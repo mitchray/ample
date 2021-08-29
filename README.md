@@ -1,6 +1,8 @@
 # Ample
 A web browser music client for [Ampache](https://ampache.org/), built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js)
 
+<img src="https://user-images.githubusercontent.com/5735900/131240725-3287abc0-2d49-4e10-b8f9-42d082355f6c.jpg" height=353 alt="Ample screenshot" />
+
 ## Features
 #### MusicBrainz Compare
 - Compare artist tracks with [MusicBrainz](https://musicbrainz.org/) recordings, if the MBID tag is present
