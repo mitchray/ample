@@ -1,0 +1,411 @@
+/* font paths are relative to build directory */
+
+/* roboto-condensed-italic - latin */
+@font-face {
+    font-family: 'Roboto Condensed';
+    font-style: italic;
+    font-weight: 400;
+    src: local(''),
+    url('../fonts/roboto-condensed-v19-latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/roboto-condensed-v19-latin-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-condensed-regular - latin */
+@font-face {
+    font-family: 'Roboto Condensed';
+    font-style: normal;
+    font-weight: 400;
+    src: local(''),
+    url('../fonts/roboto-condensed-v19-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/roboto-condensed-v19-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-condensed-700 - latin */
+@font-face {
+    font-family: 'Roboto Condensed';
+    font-style: normal;
+    font-weight: 700;
+    src: local(''),
+    url('../fonts/roboto-condensed-v19-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/roboto-condensed-v19-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* roboto-condensed-700italic - latin */
+@font-face {
+    font-family: 'Roboto Condensed';
+    font-style: italic;
+    font-weight: 700;
+    src: local(''),
+    url('../fonts/roboto-condensed-v19-latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/roboto-condensed-v19-latin-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+
+/* --------------------------
+   Variables
+   -------------------------- */
+
+:root {
+    /* Spacing */
+    --spacing-sm:  4px;
+    --spacing-md:  8px;
+    --spacing-lg:  16px;
+    --spacing-xl:  24px;
+    --spacing-xxl: 32px;
+
+    /* Sizes */
+    --size-header-height:       60px;
+    --size-sidebar-width:       150px;
+    --size-sidebar-tabs-height: 30px;
+    --size-webplayer-height:    100px;
+
+    /* Breakpoints */
+    --breakpoint-mi:  480px;
+    --breakpoint-sm:  640px;
+    --breakpoint-md:  768px;
+    --breakpoint-lg:  1024px;
+    --breakpoint-xl:  1280px;
+    --breakpoint-xxl: 1536px;
+
+    /* Fonts */
+    --font-body: 'Roboto Condensed', system-ui, Helvetica, Arial, sans-serif;
+    --font-heading: 'Roboto Condensed', system-ui, Helvetica, Arial, sans-serif;
+}
+
+/* --------------------------
+   General style rules
+   -------------------------- */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.4;
+    height: 100%;
+    background-color: var(--color-background);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+svg {
+    fill: currentColor;
+}
+
+a {
+    outline: 0;
+}
+
+a:link,
+a:visited {
+    color: var(--color-link-secondary);
+    text-decoration: none;
+}
+
+a:hover {
+    color: var(--color-link-hover);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin-top: 0;
+    color: var(--color-text-heading);
+    font-family: var(--font-heading);
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+::placeholder {
+    color: var(--color-text-body);
+    opacity: 0.8;
+}
+
+input {
+    background-color: var(--color-tint-100);
+    max-width: 100%;
+    outline: 0;
+    border: 0;
+    color: var(--color-text-body);
+}
+
+input[type="text"],
+input[type="password"],
+input[type="number"] {
+    padding: var(--spacing-md);
+}
+
+/* W3C spec */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) var(--color-lines);
+}
+
+/* Chrome, Edge, and Safari */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-lines);
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-border);
+}
+
+::selection { /* WebKit/Blink Browsers */
+    background: var(--color-tint-600);
+    color: var(--color-shade-800);
+}
+::-moz-selection { /* Gecko Browsers */
+    background: var(--color-tint-600);
+    color: var(--color-shade-800);
+}
+
+/* --------------------------
+   Buttons / badges
+   -------------------------- */
+
+::-moz-focus-inner {
+    outline: 0; /* TODO accessibility replacement */
+}
+
+.badge {
+    border-radius: 2px;
+    padding: 0.2em 0.4em;
+}
+
+button {
+    background-color: var(--color-button-bg-primary);
+    border: unset;
+    color: var(--color-button-text-primary);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 1rem;
+    margin-right: var(--spacing-sm);
+    padding: 0.6em 0.9em;
+    position: relative;
+    border-radius: 999px;
+    align-items: center;
+    outline: 0;
+    box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.2),
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.1);
+    /*overflow: hidden;*/
+}
+
+.theme-is-light button {
+    box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.1),
+        inset 0 1px 0 hsla(0, 0%, 100%, 0.3);
+}
+
+button:not(:disabled):hover {
+    background-color: var(--color-button-bg-hover);
+    color: var(--color-button-text-hover);
+}
+
+button:disabled {
+    cursor: default;
+    opacity: 0.5;
+    pointer-events: none;
+    box-shadow: none;
+    background-color: unset;
+}
+
+button.active {
+    border: 2px solid var(--color-highlight);
+}
+
+button.danger,
+.badge.danger {
+    background-color: var(--color-danger-background);
+    color: var(--color-danger-foreground);
+}
+
+button.danger:hover {
+    background-color: var(--color-danger-background-hover);
+    color: var(--color-danger-foreground-hover);
+}
+
+button.warning,
+.badge.warning {
+    background-color: var(--color-warning-background);
+    color: var(--color-warning-foreground);
+}
+
+button.warning:hover {
+    background-color: var(--color-warning-background-hover);
+    color: var(--color-warning-foreground-hover);
+}
+
+button.primary,
+.badge.success {
+    background-color: var(--color-primary-background);
+    color: var(--color-primary-foreground);
+}
+
+button.primary:hover {
+    background-color: var(--color-primary-background-hover);
+    color: var(--color-primary-foreground-hover);
+}
+
+button.secondary,
+.badge.info {
+    background-color: var(--color-secondary-background);
+    color: var(--color-secondary-foreground);
+}
+
+button.secondary:hover {
+    background-color: var(--color-secondary-background-hover);
+    color: var(--color-secondary-foreground-hover);
+}
+
+button.loading {
+    pointer-events: none;
+}
+
+button.loading:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+    border: 3px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+    from {
+        transform: rotate(0turn);
+    }
+
+    to {
+        transform: rotate(1turn);
+    }
+}
+
+/* display icon on its own without button appearance */
+button.icon {
+    /*background-color: transparent;*/
+    /*box-shadow: none;*/
+    /*border: 0;*/
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 0;
+    flex-shrink: 0;
+}
+
+/* display button as a plain text link */
+button.visuallyLink {
+    background-color: transparent;
+    padding: 0;
+    box-shadow: none;
+}
+
+button.visuallyLink:hover,
+button.visuallyLink:active {
+    background-color: transparent;
+}
+
+/* display an icon in a button */
+button.just-icon {
+    padding: 0.3em 0.3em;
+}
+
+/* display an icon alongside text */
+button.with-icon {
+    padding: 0.3em 0.9em;
+}
+
+button.with-icon svg {
+    margin-right: 0.2em;
+}
+
+button svg {
+    pointer-events: none;
+}
+
+svg.inline {
+    height: 1em;
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    bottom: 0.12em;
+    color: var(--color-highlight);
+}
+
+svg.auto {
+    height: auto;
+    width: auto;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/*
+ * Shared
+ */
+
+.well,
+.site-player__now-playing:before { /* special case for pseudo element */
+    background-color: var(--color-tint-50);
+    border-radius: 5px;
+    padding: var(--spacing-md);
+}
+
+.theme-is-light .well,
+.theme-is-light .site-player__now-playing:before { /* special case for pseudo element */
+    background-color: unset;
+    box-shadow: 0 1px 5px hsla(0, 0%, 0%, 0.4);
+    border-top: 1px solid var(--color-tint-500);
+}
+
+.art-background {
+    filter: contrast(80%) brightness(60%) saturate(120%) blur(20px);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.20;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: -1;
+}
+
+section {
+    margin-bottom: var(--spacing-xxl);
+}
+
+.notification-dot:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 7px;
+    height: 7px;
+    background-color: var(--color-highlight);
+    z-index: 5;
+    border-radius: 99px;
+}

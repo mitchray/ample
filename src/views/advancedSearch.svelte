@@ -1,0 +1,940 @@
+<h1>Advanced Search</h1>
+
+<label>
+    Type:
+    <select bind:value={selectedObjectType} on:change={populateFields}>
+        <option value="song">Songs</option>
+        <option value="album">Albums</option>
+        <option value="artist">Artists</option>
+        <option value="playlist">Playlists</option>
+    </select>
+</label>
+
+<div>
+    <button type="button" class="secondary" on:click={addRow}>Add another rule</button>
+    <button type="button" class="danger" on:click={clearAll}>Clear all</button>
+</div>
+
+<div class="container">
+    {#each rows as row (row.id)}
+        <div class="row">
+            <select on:change={(e) => { setField(row, e) }}>
+                {#each [...groupedFieldsToShow] as [key, value], i}
+                    {#if key.length > 0}
+                        <optgroup label="{key}">
+                            {#each value as field}
+                                <option value="{field.id}">{field.label}</option>
+                            {/each}
+                        </optgroup>
+                    {:else}
+                        {#each value as field}
+                            <option value="{field.id}">{field.label}</option>
+                        {/each}
+                    {/if}
+                {/each}
+            </select>
+
+            <!-- operators -->
+
+            {#if row.operatorType === "string"}
+                <select bind:value={row.operator}>
+                    <option value="0">contains</option>
+                    <option value="1">does not contain</option>
+                    <option value="2">starts with</option>
+                    <option value="3">ends with</option>
+                    <option value="4">is</option>
+                    <option value="5">is not</option>
+                    <option value="6">sounds like</option>
+                    <option value="7">does not sound like</option>
+                    <option value="8">matches regular expression</option>
+                    <option value="9">does not match regular expression</option>
+                </select>
+            {/if}
+
+            {#if row.operatorType === "number"}
+                <select bind:value={row.operator}>
+                    <option value="0">is greater than or equal to</option>
+                    <option value="1">is less than or equal to</option>
+                    <option value="2">equals</option>
+                    <option value="3">does not equal</option>
+                    <option value="4">is greater than</option>
+                    <option value="5">is less than</option>
+                </select>
+            {/if}
+
+            {#if row.operatorType === "relative"}
+                <select bind:value={row.operator}>
+                    <option value="0">before</option>
+                    <option value="1">after</option>
+                </select>
+            {/if}
+
+            {#if row.operatorType === "relative_x_days"}
+                <select bind:value={row.operator}>
+                    <option value="0">before (x) days ago</option>
+                    <option value="1">after (x) days ago</option>
+                </select>
+            {/if}
+
+            {#if row.operatorType === "rating_expanded"}
+                <select bind:value={row.operator}>
+                    <option value="0">has loved</option>
+                    <option value="1">has rated 5 stars</option>
+                    <option value="2">has rated 4 stars</option>
+                    <option value="3">has rated 3 stars</option>
+                    <option value="4">has rated 2 stars</option>
+                    <option value="5">has rated 1 stars</option>
+                    <option value="6">has not rated</option>
+                </select>
+            {/if}
+
+            {#if row.operatorType === "limit"}
+                <label>
+                    <input name="banana" type="radio" value="0" checked readonly hidden />
+                    limit
+                </label>
+            {/if}
+
+            {#if row.operatorType === "true"}
+                <label>
+                    <input name="apple" type="radio" value="0" checked readonly hidden />
+                    is true
+                </label>
+            {/if}
+
+            {#if row.operatorType === "boolean_true"}
+                <select bind:value={row.operator}>
+                    <option value="0">is true</option>
+                    <option value="1">is false</option>
+                </select>
+            {/if}
+
+            {#if row.operatorType === "boolean_is"}
+                <select bind:value={row.operator}>
+                    <option value="0">is</option>
+                    <option value="1">is not</option>
+                </select>
+            {/if}
+
+            <!-- inputs -->
+
+            {#if row.inputType === "text"}
+                <input type="text" bind:value={row.input} />
+            {/if}
+
+            {#if row.inputType === "number"}
+                <input type="number" bind:value={row.input} />
+            {/if}
+
+            {#if row.inputType === "rating"}
+                <select bind:value={row.input}>
+                    <option value="0">0 Stars</option>
+                    <option value="1">1 Star</option>
+                    <option value="2">2 Stars</option>
+                    <option value="3">3 Stars</option>
+                    <option value="4">4 Stars</option>
+                    <option value="5">5 Stars</option>
+                </select>
+            {/if}
+
+            {#if row.inputType === "user"}
+                <select bind:value={row.input}>
+                    <option value="0">TBA user 1</option>
+                    <option value="1">TBA user 2</option>
+                </select>
+            {/if}
+
+            {#if row.inputType === "catalog"}
+                <select bind:value={row.input}>
+                    <option value="0">TBA catalog 1</option>
+                    <option value="1">TBA catalog 2</option>
+                </select>
+            {/if}
+
+            {#if row.inputType === "playlist"}
+                <select bind:value={row.input}>
+                    <option value="0">TBA playlist 1</option>
+                    <option value="1">TBA playlist 2</option>
+                </select>
+            {/if}
+
+            {#if row.inputType === "smartlist"}
+                <select bind:value={row.input}>
+                    <option value="0">TBA smartlist 1</option>
+                    <option value="1">TBA smartlist 2</option>
+                </select>
+            {/if}
+
+            {#if row.inputType === "" || row.inputType === null}
+                <span>
+                    <input type="hidden" bind:value={row.input} />
+                </span>
+            {/if}
+        </div>
+    {/each}
+</div>
+
+<div>
+    <button type="button" class="primary" on:click={search}>Search</button>
+</div>
+
+{#if results.length > 0}
+    Total: {resultsTotal}
+    {#key loadedTime}
+        <Lister bind:data={results} type="song" />
+    {/key}
+{/if}
+
+<style>
+    .container {
+        display: grid;
+        grid-template-columns: repeat(3, auto);
+        width: fit-content;
+        gap: var(--spacing-sm);
+    }
+
+    .row {
+        display: contents;
+    }
+
+    .row > * {
+        height: 100%;
+        min-height: 30px;
+    }
+</style>
+
+
+<script>
+    import { getSongsFromAdvancedSearch } from '../logic/song';
+    // import { getAlbumsFromAdvancedSearch } from '../logic/album';
+    // import { getArtistsFromAdvancedSearch } from '../logic/artist';
+    // import { getPlaylistsFromAdvancedSearch } from '../logic/playlist';
+
+    import Lister from '../components/lister.svelte';
+
+    let selectedObjectType = "song";
+    let fieldsToShow;
+    let groupedFieldsToShow;
+    let maximum = 0;
+    let isRandom = false;
+    let matchAllRules = true;
+    let loadedTime;
+    let resultsTotal;
+    let results = [];
+    let rows = [];
+    let rowCounter = 0;
+
+    // $: console.debug(rows);
+
+    // reset everything if object type changes
+    $: {
+        if (selectedObjectType) {
+            populateFields();
+            clearAll();
+        }
+    }
+
+    $: resultsTotal = results.length;
+
+    function addRow() {
+        rows = [...rows, { id: rowCounter, rule: rowCounter + 1 }];
+        setField(rows[rows.length - 1]);
+        rowCounter++;
+    }
+
+    function clearAll() {
+        rows = [];
+        rowCounter = 0;
+
+        addRow();
+    }
+
+    function populateFields() {
+        let groups = new Map();
+        
+        fieldsToShow = fields.filter((field) => field.object_types.find((type) => type.id === selectedObjectType));
+
+        // setup categories based on initial order
+        for (let i = 0; i < fieldsToShow.length; i++) {
+            let item = fieldsToShow[i].object_types.find((type) => type.id === selectedObjectType);
+
+            // apply any overrides while we're at it
+            fieldsToShow[i].label = (item.label) ? item.label : fieldsToShow[i].label;
+            fieldsToShow[i].category = (item.category) ? item.category : fieldsToShow[i].category;
+
+            if (!groups.get(fieldsToShow[i].category)) {
+                groups.set(fieldsToShow[i].category, []);
+            }
+
+            groups.get(fieldsToShow[i].category).push(fieldsToShow[i]);
+        }
+
+        // alphabetize each group
+        groups.forEach((group) => {
+            group.sort(function(obj1, obj2) { return obj1.label.localeCompare(obj2.label) });
+        })
+
+        groupedFieldsToShow = groups;
+    }
+
+    function setField(row, event = null) {
+        // reset operator if type changes
+        rows[row.id].operator = "0";
+
+        rows[row.id].field = (event) ? event.target.value : fieldsToShow[0].id;
+        rows[row.id].operatorType = fieldsToShow.find((field) => field.id === rows[row.id].field).operatorType;
+        rows[row.id].inputType = fieldsToShow.find((field) => field.id === rows[row.id].field).inputType;
+    }
+
+    async function search() {
+        results = [];
+        loadedTime = null;
+
+        switch (selectedObjectType) {
+            case "song":
+                results = await getSongsFromAdvancedSearch({rows, limit: maximum, random: isRandom, matchAll: matchAllRules});
+                break;
+            default:
+                break;
+        }
+
+        // console.debug(results);
+        loadedTime = new Date();
+    }
+
+    let fields = [
+        {
+            id: "anywhere",
+            label: "Any searchable text",
+            category: "",
+            object_types: [
+                { id: "song"}
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "title",
+            label: "Title",
+            category: "Metadata",
+            object_types: [
+                { id: "song", category: "Song Metadata" },
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata", label: "Name" },
+                { id: "playlist", category: "Playlist Metadata", label: "Name" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "artist",
+            label: "Artist",
+            category: "Metadata",
+            object_types: [
+                { id: "song", category: "Song Metadata", label: "Song Artist" },
+                { id: "album", category: "Album Metadata", label: "Album Artist" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "year",
+            label: "Year",
+            category: "Metadata",
+            object_types: [
+                { id: "song", category: "Song Metadata" },
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "tag",
+            label: "Genre",
+            category: "Metadata",
+            object_types: [
+                { id: "song", category: "Song Metadata" },
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "album_tag",
+            label: "Album Genre",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "comment",
+            label: "Comment",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "lyrics",
+            label: "Lyrics",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "file",
+            label: "Filename",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "bitrate",
+            label: "Bitrate",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "label",
+            label: "Label",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "artist_tag",
+            label: "Artist Genre",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "album",
+            label: "Album",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "composer",
+            label: "Composer",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" },
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "album_artist",
+            label: "Album Artist",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" },
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "original_year",
+            label: "Original Year",
+            category: "Album Metadata",
+            object_types: [
+                { id: "album" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "release_type",
+            label: "Release Type",
+            category: "Album Metadata",
+            object_types: [
+                { id: "album" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "release_status",
+            label: "Release Status",
+            category: "Album Metadata",
+            object_types: [
+                { id: "album" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "yearformed",
+            label: "Year Formed",
+            category: "Artist Metadata",
+            object_types: [
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "placeformed",
+            label: "Place Formed",
+            category: "Artist Metadata",
+            object_types: [
+                { id: "artist" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "myrating",
+            label: "My Rating",
+            category: "Rating",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "rating"
+        },
+        {
+            id: "rating",
+            label: "Rating (average)",
+            category: "Rating",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "rating"
+        },
+        {
+            id: "albumrating",
+            label: "My Rating (album)",
+            category: "Rating",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "number",
+            inputType: "rating"
+        },
+        {
+            id: "artistrating",
+            label: "My Rating (artist)",
+            category: "Rating",
+            object_types: [
+                { id: "song" },
+                { id: "album" }
+            ],
+            operatorType: "number",
+            inputType: "rating"
+        },
+        {
+            id: "favorite",
+            label: "Favorites",
+            category: "Rating",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "favorite_album",
+            label: "Favorites (Album)",
+            category: "Rating",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "favorite_artist",
+            label: "Favorites (Artist)",
+            category: "Rating",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "played_times",
+            label: "# Played",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "skipped_times",
+            label: "# Skipped",
+            category: "Plays",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "played_or_skipped_times",
+            label: "# Played or Skipped",
+            category: "Plays",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "play_skip_ratio",
+            label: "Played/Skipped ratio",
+            category: "Plays",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "recent_played",
+            label: "Recently played",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "limit",
+            inputType: "number"
+        },
+        {
+            id: "last_play",
+            label: "My Last Play",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "relative_x_days",
+            inputType: "number"
+        },
+        {
+            id: "last_skip",
+            label: "My Last Skip",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "relative_x_days",
+            inputType: "number"
+        },
+        {
+            id: "last_play_or_skip",
+            label: "My Last Play or Skip",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "relative_x_days",
+            inputType: "number"
+        },
+        {
+            id: "played",
+            label: "Played",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "boolean_true",
+            inputType: ""
+        },
+        {
+            id: "myplayed",
+            label: "Played by me",
+            category: "Plays",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "boolean_true",
+            inputType: ""
+        },
+        {
+            id: "myplayedalbum",
+            label: "Played by Me (Album)",
+            category: "Plays",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "boolean_true",
+            inputType: ""
+        },
+        {
+            id: "myplayedartist",
+            label: "Played by Me (Artist)",
+            category: "Plays",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "boolean_true",
+            inputType: ""
+        },
+        {
+            id: "other_user",
+            label: "Another User",
+            category: "System",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "rating_expanded",
+            inputType: "user"
+        },
+        {
+            id: "catalog",
+            label: "Catalog",
+            category: "System",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "boolean_is",
+            inputType: "catalog"
+        },
+        {
+            id: "other_user_album",
+            label: "Another User (Album)",
+            category: "System",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "rating_expanded",
+            inputType: "user"
+        },
+        {
+            id: "other_user_artist",
+            label: "Another User (Artist)",
+            category: "System",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "rating_expanded",
+            inputType: "user"
+        },
+        {
+            id: "playlist",
+            label: "Playlist",
+            category: "Playlist",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "boolean_is",
+            inputType: "playlist"
+        },
+        {
+            id: "smartplaylist",
+            label: "Smart Playlist",
+            category: "Playlist",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "boolean_is",
+            inputType: "smartlist"
+        },
+        {
+            id: "playlist_name",
+            label: "Playlist Name",
+            category: "Playlist",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "time",
+            label: "Length (in minutes)",
+            category: "Time",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "added",
+            label: "Added",
+            category: "Time",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "relative",
+            inputType: "number"
+        },
+        {
+            id: "updated",
+            label: "Updated",
+            category: "Time",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "relative",
+            inputType: "number"
+        },
+        {
+            id: "recent_added",
+            label: "Recently added",
+            category: "Time",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "limit",
+            inputType: "number"
+        },
+        {
+            id: "recent_updated",
+            label: "Recently updated",
+            category: "Time",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "limit",
+            inputType: "number"
+        },
+        {
+            id: "mbid",
+            label: "MusicBrainz ID",
+            category: "MusicBrainz",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "mbid_album",
+            label: "MusicBrainz ID (Album)",
+            category: "MusicBrainz",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "mbid_artist",
+            label: "MusicBrainz ID (Artist)",
+            category: "MusicBrainz",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "possible_duplicate",
+            label: "Possible Duplicate",
+            category: "System",
+            object_types: [
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "true",
+            inputType: ""
+        },
+        {
+            id: "possible_duplicate_album",
+            label: "Possible Duplicate Albums",
+            category: "System",
+            object_types: [
+                { id: "artist" }
+            ],
+            operatorType: "true",
+            inputType: ""
+        },
+        {
+            id: "has_image",
+            label: "Local Image",
+            category: "System",
+            object_types: [
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "true",
+            inputType: ""
+        },
+        {
+            id: "image_width",
+            label: "Image Width",
+            category: "System",
+            object_types: [
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "image_height",
+            label: "Image Height",
+            category: "System",
+            object_types: [
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+    ];
+</script>
+

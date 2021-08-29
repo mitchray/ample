@@ -1,0 +1,181 @@
+<script>
+    import { onMount } from "svelte";
+    import { fade } from 'svelte/transition';
+
+    import { getSongsFromPlaylist } from "../logic/song";
+    import { getPlaylist } from '../logic/playlist';
+
+    import Rating from '../components/rating.svelte';
+    import Actions from '../components/actions.svelte';
+    import Lister from '../components/lister.svelte';
+
+    import SVGPlaylist from "../../public/images/queue_music.svg";
+    import SVGSmartlist from "../../public/images/smartlist.svg";
+    import SVGRefresh from "../../public/images/refresh.svg";
+
+    export let id;
+
+    let playlist;
+    let songs = [];
+    let loading = true;
+    let songCount;
+    let isSmartlist = false;
+    let loadedTime;
+
+    $: songs = songs;
+    $: songCount = songs.length;
+
+    onMount(async () => {
+        playlist = await getPlaylist(id);
+
+        if (playlist && playlist.id) {
+            await handleSongLoad();
+            isSmartlist = playlist.id.match(/^smart_/);
+        }
+
+        loading = false;
+    });
+
+    async function handleSongLoad() {
+        songs = await getSongsFromPlaylist(id);
+        loadedTime = new Date();
+    }
+</script>
+
+{#if loading}
+    <p>Loading playlist</p>
+{:else}
+    {#if playlist.id}
+        <div class="container">
+            <div class="details-container">
+                <div class="details">
+                    <div class="cover-container">
+                        <img class="cover" src="{playlist.art}&thumb=32" alt="Image of {playlist.name}" width="384" height="384" in:fade/>
+                    </div>
+
+                    <div class="info">
+                        <h1 class="title">
+                            {#if isSmartlist}
+                                <SVGSmartlist class="inline" />
+                            {:else}
+                                <SVGPlaylist class="inline" />
+                            {/if}
+
+                            {playlist.name}
+
+                            {#if isSmartlist}
+                                <button on:click={handleSongLoad} class="with-icon refresh-button"><SVGRefresh/></button>
+                            {/if}
+                        </h1>
+
+                        <p>
+                            {songCount} {parseInt(songCount) === 1 ? 'song' : 'songs'}
+                        </p>
+
+                        {#if !isSmartlist}
+                            <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
+                        {/if}
+
+                        <div class="actions">
+                            <Actions
+                                type="playlist"
+                                mode="fullButtons"
+                                count="{playlist.items}"
+                                direct={songs}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="songs">
+                {#key loadedTime}
+                    <Lister bind:data={songs} type="{isSmartlist ? 'smartlist' : 'playlist'}" id="{playlist.id}" />
+                {/key}
+            </div>
+        </div>
+    {:else}
+        <p>Unable to find playlist with that ID</p>
+    {/if}
+{/if}
+
+<style>
+    /* reassign to variable else local override has no effect */
+    :global(.site-content-inner) {
+        color: var(--color-text-body);
+    }
+
+    .songs {
+        color: var(--color-text-body);
+        overscroll-behavior: contain;
+    }
+
+    .cover {
+        border-radius: 10px;
+    }
+
+    .cover-container {
+        margin-bottom: var(--spacing-lg);
+        margin-right: var(--spacing-lg);
+        flex-shrink: 0;
+        max-width: 200px;
+    }
+
+    .title {
+        text-transform: unset;
+        font-size: 40px;
+        letter-spacing: -0.02em;
+        line-height: 1;
+        margin-bottom: 0.2em;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .details {
+        display: flex;
+    }
+
+    @media all and (min-width: 1800px) {
+        .container {
+            flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 1900px;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 0;
+        }
+
+        .cover {
+            width: 100%;
+            max-width: 300px;
+        }
+
+        .cover-container {
+            max-width: none;
+        }
+
+        .details {
+            flex-direction: column;
+        }
+
+        .details-container {
+            width: 400px;
+            overflow-y: auto;
+            height: 100%;
+            padding: var(--spacing-xxl);
+            border-right: 2px solid var(--color-lines);
+            flex-shrink: 0;
+        }
+
+        .songs {
+            width: 100%;
+            padding: var(--spacing-xxl);
+        }
+    }
+</style>

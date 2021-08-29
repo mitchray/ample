@@ -1,0 +1,75 @@
+<script>
+    import { onMount } from "svelte";
+    import { fade } from 'svelte/transition';
+
+    import { getPlaylists } from "../logic/playlist";
+
+    import PlaylistEdit from '../components/playlists/playlist_edit.svelte';
+    import PlaylistCard from '../components/playlistCard.svelte';
+    import Menu from '../components/menu.svelte';
+
+    let newPlaylist;
+    let playlists = [];
+    let showPlaylistCreation = false;
+    let loading = true;
+    let playlistsNewToggle;
+
+    $: {
+        if (newPlaylist) {
+            newPlaylist.isNew = true;
+
+            playlists = [
+                newPlaylist,
+                ...playlists
+            ]
+
+            // reset
+            newPlaylist = null;
+            showPlaylistCreation = false;
+        }
+
+        playlists = playlists;
+    }
+
+    function handleShowPlaylistCreator() {
+        showPlaylistCreation = !showPlaylistCreation;
+    }
+
+    onMount(async () => {
+        playlists = await getPlaylists();
+        loading = false;
+    });
+</script>
+
+<h1>Playlists</h1>
+
+<button id="js-playlistsNew" bind:this={playlistsNewToggle} on:click={handleShowPlaylistCreator} class="primary">New playlist</button>
+
+{#if showPlaylistCreation}
+    <Menu anchor="right-top" toggleElement={playlistsNewToggle} bind:isVisible={showPlaylistCreation} >
+        <PlaylistEdit isNew={true} bind:playlist={newPlaylist} bind:isVisible={showPlaylistCreation} />
+    </Menu>
+{/if}
+
+{#if loading}
+    <p>Loading playlists</p>
+{:else}
+    {#if playlists && playlists.length > 0}
+        <ul class="playlist-grid" in:fade>
+            {#each playlists as playlist (playlist.id)}
+                <li class:highlight={playlist.isNew} class:hide={playlist.isDeleted}>
+                    <PlaylistCard bind:playlist="{playlist}"/>
+                </li>
+            {/each}
+        </ul>
+    {:else}
+        <p>No playlists found</p>
+    {/if}
+{/if}
+
+<style>
+    .hide {
+        display: none;
+    }
+</style>
+
