@@ -1,4 +1,6 @@
 <script>
+    import CustomSearch from '../components/customSearch.svelte';
+    import CustomSearchResults from '../components/customSearchResults.svelte';
     import Tabs from "../components/tabs.svelte";
     import CardList from '../components/cardList.svelte';
     import MassRater from '../components/massRater.svelte';
@@ -12,8 +14,11 @@
         { label: "Mass assign", value: "mass",   icon: SVGStarFull },
     ];
 
-    // Current active tab
     let currentTab;
+    let loadedTime;
+    let loading;
+    let results = [];
+    let type = "song";
 </script>
 
 <h1>Unrated</h1>
@@ -28,7 +33,9 @@
     </div>
 
     <div class="batch" style="display: {currentTab === 'mass' ? 'block' : 'none'}">
-        <MassRater />
+        <CustomSearch bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />
+        <MassRater bind:items={results} bind:type bind:loadedTime />
+        <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
     </div>
 </Tabs>
 

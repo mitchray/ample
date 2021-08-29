@@ -21,6 +21,7 @@
     export let type;
     export let id = null;
     export let showIndex = false;
+    export let showCheckboxes = false;
     export let activeSort = null;
     export let sortReverse = null;
 
@@ -196,6 +197,11 @@
         ticking = true;
     }
 
+    function toggleAllChecked(e) {
+        dataDisplay.forEach(element => element.selected = !!(e.target.checked));
+        dataDisplay = dataDisplay;
+    }
+
     beforeUpdate(() => {
         // determine columns
         switch (type) {
@@ -338,6 +344,10 @@
                     <div>&nbsp;</div>
                 {/if}
 
+                {#if showCheckboxes}
+                    <div><input type="checkbox" on:change={toggleAllChecked} /></div>
+                {/if}
+
                 {#if showIndex}
                     <div class="index" data-sort="index" on:click={handleSort}>#</div>
                 {/if}
@@ -387,6 +397,10 @@
                 <div class="lister-item">
                     {#if type === 'playlist'}
                         <div><button class="icon remove" on:click|stopPropagation={(e) => { handleRemove(e, item) }}><SVGClose /></button></div>
+                    {/if}
+
+                    {#if showCheckboxes}
+                        <div><input type="checkbox" bind:checked={item.selected} /></div>
                     {/if}
 
                     {#if showIndex}

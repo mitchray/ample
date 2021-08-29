@@ -121,14 +121,13 @@ export const getSongFromPlaylist = ({playlistID = '', songIndex = '', limit = 1}
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false, matchAll = true}) => {
+export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false, match = "and"}) => {
     random = (random) ? 1 : 0;
-    matchAll = (matchAll) ? "and" : "or";
 
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
     queryURL += "&limit=" + limit;
     queryURL += "&random=" + random;
-    queryURL += "&type=song&operator=" + matchAll;
+    queryURL += "&type=song&operator=" + match;
 
     for (let i = 0; i < rows.length; i++) {
         let counter = parseInt(i + 1);
