@@ -28,6 +28,7 @@
     import SVGArrowLeft from "../../public/images/arrow_left.svg";
     import SVGArrowRight from "../../public/images/arrow_right.svg";
     import SVGGenre from "../../public/images/label.svg";
+    import SVGSearch from "../../public/images/search.svg";
 
     const { activeRoute } = getContext(ROUTER);
     let basePath = '';
@@ -106,7 +107,7 @@
         <div class="search-container">
             <input
                 type="text"
-                placeholder="Search"
+                placeholder="Quick search"
                 class="site-search {$ShowSearch && $SearchQuery ? 'active' : ''}"
                 on:focus={handleFocus}
                 on:paste={handleInputChange}
@@ -117,6 +118,7 @@
                 <button class="icon close" on:click={handleClear}><SVGClose /></button>
             {/if}
         </div>
+        <Link to="search" class="site-sidebar__link "><SVGSearch class="inline"/> Advanced</Link>
 
         <h3>Library</h3>
         <ul>
