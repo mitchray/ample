@@ -50,10 +50,7 @@
     $: totalContentHeight = dataDisplay.length * itemHeight;
 
     // virtual stuff
-    let start = 0;
-    let end = 0;
     let visible = [];
-    let top = 0;
     let itemHeight = 47;
     let columnWidths = [];
     let myObserver;
@@ -63,7 +60,6 @@
     let startNode;
     let visibleNodesCount;
     let offsetY;
-    let currentAF;
     let scrollTimer;
     let lastKnownScroll = 0;
     let ticking = false;
@@ -73,8 +69,8 @@
         moreMenuIsOpen = !moreMenuIsOpen;
     }
 
-    function applySort(type) {
-        switch (type) {
+    function applySort(sortType) {
+        switch (sortType) {
             case 'index':
                 dataCopy = dataCopy.sort(function(obj1, obj2) { return obj1.initialOrder > obj2.initialOrder });
                 break;
@@ -384,6 +380,12 @@
                     <div class="songs" data-sort="genreSongs" on:click={handleSort}>Songs</div>
                 {/if}
 
+                {#if type === "playlists"}
+                    <div class="owner" data-sort="owner" on:click={handleSort}>Owner</div>
+                    <div class="privacy" data-sort="privacy" on:click={handleSort}>Privacy</div>
+                    <div class="count" data-sort="count" on:click={handleSort}>Count</div>
+                {/if}
+
                 {#if showRating}
                     <div class="rating" data-sort="rating" on:click={handleSort}>Rating</div>
                 {/if}
@@ -514,6 +516,24 @@
 
                         <div class="songsCount">
                             <Link to="genres/{item.id}/songs"><SVGSong class="inline" /> {item.songs}</Link>
+                        </div>
+                    {/if}
+
+                    {#if type === "playlists"}
+                        <div class="title" title="{item.name}">
+                            <Link to="playlists/{item.id}" title="{item.name}">{item.name}</Link>
+                        </div>
+
+                        <div class="owner">
+                            {item.owner}
+                        </div>
+
+                        <div class="privacy">
+                            {item.type[0].toUpperCase() + item.type.substring(1)}
+                        </div>
+
+                        <div class="count">
+                            {item.items} {parseInt(item.items) === 1 ? 'song' : 'songs'}
                         </div>
                     {/if}
 

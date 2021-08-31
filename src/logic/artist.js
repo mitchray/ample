@@ -45,6 +45,28 @@ export const getArtists = async ({page = 0, limit = 50}) => {
 }
 
 /**
+ * Get artists through advanced search
+ * @returns {Promise<*>}
+ */
+export const getArtistsFromAdvancedSearch = ({rows = [], limit = 0, random = false, match = "and"}) => {
+    random = (random) ? 1 : 0;
+
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&limit=" + limit;
+    queryURL += "&random=" + random;
+    queryURL += "&type=artist&operator=" + match;
+
+    for (let i = 0; i < rows.length; i++) {
+        let counter = parseInt(i + 1);
+        queryURL += `&rule_${counter}=${rows[i].field}&rule_${counter}_operator=${rows[i].operator}&rule_${counter}_input=${encodeURI(rows[i].input)}`;
+    }
+
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "getArtistsFromAdvancedSearch");
+    return fetchArtistData(queryURL);
+}
+
+/**
  * Get artists starting with specified character
  * @param {string} filterChar
  * @param albumArtistsOnly

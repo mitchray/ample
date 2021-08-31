@@ -118,7 +118,6 @@ export const getSongFromPlaylist = ({playlistID = '', songIndex = '', limit = 1}
 
 /**
  * Get songs through advanced search
- * @param {string} filterChar
  * @returns {Promise<*>}
  */
 export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false, match = "and"}) => {

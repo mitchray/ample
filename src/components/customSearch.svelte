@@ -1,8 +1,8 @@
 <script>
     import { getSongsFromAdvancedSearch } from '../logic/song';
-    // import { getAlbumsFromAdvancedSearch } from '../logic/album';
-    // import { getArtistsFromAdvancedSearch } from '../logic/artist';
-    // import { getPlaylistsFromAdvancedSearch } from '../logic/playlist';
+    import { getAlbumsFromAdvancedSearch } from '../logic/album';
+    import { getArtistsFromAdvancedSearch } from '../logic/artist';
+    import { getPlaylistsFromAdvancedSearch } from '../logic/playlist';
 
     import SVGClose from "../../public/images/close.svg";
 
@@ -83,7 +83,10 @@
         // reset operator if type changes
         row.operator = "0";
 
-        row.field = (event) ? event.target.value : fieldsToShow[0].id;
+        // workaround to get first item from first group in map
+        let firstID = Array.from(groupedFieldsToShow.entries())[0][1][0].id;
+
+        row.field = (event) ? event.target.value : firstID;
         row.operatorType = fieldsToShow.find((field) => field.id === row.field).operatorType;
         row.inputType = fieldsToShow.find((field) => field.id === row.field).inputType;
 
@@ -98,6 +101,15 @@
         switch (selectedObjectType) {
             case "song":
                 results = await getSongsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                break;
+            case "album":
+                results = await getAlbumsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                break;
+            case "artist":
+                results = await getArtistsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                break;
+            case "playlists":
+                results = await getPlaylistsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
                 break;
             default:
                 break;
@@ -127,7 +139,7 @@
                 { id: "song", category: "Song Metadata" },
                 { id: "album", category: "Album Metadata" },
                 { id: "artist", category: "Artist Metadata", label: "Name" },
-                { id: "playlist", category: "Playlist Metadata", label: "Name" }
+                { id: "playlists", category: "Playlist Metadata", label: "Name" }
             ],
             operatorType: "string",
             inputType: "text"
@@ -754,7 +766,7 @@
                     <option value="song">songs</option>
                     <option value="album">albums</option>
                     <option value="artist">artists</option>
-                    <option value="playlist">playlists</option>
+                    <option value="playlists">playlists</option>
                 </select>
             </label>
         </div>
