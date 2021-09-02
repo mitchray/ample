@@ -1,4 +1,6 @@
 <script>
+    import { serverURL } from '../stores/server';
+
     import SVGData from "../../public/images/text.svg";
     import SVGSearch from "../../public/images/search.svg";
     import SVGMusic from "../../public/images/music_note.svg";
@@ -56,6 +58,11 @@
         {#if isVisible && menuType === 'data'}
             <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-data')} bind:isVisible={isVisible}>
                 <ul class="menu-list">
+                    <li>
+                        <a target="_blank" href={`${$serverURL}/artists.php?action=show&artist=${data.id}`}>
+                            Ampache
+                        </a>
+                    </li>
                     <li>
                         <a target="_blank" href={`https://www.discogs.com/search/?q="${encodeURIComponent(data.name)}"&type=artist`}>
                             Discogs
@@ -136,6 +143,11 @@
         {#if isVisible && menuType === 'data'}
             <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-data')} bind:isVisible={isVisible}>
                 <ul class="menu-list">
+                    <li>
+                        <a target="_blank" href={`${$serverURL}/albums.php?action=show&album=${data.id}`}>
+                            Ampache
+                        </a>
+                    </li>
                     <li>
                         <a target="_blank" href={`https://www.discogs.com/search/?q="${encodeURIComponent(data.name)}"+"${encodeURIComponent(data.artist.name)}"&type=release`}>
                             Discogs
