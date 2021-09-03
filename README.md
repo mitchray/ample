@@ -4,23 +4,7 @@ A web browser music client for [Ampache](https://ampache.org/), built with [Svel
 <img src="https://user-images.githubusercontent.com/5735900/131240725-3287abc0-2d49-4e10-b8f9-42d082355f6c.jpg" width=603 alt="Ample screenshot" />
 
 ## Features
-#### MusicBrainz Compare
-- Compare artist tracks with [MusicBrainz](https://musicbrainz.org/) recordings, if the MBID tag is present
-
-#### Smartlist autoplay
-- If enabled, the queue will be topped up with additional songs from the selected smartlist 
-
-#### Dark & light mode with adaptive interface colors
-- Artist & album images influence the colors of the interface
-
-#### Volume normalization & night mode
-- Will apply any ReplayGain or EBU R 128 gain if tags are present
-- Night mode boosts quieter parts of songs
-
-#### Search albums by date range
-
-#### 'Unrated' dashboard + mass assign
-- Chip away at critiquing your library with a random selection of unrated artists, albums and songs
+- Available on the [wiki](https://github.com/mitchray/ample/wiki/Features)
 
 ## Requirements
 - ECMAScript 2015 (ES6) capable web browser
