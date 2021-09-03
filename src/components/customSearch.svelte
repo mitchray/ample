@@ -1,8 +1,12 @@
 <script>
+    import { onMount } from 'svelte';
+
     import { getSongsFromAdvancedSearch } from '../logic/song';
     import { getAlbumsFromAdvancedSearch } from '../logic/album';
     import { getArtistsFromAdvancedSearch } from '../logic/artist';
-    import { getPlaylistsFromAdvancedSearch } from '../logic/playlist';
+    import { getPlaylistsFromAdvancedSearch, getPlaylists, getSmartlists } from '../logic/playlist';
+    import { getUsers } from '../logic/user';
+    import { getCatalogs } from '../logic/catalog';
 
     import SVGClose from "../../public/images/close.svg";
 
@@ -18,6 +22,10 @@
     let matchRules = "and";
     let rows = [];
     let rowCounter = 0;
+    let allUsers = [];
+    let allCatalogs = [];
+    let allPlaylists = [];
+    let allSmartlists = [];
 
     // reset everything if object type changes
     $: {
@@ -119,6 +127,13 @@
         loadedTime = new Date();
         loading = false;
     }
+
+    onMount(async () => {
+        allUsers = await getUsers();
+        allCatalogs = await getCatalogs();
+        allPlaylists = await getPlaylists();
+        allSmartlists = await getSmartlists(true);
+    });
 
     let fields = [
         {
@@ -596,7 +611,7 @@
         },
         {
             id: "smartplaylist",
-            label: "Smart Playlist",
+            label: "Smartlist",
             category: "Playlist",
             object_types: [
                 { id: "song" }
@@ -936,29 +951,33 @@
 
                 {#if row.inputType === "user"}
                     <select bind:value={row.input}>
-                        <option value="0">TBA user 1</option>
-                        <option value="1">TBA user 2</option>
+                        {#each allUsers as user}
+                            <option value={user.id}>{user.username}</option>
+                        {/each}
                     </select>
                 {/if}
 
                 {#if row.inputType === "catalog"}
                     <select bind:value={row.input}>
-                        <option value="0">TBA catalog 1</option>
-                        <option value="1">TBA catalog 2</option>
+                        {#each allCatalogs as catalog}
+                            <option value={catalog.id}>{catalog.name}</option>
+                        {/each}
                     </select>
                 {/if}
 
                 {#if row.inputType === "playlist"}
                     <select bind:value={row.input}>
-                        <option value="0">TBA playlist 1</option>
-                        <option value="1">TBA playlist 2</option>
+                        {#each allPlaylists as playlist}
+                            <option value={playlist.id}>{playlist.name}</option>
+                        {/each}
                     </select>
                 {/if}
 
                 {#if row.inputType === "smartlist"}
                     <select bind:value={row.input}>
-                        <option value="0">TBA smartlist 1</option>
-                        <option value="1">TBA smartlist 2</option>
+                        {#each allSmartlists as smartlist}
+                            <option value={smartlist.id}>{smartlist.name}</option>
+                        {/each}
                     </select>
                 {/if}
 

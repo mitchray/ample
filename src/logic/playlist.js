@@ -83,15 +83,22 @@ export const getPlaylists = () => {
  * Get all smartlists (filtered from playlists)
  * @returns {Promise<*>}
  */
-export const getSmartlists = () => {
+export const getSmartlists = (stripPrefix = false) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=playlists";
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSmartlists");
+
     return fetchPlaylistData(queryURL)
         .then((result) => {
             result = result.filter(function(item) {
                 return item.id.match(/^smart_/);
             })
+
+            if (stripPrefix) {
+                result.forEach((element, index) => {
+                    result[index].id = element.id.replace('smart_', '');
+                });
+            }
 
             return result;
         });

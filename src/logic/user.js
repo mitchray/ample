@@ -7,6 +7,34 @@ import { debugHelper } from './helper';
 let serverURL_value = get(serverURL);
 
 /**
+ * Make API request for user data
+ * @param {string} url
+ * @returns {Promise<*>}
+ */
+const fetchUserData = async (url) => {
+    return await fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (!data.error) {
+                return (data.user) ? data.user : data[0];
+            } else {
+                return [];
+            }
+        })
+        .catch(err => {
+            console.log("Error Reading data " + err);
+            return err;
+        });
+}
+
+export const getUsers = () => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=users";
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "getUsers");
+    return fetchUserData(queryURL);
+}
+
+/**
  * Get SHA256 of input as hex string
  * @param {string} text
  * @returns {string}
