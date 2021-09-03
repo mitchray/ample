@@ -20,4 +20,7 @@ export let AutoPlayPlaylist = writable(JSON.parse(localStorage.getItem('AutoPlay
 export let ShowExpandedAlbums = writable(false);
 export let ShowAlbumArtistsOnly = writable(true);
 
+export let SkipBelow = writable(JSON.parse(localStorage.getItem('SkipBelow')) || false);
+export let SkipBelowRating = writable(JSON.parse(localStorage.getItem('SkipBelowRating')) || 3);
+
 export let ThemeIsLight = writable(JSON.parse(localStorage.getItem('AmpleThemeIsLight')) || false);

@@ -6,6 +6,7 @@
     import { Link } from 'svelte-routing';
 
     import { MediaPlayer } from "../stores/player";
+    import { SkipBelow, SkipBelowRating } from "../stores/status";
 
     import {
         getSongsFromAlbum,
@@ -32,20 +33,17 @@
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
 
-    export let type;           // artist, album, playlist, song etc
-    export let mode;           // menu, miniButtons or fullButtons
-    export let id = null;      // id of the item passed specified by type
-    export let count = null;   // how many items
+    export let type;          // artist, album, playlist, song etc
+    export let mode;          // menu, miniButtons or fullButtons
+    export let id = null;     // id of the item passed specified by type
+    export let count = null;  // how many items
     export let direct = null; // play already loaded items instead of doing a new fetch
-    export let data = null;    // any additional data to pass
+    export let data = null;   // any additional data to pass
     export let artistID = null;
     export let albumID = null;
 
     let fetchURL = null;
-    let message = "";
     let moreMenuVisible = false;
-    let moreToggle;
-    let playlistAddToggle;
     let playlistAddIsVisible = false;
     let songsForPlaylistAdd = [];
     let container;
@@ -100,17 +98,44 @@
         return fetchURL;
     }
 
+    async function handleSkipBelow() {
+        await tick();
+        localStorage.setItem('SkipBelow', JSON.stringify($SkipBelow));
+        SkipBelow.set($SkipBelow);
+    }
+
+    async function handleSkipBelowRating() {
+        await tick();
+        let newValue = $SkipBelowRating;
+        localStorage.setItem('SkipBelowRating', JSON.stringify(newValue));
+        SkipBelowRating.set(newValue);
+    }
+
+    /**
+     * Filter out songs below a specified rating
+     * @param arr
+     * @returns array
+     */
+    function filterBelow(arr) {
+        // if length is 1 let's assume we want to play that item regardless of rating
+        if (arr.length > 1 && $SkipBelow) {
+            arr = arr.filter(item => item.rating >= $SkipBelowRating);
+        }
+
+        return arr;
+    }
+
     function handlePlay(e) {
         let originalText = startLoad(e.target);
 
         if (direct) {
-            $MediaPlayer.playNow([...direct]);
+            $MediaPlayer.playNow(filterBelow([...direct]));
             endLoad(e.target, originalText);
         } else {
             let query = determineFetchURL()
                 .then((result) => {
                     result = (Array.isArray(result)) ? result : [result];
-                    $MediaPlayer.playNow(result);
+                    $MediaPlayer.playNow(filterBelow(result));
                     endLoad(e.target, originalText);
                 });
         }
@@ -120,13 +145,13 @@
         let originalText = startLoad(e.target);
 
         if (direct) {
-            $MediaPlayer.playNext([...direct]);
+            $MediaPlayer.playNext(filterBelow([...direct]));
             endLoad(e.target, originalText);
         } else {
             let query = determineFetchURL()
                 .then((result) => {
                     result = (Array.isArray(result)) ? result : [result];
-                    $MediaPlayer.playNext(result);
+                    $MediaPlayer.playNext(filterBelow(result));
                     endLoad(e.target, originalText);
                 });
         }
@@ -136,13 +161,13 @@
         let originalText = startLoad(e.target);
 
         if (direct) {
-            $MediaPlayer.playLast([...direct]);
+            $MediaPlayer.playLast(filterBelow([...direct]));
             endLoad(e.target, originalText);
         } else {
             let query = determineFetchURL()
                 .then((result) => {
                     result = (Array.isArray(result)) ? result : [result];
-                    $MediaPlayer.playLast(result);
+                    $MediaPlayer.playLast(filterBelow(result));
                     endLoad(e.target, originalText);
                 });
         }
@@ -152,14 +177,14 @@
         let originalText = startLoad(e.target);
 
         if (direct) {
-            $MediaPlayer.playNow(shuffleArray([...direct]));
+            $MediaPlayer.playNow(shuffleArray(filterBelow([...direct])));
             endLoad(e.target, originalText);
         } else {
             let query = determineFetchURL()
                 .then((result) => {
                     result = (Array.isArray(result)) ? result : [result];
                     result = shuffleArray(result);
-                    $MediaPlayer.playNow(result);
+                    $MediaPlayer.playNow(filterBelow(result));
                     endLoad(e.target, originalText);
                 });
         }
@@ -169,14 +194,14 @@
         let originalText = startLoad(e.target);
 
         if (direct) {
-            $MediaPlayer.playNext([...direct]);
+            $MediaPlayer.playNext(filterBelow([...direct]));
             endLoad(e.target, originalText);
         } else {
             let query = determineFetchURL()
                 .then((result) => {
                     result = (Array.isArray(result)) ? result : [result];
                     result = shuffleArray(result);
-                    $MediaPlayer.playNext(result);
+                    $MediaPlayer.playNext(filterBelow(result));
                     endLoad(e.target, originalText);
                 });
         }
@@ -186,14 +211,14 @@
         let originalText = startLoad(e.target);
 
         if (direct) {
-            $MediaPlayer.playLast([...direct]);
+            $MediaPlayer.playLast(filterBelow([...direct]));
             endLoad(e.target, originalText);
         } else {
             let query = determineFetchURL()
                 .then((result) => {
                     result = (Array.isArray(result)) ? result : [result];
                     result = shuffleArray(result);
-                    $MediaPlayer.playLast(result);
+                    $MediaPlayer.playLast(filterBelow(result));
                     endLoad(e.target, originalText);
                 });
         }
@@ -298,6 +323,23 @@
                 <Link to="albums/{albumID}"><SVGAlbum class="inline" /> Go to album</Link>
             </div>
         {/if}
+
+        <div class="menu-separator"></div>
+
+        <div class="filter-below">
+            <label>
+                <input type="checkbox" bind:checked={$SkipBelow} on:change={handleSkipBelow} />
+                Skip songs below
+            </label>
+
+            <select bind:value={$SkipBelowRating} on:change={handleSkipBelowRating}>
+                <option value="1" selected={$SkipBelowRating === 1}>1 star</option>
+                <option value="2" selected={$SkipBelowRating === 2}>2 stars</option>
+                <option value="3" selected={$SkipBelowRating === 3}>3 stars</option>
+                <option value="4" selected={$SkipBelowRating === 4}>4 stars</option>
+                <option value="5" selected={$SkipBelowRating === 5}>5 stars</option>
+            </select>
+        </div>
     </div>
 {/if}
 
@@ -334,7 +376,7 @@
         {/if}
 
         {#if showMore}
-            <div class="action">
+            <div class="action" class:notification-badge={$SkipBelow} data-badge="{$SkipBelowRating}">
                 <button id="js-action-menu_{type}{mode}{id}" type="button" on:click={handleMore} title="More"><SVGMore /> </button>
             </div>
         {/if}
@@ -352,6 +394,11 @@
 
 
 <style>
+    .filter-below label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+    }
+
     .c-actions {
         display: flex;
         flex-wrap: wrap;
@@ -389,7 +436,7 @@
     .c-actions.menu :global(a) {
         line-height: 1;
         border: 0;
-        padding: 0.3em 0.6em;
+        padding: 0.3em 0;
         width: 100%;
         color: var(--color-text-body);
     }

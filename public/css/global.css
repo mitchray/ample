@@ -398,6 +398,12 @@ section {
     margin-bottom: var(--spacing-xxl);
 }
 
+.menu-separator {
+    display: block;
+    border-bottom: 2px solid var(--color-lines);
+    margin: var(--spacing-md) 0;
+}
+
 .notification-dot:after {
     content: '';
     position: absolute;
@@ -408,4 +414,25 @@ section {
     background-color: var(--color-highlight);
     z-index: 5;
     border-radius: 99px;
+}
+
+.notification-badge {
+    position: relative;
+}
+
+.notification-badge:after {
+    content: attr(data-badge);
+    position: absolute;
+    bottom: calc(100% - 8px);
+    left: calc(100% - 8px);
+    background-color: var(--color-text-body);
+    backdrop-filter: blur(3px);
+    z-index: 5;
+    border-radius: 99px;
+    font-size: 0.8em;
+    font-weight: 700;
+    padding: 1px 4px 2px;
+    line-height: 1;
+    color: var(--color-background);
+    pointer-events: none;
 }
