@@ -11,7 +11,99 @@
 
 <h1>Test page yo</h1>
 
-<section>
+<div style="margin: 2rem 0;">
+    <label>
+        <input type="checkbox" />
+        Check me
+    </label>
+
+    <label>
+        <input type="checkbox" class="switch">
+        Switch!
+    </label>
+
+    <label>
+        <input type="radio" value="1" name="radioTest" />
+        This
+    </label>
+
+    <label>
+        <input type="radio" value="2" name="radioTest" />
+        That
+    </label>
+
+    <input type="text" placeholder="Example" />
+
+    <button>Button</button>
+
+    <select>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+    </select>
+
+    <select>
+        <optgroup label="Fruit">
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </optgroup>
+
+        <optgroup label="Vegetables">
+            <option value="4">Four</option>
+            <option value="5">Five</option>
+            <option value="6">Six</option>
+        </optgroup>
+    </select>
+</div>
+
+<div style="margin: 2rem 0;">
+    <label>
+        <input type="checkbox" disabled />
+        Check me
+    </label>
+
+    <label>
+        <input type="checkbox" class="switch" disabled>
+        Switch!
+    </label>
+
+    <label>
+        <input type="radio" value="1" name="radioTest" disabled />
+        This
+    </label>
+
+    <label>
+        <input type="radio" value="2" name="radioTest" disabled />
+        That
+    </label>
+
+    <input type="text" placeholder="Example" disabled />
+
+    <button disabled>Button</button>
+
+    <select disabled>
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+    </select>
+
+    <select disabled>
+        <optgroup label="Fruit">
+            <option value="1">One</option>
+            <option value="2">Two</option>
+            <option value="3">Three</option>
+        </optgroup>
+
+        <optgroup label="Vegetables">
+            <option value="4">Four</option>
+            <option value="5">Five</option>
+            <option value="6">Six</option>
+        </optgroup>
+    </select>
+</div>
+
+<section style="margin: 2rem 0;">
     <button class="danger">Danger</button>
     <button class="warning">Warning</button>
     <button class="primary">Primary</button>

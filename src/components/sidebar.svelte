@@ -108,7 +108,7 @@
             <input
                 type="text"
                 placeholder="Quick search"
-                class="site-search {$ShowSearch && $SearchQuery ? 'active' : ''}"
+                class="site-search"
                 on:focus={handleFocus}
                 on:paste={handleInputChange}
                 on:keyup={handleInputChange}
@@ -324,13 +324,5 @@
 
     .logout {
         margin-top: var(--spacing-lg);
-    }
-
-    .active {
-        box-shadow: 0 0 8px 2px var(--color-shade-300);
-    }
-
-    :global(.theme-is-light) .active {
-        box-shadow: 0 0 8px 2px var(--color-shade-100);
     }
 </style>

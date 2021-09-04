@@ -1011,10 +1011,7 @@
         display: grid;
         grid-template-columns: repeat(4, auto);
         width: fit-content;
-        gap: var(--spacing-sm);
-        border: 2px solid var(--color-border);
-        border-radius: 7px;
-        padding: var(--spacing-lg);
+        gap: var(--spacing-md);
         margin: var(--spacing-lg) 0;
     }
 

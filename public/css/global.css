@@ -124,25 +124,6 @@ ul {
     padding: 0;
 }
 
-::placeholder {
-    color: var(--color-text-body);
-    opacity: 0.8;
-}
-
-input {
-    background-color: var(--color-tint-100);
-    max-width: 100%;
-    outline: 0;
-    border: 0;
-    color: var(--color-text-body);
-}
-
-input[type="text"],
-input[type="password"],
-input[type="number"] {
-    padding: var(--spacing-md);
-}
-
 /* W3C spec */
 * {
     scrollbar-width: thin;
@@ -172,11 +153,151 @@ input[type="number"] {
 }
 
 /* --------------------------
+   Form / inputs
+   -------------------------- */
+
+::placeholder {
+    color: var(--color-text-body);
+    opacity: 0.7;
+}
+
+input,
+select {
+    outline: none;
+    border: 0;
+    background-color: unset;
+    color: var(--color-text-body);
+}
+
+input {
+    appearance: none;
+    margin: 0;
+    max-width: 100%;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    color: var(--color-highlight);
+    cursor: pointer;
+    border: 1.5px solid var(--color-border);
+}
+
+input:not([type="radio"]),
+select {
+    border-radius: 5px;
+}
+
+input:not([type="radio"]):not([type="checkbox"]),
+select {
+    padding: 0.5em;
+}
+
+input,
+select {
+    border: 1.5px solid var(--color-border);
+}
+
+select:focus {
+    background-color: var(--color-background);
+}
+
+input[type="checkbox"]:not(.switch):before {
+    content: "✔";
+    position: absolute;
+    font-size: 1.5em;
+    right: 0px;
+    top: -0.2em;
+    visibility: hidden;
+    color: var(--color-background);
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    background-color: var(--color-highlight);
+}
+
+input[type="checkbox"]:checked:before {
+    visibility: visible;
+}
+
+input[type="checkbox"].switch {
+    position: relative;
+    border-radius: 99px;
+    width: 36px;
+}
+
+input[type="checkbox"].switch:after {
+    content: '';
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: var(--color-highlight);
+    position: absolute;
+    left: 1px;
+    top: 1px;
+}
+
+input[type="checkbox"].switch:checked:after {
+    background-color: var(--color-background);
+    transform: translateX(100%);
+}
+
+input[type="radio"] {
+    border-radius: 50%;
+}
+
+input[type="radio"]:before {
+    display: block;
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--color-background);
+    font-size: 1.2em;
+    top: calc(50% - 4px);
+    left: calc(50% - 4px);
+    position: relative;
+    visibility: hidden;
+}
+
+input[type="radio"]:checked::before {
+    visibility: visible;
+}
+
+input:disabled,
+select:disabled,
+textarea:disabled,
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: 0;
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+button:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-highlight);
+    border-color: var(--color-background);
+}
+
+/* --------------------------
    Buttons / badges
    -------------------------- */
 
 ::-moz-focus-inner {
-    outline: 0; /* TODO accessibility replacement */
+    outline: 0;
 }
 
 .badge {
@@ -185,6 +306,8 @@ input[type="number"] {
 }
 
 button {
+    --button-shadow: hsla(0, 0%, 0%, 0.2);
+    --button-highlight: hsla(0, 0%, 100%, 0.1);
     background-color: var(--color-button-bg-primary);
     border: unset;
     color: var(--color-button-text-primary);
@@ -197,14 +320,14 @@ button {
     border-radius: 999px;
     align-items: center;
     outline: 0;
-    box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.2),
-        inset 0 1px 0 hsla(0, 0%, 100%, 0.1);
+    box-shadow: 0 2px 3px var(--button-shadow),
+        inset 0 1px 0 var(--button-highlight);
     /*overflow: hidden;*/
 }
 
 .theme-is-light button {
-    box-shadow: 0 2px 3px hsla(0, 0%, 0%, 0.1),
-        inset 0 1px 0 hsla(0, 0%, 100%, 0.3);
+    --button-shadow: hsla(0, 0%, 0%, 0.1);
+    --button-highlight: hsla(0, 0%, 100%, 0.3);
 }
 
 button:not(:disabled):hover {
@@ -213,11 +336,7 @@ button:not(:disabled):hover {
 }
 
 button:disabled {
-    cursor: default;
-    opacity: 0.5;
-    pointer-events: none;
     box-shadow: none;
-    background-color: unset;
 }
 
 button.active {
