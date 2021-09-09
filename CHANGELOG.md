@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.11.0] - 2021-09-09
+### Changed
+- Styling for form/input elements
+- Adjust categories of some optgroups in advanced search
+- Show average ratings after heart icon to maintain alignment
+
 ## [0.10.0] - 2021-09-03
 ### Added
 - Toggleable option to skip songs below a specified rating when playing/adding to queue
