@@ -227,7 +227,7 @@
         {
             id: "file",
             label: "Filename",
-            category: "Song Metadata",
+            category: "File Data",
             object_types: [
                 { id: "song" }
             ],
@@ -237,7 +237,7 @@
         {
             id: "bitrate",
             label: "Bitrate",
-            category: "Song Metadata",
+            category: "File Data",
             object_types: [
                 { id: "song" }
             ],
@@ -558,7 +558,7 @@
         {
             id: "other_user",
             label: "Another User",
-            category: "System",
+            category: "Rating",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -570,7 +570,7 @@
         {
             id: "catalog",
             label: "Catalog",
-            category: "System",
+            category: "File Data",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -582,7 +582,7 @@
         {
             id: "other_user_album",
             label: "Another User (Album)",
-            category: "System",
+            category: "Rating",
             object_types: [
                 { id: "song" }
             ],
@@ -592,7 +592,7 @@
         {
             id: "other_user_artist",
             label: "Another User (Artist)",
-            category: "System",
+            category: "Rating",
             object_types: [
                 { id: "song" }
             ],
@@ -632,7 +632,7 @@
         {
             id: "time",
             label: "Length (in minutes)",
-            category: "Time",
+            category: "File Data",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -644,7 +644,7 @@
         {
             id: "added",
             label: "Added",
-            category: "Time",
+            category: "File Data",
             object_types: [
                 { id: "song" }
             ],
@@ -654,7 +654,7 @@
         {
             id: "updated",
             label: "Updated",
-            category: "Time",
+            category: "File Data",
             object_types: [
                 { id: "song" }
             ],
@@ -664,7 +664,7 @@
         {
             id: "recent_added",
             label: "Recently added",
-            category: "Time",
+            category: "File Data",
             object_types: [
                 { id: "song" }
             ],
@@ -674,7 +674,7 @@
         {
             id: "recent_updated",
             label: "Recently updated",
-            category: "Time",
+            category: "File Data",
             object_types: [
                 { id: "song" }
             ],
@@ -716,7 +716,7 @@
         {
             id: "possible_duplicate",
             label: "Possible Duplicate",
-            category: "System",
+            category: "File Data",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -728,7 +728,7 @@
         {
             id: "possible_duplicate_album",
             label: "Possible Duplicate Albums",
-            category: "System",
+            category: "File Data",
             object_types: [
                 { id: "artist" }
             ],
@@ -738,7 +738,7 @@
         {
             id: "has_image",
             label: "Local Image",
-            category: "System",
+            category: "File Data",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -749,7 +749,7 @@
         {
             id: "image_width",
             label: "Image Width",
-            category: "System",
+            category: "File Data",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -760,7 +760,7 @@
         {
             id: "image_height",
             label: "Image Height",
-            category: "System",
+            category: "File Data",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
