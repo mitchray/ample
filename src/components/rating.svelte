@@ -97,12 +97,6 @@
         {/each}
     </ul>
 
-    {#if averageRating && showAverageRatings}
-        <span class="c-rating__average" title="Average from all users">
-            ({averageRating})
-        </span>
-    {/if}
-
     <span on:click={handleFlag} class="c-rating__flag {flag ? 'flagged' : ''}">
         {#if flag}
             <SVGFavoriteFull />
@@ -110,6 +104,12 @@
             <SVGFavoriteOutline />
         {/if}
     </span>
+
+    {#if averageRating && showAverageRatings}
+        <span class="c-rating__average" title="Average from all users">
+            ({averageRating})
+        </span>
+    {/if}
 </div>
 
 
@@ -156,6 +156,7 @@
 
     .c-rating__average {
         cursor: default;
+        padding-left: var(--spacing-sm);
     }
     
     .current,

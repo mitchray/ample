@@ -122,6 +122,11 @@
         width: 100%;
     }
 
+    /* TODO: temporary workaround until grid refactor */
+    .song-row :global(.c-rating) {
+        min-width: 160px;
+    }
+
     .actions {
         display: flex;
         margin-left: auto;
