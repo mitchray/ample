@@ -3,7 +3,7 @@
 
     import { getSongsFromArtist, sortSongsByName } from "../logic/song";
 
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     export let artistID;
     let songs = [];
@@ -24,7 +24,7 @@
 </script>
 
 {#if !loading && songs && songs.length > 0}
-    <Lister bind:data={songs} type="song" />
+    <Lister2 bind:data={songs} type="song" />
 {:else}
     <p>Loading songs</p>
 {/if}

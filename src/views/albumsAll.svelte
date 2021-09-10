@@ -3,7 +3,7 @@
 
     import AlphanumericPagination from '../components/alphanumericPagination.svelte';
     import Actions from '../components/actions.svelte';
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     let selectedChar = ''; // bound from alphanumericPagination
     let filterChars = "";
@@ -34,6 +34,6 @@
     {#key selectedChar}
         <Actions type="albumAlpha" mode="fullButtons" data={{char: selectedChar}} count="3" />
 
-        <Lister data={dataDisplay} type="album" />
+        <Lister2 data={dataDisplay} type="album" />
     {/key}
 {/if}

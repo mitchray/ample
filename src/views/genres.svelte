@@ -4,6 +4,7 @@
     import { getGenres, sortGenresByName } from "../logic/genre";
 
     import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     let genres = [];
     let loading = false;
@@ -25,7 +26,7 @@
 <h1>Genres</h1>
 
 {#if !loading && genres && genres.length > 0}
-    <Lister data={genres} type="genre" />
+    <Lister2 data={genres} type="genre" initialSort="name" />
 {:else}
     <p>Loading genres</p>
 {/if}

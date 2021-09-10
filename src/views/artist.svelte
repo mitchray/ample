@@ -13,7 +13,7 @@
     import ArtistReleases from '../components/artistReleases.svelte';
     import ArtistSongs from '../components/artistSongs.svelte';
     import Rating from '../components/rating.svelte';
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
     import MusicbrainzScan from '../components/musicbrainzScan.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
@@ -112,7 +112,7 @@
                     Loading popular songs
                 {:then songs}
                     {#if songs.length > 0}
-                        <Lister data={songs} type="song" showIndex="{true}" />
+                        <Lister2 data={songs} type="song" showIndex={true} />
                     {:else}
                         <p>No songs found</p>
                     {/if}

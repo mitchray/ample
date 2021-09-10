@@ -1,5 +1,5 @@
 <script>
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     export let loadedTime;
     export let loading;
@@ -21,7 +21,7 @@
     {#if results.length > 0}
         <p>Total: {results.length}</p>
         {#key loadedTime}
-            <Lister bind:data={results} type="{type}" showCheckboxes={showCheckboxes} />
+            <Lister2 bind:data={results} type="{type}" showCheckboxes={showCheckboxes} />
         {/key}
     {:else}
         <p>No items found</p>

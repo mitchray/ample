@@ -9,7 +9,7 @@
 
     import Actions from '../components/actions.svelte';
     import LinkCard from '../components/linkCard.svelte';
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     import SVGGenre from "../../public/images/label.svg";
 
@@ -64,17 +64,17 @@
         {#if data.length > 0}
             {#if type === 'artists'}
                 <Actions type="artistGenre" mode="fullButtons" data="{genre.name}" />
-                <Lister data={data} type="artist" activeSort="title"/>
+                <Lister2 data={data} type="artist" activeSort="title"/>
             {/if}
 
             {#if type === 'albums'}
                 <Actions type="albumGenre" mode="fullButtons" data="{genre.name}" />
-                <Lister data={data} type="album" activeSort="title"/>
+                <Lister2 data={data} type="album" activeSort="title"/>
             {/if}
 
             {#if type === 'songs'}
                 <Actions type="songGenre" mode="fullButtons" data="{genre.name}" />
-                <Lister data={data} type="song" activeSort="title"/>
+                <Lister2 data={data} type="song" activeSort="title"/>
             {/if}
         {/if}
     {:else}

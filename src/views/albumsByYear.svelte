@@ -5,7 +5,7 @@
 
     import YearPagination from '../components/yearPagination.svelte';
     import Actions from '../components/actions.svelte';
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     export let year = null;
 
@@ -47,7 +47,7 @@
             <p>Loading albums</p>
         {:else}
             {#if data.length > 0}
-                <Lister data={data} type="album" />
+                <Lister2 data={data} type="album" />
             {:else}
                 <p>No albums found within requested range</p>
             {/if}

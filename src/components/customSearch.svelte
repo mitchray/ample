@@ -116,7 +116,7 @@
             case "artist":
                 results = await getArtistsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
                 break;
-            case "playlists":
+            case "playlist":
                 results = await getPlaylistsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
                 break;
             default:
@@ -154,7 +154,7 @@
                 { id: "song", category: "Song Metadata" },
                 { id: "album", category: "Album Metadata" },
                 { id: "artist", category: "Artist Metadata", label: "Name" },
-                { id: "playlists", category: "Playlist Metadata", label: "Name" }
+                { id: "playlist", category: "Playlist Metadata", label: "Name" }
             ],
             operatorType: "string",
             inputType: "text"
@@ -781,7 +781,7 @@
                     <option value="song">songs</option>
                     <option value="album">albums</option>
                     <option value="artist">artists</option>
-                    <option value="playlists">playlists</option>
+                    <option value="playlist">playlists</option>
                 </select>
             </label>
         </div>

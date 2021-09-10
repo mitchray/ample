@@ -5,6 +5,7 @@
 
     import Tabs from "../components/tabs.svelte";
     import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
@@ -28,7 +29,7 @@
             Loading favorite artists
         {:then artists}
             {#if artists.length > 0}
-                <Lister data={artists} type="artist" />
+                <Lister2 data={artists} type="artist" />
             {:else}
                 <p>No artists found</p>
             {/if}
@@ -42,7 +43,7 @@
             Loading favorite albums
         {:then albums}
             {#if albums.length > 0}
-                <Lister data={albums} type="album" />
+                <Lister2 data={albums} type="album" />
             {:else}
                 <p>No albums found</p>
             {/if}
@@ -56,7 +57,7 @@
             Loading favorite songs
         {:then songs}
             {#if songs.length > 0}
-                <Lister data={songs} type="song" />
+                <Lister2 data={songs} type="song" />
             {:else}
                 <p>No songs found</p>
             {/if}

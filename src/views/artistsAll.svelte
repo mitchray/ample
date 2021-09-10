@@ -4,7 +4,7 @@
 
     import AlphanumericPagination from '../components/alphanumericPagination.svelte';
     import Actions from '../components/actions.svelte';
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     let selectedChar = ''; // bound from alphanumericPagination
     let filterChars = "";
@@ -47,7 +47,7 @@
             data={{char: selectedChar}}
         />
 
-        <Lister bind:data={dataDisplay} type="artist" />
+        <Lister2 bind:data={dataDisplay} type="artist" />
     {/key}
 {/if}
 

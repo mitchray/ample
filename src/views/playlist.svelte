@@ -7,7 +7,7 @@
 
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
-    import Lister from '../components/lister.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     import SVGPlaylist from "../../public/images/queue_music.svg";
     import SVGSmartlist from "../../public/images/smartlist.svg";
@@ -90,7 +90,7 @@
 
             <div class="songs">
                 {#key loadedTime}
-                    <Lister bind:data={songs} type="{isSmartlist ? 'smartlist' : 'playlist'}" id="{playlist.id}" />
+                    <Lister2 bind:data={songs} type="song" id="{playlist.id}" />
                 {/key}
             </div>
         </div>
@@ -108,6 +108,14 @@
     .songs {
         color: var(--color-text-body);
         overscroll-behavior: contain;
+    }
+
+    /* needed as flex doesn't include padding in height calc */
+    .songs:after {
+        /*content: '';*/
+        /*padding: inherit;*/
+        /*padding-top: 0;*/
+        /*display: block;*/
     }
 
     .cover {
@@ -176,6 +184,7 @@
         .songs {
             width: 100%;
             padding: var(--spacing-xxl);
+            overflow-y: hidden; /* hide the scrollbar, but it shouldn't be needed */
         }
     }
 </style>
