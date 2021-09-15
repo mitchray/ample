@@ -152,7 +152,7 @@
 
 <style>
     .lister-wrapper {
-        width: fit-content;
+        max-width: 100%;
     }
 
     .lister-container {
