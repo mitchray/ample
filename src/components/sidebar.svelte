@@ -231,6 +231,10 @@
         z-index: 1;
     }
 
+    :global(.site-sidebar__link svg) {
+        padding-right: var(--spacing-sm);
+    }
+
     li.current :global(.site-sidebar__link) {
         position: relative;
         font-weight: 700;
