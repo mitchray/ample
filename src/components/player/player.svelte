@@ -271,7 +271,7 @@
             grid-template-rows: 1fr 1fr;
         }
 
-        .site-player__now-playing:before {
+        .site-player:before {
             content: '';
             grid-column-start: now-playing;
             grid-column-end: times;
