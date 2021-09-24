@@ -5,10 +5,13 @@
     import { getSongsFromAlbum, groupSongsByDisc } from '../logic/song';
     import { formatSongLength } from '../logic/helper';
 
+    import { CurrentSong } from '../stores/status';
+
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
+    import SVGCurrent from "../../public/images/play_circle.svg";
 
     export let id;
     let groupedSongs;
@@ -45,6 +48,11 @@
                             <li class="song-row">
                                 <span class="track">{song.track}</span>
                                 <span class="title">
+                                    {#if $CurrentSong && $CurrentSong.id === song.id}
+                                        <span class="current-icon">
+                                            <SVGCurrent class="icon" />
+                                        </span>
+                                    {/if}
                                     {song.name}
                                     {#if song.albumartist.id !== song.artist.id}
                                         <span class="artist"><Link to="artists/{song.artist.id}"><SVGArtist class="inline"/> {song.artist.name}</Link></span>
@@ -91,6 +99,8 @@
     }
 
     .title {
+        display: flex;
+        align-items: center;
         margin-left: var(--spacing-lg);
     }
 

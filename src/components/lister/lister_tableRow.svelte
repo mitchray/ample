@@ -4,6 +4,8 @@
 
     import { formatSongLength } from '../../logic/helper';
 
+    import { CurrentSong } from '../../stores/status';
+
     export let contextKey;
     export let item;
 
@@ -15,6 +17,7 @@
     import SVGSong from "../../../public/images/music_note.svg";
     import SVGYear from "../../../public/images/year.svg";
     import SVGGenre from "../../../public/images/label.svg";
+    import SVGCurrent from "../../../public/images/play_circle.svg";
     import SVGCenter from "../../../public/images/center_focus.svg";
     import SVGClose from "../../../public/images/close.svg";
 
@@ -57,7 +60,15 @@
                     {item.name}
                 </Link>
             {:else}
-                <span>{item.name}</span>
+                {#if $CurrentSong && $CurrentSong.id === item.id}
+                    <span class="current-icon">
+                        <SVGCurrent class="icon" />
+                    </span>
+                {/if}
+
+                <span>
+                    {item.name}
+                </span>
             {/if}
         </div>
     {/if}

@@ -251,6 +251,12 @@
 
 
 <style>
+    :global(.current-icon) {
+        margin-right: var(--spacing-sm);
+        color: var(--color-link-active);
+        flex-shrink: 0;
+    }
+
     .queue-header {
         display: inline-block;
         margin-bottom: var(--spacing-md);
@@ -400,11 +406,6 @@
 
     .currentlyPlaying {
         color: var(--color-link-hover);
-    }
-
-    .current-icon {
-        margin-right: var(--spacing-sm);
-        color: var(--color-link-active);
     }
 
     .details {
