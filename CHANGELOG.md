@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.12.0] - 2021-09-24
+### Fixed
+- Date selector dimensions needed adjustment after new design
+- Chrome/Webkit had a glitchy background in the player
+
+### Added
+- Currently playing song indicator in lists and album view
+
+### Changed
+- Lister component refactored for easier updates going forward
+- Lister table columns can now be resized
+- Cleaner design of lister
+
 ## [0.11.0] - 2021-09-09
 ### Changed
 - Styling for form/input elements
