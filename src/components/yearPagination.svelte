@@ -286,7 +286,7 @@
 
     .input-group {
         display: flex;
-        align-items: flex-end;
+        align-items: center;
         margin-bottom: var(--spacing-lg);
     }
 
@@ -295,8 +295,7 @@
         padding: 0;
         margin: 0;
         position: relative;
-        bottom: 50%;
-        transform: translateY(-40%);
+        transform: translateY(50%);
     }
 
     .minus {
@@ -316,7 +315,8 @@
     }
 
     .inputs input {
-        max-width: 5ch; /* Chrome doesn't honor size attribute */
+        box-sizing: content-box; /* don't include padding for this */
+        width: 4ch; /* declare as Chrome doesn't honor size attribute */
         font-size: 2rem;
     }
 
