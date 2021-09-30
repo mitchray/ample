@@ -1,9 +1,8 @@
 <script>
+    import { onMount } from 'svelte';
     import { serverURL } from '../stores/server';
 
-    import SVGData from "../../public/images/text.svg";
-    import SVGSearch from "../../public/images/search.svg";
-    import SVGMusic from "../../public/images/music_note.svg";
+    import SVGLaunch from "../../public/images/launch.svg";
 
     import Menu from '../components/menu.svelte';
 
@@ -12,216 +11,151 @@
 
     const musicbrainzRegex = new RegExp('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}');
 
+    let menu = [];
+
     let hasMusicbrainz = musicbrainzRegex.test(data.mbid);
 
     let isVisible = false;
-    let menuType;
 
-    function toggleMenu(type) {
-        menuType = type;
+    function toggleMenu() {
         isVisible = !isVisible;
     }
+
+    onMount(() => {
+        data.artist = data.artist ? data.artist : {};
+
+        menu = [
+            {
+                id: 'data',
+                title: 'Data',
+                items: [
+                    {
+                        id: 'ampache',
+                        title: 'Ampache',
+                        artistURL: `${$serverURL}/artists.php?action=show&artist=${data.id}`,
+                        albumURL: `${$serverURL}/albums.php?action=show&album=${data.id}`
+                    },
+                    {
+                        id: 'discogs',
+                        title: 'Discogs',
+                        artistURL: `https://www.discogs.com/search/?q="${encodeURIComponent(data.name)}"&type=artist`,
+                        albumURL: `https://www.discogs.com/search/?q="${encodeURIComponent(data.name)}"+"${encodeURIComponent(data.artist.name)}"&type=release`
+                    },
+                    {
+                        id: 'lastfm',
+                        title: 'Last.fm',
+                        artistURL: `https://www.last.fm/search/artists?q=${encodeURIComponent(data.name)}`,
+                        albumURL: `https://www.last.fm/search/albums?q=${encodeURIComponent(data.name)}+${encodeURIComponent(data.artist.name)}`
+                    },
+                    {
+                        id: 'musicbrainz',
+                        title: 'MusicBrainz',
+                        artistURL: hasMusicbrainz ? `https://musicbrainz.org/artist/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=artist&method=indexed`,
+                        albumURL: hasMusicbrainz ? `https://musicbrainz.org/release/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=release&method=indexed`
+                    },
+                ]
+            },
+            {
+                id: 'search',
+                title: 'Search',
+                items: [
+                    {
+                        id: 'duckduckgo',
+                        title: 'Duck Duck Go',
+                        artistURL: `https://www.duckduckgo.com/?q="${encodeURIComponent(data.name)}"`,
+                        albumURL: `https://www.duckduckgo.com/?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`
+                    },
+                    {
+                        id: 'google',
+                        title: 'Google',
+                        artistURL: `https://www.google.com/search?q="${encodeURIComponent(data.name)}"`,
+                        albumURL: `https://www.google.com/search?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`
+                    },
+                    {
+                        id: 'wikipedia',
+                        title: 'Wikipedia',
+                        artistURL: `https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`,
+                        albumURL: `https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`
+                    },
+                ]
+            },
+            {
+                id: 'services',
+                title: 'Services',
+                items: [
+                    {
+                        id: 'apple',
+                        title: 'Apple Music',
+                        artistURL: `https://music.apple.com/search?term=${encodeURIComponent(data.name)}`,
+                        albumURL: `https://music.apple.com/search?term=${encodeURIComponent(data.name)} ${encodeURIComponent(data.artist.name)}`
+                    },
+                    {
+                        id: 'bandcamp',
+                        title: 'Bandcamp',
+                        artistURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}`,
+                        albumURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}`
+                    },
+                    {
+                        id: 'deezer',
+                        title: 'Deezer',
+                        artistURL: `https://www.deezer.com/search/"${encodeURIComponent(data.name)}"/artist`,
+                        albumURL: `https://www.deezer.com/search/"${encodeURIComponent(data.name)}" "${encodeURIComponent(data.artist.name)}"/album`
+                    },
+                    {
+                        id: 'spotify',
+                        title: 'Spotify',
+                        artistURL: `https://open.spotify.com/search/artist:"${encodeURIComponent(data.name)}"`,
+                        albumURL: `https://open.spotify.com/search/album:"${encodeURIComponent(data.name)}" artist:"${encodeURIComponent(data.artist.name)}"`
+                    },
+                    {
+                        id: 'youtube',
+                        title: 'YouTube Music',
+                        artistURL: `https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`,
+                        albumURL: `https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`
+                    },
+                ]
+            },
+        ];
+    });
 </script>
 
 <div class="container">
     <button
         type="button"
         id="thirdParty-data"
-        class="just-icon"
-        on:click={() => {toggleMenu('data')}}
+        class="with-icon"
+        on:click={toggleMenu}
         title="Data"
     >
-        <SVGData style="padding: 0.15em;" />
+        <SVGLaunch style="padding: 0.2em;" /> Links
     </button>
 
-    <button
-        type="button"
-        id="thirdParty-search"
-        class="just-icon"
-        on:click={() => {toggleMenu('search')}}
-        title="Search"
-    >
-        <SVGSearch />
-    </button>
-
-    <button
-        type="button"
-        id="thirdParty-provider"
-        class="just-icon"
-        on:click={() => {toggleMenu('provider')}}
-        title="Providers"
-    >
-        <SVGMusic />
-    </button>
-
-    {#if type === 'artist'}
-        {#if isVisible && menuType === 'data'}
-            <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-data')} bind:isVisible={isVisible}>
-                <ul class="menu-list">
-                    <li>
-                        <a target="_blank" href={`${$serverURL}/artists.php?action=show&artist=${data.id}`}>
-                            Ampache
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.discogs.com/search/?q="${encodeURIComponent(data.name)}"&type=artist`}>
-                            Discogs
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.last.fm/search/artists?q=${encodeURIComponent(data.name)}`}>
-                            Last.fm
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank"
-                            href={hasMusicbrainz ? `https://musicbrainz.org/artist/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=artist&method=indexed`}
-                        >
-                            MusicBrainz
-                        </a>
-                    </li>
-                </ul>
-            </Menu>
-        {/if}
-
-        {#if isVisible && menuType === 'search'}
-            <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-search')} bind:isVisible={isVisible}>
-                <ul class="menu-list">
-                    <li>
-                        <a target="_blank" href={`https://www.duckduckgo.com/?q="${encodeURIComponent(data.name)}"`}>
-                            Duck Duck Go
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.google.com/search?q="${encodeURIComponent(data.name)}"`}>
-                            Google
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`}>
-                            Wikipedia
-                        </a>
-                    </li>
-                </ul>
-            </Menu>
-        {/if}
-
-        {#if isVisible && menuType === 'provider'}
-            <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-provider')} bind:isVisible={isVisible}>
-                <ul class="menu-list">
-                    <li>
-                        <a target="_blank" href={`https://music.apple.com/search?term=${encodeURIComponent(data.name)}`}>
-                            Apple Music
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://bandcamp.com/search?q=${encodeURIComponent(data.name)}`}>
-                            Bandcamp
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.deezer.com/search/"${encodeURIComponent(data.name)}"/artist`}>
-                            Deezer
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://open.spotify.com/search/artist:"${encodeURIComponent(data.name)}"`}>
-                            Spotify
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`}>
-                            YouTube Music
-                        </a>
-                    </li>
-                </ul>
-            </Menu>
-        {/if}
-    {/if}
-
-    {#if type === 'album'}
-        {#if isVisible && menuType === 'data'}
-            <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-data')} bind:isVisible={isVisible}>
-                <ul class="menu-list">
-                    <li>
-                        <a target="_blank" href={`${$serverURL}/albums.php?action=show&album=${data.id}`}>
-                            Ampache
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.discogs.com/search/?q="${encodeURIComponent(data.name)}"+"${encodeURIComponent(data.artist.name)}"&type=release`}>
-                            Discogs
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.last.fm/search/albums?q=${encodeURIComponent(data.name)}+${encodeURIComponent(data.artist.name)}`}>
-                            Last.fm
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank"
-                            href={hasMusicbrainz ? `https://musicbrainz.org/release/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=release&method=indexed`}
-                        >
-                            MusicBrainz
-                        </a>
-                    </li>
-                </ul>
-            </Menu>
-        {/if}
-
-        {#if isVisible && menuType === 'search'}
-            <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-search')} bind:isVisible={isVisible}>
-                <ul class="menu-list">
-                    <li>
-                        <a target="_blank" href={`https://www.duckduckgo.com/?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`}>
-                            Duck Duck Go
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.google.com/search?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`}>
-                            Google
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`}>
-                            Wikipedia
-                        </a>
-                    </li>
-                </ul>
-            </Menu>
-        {/if}
-
-        {#if isVisible && menuType === 'provider'}
-            <Menu anchor="bottom-left" toggleElement={document.querySelector('#thirdParty-provider')} bind:isVisible={isVisible}>
-                <ul class="menu-list">
-                    <li>
-                        <a target="_blank" href={`https://music.apple.com/search?term=${encodeURIComponent(data.name)} ${encodeURIComponent(data.artist.name)}`}>
-                            Apple Music
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://bandcamp.com/search?q=${encodeURIComponent(data.name)}`}>
-                            Bandcamp
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://www.deezer.com/search/"${encodeURIComponent(data.name)}" "${encodeURIComponent(data.artist.name)}"/album`}>
-                            Deezer
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://open.spotify.com/search/album:"${encodeURIComponent(data.name)}" artist:"${encodeURIComponent(data.artist.name)}"`}>
-                            Spotify
-                        </a>
-                    </li>
-                    <li>
-                        <a target="_blank" href={`https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`}>
-                            YouTube Music
-                        </a>
-                    </li>
-                </ul>
-            </Menu>
-        {/if}
+    {#if isVisible && data}
+        <Menu anchor="bottom-center" toggleElement={document.querySelector('#thirdParty-data')} bind:isVisible={isVisible}>
+            <div class="groups">
+                {#each menu as category}
+                    <div class="group">
+                        <h4>{category.title}</h4>
+                        <ul class="menu-list">
+                            {#each category.items as link}
+                                <li>
+                                    {#if type === 'artist'}
+                                        <a target="_blank" href={link.artistURL}>
+                                            {link.title}
+                                        </a>
+                                    {/if}
+                                    {#if type === 'album'}
+                                        <a target="_blank" href={link.albumURL}>
+                                            {link.title}
+                                        </a>
+                                    {/if}
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                {/each}
+            </div>
+        </Menu>
     {/if}
 </div>
 
@@ -231,23 +165,17 @@
         gap: var(--spacing-sm);
     }
 
-    ul {
-        margin: 0;
+    .groups {
+        display: flex;
+        gap: var(--spacing-xl);
     }
 
-    button {
-        padding: 0.3em;
+    .group + .group {
+        border-left: 2px solid var(--color-lines);
+        padding-left: var(--spacing-lg);
     }
 
-    a:after {
-        display: inline-block;
-        content: '';
-        background-color: currentColor;
-        mask-image: url('/ample/public/images/launch.svg');
-        mask-size: contain;
-        mask-position: center;
-        height: 1em;
-        width: 1em;
-        margin-left: var(--spacing-sm);
+    h4 {
+        margin-bottom: var(--spacing-md);
     }
 </style>
