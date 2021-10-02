@@ -47,13 +47,15 @@
                         {#each value as song}
                             <li class="song-row">
                                 <span class="track">{song.track}</span>
-                                <span class="title">
-                                    {#if $CurrentSong && $CurrentSong.id === song.id}
-                                        <span class="current-icon">
-                                            <SVGCurrent class="icon" />
-                                        </span>
-                                    {/if}
-                                    {song.name}
+                                {#if $CurrentSong && $CurrentSong.id === song.id}
+                                    <span class="current-icon">
+                                        <SVGCurrent class="icon" />
+                                    </span>
+                                {/if}
+                                <span class="info">
+                                    <span class="title">
+                                        {song.name}
+                                    </span>
                                     {#if song.albumartist.id !== song.artist.id}
                                         <span class="artist"><Link to="artists/{song.artist.id}"><SVGArtist class="inline"/> {song.artist.name}</Link></span>
                                     {/if}
@@ -101,7 +103,6 @@
     .title {
         display: flex;
         align-items: center;
-        margin-left: var(--spacing-lg);
     }
 
     li {
@@ -119,6 +120,7 @@
     .track {
         text-align: right;
         min-width: 3ch;
+        margin-right: var(--spacing-lg);
     }
 
     .time {
