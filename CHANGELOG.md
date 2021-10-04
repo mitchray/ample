@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.13.0] - 2021-10-04
+### Fixed
+- The current song indicator broke layout when song artist was shown
+
+### Changed
+- New visual style for album hover
+- New images for artists/albums with no artwork
+- Third party links for albums/artist now shown as a single menu
+
 ## [0.12.0] - 2021-09-24
 ### Fixed
 - Date selector dimensions needed adjustment after new design
