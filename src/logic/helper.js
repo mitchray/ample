@@ -141,7 +141,7 @@ export async function placeholderArtCheck(url) {
     let results = [];
     let images = [
         get(serverURL) + '/image.php?object_id=0&object_type=album&thumb=10',
-        url
+        url + '&thumb=10'
     ];
 
     try {

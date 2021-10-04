@@ -129,7 +129,7 @@ export const getArtist = async (id) => {
     debugHelper(queryURL, "getArtist");
 
     let artist = await fetchArtistData(queryURL);
-    artist.useBackground = await placeholderArtCheck(artist.art + "&thumb=10");
+    artist.useBackground = await placeholderArtCheck(artist.art);
     artist.averageColor = await getAverageColor(artist.art + "&thumb=10");
     artist.legibleColors = await getLegibleColors(artist.averageColor.value);
 

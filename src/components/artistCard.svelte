@@ -2,6 +2,7 @@
     import { Link } from "svelte-routing";
 
     import Rating from '../components/rating.svelte';
+    import Artwork from '../components/artwork.svelte';
 
     export let data = null;
 
@@ -11,7 +12,7 @@
 
 <div class="artist-card">
     {#if artist}
-        <img class="image" height="400" width="400" src="{artist.art}&thumb=22" alt="Image of {artist.name}" loading="lazy">
+        <Artwork type="artist" className="image" src="{artist.art}" thumbSize="22" alt="Image of {artist.name}" width="400" height="400" />
         <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
 
         <div class="rating-container">
@@ -57,10 +58,9 @@
         flex-direction: column;
     }
 
-    .image {
-        color: transparent;
-        background-color: var(--color-tint-100);
+    .artist-card :global(.image) {
         width: 100%;
+        height: auto;
         border-radius: 999px;
     }
 

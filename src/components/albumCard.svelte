@@ -3,6 +3,7 @@
 
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
+    import Artwork from '../components/artwork.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
@@ -16,8 +17,7 @@
 <div class="album-card">
     {#if album}
         <div class="image-container">
-            <img width="160" height="160" class="image" src="{album.art}&thumb=22" alt="Image of {album.name}">
-            <img width="160" height="160" class="image-thumb" src="{album.art}&thumb=1" alt="" loading="lazy">
+            <Artwork type="album" className="image" src="{album.art}" thumbSize="22" alt="Image of {album.name}" width="160" height="160" />
 
             <div class="actions">
                 <Actions
@@ -92,82 +92,54 @@
         flex-direction: column;
     }
 
-    .album-card:hover .image {
-        opacity: 0;
+    .album-card :global(.image) {
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    .album-card :global(.container) {
+        transition: all 200ms ease;
+        position: relative;
+        z-index: 20;
+        will-change: filter, transform;
+    }
+
+    .album-card:hover :global(.container) {
+        filter: contrast(80%) drop-shadow(0 15px 10px rgba(0,0,0,0.2));
+        transform: perspective(1000px) rotateX(50deg) translateY(-30%);
+        pointer-events: none;
     }
 
     .album-card:hover .actions {
         opacity: 1;
+        transition-duration: 1ms;
     }
 
     .image-container {
         line-height: 0;
-        border-radius: 5px;
-        overflow: hidden;
         position: relative;
         z-index: 1;
+        justify-content: center;
+        display: flex;
     }
 
-    .image-container:after {
-        content: '';
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        background-image: linear-gradient(
-            to top,
-            rgb(var(--color-highlight-rgb)) 0%,
-            rgba(var(--color-highlight-rgb), 0.738) 19%,
-            rgba(var(--color-highlight-rgb), 0.541) 34%,
-            rgba(var(--color-highlight-rgb), 0.382) 47%,
-            rgba(var(--color-highlight-rgb), 0.278) 56.5%,
-            rgba(var(--color-highlight-rgb), 0.194) 65%,
-            rgba(var(--color-highlight-rgb), 0.126) 73%,
-            rgba(var(--color-highlight-rgb), 0.075) 80.2%,
-            rgba(var(--color-highlight-rgb), 0.042) 86.1%,
-            rgba(var(--color-highlight-rgb), 0.021) 91%,
-            rgba(var(--color-highlight-rgb), 0.008) 95.2%,
-            rgba(var(--color-highlight-rgb), 0.002) 98.2%,
-            rgba(var(--color-highlight-rgb), 0) 100%
-        );
-        z-index: 10;
-        opacity: 1;
-    }
-
-    .image {
+    .image-container :global(img) {
         color: transparent;
-        background-color: var(--color-background);
         height: 100%;
         object-fit: cover;
         width: 100%;
-        opacity: 1;
-        transition: opacity 300ms ease;
-        z-index: 20;
-        position: relative;
-    }
-
-    .image-thumb {
-        object-fit: cover;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        filter: blur(5px);
     }
 
     .actions {
         position: absolute;
         bottom: var(--spacing-md);
-        width: 100%;
         display: flex;
         justify-content: center;
         opacity: 0;
-        z-index: 30;
+        background-color: var(--color-lines);
+        padding: var(--spacing-sm);
+        border-radius: 999px;
+        transition: opacity ease 2s;
     }
 
     .actions :global(button) {

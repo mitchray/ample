@@ -3,6 +3,7 @@
 
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
+    import Artwork from '../components/artwork.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
@@ -16,7 +17,7 @@
 <div class="song-card">
     {#if song}
         <div class="image-container">
-            <img class="image" height="200" width="200" src="{song.art}&thumb=22" alt="Image of {song.name}" loading="lazy">
+            <Artwork type="album" className="image" src="{song.art}" thumbSize="22" alt="Image of {song.name}" width="200" height="200" />
         </div>
 
         <div class="info">
@@ -100,11 +101,10 @@
         flex-shrink: 0;
     }
 
-    .image {
+    .image-container :global(.image) {
         object-fit: cover;
         border-radius: 5px;
         color: transparent;
-        background-color: var(--color-tint-100);
     }
 
     .info {
