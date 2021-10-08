@@ -6,14 +6,12 @@
     import { formatSongLength } from "../../logic/helper";
 
     let seekWidth;
-    let duration;
     let currentTime;
     let mouseDown = false;
     let progressSlider;
 
     function updateProgress() {
         seekWidth = ($MediaPlayer.wavesurfer) ? ($MediaPlayer.wavesurfer.getCurrentTime()/$MediaPlayer.wavesurfer.getDuration())*100 : 0;
-        duration = ($MediaPlayer.wavesurfer) ? $MediaPlayer.wavesurfer.getDuration() : 0;
         currentTime = ($MediaPlayer.wavesurfer) ? $MediaPlayer.wavesurfer.getCurrentTime() : 0;
 
         requestAnimationFrame(updateProgress);
@@ -56,7 +54,7 @@
 </script>
 
 <div class="site-player__seekBar" on:click={handleSeek} on:mousedown={handleSeekMouseDown} on:mousemove={handleSeekDrag}>
-    <span class="site-player__progress" data-value="{formatSongLength(currentTime)}" style="width: {seekWidth}%"></span>
+    <span class="site-player__progress" data-value="{formatSongLength(currentTime)}" style="transform: translateX({seekWidth}vw)"></span>
 </div>
 
 <style>
@@ -96,10 +94,11 @@
     .site-player__progress {
         background-color: var(--color-highlight);
         position: absolute;
-        left: 0;
+        right: 100%;
         bottom: 0;
         top: 0;
-        transition: width linear 200ms;
+        transition: transform linear 200ms;
+        width: 100%;
     }
 
     /* seekbar time indicator popup */
