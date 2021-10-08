@@ -58,6 +58,7 @@
     let showGoToArtist  = artistID;
     let showGoToAlbum   = albumID;
     let showMore        = true;
+    let showSkipBelow   = (type !== 'song');
 
     function determineFetchURL() {
         switch (type) {
@@ -324,22 +325,24 @@
             </div>
         {/if}
 
-        <div class="menu-separator"></div>
+        {#if showSkipBelow}
+            <div class="menu-separator"></div>
 
-        <div class="filter-below">
-            <label>
-                <input type="checkbox" bind:checked={$SkipBelow} on:change={handleSkipBelow} />
-                Skip songs below
-            </label>
+            <div class="filter-below">
+                <label>
+                    <input type="checkbox" bind:checked={$SkipBelow} on:change={handleSkipBelow} />
+                    Skip songs below
+                </label>
 
-            <select bind:value={$SkipBelowRating} on:change={handleSkipBelowRating}>
-                <option value="1" selected={$SkipBelowRating === 1}>1 star</option>
-                <option value="2" selected={$SkipBelowRating === 2}>2 stars</option>
-                <option value="3" selected={$SkipBelowRating === 3}>3 stars</option>
-                <option value="4" selected={$SkipBelowRating === 4}>4 stars</option>
-                <option value="5" selected={$SkipBelowRating === 5}>5 stars</option>
-            </select>
-        </div>
+                <select bind:value={$SkipBelowRating} on:change={handleSkipBelowRating}>
+                    <option value="1" selected={$SkipBelowRating === 1}>1 star</option>
+                    <option value="2" selected={$SkipBelowRating === 2}>2 stars</option>
+                    <option value="3" selected={$SkipBelowRating === 3}>3 stars</option>
+                    <option value="4" selected={$SkipBelowRating === 4}>4 stars</option>
+                    <option value="5" selected={$SkipBelowRating === 5}>5 stars</option>
+                </select>
+            </div>
+        {/if}
     </div>
 {/if}
 

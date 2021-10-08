@@ -9,6 +9,7 @@
     import { timeSince } from "../../logic/helper";
 
     import Menu from '../../components/menu.svelte';
+    import Actions from '../../components/actions.svelte';
 
     import SVGClose from "../../../public/images/close.svg";
     import SVGBin from "../../../public/images/delete.svg";
@@ -201,17 +202,14 @@
 
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
                             <Menu anchor="left-center" toggleElement={document.querySelector('#queueMoreToggle-' + queueMoreMenuID)} bind:isVisible={queueMoreMenuIsOpen}>
-                                <ul class="menu-list">
-                                    <li>
-                                        <button class="visuallyLink">Add to playlist</button>
-                                    </li>
-                                    <li>
-                                        <Link to="albums/{song.album.id}"><SVGAlbum class="inline"/> Go to album</Link>
-                                    </li>
-                                    <li>
-                                        <Link to="artists/{song.artist.id}"><SVGArtist class="inline"/> Go to artist</Link>
-                                    </li>
-                                </ul>
+                                <Actions
+                                    type="song"
+                                    mode="subMenu"
+                                    id="{song.id}"
+                                    count=1
+                                    albumID="{song.album.id}"
+                                    artistID="{song.artist.id}"
+                                />
                             </Menu>
                         {/if}
                     </div>
