@@ -304,7 +304,7 @@
         margin: 0 var(--spacing-lg) var(--spacing-lg) 0;
         box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3),
             0 4px 6px -2px rgba(0,0,0,0.15);
-        border: 1px solid var(--color-tint-100);
+        border: 2px solid var(--color-highlight);
         max-height: calc(100vh - 60px - var(--size-webplayer-height));
         display: flex;
         flex-direction: column;
