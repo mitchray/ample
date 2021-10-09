@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.0] - 2021-10-09
+### Fixed
+- Improved performance of the seekbar (CSS transform instead of updating width)
+- Queue item menus now hooked up to Actions component
+
+### Changed
+- Make player queue stand out against background
+
 ## [0.13.0] - 2021-10-04
 ### Fixed
 - The current song indicator broke layout when song artist was shown
