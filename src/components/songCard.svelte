@@ -86,11 +86,16 @@
     }
 
     .song-card {
-        background-color: var(--color-card-background);
+        border: 2px solid var(--color-card-background);
         padding: var(--spacing-md);
         border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
+    }
+
+    .song-card:hover {
+        border-color: transparent;
+        background-color: var(--color-card-background);
     }
 
     .image-container {

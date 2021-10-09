@@ -125,7 +125,7 @@
     }
 
     :global(.playlist-card) {
-        background-color: var(--color-card-background);
+        border: 2px solid var(--color-card-background);
         padding: var(--spacing-lg);
         padding-bottom: var(--spacing-sm);
         border-radius: 10px;
@@ -133,6 +133,11 @@
         display: flex;
         flex-direction: column;
         position: relative;
+    }
+
+    :global(.playlist-card:hover) {
+        border-color: transparent;
+        background-color: var(--color-card-background);
     }
 
     :global(.highlight .playlist-card) {

@@ -32,12 +32,12 @@
     /* Artist grids should have this on the containing element */
     :global(.artist-grid) {
         display: grid;
-        gap: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: var(--spacing-md);
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 
     :global(.artist-scroll) {
-        gap: 20px;
+        gap: var(--spacing-md);
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -45,17 +45,22 @@
     }
 
     :global(.artist-scroll) .artist-card {
-        width: 160px;
+        width: 180px;
     }
 
     .artist-card {
-        background-color: var(--color-card-background);
         padding: var(--spacing-md);
         padding-bottom: var(--spacing-lg);
+        border: 2px solid var(--color-card-background);
         border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;
+    }
+
+    .artist-card:hover {
+        border-color: transparent;
+        background-color: var(--color-card-background);
     }
 
     .artist-card :global(.image) {

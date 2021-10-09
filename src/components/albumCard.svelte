@@ -66,12 +66,13 @@
     /* Album grids should have this on the containing element */
     :global(.album-grid) {
         display: grid;
-        gap: 20px;
+        row-gap: var(--spacing-lg);
+        column-gap: var(--spacing-md);
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 
     :global(.album-scroll) {
-        gap: 20px;
+        gap: var(--spacing-md);
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -83,9 +84,7 @@
     }
 
     .album-card {
-        background-color: var(--color-card-background);
-        padding: var(--spacing-md);
-        padding-bottom: var(--spacing-sm);
+        border: 2px solid var(--color-card-background);
         border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
@@ -93,20 +92,26 @@
     }
 
     .album-card :global(.image) {
-        border-radius: 5px;
+        border-radius: 8px;
         overflow: hidden;
     }
 
     .album-card :global(.container) {
+        flex: 1;
         transition: all 200ms ease;
         position: relative;
         z-index: 20;
         will-change: filter, transform;
     }
 
+    .album-card:hover {
+        border-color: transparent;
+        background-color: var(--color-card-background);
+    }
+
     .album-card:hover :global(.container) {
         filter: contrast(80%) drop-shadow(0 15px 10px rgba(0,0,0,0.2));
-        transform: perspective(1000px) rotateX(50deg) translateY(-30%);
+        transform: perspective(800px) rotateX(40deg) translateY(-20%);
         pointer-events: none;
     }
 
@@ -132,7 +137,7 @@
 
     .actions {
         position: absolute;
-        bottom: var(--spacing-md);
+        bottom: var(--spacing-sm);
         display: flex;
         justify-content: center;
         opacity: 0;
@@ -151,7 +156,7 @@
     }
 
     .details {
-        margin: var(--spacing-md) 0;
+        padding: var(--spacing-md) var(--spacing-lg) 0 var(--spacing-md);
     }
 
     .title {
@@ -170,7 +175,6 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        margin-top: auto;
-        margin-bottom: var(--spacing-md);
+        margin: var(--spacing-md);
     }
 </style>
