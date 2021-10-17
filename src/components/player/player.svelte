@@ -225,7 +225,8 @@
     }
 
     :global(.dragging .site-player__volume-value:before),
-    :global(.dragging .site-player__progress:before) {
+    :global(.dragging .site-player__progress:before),
+    :global(.site-player__seekBar:hover .site-player__progress:before){
         opacity: 1 !important;
     }
 
