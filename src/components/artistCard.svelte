@@ -2,7 +2,6 @@
     import { Link } from "svelte-routing";
 
     import Rating from '../components/rating.svelte';
-    import Artwork from '../components/artwork.svelte';
 
     export let data = null;
 
@@ -12,7 +11,7 @@
 
 <div class="artist-card">
     {#if artist}
-        <Artwork type="artist" className="image" src="{artist.art}" thumbSize="22" alt="Image of {artist.name}" width="400" height="400" />
+        <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
         <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
 
         <div class="rating-container">

@@ -11,7 +11,6 @@
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
-    import Artwork from '../components/artwork.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
@@ -35,7 +34,7 @@
             <div class="details-container">
                 <div class="details">
                     <div class="cover-container">
-                        <Artwork type="album" className="cover" src="{album.art}" thumbSize="32" alt="Image of {album.name}" width="384" height="384" />
+                        <img class="cover" src="{album.art}&thumb=32" alt="Image of {album.name}" width="384" height="384" />
                     </div>
 
                     <div class="info">

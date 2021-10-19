@@ -3,7 +3,6 @@
 
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
-    import Artwork from '../components/artwork.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
@@ -17,7 +16,9 @@
 <div class="album-card">
     {#if album}
         <div class="image-container">
-            <Artwork type="album" className="image" src="{album.art}" thumbSize="22" alt="Image of {album.name}" width="160" height="160" />
+            <div class="container">
+                <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="160" height="160" />
+            </div>
 
             <div class="actions">
                 <Actions
