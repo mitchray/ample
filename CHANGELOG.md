@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.15.0] - 2021-10-26
+### Added
+- Show seekbar current time on hover
+
+### Changed
+- Tighter display of cards
+
+### Removed
+- Removed custom album/artist images, used improved core Ampache placeholder image instead
+
 ## [0.14.0] - 2021-10-09
 ### Fixed
 - Improved performance of the seekbar (CSS transform instead of updating width)
