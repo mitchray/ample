@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.16.0] - 2021-10-29
+### Added
+- Toggle to switch between slim and expanded sidebar modes
+- Added an interface header to house the search field and miscellanea from sidebar
+
+### Changed
+- Moved queue list into a dedicated panel which can be hidden
+- "Clear all" button will leave currently playing song if others exist, click again to remove it
+- Clicking "Now Playing" will take you to currently playing song, instead of having a separate dedicated button
+
 ## [0.15.0] - 2021-10-26
 ### Added
 - Show seekbar current time on hover

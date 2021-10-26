@@ -8,7 +8,7 @@
 
     import { serverVersion } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
-    import { MediaPlayer } from "./stores/player";
+    import { MediaPlayer, SiteContentBind } from "./stores/player";
 
     import { validateAuthToken, extendSession } from './logic/user';
     import { getServerVersion } from './logic/server';
@@ -19,7 +19,9 @@
 
     import ThemeHandler from './components/themeHandler.svelte';
     import SiteLoading from './components/siteLoading.svelte';
+    import Header from './components/header.svelte';
     import Sidebar from './components/sidebar.svelte';
+    import Queue from './components/queue.svelte';
     import Player from './components/player/player.svelte';
 
     import LoginPage from './views/login.svelte';
@@ -82,9 +84,10 @@
     {/if}
 
     {#if $isLoggedIn}
+        <Header/>
         <div class="site-inner">
             <Sidebar/>
-            <div class="site-content">
+            <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
                     <Route path="test" component={TestPage}/>
                     <Route path="search" component={AdvancedSearchPage}/>
@@ -117,6 +120,7 @@
                     <Route path="*" component={NotFound404Page}/>
                 </div>
             </div>
+            <Queue/>
         </div>
         <Player/>
     {/if}
@@ -137,6 +141,10 @@
     }
 
     :global(.site-sidebar) {
+        flex-shrink: 0;
+    }
+
+    :global(.site-queue) {
         flex-shrink: 0;
     }
 

@@ -2,10 +2,7 @@
     import { lchToRgb } from 'color-converters';
 
     import { ThemeIsLight } from '../stores/status';
-    import { customColors, MediaPlayer } from "../stores/player";
-
-    import SVGDarkMode from "../../public/images/dark_mode.svg";
-    import SVGLightMode from "../../public/images/light_mode.svg";
+    import { customColors } from "../stores/player";
 
     $: {
         if ($ThemeIsLight) {
@@ -17,27 +14,7 @@
 
     let theme;
     $: theme = $ThemeIsLight ? 'light' : 'dark';
-
-    function toggleTheme() {
-        let inverted = !$ThemeIsLight;
-        localStorage.setItem('AmpleThemeIsLight', JSON.stringify(inverted));
-        ThemeIsLight.set(inverted);
-
-        // update waveform colors when theme is toggled
-        $MediaPlayer.setWaveColors();
-    }
 </script>
-
-<button
-    class="icon theme-toggle"
-    on:click={toggleTheme}
->
-    {#if $ThemeIsLight}
-        <SVGDarkMode />
-    {:else}
-        <SVGLightMode />
-    {/if}
-</button>
 
 {@html `<style>
 :root {
@@ -214,14 +191,3 @@
 }
 </style>`}
 {/if}
-
-<style>
-    .theme-toggle {
-        position: fixed;
-        top: 2px;
-        right: 10px;
-        left: initial;
-        transform: none;
-        z-index: 100;
-    }
-</style>

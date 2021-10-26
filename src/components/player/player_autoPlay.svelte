@@ -25,12 +25,6 @@
                     .then((result) => {
                         if (!result.error && result.length > 0) {
                             result = (Array.isArray(result)) ? result : [result];
-
-                            // let queue know these are autoloaded
-                            result.forEach(function (element) {
-                                element.fromAutoPlay = "true";
-                            });
-
                             $MediaPlayer.playLast(result);
                         }
                     });

@@ -54,10 +54,11 @@
     --spacing-xxl: 32px;
 
     /* Sizes */
-    --size-header-height:       60px;
-    --size-sidebar-width:       150px;
-    --size-sidebar-tabs-height: 30px;
-    --size-webplayer-height:    100px;
+    --size-header-height:    40px;
+    --size-sidebar-width:    150px;
+    --size-webplayer-height: 100px;
+    --size-queue-width:      300px;
+    --size-seekbar-height:   5px;
 
     /* Breakpoints */
     --breakpoint-mi:  480px;

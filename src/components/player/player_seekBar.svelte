@@ -60,9 +60,9 @@
 <style>
     .site-player__seekBar {
         display: block;
-        height: 5px;
+        height: var(--size-seekbar-height);
         position: absolute;
-        top: -5px;
+        top: calc(-1 * var(--size-seekbar-height));
         left: 0;
         right: 0;
         cursor: pointer;

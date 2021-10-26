@@ -2,6 +2,7 @@
     import { fade, fly } from 'svelte/transition';
 
     import { SearchQuery, ShowSearch } from '../stores/status';
+    import { SiteContentBind } from '../stores/player';
 
     import CardList from './cardList.svelte';
 
@@ -20,9 +21,13 @@
 </script>
 
 {#if $SearchQuery}
-    <div class="container" on:click={handleClick} transition:fly={{ x: -50, duration: 300 }}>
+    <div class="container"
+        on:click={handleClick}
+        transition:fade={{ duration: 300 }}
+        style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
+    >
         <div class="header">
-            <div class="header-text">Results for <b>{$SearchQuery}<b></div>
+            <div class="header-text">Results for <b>{$SearchQuery}</b></div>
             <button class="icon close" on:click={handleClose}><SVGClose /></button>
         </div>
 
@@ -40,25 +45,24 @@
             {/key}
         </div>
     </div>
-    <div class="backdrop" transition:fade></div>
 {/if}
 
 <style>
     .container {
         background-color: var(--color-background);
         position: absolute;
-        left: calc(var(--size-sidebar-width) + var(--spacing-xl));
-        top: var(--spacing-xl);
-        width: calc(100vw - var(--size-sidebar-width) - var(--spacing-xl) * 2);
-        bottom: var(--spacing-xl);
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
         z-index: 100;
-        border-radius: 15px;
+        /*border-radius: 15px;*/
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        box-shadow: rgba(0, 0, 0, 0) 0 0 0 0,
-            rgba(0, 0, 0, 0) 0 0 0 0,
-            rgba(0, 0, 0, 0.25) 0 25px 50px -12px;
+        /*box-shadow: rgba(0, 0, 0, 0) 0 0 0 0,*/
+        /*    rgba(0, 0, 0, 0) 0 0 0 0,*/
+        /*    rgba(0, 0, 0, 0.25) 0 25px 50px -12px;*/
     }
 
     .backdrop {

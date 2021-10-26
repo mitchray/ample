@@ -129,12 +129,33 @@ class Player {
      * Clear the queue
      */
     clearQueue() {
+        // clear all tracks EXCEPT currently playing, unless its the only item in queue
+        if (this.nowPlayingQueue.length > 1) {
+            this.clearAllExceptCurrent();
+        } else {
+            this.clearAll();
+        }
+    }
+
+    /**
+     * Clear all items in queue
+     */
+    clearAll() {
         this.stopQueued = true;
         this.stop();
         CurrentSong.set(null);
         NowPlayingQueue.set([]);
         NowPlayingIndex.set(0);
         IsPlaying.set(false);
+    }
+
+    /**
+     * Clear all tracks EXCEPT currently playing
+     */
+    clearAllExceptCurrent() {
+        let current = this.nowPlayingQueue.filter(a => this.nowPlayingQueue.indexOf(a) === this.nowPlayingIndex);
+        NowPlayingQueue.set(current);
+        NowPlayingIndex.set(0);
     }
 
     /**

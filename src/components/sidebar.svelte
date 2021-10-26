@@ -3,15 +3,10 @@
     import { ROUTER } from 'svelte-routing/src/contexts';
     import { Link } from "svelte-routing";
 
-    import { SearchQuery, ShowSearch } from "../stores/status";
+    import { SidebarIsMini } from '../stores/status';
 
-    import { logout } from '../logic/user';
-
-    import Search from '../components/search.svelte';
     import SidebarDrawer from './sidebarDrawer.svelte';
 
-    import SVGAmpleLogo from "../../public/images/ample_logo.svg";
-    import SVGClose from "../../public/images/close.svg";
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
     import SVGPlaylist from "../../public/images/queue_music.svg";
@@ -24,11 +19,9 @@
     import SVGTrending from "../../public/images/trending_up.svg";
     import SVGForgotten from "../../public/images/trending_down.svg";
     import SVGRandom from "../../public/images/random.svg";
-    import SVGLogout from "../../public/images/logout.svg";
     import SVGArrowLeft from "../../public/images/arrow_left.svg";
     import SVGArrowRight from "../../public/images/arrow_right.svg";
     import SVGGenre from "../../public/images/label.svg";
-    import SVGSearch from "../../public/images/search.svg";
 
     const { activeRoute } = getContext(ROUTER);
     let basePath = '';
@@ -50,35 +43,9 @@
         }
     }
 
-    let timeout;
-    let minimumLength = 3;
     let artistsDrawerIsVisible = false;
     let albumsDrawerIsVisible = false;
     let initialized = false;
-
-    function handleFocus() {
-        ShowSearch.set(true);
-    }
-
-    function handleInputChange(event) {
-        clearTimeout(timeout);
-
-        timeout = setTimeout(function () {
-            let chars = event.target.value;
-
-            if (chars.length >= 3) {
-                ShowSearch.set(true);
-                SearchQuery.set(chars);
-            } else {
-                ShowSearch.set(false);
-            }
-        }, 600);
-    }
-
-    function handleClear() {
-        SearchQuery.set('');
-        ShowSearch.set(false);
-    }
 
     function toggleArtistsDrawer() {
         artistsDrawerIsVisible = !artistsDrawerIsVisible;
@@ -88,8 +55,10 @@
         albumsDrawerIsVisible = !albumsDrawerIsVisible;
     }
 
-    function handleLogOut() {
-        logout();
+    function toggleMini() {
+        let inverted = !$SidebarIsMini;
+        localStorage.setItem('SidebarIsMini', JSON.stringify(inverted));
+        SidebarIsMini.set(inverted);
     }
 
     onMount(() => {
@@ -98,32 +67,17 @@
     });
 </script>
 
-<div class="site-sidebar">
+<div class="site-sidebar" class:isMini={$SidebarIsMini}>
     <div class="site-sidebar-inner">
-        <div class="site-logo-container">
-            <Link to="/" class="site-logo"><SVGAmpleLogo /></Link>
-        </div>
-
-        <div class="search-container">
-            <input
-                type="text"
-                placeholder="Quick search"
-                class="site-search"
-                on:focus={handleFocus}
-                on:paste={handleInputChange}
-                on:keyup={handleInputChange}
-                value="{$SearchQuery}"
-            />
-            {#if $SearchQuery}
-                <button class="icon close" on:click={handleClear}><SVGClose /></button>
-            {/if}
-        </div>
-        <Link to="search" class="site-sidebar__link "><SVGSearch class="inline"/> Advanced</Link>
-
+        <button class="sidebar-toggle" on:click={toggleMini}>
+            {$SidebarIsMini ? ">>" : "<<"}
+        </button>
         <h3>Library</h3>
         <ul>
             <li class="{basePath === 'artists' ? 'current' : ''}">
-                <Link to="artists" class="site-sidebar__link "><SVGArtist class="inline"/> Artists</Link>
+                <Link to="artists" class="site-sidebar__link " data-label="Artists">
+                    <SVGArtist class="inline"/> <span class="label">Artists</span>
+                </Link>
                 <button id="js-drawer-artists" class="drawer-toggle icon" class:open={artistsDrawerIsVisible} on:click={toggleArtistsDrawer}>
                     {#if artistsDrawerIsVisible}
                         <SVGArrowLeft />
@@ -133,7 +87,9 @@
                 </button>
             </li>
             <li class="{basePath === 'albums' ? 'current' : ''}">
-                <Link to="albums" class="site-sidebar__link "><SVGAlbum class="inline"/> Albums</Link>
+                <Link to="albums" class="site-sidebar__link " data-label="Albums">
+                    <SVGAlbum class="inline"/> <span class="label">Albums</span>
+                </Link>
                 <button id="js-drawer-albums" class="drawer-toggle icon" class:open={albumsDrawerIsVisible} on:click={toggleAlbumsDrawer}>
                     {#if albumsDrawerIsVisible}
                         <SVGArrowLeft />
@@ -142,61 +98,93 @@
                     {/if}
                 </button>
             </li>
-            <li class="{basePath === 'playlists' ? 'current' : ''}"><Link to="playlists" class="site-sidebar__link "><SVGPlaylist class="inline"/> Playlists</Link></li>
-            <li class="{basePath === 'smartlists' ? 'current' : ''}"><Link to="smartlists" class="site-sidebar__link "><SVGSmartlist class="inline"/> Smartlists</Link></li>
-            <li class="{basePath === 'genres' ? 'current' : ''}"><Link to="genres" class="site-sidebar__link "><SVGGenre class="inline"/> Genres</Link></li>
+            <li class="{basePath === 'playlists' ? 'current' : ''}">
+                <Link to="playlists" class="site-sidebar__link " data-label="Playlists">
+                    <SVGPlaylist class="inline"/> <span class="label">Playlists</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'smartlists' ? 'current' : ''}">
+                <Link to="smartlists" class="site-sidebar__link " data-label="Smartlists">
+                    <SVGSmartlist class="inline"/> <span class="label">Smartlists</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'genres' ? 'current' : ''}">
+                <Link to="genres" class="site-sidebar__link " data-label="Genres">
+                    <SVGGenre class="inline"/> <span class="label">Genres</span>
+                </Link>
+            </li>
         </ul>
 
         <h3>Insights</h3>
         <ul>
-            <li class="{basePath === 'favorites' ? 'current' : ''}"><Link to="favorites" class="site-sidebar__link "><SVGFavoriteFull class="inline"/> Favorites</Link></li>
-            <li class="{basePath === 'recent' ? 'current' : ''}"><Link to="recent" class="site-sidebar__link "><SVGRecent class="inline"/> Recent</Link></li>
-            <li class="{basePath === 'newest' ? 'current' : ''}"><Link to="newest" class="site-sidebar__link "><SVGNew class="inline"/> Newest</Link></li>
-            <li class="{basePath === 'trending' ? 'current' : ''}"><Link to="trending" class="site-sidebar__link "><SVGTrending class="inline"/> Trending</Link></li>
-            <li class="{basePath === 'top' ? 'current' : ''}"><Link to="top" class="site-sidebar__link "><SVGStarFull class="inline"/> Top Rated</Link></li>
-            <li class="{basePath === 'forgotten' ? 'current' : ''}"><Link to="forgotten" class="site-sidebar__link "><SVGForgotten class="inline"/> Forgotten</Link></li>
-            <li class="{basePath === 'random' ? 'current' : ''}"><Link to="random" class="site-sidebar__link "><SVGRandom class="inline"/> Random</Link></li>
-            <li class="{basePath === 'unrated' ? 'current' : ''}"><Link to="unrated" class="site-sidebar__link "><SVGStarOutline class="inline"/> Unrated</Link></li>
+            <li class="{basePath === 'favorites' ? 'current' : ''}">
+                <Link to="favorites" class="site-sidebar__link " data-label="Favorites">
+                    <SVGFavoriteFull class="inline"/> <span class="label">Favorites</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'recent' ? 'current' : ''}">
+                <Link to="recent" class="site-sidebar__link " data-label="Recent">
+                    <SVGRecent class="inline"/> <span class="label">Recent</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'newest' ? 'current' : ''}">
+                <Link to="newest" class="site-sidebar__link " data-label="Newest">
+                    <SVGNew class="inline"/> <span class="label">Newest</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'trending' ? 'current' : ''}">
+                <Link to="trending" class="site-sidebar__link " data-label="Trending">
+                    <SVGTrending class="inline"/> <span class="label">Trending</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'top' ? 'current' : ''}">
+                <Link to="top" class="site-sidebar__link " data-label="Top Rated">
+                    <SVGStarFull class="inline"/> <span class="label">Top Rated</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'forgotten' ? 'current' : ''}">
+                <Link to="forgotten" class="site-sidebar__link " data-label="Forgotten">
+                    <SVGForgotten class="inline"/> <span class="label">Forgotten</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'random' ? 'current' : ''}">
+                <Link to="random" class="site-sidebar__link " data-label="Random">
+                    <SVGRandom class="inline"/> <span class="label">Random</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'unrated' ? 'current' : ''}">
+                <Link to="unrated" class="site-sidebar__link " data-label="Unrated">
+                    <SVGStarOutline class="inline"/> <span class="label">Unrated</span>
+                </Link>
+            </li>
         </ul>
-
-        <button on:click={handleLogOut} class="logout with-icon"><SVGLogout /> Log out</button>
     </div>
 
-    {#if $ShowSearch && $SearchQuery.length >= minimumLength}
-        {#key $SearchQuery}
-            <Search />
-        {/key}
-    {/if}
-
-    {#if initialized}
+    {#if initialized && false}
         <SidebarDrawer type="artist" bind:visible={artistsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-artists")} />
         <SidebarDrawer type="album" bind:visible={albumsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-albums")} />
     {/if}
 </div>
 
 <style>
-    :global(.site-logo) {
+    .sidebar-toggle {
         display: block;
-        max-width: 100px;
-        font-weight: 700;
-        font-size: 16px;
-        margin: 0 0 var(--spacing-lg);
-    }
-
-    :global(.site-logo),
-    :global(.site-logo:hover) {
-        color: var(--color-text-body);
-    }
-
-    :global(.ample-logo .amp) {
-        color: var(--color-highlight);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 8px;
+        width: 100%;
+        border-radius: 0;
+        text-align: center;
+        line-height: 0;
     }
 
     .site-sidebar {
         background-color: var(--color-interface);
         width: var(--size-sidebar-width);
         padding: var(--spacing-lg);
-        height: 100%;
+        height: 100%; /* TODO account for new header? */
         display: flex;
         flex-direction: column;
         border-right: 1px solid var(--color-tint-100);
@@ -224,11 +212,65 @@
     :global(.site-sidebar__link) {
         display: block;
         padding: 0.45em 0;
+        position: relative;
     }
 
     li {
         position: relative;
         z-index: 1;
+    }
+
+    .site-sidebar.isMini {
+        --size-sidebar-width: 46px;
+    }
+
+    .isMini .label {
+        clip-path: inset(50%);
+        height: 1px;
+        overflow: hidden;
+        position: absolute;
+        white-space: nowrap;
+        width: 1px;
+    }
+
+    .isMini .site-sidebar-inner {
+        overflow: unset;
+    }
+
+    .isMini h3 {
+        font-size: 0;
+    }
+
+    .isMini :global(svg) {
+        transform: scale(1.6);
+    }
+
+    .isMini li:not(.current) :global(svg) {
+        color: unset;
+    }
+
+    /* hover label for mini mode */
+    .isMini :global(a:after) {
+        content: attr(data-label);
+        display: flex;
+        align-items: center;
+        position: absolute;
+        left: calc(100% + var(--spacing-lg));
+        top: 0;
+        bottom: 0;
+        z-index: 5;
+        background-color: var(--color-interface);
+        padding: var(--spacing-sm) var(--spacing-md);
+        pointer-events: none;
+        white-space: nowrap;
+        font-weight: 700;
+        color: var(--color-link-hover);
+        backdrop-filter: blur(3px);
+        opacity: 0;
+    }
+
+    .isMini :global(a:hover:after) {
+        opacity: 1;
     }
 
     :global(.site-sidebar__link svg) {
@@ -243,13 +285,10 @@
 
     li.current:before {
         content: '';
-        width: 100%;
+        width: calc(100% + 2 * var(--spacing-lg));
         height: 100%;
-        background-image: linear-gradient(
-            to right,
-            var(--color-tint-100),
-            transparent
-        );
+        background-color: var(--color-highlight);
+        opacity: 0.1;
         position: absolute;
         left: calc(-1 * var(--spacing-lg));
         top: 50%;
@@ -272,6 +311,7 @@
         right: -10px;
         top: 50%;
         transform: translateY(-50%);
+        display: none; /* TEMP */
     }
 
     /* increase click area */
@@ -293,40 +333,15 @@
 
     h3 {
         color: var(--color-highlight);
+        margin-top: var(--spacing-md);
         margin-bottom: var(--spacing-sm);
+    }
+
+    ul + h3 {
         margin-top: var(--spacing-xl);
     }
 
     ul {
         margin: 0;
-    }
-
-    .site-search {
-        padding-right: 32px;
-        position: relative;
-        display: block;
-    }
-
-    .close {
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        position: absolute;
-        right: 2px;
-    }
-
-    .search-container {
-        display: flex;
-        align-items: center;
-        position: relative;
-        max-width: none;
-        width: calc(100% + (var(--spacing-md) * 2));
-        left: calc(var(--spacing-md) * -1);
-        z-index: 1;
-        margin-top: var(--spacing-md);
-    }
-
-    .logout {
-        margin-top: var(--spacing-lg);
     }
 </style>
