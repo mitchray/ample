@@ -17,7 +17,7 @@
 
     let fieldsToShow;
     let groupedFieldsToShow;
-    let maximum = 0;
+    let maximum = "0";
     let isRandom = false;
     let matchRules = "and";
     let rows = [];
