@@ -13,60 +13,115 @@
     export let loading = false;
     export let loadedTime;
     export let results = [];
-    export let selectedObjectType = "song";
+    export let defaultSettings = null;
+    export let selectedObjectType = null;
 
+    let loaded = false;
+    let fromParams = false;
+    let rows = [];
     let fieldsToShow;
     let groupedFieldsToShow;
-    let maximum = "0";
-    let isRandom = false;
-    let matchRules = "and";
-    let rows = [];
     let rowCounter = 0;
     let allUsers = [];
     let allCatalogs = [];
     let allPlaylists = [];
     let allSmartlists = [];
 
+    // set defaults
+    let settings = {
+        type: "song",
+        limit: "0",
+        random: false,
+        operator: "and"
+    };
+
+    // keep selectedObjectType in sync
+    $: selectedObjectType = settings.type;
+
     // reset everything if object type changes
     $: {
-        if (selectedObjectType) {
+        if (settings.type) {
             populateFields();
-            clearAll();
         }
     }
 
     // auto-add a row if all are removed
     $: {
-        if (rows.length < 1) {
-            addRow();
+        if (loaded && rows.length < 1) {
+            addNewRow();
         }
     }
 
+    // get highest existing id, or start at 1
     $: rowCounter = rows.length ? Math.max(...rows.map(t => t.id)) + 1 : 1;
 
-    function addRow() {
-        let newRow = { id: rowCounter, rule: rowCounter + 1 };
-        newRow = setField(newRow);
+    function parseParams() {
+        if (defaultSettings) {
+            // override default settings with any params
+            settings = {...settings,...defaultSettings};
+
+            let joined = Object.keys(settings).join(",");
+            let foundRules = joined.match(/rule_\d+(?=,)/gi);
+
+            if (foundRules) {
+                fromParams = true;
+
+                foundRules.forEach((element) => {
+                    // test to see if all items are present
+                    if (settings[`${element}_operator`] !== undefined && settings[`${element}_input`] !== undefined) {
+                        let newField = settings[`${element}`];
+
+                        let newRow = {
+                            id: parseInt(element.match(/\d+/)),
+                            field: newField,
+                            operator: settings[`${element}_operator`],
+                            input: settings[`${element}_input`]
+                        };
+
+                        newRow.operatorType = getOperatorType(newField);
+                        newRow.inputType = getInputType(newField);
+
+                        rows = [...rows, newRow];
+                    }
+                });
+            }
+        }
+    }
+
+    function getOperatorType(fieldName) {
+        return fields.find((field) => field.id === fieldName).operatorType;
+    }
+
+    function getInputType(fieldName) {
+        return fields.find((field) => field.id === fieldName).inputType;
+    }
+
+    function addNewRow() {
+        let newRow = {
+            id: rowCounter,
+            field: "title",
+            operator: "0",
+            input: ""
+        };
+
+        if (settings.type === "song") {
+            newRow.field = "anywhere";
+        }
+
+        newRow.operatorType = getOperatorType(newRow.field);
+        newRow.inputType = getInputType(newRow.field);
+
         rows = [...rows, newRow];
-    }
-
-    function removeRow(row) {
-        rows = rows.filter(item => item.id !== row.id);
-    }
-
-    function clearAll() {
-        rows = [];
-        addRow();
     }
 
     function populateFields() {
         let groups = new Map();
 
-        fieldsToShow = fields.filter((field) => field.object_types.find((type) => type.id === selectedObjectType));
+        fieldsToShow = fields.filter((field) => field.object_types.find((type) => type.id === settings.type));
 
         // setup categories based on initial order
         for (let i = 0; i < fieldsToShow.length; i++) {
-            let item = fieldsToShow[i].object_types.find((type) => type.id === selectedObjectType);
+            let item = fieldsToShow[i].object_types.find((type) => type.id === settings.type);
 
             // apply any overrides while we're at it
             fieldsToShow[i].label = (item.label) ? item.label : fieldsToShow[i].label;
@@ -87,6 +142,14 @@
         groupedFieldsToShow = groups;
     }
 
+    function removeRow(row) {
+        rows = rows.filter(item => item.id !== row.id);
+    }
+
+    function clearAll() {
+        rows = [];
+    }
+
     function setField(row, event = null) {
         // reset operator if type changes
         row.operator = "0";
@@ -95,8 +158,8 @@
         let firstID = Array.from(groupedFieldsToShow.entries())[0][1][0].id;
 
         row.field = (event) ? event.target.value : firstID;
-        row.operatorType = fieldsToShow.find((field) => field.id === row.field).operatorType;
-        row.inputType = fieldsToShow.find((field) => field.id === row.field).inputType;
+        row.operatorType = getOperatorType(row.field);
+        row.inputType = getInputType(row.field);
 
         return row;
     }
@@ -106,33 +169,36 @@
         loading = true;
         loadedTime = null;
 
-        switch (selectedObjectType) {
+        switch (settings.type) {
             case "song":
-                results = await getSongsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                results = await getSongsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
                 break;
             case "album":
-                results = await getAlbumsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                results = await getAlbumsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
                 break;
             case "artist":
-                results = await getArtistsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                results = await getArtistsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
                 break;
             case "playlist":
-                results = await getPlaylistsFromAdvancedSearch({rows, limit: maximum, random: isRandom, match: matchRules});
+                results = await getPlaylistsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
                 break;
             default:
                 break;
         }
 
-        // console.debug(results);
         loadedTime = new Date();
         loading = false;
     }
 
     onMount(async () => {
+        parseParams();
+
         allUsers = await getUsers();
         allCatalogs = await getCatalogs();
         allPlaylists = await getPlaylists();
         allSmartlists = await getSmartlists(true);
+
+        loaded = true;
     });
 
     let fields = [
@@ -777,7 +843,7 @@
         <div class="type">
             <label>
                 Search for
-                <select bind:value={selectedObjectType} on:change={populateFields}>
+                <select bind:value={settings.type} on:change={clearAll}>
                     <option value="song">songs</option>
                     <option value="album">albums</option>
                     <option value="artist">artists</option>
@@ -789,7 +855,7 @@
         <div class="maximum">
             <label>
                 Showing
-                <select bind:value={maximum}>
+                <select bind:value={settings.limit}>
                     <option value="0">unlimited</option>
                     <option value="1">1</option>
                     <option value="5">5</option>
@@ -800,13 +866,13 @@
                     <option value="250">250</option>
                     <option value="500">500</option>
                 </select>
-                {parseInt(maximum) === 1 ? 'result' : 'results'}
+                {parseInt(settings.limit) === 1 ? 'result' : 'results'}
             </label>
         </div>
 
         <div class="random">
             <label>
-                <input type="checkbox" bind:checked={isRandom} />
+                <input type="checkbox" bind:checked={settings.random} />
                 Randomized
             </label>
         </div>
@@ -814,23 +880,23 @@
         <div class="match">
             <label>
                 Matching
-                <select bind:value={matchRules}>
+                <select bind:value={settings.operator}>
                     <option value="and">all</option>
                     <option value="or">any</option>
                 </select>
-                {matchRules === "and" ? 'rules' : 'rule'}
+                {settings.operator === "and" ? 'rules' : 'rule'}
             </label>
         </div>
     </div>
 
     <div>
-        <button type="button" class="secondary" on:click={addRow}>Add another rule</button>
+        <button type="button" class="secondary" on:click={addNewRow}>Add another rule</button>
     </div>
 
     <div class="rules">
         {#each rows as row (row.id)}
             <div class="row">
-                <select on:change={(e) => { row = setField(row, e) }}>
+                <select bind:value={row.field} on:change={(e) => { row = setField(row, e) }}>
                     {#each [...groupedFieldsToShow] as [key, value], i}
                         {#if key.length > 0}
                             <optgroup label="{key}">

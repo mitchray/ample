@@ -19,6 +19,13 @@
     let loading;
     let results = [];
     let type = "song";
+
+    let batchPreset = {
+        limit: "500",
+        rule_1: "myrating",
+        rule_1_operator: "5",
+        rule_1_input: "1"
+    };
 </script>
 
 <h1>Unrated</h1>
@@ -33,7 +40,7 @@
     </div>
 
     <div class="batch" style="display: {currentTab === 'mass' ? 'block' : 'none'}">
-        <CustomSearch bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />
+        <CustomSearch defaultSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />
         <MassRater bind:items={results} bind:type bind:loadedTime />
         <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
     </div>
