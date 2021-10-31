@@ -160,7 +160,7 @@
         </ul>
     </div>
 
-    {#if initialized && false}
+    {#if initialized}
         <SidebarDrawer type="artist" bind:visible={artistsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-artists")} />
         <SidebarDrawer type="album" bind:visible={albumsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-albums")} />
     {/if}
@@ -311,7 +311,10 @@
         right: -10px;
         top: 50%;
         transform: translateY(-50%);
-        display: none; /* TEMP */
+    }
+
+    .isMini .drawer-toggle {
+        display: none;
     }
 
     /* increase click area */
