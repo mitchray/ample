@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.17.0] - 2021-11-01
+### Added
+- Recently Played on homepage will auto-refresh once song changes
+- Unrated->Mass Assign now has unrated song options preset
+
+### Fixed
+- Albums/artists not loading
+
 ## [0.16.0] - 2021-10-29
 ### Added
 - Toggle to switch between slim and expanded sidebar modes
