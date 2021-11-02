@@ -171,12 +171,16 @@
 
         if (customRegex) {
             filteredRecordings = filteredRecordings.filter(function(item) {
-                return !item.title.match(new RegExp(customRegex, 'gi'));
+                return !item.title.match(new RegExp(escapeRegExp(customRegex), 'gi'));
             })
         }
 
         // sort alphabetically
         filteredRecordings = filteredRecordings.sort(function(obj1, obj2) { return obj1.title.localeCompare(obj2.title) });
+    }
+
+    function escapeRegExp(string) {
+        return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
     }
 
     const mbQuery = async () => {
