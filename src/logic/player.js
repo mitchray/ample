@@ -172,7 +172,7 @@ class Player {
             NowPlayingIndex.set(0);
             this.start(this.nowPlayingQueue[0]);
         } else {
-            this.clearQueue();
+            this.clearAll();
         }
     }
 
@@ -195,7 +195,7 @@ class Player {
         } else {
             debugHelper('No song IDs could be found');
             document.title = this.defaultTitle;
-            this.clearQueue();
+            this.clearAll();
             return false;
         }
 
@@ -368,7 +368,7 @@ class Player {
     shuffle() {
         let tempArray = get(NowPlayingQueue);
 
-        this.clearQueue();
+        this.clearAll();
 
         tempArray = shuffleArray(tempArray);
 
@@ -392,7 +392,7 @@ class Player {
      * @param {object} songs
      */
     playNow(songs) {
-        this.clearQueue();
+        this.clearAll();
         NowPlayingQueue.set(songs);
         this.start();
     }
