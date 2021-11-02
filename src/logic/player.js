@@ -1,7 +1,7 @@
 import { tick } from "svelte";
 import { get } from 'svelte/store';
 import WaveSurfer from 'wavesurfer.js';
-import { debugHelper, shuffleArray } from './helper';
+import { debugHelper, shuffleArray, sleep } from './helper';
 import {
     NowPlayingQueue,
     NowPlayingIndex,
@@ -37,6 +37,7 @@ class Player {
 
         // filter nodes
         this.activeFilters = [];
+        this.filterFade = null;
         this.filterGain = null;
         this.filterCompressor = null;
         this.filterBiquad = null; //(for testing only)
@@ -84,6 +85,7 @@ class Player {
 
     initFilters() {
         if (this.wavesurfer) {
+            this.filterFade = this.wavesurfer.backend.ac.createGain();
             this.filterGain = this.wavesurfer.backend.ac.createGain();
 
             this.filterCompressor = this.wavesurfer.backend.ac.createDynamicsCompressor();
@@ -111,6 +113,9 @@ class Player {
             if (this.dynamicsCompressorEnabled) {
                 this.activeFilters.push(this.filterCompressor);
             }
+
+            // 3. fade
+            this.activeFilters.push(this.filterFade);
 
             // last. biquad (for testing only)
             // this.activeFilters.push(this.filterBiquad);
@@ -296,24 +301,26 @@ class Player {
     /**
      * Play/pause Howl
      */
-    playPause() {
+    async playPause() {
         debugHelper('play/pause!');
 
         if (this.wavesurfer) {
             if (this.wavesurfer.isPlaying()) {
+                await this.fadeOut();
                 this.wavesurfer.pause();
             } else {
                 this.wavesurfer.play();
+                await this.fadeIn();
             }
         } else {
-            this.start();
+            await this.start();
         }
     }
 
     /**
      * Play previous song
      */
-    previous() {
+    async previous(event) {
         debugHelper('previous!');
 
         if (this.nowPlayingIndex > -1) {
@@ -324,6 +331,11 @@ class Player {
             }
         }
 
+        // if manually called, fade out
+        if (event && event.target) {
+            await this.fadeOut();
+        }
+
         this.stop();
         this.start(this.nowPlayingQueue[this.nowPlayingIndex]);
     }
@@ -331,8 +343,13 @@ class Player {
     /**
      * Play next song
      */
-    next() {
+    async next(event) {
         debugHelper('next!');
+
+        // if manually called, fade out
+        if (event && event.target) {
+            await this.fadeOut();
+        }
 
         this.stop();
 
@@ -424,6 +441,17 @@ class Player {
         NowPlayingIndex.set(index);
 
         this.start();
+    }
+
+    async fadeIn() {
+        this.filterFade.gain.setValueAtTime(0.01, this.filterFade.context.currentTime);
+        this.filterFade.gain.exponentialRampToValueAtTime(1, this.filterFade.context.currentTime + 0.5);
+    }
+
+    async fadeOut() {
+        this.filterFade.gain.setValueAtTime(1, this.filterFade.context.currentTime);
+        this.filterFade.gain.exponentialRampToValueAtTime(0.01, this.filterFade.context.currentTime + 0.3);
+        await sleep(300); // wait for fade to end before continuing
     }
 
     /**

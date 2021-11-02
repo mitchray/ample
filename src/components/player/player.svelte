@@ -46,7 +46,7 @@
     <div class="site-player__controls">
         <button
             class="icon"
-            on:click={$MediaPlayer.previous()}
+            on:click={(e) => { $MediaPlayer.previous(e) }}
             disabled={$NowPlayingQueue.length === 0}
         >
             <SVGPrevious />
@@ -66,7 +66,7 @@
 
         <button
             class="icon"
-            on:click={$MediaPlayer.next()}
+            on:click={(e) => { $MediaPlayer.next(e) }}
             disabled={$NowPlayingQueue.length === 0}
         >
             <SVGNext />
