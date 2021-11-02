@@ -142,7 +142,8 @@
 
     .genres {
         display: flex;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-sm) var(--spacing-lg);
+        flex-wrap: wrap;
     }
 
     @media all and (min-width: 1024px) {
