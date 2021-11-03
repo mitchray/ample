@@ -187,7 +187,11 @@
         {:else}
             <span
                 class="label"
-                on:click={(e) => { applySort(col.sortBy) }}
+                on:click={(e) => {
+                    if (col.sortBy) {
+                        applySort(col.sortBy);
+                    }
+                }}
                 data-reverse={col.reverse}
             >
                 {col.label}
