@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.18.0] - 2021-11-03
+### Added
+- Fade out on manual pause/next/previous; fade in on manual resume
+
+### Fixed
+- Wrap genres list when many exist
+- Escape the MusicBrainz Compare regex input
+- Queue wasn't being cleared properly, causing duplicate waveforms
+
 ## [0.17.0] - 2021-11-01
 ### Added
 - Recently Played on homepage will auto-refresh once song changes
