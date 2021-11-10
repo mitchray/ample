@@ -181,7 +181,7 @@
 
     .bg {
         animation: slide 1s ease-in-out infinite alternate;
-        background-image: linear-gradient(-60deg, var(--color-background) 50%, var(--color-interface) 50%);
+        background-image: linear-gradient(-60deg, var(--color-interface-00) 50%, var(--color-interface) 50%);
         bottom: 0;
         left: -50%;
         opacity: 0.2;

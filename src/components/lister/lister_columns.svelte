@@ -207,7 +207,7 @@
 <style>
     .item {
         background-color: var(--color-text-subheading);
-        color: var(--color-background);
+        color: var(--color-interface-00);
         position: relative;
         font-weight: 700;
     }
@@ -270,6 +270,6 @@
 
     /* needs to stand out as lister header is inverted */
     input[type="checkbox"] {
-        border-color: var(--color-background);
+        border-color: var(--color-interface-00);
     }
 </style>

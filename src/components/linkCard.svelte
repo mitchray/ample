@@ -4,7 +4,7 @@
     export let url;
 </script>
 
-<div class="link-card">
+<div class="link-card card">
     <Link to={url}>
         <slot></slot>
     </Link>
@@ -33,7 +33,5 @@
         align-items: center;
         font-size: 1.5rem;
         font-weight: 700;
-        background-color: var(--color-card-background);
-        border-radius: 10px;
     }
 </style>

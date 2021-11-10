@@ -9,7 +9,7 @@
     $: artist = data;
 </script>
 
-<div class="artist-card">
+<div class="artist-card card">
     {#if artist}
         <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
         <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
@@ -36,6 +36,9 @@
     }
 
     :global(.artist-scroll) {
+        border: 2px solid var(--color-lines);
+        border-radius: 15px;
+        padding: var(--spacing-lg);
         gap: var(--spacing-md);
         display: flex;
         flex-wrap: nowrap;
@@ -50,16 +53,9 @@
     .artist-card {
         padding: var(--spacing-md);
         padding-bottom: var(--spacing-lg);
-        border: 2px solid var(--color-card-background);
-        border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;
-    }
-
-    .artist-card:hover {
-        border-color: transparent;
-        background-color: var(--color-card-background);
     }
 
     .artist-card :global(.image) {

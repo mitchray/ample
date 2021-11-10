@@ -32,7 +32,7 @@
     }
 </script>
 
-<div class="playlist-card">
+<div class="playlist-card card">
     {#if playlist}
         <div class="title">
             <Link to="playlists/{playlist.id}" title="{playlist.name}">{playlist.name}</Link>
@@ -125,19 +125,12 @@
     }
 
     :global(.playlist-card) {
-        border: 2px solid var(--color-card-background);
         padding: var(--spacing-lg);
         padding-bottom: var(--spacing-sm);
-        border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;
         position: relative;
-    }
-
-    :global(.playlist-card:hover) {
-        border-color: transparent;
-        background-color: var(--color-card-background);
     }
 
     :global(.highlight .playlist-card) {

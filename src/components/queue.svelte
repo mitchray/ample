@@ -192,11 +192,13 @@
 
 <style>
     .site-queue {
+        background-color: var(--color-interface-10);
+        /*border-left: 1px solid var(--color-tint-100);*/
         position: relative;
         width: var(--size-queue-width);
         height: 100%;
         z-index: 10;
-        border-left: 1px solid var(--color-tint-100);
+
         display: none;
     }
 
@@ -219,7 +221,7 @@
     }
 
     .header {
-        background-color: var(--color-interface);
+        /*background-color: var(--color-interface);*/
         border-bottom: 1px solid var(--color-tint-100);
         display: flex;
         flex-shrink: 0;
@@ -227,6 +229,10 @@
         justify-content: space-between;
         padding: var(--spacing-md);
         padding-left: var(--spacing-lg);
+    }
+
+    :global(.theme-is-light) .header {
+        border-color: var(--color-lines);
     }
 
     .header h4 {
@@ -241,7 +247,6 @@
     }
 
     .queue-list {
-        background-color: var(--color-interface);
         overflow-y: auto;
         display: flex;
         flex-direction: column;

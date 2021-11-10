@@ -18,7 +18,7 @@
 </script>
 
 
-<div class="container well" id="c-queue">
+<div class="container" id="c-queue">
     <div class="queueInfo">
         <h4 class="queue-header">Queue</h4>
         {#if $NowPlayingQueue.length > 0}
@@ -36,7 +36,7 @@
     </div>
 
     <button
-        class="with-icon queue-toggle"
+        class="with-icon queue-toggle button--with-bg"
         on:click={toggleQueue}
         title="Toggle queue"
     >
@@ -70,10 +70,18 @@
     }
 
     .container {
+        background-color: var(--color-shade-200);
+        box-shadow: var(--shadow-inner);
+        border-radius: 5px;
         display: flex;
         justify-content: space-between;
+        padding: var(--spacing-md);
         padding-right: var(--spacing-sm);
         margin-right: var(--spacing-lg);
+    }
+
+    :global(.theme-is-light) .container {
+        background-color: var(--color-shade-25);
     }
 
     .queueInfo {

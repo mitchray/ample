@@ -13,7 +13,7 @@
     $: album = data;
 </script>
 
-<div class="album-card">
+<div class="album-card card">
     {#if album}
         <div class="image-container">
             <div class="container">
@@ -73,6 +73,9 @@
     }
 
     :global(.album-scroll) {
+        border: 2px solid var(--color-lines);
+        border-radius: 15px;
+        padding: var(--spacing-lg);
         gap: var(--spacing-md);
         display: flex;
         flex-wrap: nowrap;
@@ -85,8 +88,6 @@
     }
 
     .album-card {
-        border: 2px solid var(--color-card-background);
-        border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;
@@ -103,11 +104,6 @@
         position: relative;
         z-index: 20;
         will-change: filter, transform;
-    }
-
-    .album-card:hover {
-        border-color: transparent;
-        background-color: var(--color-card-background);
     }
 
     .album-card:hover :global(.container) {

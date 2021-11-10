@@ -9,7 +9,7 @@
     $: smartlist = data;
 </script>
 
-<div class="playlist-card">
+<div class="playlist-card card">
     {#if smartlist}
         <div class="title">
             <Link to="smartlists/{smartlist.id}" title="{smartlist.name}">{smartlist.name}</Link>

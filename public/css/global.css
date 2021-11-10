@@ -86,7 +86,7 @@ html {
     font-size: 14px;
     line-height: 1.4;
     height: 100%;
-    background-color: var(--color-background);
+    background-color: var(--color-interface-00);
 }
 
 img {
@@ -204,7 +204,7 @@ select {
 }
 
 select:focus {
-    background-color: var(--color-background);
+    background-color: var(--color-interface-00);
 }
 
 input[type="checkbox"]:not(.switch):before {
@@ -214,7 +214,7 @@ input[type="checkbox"]:not(.switch):before {
     right: 0px;
     top: -0.2em;
     visibility: hidden;
-    color: var(--color-background);
+    color: var(--color-interface-00);
 }
 
 input[type="checkbox"]:checked,
@@ -244,7 +244,7 @@ input[type="checkbox"].switch:after {
 }
 
 input[type="checkbox"].switch:checked:after {
-    background-color: var(--color-background);
+    background-color: var(--color-interface-00);
     transform: translateX(100%);
 }
 
@@ -258,7 +258,7 @@ input[type="radio"]:before {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--color-background);
+    background-color: var(--color-interface-00);
     font-size: 1.2em;
     top: calc(50% - 4px);
     left: calc(50% - 4px);
@@ -274,7 +274,7 @@ input:disabled,
 select:disabled,
 textarea:disabled,
 button:disabled {
-    opacity: 0.6;
+    opacity: 0.4;
     cursor: not-allowed;
 }
 
@@ -290,7 +290,7 @@ select:focus-visible,
 textarea:focus-visible,
 button:focus-visible {
     box-shadow: 0 0 0 2px var(--color-highlight);
-    border-color: var(--color-background);
+    border-color: var(--color-interface-00);
 }
 
 /* --------------------------
@@ -307,9 +307,7 @@ button:focus-visible {
 }
 
 button {
-    --button-shadow: hsla(0, 0%, 0%, 0.2);
-    --button-highlight: hsla(0, 0%, 100%, 0.1);
-    background-color: var(--color-button-bg-primary);
+    background: unset;
     border: unset;
     color: var(--color-button-text-primary);
     cursor: pointer;
@@ -321,14 +319,10 @@ button {
     border-radius: 999px;
     align-items: center;
     outline: 0;
-    box-shadow: 0 2px 3px var(--button-shadow),
-        inset 0 1px 0 var(--button-highlight);
-    /*overflow: hidden;*/
 }
 
-.theme-is-light button {
-    --button-shadow: hsla(0, 0%, 0%, 0.1);
-    --button-highlight: hsla(0, 0%, 100%, 0.3);
+.button--with-bg {
+    background-color: var(--color-button-bg-primary);
 }
 
 button:not(:disabled):hover {
@@ -336,34 +330,37 @@ button:not(:disabled):hover {
     color: var(--color-button-text-hover);
 }
 
-button:disabled {
-    box-shadow: none;
+/* OLD */
+
+button:not(:disabled):hover {
+    color: var(--color-button-text-hover);
 }
 
 button.active {
     border: 2px solid var(--color-highlight);
 }
 
+/* TODO restore these */
 button.danger,
 .badge.danger {
-    background-color: var(--color-danger-background);
-    color: var(--color-danger-foreground);
+    /*background-color: var(--color-danger-background);*/
+    /*color: var(--color-danger-background);*/
 }
 
 button.danger:hover {
-    background-color: var(--color-danger-background-hover);
-    color: var(--color-danger-foreground-hover);
+    /*background-color: var(--color-danger-background-hover);*/
+    /*color: var(--color-danger-foreground-hover);*/
 }
 
 button.warning,
 .badge.warning {
-    background-color: var(--color-warning-background);
-    color: var(--color-warning-foreground);
+    /*background-color: var(--color-warning-background);*/
+    /*color: var(--color-warning-foreground);*/
 }
 
 button.warning:hover {
-    background-color: var(--color-warning-background-hover);
-    color: var(--color-warning-foreground-hover);
+    /*background-color: var(--color-warning-background-hover);*/
+    /*color: var(--color-warning-foreground-hover);*/
 }
 
 button.primary,
@@ -485,18 +482,23 @@ svg.auto {
  * Shared
  */
 
-.well,
-.site-player:before { /* special case for pseudo element */
+.card {
     background-color: var(--color-tint-50);
-    border-radius: 5px;
-    padding: var(--spacing-md);
+    border-radius: 10px;
+    box-shadow: var(--shadow-sm);
 }
 
-.theme-is-light .well,
-.theme-is-light .site-player:before { /* special case for pseudo element */
-    background-color: unset;
-    box-shadow: 0 1px 5px hsla(0, 0%, 0%, 0.4);
-    border-top: 1px solid var(--color-tint-500);
+.card:hover {
+    background-color: var(--color-tint-100);
+    box-shadow: var(--shadow-lg);
+}
+
+.theme-is-light .card {
+    background-color: var(--color-tint-500);
+}
+
+.theme-is-light .card:hover {
+    background-color: var(--color-interface-20);
 }
 
 .art-background {
@@ -553,6 +555,6 @@ section {
     font-weight: 700;
     padding: 1px 4px 2px;
     line-height: 1;
-    color: var(--color-background);
+    color: var(--color-interface-00);
     pointer-events: none;
 }

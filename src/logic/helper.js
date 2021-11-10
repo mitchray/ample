@@ -247,7 +247,7 @@ export async function getLegibleColors(color) {
     legibleColor.light.foreground     = [7,   35, colorArray.hue];
     legibleColor.light.interface      = [95,  5,  colorArray.hue];
     legibleColor.light.interfaceHover = [100, 5,  colorArray.hue];
-    legibleColor.light.background     = [85,  3,  colorArray.hue];
+    legibleColor.light.background     = [95,  3,  colorArray.hue];
 
     legibleColor.dark.nearWhite      = [90, 50, colorArray.hue];
     legibleColor.dark.highlight      = [73, 84, colorArray.hue];

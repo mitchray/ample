@@ -49,7 +49,7 @@
 
 <style>
     .container {
-        background-color: var(--color-background);
+        background-color: var(--color-interface-00);
         position: absolute;
         left: 0;
         top: 0;

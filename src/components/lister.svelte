@@ -663,7 +663,7 @@
     }
 
     .lister-header {
-        background-color: var(--color-background);
+        background-color: var(--color-interface-00);
         border-bottom: 2px solid var(--color-interface);
         z-index: 100;
         user-select: none;

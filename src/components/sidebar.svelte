@@ -69,7 +69,7 @@
 
 <div class="site-sidebar" class:isMini={$SidebarIsMini}>
     <div class="site-sidebar-inner">
-        <button class="sidebar-toggle" on:click={toggleMini}>
+        <button class="sidebar-toggle button--with-bg" on:click={toggleMini}>
             {$SidebarIsMini ? ">>" : "<<"}
         </button>
         <h3>Library</h3>
@@ -168,6 +168,7 @@
 
 <style>
     .sidebar-toggle {
+        box-shadow: var(--shadow-sm);
         display: block;
         position: absolute;
         top: 0;
@@ -181,13 +182,13 @@
     }
 
     .site-sidebar {
-        background-color: var(--color-interface);
+        background-color: var(--color-interface-10);
+        /*border-right: 1px solid var(--color-tint-100);*/
         width: var(--size-sidebar-width);
         padding: var(--spacing-lg);
         height: 100%; /* TODO account for new header? */
         display: flex;
         flex-direction: column;
-        border-right: 1px solid var(--color-tint-100);
         position: relative;
     }
 
@@ -251,6 +252,9 @@
 
     /* hover label for mini mode */
     .isMini :global(a:after) {
+        background-color: var(--color-interface-10);
+        box-shadow: var(--shadow-sm);
+        clip-path: inset(-10px -10px -10px 0px); /* clip shadow */
         content: attr(data-label);
         display: flex;
         align-items: center;
@@ -259,13 +263,11 @@
         top: 0;
         bottom: 0;
         z-index: 5;
-        background-color: var(--color-interface);
         padding: var(--spacing-sm) var(--spacing-md);
         pointer-events: none;
         white-space: nowrap;
         font-weight: 700;
         color: var(--color-link-hover);
-        backdrop-filter: blur(3px);
         opacity: 0;
     }
 

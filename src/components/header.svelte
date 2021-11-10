@@ -116,19 +116,19 @@
 
 <style>
     .site-header {
-        background-color: var(--color-interface);
-        border-bottom: 1px solid var(--color-tint-100);
+        background-color: var(--color-interface-20);
+        /*border-bottom: 1px solid var(--color-tint-100);*/
+        box-shadow: var(--shadow-md);
         width: 100%;
         height: var(--size-header-height);
         display: flex;
         align-items: center;
-        box-shadow: 0 3px 5px hsla(0, 0%, 0%, 0.5);
         z-index: 20;
         line-height: 1;
     }
 
     :global(.theme-is-light) .site-header {
-        box-shadow: 0 3px 5px hsla(0, 0%, 0%, 0.2);
+
     }
 
     .site-logo-container {

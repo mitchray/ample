@@ -18,6 +18,31 @@
 
 {@html `<style>
 :root {
+    /* GLOBAL */
+    --color-tint-900:  rgba(255, 255, 255, 0.9);
+    --color-tint-800:  rgba(255, 255, 255, 0.8);
+    --color-tint-700:  rgba(255, 255, 255, 0.7);
+    --color-tint-600:  rgba(255, 255, 255, 0.6);
+    --color-tint-500:  rgba(255, 255, 255, 0.5);
+    --color-tint-400:  rgba(255, 255, 255, 0.4);
+    --color-tint-300:  rgba(255, 255, 255, 0.3);
+    --color-tint-200:  rgba(255, 255, 255, 0.2);
+    --color-tint-100:  rgba(255, 255, 255, 0.1);
+    --color-tint-50:   rgba(255, 255, 255, 0.05);
+    --color-tint-25:   rgba(255, 255, 255, 0.025);
+
+    --color-shade-900:  rgba(0, 0, 0, 0.9);
+    --color-shade-800:  rgba(0, 0, 0, 0.8);
+    --color-shade-700:  rgba(0, 0, 0, 0.7);
+    --color-shade-600:  rgba(0, 0, 0, 0.6);
+    --color-shade-500:  rgba(0, 0, 0, 0.5);
+    --color-shade-400:  rgba(0, 0, 0, 0.4);
+    --color-shade-300:  rgba(0, 0, 0, 0.3);
+    --color-shade-200:  rgba(0, 0, 0, 0.2);
+    --color-shade-100:  rgba(0, 0, 0, 0.1);
+    --color-shade-50:   rgba(0, 0, 0, 0.05);
+    --color-shade-25:   rgba(0, 0, 0, 0.025);
+
     --color-danger-foreground:       rgb(${lchToRgb([100, 40, 35])});
     --color-danger-foreground-hover: rgb(${lchToRgb([100, 0,  35])});
     --color-danger-background:       rgb(${lchToRgb([40,  40, 35])});
@@ -43,30 +68,20 @@
 {#if $ThemeIsLight}
     {@html `<style>
 :root {
-    /* tints and shades inverted for light theme */
-    --color-tint-900:  rgba(255, 255, 255, 0.9);
-    --color-tint-800:  rgba(255, 255, 255, 0.85);
-    --color-tint-700:  rgba(255, 255, 255, 0.8);
-    --color-tint-600:  rgba(255, 255, 255, 0.75);
-    --color-tint-500:  rgba(255, 255, 255, 0.7);
-    --color-tint-400:  rgba(255, 255, 255, 0.6);
-    --color-tint-300:  rgba(255, 255, 255, 0.5);
-    --color-tint-200:  rgba(255, 255, 255, 0.4);
-    --color-tint-100:  rgba(255, 255, 255, 0.3);
-    --color-tint-50:   rgba(255, 255, 255, 0.2);
+    --color-interface-00: rgb(${lchToRgb([95, 3, 243])});
+    --color-interface-10: rgb(${lchToRgb([100, 3, 243])});
+    --color-interface-20: rgb(${lchToRgb([100, 3, 243])});
+    --color-interface-30: rgb(${lchToRgb([100, 3, 243])});
 
-    --color-shade-900:  rgba(0, 0, 0, 0.9);
-    --color-shade-800:  rgba(0, 0, 0, 0.8);
-    --color-shade-700:  rgba(0, 0, 0, 0.7);
-    --color-shade-600:  rgba(0, 0, 0, 0.6);
-    --color-shade-500:  rgba(0, 0, 0, 0.5);
-    --color-shade-400:  rgba(0, 0, 0, 0.4);
-    --color-shade-300:  rgba(0, 0, 0, 0.3);
-    --color-shade-200:  rgba(0, 0, 0, 0.2);
-    --color-shade-100:  rgba(0, 0, 0, 0.1);
-    --color-shade-50:   rgba(0, 0, 0, 0.05);
+    --shadow-inner: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+    --shadow-sm:  rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    --shadow-md:  rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,   rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    --shadow-lg:  rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    --shadow-xl:  rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    --shadow-xxl: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 
-    --color-background: rgb(${lchToRgb([90, 3, 243])});
+    /*  OLD  */
+
     --color-interface: rgba(${lchToRgb([95, 3, 243])}, 0.8);
     --color-interface-hover: rgba(${lchToRgb([95, 3, 243])}, 0.8);
     --color-highlight: rgb(${lchToRgb([57,49,257])});
@@ -81,12 +96,12 @@
     --color-link-active:     var(--color-shade-800);
     --color-link-secondary:  var(--color-text-body);
 
-    --color-button-bg-primary: var(--color-tint-200);
+    --color-button-bg-primary: var(--color-shade-50);
     --color-button-text-primary: var(--color-link-secondary);
-    --color-button-bg-hover:   var(--color-tint-400);
+    --color-button-bg-hover:   var(--color-shade-100);
     --color-button-text-hover:   var(--color-link-hover);
 
-    --color-card-background: var(--color-tint-500);
+    --color-card-background: var(--color-interface-20);
 
     --color-lines:           var(--color-shade-100);
     --color-border:          var(--color-shade-200);
@@ -98,29 +113,20 @@
 {:else}
     {@html `<style>
 :root {
-    --color-tint-900:  rgba(255, 255, 255, 0.9);
-    --color-tint-800:  rgba(255, 255, 255, 0.8);
-    --color-tint-700:  rgba(255, 255, 255, 0.7);
-    --color-tint-600:  rgba(255, 255, 255, 0.6);
-    --color-tint-500:  rgba(255, 255, 255, 0.5);
-    --color-tint-400:  rgba(255, 255, 255, 0.4);
-    --color-tint-300:  rgba(255, 255, 255, 0.3);
-    --color-tint-200:  rgba(255, 255, 255, 0.2);
-    --color-tint-100:  rgba(255, 255, 255, 0.1);
-    --color-tint-50:   rgba(255, 255, 255, 0.05);
+    --color-interface-00: rgb(${lchToRgb([3, 3, 243])});
+    --color-interface-10: rgb(${lchToRgb([10, 3, 243])});
+    --color-interface-20: rgb(${lchToRgb([15, 3, 243])});
+    --color-interface-30: rgb(${lchToRgb([20, 3, 243])});
 
-    --color-shade-900:  rgba(0, 0, 0, 0.9);
-    --color-shade-800:  rgba(0, 0, 0, 0.8);
-    --color-shade-700:  rgba(0, 0, 0, 0.7);
-    --color-shade-600:  rgba(0, 0, 0, 0.6);
-    --color-shade-500:  rgba(0, 0, 0, 0.5);
-    --color-shade-400:  rgba(0, 0, 0, 0.4);
-    --color-shade-300:  rgba(0, 0, 0, 0.3);
-    --color-shade-200:  rgba(0, 0, 0, 0.2);
-    --color-shade-100:  rgba(0, 0, 0, 0.1);
-    --color-shade-50:   rgba(0, 0, 0, 0.05);
+    --shadow-inner: rgba(0, 0, 0, 0.24) 0px 2px 4px 0px inset;
+    --shadow-sm:  rgba(0, 0, 0, 0.4) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.24) 0px 1px 2px 0px;
+    --shadow-md:  rgba(0, 0, 0, 0.4) 0px 4px 6px -1px,   rgba(0, 0, 0, 0.24) 0px 2px 4px -1px;
+    --shadow-lg:  rgba(0, 0, 0, 0.4) 0px 10px 15px -3px, rgba(0, 0, 0, 0.20) 0px 4px 6px -2px;
+    --shadow-xl:  rgba(0, 0, 0, 0.4) 0px 20px 25px -5px, rgba(0, 0, 0, 0.16) 0px 10px 10px -5px;
+    --shadow-xxl: rgba(0, 0, 0, 0.4) 0px 20px 25px -5px, rgba(0, 0, 0, 0.16) 0px 10px 10px -5px;
 
-    --color-background: rgb(${lchToRgb([3, 3, 243])});
+    /*  OLD  */
+
     --color-interface: rgba(${lchToRgb([12, 3, 243])}, 0.7);
     --color-interface-hover: rgba(${lchToRgb([20, 3, 243])}, 0.7);
     --color-highlight: rgb(${lchToRgb([73,84,68])});
@@ -135,9 +141,9 @@
     --color-link-active:     var(--color-tint-900);
     --color-link-secondary:  var(--color-text-body);
 
-    --color-button-bg-primary: var(--color-tint-50);
+    --color-button-bg-primary: var(--color-tint-100);
     --color-button-text-primary: var(--color-link-secondary);
-    --color-button-bg-hover:   var(--color-tint-100);
+    --color-button-bg-hover:   var(--color-tint-200);
     --color-button-text-hover:   var(--color-link-hover);
 
     --color-card-background: var(--color-tint-50);

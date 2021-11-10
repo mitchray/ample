@@ -132,7 +132,7 @@
         flex-direction: column;
         height: 100vh;
         overflow: hidden;
-        background-color: var(--color-background);
+        background-color: var(--color-interface-00);
         color: var(--color-text-body);
     }
 

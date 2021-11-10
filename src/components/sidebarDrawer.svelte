@@ -239,7 +239,7 @@
     .container {
         display: flex;
         width: 240px;
-        background-color: var(--color-background);
+        background-color: var(--color-interface-00);
         position: absolute;
         left: 100%;
         top: 0;

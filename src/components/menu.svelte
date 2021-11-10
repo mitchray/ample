@@ -142,7 +142,7 @@
 <style>
     .c-menu {
         contain: layout paint;
-        background-color: var(--color-background);
+        background-color: var(--color-interface-00);
         padding: var(--spacing-lg);
         border-radius: 5px;
         border: 1px solid var(--color-tint-100);

@@ -13,7 +13,7 @@
     $: song = data;
 </script>
 
-<div class="song-card">
+<div class="song-card card">
     {#if song}
         <div class="image-container">
             <img class="image" src="{song.art}&thumb=22" alt="Image of {song.name}" width="200" height="200" />
@@ -73,6 +73,9 @@
     }
 
     :global(.song-scroll) {
+        border: 2px solid var(--color-lines);
+        border-radius: 15px;
+        padding: var(--spacing-lg);
         gap: 20px;
         display: flex;
         flex-wrap: nowrap;
@@ -85,16 +88,9 @@
     }
 
     .song-card {
-        border: 2px solid var(--color-card-background);
         padding: var(--spacing-md);
-        border-radius: 10px;
         height: 100%; /* equal height with siblings */
         display: flex;
-    }
-
-    .song-card:hover {
-        border-color: transparent;
-        background-color: var(--color-card-background);
     }
 
     .image-container {
