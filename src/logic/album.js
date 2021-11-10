@@ -101,20 +101,16 @@ export const getAlbumsFromAdvancedSearch = ({rows = [], limit = 0, random = fals
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getAlbumsStartingWith = async (filterChar) => {
+export const getAlbumsStartingWith = ({page = 0, limit = 50, filterChar}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=album";
-    // ignore punctuation and leading "The "
-    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^(?!the\\s)[[:punct:]]*') + filterChar;
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    // ignore punctuation
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getAlbumsStartingWith");
 
-    let albums = await fetchAlbumData(queryURL);
-
-    albums.sort(function(obj1, obj2) {
-        return obj1.name.toLowerCase().replace(/([^a-z0-9\s]|the\s)/g, "").localeCompare(obj2.name.toLowerCase().replace(/([^a-z0-9\s]|the\s)/g, "")) ;
-    });
-
-    return albums;
+    return fetchAlbumData(queryURL);
 }
 
 /**
@@ -167,12 +163,16 @@ export const getAlbumsByArtist = (id) => {
 
 /**
  * Get albums by year range
+ * @param page
+ * @param limit
  * @param {number} from
  * @param {number} to
  * @returns {Promise<*>}
  */
-export const getAlbumsByYear = (from, to) => {
+export const getAlbumsByYear = ({page = 0, limit = 50, from, to}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
     queryURL += "&type=album&operator=and";
     queryURL += "&rule_1=year&rule_1_operator=0&rule_1_input=" + from;
     queryURL += "&rule_2=year&rule_2_operator=1&rule_2_input=" + to;

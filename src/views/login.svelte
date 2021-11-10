@@ -15,6 +15,8 @@
     import SVGAmpleLogo from "../../public/images/ample_logo.svg";
     import SVGLogin from "../../public/images/login.svg";
 
+    let theme;
+    let versionCheck;
     let username = "";
     let password = "";
     let apiKey = "";

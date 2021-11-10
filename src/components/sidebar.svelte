@@ -161,8 +161,8 @@
     </div>
 
     {#if initialized}
-        <SidebarDrawer type="artist" bind:visible={artistsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-artists")} />
-        <SidebarDrawer type="album" bind:visible={albumsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-albums")} />
+<!--        <SidebarDrawer type="artist" bind:visible={artistsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-artists")} />-->
+<!--        <SidebarDrawer type="album" bind:visible={albumsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-albums")} />-->
     {/if}
 </div>
 
@@ -313,6 +313,7 @@
         right: -10px;
         top: 50%;
         transform: translateY(-50%);
+        display: none; /* TODO restore if all artists/albums can be handled well */
     }
 
     .isMini .drawer-toggle {

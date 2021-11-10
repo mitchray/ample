@@ -68,54 +68,36 @@ export const getArtistsFromAdvancedSearch = ({rows = [], limit = 0, random = fal
 
 /**
  * Get artists starting with specified character
+ * @param page
+ * @param limit
  * @param {string} filterChar
- * @param albumArtistsOnly
  * @returns {Promise<*>}
  */
-export const getArtistsStartingWith = async (filterChar, albumArtistsOnly = false) => {
+export const getArtistsStartingWith = ({page = 0, limit = 50, filterChar}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=artist";
-    // ignore punctuation and leading "The "
-    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^(?!the\\s)[[:punct:]]*') + filterChar;
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    // ignore punctuation
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getArtistsStartingWith");
 
-    let artists = await fetchArtistData(queryURL);
-
-    artists.sort(function(obj1, obj2) {
-        return obj1.name.toLowerCase().replace(/([^a-z0-9\s]|the\s)/g, "").localeCompare(obj2.name.toLowerCase().replace(/([^a-z0-9\s]|the\s)/g, "")) ;
-    });
-
-    if (albumArtistsOnly) {
-        artists = artists.filter(a => a.albumcount > 0);
-    }
-
-    return artists;
+    return fetchArtistData(queryURL);
 }
 
 /**
  * Test existence of artists starting with specified character
  * @param {string} filterChar
- * @param albumArtistsOnly
  * @returns {Promise<*>}
  */
-export const testArtistsStartingWith = async (filterChar, albumArtistsOnly = false) => {
+export const testArtistsStartingWith = async (filterChar) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=artist";
-
-    // need to check more artists if albumArtistsOnly in case some get filtered out
-    // 20 seems like a reasonable balance between speed and accuracy
-    queryURL += `&limit=${albumArtistsOnly ? 20 : 1}`;
-
+    queryURL += `&limit=1`;
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "testArtistsStartingWith");
 
-    let artists = await fetchArtistData(queryURL);
-
-    if (albumArtistsOnly) {
-        artists = artists.filter(a => a.albumcount > 0);
-    }
-
-    return artists;
+    return fetchArtistData(queryURL);
 }
 
 /**

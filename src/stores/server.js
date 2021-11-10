@@ -55,7 +55,6 @@ export let artistIndex = derived(
             // work out counts for artists and album artists
             usedChars.forEach((value, key) => {
                 let artistCount;
-                let albumArtistCount;
 
                 let code = key.replaceAll("#", "(\\d|\\W)");
 
@@ -64,9 +63,7 @@ export let artistIndex = derived(
                     return regex.test(a.name);
                 });
 
-                albumArtistCount = artistCount.filter(a => a.albumcount > 0);
-
-                usedChars.set(key, {artistCount: artistCount.length, albumArtistCount: albumArtistCount.length});
+                usedChars.set(key, {artistCount: artistCount.length});
             });
 
             let sorted = new Map([...usedChars.entries()].sort());

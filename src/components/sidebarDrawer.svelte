@@ -3,7 +3,6 @@
     import { Link } from "svelte-routing";
 
     import { allArtists, allAlbums, artistIndex, albumIndex } from '../stores/server';
-    import { ShowAlbumArtistsOnly } from "../stores/status";
 
     import { getArtists } from "../logic/artist";
     import { getAlbums } from "../logic/album";
@@ -22,7 +21,7 @@
 
     $: {
         if (type === "artist" && $allArtists.loaded) {
-            dataDisplay = $ShowAlbumArtistsOnly ? $allArtists.data.filter(a => a.albumcount > 0) : $allArtists.data;
+            dataDisplay = $allArtists.data;
             dataDisplay = groupByFirstChar(dataDisplay);
         }
 
@@ -82,10 +81,6 @@
         loading = false;
     }
 
-    function handleToggleAlbumArtists() {
-        ShowAlbumArtistsOnly.set(!$ShowAlbumArtistsOnly);
-    }
-
     function handleClick() {
         visible = false;
     }
@@ -127,13 +122,9 @@
         {#if type === 'artist'}
             {#if $artistIndex}
                 {#each [...$artistIndex] as [key, value], i}
-                    {#if value.artistCount > 0 || value.albumArtistCount > 0}
+                    {#if value.artistCount > 0}
                         <button
                             on:click={handleAlphaScroll}
-                            disabled={
-                                ($ShowAlbumArtistsOnly && parseInt(value.albumArtistCount) === 0) ||
-                                (!$ShowAlbumArtistsOnly && parseInt(value.artistCount) === 0)
-                            }
                         >
                             {key}
                         </button>
@@ -156,15 +147,6 @@
     </div>
 
     <div class="list">
-        {#if type === 'artist'}
-            <div class="header">
-                <label>
-                    <input type=checkbox on:change={handleToggleAlbumArtists} bind:checked={$ShowAlbumArtistsOnly} disabled={loading} />
-                    Show album artists only
-                </label>
-            </div>
-        {/if}
-
         {#if !loading}
             <ul>
                 {#if type === 'artist' && $allArtists}

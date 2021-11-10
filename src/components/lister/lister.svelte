@@ -153,6 +153,7 @@
 <style>
     .lister-wrapper {
         max-width: 100%;
+        margin-bottom: var(--spacing-lg);
     }
 
     .lister-container {

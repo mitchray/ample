@@ -1,18 +1,26 @@
 <script>
-    import { ShowAlbumArtistsOnly } from "../stores/status";
-    import { artistIndex, albumIndex } from '../stores/server';
-
-    // Begin component
     export let selectedChar;
-    export let type;
+    export let searchValue;
+
+    let options = '#abcdefghijklmnopqrstuvwxyz';
+    let expanded = [...options];
+    let items = new Map();
+
+    for (let i = 0; i < expanded.length; i++) {
+        if (expanded[i] === "#") {
+            items.set(expanded[i], '([[:digit:]]|[[:space:]])');
+        } else {
+            items.set(expanded[i], expanded[i]);
+        }
+    }
 
     let params = (new URL(document.location)).searchParams;
 
     // Load from URL otherwise set defaults
     let charID = params.get('filter') || '';
-    let items = [];
 
     $: selectedChar = charID;
+    $: searchValue = charID.replaceAll("#", "([[:digit:]]|[[:space:]])");
 
     function clear() {
         let url = new URL(window.location);
@@ -36,43 +44,17 @@
     </button>
 
     <ul class="row">
-        {#if type === "artists"}
-            {#if $artistIndex}
-                {#each [...$artistIndex] as [key, value], i}
-                    {#if value.artistCount > 0 || value.albumArtistCount > 0}
-                        <li>
-                            <button
-                                on:click={handleSelection}
-                                data-char_id={key}
-                                class:active={key === selectedChar}
-                                disabled={
-                                ($ShowAlbumArtistsOnly && parseInt(value.albumArtistCount) === 0) ||
-                                (!$ShowAlbumArtistsOnly && parseInt(value.artistCount) === 0)
-                            }
-                            >
-                                {key}
-                            </button>
-                        </li>
-                    {/if}
-                {/each}
-            {/if}
-        {:else}
-            {#if $albumIndex}
-                {#each [...$albumIndex] as [key, value], i}
-                    {#if value.albumCount > 0}
-                        <li>
-                            <button
-                                on:click={handleSelection}
-                                data-char_id={key}
-                                class:active={key === selectedChar}
-                            >
-                                {key}
-                            </button>
-                        </li>
-                    {/if}
-                {/each}
-            {/if}
-        {/if}
+        {#each [...items] as [id, chars]}
+            <li>
+                <button
+                    on:click={handleSelection}
+                    data-char_id={id}
+                    class:active={id === selectedChar}
+                >
+                    {id}
+                </button>
+            </li>
+        {/each}
     </ul>
 </div>
 
@@ -80,11 +62,13 @@
     .container {
         display: flex;
         align-items: center;
+        margin-bottom: var(--spacing-lg);
     }
 
     .row {
         display: flex;
         gap: var(--spacing-sm);
+        flex-wrap: wrap;
     }
 
     li {
