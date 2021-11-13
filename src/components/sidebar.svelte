@@ -190,6 +190,7 @@
         display: flex;
         flex-direction: column;
         position: relative;
+        box-shadow: var(--shadow-md);
     }
 
     .site-sidebar-inner:after {

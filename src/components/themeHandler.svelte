@@ -80,6 +80,8 @@
     --shadow-xl:  rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
     --shadow-xxl: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
 
+    --shadow-inset-md:  rgba(0, 0, 0, 0.1) 0px 4px 6px -1px inset,   rgba(0, 0, 0, 0.06) 0px 2px 4px -1px inset;
+
     /*  OLD  */
 
     --color-interface: rgba(${lchToRgb([95, 3, 243])}, 0.8);
@@ -124,6 +126,8 @@
     --shadow-lg:  rgba(0, 0, 0, 0.4) 0px 10px 15px -3px, rgba(0, 0, 0, 0.20) 0px 4px 6px -2px;
     --shadow-xl:  rgba(0, 0, 0, 0.4) 0px 20px 25px -5px, rgba(0, 0, 0, 0.16) 0px 10px 10px -5px;
     --shadow-xxl: rgba(0, 0, 0, 0.4) 0px 20px 25px -5px, rgba(0, 0, 0, 0.16) 0px 10px 10px -5px;
+
+    --shadow-inset-md: rgba(0, 0, 0, 0.4) 0px 4px 6px -1px inset, rgba(0, 0, 0, 0.24) 0px 2px 4px -1px inset;
 
     /*  OLD  */
 

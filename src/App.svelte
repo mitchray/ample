@@ -159,7 +159,6 @@
         position: relative;
         padding: var(--spacing-xxl);
         flex: 1;
-        box-shadow: inset 20px 0px 20px -20px rgba(0,0,0,0.2);
         z-index: -10;
     }
 
