@@ -128,12 +128,13 @@ ul {
 /* W3C spec */
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-border) var(--color-lines);
+    scrollbar-color: var(--color-highlight) var(--color-lines);
 }
 
 /* Chrome, Edge, and Safari */
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 ::-webkit-scrollbar-track {
@@ -141,7 +142,7 @@ ul {
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--color-border);
+    background-color: var(--color-highlight);
 }
 
 ::selection { /* WebKit/Blink Browsers */
