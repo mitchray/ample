@@ -4,17 +4,16 @@
 
     import { logout } from "../logic/user";
 
-    import { SearchQuery, ShowSearch, ThemeIsLight } from "../stores/status";
-    import { MediaPlayer, SiteContentBind } from '../stores/player';
+    import { SearchQuery, ShowSearch } from "../stores/status";
+    import { SiteContentBind } from '../stores/player';
 
     import Search from '../components/search.svelte';
+    import ThemeToggle from '../components/themeToggle.svelte';
 
     import SVGAmpleLogo from "../../public/images/ample_logo.svg";
     import SVGClose from "../../public/images/close.svg";
     import SVGSearch from "../../public/images/search.svg";
     import SVGLogout from "../../public/images/logout.svg";
-    import SVGDarkMode from "../../public/images/dark_mode.svg";
-    import SVGLightMode from "../../public/images/light_mode.svg";
 
     let timeout;
     let minimumLength = 3;
@@ -46,15 +45,6 @@
 
     function handleLogOut() {
         logout();
-    }
-
-    function toggleTheme() {
-        let inverted = !$ThemeIsLight;
-        localStorage.setItem('AmpleThemeIsLight', JSON.stringify(inverted));
-        ThemeIsLight.set(inverted);
-
-        // update waveform colors when theme is toggled
-        $MediaPlayer.setWaveColors();
     }
 
     onMount(() => {
@@ -96,16 +86,7 @@
 
     <button on:click={handleLogOut} class="logout visuallyLink"><SVGLogout /> Log out</button>
 
-    <button
-        class="icon theme-toggle"
-        on:click={toggleTheme}
-    >
-        {#if $ThemeIsLight}
-            <SVGDarkMode />
-        {:else}
-            <SVGLightMode />
-        {/if}
-    </button>
+    <ThemeToggle />
 </div>
 
 {#if $ShowSearch && $SearchQuery.length >= minimumLength}
@@ -183,10 +164,5 @@
     .site-header :global(.advanced-search) {
         display: inline-block;
         margin-right: auto;
-    }
-
-    .theme-toggle {
-        margin-left: var(--spacing-lg);
-        margin-right: var(--spacing-md);
     }
 </style>

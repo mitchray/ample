@@ -11,6 +11,7 @@
     import { getLegibleColors, getRandomInt } from '../logic/helper';
 
     import Tabs from "../components/tabs.svelte";
+    import ThemeToggle from '../components/themeToggle.svelte';
 
     import SVGAmpleLogo from "../../public/images/ample_logo.svg";
     import SVGLogin from "../../public/images/login.svg";
@@ -54,59 +55,60 @@
     });
 </script>
 
-<div class="container" in:fade out:fade>
-    {#if versionCheck && versionCheck < 5}
-        <p class="server-message badge danger" in:fade>Ample only supports Ampache v5 and up. Version {$serverVersion} detected.</p>
-    {/if}
+<div class="container">
+    <ThemeToggle />
 
-    <div class="logo">
-        <SVGAmpleLogo />
-    </div>
+    <div class="form" in:fade out:fade>
+        {#if versionCheck && versionCheck < 5}
+            <p class="server-message badge danger" in:fade>Ample only supports Ampache v5 and up. Version {$serverVersion} detected.</p>
+        {/if}
 
-    <Tabs bind:activeTabValue={currentTab} items={tabItems}>
-        <div class="username" style="display: {currentTab === 1 ? 'block' : 'none'}">
-            <form on:submit|preventDefault={handleSubmitUsername}>
-                <p>
-                    <label>Ampache username
-                        <input type="text" bind:value={username} />
-                    </label>
-                </p>
-                <p>
-                    <label>Ampache password
-                        <input type="password" bind:value={password} />
-                    </label>
-                </p>
-                <button class="primary with-icon" type="submit"><SVGLogin /> Login</button>
-            </form>
+        <div class="logo">
+            <SVGAmpleLogo />
         </div>
 
-        <div class="api" style="display: {currentTab === 2 ? 'block' : 'none'}">
-            <form on:submit|preventDefault={handleSubmitAPI}>
-                <p>
-                    <label>API key
-                        <input type="text" bind:value={apiKey} />
-                    </label>
-                </p>
+        <Tabs bind:activeTabValue={currentTab} items={tabItems}>
+            <div class="username" style="display: {currentTab === 1 ? 'block' : 'none'}">
+                <form on:submit|preventDefault={handleSubmitUsername}>
+                    <p>
+                        <label>Ampache username
+                            <input type="text" autofocus bind:value={username} />
+                        </label>
+                    </p>
+                    <p>
+                        <label>Ampache password
+                            <input type="password" bind:value={password} />
+                        </label>
+                    </p>
+                    <button class="primary with-icon" type="submit"><SVGLogin /> Login</button>
+                </form>
+            </div>
 
-                <button class="primary with-icon" type="submit"><SVGLogin /> Login</button>
-            </form>
+            <div class="api" style="display: {currentTab === 2 ? 'block' : 'none'}">
+                <form on:submit|preventDefault={handleSubmitAPI}>
+                    <p>
+                        <label>API key
+                            <input type="text" bind:value={apiKey} />
+                        </label>
+                    </p>
+
+                    <button class="primary with-icon" type="submit"><SVGLogin /> Login</button>
+                </form>
+            </div>
+        </Tabs>
+
+        {#if message}
+            <p class="login-message badge warning" in:fade>{message}</p>
+        {/if}
+
+        <div class="meta">
+            <span>Ample v{$ampleVersion}</span> {#if $serverVersion}- <span>Ampache v{$serverVersion}</span>{/if}
         </div>
-    </Tabs>
-
-    {#if message}
-        <p class="login-message badge warning" in:fade>{message}</p>
-    {/if}
-
-    <div class="meta">
-        <span>Ample v{$ampleVersion}</span> {#if $serverVersion}- <span>Ampache v{$serverVersion}</span>{/if}
     </div>
 </div>
 
 <div class="bg-container" out:fade>
     <div class="bg"></div>
-    <div class="bg bg2"></div>
-    <div class="bg bg3"></div>
-    <div class="bg bg4"></div>
 </div>
 
 <style>
@@ -115,6 +117,19 @@
     }
 
     .container {
+        width: 100vw;
+        height: 100vh;
+        z-index: 10;
+    }
+
+    .container :global(.theme-toggle) {
+        position: absolute;
+        top: var(--spacing-md);
+        right: var(--spacing-md);
+        margin: 0;
+    }
+
+    .form {
         position: absolute;
         left: 50%;
         top: 50%;
@@ -122,16 +137,17 @@
         width: 100%;
         max-width: 400px;
         padding: var(--spacing-xxl);
-        background-color: var(--color-tint-50);
+        background-color: var(--color-interface-10);
         border-radius: 15px;
         z-index: 10;
         border-top: 2px solid var(--color-tint-100);
-        box-shadow: rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+        box-shadow: var(--shadow-xl);
     }
 
     @supports (backdrop-filter: blur(0)) {
-        .container {
-            backdrop-filter: blur(10px) saturate(180%);
+        .form {
+            background-color: var(--color-tint-50);
+            backdrop-filter: blur(15px) saturate(180%);
         }
     }
 
@@ -175,15 +191,22 @@
         right: 0;
         bottom: 0;
         left: 0;
+        z-index: 0;
         background-size: 30px 30px;
         background-image:
                 linear-gradient(to right, var(--color-tint-50) 1px, transparent 1px),
                 linear-gradient(to bottom, var(--color-tint-50) 1px, transparent 1px);
     }
 
+    :global(.theme-is-light) .bg-container {
+        background-color: var(--color-lines);
+        background-image:
+                linear-gradient(to right, var(--color-shade-50) 1px, transparent 1px),
+                linear-gradient(to bottom, var(--color-shade-50) 1px, transparent 1px);
+    }
+
     .bg {
-        animation: slide 1s ease-in-out infinite alternate;
-        background-image: linear-gradient(-60deg, var(--color-interface-00) 50%, var(--color-interface) 50%);
+        background-image: linear-gradient(-60deg, var(--color-interface-00) 50%, var(--color-lines) 50%);
         bottom: 0;
         left: -50%;
         opacity: 0.2;
@@ -191,41 +214,5 @@
         right: -50%;
         top: 0;
         z-index: 1;
-    }
-
-    .bg {
-        animation-duration: 5s;
-    }
-
-    .bg2 {
-        animation-duration: 6s;
-        animation-name: slide2;
-    }
-
-    .bg3 {
-        animation-duration: 6s;
-    }
-
-    .bg4 {
-        animation-duration: 7s;
-        animation-name: slide2;
-    }
-
-    @keyframes slide {
-        0% {
-            transform:translateX(-25%);
-        }
-        100% {
-            transform:translateX(25%);
-        }
-    }
-
-    @keyframes slide2 {
-        0% {
-            transform:translateX(25%);
-        }
-        100% {
-            transform:translateX(-25%);
-        }
     }
 </style>
