@@ -516,6 +516,10 @@ svg.auto {
     z-index: -1;
 }
 
+.panel-header {
+    min-height: 48px;
+}
+
 section {
     margin-bottom: var(--spacing-xxl);
 }

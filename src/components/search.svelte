@@ -26,8 +26,8 @@
         transition:fade={{ duration: 300 }}
         style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
     >
-        <div class="header">
-            <div class="header-text">Results for <b>{$SearchQuery}</b></div>
+        <div class="header panel-header">
+            <h4>Results for <b>{$SearchQuery}</b></h4>
             <button class="icon close" on:click={handleClose}><SVGClose /></button>
         </div>
 
@@ -65,41 +65,19 @@
         /*    rgba(0, 0, 0, 0.25) 0 25px 50px -12px;*/
     }
 
-    .backdrop {
-        position: absolute;
-        content: '';
-        top: 0;
-        left: 100%;
-        width: calc(100vw - var(--size-sidebar-width));
-        bottom: 0;
-        background-color: var(--color-tint-200);
-    }
-
-    @supports (backdrop-filter: blur(0)) {
-        .backdrop {
-            backdrop-filter: blur(10px) saturate(180%);
-            background-color: var(--color-tint-100);
-        }
-    }
-
-    :global(.theme-is-light) .backdrop {
-        background-color: var(--color-shade-200);
-    }
-
-    .close {
-        position: absolute;
-        top: var(--spacing-lg);
-        right: var(--spacing-lg);
-        cursor: pointer;
-        z-index: 1;
-    }
-
     .header {
-        background-color: var(--color-tint-50);
+        background-color: var(--color-interface-10);
         display: flex;
+        flex-shrink: 0;
+        align-items: center;
+        justify-content: space-between;
         padding: var(--spacing-md);
-        padding-left: var(--spacing-xl);
-        border-bottom: 1px solid var(--color-tint-100);
+        padding-left: var(--spacing-lg);
+    }
+
+    .header h4 {
+        margin: 0;
+        margin-right: auto;
     }
 
     .results {
@@ -112,9 +90,5 @@
         padding: inherit;
         padding-top: 0;
         display: block;
-    }
-
-    .header-text {
-        font-size: 28px;
     }
 </style>

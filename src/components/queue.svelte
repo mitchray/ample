@@ -131,7 +131,7 @@
     class:visible={$ShowQueue}
 >
     <div class="site-queue-inner">
-        <div class="header">
+        <div class="header panel-header">
             <h4 on:click={showCurrentSong}>Now Playing</h4>
 
             <button class="clear-played just-icon" title="Clear played songs" on:click={handleClearPlayed}><SVGClose /></button>
