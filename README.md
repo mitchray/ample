@@ -9,7 +9,7 @@ A web browser music client for [Ampache](https://ampache.org/), built with [Svel
 ## Requirements
 - ECMAScript 2015 (ES6) capable web browser
 - Ampache 5+
-- Apache for a small .htaccess URL rewrite, or BYO nginx/alternative equivalent (share if you do!)
+- Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
 ## Installing
 If using a pre-built release, copy the ```ample``` folder into your Ampache ```public``` folder, done!
