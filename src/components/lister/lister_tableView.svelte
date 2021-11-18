@@ -82,6 +82,10 @@
         background-color: var(--color-tint-50);
     }
 
+    :global(.theme-is-light) .lister :global(.stripe > div) {
+        background-color: var(--color-shade-50);
+    }
+
     .row :global(.c-actions) {
         opacity: 0;
     }
