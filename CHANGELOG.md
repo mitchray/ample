@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.19.0] - 2021-11-18
+### Requires at least Ampache 5.1.1
+
+Some big under the hood changes; should scale better with large collections
+
+### Changed
+- Paginate All Artists/Albums instead of preloading everything (the 5.1.1 requirement )
+- Light/dark mode toggle now available on login; and removed motion effect from login page
+- Theme improvements, many for light mode specifically
+
+### Fixed
+- Albums by date was not displaying properly
+
+### Removed
+- Sidebar slideout with all artists/albums; not happy with the performance due to needing all items to be loaded, but might return one day
+
 ## [0.18.0] - 2021-11-03
 ### Added
 - Fade out on manual pause/next/previous; fade in on manual resume
