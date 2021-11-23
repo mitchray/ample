@@ -174,8 +174,6 @@ export let validateAuthToken = () => {
             } else {
                 logout();
             }
-
-            APIVersion.set(data.version);
         })
         .catch(err => {
             console.log("Error Reading data " + err);
