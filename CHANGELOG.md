@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.20.0] - 2021-11-23
+### Changed
+- Specify desired API version instead of getting it from handshake
+
 ## [0.19.0] - 2021-11-18
 ### Requires at least Ampache 5.1.1
 
