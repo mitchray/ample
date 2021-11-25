@@ -47,17 +47,4 @@
     .genres :global(td) {
         padding: 0.6em 0.6em;
     }
-
-    .actions {
-        margin-bottom: var(--spacing-xl);
-    }
-
-    .reverse {
-        margin-left: var(--spacing-lg);
-    }
-
-    .active {
-        background-color: var(--color-tint-800);
-        color: var(--color-shade-800);
-    }
 </style>

@@ -58,6 +58,10 @@
         background-color: var(--color-tint-100);
     }
 
+    :global(.theme-is-light) span:hover {
+        background-color: var(--color-shade-100);
+    }
+
     li.active > span {
         color: var(--color-link-active);
     }

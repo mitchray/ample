@@ -145,13 +145,14 @@ ul {
     background-color: var(--color-highlight);
 }
 
-::selection { /* WebKit/Blink Browsers */
+::selection {
     background: var(--color-tint-600);
-    color: var(--color-shade-800);
+    color: var(--color-shade-900);
 }
-::-moz-selection { /* Gecko Browsers */
-    background: var(--color-tint-600);
-    color: var(--color-shade-800);
+
+.theme-is-light ::selection {
+    background: var(--color-shade-600);
+    color: var(--color-tint-900);
 }
 
 /* --------------------------

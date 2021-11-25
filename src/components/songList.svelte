@@ -138,6 +138,10 @@
         background-color: var(--color-tint-50);
     }
 
+    :global(.theme-is-light) li:hover {
+        background-color: var(--color-shade-50);
+    }
+
     li:hover .actions {
         opacity: 1;
     }

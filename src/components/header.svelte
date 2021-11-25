@@ -98,7 +98,6 @@
 <style>
     .site-header {
         background-color: var(--color-interface-20);
-        /*border-bottom: 1px solid var(--color-tint-100);*/
         box-shadow: var(--shadow-md);
         width: 100%;
         height: var(--size-header-height);

@@ -259,7 +259,7 @@
     .container {
         display: flex;
         align-items: center;
-        border: 2px solid var(--color-tint-100);
+        border: 2px solid var(--color-lines);
         border-radius: 10px;
         margin-bottom: var(--spacing-xxl);
         overflow: hidden;
@@ -324,12 +324,11 @@
         display: inline-block;
         text-align: center;
         width: 100%;
-        margin-top: var(--spacing-md);
     }
 
     .presets {
         display: table;
-        border-left: 2px solid var(--color-tint-100);
+        border-left: 2px solid var(--color-lines);
     }
 
     .presets .label,
@@ -344,7 +343,11 @@
     }
 
     .row:nth-child(even) {
-        background-color: var(--color-shade-100);
+        background-color: var(--color-tint-50);
+    }
+
+    :global(.theme-is-light) .row:nth-child(even) {
+        background-color: var(--color-shade-50);
     }
 
     .label {
@@ -368,6 +371,10 @@
 
     .timeframe button.active {
         background-color: var(--color-tint-100);
+    }
+
+    :global(.theme-is-light) .timeframe button.active {
+        background-color: var(--color-shade-100);
     }
 
     .ranges ul {

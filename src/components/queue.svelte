@@ -295,8 +295,16 @@
         position: relative;
     }
 
+    :global(.theme-is-light) .queue-item {
+        background-color: var(--color-shade-50);
+    }
+
     .queue-item:hover {
         background-color: var(--color-tint-100);
+    }
+
+    :global(.theme-is-light) .queue-item:hover {
+        background-color: var(--color-shade-100);
     }
 
     .queue-item + .queue-item {

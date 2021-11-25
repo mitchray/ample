@@ -296,12 +296,6 @@
         overflow-x: hidden;
     }
 
-    .header {
-        padding: var(--spacing-md);
-        background-color: var(--color-tint-50);
-        flex-shrink: 0;
-    }
-
     ul {
         margin: 0;
         padding: var(--spacing-md) 0;

@@ -68,7 +68,7 @@
     .album-card-expanded {
         padding: var(--spacing-lg);
         border-radius: 10px;
-        border: 2px solid var(--color-tint-100);
+        border: 2px solid var(--color-lines);
         max-width: 2000px;
     }
 
