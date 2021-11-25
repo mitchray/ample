@@ -32,6 +32,8 @@
     export let averageRating = null;
 
     let showAverageRatings = true;
+    let pendingRating = null;
+    let loading = false;
 
     const values = [1, 2, 3, 4, 5];
 
@@ -48,7 +50,10 @@
     let update = Promise.resolve([]);
 
     function handleRating() {
+        loading = true;
+
         let newRating = parseInt(this.dataset.rating);
+        pendingRating = newRating;
 
         update = setRating(type, id, newRating)
             .then((result) => {
@@ -59,6 +64,8 @@
                         id: id,
                         rating: newRating
                     });
+
+                    loading = false;
                 }
             });
     }
@@ -87,7 +94,7 @@
 
     <ul class="c-rating__stars">
         {#each values as ratingValue, i}
-            <li on:click={handleRating} data-rating="{ratingValue}" class="c-rating__star {rating === ratingValue ? 'current' : ''}">
+            <li on:click={handleRating} data-rating="{ratingValue}" class="c-rating__star" class:current={rating === ratingValue} class:new={loading && pendingRating === ratingValue}>
                 {#if rating > i}
                     <SVGStarFull />
                 {:else}
@@ -97,7 +104,7 @@
         {/each}
     </ul>
 
-    <span on:click={handleFlag} class="c-rating__flag {flag ? 'flagged' : ''}">
+    <span on:click={handleFlag} class="c-rating__flag" class:flagged={flag}>
         {#if flag}
             <SVGFavoriteFull />
         {:else}
@@ -162,6 +169,22 @@
     .current,
     .flagged {
         opacity: 1;
+    }
+
+    .new {
+        animation-name: spin;
+        animation-duration: 1s;
+        animation-delay: 0.1s;
+        animation-timing-function: ease-in;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
     }
 
     .c-rating:hover .c-rating__stars {
