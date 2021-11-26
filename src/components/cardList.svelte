@@ -5,6 +5,7 @@
     import SVGRefresh from "../../public/images/refresh.svg";
 
     export let type;
+    export let initialData = [];
     export let dataProvider;
     export let refresh = false;
     export let limit;
@@ -66,7 +67,14 @@
                 break;
         }
 
-        await loadMore();
+        // if starting off with preloaded data, kick off the loadCount
+        if (initialData.length > 0) {
+            newBatch = initialData;
+            loading = false;
+            loadCount++;
+        } else {
+            await loadMore();
+        }
     });
 
     // Append extra data to existing

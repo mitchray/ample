@@ -4,9 +4,24 @@
     import { SearchQuery, ShowSearch } from '../stores/status';
     import { SiteContentBind } from '../stores/player';
 
+    import { searchArtists } from '../logic/artist';
+    import { searchAlbums } from '../logic/album';
+    import { searchSongs } from '../logic/song';
+    import { searchPlaylists } from '../logic/playlist';
+    import { searchSmartlists } from '../logic/playlist';
+
     import CardList from './cardList.svelte';
 
     import SVGClose from "../../public/images/close.svg";
+
+    let initialResults = {
+        artists: [],
+        albums: [],
+        songs: [],
+        playlists: [],
+        smartlists: [],
+    };
+    let noResults = false;
 
     function handleClick(event) {
         // Close search if we are following a link
@@ -17,6 +32,28 @@
 
     function handleClose() {
         ShowSearch.set(false);
+    }
+
+    $: {
+        if ($SearchQuery) {
+            doSearch();
+        }
+    }
+
+    async function doSearch() {
+        const s1 = searchArtists({query: $SearchQuery, page: 0, limit: 6});
+        const s2 = searchAlbums({query: $SearchQuery, page: 0, limit: 6});
+        const s3 = searchSongs({query: $SearchQuery, page: 0, limit: 9});
+        const s4 = searchPlaylists({query: $SearchQuery, page: 0, limit: 6});
+        const s5 = searchSmartlists({query: $SearchQuery, page: 0, limit: 6});
+
+        [initialResults.artists, initialResults.albums, initialResults.songs, initialResults.playlists, initialResults.smartlists] = await Promise.all([s1, s2, s3, s4, s5]);
+
+        if (initialResults.artists.length === 0 && initialResults.albums.length === 0 && initialResults.songs.length === 0 && initialResults.playlists.length === 0 && initialResults.smartlists.length === 0) {
+            noResults = true;
+        } else {
+            noResults = false;
+        }
     }
 </script>
 
@@ -33,15 +70,29 @@
 
         <div class="results">
             {#key $SearchQuery}
-                <CardList type="artist" dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists" />
+                {#if noResults}
+                    <p>No results found</p>
+                {/if}
 
-                <CardList type="album" dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums" />
+                {#if initialResults.artists.length > 0}
+                    <CardList type="artist" initialData={initialResults.artists} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists" />
+                {/if}
 
-                <CardList type="song" dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs" />
+                {#if initialResults.albums.length > 0}
+                    <CardList type="album" initialData={initialResults.albums} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums" />
+                {/if}
 
-                <CardList type="playlist" dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="Playlists" />
+                {#if initialResults.songs.length > 0}
+                    <CardList type="song" initialData={initialResults.songs} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs" />
+                {/if}
 
-                <CardList type="smartlist" dataProvider={"searchSmartlists"} limit=6 arg={encodeURI($SearchQuery)} heading="Smartlists" />
+                {#if initialResults.playlists.length > 0}
+                    <CardList type="playlist" initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="Playlists" />
+                {/if}
+
+                {#if initialResults.smartlists.length > 0}
+                    <CardList type="smartlist" initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} limit=6 arg={encodeURI($SearchQuery)} heading="Smartlists" />
+                {/if}
             {/key}
         </div>
     </div>
