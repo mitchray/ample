@@ -49,11 +49,10 @@
 
         [initialResults.artists, initialResults.albums, initialResults.songs, initialResults.playlists, initialResults.smartlists] = await Promise.all([s1, s2, s3, s4, s5]);
 
-        if (initialResults.artists.length === 0 && initialResults.albums.length === 0 && initialResults.songs.length === 0 && initialResults.playlists.length === 0 && initialResults.smartlists.length === 0) {
-            noResults = true;
-        } else {
-            noResults = false;
-        }
+        // test if every array in initialResults is empty
+        noResults = Object.values(initialResults).every(value => {
+            return value.length === 0;
+        });
     }
 </script>
 
