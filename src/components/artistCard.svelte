@@ -11,7 +11,9 @@
 
 <div class="artist-card card">
     {#if artist}
-        <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
+        <div class="art-container">
+            <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
+        </div>
         <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
 
         <div class="rating-container">
@@ -58,10 +60,25 @@
         flex-direction: column;
     }
 
-    .artist-card :global(.image) {
+    .artist-card :global(.art-container) {
+        border-radius: 50%;
+        border: 3px solid var(--color-highlight);
+        overflow: hidden;
+        height: 0;
+        padding-bottom: 100%;
         width: 100%;
-        height: auto;
-        border-radius: 999px;
+        position: relative;
+    }
+
+    .artist-card :global(.image) {
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
     }
 
     .title {

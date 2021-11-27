@@ -57,7 +57,9 @@
         {/if}
 
         <div class="container">
-            <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="210" height="210" in:fade/>
+            <div class="art-container">
+                <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="210" height="210" in:fade/>
+            </div>
             <div class="details">
                 <h1 class="title">{artist.name}</h1>
                 <p>
@@ -183,10 +185,18 @@
         flex-wrap: wrap;
     }
 
+    .art-container {
+        border-radius: 50%;
+        border: 3px solid var(--color-highlight);
+        width: 210px;
+        height: 210px;
+        overflow: hidden;
+    }
+
     .art {
         height: 100%;
-        border-radius: 999px;
-        border: 3px solid var(--color-highlight);
+        width: 100%;
+        object-fit: cover;
     }
 
     .details {

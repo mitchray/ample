@@ -107,15 +107,14 @@
 
     .songs {
         color: var(--color-text-body);
-        overscroll-behavior: contain;
     }
 
     /* needed as flex doesn't include padding in height calc */
     .songs:after {
-        /*content: '';*/
-        /*padding: inherit;*/
-        /*padding-top: 0;*/
-        /*display: block;*/
+        content: '';
+        padding: inherit;
+        padding-top: 0;
+        display: block;
     }
 
     .cover {
@@ -149,14 +148,6 @@
     @media all and (min-width: 1800px) {
         .container {
             flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1900px;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            padding: 0;
         }
 
         .cover {
@@ -170,21 +161,19 @@
 
         .details {
             flex-direction: column;
+            position: sticky;
+            top: 0;
         }
 
         .details-container {
             width: 400px;
-            overflow-y: auto;
-            height: 100%;
-            padding: var(--spacing-xxl);
-            border-right: 2px solid var(--color-lines);
+            padding-right: var(--spacing-xxl);
             flex-shrink: 0;
+
         }
 
         .songs {
-            width: 100%;
-            padding: var(--spacing-xxl);
-            overflow-y: hidden; /* hide the scrollbar, but it shouldn't be needed */
+            min-width: 0; /* keeps content from overflowing parent */
         }
     }
 </style>

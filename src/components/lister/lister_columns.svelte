@@ -9,7 +9,7 @@
 
     let newColumns = JSON.parse(JSON.stringify(columns)); // MAKE AN INDIVIDUAL COPY OF IMPORTED OBJECT
 
-    let { currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, lister, listerContainer, visibleColumns } = getContext(contextKey);
+    let { currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, lister, listerContainer, visibleColumns, listerHeader } = getContext(contextKey);
     const min = 100;
     let thisType = getType();
     let headerBeingResized;
@@ -54,7 +54,7 @@
 
         headerBeingResized = e.target.parentNode;
         columnWidthArray = $columnWidths.split(" ");
-        updateIndex = Array.from($listerContainer.querySelectorAll('.header .item')).findIndex((header) => header === headerBeingResized);
+        updateIndex = Array.from($listerContainer.querySelectorAll('.header .cell')).findIndex((header) => header === headerBeingResized);
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
@@ -86,13 +86,13 @@
         $visibleColumns.forEach((col) => {
             switch (col.widthPreset) {
                 case "large":
-                    newWidths += `minmax(${min}px, 2.33fr) `;
+                    newWidths += `250px `;
                     break;
                 case "medium":
-                    newWidths += `minmax(${min}px, 1.66fr) `;
+                    newWidths += `180px `;
                     break;
                 case "small":
-                    newWidths += `minmax(${min}px, 1fr) `;
+                    newWidths += `120px `;
                     break;
                 case "rating":
                     newWidths += `180px `;
@@ -181,7 +181,7 @@
 </script>
 
 {#each $visibleColumns as col (col)}
-    <div class="item" data-sortable="{col.sortable}" >
+    <div class="cell {col.id}" data-sortable="{col.sortable}" >
         {#if col.id === "checkbox"}
             <input type="checkbox" on:change={toggleAllChecked} />
         {:else}
@@ -199,16 +199,13 @@
         {/if}
 
         {#if !col.fixedSize}
-            <span class="resize-handle" on:mousedown={(e) => { initResize(e) }}></span>
+            <span class="resize-handle" on:mousedown={(e) => { initResize(e) }} on:dblclick={() => { $listerHeader.calculateWidths() }}></span>
         {/if}
     </div>
 {/each}
 
 <style>
-    .item {
-        background-color: var(--color-text-subheading);
-        color: var(--color-interface-00);
-        position: relative;
+    .cell {
         font-weight: 700;
     }
 
@@ -224,7 +221,7 @@
         z-index: 10;
     }
 
-    .item:hover .resize-handle,
+    .cell:hover .resize-handle,
     .resize-handle:hover,
     :global(.header--being-resized) .resize-handle {
         opacity: 0.3;

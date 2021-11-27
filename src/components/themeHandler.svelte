@@ -69,6 +69,7 @@
     {@html `<style>
 :root {
     --color-interface-00: rgb(${lchToRgb([95, 3, 243])});
+    --color-interface-05: rgb(${lchToRgb([97, 3, 243])});
     --color-interface-10: rgb(${lchToRgb([100, 3, 243])});
     --color-interface-20: rgb(${lchToRgb([100, 3, 243])});
     --color-interface-30: rgb(${lchToRgb([100, 3, 243])});
@@ -116,6 +117,7 @@
     {@html `<style>
 :root {
     --color-interface-00: rgb(${lchToRgb([3, 3, 243])});
+    --color-interface-05: rgb(${lchToRgb([6, 3, 243])});
     --color-interface-10: rgb(${lchToRgb([10, 3, 243])});
     --color-interface-20: rgb(${lchToRgb([15, 3, 243])});
     --color-interface-30: rgb(${lchToRgb([20, 3, 243])});

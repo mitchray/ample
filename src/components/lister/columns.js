@@ -67,7 +67,7 @@ const columns = {
         {
             id: "name",
             label: "Name",
-            widthPreset: "medium",
+            widthPreset: "large",
             sortable: true,
             sortBy: "name",
             type: "string",
@@ -102,7 +102,7 @@ const columns = {
         },
         {
             id: "length",
-            label: "Length",
+            label: "Time",
             widthPreset: "none",
             sortable: true,
             sortBy: "time",
