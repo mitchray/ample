@@ -94,6 +94,9 @@
                 case "small":
                     newWidths += `120px `;
                     break;
+                case "art":
+                    newWidths += `60px `;
+                    break;
                 case "rating":
                     newWidths += `180px `;
                     break;

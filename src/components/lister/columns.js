@@ -59,7 +59,7 @@ const columns = {
         {
             id: "art",
             label: "",
-            widthPreset: "fit",
+            widthPreset: "art",
             fixedSize: true,
             type: "image",
             show: true
@@ -139,7 +139,7 @@ const columns = {
         {
             id: "art",
             label: "",
-            widthPreset: "fit",
+            widthPreset: "art",
             fixedSize: true,
             type: "image",
             show: true
@@ -217,7 +217,7 @@ const columns = {
         {
             id: "art",
             label: "",
-            widthPreset: "fit",
+            widthPreset: "art",
             fixedSize: true,
             type: "image",
             show: true
@@ -296,7 +296,7 @@ const columns = {
         {
             id: "art",
             label: "",
-            widthPreset: "fit",
+            widthPreset: "art",
             fixedSize: true,
             type: "image",
             show: true

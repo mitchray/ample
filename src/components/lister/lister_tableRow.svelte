@@ -37,7 +37,7 @@
 
         {#if col.id === "art"}
             {#key item.art}
-                <img src="{item.art}&thumb=1" alt="" height="44" width="44"/>
+                <img src="{item.art}&thumb=1" alt="" height="60" width="60"/>
             {/key}
         {/if}
 
