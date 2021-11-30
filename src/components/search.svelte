@@ -14,13 +14,7 @@
 
     import SVGClose from "../../public/images/close.svg";
 
-    let initialResults = {
-        artists: [],
-        albums: [],
-        songs: [],
-        playlists: [],
-        smartlists: [],
-    };
+    let initialResults = {};
     let noResults = false;
 
     function handleClick(event) {
@@ -36,8 +30,19 @@
 
     $: {
         if ($SearchQuery) {
+            resetResults();
             doSearch();
         }
+    }
+
+    function resetResults() {
+        initialResults = {
+            artists: [],
+            albums: [],
+            songs: [],
+            playlists: [],
+            smartlists: [],
+        };
     }
 
     async function doSearch() {
