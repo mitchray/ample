@@ -74,7 +74,7 @@
                 </div>
             </div>
 
-            <div class="songs">
+            <div class="songs-container">
                 <AlbumSongs id={album.id}/>
             </div>
         </div>
@@ -98,7 +98,7 @@
         flex-wrap: wrap;
     }
 
-    .songs {
+    .songs-container {
         color: var(--color-text-body);
     }
 
@@ -110,7 +110,7 @@
         margin-bottom: var(--spacing-lg);
         margin-right: var(--spacing-lg);
         flex-shrink: 0;
-        max-width: 200px;
+        max-width: 75px;
     }
 
     .title {
@@ -138,6 +138,7 @@
 
     .details {
         display: flex;
+        flex-direction: column;
     }
 
     .genres {
@@ -146,12 +147,27 @@
         flex-wrap: wrap;
     }
 
-    @media all and (min-width: 1024px) {
+    .songs-container :global(.song-list) {
+        max-width: 800px;
+    }
+
+    @media all and (min-width: 900px) {
+        .details {
+            flex-direction: row;
+        }
+    }
+
+    @media all and (min-width: 1100px) {
+        .cover-container {
+            max-width: 245px;
+        }
+    }
+
+    @media all and (min-width: 1600px) {
         .container {
             flex-direction: row;
             justify-content: space-between;
             width: 100%;
-            max-width: 1300px;
             position: absolute;
             top: 0;
             bottom: 0;
@@ -173,15 +189,16 @@
         }
 
         .details-container {
-            width: 40%;
+            width: 450px;
+            flex-shrink: 0;
             overflow-y: auto;
             height: 100%;
             padding: var(--spacing-xxl);
             border-right: 2px solid var(--color-lines);
         }
 
-        .songs {
-            width: 60%;
+        .songs-container {
+            width: 100%;
             overflow-y: auto;
             padding: var(--spacing-xxl);
         }
