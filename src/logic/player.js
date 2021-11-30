@@ -31,7 +31,6 @@ class Player {
         this.targetVolume = parseInt(-14);
         this.masteredVolume = null;
         this.gainNeeded = null;
-        this.gainValue = null;
         this.gainType = null;
         this.gainTagValue = null;
 
