@@ -48,15 +48,21 @@
         overflow: auto;
     }
 
-    /* header name */
-    .header :global(.name) {
+    .header :global(.name),
+    .header :global(.actions) {
         position: sticky;
-        left: 0;
         top: 0;
         z-index: 3;
     }
 
-    /* all th */
+    .header :global(.name) {
+        left: 0;
+    }
+
+    .header :global(.actions) {
+        right: 0;
+    }
+
     .header > :global(div) {
         text-align: left;
         background-color: var(--color-text-subheading);
@@ -72,24 +78,34 @@
         background-color: var(--color-shade-50);
     }
 
-    /* body name */
+    .lister :global(.actions.actions),
     .lister :global(.name.name) { /* specificity hack to overcome light theme */
         background-color: var(--color-interface-05);
         position: sticky;
-        left: 0;
         z-index: 1;
         box-shadow: var(--shadow-sm);
     }
 
+    .lister :global(.name.name) {
+        left: 0;
+    }
+
+    .lister :global(.actions.actions) {
+        right: 0;
+    }
+
+    .lister :global(.stripe .actions),
     .lister :global(.stripe .name) {
         background-color: var(--color-interface-10);
     }
 
     /* swap for light theme */
+    :global(.theme-is-light) .lister :global(.actions.actions),
     :global(.theme-is-light) .lister :global(.name.name) {
         background-color: var(--color-interface-10);
     }
 
+    :global(.theme-is-light) .lister :global(.stripe .actions),
     :global(.theme-is-light) .lister :global(.stripe .name) {
         background-color: var(--color-interface-05);
     }
