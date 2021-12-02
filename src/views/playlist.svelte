@@ -88,7 +88,7 @@
                 </div>
             </div>
 
-            <div class="songs">
+            <div class="songs-container">
                 {#key loadedTime}
                     <Lister2 bind:data={songs} type="song" id="{playlist.id}" />
                 {/key}
@@ -105,18 +105,10 @@
         color: var(--color-text-body);
     }
 
-    .songs {
+    .songs-container {
         color: var(--color-text-body);
     }
-
-    /* needed as flex doesn't include padding in height calc */
-    .songs:after {
-        content: '';
-        padding: inherit;
-        padding-top: 0;
-        display: block;
-    }
-
+    
     .cover {
         border-radius: 10px;
     }
@@ -148,6 +140,13 @@
     @media all and (min-width: 1800px) {
         .container {
             flex-direction: row;
+            justify-content: space-between;
+            width: 100%;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            padding: 0;
         }
 
         .cover {
@@ -166,14 +165,18 @@
         }
 
         .details-container {
-            width: 400px;
-            padding-right: var(--spacing-xxl);
+            width: 450px;
             flex-shrink: 0;
-
+            overflow-y: auto;
+            height: 100%;
+            padding: var(--spacing-xxl);
+            border-right: 2px solid var(--color-lines);
         }
 
-        .songs {
-            min-width: 0; /* keeps content from overflowing parent */
+        .songs-container {
+            width: 100%;
+            overflow-y: auto;
+            padding: var(--spacing-xxl);
         }
     }
 </style>
