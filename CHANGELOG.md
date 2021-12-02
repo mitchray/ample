@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.21.0] - 2021-12-03
+### Changed
+- Search results won't show categories with zero results
+- Revised table display
+    - Predefined column widths instead of autofit (still resizable), with horizontal scrolling
+    - Name and actions (play, shuffle etc) always visible
+    - Larger artwork
+    - Double-click any column resizer bar to reset all columns to default widths
+    
+### Removed
+- Virtual tables (where only visible rows are present in the DOM)
+
 ## [0.20.0] - 2021-11-23
 ### Changed
 - Specify desired API version instead of getting it from handshake
