@@ -55,42 +55,46 @@
 </script>
 
 <div class="container">
-    <h4>{isNew ? 'New' : 'Edit'} playlist</h4>
-
-    <label class="name">
-        Name
-        <input
-            type="text"
-            bind:value={playlistName}
-            on:paste={handleInputChange}
-            on:keyup={handleInputChange}
-        />
-    </label>
-
-    <div class="types">
-        <label>
-            <input type="radio" bind:group={playlistType} value="private" />
-            Private
-        </label>
-
-        <label>
-            <input type="radio" bind:group={playlistType} value="public" />
-            Public
-        </label>
+    <div class="panel-header">
+        <h4 class="title">{isNew ? 'New' : 'Edit'} playlist</h4>
     </div>
 
-    <div class="actions">
+    <div class="panel-content">
+        <label class="name">
+            Name
+            <input
+                type="text"
+                bind:value={playlistName}
+                on:paste={handleInputChange}
+                on:keyup={handleInputChange}
+            />
+        </label>
+
+        <div class="types">
+            <label>
+                <input type="radio" bind:group={playlistType} value="private" />
+                Private
+            </label>
+
+            <label>
+                <input type="radio" bind:group={playlistType} value="public" />
+                Public
+            </label>
+        </div>
+
+        <div class="message badge warning" class:visible={playlistExists}>Playlist <em>{playlistName}</em> already exists</div>
+    </div>
+
+    <div class="panel-footer">
         <button class="" on:click={handleCancel}>Cancel</button>
 
         <button
-                class="submit primary"
-                on:click={savePlaylist}
+            class="submit primary"
+            on:click={savePlaylist}
         >
             {isNew ? 'Create' : 'Update'}
         </button>
     </div>
-
-    <div class="message badge warning" class:visible={playlistExists}>Playlist <em>{playlistName}</em> already exists</div>
 </div>
 
 <style>
@@ -99,10 +103,6 @@
         flex-direction: column;
         width: 250px;
         gap: var(--spacing-md);
-    }
-
-    h4 {
-        margin: 0;
     }
 
     .name {
@@ -119,11 +119,6 @@
         margin-left: var(--spacing-md);
     }
 
-    .actions {
-        display: flex;
-        justify-content: space-between;
-    }
-
     .types {
         display: flex;
         gap: var(--spacing-md);
@@ -135,9 +130,5 @@
 
     .message.visible {
         display: block;
-    }
-
-    .submit {
-        align-self: flex-start;
     }
 </style>

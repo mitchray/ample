@@ -122,7 +122,6 @@
 
     .nested {
         margin-top: var(--spacing-lg);
-        padding: var(--spacing-lg);
         border: 1px solid var(--color-border);
         border-radius: 3px;
     }

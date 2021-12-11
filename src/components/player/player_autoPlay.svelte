@@ -71,16 +71,16 @@
 
 {#if isVisible}
     <Menu anchor="top-center" toggleElement={document.querySelector("#autoPlayMenu")} bind:isVisible >
-        <div class="wrapper">
-            <div class="header">
-                <h4>Smartlist AutoPlay</h4>
+        <div class="header panel-header">
+            <h4 class="title">Smartlist AutoPlay</h4>
 
-                <label class="toggle">
-                    <input type="checkbox" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
-                    Enable
-                </label>
-            </div>
+            <label class="toggle">
+                <input type="checkbox" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
+                Enable
+            </label>
+        </div>
 
+        <div class="panel-content">
             <PlaylistSelector
                 type="smartlists"
                 bind:selectedPlaylist
@@ -92,19 +92,5 @@
 {/if}
 
 <style>
-    .header {
-        position: relative;
-    }
-
-    .wrapper {
-        width: 300px;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .toggle {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
+    
 </style>

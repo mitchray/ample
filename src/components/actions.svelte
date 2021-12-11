@@ -386,10 +386,12 @@
 
         {#if moreMenuVisible}
             <Menu anchor="bottom-center" toggleElement={document.querySelector("#js-action-menu_" + type + mode + id)} bind:isVisible={moreMenuVisible} >
-                <svelte:self
-                    {...$$props}
-                    mode="subMenu"
-                />
+                <div class="panel-content">
+                    <svelte:self
+                        {...$$props}
+                        mode="subMenu"
+                    />
+                </div>
             </Menu>
         {/if}
     </div>

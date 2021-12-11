@@ -132,28 +132,30 @@
 
     {#if isVisible && data}
         <Menu anchor="bottom-center" toggleElement={document.querySelector('#thirdParty-data')} bind:isVisible={isVisible}>
-            <div class="groups">
-                {#each menu as category}
-                    <div class="group">
-                        <h4>{category.title}</h4>
-                        <ul class="menu-list">
-                            {#each category.items as link}
-                                <li>
-                                    {#if type === 'artist'}
-                                        <a target="_blank" href={link.artistURL}>
-                                            {link.title}
-                                        </a>
-                                    {/if}
-                                    {#if type === 'album'}
-                                        <a target="_blank" href={link.albumURL}>
-                                            {link.title}
-                                        </a>
-                                    {/if}
-                                </li>
-                            {/each}
-                        </ul>
-                    </div>
-                {/each}
+            <div class="panel-content">
+                <div class="groups">
+                    {#each menu as category}
+                        <div class="group">
+                            <h4>{category.title}</h4>
+                            <ul class="menu-list">
+                                {#each category.items as link}
+                                    <li>
+                                        {#if type === 'artist'}
+                                            <a target="_blank" href={link.artistURL}>
+                                                {link.title}
+                                            </a>
+                                        {/if}
+                                        {#if type === 'album'}
+                                            <a target="_blank" href={link.albumURL}>
+                                                {link.title}
+                                            </a>
+                                        {/if}
+                                    </li>
+                                {/each}
+                            </ul>
+                        </div>
+                    {/each}
+                </div>
             </div>
         </Menu>
     {/if}

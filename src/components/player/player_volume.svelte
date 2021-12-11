@@ -122,44 +122,44 @@
 
 {#if menuIsVisible}
     <Menu anchor="top-center" toggleElement={document.querySelector("#volumeMenu")} bind:isVisible={menuIsVisible} class="test" >
-        <div class="wrapper">
-            <div class="header">
-                <h4>Volume settings</h4>
+        <div class="header panel-header">
+            <h4 class="title">Volume settings</h4>
+        </div>
 
-                <div class="group">
-                    <label class="toggle">
-                        <input type="checkbox" on:change={handleVolumeNormalize} bind:checked={$VolumeNormalizationEnabled} />
-                        Normalize volume
-                    </label>
+        <div class="panel-content">
+            <div class="group">
+                <label class="toggle">
+                    <input type="checkbox" on:change={handleVolumeNormalize} bind:checked={$VolumeNormalizationEnabled} />
+                    Normalize volume
+                </label>
 
-                    <p class="info">Keeps volume consistent between different tracks</p>
+                <p class="info">Keeps volume consistent between different tracks</p>
 
-                    {#if $CurrentSong}
-                        <div class="well">
-                            <div>Current type: {$MediaPlayer.gainType}</div>
+                {#if $CurrentSong}
+                    <div class="well">
+                        <div>Current type: {$MediaPlayer.gainType}</div>
 
-                            {#if $MediaPlayer.gainType === 'EBU R128'}
-                                <div>Target volume: {$MediaPlayer.targetVolume}db</div>
-                                <div>Mastered volume: {$MediaPlayer.masteredVolume}db</div>
-                            {/if}
+                        {#if $MediaPlayer.gainType === 'EBU R128'}
+                            <div>Target volume: {$MediaPlayer.targetVolume}db</div>
+                            <div>Mastered volume: {$MediaPlayer.masteredVolume}db</div>
+                        {/if}
 
-                            {#if $MediaPlayer.gainType === 'ReplayGain'}
-                                <div>ReplayGain: {$MediaPlayer.gainTagValue}</div>
-                            {/if}
+                        {#if $MediaPlayer.gainType === 'ReplayGain'}
+                            <div>ReplayGain: {$MediaPlayer.gainTagValue}</div>
+                        {/if}
 
-                            <div>Gain: {$MediaPlayer.gainNeeded}db</div>
-                        </div>
-                    {/if}
-                </div>
+                        <div>Gain: {$MediaPlayer.gainNeeded}db</div>
+                    </div>
+                {/if}
+            </div>
 
-                <div class="group">
-                    <label class="toggle">
-                        <input type="checkbox" on:change={handleDynamicsCompressor} bind:checked={$DynamicsCompressorEnabled} />
-                        Enable Night Mode
-                    </label>
+            <div class="group">
+                <label class="toggle">
+                    <input type="checkbox" on:change={handleDynamicsCompressor} bind:checked={$DynamicsCompressorEnabled} />
+                    Enable Night Mode
+                </label>
 
-                    <p class="info">Boosts quieter parts of songs</p>
-                </div>
+                <p class="info">Boosts quieter parts of songs</p>
             </div>
         </div>
     </Menu>
@@ -167,7 +167,7 @@
 
 <style>
     .wrapper {
-        max-width: 185px;
+        max-width: 185px; /* TODO: restore width */
     }
 
     .info {
@@ -177,7 +177,6 @@
 
     .group + .group {
         border-top: 2px solid var(--color-lines);
-        margin-top: var(--spacing-lg);
         padding-top: var(--spacing-lg);
     }
 

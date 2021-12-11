@@ -61,14 +61,16 @@
 
         {#if showPlaylistMore}
             <Menu anchor="bottom-right" toggleElement={document.querySelector('#playlistMoreToggle-' + playlist.id)} bind:isVisible={showPlaylistMore} >
-                <ul class="menu-list">
-                    <li>
-                        <button class="visuallyLink" id="playlistEditToggle-{playlist.id}" on:click={handleEdit}>Edit</button>
-                    </li>
-                    <li>
-                        <button class="visuallyLink" id="playlistDeleteToggle-{playlist.id}" on:click={handleDelete}>Delete</button>
-                    </li>
-                </ul>
+                <div class="panel-content">
+                    <ul class="menu-list">
+                        <li>
+                            <button class="visuallyLink" id="playlistEditToggle-{playlist.id}" on:click={handleEdit}>Edit</button>
+                        </li>
+                        <li>
+                            <button class="visuallyLink" id="playlistDeleteToggle-{playlist.id}" on:click={handleDelete}>Delete</button>
+                        </li>
+                    </ul>
+                </div>
             </Menu>
         {/if}
 

@@ -133,11 +133,13 @@
 
     {#if isVisible}
         <Menu anchor="{menuAnchor}" toggleElement={document.querySelector("#testToggleMenu")} bind:isVisible>
-            <ul style="margin: 0;">
-                <li>One</li>
-                <li>Two is longer so we can test stuff</li>
-                <li>Three</li>
-            </ul>
+            <div class="panel-content">
+                <ul style="margin: 0;">
+                    <li>One</li>
+                    <li>Two is longer so we can test stuff</li>
+                    <li>Three</li>
+                </ul>
+            </div>
         </Menu>
     {/if}
 </section>

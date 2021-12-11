@@ -19,11 +19,15 @@
 </script>
 
 <div class="container">
-    <h4>Confirm playlist removal</h4>
+    <div class="panel-header">
+        <h4>Confirm playlist removal</h4>
+    </div>
 
-    <p><em>{playlist.name}</em> will be deleted</p>
+    <div class="panel-content">
+        <p><em>{playlist.name}</em> will be deleted</p>
+    </div>
 
-    <div class="actions">
+    <div class="panel-footer">
         <button class="" on:click={handleCancel}>Cancel</button>
         <button class="with-icon danger" on:click={handleDelete}><SVGBin /> Delete</button>
     </div>

@@ -26,18 +26,24 @@
     }
 </script>
 
-<h4>Add to playlist</h4>
 
-<label class="toggle">
-    <input type="checkbox" on:change={toggleIgnoreDuplicates} bind:checked={ignoreDuplicates} />
-    Skip duplicates
-</label>
+<div class="panel-header">
+    <h4 class="title">Add to playlist</h4>
+</div>
 
-<PlaylistSelector
-    type="playlists"
-    bind:selectedPlaylist
-    on:selected={handleSelected}
-/>
+<div class="panel-content">
+    <label class="toggle">
+        <input type="checkbox" on:change={toggleIgnoreDuplicates} bind:checked={ignoreDuplicates} />
+        Skip duplicates
+    </label>
+
+    <PlaylistSelector
+        type="playlists"
+        bind:selectedPlaylist
+        on:selected={handleSelected}
+    />
+</div>
+
 
 <style>
     h4 {

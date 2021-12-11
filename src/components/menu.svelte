@@ -140,12 +140,12 @@
 </div>
 
 <style>
+    /* TODO: restore transparency? */
     .c-menu {
         contain: layout paint;
         background-color: var(--color-interface-00);
-        padding: var(--spacing-lg);
         border-radius: 5px;
-        border: 1px solid var(--color-tint-100);
+        border: 2px solid var(--color-tint-200);
         box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3),
             0 4px 6px -2px rgba(0,0,0,0.15);
         opacity: 0;
@@ -157,9 +157,13 @@
         z-index: 1000;
     }
 
+    .theme-is-light .c-menu {
+        border-color: var(--color-shade-200);
+    }
+
     @supports (backdrop-filter: blur(0)) {
         .c-menu {
-            background-color: var(--color-interface);
+            background-color: var(--color-interface-10);
             backdrop-filter: blur(10px) saturate(180%);
         }
     }
@@ -187,5 +191,11 @@
         text-align: left;
         align-items: center;
         gap: var(--spacing-sm);
+    }
+
+    .c-menu :global(.title) {
+        margin-bottom: 0;
+        display: inline-block;
+        margin-right: var(--spacing-xl);
     }
 </style>

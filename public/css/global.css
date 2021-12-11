@@ -356,8 +356,8 @@ button.danger:hover {
 
 button.warning,
 .badge.warning {
-    /*background-color: var(--color-warning-background);*/
-    /*color: var(--color-warning-foreground);*/
+    background-color: var(--color-warning-background);
+    color: var(--color-warning-foreground);
 }
 
 button.warning:hover {
@@ -518,10 +518,6 @@ svg.auto {
     z-index: -1;
 }
 
-.panel-header {
-    min-height: 48px;
-}
-
 section {
     margin-bottom: var(--spacing-xxl);
 }
@@ -563,4 +559,38 @@ section {
     line-height: 1;
     color: var(--color-interface-00);
     pointer-events: none;
+}
+
+/*
+ * Panels & Modals
+ */
+
+.panel-header,
+.panel-content,
+.panel-footer {
+    display: flex;
+}
+
+.panel-header,
+.panel-footer {
+    min-height: 48px;
+    background-color: var(--color-tint-50);
+    align-items: center;
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.theme-is-light .panel-header,
+.theme-is-light .panel-footer {
+    background-color: var(--color-shade-50);
+}
+
+.panel-content {
+    background-color: var(--color-interface-10);
+    flex-direction: column;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg);
+}
+
+.panel-footer {
+    justify-content: space-between;
 }

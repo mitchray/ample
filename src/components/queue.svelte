@@ -173,14 +173,16 @@
 
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
                             <Menu anchor="left-center" toggleElement={document.querySelector('#queueMoreToggle-' + queueMoreMenuID)} bind:isVisible={queueMoreMenuIsOpen}>
-                                <Actions
-                                    type="song"
-                                    mode="subMenu"
-                                    id="{song.id}"
-                                    count=1
-                                    albumID="{song.album.id}"
-                                    artistID="{song.artist.id}"
-                                />
+                                <div class="panel-content">
+                                    <Actions
+                                        type="song"
+                                        mode="subMenu"
+                                        id="{song.id}"
+                                        count=1
+                                        albumID="{song.album.id}"
+                                        artistID="{song.artist.id}"
+                                    />
+                                </div>
                             </Menu>
                         {/if}
                     </div>
