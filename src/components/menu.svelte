@@ -143,7 +143,7 @@
     /* TODO: restore transparency? */
     .c-menu {
         contain: layout paint;
-        background-color: var(--color-interface-00);
+        background-color: var(--color-interface-10);
         border-radius: 5px;
         border: 2px solid var(--color-tint-200);
         box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3),
@@ -163,7 +163,7 @@
 
     @supports (backdrop-filter: blur(0)) {
         .c-menu {
-            background-color: var(--color-interface-10);
+            background-color: var(--color-interface-alpha);
             backdrop-filter: blur(10px) saturate(180%);
         }
     }

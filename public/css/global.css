@@ -585,7 +585,6 @@ section {
 }
 
 .panel-content {
-    background-color: var(--color-interface-10);
     flex-direction: column;
     gap: var(--spacing-md);
     padding: var(--spacing-lg);

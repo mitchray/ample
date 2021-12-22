@@ -73,6 +73,7 @@
     --color-interface-10: rgb(${lchToRgb([100, 3, 243])});
     --color-interface-20: rgb(${lchToRgb([100, 3, 243])});
     --color-interface-30: rgb(${lchToRgb([100, 3, 243])});
+    --color-interface-alpha: rgba(${lchToRgb([95, 3, 243])}, 0.8);
 
     --shadow-inner: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
     --shadow-sm:  rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
@@ -121,6 +122,7 @@
     --color-interface-10: rgb(${lchToRgb([10, 3, 243])});
     --color-interface-20: rgb(${lchToRgb([15, 3, 243])});
     --color-interface-30: rgb(${lchToRgb([20, 3, 243])});
+    --color-interface-alpha: rgba(${lchToRgb([12, 3, 243])}, 0.7);
 
     --shadow-inner: rgba(0, 0, 0, 0.24) 0px 2px 4px 0px inset;
     --shadow-sm:  rgba(0, 0, 0, 0.4) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.24) 0px 1px 2px 0px;
