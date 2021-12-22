@@ -19,17 +19,6 @@
             <div class="container">
                 <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="160" height="160" />
             </div>
-
-            <div class="actions">
-                <Actions
-                    type="album"
-                    mode="miniButtons"
-                    id="{album.id}"
-                    count={album.songcount}
-                    albumID="{album.id}"
-                    artistID="{album.artist.id}"
-                />
-            </div>
         </div>
 
         <div class="details">
@@ -46,6 +35,17 @@
         <div class="rating-container">
             <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}"/>
         </div>
+
+        <div class="actions">
+            <Actions
+                type="album"
+                mode="miniButtons"
+                id="{album.id}"
+                count={album.songcount}
+                albumID="{album.id}"
+                artistID="{album.artist.id}"
+            />
+        </div>
     {:else}
         <div class="image-container">
             <img width="160" height="160" class="image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
@@ -59,6 +59,10 @@
 
         <div class="rating-container">
             <Rating />
+        </div>
+
+        <div class="actions">
+            <Actions type="album" mode="miniButtons" />
         </div>
     {/if}
 </div>
@@ -103,18 +107,6 @@
         transition: all 200ms ease;
         position: relative;
         z-index: 20;
-        will-change: filter, transform;
-    }
-
-    .album-card:hover :global(.container) {
-        filter: contrast(80%) drop-shadow(0 15px 10px rgba(0,0,0,0.2));
-        transform: perspective(800px) rotateX(40deg) translateY(-20%);
-        pointer-events: none;
-    }
-
-    .album-card:hover .actions {
-        opacity: 1;
-        transition-duration: 1ms;
     }
 
     .image-container {
@@ -133,23 +125,13 @@
     }
 
     .actions {
-        position: absolute;
-        bottom: var(--spacing-sm);
         display: flex;
         justify-content: center;
-        opacity: 0;
-        background-color: var(--color-lines);
-        padding: var(--spacing-sm);
-        border-radius: 999px;
-        transition: opacity ease 2s;
+        margin-bottom: var(--spacing-sm);
     }
 
     .actions :global(button) {
         --color-button-bg-primary: var(--color-interface);
-    }
-
-    .actions :global(button:hover) {
-        --color-button-bg-hover: var(--color-interface-hover);
     }
 
     .details {

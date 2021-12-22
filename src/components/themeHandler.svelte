@@ -87,9 +87,7 @@
     /*  OLD  */
 
     --color-interface: rgba(${lchToRgb([95, 3, 243])}, 0.8);
-    --color-interface-hover: rgba(${lchToRgb([95, 3, 243])}, 0.8);
     --color-highlight: rgb(${lchToRgb([57,49,257])});
-    --color-highlight-rgb: ${lchToRgb([57,49,257])};
 
     --color-text-body:       var(--color-shade-700);
     --color-text-heading:    var(--color-shade-800);
@@ -136,9 +134,7 @@
     /*  OLD  */
 
     --color-interface: rgba(${lchToRgb([12, 3, 243])}, 0.7);
-    --color-interface-hover: rgba(${lchToRgb([20, 3, 243])}, 0.7);
     --color-highlight: rgb(${lchToRgb([73,84,68])});
-    --color-highlight-rgb: ${lchToRgb([73,84,68])};
 
     --color-text-body:       var(--color-tint-700);
     --color-text-heading:    var(--color-tint-900);
@@ -184,7 +180,6 @@
     --color-tint-50:   rgba(${$customColors[theme].nearWhite}, ${$ThemeIsLight ? 0.3 : 0.05});
 
     --color-highlight: rgba(${$customColors[theme].highlight}, 1);
-    --color-highlight-rgb: ${$customColors[theme].highlight};
 
     --color-text-heading:    rgba(${$customColors[theme].highlight}, 1);
 
