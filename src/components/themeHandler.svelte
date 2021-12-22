@@ -42,26 +42,6 @@
     --color-shade-100:  rgba(0, 0, 0, 0.1);
     --color-shade-50:   rgba(0, 0, 0, 0.05);
     --color-shade-25:   rgba(0, 0, 0, 0.025);
-
-    --color-danger-foreground:       rgb(${lchToRgb([100, 40, 35])});
-    --color-danger-foreground-hover: rgb(${lchToRgb([100, 0,  35])});
-    --color-danger-background:       rgb(${lchToRgb([40,  40, 35])});
-    --color-danger-background-hover: rgb(${lchToRgb([45,  40, 35])});
-
-    --color-warning-foreground:       rgb(${lchToRgb([100, 40, 60])});
-    --color-warning-foreground-hover: rgb(${lchToRgb([100, 0,  60])});
-    --color-warning-background:       rgb(${lchToRgb([50,  40, 60])});
-    --color-warning-background-hover: rgb(${lchToRgb([55,  40, 60])});
-
-    --color-primary-foreground:       rgb(${lchToRgb([100, 40, 130])});
-    --color-primary-foreground-hover: rgb(${lchToRgb([100, 0,  130])});
-    --color-primary-background:       rgb(${lchToRgb([50,  40, 130])});
-    --color-primary-background-hover: rgb(${lchToRgb([55,  40, 130])});
-
-    --color-secondary-foreground:       rgb(${lchToRgb([95, 20, 240])});
-    --color-secondary-foreground-hover: rgb(${lchToRgb([100, 0,  240])});
-    --color-secondary-background:       rgb(${lchToRgb([40,  40, 240])});
-    --color-secondary-background-hover: rgb(${lchToRgb([45,  40, 240])});
 }
 </style>`}
 
@@ -74,6 +54,26 @@
     --color-interface-20: rgb(${lchToRgb([100, 3, 243])});
     --color-interface-30: rgb(${lchToRgb([100, 3, 243])});
     --color-interface-alpha: rgba(${lchToRgb([95, 3, 243])}, 0.8);
+
+    --color-danger-foreground:       rgb(${lchToRgb([100, 40, 35])});
+    --color-danger-foreground-hover: rgb(${lchToRgb([100, 0,  35])});
+    --color-danger-background:       rgb(${lchToRgb([40,  40, 35])});
+    --color-danger-background-hover: rgb(${lchToRgb([45,  40, 35])});
+
+    --color-warning-foreground:       rgb(${lchToRgb([100, 40, 60])});
+    --color-warning-foreground-hover: rgb(${lchToRgb([100, 0,  60])});
+    --color-warning-background:       rgb(${lchToRgb([50,  40, 60])});
+    --color-warning-background-hover: rgb(${lchToRgb([55,  40, 60])});
+
+    --color-primary-foreground:       rgb(${lchToRgb([50, 40, 140])});
+    --color-primary-foreground-hover: rgb(${lchToRgb([100, 0,  140])});
+    --color-primary-background:       rgb(${lchToRgb([50,  40, 140])});
+    --color-primary-background-hover: rgb(${lchToRgb([55,  40, 140])});
+
+    --color-secondary-foreground:       rgb(${lchToRgb([50, 40, 240])});
+    --color-secondary-foreground-hover: rgb(${lchToRgb([100, 0,  240])});
+    --color-secondary-background:       rgb(${lchToRgb([50,  40, 240])});
+    --color-secondary-background-hover: rgb(${lchToRgb([45,  40, 240])});
 
     --shadow-inner: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
     --shadow-sm:  rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
@@ -121,6 +121,26 @@
     --color-interface-20: rgb(${lchToRgb([15, 3, 243])});
     --color-interface-30: rgb(${lchToRgb([20, 3, 243])});
     --color-interface-alpha: rgba(${lchToRgb([12, 3, 243])}, 0.7);
+
+    --color-danger-foreground:       rgb(${lchToRgb([100, 40, 35])});
+    --color-danger-foreground-hover: rgb(${lchToRgb([100, 0,  35])});
+    --color-danger-background:       rgb(${lchToRgb([40,  40, 35])});
+    --color-danger-background-hover: rgb(${lchToRgb([45,  40, 35])});
+
+    --color-warning-foreground:       rgb(${lchToRgb([100, 40, 60])});
+    --color-warning-foreground-hover: rgb(${lchToRgb([100, 0,  60])});
+    --color-warning-background:       rgb(${lchToRgb([50,  40, 60])});
+    --color-warning-background-hover: rgb(${lchToRgb([55,  40, 60])});
+
+    --color-primary-foreground:       rgb(${lchToRgb([60, 40, 140])});
+    --color-primary-foreground-hover: rgb(${lchToRgb([100, 0,  140])});
+    --color-primary-background:       rgb(${lchToRgb([60,  40, 140])});
+    --color-primary-background-hover: rgb(${lchToRgb([55,  40, 140])});
+
+    --color-secondary-foreground:       rgb(${lchToRgb([60, 40, 240])});
+    --color-secondary-foreground-hover: rgb(${lchToRgb([100, 0,  240])});
+    --color-secondary-background:       rgb(${lchToRgb([60,  40, 240])});
+    --color-secondary-background-hover: rgb(${lchToRgb([45,  40, 240])});
 
     --shadow-inner: rgba(0, 0, 0, 0.24) 0px 2px 4px 0px inset;
     --shadow-sm:  rgba(0, 0, 0, 0.4) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.24) 0px 1px 2px 0px;

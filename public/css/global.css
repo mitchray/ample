@@ -365,25 +365,33 @@ button.warning:hover {
     /*color: var(--color-warning-foreground-hover);*/
 }
 
-button.primary,
-.badge.success {
-    background-color: var(--color-primary-background);
+button.primary {
+    border: 2px solid var(--color-primary-background);
     color: var(--color-primary-foreground);
 }
 
 button.primary:hover {
-    background-color: var(--color-primary-background-hover);
+    background-color: var(--color-primary-background);
     color: var(--color-primary-foreground-hover);
 }
 
-button.secondary,
-.badge.info {
-    background-color: var(--color-secondary-background);
+button.secondary {
+    border: 2px solid var(--color-secondary-background);
     color: var(--color-secondary-foreground);
 }
 
 button.secondary:hover {
-    background-color: var(--color-secondary-background-hover);
+    background-color: var(--color-secondary-background);
+    color: var(--color-secondary-foreground-hover);
+}
+
+.badge.success {
+    background-color: var(--color-primary-background);
+    color: var(--color-primary-foreground-hover);
+}
+
+.badge.info {
+    background-color: var(--color-secondary-background);
     color: var(--color-secondary-foreground-hover);
 }
 
