@@ -12,7 +12,9 @@
 <div class="artist-card card">
     {#if artist}
         <div class="art-container">
-            <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
+            <Link to="artists/{artist.id}" title="{artist.name}">
+                <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
+            </Link>
         </div>
         <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
 

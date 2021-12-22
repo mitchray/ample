@@ -17,7 +17,9 @@
     {#if album}
         <div class="image-container">
             <div class="container">
-                <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="160" height="160" />
+                <Link to="albums/{album.id}" title="{album.name}">
+                    <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="160" height="160" />
+                </Link>
             </div>
         </div>
 
