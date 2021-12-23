@@ -78,7 +78,7 @@
             value="{$SearchQuery}"
         />
         {#if $SearchQuery}
-            <button class="icon close" on:click={handleClear}><SVGClose /></button>
+            <button class="icon-button close" on:click={handleClear}><SVGClose /></button>
         {/if}
     </div>
 
@@ -97,6 +97,7 @@
 
 <style>
     .site-header {
+        border-bottom: 1px solid var(--color-border);
         background-color: var(--color-interface-20);
         box-shadow: var(--shadow-md);
         width: 100%;

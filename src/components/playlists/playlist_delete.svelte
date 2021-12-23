@@ -28,8 +28,8 @@
     </div>
 
     <div class="panel-footer">
-        <button class="" on:click={handleCancel}>Cancel</button>
-        <button class="with-icon danger" on:click={handleDelete}><SVGBin /> Delete</button>
+        <button class="button button--regular" on:click={handleCancel}>Cancel</button>
+        <button class="button button--danger" on:click={handleDelete}><SVGBin /> Delete</button>
     </div>
 </div>
 

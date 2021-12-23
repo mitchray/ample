@@ -64,7 +64,7 @@
                             {playlist.name}
 
                             {#if isSmartlist}
-                                <button on:click={handleSongLoad} class="with-icon refresh-button"><SVGRefresh/></button>
+                                <button on:click={handleSongLoad} class="icon-button refresh-button"><SVGRefresh/></button>
                             {/if}
                         </h1>
 

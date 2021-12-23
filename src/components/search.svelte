@@ -69,7 +69,7 @@
     >
         <div class="header panel-header">
             <h4>Results for <b>{$SearchQuery}</b></h4>
-            <button class="icon close" on:click={handleClose}><SVGClose /></button>
+            <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
         </div>
 
         <div class="results">

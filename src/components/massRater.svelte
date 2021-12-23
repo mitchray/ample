@@ -26,7 +26,7 @@
 
 
 <div class="container well">
-    <button type="button" class="primary" on:click={handleApply}>Apply</button>
+    <button type="button" class="button button--primary" on:click={handleApply}>Apply</button>
 
     <label>
         rating of

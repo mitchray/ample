@@ -45,7 +45,7 @@
 
     <div class="site-player__controls">
         <button
-            class="icon"
+            class="icon-button"
             on:click={(e) => { $MediaPlayer.previous(e) }}
             disabled={$NowPlayingQueue.length === 0}
         >
@@ -53,7 +53,7 @@
         </button>
 
         <button
-            class="icon play"
+            class="icon-button button--regular play"
             on:click={$MediaPlayer.playPause()}
             disabled={$NowPlayingQueue.length === 0}
         >
@@ -65,7 +65,7 @@
         </button>
 
         <button
-            class="icon"
+            class="icon-button"
             on:click={(e) => { $MediaPlayer.next(e) }}
             disabled={$NowPlayingQueue.length === 0}
         >
@@ -107,21 +107,21 @@
 
     <div class="site-player__secondary-controls">
         <button
-            class="icon icon-repeat"
+            class="icon-button icon-repeat"
             class:active={$RepeatEnabled}
             on:click={$MediaPlayer.repeat()}
             title="Repeat"
         >
-            <SVGRepeat style="padding: 0.15em;" />
+            <SVGRepeat style="transform: scale(0.85);" />
         </button>
 
         <button
-            class="icon icon-shuffle"
+            class="icon-button icon-shuffle"
             on:click={$MediaPlayer.shuffle()}
             disabled={$NowPlayingQueue.length === 0}
             title="Shuffle"
         >
-            <SVGShuffle style="padding: 0.15em;" />
+            <SVGShuffle style="transform: scale(0.85);" />
         </button>
 
         <PlayerAutoPlay />
@@ -136,6 +136,9 @@
     .play {
         width: 45px;
         height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .site-player {

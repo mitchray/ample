@@ -50,7 +50,7 @@
                 <button
                     disabled={pager.currentPage === 1}
                     on:click={handlePageButtonClick(pager.totalPages - pager.totalPages)}
-                    class="first"
+                    class="first button"
                 >
                     First
                 </button>
@@ -59,7 +59,7 @@
                 <button
                     disabled={pager.currentPage === 1}
                     on:click={handlePageButtonClick(pager.currentPage - 1)}
-                    class="previous"
+                    class="previous button"
                 >
                     Previous
                 </button>
@@ -70,7 +70,7 @@
                         {#each pager.pages as page}
                             <li>
                                 <button
-                                    class="number {pager.currentPage === page ? 'pagination--active' : ''}"
+                                    class="number button {pager.currentPage === page ? 'pagination--active' : ''}"
                                     on:click={handlePageButtonClick(page)}
                                 >
                                     {page}
@@ -81,7 +81,7 @@
                         <li>
                             <button
                                 disabled
-                                class="number pagination--active"
+                                class="number button pagination--active"
                             >
                                 1
                             </button>
@@ -93,7 +93,7 @@
                 <button
                     disabled={pager.currentPage === pager.totalPages}
                     on:click={handlePageButtonClick(pager.currentPage + 1)}
-                    class="next"
+                    class="next button"
                 >
                     Next
                 </button>
@@ -102,7 +102,7 @@
                 <button
                     disabled={pager.currentPage === pager.totalPages}
                     on:click={handlePageButtonClick(pager.totalPages)}
-                    class="last"
+                    class="last button"
                 >
                     Last ({pager.totalPages || 1})
                 </button>

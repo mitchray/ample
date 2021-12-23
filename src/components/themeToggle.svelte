@@ -16,7 +16,7 @@
 </script>
 
 <button
-    class="icon theme-toggle"
+    class="icon-button theme-toggle"
     on:click={toggleTheme}
 >
     {#if $ThemeIsLight}

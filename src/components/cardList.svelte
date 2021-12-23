@@ -126,7 +126,7 @@
                 {/each}
                 {#if !refresh}
                     <li>
-                        <button on:click={loadMore} hidden={newBatch.length < limit} class="load-more-button just-icon"><SVGAdd /></button>
+                        <button on:click={loadMore} hidden={newBatch.length < limit} class="load-more-button icon-button button--regular"><SVGAdd /></button>
                     </li>
                 {/if}
             </ul>

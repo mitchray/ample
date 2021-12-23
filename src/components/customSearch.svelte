@@ -890,7 +890,7 @@
     </div>
 
     <div>
-        <button type="button" class="secondary" on:click={addNewRow}>Add another rule</button>
+        <button type="button" class="button button--secondary" on:click={addNewRow}>Add another rule</button>
     </div>
 
     <div class="rules">
@@ -1054,13 +1054,13 @@
                 {/if}
 
                 <!-- remove row -->
-                <button type="button" class="icon danger" on:click={() => { removeRow(row) }}><SVGClose /></button>
+                <button type="button" class="icon-button button--danger" on:click={() => { removeRow(row) }}><SVGClose /></button>
             </div>
         {/each}
     </div>
 
     <div>
-        <button type="button" class="primary" on:click={search}>Search</button>
+        <button type="button" class="button button--primary" on:click={search}>Search</button>
     </div>
 </div>
 

@@ -159,8 +159,8 @@
                 From
                 <input type="number" bind:value={fromFinal} size="4" maxlength="4" on:change={handleFrom}>
             </label>
-            <button class="minus" on:click={() => {--fromFinal; handleFrom()}}><SVGMinus class="icon"/></button>
-            <button class="plus" on:click={() => {++fromFinal; handleFrom()}}><SVGPlus class="icon"/></button>
+            <button class="minus button" on:click={() => {--fromFinal; handleFrom()}}><SVGMinus /></button>
+            <button class="plus button" on:click={() => {++fromFinal; handleFrom()}}><SVGPlus /></button>
         </div>
 
         <div class="input-group">
@@ -168,11 +168,11 @@
                 To
                 <input type="number" bind:value={toFinal} size="4" maxlength="4" on:change={handleTo}>
             </label>
-            <button class="minus" on:click={() => {--toFinal; handleTo()}}><SVGMinus class="icon"/></button>
-            <button class="plus" on:click={() => {++toFinal; handleTo()}}><SVGPlus class="icon"/></button>
+            <button class="minus button" on:click={() => {--toFinal; handleTo()}}><SVGMinus /></button>
+            <button class="plus button" on:click={() => {++toFinal; handleTo()}}><SVGPlus /></button>
         </div>
 
-        <button class="submit primary" on:click={handleSearch}>Search</button>
+        <button class="submit button button--primary" on:click={handleSearch}>Search</button>
     </div>
 
     <div class="presets">
@@ -185,6 +185,7 @@
                             on:click={handleRangeSelection}
                             data-from={yearRangeAdjustment(currentYear - chunk)}
                             data-to={currentYear}
+                            class="button"
                         >
                             Last <span class="emphasis">{chunk} years</span>
                         </button>
@@ -204,6 +205,7 @@
                             data-to={maxValueCheck(century + 99)}
                             data-century={century}
                             class:active={century.toString() === centuryFinal.toString()}
+                            class="button"
                         >
                             {century}
                         </button>
@@ -224,6 +226,7 @@
                             data-century={centuryFinal}
                             data-decade={decade}
                             class:active={decade.toString() === decadeFinal.toString()}
+                            class="button"
                         >
                             {decade}
                         </button>
@@ -244,6 +247,7 @@
                             data-century={centuryFinal}
                             data-decade={decadeFinal}
                             data-year={year}
+                            class="button"
                         >
                             {year}
                         </button>
@@ -291,11 +295,14 @@
     }
 
     .input-group button {
-        height: max-content;
         padding: 0;
         margin: 0;
         position: relative;
-        transform: translateY(50%);
+        transform: translateY(33%);
+    }
+
+    .input-group button :global(svg) {
+        margin: unset;
     }
 
     .minus {
@@ -388,6 +395,7 @@
         text-align: center;
         min-width: 17ch;
         margin: 0;
+        font-weight: normal;
     }
 
     .emphasis {
@@ -398,7 +406,7 @@
 
     @media all and (min-width: 1080px) {
         .container {
-            max-width: 880px;
+            max-width: 910px;
         }
     }
 </style>

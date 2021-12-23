@@ -133,9 +133,8 @@
     <div class="site-queue-inner">
         <div class="header panel-header">
             <h4 on:click={showCurrentSong}>Now Playing</h4>
-
-            <button class="clear-played just-icon" title="Clear played songs" on:click={handleClearPlayed}><SVGClose /></button>
-            <button class="clear-all just-icon danger" on:click={handleClearQueue} title="Clear all"><SVGBin /></button>
+            <button class="clear-played icon-button" title="Clear played songs" on:click={handleClearPlayed}><SVGClose /></button>
+            <button class="clear-all icon-button button--danger" on:click={handleClearQueue} title="Clear all"><SVGBin /></button>
         </div>
 
         <div
@@ -154,7 +153,7 @@
                         class="queue-item"
                         class:currentlyPlaying={$NowPlayingIndex === i}
                     >
-                        <button class="icon remove" on:click|stopPropagation={handleRemove(i)}><SVGClose /></button>
+                        <button class="icon-button remove" on:click|stopPropagation={handleRemove(i)}><SVGClose /></button>
 
                         <span class="thumb">
                             <img src="{song.art}&thumb=1" alt="" loading="lazy"/>
@@ -169,7 +168,7 @@
                             <div class="queue-artist" title="{song.artist.name}"><SVGArtist class="inline"/> {song.artist.name}</div>
                         </span>
 
-                        <button id="queueMoreToggle-{i}" class="icon more" on:click|stopPropagation={handleSongMenu(i)}><SVGMore /></button>
+                        <button id="queueMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleSongMenu(i)}><SVGMore /></button>
 
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
                             <Menu anchor="left-center" toggleElement={document.querySelector('#queueMoreToggle-' + queueMoreMenuID)} bind:isVisible={queueMoreMenuIsOpen}>
@@ -195,12 +194,12 @@
 <style>
     .site-queue {
         background-color: var(--color-interface-10);
-        /*border-left: 1px solid var(--color-tint-100);*/
+        border-left: 1px solid var(--color-border);
         position: relative;
         width: var(--size-queue-width);
         height: 100%;
         z-index: 10;
-
+        box-shadow: var(--shadow-lg);
         display: none;
     }
 
@@ -239,7 +238,7 @@
 
     .header h4 {
         margin: 0;
-        margin-right: auto;
+        margin-right: var(--spacing-md);
         cursor: pointer;
     }
 
@@ -331,7 +330,7 @@
     }
 
     .clear-played {
-        margin-right: var(--spacing-md);
+        margin-right: auto;
     }
 
     .more {

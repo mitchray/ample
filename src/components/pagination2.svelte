@@ -29,8 +29,8 @@
         <input type="number" bind:value={limit} />
     </label>
 
-    <button on:click={previousPage} disabled={page === 0}>Previous</button>
-    <button on:click={nextPage} disabled={count < limit}>Next</button>
+    <button class="button button--regular" on:click={previousPage} disabled={page === 0}>Previous</button>
+    <button class="button button--regular" on:click={nextPage} disabled={count < limit}>Next</button>
 </div>
 
 <style>

@@ -101,7 +101,7 @@
         <Tabs bind:activeTabValue={currentTab} items={tabItems}>
             <div class="discography" style="display: {currentTab === 'discography' ? 'block' : 'none'}">
                 <button
-                        class="album-view-toggle"
+                        class="album-view-toggle button button--regular"
                         on:click={toggleShowExpanded}>
                     View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
                 </button>

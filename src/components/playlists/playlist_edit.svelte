@@ -86,10 +86,10 @@
     </div>
 
     <div class="panel-footer">
-        <button class="" on:click={handleCancel}>Cancel</button>
+        <button class="button button--regular" on:click={handleCancel}>Cancel</button>
 
         <button
-            class="submit primary"
+            class="submit button button--primary"
             on:click={savePlaylist}
         >
             {isNew ? 'Create' : 'Update'}

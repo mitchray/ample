@@ -39,7 +39,7 @@
 </script>
 
 <div class="container pagination">
-    <button class="all" on:click={clear}>
+    <button class="button button--regular all" on:click={clear}>
         All
     </button>
 
@@ -49,6 +49,7 @@
                 <button
                     on:click={handleSelection}
                     data-char_id={id}
+                    class="button"
                     class:active={id === selectedChar}
                 >
                     {id}

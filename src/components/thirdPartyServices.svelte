@@ -123,11 +123,11 @@
     <button
         type="button"
         id="thirdParty-data"
-        class="with-icon"
+        class="button button--regular"
         on:click={toggleMenu}
         title="Data"
     >
-        <SVGLaunch style="padding: 0.2em;" /> Links
+        <SVGLaunch style="transform: scale(1.3)" /> Links
     </button>
 
     {#if isVisible && data}

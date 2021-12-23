@@ -308,91 +308,119 @@ button:focus-visible {
     padding: 0.2em 0.4em;
 }
 
+/* base button */
 button {
     background: unset;
-    border: unset;
-    color: var(--color-button-text-primary);
+    border: 2px solid transparent;
+    color: inherit;
     cursor: pointer;
     display: inline-flex;
-    font-size: 1rem;
-    margin-right: var(--spacing-sm);
-    padding: 0.6em 0.9em;
+    padding: unset;
     position: relative;
     border-radius: 999px;
     align-items: center;
     outline: 0;
+    text-align: left;
+    font-weight: inherit;
 }
 
-.button--with-bg {
-    background-color: var(--color-button-bg-primary);
+button svg {
+    max-height: 100%;
+    width: 24px;
+    height: 24px;
 }
 
-button:not(:disabled):hover {
-    background-color: var(--color-button-bg-hover);
-    color: var(--color-button-text-hover);
+/* plain buttons */
+.button {
+    color: var(--color-regular-foreground);
+    padding: 0.5em 1em;
+    font-weight: 700;
+    margin-right: var(--spacing-sm);
 }
+
+.button:not(:disabled):hover,
+.icon-button:not(:disabled):hover {
+    background-color: var(--color-regular-background);
+    color: var(--color-regular-foreground-hover);
+}
+
+.button--regular {
+    border-color: var(--color-regular-background);
+}
+
+.button--danger {
+    color: var(--color-danger-foreground);
+    border-color: var(--color-danger-background);
+}
+
+.button--danger:not(:disabled):hover {
+    background-color: var(--color-danger-background);
+    color: var(--color-danger-foreground-hover);
+}
+
+.button--warning {
+    color: var(--color-warning-foreground);
+    border-color: var(--color-warning-background);
+}
+
+.button--warning:not(:disabled):hover {
+    background-color: var(--color-warning-background);
+    color: var(--color-warning-foreground-hover);
+}
+
+.button--primary {
+    color: var(--color-primary-foreground);
+    border-color: var(--color-primary-background);
+}
+
+.button--primary:not(:disabled):hover {
+    background-color: var(--color-primary-background);
+    color: var(--color-primary-foreground-hover);
+}
+
+.button--secondary {
+    color: var(--color-secondary-foreground);
+    border-color: var(--color-secondary-background);
+}
+
+.button--secondary:not(:disabled):hover {
+    background-color: var(--color-secondary-background);
+    color: var(--color-secondary-foreground-hover);
+}
+
+/* buttons with leading icon */
+.button svg {
+    margin-left: -0.25em;
+    margin-right: var(--spacing-sm);
+    margin-top: -1em;
+    margin-bottom: -1em;
+}
+
+/* icon-only buttons */
+.icon-button {
+    border-width: 2px;
+    border-style: solid;
+    padding: var(--spacing-sm);
+}
+
+/* mini buttons */
+.button--mini {
+    padding: 0;
+}
+
 
 /* OLD */
 
-button:not(:disabled):hover {
-    color: var(--color-button-text-hover);
-}
 
-button.active {
-    border: 2px solid var(--color-highlight);
-}
-
-/* TODO restore these */
-button.danger,
-.badge.danger {
-    /*background-color: var(--color-danger-background);*/
-    /*color: var(--color-danger-background);*/
-}
-
-button.danger:hover {
-    /*background-color: var(--color-danger-background-hover);*/
-    /*color: var(--color-danger-foreground-hover);*/
-}
-
-button.warning,
-.badge.warning {
-    background-color: var(--color-warning-background);
-    color: var(--color-warning-foreground);
-}
-
-button.warning:hover {
-    /*background-color: var(--color-warning-background-hover);*/
-    /*color: var(--color-warning-foreground-hover);*/
-}
-
-button.primary {
-    border: 2px solid var(--color-primary-background);
-    color: var(--color-primary-foreground);
-}
-
-button.primary:hover {
-    background-color: var(--color-primary-background);
-    color: var(--color-primary-foreground-hover);
-}
-
-button.secondary {
-    border: 2px solid var(--color-secondary-background);
-    color: var(--color-secondary-foreground);
-}
-
-button.secondary:hover {
-    background-color: var(--color-secondary-background);
-    color: var(--color-secondary-foreground-hover);
-}
-
+/* TODO restore badges */
 .badge.success {
-    background-color: var(--color-primary-background);
-    color: var(--color-primary-foreground-hover);
+    /*background-color: var(--color-primary-background);*/
+    /*color: var(--color-primary-foreground-hover);*/
 }
 
 .badge.info {
-    background-color: var(--color-secondary-background);
-    color: var(--color-secondary-foreground-hover);
+    /*background-color: var(--color-secondary-background);*/
+    /*color: var(--color-secondary-foreground-hover);*/
 }
 
 button.loading {
@@ -425,26 +453,11 @@ button.loading:before {
     }
 }
 
-/* display icon on its own without button appearance */
-button.icon {
-    /*background-color: transparent;*/
-    /*box-shadow: none;*/
-    /*border: 0;*/
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 0;
-    flex-shrink: 0;
-}
-
 /* display button as a plain text link */
 button.visuallyLink {
     background-color: transparent;
     padding: 0;
-    box-shadow: none;
+    font-weight: normal;
 }
 
 button.visuallyLink:hover,
@@ -452,23 +465,13 @@ button.visuallyLink:active {
     background-color: transparent;
 }
 
-/* display an icon in a button */
-button.just-icon {
-    padding: 0.3em 0.3em;
-}
-
-/* display an icon alongside text */
-button.with-icon {
-    padding: 0.3em 0.9em;
-}
-
-button.with-icon svg {
-    margin-right: 0.2em;
-}
-
 button svg {
     pointer-events: none;
 }
+
+/* --------------------------
+   SVG
+   -------------------------- */
 
 svg.inline {
     height: 1em;
@@ -480,17 +483,9 @@ svg.inline {
     color: var(--color-highlight);
 }
 
-svg.auto {
-    height: auto;
-    width: auto;
-    max-width: 100%;
-    display: inline-block;
-    vertical-align: middle;
-}
-
-/*
- * Shared
- */
+/* --------------------------
+   Shared
+   -------------------------- */
 
 .card {
     background-color: var(--color-tint-50);

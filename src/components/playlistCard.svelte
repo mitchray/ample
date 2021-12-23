@@ -57,7 +57,7 @@
             />
         </div>
 
-        <button id="playlistMoreToggle-{playlist.id}" class="icon more" on:click|stopPropagation={handleMenu}><SVGMore /></button>
+        <button id="playlistMoreToggle-{playlist.id}" class="icon-button more" on:click|stopPropagation={handleMenu}><SVGMore /></button>
 
         {#if showPlaylistMore}
             <Menu anchor="bottom-right" toggleElement={document.querySelector('#playlistMoreToggle-' + playlist.id)} bind:isVisible={showPlaylistMore} >

@@ -343,7 +343,7 @@
 
         {#if hasMusicbrainz}
             {#if loadCount < 1}
-                <button on:click={handleGo} class="submit primary">Begin comparison</button>
+                <button on:click={handleGo} class="submit button button--primary">Begin comparison</button>
             {/if}
         {:else}
             <p>Artist is missing a MusicBrainz Artist ID tag</p>

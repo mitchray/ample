@@ -39,7 +39,7 @@
     {#each songs as song, i}
         <li>
             {#if playlist && playlist.id}
-                <button class="icon remove" on:click|stopPropagation={() => { handleRemove(i) }}><SVGClose /></button>
+                <button class="icon-button remove" on:click|stopPropagation={() => { handleRemove(i) }}><SVGClose /></button>
             {/if}
 
             {#if showIndex}

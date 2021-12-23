@@ -69,7 +69,7 @@
 
 <div class="site-sidebar" class:isMini={$SidebarIsMini}>
     <div class="site-sidebar-inner">
-        <button class="sidebar-toggle button--with-bg" on:click={toggleMini}>
+        <button class="sidebar-toggle" on:click={toggleMini}>
             {$SidebarIsMini ? ">>" : "<<"}
         </button>
         <h3>Library</h3>
@@ -179,18 +179,25 @@
         border-radius: 0;
         text-align: center;
         line-height: 0;
+        background-color: var(--color-button-bg-primary);
+        padding: 0.6em 0.9em;
+    }
+
+    .sidebar-toggle:hover {
+        background-color: var(--color-button-bg-hover);
+        color: var(--color-button-text-hover);
     }
 
     .site-sidebar {
         background-color: var(--color-interface-10);
-        /*border-right: 1px solid var(--color-tint-100);*/
+        border-right: 1px solid var(--color-border);
         width: var(--size-sidebar-width);
         padding: var(--spacing-lg);
         height: 100%; /* TODO account for new header? */
         display: flex;
         flex-direction: column;
         position: relative;
-        box-shadow: var(--shadow-md);
+        box-shadow: var(--shadow-lg);
     }
 
     .site-sidebar-inner:after {
@@ -209,6 +216,10 @@
         overflow-x: hidden;
         overflow-y: auto;
         padding: inherit;
+    }
+
+    .site-sidebar:not(.isMini) .site-sidebar-inner {
+        padding-top: var(--spacing-xl);
     }
 
     :global(.site-sidebar__link) {

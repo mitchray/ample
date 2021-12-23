@@ -356,31 +356,31 @@
     <div class="c-actions {mode}" bind:this={container}>
         {#if showPlay}
             <div class="action">
-                <button type="button" class="primary" on:click={handlePlay} title="Play"><SVGPlay /> </button>
+                <button type="button" class="primary icon-button button--primary" on:click={handlePlay} title="Play"><SVGPlay /> </button>
             </div>
         {/if}
 
         {#if showShuffle}
             <div class="action">
-                <button type="button" class="secondary" on:click={handleShuffle} title="Shuffle"><SVGShuffle style="padding: 0.15em;" /> </button>
+                <button type="button" class="secondary icon-button button--secondary" on:click={handleShuffle} title="Shuffle"><SVGShuffle style="transform: scale(0.85);" /> </button>
             </div>
         {/if}
 
         {#if showPlayNext}
             <div class="action">
-                <button type="button" on:click={handlePlayNext} title="Play next"><SVGPlayNext style="padding: 0.15em;" /> </button>
+                <button type="button" class="icon-button" on:click={handlePlayNext} title="Play next"><SVGPlayNext style="transform: scale(0.85);" /> </button>
             </div>
         {/if}
 
         {#if showPlayLast}
             <div class="action">
-                <button type="button" on:click={handlePlayLast} title="Add to queue"><SVGQueue style="padding: 0.15em;" /> </button>
+                <button type="button" class="icon-button" on:click={handlePlayLast} title="Add to queue"><SVGQueue style="transform: scale(0.85);" /> </button>
             </div>
         {/if}
 
         {#if showMore}
             <div class="action" class:notification-badge={$SkipBelow} data-badge="{$SkipBelowRating}">
-                <button id="js-action-menu_{type}{mode}{id}" type="button" on:click={handleMore} title="More"><SVGMore /> </button>
+                <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="More"><SVGMore /> </button>
             </div>
         {/if}
 
@@ -462,14 +462,14 @@
     }
 
     .c-actions.menu button:after,
-    .c-actions.fullButtons button.primary:after,
-    .c-actions.fullButtons button.secondary:after {
+    .c-actions.fullButtons :global(.button--primary:after),
+    .c-actions.fullButtons :global(.button--secondary:after) {
         content: attr(title);
     }
 
     .c-actions.menu :global(svg),
-    .c-actions.fullButtons button.primary :global(svg),
-    .c-actions.fullButtons button.secondary :global(svg) {
+    .c-actions.fullButtons .button--primary :global(svg),
+    .c-actions.fullButtons .button--secondary :global(svg) {
         margin-right: var(--spacing-sm);
     }
 
@@ -486,14 +486,12 @@
     .c-actions.fullButtons {
         margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
+        font-weight: 700;
     }
 
-    .c-actions.fullButtons button {
-        padding: 0.3em;
-    }
-
-    .c-actions.fullButtons button.primary,
-    .c-actions.fullButtons button.secondary {
-        padding: 0.3em 0.9em;
+    .c-actions.fullButtons .button--primary,
+    .c-actions.fullButtons .button--secondary {
+        padding-left: 1em;
+        padding-right: 1em;
     }
 </style>

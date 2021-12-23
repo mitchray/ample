@@ -398,7 +398,7 @@
             {#each visible as item, index (index)}
                 <div class="lister-item">
                     {#if type === 'playlist'}
-                        <div><button class="icon remove" on:click|stopPropagation={(e) => { handleRemove(e, item) }}><SVGClose /></button></div>
+                        <div><button class="icon-button remove" on:click|stopPropagation={(e) => { handleRemove(e, item) }}><SVGClose /></button></div>
                     {/if}
 
                     {#if showCheckboxes}

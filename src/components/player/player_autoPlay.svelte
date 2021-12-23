@@ -62,11 +62,11 @@
 
 <button
     id="autoPlayMenu"
-    class="icon"
+    class="icon-button"
     title="Smartlist AutoPlay"
     on:click={toggleMenu}
 >
-    <SVGAutoPlay />
+    <SVGAutoPlay style="transform: scale(0.75);" />
 </button>
 
 {#if isVisible}

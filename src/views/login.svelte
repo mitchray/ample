@@ -80,7 +80,7 @@
                             <input type="password" bind:value={password} />
                         </label>
                     </p>
-                    <button class="primary with-icon" type="submit"><SVGLogin /> Login</button>
+                    <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
                 </form>
             </div>
 
@@ -92,7 +92,7 @@
                         </label>
                     </p>
 
-                    <button class="primary with-icon" type="submit"><SVGLogin /> Login</button>
+                    <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
                 </form>
             </div>
         </Tabs>

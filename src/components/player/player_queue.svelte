@@ -36,7 +36,7 @@
     </div>
 
     <button
-        class="with-icon queue-toggle button--with-bg"
+        class="icon-button queue-toggle"
         on:click={toggleQueue}
         title="Toggle queue"
     >
@@ -63,6 +63,13 @@
         width: auto;
         padding: 0;
         flex-shrink: 0;
+        background-color: var(--color-button-bg-primary);
+        margin-right: var(--spacing-sm);
+    }
+
+    .queue-toggle:hover {
+        background-color: var(--color-button-bg-hover);
+        color: var(--color-button-text-hover);
     }
 
     .queue-toggle :global(svg) {

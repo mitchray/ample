@@ -81,7 +81,7 @@
         </div>
     {:else}
         {#if type === "playlists"}
-            <button id="js-playlistsNewFromAdd" on:click={handleNewPlaylist} class="addNew primary">New playlist</button>
+            <button id="js-playlistsNewFromAdd" on:click={handleNewPlaylist} class="addNew button button--primary">New playlist</button>
         {/if}
 
         <label class="filter">
