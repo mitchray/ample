@@ -1,5 +1,6 @@
 import { tick } from "svelte";
 import { get } from 'svelte/store';
+import WaveSurfer from 'wavesurfer.js';
 import { debugHelper, shuffleArray, sleep } from './helper';
 import {
     NowPlayingQueue,
@@ -207,19 +208,34 @@ class Player {
                 normalize: true,
                 responsive: true,
                 hideScrollbar: true,
-                plugins: [
-                    WaveSurfer.mediasession.create({
-                        metadata: {
-                            title: song.title,
-                            artist: song.artist.name,
-                            album: song.album.name,
-                            artwork: [
-                                {src: `${song.art}&thumb=22`, sizes: '512x512', type: 'image/jpg'},
-                            ]
-                        }
-                    })
-                ]
             });
+
+            if ('mediaSession' in navigator) {
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: song.title || '',
+                    artist: song.artist.name || '',
+                    album: song.album.name || '',
+                    artwork: [
+                        { src: `${song.art}&thumb=22` },
+                    ]
+                });
+
+                navigator.mediaSession.setActionHandler('play', function () {
+                    self.playPause();
+                });
+                navigator.mediaSession.setActionHandler('pause', function () {
+                    self.playPause();
+                });
+                navigator.mediaSession.setActionHandler('stop', function () {
+                    self.stop();
+                });
+                navigator.mediaSession.setActionHandler('nexttrack', function () {
+                    self.next();
+                });
+                navigator.mediaSession.setActionHandler('previoustrack', function () {
+                    self.previous();
+                });
+            }
 
             this.initFilters();
             this.filterGain.gain.value = this.calculateGain();
