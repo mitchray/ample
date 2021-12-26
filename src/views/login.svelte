@@ -60,7 +60,7 @@
 
     <div class="form" in:fade out:fade>
         {#if versionCheck && versionCheck < 5}
-            <p class="server-message badge danger" in:fade>Ample only supports Ampache v5 and up. Version {$serverVersion} detected.</p>
+            <p class="server-message badge badge--danger" in:fade>Ample only supports Ampache v5 and up. Version {$serverVersion} detected.</p>
         {/if}
 
         <div class="logo">
@@ -98,7 +98,7 @@
         </Tabs>
 
         {#if message}
-            <p class="login-message badge warning" in:fade>{message}</p>
+            <p class="login-message badge badge--warning" in:fade>{message}</p>
         {/if}
 
         <div class="meta">

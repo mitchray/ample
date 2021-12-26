@@ -303,11 +303,6 @@ button:focus-visible {
     outline: 0;
 }
 
-.badge {
-    border-radius: 2px;
-    padding: 0.2em 0.4em;
-}
-
 /* base button */
 button {
     background: unset;
@@ -408,21 +403,6 @@ button svg {
     padding: 0;
 }
 
-
-/* OLD */
-
-
-/* TODO restore badges */
-.badge.success {
-    /*background-color: var(--color-primary-background);*/
-    /*color: var(--color-primary-foreground-hover);*/
-}
-
-.badge.info {
-    /*background-color: var(--color-secondary-background);*/
-    /*color: var(--color-secondary-foreground-hover);*/
-}
-
 button.loading {
     pointer-events: none;
 }
@@ -467,6 +447,32 @@ button.visuallyLink:active {
 
 button svg {
     pointer-events: none;
+}
+
+/* badges */
+.badge {
+    border-radius: 2px;
+    padding: 0.2em 0.4em;
+}
+
+.badge--success {
+    background-color: var(--color-primary-background);
+    color: var(--color-primary-foreground-hover);
+}
+
+.badge--info {
+    background-color: var(--color-secondary-background);
+    color: var(--color-secondary-foreground-hover);
+}
+
+.badge--warning {
+    background-color: var(--color-warning-background);
+    color: var(--color-warning-foreground-hover);
+}
+
+.badge--danger {
+    background-color: var(--color-danger-background);
+    color: var(--color-danger-foreground-hover);
 }
 
 /* --------------------------

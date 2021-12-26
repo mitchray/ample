@@ -102,7 +102,7 @@
         <p class="current">
             Selected:
             {#if selectedPlaylist}
-                <span class="inner goto badge info" title="{selectedPlaylist.name}" on:click={handleGoToSelected}>{selectedPlaylist.name}</span>
+                <span class="inner goto badge badge--info" title="{selectedPlaylist.name}" on:click={handleGoToSelected}>{selectedPlaylist.name}</span>
             {:else}
                 <span class="inner badge">No playlist selected</span>
             {/if}

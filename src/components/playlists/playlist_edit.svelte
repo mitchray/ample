@@ -82,7 +82,7 @@
             </label>
         </div>
 
-        <div class="message badge warning" class:visible={playlistExists}>Playlist <em>{playlistName}</em> already exists</div>
+        <div class="message badge badge--warning" class:visible={playlistExists}>Playlist <em>{playlistName}</em> already exists</div>
     </div>
 
     <div class="panel-footer">

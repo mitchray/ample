@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.22.0] - 2021-12-27
+### Added
+- Basic media keys ([mediasession](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)) support in [browsers which have it](https://caniuse.com/mdn-api_mediasession)
+
+### Changed
+- Album actions (play, shuffle etc) now always visible instead of revealed on hover
+- Album/artist images are now links
+
 ## [0.21.0] - 2021-12-03
 ### Changed
 - Search results won't show categories with zero results

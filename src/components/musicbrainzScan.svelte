@@ -262,7 +262,7 @@
 
 <div class="container">
     <div class="sidebar">
-        <div class="total badge info">Showing {filteredRecordings.length} of {allRecordings.length}</div>
+        <div class="total badge badge--info">Showing {filteredRecordings.length} of {allRecordings.length}</div>
 
         <h4>Show</h4>
 
@@ -375,9 +375,9 @@
                             <td>
                                 <span
                                     class="badge"
-                                    class:success={mbRecording.result === 'exact'}
-                                    class:warning={mbRecording.result === 'name'}
-                                    class:danger={!mbRecording.result}
+                                    class:badge--success={mbRecording.result === 'exact'}
+                                    class:badge--warning={mbRecording.result === 'name'}
+                                    class:badge--danger={!mbRecording.result}
                                 >
                                     {#if mbRecording.result === 'exact'}Exact MBID match{/if}
                                     {#if mbRecording.result === 'name'}Duplicate name of exact match{/if}

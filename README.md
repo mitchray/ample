@@ -7,14 +7,13 @@ A web browser music client for [Ampache](https://ampache.org/), built with [Svel
 - Available on the [wiki](https://github.com/mitchray/ample/wiki/Features)
 
 ## Requirements
-- ECMAScript 2015 (ES6) capable web browser
 - Ampache 5+
+- A modern desktop web browser
 - Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
 ## Installing
-If using a pre-built release, copy the ```ample``` folder into your Ampache ```public``` folder, done!
-
-If using a development build, I recommend creating a symbolic link within your Ampache public folder, otherwise if you have CORS configured on your server you can override the ```detectedURL``` in ```src/stores/server.js```
+- Prebuilt release: Copy the ```ample``` folder into your Ampache ```public``` folder, done!
+- Git branch: I recommend creating a symbolic link within your Ampache public folder, otherwise if you have CORS configured on your server you can override the ```detectedURL``` in ```src/stores/server.js```
 
 - To access the Ample client add ```/ample``` to your Ampache server address. e.g ```yourampache.com/ample```
 
