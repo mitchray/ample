@@ -60,6 +60,8 @@
                                         <span class="artist"><Link to="artists/{song.artist.id}"><SVGArtist class="inline"/> {song.artist.name}</Link></span>
                                     {/if}
                                 </span>
+                                <span class="time">{formatSongLength(song.time)}</span>
+                                <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
                                 <span class="actions">
                                     <Actions
                                         type="song"
@@ -70,8 +72,6 @@
                                         albumID="{song.album.id}"
                                     />
                                 </span>
-                                <span class="time">{formatSongLength(song.time)}</span>
-                                <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
                             </li>
                         {/each}
                     </ul>
@@ -117,10 +117,6 @@
         background-color: var(--color-shade-50);
     }
 
-    li:hover .actions {
-        opacity: 1;
-    }
-
     .track {
         text-align: right;
         min-width: 3ch;
@@ -128,6 +124,7 @@
     }
 
     .time {
+        margin-left: auto;
         margin-right: var(--spacing-lg);
         padding-left: var(--spacing-lg);
     }
@@ -145,8 +142,6 @@
 
     .actions {
         display: flex;
-        margin-left: auto;
-        opacity: 0;
         flex-shrink: 0;
     }
 
