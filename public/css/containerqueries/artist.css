@@ -1,0 +1,92 @@
+@container artist-details-wrapper size(min-width: 500px) {
+    .actions {
+        flex-direction: row;
+        gap: var(--spacing-xxl);
+        align-items: center;
+    }
+}
+
+@container artist-info-wrapper size(min-width: 500px) {
+    .title {
+        font-size: 40px;
+        text-align: left;
+        color: white;
+        margin-bottom: 0.2em;
+        padding-right: var(--spacing-xxl);
+        padding-top: var(--spacing-xl);
+    }
+
+    .art-container {
+        max-width: 180px;
+    }
+
+    .profile {
+        justify-content: start;
+        width: fit-content;
+        margin-top: -60px;
+        float: left;
+        z-index: 10;
+    }
+
+    .details {
+        margin-top: var(--spacing-lg);
+        margin-left: calc(180px + var(--spacing-xxl));
+        position: relative;
+    }
+
+    .header {
+        display: flex;
+        align-items: end;
+        min-height: 135px;
+        padding-bottom: var(--spacing-md);
+        padding-left: calc(180px + var(--spacing-xxl) * 2);
+        position: relative;
+        overflow: hidden;
+        margin-top: calc(-1 * var(--spacing-xxl));
+        margin-left: calc(-1 * var(--spacing-xxl));
+        margin-right: calc(-1 * var(--spacing-xxl));
+    }
+
+    .header__image-copy,
+    .header__image-blur {
+        background-color: hsla(0, 0%, 40%, 0.7);
+        position: absolute;
+        bottom: 0;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin: -20px; /* match the blur amount */
+        pointer-events: none;
+        z-index: -1;
+        background-size: cover;
+        background-position: center 60%;
+        background-attachment: fixed;
+    }
+
+    .header__image-blur {
+        filter: saturate(200%) contrast(70%) brightness(60%) blur(20px);
+    }
+}
+
+@container artist-info-wrapper size(min-width: 800px) {
+    .title {
+        font-size: 50px;
+    }
+
+    .art-container {
+        width: 240px;
+        max-width: unset;
+    }
+
+    .details {
+        margin-left: calc(240px + var(--spacing-xxl));
+    }
+
+    .header {
+        padding-left: calc(240px + var(--spacing-xxl) * 2);
+    }
+
+    .profile {
+        margin-top: -100px;
+    }
+}

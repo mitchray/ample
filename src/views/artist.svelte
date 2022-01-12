@@ -24,6 +24,8 @@
     import SVGSimilar from "../../public/images/people.svg";
     import SVGArticle from "../../public/images/article.svg";
     import SVGGenre from "../../public/images/label.svg";
+    import SVGTrack from "../../public/images/music_note.svg";
+    import SVGClock from "../../public/images/clock.svg";
 
     export let id;
 
@@ -48,32 +50,56 @@
     }
 </script>
 
+<svelte:head>
+    <link rel="stylesheet" href='/ample/public/css/containerqueries/artist.css'>
+</svelte:head>
+
 {#await getArtist(id)}
     <p>Loading artist</p>
 {:then artist}
     {#if artist.id}
-        {#if artist.useBackground && !$ThemeIsLight}
-            <img class="art-background" src="{artist.art}&thumb=10" alt="" loading="lazy" in:fade/>
+
+        {#if artist.useBackground}
+            {@html `<style>
+                .header__image-copy,
+                .header__image-blur {
+                    background-image: url('${artist.art}&thumb=10');
+                }
+            </style>`}
         {/if}
 
-        <div class="container">
-            <div class="art-container">
-                <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="210" height="210" in:fade/>
-            </div>
-            <div class="details">
+        <div class="container" in:fade>
+            <div class="header">
                 <h1 class="title">{artist.name}</h1>
-                <p>
+                <div class="header__image-copy"></div>
+                <div class="header__image-blur"></div>
+            </div>
+
+            <div class="profile">
+                <div class="art-container" >
+                    <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="240" height="240"  />
+                </div>
+
+                <div class="rating">
+                    <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                </div>
+            </div>
+
+            <div class="details">
+                <div class="meta">
                     {#if artist.albumcount > 0}
-                        <SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'} &bull;
+                        <span><SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'}</span>
                     {/if}
 
                     {#if artist.appearanceCount > 0}
-                        <SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'} &bull;
+                        <span><SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'}</span>
                     {/if}
 
-                    {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'} &bull;
-                    {formatTimeToReadable(artist.time)} total
-                </p>
+                    <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
+
+                    <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
+                </div>
+
 
                 {#if artist.genre.length > 0}
                     <ul class="genres">
@@ -83,26 +109,24 @@
                     </ul>
                 {/if}
 
-                <div class="inline">
-                    <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                <div class="actions">
+                    <Actions
+                        type="artist"
+                        mode="fullButtons"
+                        id="{artist.id}"
+                        count={artist.songcount}
+                    />
 
                     <ThirdPartyServices data={artist} type="artist" />
                 </div>
-
-                <Actions
-                    type="artist"
-                    mode="fullButtons"
-                    id="{artist.id}"
-                    count={artist.songcount}
-                />
             </div>
         </div>
 
-        <Tabs bind:activeTabValue={currentTab} items={tabItems}>
+        <Tabs bind:activeTabValue={currentTab} items={tabItems} class="tabs">
             <div class="discography" style="display: {currentTab === 'discography' ? 'block' : 'none'}">
                 <button
-                        class="album-view-toggle button button--regular"
-                        on:click={toggleShowExpanded}>
+                    class="album-view-toggle button button--regular"
+                    on:click={toggleShowExpanded}>
                     View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
                 </button>
 
@@ -174,42 +198,54 @@
 
 <style>
     .container {
-        display: flex;
-        margin-bottom: var(--spacing-xxl);
-    }
-
-    .inline {
-        display: flex;
-        align-items: center;
-        gap: var(--spacing-lg);
-        flex-wrap: wrap;
+        container: inline-size / artist-info-wrapper;
     }
 
     .art-container {
-        border-radius: 50%;
-        border: 3px solid var(--color-highlight);
-        width: 210px;
-        height: 210px;
+        max-width: 240px;
+        aspect-ratio: 1 / 1;
+        border-radius: 10%;
         overflow: hidden;
+        border: 2px solid var(--color-highlight);
     }
 
     .art {
-        height: 100%;
-        width: 100%;
         object-fit: cover;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        position: relative;
     }
 
-    .details {
-        margin-left: var(--spacing-xl);
-        margin-bottom: var(--spacing-xl);
+    .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    .rating {
+        display: inline-block;
+        margin-top: var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
     }
 
     .title {
         text-transform: unset;
-        font-size: 40px;
         letter-spacing: -0.02em;
         line-height: 1;
-        margin-bottom: 0.2em;
+        text-align: center;
+    }
+
+    .details {
+        container: inline-size / artist-details-wrapper;
+    }
+
+    .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-md) var(--spacing-xl);
     }
 
     .genres {
@@ -218,8 +254,16 @@
         flex-wrap: wrap;
     }
 
-    .discography {
-        position: relative;
+    .actions {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+
+    .details:after {
+        content: '';
+        display: table;
+        clear: both;
+        padding-bottom: var(--spacing-xxl);
     }
 
     .album-view-toggle {

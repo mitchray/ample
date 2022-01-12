@@ -7,8 +7,8 @@ A web browser music client for [Ampache](https://ampache.org/), built with [Svel
 - Available on the [wiki](https://github.com/mitchray/ample/wiki/Features)
 
 ## Requirements
-- Ampache 5+
-- A modern desktop web browser
+- Ampache 5.x
+- A modern desktop web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
 - Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
 ## Installing
