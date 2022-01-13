@@ -245,7 +245,7 @@
     .meta {
         display: flex;
         flex-wrap: wrap;
-        gap: var(--spacing-md) var(--spacing-xl);
+        gap: var(--spacing-md) var(--spacing-lg);
     }
 
     .genres {

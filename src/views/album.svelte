@@ -15,12 +15,18 @@
     import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
     import SVGGenre from "../../public/images/label.svg";
+    import SVGTrack from "../../public/images/music_note.svg";
+    import SVGClock from "../../public/images/clock.svg";
 
     export let id;
 
     let theme;
     $: theme = $ThemeIsLight ? 'light' : 'dark';
 </script>
+
+<svelte:head>
+    <link rel="stylesheet" href='/ample/public/css/containerqueries/album.css'>
+</svelte:head>
 
 {#await getAlbum(id)}
     <p>Loading album</p>
@@ -30,52 +36,57 @@
             <img class="art-background" src="{album.art}&thumb=10" alt="" loading="lazy" in:fade/>
         {/if}
 
-        <div class="container">
-            <div class="details-container">
-                <div class="details">
-                    <div class="cover-container">
-                        <img class="cover" src="{album.art}&thumb=32" alt="Image of {album.name}" width="384" height="384" />
-                    </div>
+        <div class="container album-wrapper">
+            <div class="album-container">
+                <div class="details-container">
+                    <div class="details">
+                        <div class="cover-rating">
+                            <div class="art-container">
+                                <img class="art" src="{album.art}&thumb=32" alt="Image of {album.name}" width="384" height="384" />
+                            </div>
 
-                    <div class="info">
-                        <h1 class="title">{album.name}</h1>
-                        <div class="meta">
-                            <span class="date"><Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link></span>
-                            <Link to="artists/{album.artist.id}"><SVGArtist class="inline"/> {album.artist.name}</Link>
-                        </div>
-                        <p>
-                            {formatTotalTime(album.time)}
-                            &bull;
-                            {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}
-                        </p>
-
-                        {#if album.genre.length > 0}
-                            <ul class="genres">
-                                {#each album.genre as genre}
-                                    <li><Link to="genres/{genre.id}"><SVGGenre class="inline" /> {genre.name}</Link></li>
-                                {/each}
-                            </ul>
-                        {/if}
-
-                        <div class="inline">
-                            <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
-
-                            <ThirdPartyServices data={album} type="album" />
+                            <div class="rating">
+                                <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
+                            </div>
                         </div>
 
-                        <Actions
-                            type="album"
-                            mode="fullButtons"
-                            id="{album.id}"
-                            count="{album.songcount}"
-                            artistID="{album.artist.id}"
-                        />
+                        <div class="info">
+                            <h1 class="title">{album.name}</h1>
+                            <div class="artist">
+                                <Link to="artists/{album.artist.id}"><SVGArtist class="inline"/> {album.artist.name}</Link>
+                            </div>
+                            <div class="meta">
+                                <span class="date"><Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link></span>
+                                <span><SVGClock class="inline"/> {formatTotalTime(album.time)}</span>
+                                <span><SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}</span>
+                            </div>
+
+                            {#if album.genre.length > 0}
+                                <ul class="genres">
+                                    {#each album.genre as genre}
+                                        <li><Link to="genres/{genre.id}"><SVGGenre class="inline" /> {genre.name}</Link></li>
+                                    {/each}
+                                </ul>
+                            {/if}
+
+                            <div class="actions">
+                                <Actions
+                                    type="album"
+                                    mode="fullButtons"
+                                    id="{album.id}"
+                                    count="{album.songcount}"
+                                    artistID="{album.artist.id}"
+                                />
+
+                                <ThirdPartyServices data={album} type="album" />
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="songs-container">
-                <AlbumSongs id={album.id}/>
+                <div class="songs-container">
+                    <AlbumSongs id={album.id}/>
+                </div>
             </div>
         </div>
     {:else}
@@ -91,54 +102,76 @@
         color: var(--color-text-body);
     }
 
-    .inline {
+    .container {
+        flex-direction: row;
+        justify-content: space-between;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        padding: var(--spacing-xxl);
+    }
+
+    .album-wrapper {
+        container: inline-size / album-wrapper;
+    }
+
+    .details-container {
+        container: inline-size / album-details-wrapper;
+    }
+
+    .details {
+        margin-bottom: var(--spacing-xxl);
+    }
+
+    .cover-rating {
         display: flex;
+        flex-direction: column;
         align-items: center;
-        gap: var(--spacing-lg);
-        flex-wrap: wrap;
+        justify-content: center;
+        position: relative;
     }
 
-    .songs-container {
-        color: var(--color-text-body);
+    .art-container {
+        max-width: 240px;
+        aspect-ratio: 1 / 1;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 1px solid hsla(0, 0%, 50%, 0.1);
+        box-shadow: var(--shadow-lg);
     }
 
-    .cover-container :global(.cover) {
-        border-radius: 10px;
+    .art {
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        position: relative;
     }
 
-    .cover-container {
+    .rating {
+        margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
-        margin-right: var(--spacing-lg);
-        flex-shrink: 0;
-        max-width: 75px;
     }
 
     .title {
         text-transform: unset;
-        font-size: 40px;
         letter-spacing: -0.02em;
         line-height: 1;
-        margin-bottom: 0.2em;
+        text-align: center;
+        margin-bottom: var(--spacing-sm);
     }
 
-    .date {
-        margin-right: var(--spacing-lg);
+    .artist {
+        text-align: center;
+        margin-bottom: var(--spacing-lg);
     }
 
     .meta {
-        font-size: 20px;
-        font-weight: 700;
-        letter-spacing: -0.02em;
-    }
-
-    .container {
         display: flex;
-        flex-direction: column;
-    }
-
-    .details {
-        display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap: var(--spacing-md) var(--spacing-lg);
     }
 
     .genres {
@@ -147,60 +180,8 @@
         flex-wrap: wrap;
     }
 
-    .songs-container :global(.song-list) {
-        max-width: 800px;
-    }
-
-    @media all and (min-width: 900px) {
-        .details {
-            flex-direction: row;
-        }
-    }
-
-    @media all and (min-width: 1100px) {
-        .cover-container {
-            max-width: 245px;
-        }
-    }
-
-    @media all and (min-width: 1600px) {
-        .container {
-            flex-direction: row;
-            justify-content: space-between;
-            width: 100%;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            padding: 0;
-        }
-
-        .cover-container :global(.cover) {
-            width: 100%;
-            max-width: 300px;
-        }
-
-        .cover-container {
-            max-width: none;
-        }
-
-        .details {
-            flex-direction: column;
-        }
-
-        .details-container {
-            width: 450px;
-            flex-shrink: 0;
-            overflow-y: auto;
-            height: 100%;
-            padding: var(--spacing-xxl);
-            border-right: 2px solid var(--color-lines);
-        }
-
-        .songs-container {
-            width: 100%;
-            overflow-y: auto;
-            padding: var(--spacing-xxl);
-        }
+    .actions {
+        display: flex;
+        flex-direction: column-reverse;
     }
 </style>

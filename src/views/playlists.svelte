@@ -43,7 +43,7 @@
 
 <h1>Playlists</h1>
 
-<button id="js-playlistsNew" bind:this={playlistsNewToggle} on:click={handleShowPlaylistCreator} class="primary">New playlist</button>
+<button id="js-playlistsNew" bind:this={playlistsNewToggle} on:click={handleShowPlaylistCreator} class="button button--primary">New playlist</button>
 
 {#if showPlaylistCreation}
     <Menu anchor="right-top" toggleElement={playlistsNewToggle} bind:isVisible={showPlaylistCreation} >
