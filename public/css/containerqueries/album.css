@@ -40,7 +40,12 @@
     }
 }
 
-@container album-wrapper (min-width: 1100px) {
+@container album-page-wrapper (min-width: 1100px) {
+    .container {
+        display: flex;
+        overflow: hidden;
+    }
+
     .album-container {
         display: flex;
     }
@@ -54,6 +59,10 @@
     }
 
     .songs-container {
+        flex: 1;
+    }
+
+    .songs {
         max-width: 800px;
     }
 }

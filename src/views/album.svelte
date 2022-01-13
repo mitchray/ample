@@ -36,8 +36,8 @@
             <img class="art-background" src="{album.art}&thumb=10" alt="" loading="lazy" in:fade/>
         {/if}
 
-        <div class="container album-wrapper">
-            <div class="album-container">
+        <div class="wrapper">
+            <div class="container">
                 <div class="details-container">
                     <div class="details">
                         <div class="cover-rating">
@@ -83,9 +83,10 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="songs-container">
-                    <AlbumSongs id={album.id}/>
+                    <div class="songs">
+                        <AlbumSongs id={album.id}/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,27 +103,37 @@
         color: var(--color-text-body);
     }
 
-    .container {
-        flex-direction: row;
-        justify-content: space-between;
+    .wrapper {
+        container: size / album-page-wrapper;
+        height: 100%;
         width: 100%;
         position: absolute;
         top: 0;
-        bottom: 0;
         left: 0;
+        right: 0;
+        bottom: 0;
+    }
+
+    .container {
+        height: 100%;
+        width: 100%;
+        will-change: overflow;
+    }
+
+    .details-container,
+    .songs-container {
+        overflow: auto;
+        height: auto;
         padding: var(--spacing-xxl);
     }
 
-    .album-wrapper {
+    .container {
         container: inline-size / album-wrapper;
     }
 
     .details-container {
         container: inline-size / album-details-wrapper;
-    }
-
-    .details {
-        margin-bottom: var(--spacing-xxl);
+        padding-bottom: 0;
     }
 
     .cover-rating {
@@ -173,6 +184,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-md) var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
     }
 
     .genres {

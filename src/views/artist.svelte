@@ -247,6 +247,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-md) var(--spacing-lg);
+        margin-bottom: var(--spacing-lg);
     }
 
     .genres {
