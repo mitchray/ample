@@ -207,6 +207,7 @@
         border-radius: 50%;
         overflow: hidden;
         border: 2px solid var(--color-highlight);
+        font-size: 0;
     }
 
     .art {

@@ -140,6 +140,7 @@
         overflow: hidden;
         border: 1px solid hsla(0, 0%, 50%, 0.1);
         box-shadow: var(--shadow-lg);
+        font-size: 0;
     }
 
     .art {
