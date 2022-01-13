@@ -204,7 +204,7 @@
     .art-container {
         max-width: 240px;
         aspect-ratio: 1 / 1;
-        border-radius: 10%;
+        border-radius: 50%;
         overflow: hidden;
         border: 2px solid var(--color-highlight);
     }
