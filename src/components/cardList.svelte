@@ -147,7 +147,6 @@
     }
 
     .load-more-button:not([hidden]) {
-        display: block;
         height: 100%;
     }
 </style>

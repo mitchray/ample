@@ -1,4 +1,6 @@
 <script>
+    // this is an unused legacy file, pending deletion once all features are ported
+
     import { onMount, tick, beforeUpdate, onDestroy } from "svelte";
     import { Link } from 'svelte-routing';
 
@@ -667,14 +669,6 @@
         border-bottom: 2px solid var(--color-interface);
         z-index: 100;
         user-select: none;
-    }
-
-    @supports (backdrop-filter: blur(0)) {
-        .lister-header {
-            background-color: var(--color-interface);
-            backdrop-filter: blur(10px) saturate(180%);
-            border-bottom-color: var(--color-border);
-        }
     }
 
     [data-sort]:hover {

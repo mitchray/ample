@@ -40,7 +40,7 @@
     }
 
     :global(.artist-scroll) {
-        border: 2px solid var(--color-lines);
+        border: 2px solid var(--color-separator);
         border-radius: 15px;
         padding: var(--spacing-lg);
         gap: var(--spacing-md);
@@ -62,17 +62,17 @@
         flex-direction: column;
     }
 
-    .artist-card :global(.art-container) {
+    .art-container {
         border-radius: 50%;
-        border: 3px solid var(--color-highlight);
         overflow: hidden;
         height: 0;
         padding-bottom: 100%;
         width: 100%;
         position: relative;
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
     }
 
-    .artist-card :global(.image) {
+    .image {
         height: 100%;
         width: 100%;
         object-fit: cover;

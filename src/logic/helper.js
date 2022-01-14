@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 
 import { serverURL, debugMode } from '../stores/server';
+import { customHue } from "../stores/status";
 
 import JsSHA from "jssha/dist/sha1";
 import FastAverageColor from "fast-average-color";
@@ -223,12 +224,9 @@ function colorIsAcceptable(color) {
 /**
  Turn color into legible versions
  */
-export async function getLegibleColors(color) {
+export async function getCustomHue(color) {
+    let theHue;
     let colorArray = [];
-    let legibleColor = {
-        light: [],
-        dark: []
-    };
 
     // Convert RGB (normalized to 0-1) to Lch
     let lchColor = rgbToLch([color[0], color[1], color[2]]);
@@ -238,35 +236,12 @@ export async function getLegibleColors(color) {
     colorArray.hue       = lchColor[2];
 
     if (!colorIsAcceptable(colorArray)) {
-        return;
+        customHue.set(null);
     }
 
-    // DEFAULTS
-    legibleColor.light.nearWhite      = [97,  2,  colorArray.hue];
-    legibleColor.light.highlight      = [50,  49, colorArray.hue];
-    legibleColor.light.foreground     = [7,   35, colorArray.hue];
-    legibleColor.light.interface      = [95,  5,  colorArray.hue];
-    legibleColor.light.interfaceHover = [100, 5,  colorArray.hue];
-    legibleColor.light.background     = [95,  3,  colorArray.hue];
+    theHue = colorArray.hue;
 
-    legibleColor.dark.nearWhite      = [90, 50, colorArray.hue];
-    legibleColor.dark.highlight      = [73, 84, colorArray.hue];
-    legibleColor.dark.foreground     = [90, 30, colorArray.hue];
-    legibleColor.dark.interface      = [12, 15, colorArray.hue];
-    legibleColor.dark.interfaceHover = [20, 15, colorArray.hue];
-    legibleColor.dark.background     = [3,  3,  colorArray.hue];
+    debugHelper(theHue, "customHue");
 
-    // convert to a usable format
-    for (let [key, value] of Object.entries(legibleColor)) {
-        for (let [key2, value2] of Object.entries(value)) {
-            // convert back to RBG
-            legibleColor[key][key2] = lchToRgb([legibleColor[key][key2][0], legibleColor[key][key2][1], legibleColor[key][key2][2]]);
-        }
-    }
-
-    debugHelper(legibleColor, "getLegibleColors");
-
-    document.body.classList.add('useCustomColors');
-
-    return legibleColor;
+    customHue.set(theHue);
 }

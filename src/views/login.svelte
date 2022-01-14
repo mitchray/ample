@@ -4,11 +4,11 @@
     import { lchToRgb } from 'color-converters';
 
     import { serverVersion } from "../stores/server";
-    import { ThemeIsLight } from "../stores/status";
-    import { customColors, ampleVersion } from "../stores/player";
+    import { Theme } from "../stores/status";
+    import { ampleVersion } from "../stores/player";
 
     import { handshake, handshakeAPI } from '../logic/user';
-    import { getLegibleColors, getRandomInt } from '../logic/helper';
+    import { getCustomHue, getRandomInt } from '../logic/helper';
 
     import Tabs from "../components/tabs.svelte";
     import ThemeToggle from '../components/themeToggle.svelte';
@@ -35,7 +35,7 @@
     // Current active tab
     let currentTab;
 
-    $: theme = $ThemeIsLight ? 'light' : 'dark';
+    $: theme = $Theme;
 
     $: versionCheck = $serverVersion.charAt(0);
 
@@ -50,8 +50,7 @@
     }
 
     onMount(async () => {
-        legibleColors = await getLegibleColors(randomColor);
-        customColors.set(legibleColors);
+        await getCustomHue(randomColor);
     });
 </script>
 
@@ -113,7 +112,7 @@
 
 <style>
     .logo {
-        margin-bottom: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
     }
 
     .container {
@@ -137,18 +136,10 @@
         width: 100%;
         max-width: 400px;
         padding: var(--spacing-xxl);
-        background-color: var(--color-interface-10);
+        background-color: var(--color-interface);
         border-radius: 15px;
         z-index: 10;
-        border-top: 2px solid var(--color-tint-100);
         box-shadow: var(--shadow-xl);
-    }
-
-    @supports (backdrop-filter: blur(0)) {
-        .form {
-            background-color: var(--color-tint-50);
-            backdrop-filter: blur(15px) saturate(180%);
-        }
     }
 
     label > * {
@@ -185,34 +176,14 @@
         opacity: 0.4;
     }
 
-    .bg-container {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 0;
-        background-size: 30px 30px;
-        background-image:
-                linear-gradient(to right, var(--color-tint-50) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--color-tint-50) 1px, transparent 1px);
-    }
-
-    :global(.theme-is-light) .bg-container {
-        background-color: var(--color-lines);
-        background-image:
-                linear-gradient(to right, var(--color-shade-50) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--color-shade-50) 1px, transparent 1px);
-    }
-
     .bg {
-        background-image: linear-gradient(-60deg, var(--color-interface-00) 50%, var(--color-lines) 50%);
+        background-color: var(--color-highlight);
         bottom: 0;
         left: -50%;
-        opacity: 0.2;
         position: fixed;
         right: -50%;
         top: 0;
         z-index: 1;
+        opacity: 0.1;
     }
 </style>

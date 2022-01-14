@@ -65,25 +65,28 @@
 
     .header > :global(div) {
         text-align: left;
-        background-color: var(--color-text-subheading);
-        color: var(--color-interface-00);
-        backdrop-filter: blur(10px) saturate(180%);
+        background-color: var(--color-background);
+        border-bottom: 2px solid var(--color-border);
+        position: relative;
+    }
+
+    .row > :global(div) {
+        background-color: var(--color-card-primary);
     }
 
     .stripe > :global(div) {
-        background-color: var(--color-tint-50);
+        background-color: var(--color-row-stripe);
     }
 
-    :global(.theme-is-light) .stripe > :global(div) {
-        background-color: var(--color-shade-50);
+    .lister {
+        /*background-color: var(--color-card-primary);*/
     }
 
     .lister :global(.actions.actions),
     .lister :global(.name.name) { /* specificity hack to overcome light theme */
-        background-color: var(--color-interface-05);
         position: sticky;
         z-index: 1;
-        box-shadow: var(--shadow-sm);
+        box-shadow: var(--shadow-md);
     }
 
     .lister :global(.name.name) {
@@ -92,22 +95,6 @@
 
     .lister :global(.actions.actions) {
         right: 0;
-    }
-
-    .lister :global(.stripe .actions),
-    .lister :global(.stripe .name) {
-        background-color: var(--color-interface-10);
-    }
-
-    /* swap for light theme */
-    :global(.theme-is-light) .lister :global(.actions.actions),
-    :global(.theme-is-light) .lister :global(.name.name) {
-        background-color: var(--color-interface-10);
-    }
-
-    :global(.theme-is-light) .lister :global(.stripe .actions),
-    :global(.theme-is-light) .lister :global(.stripe .name) {
-        background-color: var(--color-interface-05);
     }
 
     .header :global(> div),

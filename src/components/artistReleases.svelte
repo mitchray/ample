@@ -57,10 +57,17 @@
 {/if}
 
 <style>
-    @media all and (min-width: 1024px) {
-        .release-type {
-            padding-bottom: var(--spacing-md);
-            border-bottom: 2px solid var(--color-lines);
-        }
+    .release-type {
+        text-transform: uppercase;
+        margin-bottom: var(--spacing-md);
+        font-weight: 700;
+    }
+
+    .items {
+        margin-bottom: var(--spacing-xxxl);
+    }
+
+    .album-grid {
+        margin-top: 0;
     }
 </style>

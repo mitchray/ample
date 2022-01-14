@@ -102,15 +102,15 @@
 <style>
     /* reassign to variable else local override has no effect */
     :global(.site-content-inner) {
-        color: var(--color-text-body);
+        color: var(--color-text-primary);
     }
 
     .songs-container {
-        color: var(--color-text-body);
+        color: var(--color-text-primary);
     }
     
     .cover {
-        border-radius: 10px;
+
     }
 
     .cover-container {
@@ -118,10 +118,13 @@
         margin-right: var(--spacing-lg);
         flex-shrink: 0;
         max-width: 200px;
+        line-height: 0;
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
+        border-radius: 10px;
+        overflow: hidden;
     }
 
     .title {
-        text-transform: unset;
         font-size: 40px;
         letter-spacing: -0.02em;
         line-height: 1;
@@ -170,7 +173,7 @@
             overflow-y: auto;
             height: 100%;
             padding: var(--spacing-xxl);
-            border-right: 2px solid var(--color-lines);
+            border-right: 2px solid red; /* TODO redo with container queries */
         }
 
         .songs-container {

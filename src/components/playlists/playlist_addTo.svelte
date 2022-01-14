@@ -28,7 +28,7 @@
 
 
 <div class="panel-header">
-    <h4 class="title">Add to playlist</h4>
+    <h4 class="title">Add to Playlist</h4>
 </div>
 
 <div class="panel-content">

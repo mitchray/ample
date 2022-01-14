@@ -2,7 +2,7 @@
     import { fade } from 'svelte/transition';
     import { Link } from 'svelte-routing';
 
-    import { ThemeIsLight } from '../stores/status';
+    import { Theme } from '../stores/status';
 
     import { getAlbum } from "../logic/album";
     import { formatTotalTime } from "../logic/helper";
@@ -13,7 +13,6 @@
     import Actions from '../components/actions.svelte';
     import Genres from '../components/genres.svelte';
 
-    import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
     import SVGTrack from "../../public/images/music_note.svg";
     import SVGClock from "../../public/images/clock.svg";
@@ -21,7 +20,7 @@
     export let id;
 
     let theme;
-    $: theme = $ThemeIsLight ? 'light' : 'dark';
+    $: theme = $Theme;
 </script>
 
 <svelte:head>
@@ -32,7 +31,7 @@
     <p>Loading album</p>
 {:then album}
     {#if album.id}
-        {#if album.useBackground && !$ThemeIsLight}
+        {#if album.useBackground && !$Theme === 'light'}
             <img class="art-background" src="{album.art}&thumb=10" alt="" loading="lazy" in:fade/>
         {/if}
 
@@ -51,29 +50,29 @@
                         </div>
 
                         <div class="info">
-                            <h1 class="title">{album.name}</h1>
-                            <div class="artist">
-                                <Link to="artists/{album.artist.id}"><SVGArtist class="inline"/> {album.artist.name}</Link>
+                            <div class="name">
+                                <h1 class="title">{album.name}</h1>
+                                <div class="artist">
+                                    <Link to="artists/{album.artist.id}">{album.artist.name}</Link>
+                                </div>
                             </div>
+
+                            <Actions
+                                type="album"
+                                mode="fullButtons"
+                                id="{album.id}"
+                                count="{album.songcount}"
+                                artistID="{album.artist.id}"
+                            />
+
                             <div class="meta">
                                 <span class="date"><Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link></span>
                                 <span><SVGClock class="inline"/> {formatTotalTime(album.time)}</span>
                                 <span><SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}</span>
+                                <ThirdPartyServices data={album} type="album" />
                             </div>
 
                             <Genres genres="{album.genre}" />
-
-                            <div class="actions">
-                                <Actions
-                                    type="album"
-                                    mode="fullButtons"
-                                    id="{album.id}"
-                                    count="{album.songcount}"
-                                    artistID="{album.artist.id}"
-                                />
-
-                                <ThirdPartyServices data={album} type="album" />
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -94,7 +93,7 @@
 <style>
     /* reassign to variable else local override has no effect */
     :global(.site-content-inner) {
-        color: var(--color-text-body);
+        color: var(--color-text-primary);
     }
 
     .wrapper {
@@ -130,11 +129,18 @@
         padding-bottom: 0;
     }
 
+    .details {
+        background-color: var(--color-card-primary);
+        border-radius: 10px;
+        padding: var(--spacing-lg);
+        box-shadow: var(--shadow-md);
+        margin-bottom: var(--spacing-xl);
+    }
+
     .cover-rating {
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         position: relative;
     }
 
@@ -146,13 +152,13 @@
         border: 1px solid hsla(0, 0%, 50%, 0.1);
         box-shadow: var(--shadow-lg);
         font-size: 0;
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
     }
 
     .art {
         object-fit: cover;
         width: 100%;
         height: 100%;
-        z-index: -1;
         position: relative;
     }
 
@@ -161,17 +167,23 @@
         margin-bottom: var(--spacing-lg);
     }
 
+    .name {
+        background-color: var(--color-card-highlight);
+        padding: var(--spacing-md);
+        border-radius: 5px;
+        margin-bottom: var(--spacing-md);
+    }
+
     .title {
-        text-transform: unset;
         letter-spacing: -0.02em;
-        line-height: 1;
+        line-height: 1.1;
         text-align: center;
         margin-bottom: var(--spacing-sm);
+        font-weight: 700;
     }
 
     .artist {
         text-align: center;
-        margin-bottom: var(--spacing-lg);
     }
 
     .meta {
@@ -179,10 +191,10 @@
         flex-wrap: wrap;
         gap: var(--spacing-md) var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
+        align-items: center;
     }
 
-    .actions {
-        display: flex;
-        flex-direction: column-reverse;
+    .songs {
+        max-width: 700px;
     }
 </style>

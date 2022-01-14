@@ -120,6 +120,7 @@
     <button class="button button--warning">Warning</button>
     <button class="button button--primary">Primary</button>
     <button class="button button--secondary">Secondary</button>
+    <button class="button button--tertiary">Tertiary</button>
     <hr>
     <h4>With icons</h4>
     <button class="button button--regular"><SVGShuffle /> Regular with icon</button>
@@ -127,6 +128,7 @@
     <button class="button button--warning"><SVGShuffle /> Warning with icon</button>
     <button class="button button--primary"><SVGShuffle /> Primary with icon</button>
     <button class="button button--secondary"><SVGShuffle /> Secondary with icon</button>
+    <button class="button button--tertiary"><SVGShuffle /> Tertiary</button>
     <hr>
     <h4>Icons only</h4>
     <button class="icon-button button--regular"><SVGPlay style="transform: scale(1.2);" /></button>
@@ -135,6 +137,7 @@
     <button class="icon-button button--warning"><SVGShuffle /></button>
     <button class="icon-button button--primary"><SVGShuffle /></button>
     <button class="icon-button button--secondary"><SVGShuffle /></button>
+    <button class="icon-button button--tertiary"><SVGShuffle /></button>
     <button class="icon-button"><SVGPlay /></button>
     <button class="icon-button"><SVGShuffle /></button>
     <hr>
@@ -145,6 +148,7 @@
     <button class="icon-button button--warning button--mini"><SVGShuffle style="transform: scale(0.85);" /></button>
     <button class="icon-button button--primary button--mini"><SVGShuffle style="transform: scale(0.85);" /></button>
     <button class="icon-button button--secondary button--mini"><SVGShuffle style="transform: scale(0.85);" /></button>
+    <button class="icon-button button--tertiary button--mini"><SVGShuffle style="transform: scale(0.85);" /></button>
     <button class="icon-button button--mini"><SVGPlay /></button>
     <button class="icon-button button--mini"><SVGShuffle style="transform: scale(0.85);" /></button>
     <hr>
@@ -154,6 +158,7 @@
     <button class="button button--warning" disabled>Warning</button>
     <button class="button button--primary" disabled>Primary</button>
     <button class="button button--secondary" disabled>Secondary</button>
+    <button class="button button--tertiary" disabled>Secondary</button>
     <hr>
 </section>
 

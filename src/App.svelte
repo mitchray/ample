@@ -132,8 +132,8 @@
         flex-direction: column;
         height: 100vh;
         overflow: hidden;
-        background-color: var(--color-interface-00);
-        color: var(--color-text-body);
+        background-color: var(--color-background);
+        color: var(--color-text-primary);
     }
 
     :global(.site-header) {

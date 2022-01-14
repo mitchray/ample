@@ -40,7 +40,7 @@
     }
 </script>
 
-<h1>Albums by year</h1>
+<h1>Albums by Year</h1>
 
 <YearPagination bind:fromYear bind:toYear showYear={year} />
 

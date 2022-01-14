@@ -7,11 +7,11 @@
     import { newestAlbums, randomAlbums } from "../logic/album";
 </script>
 
-<CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest albums" />
+<CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest Albums" />
 
 {#key ($CurrentSong) ? $CurrentSong.id : 0}
-    <CardList type="song" dataProvider={"recentSongs"} limit=9 containerType="scroll" heading="Recently played" />
+    <CardList type="song" dataProvider={"recentSongs"} limit=9 containerType="scroll" heading="Recently Played" />
 {/key}
 
-<CardList type="album" dataProvider={"randomAlbums"} limit=12 refresh=true containerType="scroll" heading="Random albums" />
+<CardList type="album" dataProvider={"randomAlbums"} limit=12 refresh=true containerType="scroll" heading="Random Albums" />
 

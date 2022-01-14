@@ -4,6 +4,7 @@
     import { Link } from "svelte-routing";
 
     import { SidebarIsMini } from '../stores/status';
+    import { customHue } from "../stores/status";
 
     import SidebarDrawer from './sidebarDrawer.svelte';
 
@@ -23,6 +24,7 @@
     import SVGArrowRight from "../../public/images/arrow_right.svg";
     import SVGGenre from "../../public/images/label.svg";
 
+
     const { activeRoute } = getContext(ROUTER);
     let basePath = '';
 
@@ -30,14 +32,14 @@
         if ($activeRoute !== null) {
             basePath = $activeRoute.route._path.split(/\//)[0];
 
-            // remove customColors class if not on our special pages
+            // reset customHue if not on our special pages
             // their onMount events will add it back in
             switch ($activeRoute.route._path) {
                 case 'albums/:id':
                 case 'artists/:id':
                     break;
                 default:
-                    document.body.classList.remove('useCustomColors');
+                    customHue.set(null);
                     break;
             }
         }
@@ -168,36 +170,31 @@
 
 <style>
     .sidebar-toggle {
-        box-shadow: var(--shadow-sm);
-        display: block;
+        display: flex;
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
-        height: 8px;
         width: 100%;
         border-radius: 0;
         text-align: center;
-        line-height: 0;
-        background-color: var(--color-button-bg-primary);
-        padding: 0.6em 0.9em;
-    }
-
-    .sidebar-toggle:hover {
-        background-color: var(--color-button-bg-hover);
-        color: var(--color-button-text-hover);
+        line-height: 1;
+        background-color: var(--color-interface);
+        border-bottom: 1px solid var(--color-border);
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 2px;
     }
 
     .site-sidebar {
-        background-color: var(--color-interface-10);
+        background-color: var(--color-interface);
         border-right: 1px solid var(--color-border);
         width: var(--size-sidebar-width);
         padding: var(--spacing-lg);
-        height: 100%; /* TODO account for new header? */
+        height: 100%;
         display: flex;
         flex-direction: column;
         position: relative;
-        box-shadow: var(--shadow-lg);
     }
 
     .site-sidebar-inner:after {
@@ -233,6 +230,10 @@
         z-index: 1;
     }
 
+    li :global(svg) {
+        color: var(--color-icon);
+    }
+
     .site-sidebar.isMini {
         --size-sidebar-width: 46px;
     }
@@ -255,16 +256,16 @@
     }
 
     .isMini :global(svg) {
-        transform: scale(1.6);
+        transform: scale(1.5);
     }
 
     .isMini li:not(.current) :global(svg) {
-        color: unset;
+        /*color: unset;*/
     }
 
     /* hover label for mini mode */
     .isMini :global(a:after) {
-        background-color: var(--color-interface-10);
+        background-color: var(--color-interface);
         box-shadow: var(--shadow-sm);
         clip-path: inset(-10px -10px -10px 0px); /* clip shadow */
         content: attr(data-label);
@@ -279,7 +280,6 @@
         pointer-events: none;
         white-space: nowrap;
         font-weight: 700;
-        color: var(--color-link-hover);
         opacity: 0;
     }
 
@@ -294,15 +294,13 @@
     li.current :global(.site-sidebar__link) {
         position: relative;
         font-weight: 700;
-        color: var(--color-link-active);
     }
 
     li.current:before {
         content: '';
         width: calc(100% + 2 * var(--spacing-lg));
         height: 100%;
-        background-color: var(--color-highlight);
-        opacity: 0.1;
+        background-color: var(--color-card-primary);
         position: absolute;
         left: calc(-1 * var(--spacing-lg));
         top: 50%;
@@ -317,7 +315,7 @@
         padding: 0;
         width: 20px;
         height: 20px;
-        border-radius: 999px;
+        border-radius: 100vh;
         display: inline-flex;
         justify-content: center;
         align-items: center;
@@ -350,9 +348,11 @@
     }
 
     h3 {
-        color: var(--color-highlight);
         margin-top: var(--spacing-md);
         margin-bottom: var(--spacing-sm);
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
+        font-size: 14px;
     }
 
     ul + h3 {

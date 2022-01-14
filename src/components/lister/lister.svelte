@@ -80,8 +80,6 @@
     .lister-container {
         width: fit-content;
         max-width: 100%;
-        border-radius: 5px;
-        border: 2px solid var(--color-text-subheading);
         display: flex;
         flex-direction: column;
         contain: content;

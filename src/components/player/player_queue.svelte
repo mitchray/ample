@@ -36,7 +36,7 @@
     </div>
 
     <button
-        class="icon-button queue-toggle"
+        class="queue-toggle icon-button button--regular"
         on:click={toggleQueue}
         title="Toggle queue"
     >
@@ -48,7 +48,6 @@
 <style>
     :global(.current-icon) {
         margin-right: var(--spacing-sm);
-        color: var(--color-link-active);
         flex-shrink: 0;
     }
 
@@ -63,13 +62,7 @@
         width: auto;
         padding: 0;
         flex-shrink: 0;
-        background-color: var(--color-button-bg-primary);
         margin-right: var(--spacing-sm);
-    }
-
-    .queue-toggle:hover {
-        background-color: var(--color-button-bg-hover);
-        color: var(--color-button-text-hover);
     }
 
     .queue-toggle :global(svg) {
@@ -77,18 +70,14 @@
     }
 
     .container {
-        background-color: var(--color-shade-200);
-        box-shadow: var(--shadow-inner);
+        background-color: var(--color-card-primary);
+        box-shadow: var(--shadow-sm);
         border-radius: 5px;
         display: flex;
         justify-content: space-between;
         padding: var(--spacing-md);
         padding-right: var(--spacing-sm);
         margin-right: var(--spacing-lg);
-    }
-
-    :global(.theme-is-light) .container {
-        background-color: var(--color-shade-25);
     }
 
     .queueInfo {

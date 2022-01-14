@@ -56,7 +56,7 @@
 
 <div class="container">
     <div class="panel-header">
-        <h4 class="title">{isNew ? 'New' : 'Edit'} playlist</h4>
+        <h4 class="title">{isNew ? 'New' : 'Edit'} Playlist</h4>
     </div>
 
     <div class="panel-content">
@@ -86,7 +86,7 @@
     </div>
 
     <div class="panel-footer">
-        <button class="button button--regular" on:click={handleCancel}>Cancel</button>
+        <button class="button button--tertiary" on:click={handleCancel}>Cancel</button>
 
         <button
             class="submit button button--primary"

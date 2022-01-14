@@ -366,23 +366,25 @@
             </div>
         {/if}
 
-        {#if showPlayNext}
-            <div class="action">
-                <button type="button" class="icon-button" on:click={handlePlayNext} title="Play next"><SVGPlayNext style="transform: scale(0.85);" /> </button>
-            </div>
-        {/if}
+        <span class="group">
+            {#if showPlayNext}
+                <div class="action">
+                    <button type="button" class="icon-button" on:click={handlePlayNext} title="Play next"><SVGPlayNext style="transform: scale(0.85);" /> </button>
+                </div>
+            {/if}
 
-        {#if showPlayLast}
-            <div class="action">
-                <button type="button" class="icon-button" on:click={handlePlayLast} title="Add to queue"><SVGQueue style="transform: scale(0.85);" /> </button>
-            </div>
-        {/if}
+            {#if showPlayLast}
+                <div class="action">
+                    <button type="button" class="icon-button" on:click={handlePlayLast} title="Add to queue"><SVGQueue style="transform: scale(0.85);" /> </button>
+                </div>
+            {/if}
 
-        {#if showMore}
-            <div class="action" class:notification-badge={$SkipBelow} data-badge="{$SkipBelowRating}">
-                <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="More"><SVGMore /> </button>
-            </div>
-        {/if}
+            {#if showMore}
+                <div class="action" class:notification-badge={$SkipBelow} data-badge="{$SkipBelowRating}">
+                    <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="More"><SVGMore /> </button>
+                </div>
+            {/if}
+        </span>
 
         {#if moreMenuVisible}
             <Menu anchor="bottom-center" toggleElement={document.querySelector("#js-action-menu_" + type + mode + id)} bind:isVisible={moreMenuVisible} >
@@ -443,12 +445,7 @@
         border: 0;
         padding: 0.3em 0;
         width: 100%;
-        color: var(--color-text-body);
-    }
-
-    .c-actions.menu button:hover,
-    .c-actions.menu :global(a:hover) {
-        color: var(--color-link-hover);
+        color: var(--color-text-primary);
     }
 
     .c-actions.menu button {
@@ -493,5 +490,10 @@
     .c-actions.fullButtons .button--secondary {
         padding-left: 1em;
         padding-right: 1em;
+    }
+
+    .group {
+        display: inline-flex;
+        flex-wrap: nowrap;
     }
 </style>

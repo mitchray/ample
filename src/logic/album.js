@@ -2,9 +2,9 @@ import { get } from "svelte/store";
 
 import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
-import { customColors, MediaPlayer } from '../stores/player';
+import { MediaPlayer } from '../stores/player';
 
-import { placeholderArtCheck, debugHelper, getLegibleColors, getAverageColor } from "./helper";
+import { placeholderArtCheck, debugHelper, getCustomHue, getAverageColor } from "./helper";
 import { getUserPreference } from './server';
 
 let serverURL_value = get(serverURL);
@@ -140,9 +140,8 @@ export const getAlbum = async (id) => {
     let album = await fetchAlbumData(queryURL);
     album.useBackground = await placeholderArtCheck(album.art);
     album.averageColor = await getAverageColor(album.art + "&thumb=10");
-    album.legibleColors = await getLegibleColors(album.averageColor.value);
+    await getCustomHue(album.averageColor.value);
 
-    customColors.set(album.legibleColors);
     let mp = get(MediaPlayer);
     await mp.setWaveColors();
 

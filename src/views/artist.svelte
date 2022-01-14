@@ -2,7 +2,7 @@
     import { fade } from 'svelte/transition';
     import { Link } from 'svelte-routing';
 
-    import { ShowExpandedAlbums, ThemeIsLight } from "../stores/status";
+    import { ShowExpandedAlbums, Theme } from "../stores/status";
 
     import { getArtist, similarArtists } from "../logic/artist";
     import { getTopSongsFromArtist } from "../logic/song";
@@ -30,16 +30,16 @@
     export let id;
 
     let theme;
-    $: theme = $ThemeIsLight ? 'light' : 'dark';
+    $: theme = $Theme;
 
     // List of tab items with labels and values.
     let tabItems = [
         { label: "Discography",         value: "discography", icon: SVGAlbum },
-        { label: "Popular songs",       value: "popular",     icon: SVGPopular },
-        { label: "All songs",           value: "all",         icon: SVGSongs },
-        { label: "Similar artists",     value: "similar",     icon: SVGSimilar },
+        { label: "Popular Songs",       value: "popular",     icon: SVGPopular },
+        { label: "All Songs",           value: "all",         icon: SVGSongs },
+        { label: "Similar Artists",     value: "similar",     icon: SVGSimilar },
         { label: "Summary",             value: "summary",     icon: SVGArticle },
-        { label: "MusicBrainz compare", value: "musicbrainz" },
+        { label: "MusicBrainz Compare", value: "musicbrainz" },
     ];
 
     // Current active tab
@@ -61,57 +61,52 @@
 
         {#if artist.useBackground}
             {@html `<style>
-                .header__image-copy,
-                .header__image-blur {
-                    background-image: url('${artist.art}&thumb=10');
-                }
+
             </style>`}
         {/if}
 
         <div class="container" in:fade>
             <div class="header">
                 <h1 class="title">{artist.name}</h1>
-                <div class="header__image-copy"></div>
-                <div class="header__image-blur"></div>
-            </div>
 
-            <div class="profile">
-                <div class="art-container" >
-                    <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="240" height="240"  />
+                <div class="profile">
+                    <div class="art-container" >
+                        <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="240" height="240"  />
+                    </div>
+
+                    <div class="rating">
+                        <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                    </div>
                 </div>
 
-                <div class="rating">
-                    <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
-                </div>
-            </div>
+                <div class="details">
+                    <div class="meta">
+                        {#if artist.albumcount > 0}
+                            <span><SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'}</span>
+                        {/if}
 
-            <div class="details">
-                <div class="meta">
-                    {#if artist.albumcount > 0}
-                        <span><SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'}</span>
-                    {/if}
+                        {#if artist.appearanceCount > 0}
+                            <span><SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'}</span>
+                        {/if}
 
-                    {#if artist.appearanceCount > 0}
-                        <span><SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'}</span>
-                    {/if}
+                        <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
 
-                    <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
-
-                    <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
-                </div>
+                        <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
+                    </div>
 
 
-                <Genres genres="{artist.genre}" />
+                    <Genres genres="{artist.genre}" />
 
-                <div class="actions">
-                    <Actions
-                        type="artist"
-                        mode="fullButtons"
-                        id="{artist.id}"
-                        count={artist.songcount}
-                    />
+                    <div class="actions">
+                        <Actions
+                            type="artist"
+                            mode="fullButtons"
+                            id="{artist.id}"
+                            count={artist.songcount}
+                        />
 
-                    <ThirdPartyServices data={artist} type="artist" />
+                        <ThirdPartyServices data={artist} type="artist" />
+                    </div>
                 </div>
             </div>
         </div>
@@ -195,21 +190,55 @@
         container: inline-size / artist-info-wrapper;
     }
 
+    .header {
+        position: relative;
+    }
+    
+    .header:before {
+        content: '';
+        background-color: var(--color-highlight);
+        mask-image: linear-gradient(
+                to bottom,
+                hsl(0, 0%, 0%) 0%,
+                hsla(0, 0%, 0%, 0.738) 19%,
+                hsla(0, 0%, 0%, 0.541) 34%,
+                hsla(0, 0%, 0%, 0.382) 47%,
+                hsla(0, 0%, 0%, 0.278) 56.5%,
+                hsla(0, 0%, 0%, 0.194) 65%,
+                hsla(0, 0%, 0%, 0.126) 73%,
+                hsla(0, 0%, 0%, 0.075) 80.2%,
+                hsla(0, 0%, 0%, 0.042) 86.1%,
+                hsla(0, 0%, 0%, 0.021) 91%,
+                hsla(0, 0%, 0%, 0.008) 95.2%,
+                hsla(0, 0%, 0%, 0.002) 98.2%,
+                hsla(0, 0%, 0%, 0) 100%
+        );
+        position: absolute;
+        bottom: 0;
+        top: calc(-1 * var(--spacing-xxl));
+        left: calc(-1 * var(--spacing-xxl));
+        right: calc(-1 * var(--spacing-xxl));
+        pointer-events: none;
+        z-index: -1;
+        opacity: 0.3;
+    }
+    
     .art-container {
         max-width: 240px;
         aspect-ratio: 1 / 1;
         border-radius: 50%;
         overflow: hidden;
-        border: 2px solid var(--color-highlight);
         font-size: 0;
+        position: relative;
+        box-shadow: var(--shadow-lg);
     }
 
     .art {
         object-fit: cover;
         width: 100%;
         height: 100%;
-        z-index: -1;
         position: relative;
+        z-index: -1;
     }
 
     .profile {
@@ -227,10 +256,9 @@
     }
 
     .title {
-        text-transform: unset;
-        letter-spacing: -0.02em;
         line-height: 1;
         text-align: center;
+        font-weight: 700;
     }
 
     .details {
@@ -257,7 +285,7 @@
     }
 
     .album-view-toggle {
-        width: 130px;
+        width: 140px;
         text-align: center;
         display: inline-block;
         margin-bottom: var(--spacing-xl);

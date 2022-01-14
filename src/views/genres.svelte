@@ -3,7 +3,6 @@
 
     import { getGenres, sortGenresByName } from "../logic/genre";
 
-    import Lister from '../components/lister.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
     let genres = [];
@@ -32,19 +31,5 @@
 {/if}
 
 <style>
-    .genres :global(table) {
-        border-collapse: collapse;
-    }
 
-    .genres :global(tr) {
-        border-bottom: 1px solid var(--color-lines);
-    }
-
-    .genres :global(th) {
-        text-align: left;
-    }
-
-    .genres :global(td) {
-        padding: 0.6em 0.6em;
-    }
 </style>

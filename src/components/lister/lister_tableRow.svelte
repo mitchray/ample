@@ -24,7 +24,7 @@
 </script>
 
 {#each $visibleColumns as col }
-    <div class="cell {col.id}">
+    <div class="cell {col.id}" data-type={col.type}>
 
         {#if col.id === "checkbox"}
             <input type="checkbox" bind:checked={item.selected} />
@@ -36,7 +36,7 @@
 
         {#if col.id === "art"}
             {#key item.art}
-                <img src="{item.art}&thumb=1" alt="" height="60" width="60"/>
+                <img class="image" src="{item.art}&thumb=1" alt="" height="60" width="60"/>
             {/key}
         {/if}
 
@@ -145,6 +145,10 @@
 {/each}
 
 <style>
+    .image {
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
+    }
+
     .cell :global(ul) {
         margin: 0;
     }
@@ -158,6 +162,16 @@
     }
 
     .cell:global(.art) {
-        padding: 0;
+        padding: var(--spacing-sm) var(--spacing-md);
+        background-color: var(--color-card-primary);
+    }
+
+    .cell:global(.art) img {
+        border-radius: 2px;
+    }
+
+    .cell[data-type=number],
+    .cell[data-type=time] {
+        justify-content: end;
     }
 </style>

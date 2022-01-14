@@ -62,28 +62,33 @@
 
 <style>
     :global(.album-card-expanded + .album-card-expanded) {
-        margin-top: var(--spacing-xxl);
+        margin-top: var(--spacing-xxxl);
     }
 
     .album-card-expanded {
-        padding: var(--spacing-lg);
-        border-radius: 10px;
-        border: 2px solid var(--color-lines);
         max-width: 2000px;
     }
 
     .image {
-        border-radius: 5px;
         max-width: 125px;
     }
 
     .image-container {
         margin-right: var(--spacing-lg);
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
+        line-height: 0;
+        border-radius: 5px;
+        overflow: hidden;
     }
 
     .info {
         display: flex;
         margin-bottom: var(--spacing-md);
+        background-color: var(--color-card-primary);
+        box-shadow: var(--shadow-md);
+        padding: var(--spacing-lg);
+        border-radius: 6px;
+        max-width: fit-content;
     }
 
     .title {

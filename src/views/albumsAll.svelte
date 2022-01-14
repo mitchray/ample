@@ -38,7 +38,7 @@
     }
 </script>
 
-<h1>All albums</h1>
+<h1>All Albums</h1>
 
 <AlphanumericPagination bind:selectedChar bind:searchValue />
 

@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { flip } from 'svelte/animate';
     import { dndzone } from 'svelte-dnd-action';
 
     import { NowPlayingQueue, NowPlayingIndex, CurrentSong, ShowQueue } from '../stores/status';
@@ -10,13 +11,14 @@
 
     import SVGClose from '../../public/images/close.svg';
     import SVGBin from '../../public/images/delete.svg';
-    import SVGArtist from '../../public/images/artist.svg';
     import SVGCurrent from '../../public/images/play_circle.svg';
     import SVGMore from '../../public/images/more-hori.svg';
 
+    const flipDurationMs = 100;
+
     let nextSong;
     let staleTime = Date.now();
-    let staleThreshold = 1000 * 60 * 60 * 3; // 3 hours
+    let staleThreshold = 1000 * 60 * 60 * 6; // 6 hours
 
     let queueMoreMenuID;
     let queueMoreMenuIsOpen = false;
@@ -98,6 +100,10 @@
         }
     }
 
+    function transformDraggedElement(draggedEl, data, index) {
+        draggedEl.classList.add('queue-dragging');
+    }
+
     onMount(() => {
         // check for stale songs and remove from queue
         const staleTimer = setInterval(() => {
@@ -141,7 +147,9 @@
             class="queue-list"
             use:dndzone={{
                 items: $NowPlayingQueue,
-                dropTargetStyle: {}
+                dropTargetStyle: {},
+                flipDurationMs: flipDurationMs,
+                transformDraggedElement
             }}
             on:consider={handleSort}
             on:finalize={handleSort}
@@ -152,6 +160,7 @@
                         on:click={(e) => { handleAction(e, i) }}
                         class="queue-item"
                         class:currentlyPlaying={$NowPlayingIndex === i}
+                        animate:flip={{duration:flipDurationMs}}
                     >
                         <button class="icon-button remove" on:click|stopPropagation={handleRemove(i)}><SVGClose /></button>
 
@@ -165,7 +174,7 @@
 
                         <span class="details">
                             <div class="queue-title" title="{song.name}">{song.name}</div>
-                            <div class="queue-artist" title="{song.artist.name}"><SVGArtist class="inline"/> {song.artist.name}</div>
+                            <div class="queue-artist" title="{song.artist.name}">{song.artist.name}</div>
                         </span>
 
                         <button id="queueMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleSongMenu(i)}><SVGMore /></button>
@@ -193,13 +202,11 @@
 
 <style>
     .site-queue {
-        background-color: var(--color-interface-10);
         border-left: 1px solid var(--color-border);
         position: relative;
         width: var(--size-queue-width);
         height: 100%;
         z-index: 10;
-        box-shadow: var(--shadow-lg);
         display: none;
     }
 
@@ -222,18 +229,12 @@
     }
 
     .header {
-        /*background-color: var(--color-interface);*/
-        border-bottom: 1px solid var(--color-tint-100);
         display: flex;
         flex-shrink: 0;
         align-items: center;
         justify-content: space-between;
         padding: var(--spacing-md);
         padding-left: var(--spacing-lg);
-    }
-
-    :global(.theme-is-light) .header {
-        border-color: var(--color-lines);
     }
 
     .header h4 {
@@ -252,7 +253,7 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        align-items: initial;
+        padding: var(--spacing-md);
         padding-bottom: calc(var(--spacing-md) + var(--size-seekbar-height)); /* account for absolute pos seekbar */
     }
 
@@ -277,11 +278,14 @@
     .thumb {
         flex-shrink: 0;
         margin-right: var(--spacing-md);
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
+        line-height: 0;
     }
 
     .thumb img {
-        height: 40px;
-        width: 40px;
+        height: 45px;
+        width: 45px;
+        border-radius: 2px;
     }
 
     .queue-item {
@@ -292,20 +296,17 @@
         align-items: center;
         user-select: none;
         cursor: pointer !important;
-        background-color: var(--color-tint-50);
+        border-radius: 4px;
         position: relative;
     }
 
-    :global(.theme-is-light) .queue-item {
-        background-color: var(--color-shade-50);
-    }
-
     .queue-item:hover {
-        background-color: var(--color-tint-100);
+        background-color: var(--color-row-hover);
     }
 
-    :global(.theme-is-light) .queue-item:hover {
-        background-color: var(--color-shade-100);
+    :global(.queue-dragging) {
+        background-color: var(--color-row-hover) !important;
+        box-shadow: var(--shadow-lg);
     }
 
     .queue-item + .queue-item {
@@ -313,7 +314,7 @@
     }
 
     .currentlyPlaying {
-        color: var(--color-link-hover);
+        background-color: var(--color-card-highlight);
     }
 
     .details {

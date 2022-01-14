@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.30.0] - 2022-01-21
+### Changed
+- New visual style for many items
+- Overhauled color system
+
 ## [0.22.0] - 2021-12-27
 ### Added
 - Basic media keys ([mediasession](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)) support in [browsers which have it](https://caniuse.com/mdn-api_mediasession)

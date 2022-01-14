@@ -66,16 +66,10 @@
         left: 0;
         right: 0;
         cursor: pointer;
-        background-color: var(--color-lines);
-        border-top: 1px solid var(--color-interface);
+        background-color: var(--color-border);
+        border-top: 1px solid var(--color-background);
         z-index: 100; /* make sure it is above waveform else it interferes with mouse */
         will-change: z-index;
-    }
-
-    @supports (backdrop-filter: blur(0)) {
-        .site-player__seekBar {
-            backdrop-filter: blur(10px) saturate(180%);
-        }
     }
 
     /* increase clickable area of seekbar */

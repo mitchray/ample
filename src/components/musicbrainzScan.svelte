@@ -329,7 +329,7 @@
         <h4>Hide</h4>
 
         <label>
-            Regex pattern:
+            Regex pattern<br>
             <input type=text bind:value={customRegex} />
         </label>
     </div>
@@ -371,7 +371,7 @@
                                     <em>- {mbRecording.disambiguation}</em>
                                 {/if}
                             </td>
-                            <td>{formatTotalTime(mbRecording["length"] / 1000)}</td>
+                            <td class="time">{formatTotalTime(mbRecording["length"] / 1000)}</td>
                             <td>
                                 <span
                                     class="badge"
@@ -403,11 +403,16 @@
     .sidebar {
         display: flex;
         flex-direction: column;
-        flex-shrink: 0;
+        /*flex-shrink: 0;*/
         margin-right: var(--spacing-xxl);
         position: sticky;
         top: 0;
         align-self: flex-start; /* needed for sticky to activate */
+        max-width: fit-content;
+        background-color: var(--color-card-primary);
+        padding: var(--spacing-lg);
+        border-radius: 6px;
+        box-shadow: var(--shadow-md);
     }
 
     .submit {
@@ -427,15 +432,18 @@
         margin-bottom: var(--spacing-sm);
     }
 
-    .filter-separator,
-    .total {
+    .time {
+        text-align: right;
+    }
+
+    .filter-separator {
         margin-top: var(--spacing-md);
     }
 
     .progress-bar {
         height: 10px;
         width: 100%;
-        background-color: var(--color-lines);
+        background-color: var(--color-waveform-wave);
         position: relative;
         min-width: 500px;
     }
@@ -443,7 +451,7 @@
     .progress-value {
         display: inline-block;
         height: 100%;
-        background-color: var(--color-text-subheading);
+        background-color: var(--color-waveform-progress);
         position: absolute;
         left: 0;
         top: 0;
@@ -455,7 +463,7 @@
     }
 
     .results :global(tr) {
-        border-bottom: 1px solid var(--color-lines);
+        border-bottom: 1px solid var(--color-border);
     }
 
     .results :global(td), .results :global(th) {

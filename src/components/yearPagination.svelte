@@ -263,10 +263,11 @@
     .container {
         display: flex;
         align-items: center;
-        border: 2px solid var(--color-lines);
+        background-color: var(--color-card-primary);
         border-radius: 10px;
         margin-bottom: var(--spacing-xxl);
         overflow: hidden;
+        box-shadow: var(--shadow-md);
     }
 
     /* hide number spinners */
@@ -317,8 +318,6 @@
     .inputs label {
         margin: 0 var(--spacing-md);
         font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.03em;
     }
 
     .inputs input {
@@ -335,7 +334,7 @@
 
     .presets {
         display: table;
-        border-left: 2px solid var(--color-lines);
+        border-left: 2px solid var(--color-separator);
     }
 
     .presets .label,
@@ -350,11 +349,7 @@
     }
 
     .row:nth-child(even) {
-        background-color: var(--color-tint-50);
-    }
-
-    :global(.theme-is-light) .row:nth-child(even) {
-        background-color: var(--color-shade-50);
+        background-color: var(--color-row-stripe);
     }
 
     .label {
@@ -376,12 +371,9 @@
         border: 0;
     }
 
-    .timeframe button.active {
-        background-color: var(--color-tint-100);
-    }
-
-    :global(.theme-is-light) .timeframe button.active {
-        background-color: var(--color-shade-100);
+    .timeframe button.active:not(:hover) {
+        background-color: var(--color-active-background);
+        color: var(--color-active-text);
     }
 
     .ranges ul {
@@ -400,7 +392,6 @@
 
     .emphasis {
         font-weight: 700;
-        color: var(--color-text-heading);
         pointer-events: none;
     }
 

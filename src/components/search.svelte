@@ -68,7 +68,7 @@
         style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
     >
         <div class="header panel-header">
-            <h4>Results for <b>{$SearchQuery}</b></h4>
+            <h4>Results for <span class="query">{$SearchQuery}</span></h4>
             <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
         </div>
 
@@ -104,7 +104,7 @@
 
 <style>
     .container {
-        background-color: var(--color-interface-00);
+        background-color: var(--color-background);
         position: absolute;
         left: 0;
         top: 0;
@@ -125,12 +125,10 @@
         bottom: 0;
         width: 100%;
         height: 100%;
-        box-shadow: var(--shadow-inset-md);
         pointer-events: none;
     }
 
     .header {
-        background-color: var(--color-interface-10);
         display: flex;
         flex-shrink: 0;
         align-items: center;
@@ -142,6 +140,11 @@
     .header h4 {
         margin: 0;
         margin-right: auto;
+    }
+
+    .query {
+        font-weight: 700;
+        font-style: italic;
     }
 
     .results {

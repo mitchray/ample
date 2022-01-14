@@ -142,8 +142,8 @@
     }
 
     .site-player {
-        background-color: var(--color-interface-20);
-        /*box-shadow: 0 0 20px rgba(0,0,0,0.2);*/
+        background-color: var(--color-interface);
+        border-top: 1px solid var(--color-border);
         height: var(--size-webplayer-height);
         display: grid;
         grid-template-areas:
@@ -245,8 +245,7 @@
         content: '';
         height: 12px;
         min-width: 12px;
-        background-color: var(--color-interface-00);
-        filter: invert(100%) hue-rotate(180deg); /* invert the solid color, then shift hue back to what it should be */
+        background-color: var(--color-text-primary);
         position: absolute;
         top: 50%;
         right: 0;
@@ -263,7 +262,7 @@
         font-weight: 700;
         text-align: center;
         line-height: 12px;
-        color: var(--color-text-subheading);
+        color: var(--color-background);
     }
 
     @media all and (min-width: 1300px) {
@@ -276,8 +275,8 @@
         }
 
         .site-player:before {
-            background-color: var(--color-shade-200);
-            box-shadow: var(--shadow-inner);
+            background-color: var(--color-card-primary);
+            box-shadow: var(--shadow-sm);
             border-radius: 5px;
             content: '';
             grid-column-start: now-playing;
@@ -289,10 +288,6 @@
             left: 0;
             right: 0;
             z-index: -1;
-        }
-
-        :global(.theme-is-light) .site-player:before {
-            background-color: var(--color-shade-25);
         }
 
         .site-player__times {
@@ -332,7 +327,7 @@
 
     @media all and (min-width: 1700px) {
         .site-player {
-            grid-template-columns: var(--size-sidebar-width) 2fr var(--spacing-xxl) min-content var(--spacing-xxl) 4fr var(--spacing-xxl) min-content var(--spacing-xxl) 300px;
+            grid-template-columns: var(--size-sidebar-width) 2fr var(--spacing-xxl) min-content var(--spacing-xxl) 4fr var(--spacing-xxl) min-content var(--spacing-xxl) 320px;
         }
     }
 </style>

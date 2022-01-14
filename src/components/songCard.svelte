@@ -4,7 +4,6 @@
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
 
-    import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
 
     export let data = null;
@@ -20,13 +19,16 @@
         </div>
 
         <div class="info">
-            <div class="details">
+            <div class="top">
                 <div class="title" title="{song.name}">{song.name}</div>
-                <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}"><SVGArtist class="inline"/> {song.artist.name}</Link></div>
-                <div class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
+                <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
             </div>
 
-            <div class="actions-container">
+            <div class="bottom">
+                <div class="meta">
+                    <span class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></span>
+                </div>
+
                 <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
 
                 <div class="actions">
@@ -47,13 +49,13 @@
         </div>
 
         <div class="info">
-            <div class="details">
+            <div class="top">
                 <div class="title">Loading</div>
                 <div class="artist"><br></div>
                 <div class="album"><br></div>
             </div>
 
-            <div class="actions-container">
+            <div class="bottom">
                 <Rating />
 
                 <div class="actions">
@@ -73,7 +75,7 @@
     }
 
     :global(.song-scroll) {
-        border: 2px solid var(--color-lines);
+        border: 2px solid var(--color-separator);
         border-radius: 15px;
         padding: var(--spacing-lg);
         gap: 20px;
@@ -96,28 +98,40 @@
     .image-container {
         line-height: 0;
         position: relative;
-        width: 125px;
-        height: 125px;
+        height: 100%;
+        max-width: 140px;
+        aspect-ratio: 1 / 1;
         flex-shrink: 0;
+        flex-grow: 0;
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
+        border-radius: 5px;
+        overflow: hidden;
     }
 
     .image-container :global(.image) {
         object-fit: cover;
-        border-radius: 5px;
         color: transparent;
+        height: 100%;
+        width: 100%;
     }
 
     .info {
-        margin-left: var(--spacing-lg);
+        margin-left: var(--spacing-md);
         display: flex;
         flex-direction: column;
         flex: 1;
         overflow: hidden;
     }
 
+    .top {
+        background-color: var(--color-card-highlight);
+        padding: var(--spacing-md) var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
+        border-radius: 5px;
+    }
+
     .title {
         font-weight: 700;
-        margin-bottom: var(--spacing-sm);
     }
 
     .title,
@@ -128,10 +142,18 @@
         text-overflow: ellipsis;
     }
 
-    .actions-container {
+    .album {
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .meta {
+        display: flex;
+        gap: var(--spacing-lg);
+    }
+
+    .bottom {
         display: flex;
         flex-direction: column;
-        margin-top: var(--spacing-md);
     }
 
     .actions {

@@ -80,6 +80,10 @@
         margin: 0;
     }
 
+    .active:not(:hover) {
+        background-color: var(--color-card-highlight);
+    }
+
     button {
         display: inline-flex;
         height: 30px;

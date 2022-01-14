@@ -148,7 +148,7 @@
 
         // sort the dataDisplay
         $dataDisplay = $dataDisplay.sort(function(obj1, obj2) {
-            if (col.type === "number") {
+            if (col.type === "number" || col.type === "rating") {
                 return obj1[sortBy] > obj2[sortBy];
             }
 
@@ -270,6 +270,6 @@
 
     /* needs to stand out as lister header is inverted */
     input[type="checkbox"] {
-        border-color: var(--color-interface-00);
+        border-color: var(--color-background);
     }
 </style>

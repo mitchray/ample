@@ -4,8 +4,8 @@
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
 
-    import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
+    import SVGTrack from "../../public/images/music_note.svg";
 
     export let data = null;
 
@@ -16,55 +16,75 @@
 <div class="album-card card">
     {#if album}
         <div class="image-container">
-            <div class="container">
-                <Link to="albums/{album.id}" title="{album.name}">
-                    <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="160" height="160" />
-                </Link>
+            <Link to="albums/{album.id}" title="{album.name}">
+                <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="200" height="200" />
+            </Link>
+        </div>
+
+        <div class="info">
+            <div class="top">
+                <div class="details">
+                    <div class="title"><Link to="albums/{album.id}" title="{album.name}">{album.name}</Link></div>
+                    <div class="artist"><Link to="artists/{album.artist.id}" title="{album.artist.name}">{album.artist.name}</Link></div>
+                </div>
             </div>
-        </div>
 
-        <div class="details">
-            <div class="title"><Link to="albums/{album.id}" title="{album.name}">{album.name}</Link></div>
-            <div class="artist"><Link to="artists/{album.artist.id}" title="{album.artist.name}"><SVGArtist class="inline"/> {album.artist.name}</Link></div>
-            <div class="year">
-                {#if album.year > 0}
-                    <Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link> &bull;
-                {/if}
-                {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}
+            <div class="bottom">
+                <div class="meta">
+                    {#if album.year > 0}
+                        <span>
+                            <Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link>
+                        </span>
+                    {/if}
+                    <span>
+                        <SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}
+                    </span>
+                </div>
+
+                <div class="rating-container">
+                    <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}"/>
+                </div>
+
+                <div class="actions">
+                    <Actions
+                        type="album"
+                        mode="miniButtons"
+                        id="{album.id}"
+                        count={album.songcount}
+                        albumID="{album.id}"
+                        artistID="{album.artist.id}"
+                    />
+                </div>
             </div>
-        </div>
-
-        <div class="rating-container">
-            <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}"/>
-        </div>
-
-        <div class="actions">
-            <Actions
-                type="album"
-                mode="miniButtons"
-                id="{album.id}"
-                count={album.songcount}
-                albumID="{album.id}"
-                artistID="{album.artist.id}"
-            />
         </div>
     {:else}
         <div class="image-container">
-            <img width="160" height="160" class="image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+            <img width="200" height="200" class="image" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
         </div>
 
-        <div class="details">
-            <div class="title">Loading</div>
-            <div class="artist"><br></div>
-            <div class="year"><br></div>
-        </div>
+        <div class="info">
+            <div class="top">
+                <div class="details">
+                    <div class="title">Loading</div>
+                    <div class="artist">&nbsp;<br></div>
+                </div>
+            </div>
 
-        <div class="rating-container">
-            <Rating />
-        </div>
+            <div class="bottom">
+                <div class="meta">
+                    <span>
+                        <SVGTrack class="inline"/> &nbsp;<br>
+                    </span>
+                </div>
 
-        <div class="actions">
-            <Actions type="album" mode="miniButtons" />
+                <div class="rating-container">
+                    <Rating />
+                </div>
+
+                <div class="actions">
+                    <Actions type="album" mode="miniButtons" />
+                </div>
+            </div>
         </div>
     {/if}
 </div>
@@ -75,11 +95,11 @@
         display: grid;
         row-gap: var(--spacing-lg);
         column-gap: var(--spacing-md);
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
 
     :global(.album-scroll) {
-        border: 2px solid var(--color-lines);
+        border: 2px solid var(--color-separator);
         border-radius: 15px;
         padding: var(--spacing-lg);
         gap: var(--spacing-md);
@@ -90,25 +110,15 @@
     }
 
     :global(.album-scroll) .album-card {
-        width: 180px;
+        width: 190px;
     }
 
     .album-card {
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;
-    }
-
-    .album-card :global(.image) {
-        border-radius: 8px;
         overflow: hidden;
-    }
-
-    .album-card :global(.container) {
-        flex: 1;
-        transition: all 200ms ease;
-        position: relative;
-        z-index: 20;
+        padding: var(--spacing-md);
     }
 
     .image-container {
@@ -117,6 +127,10 @@
         z-index: 1;
         justify-content: center;
         display: flex;
+        margin-bottom: var(--spacing-md);
+        border-radius: 5px;
+        overflow: hidden;
+        border: 1px solid hsla(0, 0%, 50%, 0.2);
     }
 
     .image-container :global(img) {
@@ -124,25 +138,28 @@
         height: 100%;
         object-fit: cover;
         width: 100%;
+        aspect-ratio: 1 / 1;
+    }
+
+    .info {
+        /*padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) var(--spacing-lg);*/
+    }
+
+    .top {
+        background-color: var(--color-card-highlight);
+        padding: var(--spacing-md);
+        border-radius: 5px;
+        margin-bottom: var(--spacing-md);
     }
 
     .actions {
         display: flex;
         justify-content: center;
-        margin-bottom: var(--spacing-sm);
-    }
-
-    .actions :global(button) {
-        --color-button-bg-primary: var(--color-interface);
-    }
-
-    .details {
-        padding: var(--spacing-md) var(--spacing-lg) 0 var(--spacing-md);
     }
 
     .title {
         font-weight: 700;
-        margin-bottom: var(--spacing-sm);
+        line-height: 1.2;
     }
 
     .title,
@@ -150,6 +167,17 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        text-align: center;
+    }
+
+    .meta {
+        display: flex;
+        gap: var(--spacing-lg);
+        justify-content: center;
+    }
+
+    .bottom {
+        padding-top: 0;
     }
 
     .rating-container {

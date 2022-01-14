@@ -9,7 +9,7 @@
 {#if genres.length > 0}
     <ul class="genres">
         {#each genres as genre}
-            <li class="genre-tag"><Link to="genres/{genre.id}"><SVGGenre class="inline" /> {genre.name}</Link></li>
+            <li class="genre-tag"><Link to="genres/{genre.id}"><SVGGenre /> {genre.name}</Link></li>
         {/each}
     </ul>
 {/if}
@@ -22,23 +22,23 @@
         margin-bottom: var(--spacing-lg);
     }
 
-    .genre-tag {
-        display: inline-flex;
-        background-color: hsl(264, 50%, 25%);
-        color: hsl(251, 95%, 92%);
+    .genre-tag :global(a) {
+        display: flex;
+        background-color: var(--color-genre-background);
+        border: 1px solid var(--color-genre-border);
+        color: var(--color-genre-text);
         border-radius: 3px;
         padding: 0.2em 0.5em;
         font-weight: 700;
         letter-spacing: 0.01em;
+        align-items: center;
     }
 
-    :global(.theme-is-light) .genre-tag {
-        background-color: hsl(251, 95%, 92%);
-        color: hsl(264, 67%, 35%);
-    }
-
-    .genre-tag :global(a),
     .genre-tag :global(svg) {
         color: inherit;
+        opacity: 0.5;
+        height: 1em;
+        width: auto;
+        margin-right: var(--spacing-sm);
     }
 </style>

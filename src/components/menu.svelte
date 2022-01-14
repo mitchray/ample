@@ -143,11 +143,10 @@
     /* TODO: restore transparency? */
     .c-menu {
         contain: layout paint;
-        background-color: var(--color-interface-10);
+        background-color: var(--color-menu-background);
+        border: 2px solid var(--color-menu-border);
         border-radius: 5px;
-        border: 2px solid var(--color-tint-200);
-        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3),
-            0 4px 6px -2px rgba(0,0,0,0.15);
+        box-shadow: var(--shadow-lg);
         opacity: 0;
         cursor: initial;
         pointer-events: none;
@@ -155,17 +154,6 @@
         top: min(max(0%, var(--mouse-y)), calc(100vh - var(--height)));
         left: min(max(0%, var(--mouse-x)), calc(100vw - var(--width)));
         z-index: 1000;
-    }
-
-    .theme-is-light .c-menu {
-        border-color: var(--color-shade-200);
-    }
-
-    @supports (backdrop-filter: blur(0)) {
-        .c-menu {
-            background-color: var(--color-interface-alpha);
-            backdrop-filter: blur(10px) saturate(180%);
-        }
     }
 
     .is-open {

@@ -1,3 +1,4 @@
+<!-- TODO remove old component -->
 <!-- Adapted from https://github.com/cornflourblue/jw-react-pagination/blob/master/src/JwPagination.jsx -->
 <script>
     import { onMount, afterUpdate } from 'svelte';
@@ -152,7 +153,7 @@
 
     :global(.pagination button) {
         margin: 0;
-        border-radius: 999px;
+        border-radius: 100vh;
     }
 
     .number {

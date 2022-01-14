@@ -188,19 +188,13 @@
     }
 
     .c-rating:hover .c-rating__stars {
-        color: hsl(45, 100%, 60%);
-    }
-
-    :global(.theme-is-light) .c-rating:hover .c-rating__stars {
-        color: hsl(35, 90%, 30%);
+        /*color: hsl(40, 90%, 40%);*/
+        color: var(--color-rating);
     }
 
     .c-rating:hover .c-rating__flag {
-        color: hsl(0, 80%, 50%);
-    }
-
-    :global(.theme-is-light) .c-rating:hover .c-rating__flag {
-        color: hsl(0, 80%, 40%);
+        /*color: hsl(0, 80%, 40%);*/
+        color: var(--color-favorite);
     }
 </style>
 

@@ -116,7 +116,7 @@ const columns = {
             fixedSize: true,
             sortable: true,
             sortBy: "rating",
-            type: "number",
+            type: "rating",
             show: true
         },
         {
@@ -194,7 +194,7 @@ const columns = {
             fixedSize: true,
             sortable: true,
             sortBy: "rating",
-            type: "number",
+            type: "rating",
             show: true
         },
         {
@@ -263,7 +263,7 @@ const columns = {
             fixedSize: true,
             sortable: true,
             sortBy: "rating",
-            type: "number",
+            type: "rating",
             show: true
         },
         {
@@ -344,7 +344,7 @@ const columns = {
             fixedSize: true,
             sortable: true,
             sortBy: "rating",
-            type: "number",
+            type: "rating",
             show: false
         },
         {

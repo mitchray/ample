@@ -3,7 +3,6 @@
 
     import { CurrentSong } from "../../stores/status";
 
-    import SVGArtist from "../../../public/images/artist.svg";
     import SVGAlbum from "../../../public/images/album.svg";
     import SVGYear from "../../../public/images/year.svg";
 </script>
@@ -13,7 +12,7 @@
         <img class="nowPlayingArtwork" src="{$CurrentSong.art}&thumb=22" alt="" />
         <div class="details">
             <div class="title" title="{$CurrentSong.title}">{$CurrentSong.title}</div>
-            <div class="artist" title="{$CurrentSong.artist.name}"><Link to="artists/{$CurrentSong.artist.id}"><SVGArtist class="inline"/> {$CurrentSong.artist.name}</Link></div>
+            <div class="artist" title="{$CurrentSong.artist.name}"><Link to="artists/{$CurrentSong.artist.id}">{$CurrentSong.artist.name}</Link></div>
             <div class="album">
                 {#if $CurrentSong.year > 0}
                     <span class="date"><Link to="albums/year/{$CurrentSong.year}"><SVGYear class="inline"/> {$CurrentSong.year}</Link></span>

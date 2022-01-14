@@ -10,7 +10,6 @@
     import Rating from '../components/rating.svelte';
     import Actions from '../components/actions.svelte';
 
-    import SVGArtist from "../../public/images/artist.svg";
     import SVGCurrent from "../../public/images/play_circle.svg";
 
     export let id;
@@ -57,7 +56,7 @@
                                         {song.name}
                                     </span>
                                     {#if song.albumartist.id !== song.artist.id}
-                                        <span class="artist"><Link to="artists/{song.artist.id}"><SVGArtist class="inline"/> {song.artist.name}</Link></span>
+                                        <span class="artist"><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
                                     {/if}
                                 </span>
                                 <span class="time">{formatSongLength(song.time)}</span>
@@ -105,16 +104,14 @@
         align-items: center;
     }
 
-    li {
-        border-top: 1px solid var(--color-lines);
+    .song-row + .song-row {
+        border-top: 2px solid var(--color-separator);
     }
 
     li:hover {
-        background-color: var(--color-tint-50);
-    }
-
-    :global(.theme-is-light) li:hover {
-        background-color: var(--color-shade-50);
+        background-color: var(--color-row-hover);
+        box-shadow: var(--shadow-md);
+        border-radius: 6px;
     }
 
     .track {

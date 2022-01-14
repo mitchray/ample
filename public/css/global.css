@@ -1,44 +1,105 @@
 /* font paths are relative to build directory */
 
-/* roboto-condensed-italic - latin */
+/* source-sans-pro-300 - latin-ext_latin */
 @font-face {
-    font-family: 'Roboto Condensed';
-    font-style: italic;
-    font-weight: 400;
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 300;
     src: local(''),
-    url('../fonts/roboto-condensed-v19-latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-    url('../fonts/roboto-condensed-v19-latin-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-300.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-300.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-/* roboto-condensed-regular - latin */
+/* source-sans-pro-300italic - latin-ext_latin */
 @font-face {
-    font-family: 'Roboto Condensed';
+    font-family: 'Source Sans Pro';
+    font-style: italic;
+    font-weight: 300;
+    src: local(''),
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-300italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-300italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* source-sans-pro-regular - latin-ext_latin */
+@font-face {
+    font-family: 'Source Sans Pro';
     font-style: normal;
     font-weight: 400;
     src: local(''),
-    url('../fonts/roboto-condensed-v19-latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-    url('../fonts/roboto-condensed-v19-latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-regular.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-regular.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-/* roboto-condensed-700 - latin */
+/* source-sans-pro-italic - latin-ext_latin */
 @font-face {
-    font-family: 'Roboto Condensed';
+    font-family: 'Source Sans Pro';
+    font-style: italic;
+    font-weight: 400;
+    src: local(''),
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* source-sans-pro-600 - latin-ext_latin */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 600;
+    src: local(''),
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-600.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-600.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* source-sans-pro-600italic - latin-ext_latin */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: italic;
+    font-weight: 600;
+    src: local(''),
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-600italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-600italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* source-sans-pro-700 - latin-ext_latin */
+@font-face {
+    font-family: 'Source Sans Pro';
     font-style: normal;
     font-weight: 700;
     src: local(''),
-    url('../fonts/roboto-condensed-v19-latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-    url('../fonts/roboto-condensed-v19-latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-700.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-700.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
-/* roboto-condensed-700italic - latin */
+/* source-sans-pro-700italic - latin-ext_latin */
 @font-face {
-    font-family: 'Roboto Condensed';
+    font-family: 'Source Sans Pro';
     font-style: italic;
     font-weight: 700;
     src: local(''),
-    url('../fonts/roboto-condensed-v19-latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-    url('../fonts/roboto-condensed-v19-latin-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-700italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-700italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
+
+/* source-sans-pro-900 - latin-ext_latin */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: normal;
+    font-weight: 900;
+    src: local(''),
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-900.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-900.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
+/* source-sans-pro-900italic - latin-ext_latin */
+@font-face {
+    font-family: 'Source Sans Pro';
+    font-style: italic;
+    font-weight: 900;
+    src: local(''),
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-900italic.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
+    url('../fonts/source-sans-pro-v18-latin-ext_latin-900italic.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+}
+
 
 
 /* --------------------------
@@ -47,17 +108,18 @@
 
 :root {
     /* Spacing */
-    --spacing-sm:  4px;
-    --spacing-md:  8px;
-    --spacing-lg:  16px;
-    --spacing-xl:  24px;
-    --spacing-xxl: 32px;
+    --spacing-sm:   4px;
+    --spacing-md:   8px;
+    --spacing-lg:   16px;
+    --spacing-xl:   24px;
+    --spacing-xxl:  32px;
+    --spacing-xxxl: 48px;
 
     /* Sizes */
     --size-header-height:    40px;
     --size-sidebar-width:    150px;
     --size-webplayer-height: 100px;
-    --size-queue-width:      300px;
+    --size-queue-width:      320px;
     --size-seekbar-height:   5px;
 
     /* Breakpoints */
@@ -69,8 +131,18 @@
     --breakpoint-xxl: 1536px;
 
     /* Fonts */
-    --font-body: 'Roboto Condensed', system-ui, Helvetica, Arial, sans-serif;
-    --font-heading: 'Roboto Condensed', system-ui, Helvetica, Arial, sans-serif;
+    --font-body: 'Source Sans Pro', system-ui, Helvetica, Arial, sans-serif;
+    --font-heading: 'Source Sans Pro', system-ui, Helvetica, Arial, sans-serif;
+
+    /* Shadows */
+    --shadow-inner: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
+    --shadow-sm:  rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,    rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    --shadow-md:  rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,   rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+    --shadow-lg:  rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+    --shadow-xl:  rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+    --shadow-xxl: rgba(0, 0, 0, 0.1) 0px 20px 25px -5px, rgba(0, 0, 0, 0.04) 0px 10px 10px -5px;
+
+    rgb(0, 48, 100)
 }
 
 /* --------------------------
@@ -86,7 +158,7 @@ html {
     font-size: 14px;
     line-height: 1.4;
     height: 100%;
-    background-color: var(--color-interface-00);
+    background-color: var(--color-background);
 }
 
 img {
@@ -104,7 +176,7 @@ a {
 
 a:link,
 a:visited {
-    color: var(--color-link-secondary);
+    color: var(--color-text-primary);
     text-decoration: none;
 }
 
@@ -114,10 +186,9 @@ a:hover {
 
 h1, h2, h3, h4, h5, h6 {
     margin-top: 0;
-    color: var(--color-text-heading);
     font-family: var(--font-heading);
-    text-transform: uppercase;
-    letter-spacing: 0.03em;
+    font-weight: 600;
+    color: var(--color-text-heading);
 }
 
 ul {
@@ -128,7 +199,7 @@ ul {
 /* W3C spec */
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-highlight) var(--color-lines);
+    scrollbar-color: var(--color-highlight) var(--color-border);
 }
 
 /* Chrome, Edge, and Safari */
@@ -138,7 +209,7 @@ ul {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--color-lines);
+    background: var(--color-border);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -146,13 +217,8 @@ ul {
 }
 
 ::selection {
-    background: var(--color-tint-600);
-    color: var(--color-shade-900);
-}
-
-.theme-is-light ::selection {
-    background: var(--color-shade-600);
-    color: var(--color-tint-900);
+    background: var(--color-text-primary);
+    color: var(--color-background);
 }
 
 /* --------------------------
@@ -160,16 +226,16 @@ ul {
    -------------------------- */
 
 ::placeholder {
-    color: var(--color-text-body);
+    color: var(--color-text-primary);
     opacity: 0.7;
 }
 
 input,
 select {
     outline: none;
-    border: 0;
     background-color: unset;
-    color: var(--color-text-body);
+    color: var(--color-text-primary);
+    border: 1.5px solid var(--color-border);
 }
 
 input {
@@ -195,31 +261,25 @@ select {
     border-radius: 5px;
 }
 
+/* menu background */
+select:focus {
+    background-color: var(--color-background);
+}
+
 input:not([type="radio"]):not([type="checkbox"]),
 select {
     padding: 0.5em;
-}
-
-input,
-select {
-    border: 1.5px solid var(--color-border);
-}
-
-select:focus {
-    background-color: var(--color-interface-00);
 }
 
 input[type="checkbox"]:not(.switch):before {
     content: "✔";
     position: absolute;
     font-size: 1.5em;
-    right: 0px;
+    right: 0;
     top: -0.2em;
     visibility: hidden;
-    color: var(--color-interface-00);
 }
 
-input[type="checkbox"]:checked,
 input[type="radio"]:checked {
     background-color: var(--color-highlight);
 }
@@ -246,7 +306,7 @@ input[type="checkbox"].switch:after {
 }
 
 input[type="checkbox"].switch:checked:after {
-    background-color: var(--color-interface-00);
+    background-color: var(--color-background);
     transform: translateX(100%);
 }
 
@@ -260,7 +320,7 @@ input[type="radio"]:before {
     width: 8px;
     height: 8px;
     border-radius: 50%;
-    background-color: var(--color-interface-00);
+    background-color: var(--color-background);
     font-size: 1.2em;
     top: calc(50% - 4px);
     left: calc(50% - 4px);
@@ -292,7 +352,7 @@ select:focus-visible,
 textarea:focus-visible,
 button:focus-visible {
     box-shadow: 0 0 0 2px var(--color-highlight);
-    border-color: var(--color-interface-00);
+    border-color: var(--color-background);
 }
 
 /* --------------------------
@@ -312,7 +372,7 @@ button {
     display: inline-flex;
     padding: unset;
     position: relative;
-    border-radius: 999px;
+    border-radius: 100vh;
     align-items: center;
     outline: 0;
     text-align: left;
@@ -381,6 +441,15 @@ button svg {
 .button--secondary:not(:disabled):hover {
     background-color: var(--color-secondary-background);
     color: var(--color-secondary-foreground-hover);
+}
+
+.button--tertiary {
+    padding: 0;
+}
+
+.button--tertiary:not(:disabled):hover {
+    background-color: transparent;
+    color: inherit;
 }
 
 /* buttons with leading icon */
@@ -486,7 +555,7 @@ svg.inline {
     vertical-align: middle;
     position: relative;
     bottom: 0.12em;
-    color: var(--color-highlight);
+    color: var(--color-icon);
 }
 
 /* --------------------------
@@ -494,22 +563,14 @@ svg.inline {
    -------------------------- */
 
 .card {
-    background-color: var(--color-tint-50);
+    background-color: var(--color-card-primary);
     border-radius: 10px;
     box-shadow: var(--shadow-sm);
 }
 
 .card:hover {
-    background-color: var(--color-tint-100);
-    box-shadow: var(--shadow-lg);
-}
-
-.theme-is-light .card {
-    background-color: var(--color-tint-500);
-}
-
-.theme-is-light .card:hover {
-    background-color: var(--color-interface-20);
+    box-shadow: var(--shadow-xl);
+    background-color: var(--color-card-hover);
 }
 
 .art-background {
@@ -533,7 +594,7 @@ section {
 
 .menu-separator {
     display: block;
-    border-bottom: 2px solid var(--color-lines);
+    border-bottom: 2px solid var(--color-separator);
     margin: var(--spacing-md) 0;
 }
 
@@ -558,7 +619,7 @@ section {
     position: absolute;
     bottom: calc(100% - 8px);
     left: calc(100% - 8px);
-    background-color: var(--color-text-body);
+    background-color: var(--color-text-primary);
     backdrop-filter: blur(3px);
     z-index: 5;
     border-radius: 99px;
@@ -566,7 +627,7 @@ section {
     font-weight: 700;
     padding: 1px 4px 2px;
     line-height: 1;
-    color: var(--color-interface-00);
+    color: var(--color-background);
     pointer-events: none;
 }
 
@@ -583,14 +644,10 @@ section {
 .panel-header,
 .panel-footer {
     min-height: 48px;
-    background-color: var(--color-tint-50);
+    background-color: var(--color-interface);
     align-items: center;
     padding: var(--spacing-md) var(--spacing-lg);
-}
-
-.theme-is-light .panel-header,
-.theme-is-light .panel-footer {
-    background-color: var(--color-shade-50);
+    padding-right: var(--spacing-md);
 }
 
 .panel-content {

@@ -4,7 +4,6 @@
     import { favoriteSongs } from "../logic/song";
 
     import Tabs from "../components/tabs.svelte";
-    import Lister from '../components/lister.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";

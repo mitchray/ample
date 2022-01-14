@@ -123,11 +123,11 @@
     <button
         type="button"
         id="thirdParty-data"
-        class="button button--regular"
+        class="button button--tertiary"
         on:click={toggleMenu}
         title="Data"
     >
-        <SVGLaunch style="transform: scale(1.3)" /> Links
+        Links
     </button>
 
     {#if isVisible && data}
@@ -169,15 +169,26 @@
 
     .groups {
         display: flex;
-        gap: var(--spacing-xl);
+        gap: var(--spacing-xxl);
     }
 
-    .group + .group {
-        border-left: 2px solid var(--color-lines);
-        padding-left: var(--spacing-lg);
+    button:after {
+        content: '';
+        background-color: currentColor;
+        mask-image: url('/ample/public/images/arrow_left.svg');
+        mask-size: cover;
+        mask-position: center;
+        width: 25px;
+        position: absolute;
+        left: calc(100% - 5px);
+        bottom: 0;
+        top: 0;
+        transform: rotate(270deg);
     }
 
     h4 {
         margin-bottom: var(--spacing-md);
+        text-transform: uppercase;
+        letter-spacing: 0.025em;
     }
 </style>

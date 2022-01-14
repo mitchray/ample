@@ -116,7 +116,6 @@
     }
 
     .selected {
-        color: var(--color-link-hover);
         font-weight: 700;
     }
 
@@ -133,7 +132,7 @@
     .playlists {
         height: 200px;
         overflow-y: auto;
-        border: 2px solid var(--color-lines);
+        border: 2px solid var(--color-border);
         border-radius: 3px;
         padding: var(--spacing-sm) 0;
         margin-bottom: 0;
@@ -166,11 +165,7 @@
     }
 
     .item:hover {
-        background-color: var(--color-tint-50);
-    }
-
-    :global(.theme-is-light) .item:hover {
-        background-color: var(--color-shade-50);
+        background-color: var(--color-card-highlight);
     }
 
     .item + .item {

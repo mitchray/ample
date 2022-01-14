@@ -28,7 +28,7 @@
     </div>
 
     <div class="panel-footer">
-        <button class="button button--regular" on:click={handleCancel}>Cancel</button>
+        <button class="button button--tertiary" on:click={handleCancel}>Cancel</button>
         <button class="button button--danger" on:click={handleDelete}><SVGBin /> Delete</button>
     </div>
 </div>
@@ -43,11 +43,6 @@
 
     h4 {
         margin: 0;
-    }
-
-    .actions {
-        display: flex;
-        justify-content: space-between;
     }
 
     p {

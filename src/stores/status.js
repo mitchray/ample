@@ -25,4 +25,5 @@ export let ShowExpandedAlbums = writable(false);
 export let SkipBelow = writable(JSON.parse(localStorage.getItem('SkipBelow')) || false);
 export let SkipBelowRating = writable(JSON.parse(localStorage.getItem('SkipBelowRating')) || 3);
 
-export let ThemeIsLight = writable(JSON.parse(localStorage.getItem('AmpleThemeIsLight')) || false);
+export let Theme = writable(JSON.parse(localStorage.getItem('AmpleTheme')) || null);
+export let customHue = writable();

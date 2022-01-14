@@ -84,7 +84,7 @@
 
     <Link to="search" class="advanced-search">Advanced search</Link>
 
-    <button on:click={handleLogOut} class="logout visuallyLink"><SVGLogout /> Log out</button>
+    <button on:click={handleLogOut} class="logout visuallyLink"><SVGLogout style="transform: scale(0.8);" /> Log out</button>
 
     <ThemeToggle />
 </div>
@@ -98,18 +98,13 @@
 <style>
     .site-header {
         border-bottom: 1px solid var(--color-border);
-        background-color: var(--color-interface-20);
-        box-shadow: var(--shadow-md);
+        background-color: var(--color-interface);
         width: 100%;
         height: var(--size-header-height);
         display: flex;
         align-items: center;
         z-index: 20;
         line-height: 1;
-    }
-
-    :global(.theme-is-light) .site-header {
-
     }
 
     .site-logo-container {

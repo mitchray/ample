@@ -88,7 +88,7 @@
 </script>
 
 <button
-    class="icon"
+    class="icon-button"
     on:click={handleMuteToggle}
     disabled={$NowPlayingQueue.length === 0}
     title="{$IsMuted ? 'Unmute' : 'Mute'}"
@@ -112,7 +112,7 @@
 
 <button
     id="volumeMenu"
-    class="icon"
+    class="icon-button"
     title="Volume settings"
     on:click={toggleMenu}
     class:notification-dot={missingGainTags}
@@ -123,7 +123,7 @@
 {#if menuIsVisible}
     <Menu anchor="top-center" toggleElement={document.querySelector("#volumeMenu")} bind:isVisible={menuIsVisible} class="test" >
         <div class="header panel-header">
-            <h4 class="title">Volume settings</h4>
+            <h4 class="title">Volume Settings</h4>
         </div>
 
         <div class="panel-content">
@@ -133,10 +133,10 @@
                     Normalize volume
                 </label>
 
-                <p class="info">Keeps volume consistent between different tracks</p>
+                <div class="info">Keeps volume consistent between different tracks</div>
 
                 {#if $CurrentSong}
-                    <div class="well">
+                    <div class="current">
                         <div>Current type: {$MediaPlayer.gainType}</div>
 
                         {#if $MediaPlayer.gainType === 'EBU R128'}
@@ -159,36 +159,31 @@
                     Enable Night Mode
                 </label>
 
-                <p class="info">Boosts quieter parts of songs</p>
+                <div class="info">Boosts quieter parts of songs</div>
             </div>
         </div>
     </Menu>
 {/if}
 
 <style>
-    .wrapper {
-        max-width: 185px; /* TODO: restore width */
-    }
-
     .info {
         margin-top: var(--spacing-sm);
-        opacity: 0.7;
+        color: var(--color-text-secondary);
     }
 
     .group + .group {
-        border-top: 2px solid var(--color-lines);
         padding-top: var(--spacing-lg);
     }
 
     .site-player__volume-slider {
-        background-color: var(--color-lines);
+        background-color: var(--color-border);
         display: flex;
         height: 4px;
         width: 100%;
         min-width: 100px;
         cursor: pointer;
         position: relative;
-        border-radius: 999px;
+        border-radius: 100vh;
         justify-self: center;
         margin: 0 10px;
     }
@@ -208,13 +203,13 @@
     }
 
     .site-player__volume-value {
-        background-color: var(--color-lines);
+        background-color: var(--color-highlight);
         position: absolute;
         left: 0;
         bottom: 0;
         top: 0;
         transition: width linear 200ms;
-        border-radius: 999px;
+        border-radius: 100vh;
     }
 
     /* volume value indicator popup */
@@ -228,5 +223,12 @@
         height: 200px !important;
         padding: 0 200px;
         z-index: 100;
+    }
+
+    .current {
+        background-color: var(--color-card-highlight);
+        max-width: fit-content;
+        padding: var(--spacing-md);
+        margin-top: var(--spacing-md);
     }
 </style>
