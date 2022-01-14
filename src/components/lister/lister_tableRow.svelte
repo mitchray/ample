@@ -11,6 +11,7 @@
 
     import Rating from '../../components/rating.svelte';
     import Actions from '../../components/actions.svelte';
+    import Genres from '../../components/genres.svelte';
 
     import SVGArtist from "../../../public/images/artist.svg";
     import SVGAlbum from "../../../public/images/album.svg";
@@ -18,8 +19,6 @@
     import SVGYear from "../../../public/images/year.svg";
     import SVGGenre from "../../../public/images/label.svg";
     import SVGCurrent from "../../../public/images/play_circle.svg";
-    import SVGCenter from "../../../public/images/center_focus.svg";
-    import SVGClose from "../../../public/images/close.svg";
 
     const { getType, visibleColumns } = getContext(contextKey);
 </script>
@@ -100,13 +99,7 @@
         {/if}
 
         {#if col.id === "genres"}
-            {#if item.genre.length > 0}
-                <ul>
-                    {#each item.genre as genre}
-                        <li><Link to="genres/{genre.id}"><SVGGenre class="inline" /> {genre.name}</Link></li>
-                    {/each}
-                </ul>
-            {/if}
+            <Genres genres="{item.genre}" />
         {/if}
 
         {#if col.id === "artistsCount"}
@@ -160,9 +153,8 @@
         line-height: 1;
     }
 
-    .genres li {
-        display: inline;
-        margin-right: var(--spacing-md);
+    .cell :global(.genres) {
+        flex-wrap: nowrap;
     }
 
     .cell:global(.art) {

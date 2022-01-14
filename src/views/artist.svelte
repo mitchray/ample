@@ -17,13 +17,13 @@
     import MusicbrainzScan from '../components/musicbrainzScan.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
+    import Genres from '../components/genres.svelte';
 
     import SVGAlbum from "../../public/images/album.svg";
     import SVGPopular from "../../public/images/trending_up.svg";
     import SVGSongs from "../../public/images/songs.svg";
     import SVGSimilar from "../../public/images/people.svg";
     import SVGArticle from "../../public/images/article.svg";
-    import SVGGenre from "../../public/images/label.svg";
     import SVGTrack from "../../public/images/music_note.svg";
     import SVGClock from "../../public/images/clock.svg";
 
@@ -101,13 +101,7 @@
                 </div>
 
 
-                {#if artist.genre.length > 0}
-                    <ul class="genres">
-                        {#each artist.genre as genre}
-                            <li><Link to="genres/{genre.id}"><SVGGenre class="inline" /> {genre.name}</Link></li>
-                        {/each}
-                    </ul>
-                {/if}
+                <Genres genres="{artist.genre}" />
 
                 <div class="actions">
                     <Actions
@@ -249,13 +243,7 @@
         gap: var(--spacing-md) var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
     }
-
-    .genres {
-        display: flex;
-        gap: var(--spacing-sm) var(--spacing-lg);
-        flex-wrap: wrap;
-    }
-
+    
     .actions {
         display: flex;
         flex-direction: column-reverse;

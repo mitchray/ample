@@ -11,10 +11,10 @@
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
+    import Genres from '../components/genres.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGYear from "../../public/images/year.svg";
-    import SVGGenre from "../../public/images/label.svg";
     import SVGTrack from "../../public/images/music_note.svg";
     import SVGClock from "../../public/images/clock.svg";
 
@@ -61,13 +61,7 @@
                                 <span><SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}</span>
                             </div>
 
-                            {#if album.genre.length > 0}
-                                <ul class="genres">
-                                    {#each album.genre as genre}
-                                        <li><Link to="genres/{genre.id}"><SVGGenre class="inline" /> {genre.name}</Link></li>
-                                    {/each}
-                                </ul>
-                            {/if}
+                            <Genres genres="{album.genre}" />
 
                             <div class="actions">
                                 <Actions
@@ -185,12 +179,6 @@
         flex-wrap: wrap;
         gap: var(--spacing-md) var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
-    }
-
-    .genres {
-        display: flex;
-        gap: var(--spacing-sm) var(--spacing-lg);
-        flex-wrap: wrap;
     }
 
     .actions {
