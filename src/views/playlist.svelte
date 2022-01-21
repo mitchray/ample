@@ -173,7 +173,7 @@
             overflow-y: auto;
             height: 100%;
             padding: var(--spacing-xxl);
-            border-right: 2px solid red; /* TODO redo with container queries */
+            border-right: 2px solid var(--color-border); /* TODO redo with container queries */
         }
 
         .songs-container {

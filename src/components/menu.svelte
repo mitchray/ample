@@ -140,7 +140,6 @@
 </div>
 
 <style>
-    /* TODO: restore transparency? */
     .c-menu {
         contain: layout paint;
         background-color: var(--color-menu-background);
