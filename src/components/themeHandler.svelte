@@ -34,6 +34,7 @@
     --color-background:        rgb(${lchToRgb([ 90,  5, hue])});
     --color-interface:         rgb(${lchToRgb([ 95,  5, hue])});
     --color-border:            rgb(${lchToRgb([ 80, 10, hue])});
+    --color-input-border:      rgb(${lchToRgb([ 70, 10, hue])});
     --color-active-background: rgb(${lchToRgb([ 15, 50, hue])});
     --color-active-text:       rgb(${lchToRgb([ 85, 10, hue])});
     --color-text-primary:      rgb(${lchToRgb([ 15, 50, hue])});
@@ -82,6 +83,7 @@
     --color-background:        rgb(${lchToRgb([  4,  2, hue])});
     --color-interface:         rgb(${lchToRgb([  9,  3, hue])});
     --color-border:            rgb(${lchToRgb([ 20, 10, hue])});
+    --color-input-border:      rgb(${lchToRgb([ 30, 10, hue])});
     --color-active-background: rgb(${lchToRgb([ 90, 20, hue])});
     --color-active-text:       rgb(${lchToRgb([ 15, 10, hue])});
     --color-text-primary:      rgb(${lchToRgb([ 90, 10, hue])});

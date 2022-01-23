@@ -1067,7 +1067,7 @@
 
 <style>
     .container {
-        border: 2px solid var(--color-border);
+        border: 2px solid var(--color-input-border);
         border-radius: 10px;
         padding: var(--spacing-lg);
         margin: var(--spacing-lg) 0;

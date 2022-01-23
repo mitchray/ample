@@ -78,22 +78,17 @@
         background-color: var(--color-row-stripe);
     }
 
-    .lister {
-        /*background-color: var(--color-card-primary);*/
-    }
-
-    .lister :global(.actions.actions),
-    .lister :global(.name.name) { /* specificity hack to overcome light theme */
+    .lister :global(.actions),
+    .lister :global(.name) {
         position: sticky;
         z-index: 1;
-        box-shadow: var(--shadow-md);
     }
 
-    .lister :global(.name.name) {
+    .lister :global(.name) {
         left: 0;
     }
 
-    .lister :global(.actions.actions) {
+    .lister :global(.actions) {
         right: 0;
     }
 
@@ -122,6 +117,11 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+    }
+
+    /* stand out more in lister */
+    :global(.lister-container input[type="checkbox"]) {
+        border-color: var(--color-text-secondary);
     }
 
     .header :global(.cell),

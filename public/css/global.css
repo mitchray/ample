@@ -235,7 +235,7 @@ select {
     outline: none;
     background-color: unset;
     color: var(--color-text-primary);
-    border: 1.5px solid var(--color-border);
+    border: 1.5px solid var(--color-input-border);
 }
 
 input {
@@ -253,7 +253,7 @@ input[type='radio'] {
     position: relative;
     color: var(--color-highlight);
     cursor: pointer;
-    border: 1.5px solid var(--color-border);
+    border: 1.5px solid var(--color-input-border);
 }
 
 input:not([type="radio"]),

@@ -217,7 +217,7 @@
         top: 0;
         right: 0;
         bottom: 0;
-        background: black;
+        background: var(--color-text-primary);
         opacity: 0;
         width: 5px;
         cursor: col-resize;
@@ -266,10 +266,5 @@
     :global([data-reverse=false]).label:before,
     :global([data-reverse=true]).label:after {
         opacity: 1;
-    }
-
-    /* needs to stand out as lister header is inverted */
-    input[type="checkbox"] {
-        border-color: var(--color-background);
     }
 </style>
