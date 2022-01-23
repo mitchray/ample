@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.31.0] - 2022-01-23
+### Fixed
+- Lister column resize handles and checkboxes were not visible in dark mode
+
+### Changed
+- Updated layout for playlists
+
 ## [0.30.0] - 2022-01-21
 ### Changed
 - New visual style for many items
