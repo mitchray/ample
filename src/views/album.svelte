@@ -87,11 +87,6 @@
 {/await}
 
 <style>
-    /* reassign to variable else local override has no effect */
-    :global(.site-content-inner) {
-        color: var(--color-text-primary);
-    }
-
     .wrapper {
         container: size / album-page-wrapper;
         height: 100%;
@@ -145,7 +140,6 @@
         aspect-ratio: 1 / 1;
         border-radius: 6px;
         overflow: hidden;
-        border: 1px solid hsla(0, 0%, 50%, 0.1);
         box-shadow: var(--shadow-lg);
         font-size: 0;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
