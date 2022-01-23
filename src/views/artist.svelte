@@ -58,13 +58,6 @@
     <p>Loading artist</p>
 {:then artist}
     {#if artist.id}
-
-        {#if artist.useBackground}
-            {@html `<style>
-
-            </style>`}
-        {/if}
-
         <div class="container" in:fade>
             <div class="header">
                 <h1 class="title">{artist.name}</h1>

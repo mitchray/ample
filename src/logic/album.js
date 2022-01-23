@@ -138,7 +138,6 @@ export const getAlbum = async (id) => {
     debugHelper(queryURL, "getAlbum");
 
     let album = await fetchAlbumData(queryURL);
-    album.useBackground = await placeholderArtCheck(album.art);
     album.averageColor = await getAverageColor(album.art + "&thumb=10");
     await getCustomHue(album.averageColor.value);
 

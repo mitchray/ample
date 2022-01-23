@@ -31,10 +31,6 @@
     <p>Loading album</p>
 {:then album}
     {#if album.id}
-        {#if album.useBackground && !$Theme === 'light'}
-            <img class="art-background" src="{album.art}&thumb=10" alt="" loading="lazy" in:fade/>
-        {/if}
-
         <div class="wrapper">
             <div class="container">
                 <div class="details-container">

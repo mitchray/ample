@@ -40,7 +40,6 @@ export const getPlaylist = async (id) => {
     debugHelper(queryURL, "getPlaylist");
 
     let playlist = await fetchPlaylistData(queryURL);
-    playlist.useBackground = await placeholderArtCheck(playlist.art + "&thumb=10");
 
     let mp = get(MediaPlayer);
     await mp.setWaveColors();
