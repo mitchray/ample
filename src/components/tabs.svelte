@@ -71,10 +71,6 @@
         font-weight: 600;
     }
 
-    li.active > span {
-        color: var(--color-card-primary);
-    }
-
     li.active {
         position: relative;
         background-color: var(--color-active-background);

@@ -231,7 +231,7 @@
     }
 
     li :global(svg) {
-        color: var(--color-icon);
+        color: var(--color-highlight);
     }
 
     .site-sidebar.isMini {

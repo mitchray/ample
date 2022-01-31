@@ -171,13 +171,13 @@
 
     .meta {
         position: absolute;
-        bottom: var(--spacing-xl);
+        bottom: var(--spacing-xxl);
         right: var(--spacing-xxl);
         opacity: 0.4;
     }
 
     .bg {
-        background-color: var(--color-highlight);
+        background-color: var(--color-background);
         bottom: 0;
         left: -50%;
         position: fixed;

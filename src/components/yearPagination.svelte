@@ -334,7 +334,7 @@
 
     .presets {
         display: table;
-        border-left: 2px solid var(--color-separator);
+        border-left: 2px solid var(--color-border);
     }
 
     .presets .label,
@@ -373,7 +373,6 @@
 
     .timeframe button.active:not(:hover) {
         background-color: var(--color-active-background);
-        color: var(--color-active-text);
     }
 
     .ranges ul {
@@ -397,7 +396,7 @@
 
     @media all and (min-width: 1080px) {
         .container {
-            max-width: 910px;
+            max-width: 920px;
         }
     }
 </style>

@@ -31,16 +31,15 @@
 
     {@html `<style>
 :root {
-    --color-background:        rgb(${lchToRgb([ 90,  5, hue])});
-    --color-interface:         rgb(${lchToRgb([ 95,  5, hue])});
+    --color-background:        rgb(${lchToRgb([ 95,  8, hue])});
+    --color-interface:         rgb(${lchToRgb([ 98,  3, hue])});
     --color-border:            rgb(${lchToRgb([ 80, 10, hue])});
     --color-input-border:      rgb(${lchToRgb([ 70, 10, hue])});
-    --color-active-background: rgb(${lchToRgb([ 15, 50, hue])});
-    --color-active-text:       rgb(${lchToRgb([ 85, 10, hue])});
+    --color-active-background: rgb(${lchToRgb([ 90, 15, hue])});
     --color-text-primary:      rgb(${lchToRgb([ 15, 50, hue])});
     --color-text-secondary:    rgb(${lchToRgb([ 60, 25, hue])});
     --color-text-heading:      rgb(${lchToRgb([ 30, 70, hue])});
-    --color-icon:              rgb(${lchToRgb([ 50, 30, hue])});
+    --color-icon:              rgb(${lchToRgb([ 50, 50, hue])});
     --color-highlight:         rgb(${lchToRgb([ 50, 60, hue])});
     --color-link-hover:        rgb(${lchToRgb([ 25, 70, hue])});
     --color-card-primary:      rgb(${lchToRgb([100,  0, hue])});
@@ -84,12 +83,11 @@
     --color-interface:         rgb(${lchToRgb([  9,  3, hue])});
     --color-border:            rgb(${lchToRgb([ 20, 10, hue])});
     --color-input-border:      rgb(${lchToRgb([ 30, 10, hue])});
-    --color-active-background: rgb(${lchToRgb([ 90, 20, hue])});
-    --color-active-text:       rgb(${lchToRgb([ 15, 10, hue])});
+    --color-active-background: rgb(${lchToRgb([ 25, 15, hue])});
     --color-text-primary:      rgb(${lchToRgb([ 90, 10, hue])});
     --color-text-secondary:    rgb(${lchToRgb([ 60, 10, hue])});
     --color-text-heading:      rgb(${lchToRgb([ 75, 50, hue])});
-    --color-icon:              rgb(${lchToRgb([ 50, 40, hue])});
+    --color-icon:              rgb(${lchToRgb([ 70, 40, hue])});
     --color-highlight:         rgb(${lchToRgb([ 70, 70, hue])});
     --color-link-hover:        rgb(${lchToRgb([ 75, 70, hue])});
     --color-card-primary:      rgb(${lchToRgb([ 15,  5, hue])});
