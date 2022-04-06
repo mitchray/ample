@@ -230,8 +230,8 @@
         z-index: 1;
     }
 
-    li :global(svg) {
-        color: var(--color-highlight);
+    .site-sidebar.isMini :global(svg) {
+        color: var(--color-text-primary);
     }
 
     .site-sidebar.isMini {
@@ -259,13 +259,18 @@
         transform: scale(1.5);
     }
 
+    .isMini li.current :global(svg) {
+        color: var(--color-highlight);
+    }
+
     .isMini li:not(.current) :global(svg) {
-        /*color: unset;*/
+        opacity: 0.5;
     }
 
     /* hover label for mini mode */
     .isMini :global(a:after) {
         background-color: var(--color-interface);
+        color: var(--color-text-primary);
         box-shadow: var(--shadow-sm);
         clip-path: inset(-10px -10px -10px 0px); /* clip shadow */
         content: attr(data-label);
