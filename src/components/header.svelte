@@ -109,8 +109,8 @@
 
     .site-logo-container {
         width: var(--size-sidebar-width);
-        padding: 0 var(--spacing-lg);
-        margin-right: var(--spacing-xxl);
+        padding: 0 var(--spacing-xl);
+        margin-right: var(--spacing-sm);
         display: flex;
         align-items: center;
     }
@@ -121,8 +121,20 @@
         line-height: 0;
     }
 
-    :global(.ample-logo .amp) {
+    :global(.ample-logo) {
         color: var(--color-highlight);
+    }
+
+    :global(.ample-logo > *) {
+        opacity: 0.7;
+    }
+
+    :global(.ample-logo .amp) {
+        opacity: 1;
+    }
+
+    :global(.ample-logo:hover) {
+        color: var(--color-text-primary);
     }
 
     input.site-search {
