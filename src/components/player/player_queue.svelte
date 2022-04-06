@@ -24,14 +24,13 @@
         {#if $NowPlayingQueue.length > 0}
             <span class="queue-details">{$NowPlayingQueue.length === 0 ? 0 : $NowPlayingIndex + 1} of {$NowPlayingQueue.length}</span>
         {/if}
-        {#if $NowPlayingQueue.length < 2}
-            <span style="display: block">No upcoming songs</span>
-            <br>
-        {/if}
 
         {#if nextSong}
             <div class="title"><span>Next:</span> {nextSong.title}</div>
             <div class="artist"><Link to="artists/{nextSong.artist.id}"><SVGArtist class="inline"/> {nextSong.artist.name}</Link></div>
+        {:else}
+            <div>No upcoming songs</div>
+            <br>
         {/if}
     </div>
 
