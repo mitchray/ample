@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.32.0] - 2022-04-06
+### Fixed
+- Could not scroll queue using touch devices
+
+### Changed
+- Reorder queue items by dragging the cover art
+- A few colour tweaks here and there
+
 ## [0.31.0] - 2022-01-23
 ### Fixed
 - Lister column resize handles and checkboxes were not visible in dark mode

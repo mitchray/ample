@@ -295,6 +295,7 @@
         margin-right: var(--spacing-md);
         border: 1px solid hsla(0, 0%, 50%, 0.2);
         line-height: 0;
+        cursor: grab;
     }
 
     .thumb img {
@@ -322,6 +323,10 @@
     :global(.queue-dragging) {
         background-color: var(--color-row-hover) !important;
         box-shadow: var(--shadow-lg);
+    }
+
+    :global(.queue-dragging) .thumb {
+        cursor: grabbing;
     }
 
     .queue-item + .queue-item {
