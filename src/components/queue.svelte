@@ -22,6 +22,7 @@
 
     let queueMoreMenuID;
     let queueMoreMenuIsOpen = false;
+    let dragDisabled = true;
 
     $: queueMoreMenuID;
     $: nextSong = $NowPlayingQueue[$NowPlayingIndex + 1];
@@ -98,10 +99,19 @@
         if (currentIndex !== -1) {
             NowPlayingIndex.set(currentIndex);
         }
+
+        dragDisabled = true;
+    }
+
+    function startDrag(e) {
+        // preventing default to prevent lag on touch devices (because of the browser checking for screen scrolling)
+        e.preventDefault();
+        dragDisabled = false;
     }
 
     function transformDraggedElement(draggedEl, data, index) {
         draggedEl.classList.add('queue-dragging');
+        // console.debug(draggedEl);
     }
 
     onMount(() => {
@@ -149,7 +159,8 @@
                 items: $NowPlayingQueue,
                 dropTargetStyle: {},
                 flipDurationMs: flipDurationMs,
-                transformDraggedElement
+                transformDraggedElement,
+                dragDisabled
             }}
             on:consider={handleSort}
             on:finalize={handleSort}
@@ -164,7 +175,11 @@
                     >
                         <button class="icon-button remove" on:click|stopPropagation={handleRemove(i)}><SVGClose /></button>
 
-                        <span class="thumb">
+                        <span
+                            class="thumb"
+                            on:mousedown={startDrag}
+                            on:touchstart={startDrag}
+                        >
                             <img src="{song.art}&thumb=1" alt="" loading="lazy"/>
                         </span>
 
