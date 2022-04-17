@@ -47,9 +47,9 @@
     --color-card-highlight:    rgb(${lchToRgb([ 96,  6, hue])});
     --color-menu-background:   rgb(${lchToRgb([100,  0, hue])});
     --color-menu-border:       rgb(${lchToRgb([ 90,  5, hue])});
-    --color-genre-background:  rgb(${lchToRgb([ 87, 19, 294])});
-    --color-genre-text:        rgb(${lchToRgb([ 25, 71, 306])});
-    --color-genre-border:      rgb(${lchToRgb([ 80, 80, 294])});
+    --color-genre-background: rgba(${lchToRgb([ 98,  3, hue])}, 0.75);
+    --color-genre-text:        rgb(${lchToRgb([ 15, 50, hue])});
+    --color-genre-border:      rgb(${lchToRgb([ 80, 10, hue])});
     --color-separator:         rgb(${lchToRgb([ 85, 10, hue])});
     --color-row-hover:         rgb(${lchToRgb([100,  0, hue])});
     --color-row-stripe:        rgb(${lchToRgb([ 98,  5, hue])});
@@ -95,9 +95,9 @@
     --color-card-highlight:    rgb(${lchToRgb([ 10,  5, hue])});
     --color-menu-background:   rgb(${lchToRgb([ 15,  5, hue])});
     --color-menu-border:       rgb(${lchToRgb([ 20, 10, hue])});
-    --color-genre-background:  rgb(${lchToRgb([ 13, 19, 294])});
-    --color-genre-text:        rgb(${lchToRgb([ 80, 71, 306])});
-    --color-genre-border:      rgb(${lchToRgb([ 20, 19, 294])});
+    --color-genre-background: rgba(${lchToRgb([  9,  3, hue])}, 0.75);
+    --color-genre-text:        rgb(${lchToRgb([ 90, 10, hue])});
+    --color-genre-border:      rgb(${lchToRgb([ 30, 10, hue])});
     --color-separator:         rgb(${lchToRgb([ 15, 10, hue])});
     --color-row-hover:         rgb(${lchToRgb([ 15,  5, hue])});
     --color-row-stripe:        rgb(${lchToRgb([ 12,  5, hue])});
