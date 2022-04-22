@@ -383,6 +383,27 @@
             inputType: "number"
         },
         {
+            id: "song_count",
+            label: "Song Count",
+            category: "Metadata",
+            object_types: [
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
+            id: "album_count",
+            label: "Album Count",
+            category: "Artist Metadata",
+            object_types: [
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
             id: "release_type",
             label: "Release Type",
             category: "Album Metadata",
