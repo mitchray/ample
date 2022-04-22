@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.33.0] - 2022-04-22
+### Requires at least Ampache 5.2.1
+
+Just catching up on updates from Ampache
+
+### Added
+- Album and artist objects for playlist and playlist_name in advanced search
+- no_tag (genre) in advanced search
+
+### Changed
+- De-emphasised genre tags (didn't feel that the purple was working) 
+
 ## [0.32.0] - 2022-04-06
 ### Fixed
 - Could not scroll queue using touch devices
