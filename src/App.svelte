@@ -50,6 +50,7 @@
 
     import TestPage from './views/test.svelte';
     import AdvancedSearchPage from './views/advancedSearch.svelte';
+    import DuplicatesPage from './views/duplicates.svelte';
 
     validateAuthToken();
 
@@ -91,6 +92,7 @@
                 <div class="site-content-inner">
                     <Route path="test" component={TestPage}/>
                     <Route path="search" component={AdvancedSearchPage}/>
+                    <Route path="duplicates/:songTitle/:artistName" component={DuplicatesPage}/>
 
                     <Route path="artists/all" component={ArtistsAll}/>
                     <Route path="artists/:id" component={ArtistPage}/>

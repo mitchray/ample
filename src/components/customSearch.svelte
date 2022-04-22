@@ -15,6 +15,7 @@
     export let results = [];
     export let defaultSettings = null;
     export let selectedObjectType = null;
+    export let immediateSearch = false;
 
     let loaded = false;
     let fromParams = false;
@@ -199,6 +200,10 @@
         allSmartlists = await getSmartlists(true);
 
         loaded = true;
+
+        if (immediateSearch) {
+            await search();
+        }
     });
 
     let fields = [

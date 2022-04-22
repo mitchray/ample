@@ -9,6 +9,7 @@
 
     import Search from '../components/search.svelte';
     import ThemeToggle from '../components/themeToggle.svelte';
+    import SongDuplicates from '../components/player/player_duplicates.svelte';
 
     import SVGAmpleLogo from "../../public/images/ample_logo.svg";
     import SVGClose from "../../public/images/close.svg";
@@ -83,6 +84,8 @@
     </div>
 
     <Link to="search" class="advanced-search">Advanced search</Link>
+
+    <SongDuplicates />
 
     <button on:click={handleLogOut} class="logout visuallyLink"><SVGLogout style="transform: scale(0.8);" /> Log out</button>
 
@@ -169,6 +172,11 @@
     }
 
     .site-header :global(.advanced-search) {
+        display: inline-block;
+        margin-right: var(--spacing-lg);
+    }
+
+    .site-header :global(.song-duplicates) {
         display: inline-block;
         margin-right: auto;
     }

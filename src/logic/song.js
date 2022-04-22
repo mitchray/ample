@@ -139,6 +139,22 @@ export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false
 }
 
 /**
+ * Find songs with same title from artist
+ * @param {string} title
+ * @returns {Promise<*>}
+ */
+export const hasSongDuplicates = (songTitle, artistName) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&limit=2";
+    queryURL += "&type=song&operator=and";
+    queryURL += "&rule_1=title&rule_1_operator=4&rule_1_input=" + encodeURI(songTitle);
+    queryURL += "&rule_2=artist&rule_2_operator=4&rule_2_input=" + encodeURI(artistName);
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "hasSongDuplicates");
+    return fetchSongData(queryURL);
+}
+
+/**
  * Get songs from albums starting with specified character
  * @param {string} filterChar
  * @returns {Promise<*>}
