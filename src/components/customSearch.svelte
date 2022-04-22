@@ -271,6 +271,18 @@
             inputType: "text"
         },
         {
+            id: "no_tag",
+            label: "No Genre",
+            category: "Metadata",
+            object_types: [
+                { id: "song", category: "Song Metadata" },
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata" }
+            ],
+            operatorType: "boolean_true",
+            inputType: ""
+        },
+        {
             id: "comment",
             label: "Comment",
             category: "Song Metadata",
