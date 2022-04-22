@@ -373,6 +373,16 @@
             inputType: "text"
         },
         {
+            id: "song_artist",
+            label: "Song Artist",
+            category: "Album Metadata",
+            object_types: [
+                { id: "album" },
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
             id: "original_year",
             label: "Original Year",
             category: "Album Metadata",
@@ -661,7 +671,8 @@
             label: "Played by Me (Artist)",
             category: "Plays",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" }
             ],
             operatorType: "boolean_true",
             inputType: ""
@@ -781,7 +792,8 @@
             label: "Recently added",
             category: "File Data",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" }
             ],
             operatorType: "limit",
             inputType: "number"

@@ -6,7 +6,7 @@ export let debugMode = writable(false);
 // Attempt to obtain the Ampache server installation based on requested path
 let detectedURL = (window.location.origin + window.location.pathname).split(/\/ample/)[0];
 
-export let APIVersion = writable("5.2.1");
+export let APIVersion = writable("5.3.1");
 
 export const serverURL = readable(detectedURL, function start(set) {
     // local testing override
