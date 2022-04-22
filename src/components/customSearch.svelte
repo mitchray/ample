@@ -447,11 +447,23 @@
             inputType: "rating"
         },
         {
+            id: "songrating",
+            label: "My Rating (song)",
+            category: "Rating",
+            object_types: [
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "number",
+            inputType: "rating"
+        },
+        {
             id: "albumrating",
             label: "My Rating (album)",
             category: "Rating",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "artist" }
             ],
             operatorType: "number",
             inputType: "rating"
