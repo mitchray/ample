@@ -670,7 +670,9 @@
             label: "Playlist",
             category: "Playlist",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
             ],
             operatorType: "boolean_is",
             inputType: "playlist"
@@ -690,7 +692,9 @@
             label: "Playlist Name",
             category: "Playlist",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" }
             ],
             operatorType: "string",
             inputType: "text"
