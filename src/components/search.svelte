@@ -19,7 +19,7 @@
 
     function handleClick(event) {
         // Close search if we are following a link
-        if (event.target.href !== undefined) {
+        if (event.target.href !== undefined || event.target.parentNode.href !== undefined) {
             ShowSearch.set(false);
         }
     }
