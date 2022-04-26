@@ -94,7 +94,7 @@ const columns = {
         {
             id: "date",
             label: "Date",
-            widthPreset: "none",
+            fixedSize: true,
             sortable: true,
             sortBy: "year",
             type: "number",
@@ -103,7 +103,7 @@ const columns = {
         {
             id: "length",
             label: "Time",
-            widthPreset: "none",
+            fixedSize: true,
             sortable: true,
             sortBy: "time",
             type: "time",
@@ -165,7 +165,7 @@ const columns = {
         {
             id: "date",
             label: "Date",
-            widthPreset: "none",
+            fixedSize: true,
             sortable: true,
             sortBy: "year",
             type: "number",
@@ -174,7 +174,7 @@ const columns = {
         {
             id: "songCount",
             label: "Songs",
-            widthPreset: "none",
+            fixedSize: true,
             sortable: true,
             sortBy: "songcount",
             type: "number",
@@ -234,7 +234,7 @@ const columns = {
         {
             id: "albumCount",
             label: "Releases",
-            widthPreset: "none",
+            fixedSize: true,
             sortable: true,
             sortBy: "albumcount",
             type: "number",
@@ -243,7 +243,7 @@ const columns = {
         {
             id: "songCount",
             label: "Songs",
-            widthPreset: "none",
+            fixedSize: true,
             sortable: true,
             sortBy: "songcount",
             type: "number",
