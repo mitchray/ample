@@ -58,7 +58,7 @@ export const shuffleArray = (arr) => {
  * @returns {string}
  */
 export const formatTotalTime = (secs) => {
-    return new Date(secs * 1000).toISOString().substr(11, 8).replace(/^0+\:?/, '');
+    return new Date(secs * 1000).toISOString().substr(11, 8).replace(/^0+:?0*/, '');
 }
 
 /**

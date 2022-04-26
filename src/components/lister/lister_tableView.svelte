@@ -6,7 +6,7 @@
 
     export let contextKey;
 
-    const { getData, visible, columnWidths, lister, listerHeader, listerContainer } = getContext(contextKey);
+    const { getData, dataDisplay, columnWidths, listerObject, listerHeader } = getContext(contextKey);
     let data = getData();
 
     onMount(() => {
@@ -15,15 +15,15 @@
     });
 </script>
 
-<div class="header-flex syncscroll" name="listerhack">
+<div class="header-flex syncscroll" name="listerhack-{contextKey}">
     <div class="header" style="grid-template-columns: {$columnWidths}">
         <Columns bind:this={$listerHeader} contextKey={contextKey} />
     </div>
 </div>
 
-<div class="lister-flex syncscroll" name="listerhack">
-    <div class="lister" bind:this={$lister} style="grid-template-columns: {$columnWidths}">
-        {#each $visible as row, i (i)}
+<div class="lister-flex syncscroll" name="listerhack-{contextKey}">
+    <div class="lister" bind:this={$listerObject} style="grid-template-columns: {$columnWidths}">
+        {#each $dataDisplay as row, i (i)}
             <div class="row" class:stripe={row.sortOrder % 2}>
                 <TableRow item={row} contextKey={contextKey} />
             </div>

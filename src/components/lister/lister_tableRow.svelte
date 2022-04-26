@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
 
-    import { formatSongLength } from '../../logic/helper';
+    import { formatTotalTime } from '../../logic/helper';
 
     import { CurrentSong } from '../../stores/status';
 
@@ -41,53 +41,57 @@
         {/if}
 
         {#if col.id === "name"}
-                {#if getType() === "artist"}
-                    <Link to="artists/{item.id}">
-                        <span>{item.name}</span>
-                    </Link>
-                {:else if getType() === "album"}
-                    <Link to="albums/{item.id}">
-                        <span>{item.name}</span>
-                    </Link>
-                {:else if getType() === "genre"}
-                    <Link to="genres/{item.id}">
-                        <SVGGenre class="inline" /> {item.name}
-                    </Link>
-                {:else if getType() === "playlists"}
-                    <Link to="playlists/{item.id}">
-                        {item.name}
-                    </Link>
-                {:else}
-                    {#if $CurrentSong && $CurrentSong.id === item.id}
-                        <span class="current-icon">
-                            <SVGCurrent class="icon" />
-                        </span>
-                    {/if}
-
-                    <span>
-                        {item.name}
+            {#if getType() === "artist"}
+                <Link to="artists/{item.id}">
+                    <span>{item.name}</span>
+                </Link>
+            {:else if getType() === "album"}
+                <Link to="albums/{item.id}">
+                    <span>{item.name}</span>
+                </Link>
+            {:else if getType() === "genre"}
+                <Link to="genres/{item.id}">
+                    <SVGGenre class="inline" /> {item.name}
+                </Link>
+            {:else if getType() === "playlists"}
+                <Link to="playlists/{item.id}">
+                    {item.name}
+                </Link>
+            {:else}
+                {#if $CurrentSong && $CurrentSong.id === item.id}
+                    <span class="current-icon">
+                        <SVGCurrent class="icon" />
                     </span>
                 {/if}
+
+                <span>
+                    {item.name}
+                </span>
+            {/if}
         {/if}
 
         {#if col.id === "artist"}
-                <Link to="artists/{item.artist.id}">
-                    <SVGArtist class="inline"/> {item.artist.name}
-                </Link>
+            <Link to="artists/{item.artist.id}">
+                <SVGArtist class="inline"/> {item.artist.name}
+            </Link>
         {/if}
 
         {#if col.id === "album"}
-                <Link to="albums/{item.album.id}">
-                    <SVGAlbum class="inline"/> {item.album.name}
-                </Link>
+            <Link to="albums/{item.album.id}">
+                <SVGAlbum class="inline"/> {item.album.name}
+            </Link>
         {/if}
 
         {#if col.id === "date"}
-                <Link to="albums/year/{item.year}"><SVGYear class="inline"/> {item.year || 'None'}</Link>
+            <Link to="albums/year/{item.year}"><SVGYear class="inline"/> {item.year || 'None'}</Link>
         {/if}
 
         {#if col.id === "length"}
-            {formatSongLength(item.time)}
+            {formatTotalTime(item.time)}
+        {/if}
+
+        {#if col.id === "playCount"}
+            <span>{item.playcount}</span>
         {/if}
 
         {#if col.id === "albumCount"}
@@ -98,19 +102,25 @@
             <span>{item.songcount}</span>
         {/if}
 
+        {#if col.id === "type"}
+            {#if item.type !== null}
+                <span style="text-transform: uppercase">{item.type}</span>
+            {/if}
+        {/if}
+
         {#if col.id === "genres"}
             <Genres genres="{item.genre}" />
         {/if}
 
-        {#if col.id === "artistsCount"}
+        {#if col.id === "genreArtistsCount"}
             <Link to="genres/{item.id}/artists"><SVGArtist class="inline" /> {item.artists}</Link>
         {/if}
 
-        {#if col.id === "albumsCount"}
+        {#if col.id === "genreAlbumsCount"}
             <Link to="genres/{item.id}/albums"><SVGAlbum class="inline" /> {item.albums}</Link>
         {/if}
 
-        {#if col.id === "songsCount"}
+        {#if col.id === "genreSongsCount"}
             <Link to="genres/{item.id}/songs"><SVGSong class="inline" /> {item.songs}</Link>
         {/if}
 
@@ -124,6 +134,14 @@
 
         {#if col.id === "count"}
             {item.items} {parseInt(item.items) === 1 ? 'song' : 'songs'}
+        {/if}
+
+        {#if col.id === "quality"}
+            <span style="text-transform: uppercase">{item.url.split('.').pop()}</span>&nbsp;{#if item.mode === "vbr"}~{/if}{parseInt(item.bitrate/1000)}
+        {/if}
+
+        {#if col.id === "size"}
+            {parseFloat(item.size / 1e+6).toFixed(2)} MB
         {/if}
 
         {#if col.id === "rating"}

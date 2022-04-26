@@ -185,4 +185,8 @@
         display: inline-block;
         margin-right: var(--spacing-xl);
     }
+
+    .c-menu :global(label) {
+        cursor: pointer;
+    }
 </style>

@@ -2,6 +2,7 @@
     import { onMount, getContext, tick } from 'svelte';
 
     import { columns } from './columns.js';
+    import ColumnSelector from './lister_columnSelector.svelte';
 
     import { getProp } from '../../logic/helper';
 
@@ -9,28 +10,41 @@
 
     let newColumns = JSON.parse(JSON.stringify(columns)); // MAKE AN INDIVIDUAL COPY OF IMPORTED OBJECT
 
-    let { currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, lister, listerContainer, visibleColumns, listerHeader } = getContext(contextKey);
+    let { currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);
     const min = 100;
     let thisType = getType();
     let headerBeingResized;
     let columnWidthArray;
     let updateIndex;
     let horizontalScrollOffset = 0;
-    let columnsForType = newColumns[thisType];
 
     $: {
+        $availableColumns = newColumns.filter((col) => col.object_types.find((type) => type.id === thisType));
+
+        // apply any overrides
+        if ($availableColumns) {
+            for (let i = 0; i < $availableColumns.length; i++) {
+                let item = $availableColumns[i].object_types.find((type) => type.id === thisType);
+
+                // apply any overrides
+                $availableColumns[i].widthPreset = (item.widthPreset) ? item.widthPreset : $availableColumns[i].widthPreset;
+
+                $availableColumns = $availableColumns;
+            }
+        }
+
         // enable any special columns
         if (showIndex) {
-            columnsForType.find(el => el.id === "index").show = true;
+            $availableColumns.find(el => el.id === "index").show = true;
         }
 
         // enable any special columns
         if (showCheckboxes) {
-            columnsForType.find(el => el.id === "checkbox").show = true;
+            $availableColumns.find(el => el.id === "checkbox").show = true;
         }
 
         // filter by columns we should be showing
-        $visibleColumns = columnsForType.filter(el => el.show === true); // one day this will tie in to a selection modal
+        $visibleColumns = $availableColumns.filter(el => el.show === true); // one day this will tie in to a selection modal
     }
 
     onMount(() => {
@@ -44,8 +58,8 @@
 
     export function setStaticWidths() {
         // convert to static widths if lister has been rendered
-        if (window.getComputedStyle($lister).gridTemplateColumns.indexOf("repeat") === -1) {
-            $columnWidths = window.getComputedStyle($lister).gridTemplateColumns;
+        if (window.getComputedStyle($listerObject).gridTemplateColumns.indexOf("repeat") === -1) {
+            $columnWidths = window.getComputedStyle($listerObject).gridTemplateColumns;
         }
     }
 
@@ -53,8 +67,8 @@
         setStaticWidths();
 
         headerBeingResized = e.target.parentNode;
-        columnWidthArray = $columnWidths.split(" ");
-        updateIndex = Array.from($listerContainer.querySelectorAll('.header .cell')).findIndex((header) => header === headerBeingResized);
+        columnWidthArray   = $columnWidths.split(" ");
+        updateIndex        = Array.from($listerContainer.querySelectorAll('.header .cell')).findIndex((header) => header === headerBeingResized);
 
         window.addEventListener('mousemove', onMouseMove);
         window.addEventListener('mouseup', onMouseUp);
@@ -63,7 +77,7 @@
     }
 
     const onMouseMove = (e) => requestAnimationFrame(() => {
-        horizontalScrollOffset = $lister.scrollLeft;
+        horizontalScrollOffset = $listerObject.scrollLeft;
         const width = (horizontalScrollOffset + e.clientX) - headerBeingResized.getBoundingClientRect().left + 5;
 
         // update specific column
@@ -76,7 +90,7 @@
     const onMouseUp = () => {
         window.removeEventListener('mousemove', onMouseMove);
         window.removeEventListener('mouseup', onMouseUp);
-        $lister.classList.remove('being-resized');
+        $listerObject.classList.remove('being-resized');
         headerBeingResized.classList.remove('header--being-resized');
     }
 
@@ -148,6 +162,10 @@
 
         // sort the dataDisplay
         $dataDisplay = $dataDisplay.sort(function(obj1, obj2) {
+            // handle null
+            if (!getProp(obj1, sortBy)) return -1;
+            if (!getProp(obj2, sortBy)) return +1;
+
             if (col.type === "number" || col.type === "rating") {
                 return obj1[sortBy] > obj2[sortBy];
             }
@@ -187,6 +205,8 @@
     <div class="cell {col.id}" data-sortable="{col.sortable}" >
         {#if col.id === "checkbox"}
             <input type="checkbox" on:change={toggleAllChecked} />
+        {:else if col.id === "actions"}
+            <ColumnSelector contextKey={contextKey} />
         {:else}
             <span
                 class="label"

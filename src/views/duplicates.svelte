@@ -28,7 +28,7 @@
 <h1>Duplicates of <em>{songTitle}</em></h1>
 
 {#key songTitle + artistName}
-    <CustomSearch defaultSettings={duplicatesPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
+    <CustomSearch useSettings={duplicatesPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
     <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />
 {/key}
 

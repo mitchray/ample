@@ -40,7 +40,7 @@
     </div>
 
     <div class="batch" style="display: {currentTab === 'mass' ? 'block' : 'none'}">
-        <CustomSearch defaultSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
+        <CustomSearch useSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
         <MassRater bind:items={results} bind:type bind:loadedTime />
         <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
     </div>

@@ -7,23 +7,23 @@
 
     export let data;
     export let type;
-    export let showIndex = false;
+    export let showIndex      = false;
     export let showCheckboxes = false;
-    export let initialSort = null;
+    export let initialSort    = null;
     export let initialReverse = null;
 
-    const contextKey = uuidv4();
+    const contextKey = uuidv4(); // unique key for each instance of lister
 
     let listerObserver;
-    let columnWidths = writable('');
-    let lister = writable(null);
-    let listerHeader = writable(null);
-    let listerContainer = writable(null);
-    let listerWrapper = writable(null);
-    let dataDisplay = writable([]);
-    let visible = writable([]);
-    let visibleColumns = writable([]);
-    let currentSort = writable(initialSort);
+    let columnWidths     = writable('');   // the individual sizes for each column
+    let listerObject     = writable(null); // the lister itself
+    let listerHeader     = writable(null); // the separate header for the lister table
+    let listerContainer  = writable(null); // containing element of the lister object
+    let listerWrapper    = writable(null); // outer wrapper of lister, currently unused except for CSS
+    let dataDisplay      = writable([]);   // editable/sortable/etc copy of the data
+    let availableColumns = writable([]);   // available columns
+    let visibleColumns   = writable([]);   // columns to show
+    let currentSort      = writable(initialSort); // the current sort method
 
     setContext(contextKey, {
         getType: () => type,
@@ -33,18 +33,17 @@
         showCheckboxes,
         dataDisplay,
         columnWidths,
-        lister,
+        listerObject,
         listerHeader,
         listerContainer,
         listerWrapper,
-        visible,
+        availableColumns,
         visibleColumns,
         currentSort
     });
 
-    $: data = data; //immutable
+    $: data         = data; //immutable
     $: $dataDisplay = data.slice();
-    $: $visible = $dataDisplay.slice();
 
     onMount(() => {
         // use ResizeObserver on ListerContainer to monitor changes in dimension

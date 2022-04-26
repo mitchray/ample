@@ -13,7 +13,7 @@
     export let loading = false;
     export let loadedTime;
     export let results = [];
-    export let defaultSettings = null;
+    export let useSettings = null;
     export let selectedObjectType = null;
     export let immediateSearch = false;
 
@@ -57,9 +57,9 @@
     $: rowCounter = rows.length ? Math.max(...rows.map(t => t.id)) + 1 : 1;
 
     function parseParams() {
-        if (defaultSettings) {
+        if (useSettings) {
             // override default settings with any params
-            settings = {...settings,...defaultSettings};
+            settings = {...settings,...useSettings};
 
             let joined = Object.keys(settings).join(",");
             let foundRules = joined.match(/rule_\d+(?=,)/gi);

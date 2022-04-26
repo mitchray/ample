@@ -121,7 +121,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="top-center" toggleElement={document.querySelector("#volumeMenu")} bind:isVisible={menuIsVisible} class="test" >
+    <Menu anchor="top-center" toggleElement={document.querySelector("#volumeMenu")} bind:isVisible={menuIsVisible} >
         <div class="header panel-header">
             <h4 class="title">Volume Settings</h4>
         </div>
