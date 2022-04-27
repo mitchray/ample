@@ -1,5 +1,23 @@
 # Changelog
 
+## [0.34.0] - 2022-04-27
+### Requires at least Ampache 5.3.1
+
+### Added
+- Ability to toggle lister columns (resets each time but will save in future release)
+- New lister columns
+  - Songs: Plays, Quality, Size
+  - Albums: Length, Type
+  - Artists: Length
+- Advanced search updates
+  - "My Rating (song)" for albums and artists
+  - "My Rating (album)" for artists
+  - "Song Count" for albums and artists
+  - "Album Count" for artists
+  - "Song Artist" for albums
+  - "Played by Me (Artist)" for albums
+  - "Recently added" for albums
+
 ## [0.33.0] - 2022-04-22
 ### Requires at least Ampache 5.2.1
 
