@@ -17,6 +17,14 @@
   - "Song Artist" for albums
   - "Played by Me (Artist)" for albums
   - "Recently added" for albums
+- A "Duplicates found" link will appear next to the search bar if the currently playing song matches another of the (exact) same title by that artist. Planning on expanding into other 'health checks'.
+
+### Changed
+- Unrated -> Mass Assign will show results automatically
+- Date and number columns don't need to be resizable
+
+### Fixed
+- Close the search results if an image is clicked
 
 ## [0.33.0] - 2022-04-22
 ### Requires at least Ampache 5.2.1

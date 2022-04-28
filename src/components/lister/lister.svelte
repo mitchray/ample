@@ -83,4 +83,14 @@
         flex-direction: column;
         contain: content;
     }
+
+    .lister-container:global(.scroll-start) :global(.name) {
+        box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+        clip-path: inset(0px -10px 0px 0px);
+    }
+
+    .lister-container:global(.scroll-end) :global(.actions) {
+        box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+        clip-path: inset(0px 0px 0px -10px);
+    }
 </style>

@@ -6,17 +6,44 @@
 
     export let contextKey;
 
-    const { getData, dataDisplay, columnWidths, listerObject, listerHeader } = getContext(contextKey);
+    const { getData, dataDisplay, columnWidths, listerObject, listerHeader, listerContainer } = getContext(contextKey);
     let data = getData();
+    let bindForName;
+    let bindForActions;
 
     onMount(() => {
         // initialise syncscroll
         syncscroll.reset();
+
+        const container = $listerContainer;
+
+        // needs separate IntersectionObservers otherwise only one works at a time
+
+        // apply shadow when .name becomes sticky
+        let observerName = new IntersectionObserver(
+            ([e]) => {
+                const scrimClass = 'scroll-start';
+                e.intersectionRatio !== 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
+            },
+            { root: bindForName, rootMargin: '0px 0px 0px -1px', threshold: 1 }
+        );
+
+        // apply shadow when .actions becomes sticky
+        let observerActions = new IntersectionObserver(
+            ([e]) => {
+                const scrimClass = 'scroll-end';
+                e.intersectionRatio === 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
+            },
+            { root: bindForActions, rootMargin: '0px -1px 0px 0px', threshold: 1 }
+        );
+
+        observerName.observe($listerContainer.querySelector('.header .name'));
+        observerActions.observe($listerContainer.querySelector('.header .actions'));
     });
 </script>
 
-<div class="header-flex syncscroll" name="listerhack-{contextKey}">
-    <div class="header" style="grid-template-columns: {$columnWidths}">
+<div class="header-flex syncscroll" name="listerhack-{contextKey}" bind:this={bindForName} >
+    <div class="header" style="grid-template-columns: {$columnWidths}" bind:this={bindForActions} >
         <Columns bind:this={$listerHeader} contextKey={contextKey} />
     </div>
 </div>
