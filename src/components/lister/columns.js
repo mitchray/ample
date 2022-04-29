@@ -30,20 +30,6 @@ const columns = [
         ],
     },
     {
-        id: "art",
-        label: "Art",
-        widthPreset: "art",
-        fixedSize: true,
-        type: "image",
-        show: true,
-        object_types: [
-            { id: "song" },
-            { id: "album" },
-            { id: "artist" },
-            { id: "playlist" }
-        ]
-    },
-    {
         id: "name",
         label: "Name",
         widthPreset: "large",

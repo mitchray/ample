@@ -34,13 +34,11 @@
             {item.initialOrder + 1}
         {/if}
 
-        {#if col.id === "art"}
-            {#key item.art}
-                <img class="image" src="{item.art}&thumb=1" alt="" height="60" width="60"/>
-            {/key}
-        {/if}
-
         {#if col.id === "name"}
+            {#if item.art}
+                <img class="image" src="{item.art}&thumb=1" alt="" height="50" width="50"/>
+            {/if}
+
             {#if getType() === "artist"}
                 <Link to="artists/{item.id}">
                     <span>{item.name}</span>
@@ -164,7 +162,9 @@
 
 <style>
     .image {
-        border: 1px solid hsla(0, 0%, 50%, 0.2);
+        margin-right: var(--spacing-md);
+        margin-left: calc(var(--spacing-md) * -1);
+        border-radius: 3px;
     }
 
     .cell :global(ul) {
@@ -177,15 +177,6 @@
 
     .cell :global(.genres) {
         flex-wrap: nowrap;
-    }
-
-    .cell:global(.art) {
-        padding: var(--spacing-sm) var(--spacing-md);
-        background-color: var(--color-card-primary);
-    }
-
-    .cell:global(.art) img {
-        border-radius: 2px;
     }
 
     .cell[data-type=number],

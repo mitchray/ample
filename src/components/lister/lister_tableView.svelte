@@ -15,7 +15,11 @@
         // initialise syncscroll
         syncscroll.reset();
 
-        const container = $listerContainer;
+        const container   = $listerContainer;
+        let headerName    = $listerContainer.querySelector('.header .name');
+        let headerActions = $listerContainer.querySelector('.header .actions');
+        let marginName    = '0px 0px 0px -1px';
+        let marginActions = '0px -1px 0px 0px';
 
         // needs separate IntersectionObservers otherwise only one works at a time
 
@@ -23,9 +27,9 @@
         let observerName = new IntersectionObserver(
             ([e]) => {
                 const scrimClass = 'scroll-start';
-                e.intersectionRatio !== 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
+                e.intersectionRatio === 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
             },
-            { root: bindForName, rootMargin: '0px 0px 0px -1px', threshold: 1 }
+            { root: bindForActions, rootMargin: marginName, threshold: 1 }
         );
 
         // apply shadow when .actions becomes sticky
@@ -34,11 +38,13 @@
                 const scrimClass = 'scroll-end';
                 e.intersectionRatio === 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
             },
-            { root: bindForActions, rootMargin: '0px -1px 0px 0px', threshold: 1 }
+            { root: bindForActions, rootMargin: marginActions, threshold: 1 }
         );
 
-        observerName.observe($listerContainer.querySelector('.header .name'));
-        observerActions.observe($listerContainer.querySelector('.header .actions'));
+        if (headerName && headerActions) {
+            observerName.observe(headerName);
+            observerActions.observe(headerActions);
+        }
     });
 </script>
 
