@@ -84,13 +84,33 @@
         contain: content;
     }
 
-    .lister-container:global(.scroll-start) :global(.name) {
+    .lister-container:global(.scroll-start) :global(.name:before) {
         box-shadow: 2px 0 6px rgba(0,0,0,0.2);
         clip-path: inset(0px -10px 0px 0px);
     }
 
-    .lister-container:global(.scroll-end) :global(.actions) {
+    .lister-container:global(.scroll-end) :global(.actions:before) {
         box-shadow: -2px 0 6px rgba(0,0,0,0.2);
         clip-path: inset(0px 0px 0px -10px);
+    }
+
+    .lister-container :global(.name:before),
+    .lister-container :global(.actions:before) {
+        content: '';
+        background-color: var(--color-column-sticky);
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: -1;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .lister-container:global(.scroll-start) :global(.name:before),
+    .lister-container:global(.scroll-end) :global(.actions:before) {
+        opacity: 1;
     }
 </style>

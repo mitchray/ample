@@ -53,6 +53,7 @@
     --color-separator:         rgb(${lchToRgb([ 85, 10, hue])});
     --color-row-hover:         rgb(${lchToRgb([100,  0, hue])});
     --color-row-stripe:        rgb(${lchToRgb([ 98,  5, hue])});
+    --color-column-sticky:    rgba(${lchToRgb([ 80, 20, hue])}, 0.1);
     --color-waveform-progress: rgb(${lchToRgb([ 15, 50, hue])});
     --color-waveform-wave:     rgb(${lchToRgb([ 75, 20, hue])});
     --color-rating:            rgb(${lchToRgb([ 60, 66, 74])});
@@ -101,6 +102,7 @@
     --color-separator:         rgb(${lchToRgb([ 15, 10, hue])});
     --color-row-hover:         rgb(${lchToRgb([ 15,  5, hue])});
     --color-row-stripe:        rgb(${lchToRgb([ 12,  5, hue])});
+    --color-column-sticky:    rgba(${lchToRgb([100,  0, hue])}, 0.02);
     --color-waveform-progress: rgb(${lchToRgb([ 80, 10, hue])});
     --color-waveform-wave:     rgb(${lchToRgb([ 25, 10, hue])});
     --color-rating:            rgb(${lchToRgb([ 80, 100, 85])});
