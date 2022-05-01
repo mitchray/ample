@@ -118,7 +118,7 @@
                     newWidths += `160px `;
                     break;
                 case "fit":
-                    newWidths += `minmax(40px, max-content) `;
+                    newWidths += `minmax(50px, max-content) `;
                     break;
                 default:
                     newWidths += `minmax(${min}px, max-content) `;
@@ -254,6 +254,11 @@
         position: relative;
         user-select: none;
         padding-right: 5px;
+    }
+
+    :global(.lister-container input[type="checkbox"]) {
+        flex-shrink: 0;
+        max-width: unset;
     }
 
     [data-sortable] .label {
