@@ -18,26 +18,20 @@
         const container   = $listerContainer;
         let headerName    = $listerContainer.querySelector('.header .name');
         let headerActions = $listerContainer.querySelector('.header .actions');
-        let marginName    = '0px 0px 0px -1px';
+        let marginName    = '0px 0px 0px 0px';
         let marginActions = '0px -1px 0px 0px';
 
         // needs separate IntersectionObservers otherwise only one works at a time
 
         // apply shadow when .name becomes sticky
         let observerName = new IntersectionObserver(
-            ([e]) => {
-                const scrimClass = 'scroll-start';
-                e.intersectionRatio === 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
-            },
-            { root: bindForActions, rootMargin: marginName, threshold: 1 }
+            ([e]) => container.classList.toggle("scroll-start", e.intersectionRatio < 1),
+            { root: bindForName, rootMargin: marginName, threshold: 1 }
         );
 
         // apply shadow when .actions becomes sticky
         let observerActions = new IntersectionObserver(
-            ([e]) => {
-                const scrimClass = 'scroll-end';
-                e.intersectionRatio === 1 ? container.classList.add(scrimClass) : container.classList.remove(scrimClass);
-            },
+            ([e]) => container.classList.toggle("scroll-end", e.intersectionRatio === 1),
             { root: bindForActions, rootMargin: marginActions, threshold: 1 }
         );
 
@@ -89,7 +83,7 @@
     }
 
     .header :global(.name) {
-        left: 0;
+        left: -1px;
     }
 
     .header :global(.actions) {
@@ -118,7 +112,7 @@
     }
 
     .lister :global(.name) {
-        left: 0;
+        left: -1px;
     }
 
     .lister :global(.actions) {
