@@ -140,7 +140,6 @@
     }
 
     .title {
-        font-weight: 700;
         margin-bottom: var(--spacing-md);
         white-space: nowrap;
         overflow: hidden;

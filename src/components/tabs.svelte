@@ -42,7 +42,6 @@
         flex-wrap: wrap;
         margin: 0;
         margin-bottom: var(--spacing-xl);
-        font-weight: 700;
         font-family: var(--font-heading);
     }
 
@@ -68,7 +67,6 @@
 
     li {
         border-radius: 100vh;
-        font-weight: 600;
     }
 
     li.active {

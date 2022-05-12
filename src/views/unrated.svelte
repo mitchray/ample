@@ -28,7 +28,7 @@
     };
 </script>
 
-<h1>Unrated</h1>
+<h1 class="page-title">Unrated</h1>
 
 <Tabs bind:activeTabValue={currentTab} items={tabItems}>
     <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">

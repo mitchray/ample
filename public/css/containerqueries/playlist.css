@@ -32,8 +32,6 @@
 @container playlist-details-wrapper size(min-width: 800px) {
     .title {
         font-size: 40px;
-        font-weight: 600;
-        letter-spacing: -0.03em;
     }
 
     .art-container {

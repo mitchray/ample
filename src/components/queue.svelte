@@ -148,7 +148,7 @@
 >
     <div class="site-queue-inner">
         <div class="header panel-header">
-            <h4 on:click={showCurrentSong}>Now Playing</h4>
+            <h4 class="panel-title" on:click={showCurrentSong}>Now Playing</h4>
             <button class="clear-played icon-button" title="Clear played songs" on:click={handleClearPlayed}><SVGClose /></button>
             <button class="clear-all icon-button button--danger" on:click={handleClearQueue} title="Clear all"><SVGBin /></button>
         </div>
@@ -188,7 +188,7 @@
                         {/if}
 
                         <span class="details">
-                            <div class="queue-title" title="{song.name}">{song.name}</div>
+                            <div class="queue-title card-title" title="{song.name}">{song.name}</div>
                             <div class="queue-artist" title="{song.artist.name}">{song.artist.name}</div>
                         </span>
 
@@ -279,10 +279,6 @@
         display: block;
     }
 
-    .queue-title {
-        font-weight: 700;
-    }
-
     .queue-title,
     .queue-artist {
         white-space: nowrap;
@@ -314,6 +310,7 @@
         cursor: pointer !important;
         border-radius: 4px;
         position: relative;
+        font-stretch: 50%;
     }
 
     .queue-item:hover {

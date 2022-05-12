@@ -130,10 +130,6 @@
         border-radius: 5px;
     }
 
-    .title {
-        font-weight: 700;
-    }
-
     .title,
     .artist,
     .album {

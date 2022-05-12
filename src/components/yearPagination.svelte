@@ -317,7 +317,6 @@
 
     .inputs label {
         margin: 0 var(--spacing-md);
-        font-weight: 700;
     }
 
     .inputs input {
@@ -354,7 +353,6 @@
 
     .label {
         text-align: right;
-        font-weight: 700;
         padding-right: var(--spacing-lg);
         padding-left: var(--spacing-xxl);
     }
@@ -390,7 +388,6 @@
     }
 
     .emphasis {
-        font-weight: 700;
         pointer-events: none;
     }
 

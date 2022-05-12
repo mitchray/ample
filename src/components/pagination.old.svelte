@@ -157,7 +157,6 @@
     }
 
     .number {
-        font-weight: 700;
         min-width: 5.5ch;
         text-align: center;
         display: inline-block;

@@ -2,7 +2,7 @@
     import CardList from '../components/cardList.svelte';
 </script>
 
-<h1>Trending</h1>
+<h1 class="page-title">Trending</h1>
 
 <CardList type="artist" dataProvider={"frequentArtists"} limit=12 containerType="scroll" heading="Artists" />
 

@@ -17,7 +17,7 @@
     }
 </script>
 
-<h1>Test page yo</h1>
+<h1 class="page-title">Test page yo</h1>
 
 <div style="margin: 2rem 0;">
     <h2>Form elements</h2>

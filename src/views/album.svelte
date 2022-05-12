@@ -165,11 +165,13 @@
     }
 
     .title {
-        letter-spacing: -0.02em;
+        --roboto-opsz: 50;
         line-height: 1.1;
         text-align: center;
         margin-bottom: var(--spacing-sm);
-        font-weight: 700;
+        letter-spacing: 0.02em;
+        font-weight: 300;
+        font-stretch: 80%;
     }
 
     .artist {

@@ -276,7 +276,6 @@
         text-transform: uppercase;
         padding-left: var(--spacing-lg);
         font-size: 1.5em;
-        font-weight: 700;
     }
 
     .subheading:not(:first-child) {

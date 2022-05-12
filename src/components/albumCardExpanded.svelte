@@ -15,7 +15,7 @@
     $: album = data;
 </script>
 
-<div class="album-card-expanded">
+<div class="album-card-expanded card">
     <div class="info">
         <div class="image-container">
             <img width="125" height="125" class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" loading="lazy">
@@ -92,7 +92,6 @@
     }
 
     .title {
-        font-weight: 700;
         margin-bottom: var(--spacing-md);
     }
 

@@ -20,7 +20,7 @@
     ];
 </script>
 
-<h1>Top Rated</h1>
+<h1 class="page-title">Top Rated</h1>
 
 <Tabs bind:activeTabValue={currentTab} items={tabItems}>
     <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">

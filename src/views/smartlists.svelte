@@ -6,7 +6,7 @@
     import SmartlistCard from '../components/smartlistCard.svelte';
 </script>
 
-<h1>Smartlists</h1>
+<h1 class="page-title">Smartlists</h1>
 
 {#await getSmartlists()}
     <p>Loading smartlists</p>

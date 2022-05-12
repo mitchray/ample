@@ -189,6 +189,5 @@
     h4 {
         margin-bottom: var(--spacing-md);
         text-transform: uppercase;
-        letter-spacing: 0.025em;
     }
 </style>

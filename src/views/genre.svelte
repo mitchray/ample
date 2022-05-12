@@ -45,7 +45,7 @@
 
 {#if !loading}
     {#if genre}
-        <h1>
+        <h1 class="page-title">
             {#if type}
                 {type} with: <Link to="genres/{id}"><SVGGenre class="inline" /> {genre.name}</Link>
             {:else }

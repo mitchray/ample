@@ -96,7 +96,7 @@
 </script>
 
 {#if heading}
-    <h2>
+    <h2 class="panel-title">
         {heading}
 
         {#if refresh}

@@ -143,7 +143,6 @@
     }
 
     .artist {
-        font-weight: 700;
         display: block;
     }
 

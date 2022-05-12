@@ -188,12 +188,10 @@
     }
 
     .c-rating:hover .c-rating__stars {
-        /*color: hsl(40, 90%, 40%);*/
         color: var(--color-rating);
     }
 
     .c-rating:hover .c-rating__flag {
-        /*color: hsl(0, 80%, 40%);*/
         color: var(--color-favorite);
     }
 </style>

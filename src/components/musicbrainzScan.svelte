@@ -264,7 +264,7 @@
     <div class="sidebar">
         <div class="total badge badge--info">Showing {filteredRecordings.length} of {allRecordings.length}</div>
 
-        <h4>Show</h4>
+        <h4 class="panel-title">Show</h4>
 
         <label>
             <input type=checkbox bind:checked={includeMatches} />
@@ -326,7 +326,7 @@
             Videos
         </label>
 
-        <h4>Hide</h4>
+        <h4 class="panel-title">Hide</h4>
 
         <label>
             Regex pattern<br>

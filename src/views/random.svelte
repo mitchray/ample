@@ -2,7 +2,7 @@
     import CardList from '../components/cardList.svelte';
 </script>
 
-<h1>Random</h1>
+<h1 class="page-title">Random</h1>
 
 <CardList type="artist" dataProvider={"randomArtists"} limit=6 refresh=true heading="Artists" />
 

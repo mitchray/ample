@@ -194,11 +194,9 @@
     }
 
     .title {
-        letter-spacing: -0.02em;
         line-height: 1.1;
         text-align: center;
         margin-bottom: var(--spacing-sm);
-        font-weight: 700;
         display: flex;
         align-items: center;
         justify-content: center;

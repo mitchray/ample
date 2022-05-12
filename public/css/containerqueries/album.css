@@ -31,14 +31,8 @@
 
 @container album-details-wrapper size(min-width: 800px) {
     .title {
-        font-size: 50px;
-        font-weight: 600;
-        letter-spacing: -0.03em;
-    }
-
-    .artist {
-        font-size: 16px;
-        font-weight: 700;
+        font-size: 40px;
+        font-weight: 200;
     }
 
     .art-container {

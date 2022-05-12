@@ -74,7 +74,7 @@
         <button class="sidebar-toggle" on:click={toggleMini}>
             {$SidebarIsMini ? ">>" : "<<"}
         </button>
-        <h3>Library</h3>
+        <h3 class="panel-title">Library</h3>
         <ul>
             <li class="{basePath === 'artists' ? 'current' : ''}">
                 <Link to="artists" class="site-sidebar__link " data-label="Artists">
@@ -117,7 +117,7 @@
             </li>
         </ul>
 
-        <h3>Insights</h3>
+        <h3 class="panel-title">Insights</h3>
         <ul>
             <li class="{basePath === 'favorites' ? 'current' : ''}">
                 <Link to="favorites" class="site-sidebar__link " data-label="Favorites">
@@ -284,7 +284,6 @@
         padding: var(--spacing-sm) var(--spacing-md);
         pointer-events: none;
         white-space: nowrap;
-        font-weight: 700;
         opacity: 0;
     }
 
@@ -298,7 +297,6 @@
 
     li.current :global(.site-sidebar__link) {
         position: relative;
-        font-weight: 700;
     }
 
     li.current:before {
@@ -355,9 +353,6 @@
     h3 {
         margin-top: var(--spacing-md);
         margin-bottom: var(--spacing-sm);
-        text-transform: uppercase;
-        letter-spacing: 0.025em;
-        font-size: 14px;
     }
 
     ul + h3 {

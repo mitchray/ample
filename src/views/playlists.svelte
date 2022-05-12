@@ -41,7 +41,7 @@
     });
 </script>
 
-<h1>Playlists</h1>
+<h1 class="page-title">Playlists</h1>
 
 <button id="js-playlistsNew" bind:this={playlistsNewToggle} on:click={handleShowPlaylistCreator} class="button button--primary">New playlist</button>
 

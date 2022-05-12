@@ -84,7 +84,6 @@
     }
 
     .title {
-        font-weight: 700;
         text-align: center;
         margin: var(--spacing-lg) var(--spacing-sm) var(--spacing-md);
         white-space: nowrap;

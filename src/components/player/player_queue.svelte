@@ -20,13 +20,13 @@
 
 <div class="container" id="c-queue">
     <div class="queueInfo">
-        <h4 class="queue-header">Queue</h4>
+        <h4 class="queue-header panel-title">Queue</h4>
         {#if $NowPlayingQueue.length > 0}
             <span class="queue-details">{$NowPlayingQueue.length === 0 ? 0 : $NowPlayingIndex + 1} of {$NowPlayingQueue.length}</span>
         {/if}
 
         {#if nextSong}
-            <div class="title"><span>Next:</span> {nextSong.title}</div>
+            <div class="title card-title"><span>Next:</span> {nextSong.title}</div>
             <div class="artist"><Link to="artists/{nextSong.artist.id}"><SVGArtist class="inline"/> {nextSong.artist.name}</Link></div>
         {:else}
             <div>No upcoming songs</div>
@@ -65,7 +65,7 @@
     }
 
     .queue-toggle :global(svg) {
-        margin-left: 7px;
+        margin-left: 6px;
     }
 
     .container {
@@ -87,5 +87,9 @@
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
+    }
+
+    .artist {
+        font-stretch: 50%;
     }
 </style>

@@ -5,7 +5,7 @@
     import { newestAlbums, randomAlbums } from "../logic/album";
 </script>
 
-<h1>Albums</h1>
+<h1 class="page-title">Albums</h1>
 
 <section class="link-grid">
     <LinkCard url="albums/all">All Albums</LinkCard>

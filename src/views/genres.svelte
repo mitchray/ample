@@ -22,7 +22,7 @@
     });
 </script>
 
-<h1>Genres</h1>
+<h1 class="page-title">Genres</h1>
 
 {#if !loading && genres && genres.length > 0}
     <Lister2 data={genres} type="genre" initialSort="name" />

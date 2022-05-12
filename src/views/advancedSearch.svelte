@@ -8,7 +8,7 @@
     let type;
 </script>
 
-<h1>Advanced Search</h1>
+<h1 class="page-title">Advanced Search</h1>
 
 <CustomSearch bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />
 <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />

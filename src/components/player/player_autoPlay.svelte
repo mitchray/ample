@@ -72,7 +72,7 @@
 {#if isVisible}
     <Menu anchor="top-center" toggleElement={document.querySelector("#autoPlayMenu")} bind:isVisible >
         <div class="header panel-header">
-            <h4 class="title">Smartlist AutoPlay</h4>
+            <h4 class="title panel-title">Smartlist AutoPlay</h4>
 
             <label class="toggle">
                 <input type="checkbox" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />

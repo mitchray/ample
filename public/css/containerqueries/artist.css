@@ -38,8 +38,7 @@
 @container artist-info-wrapper size(min-width: 800px) {
     .title {
         font-size: 50px;
-        font-weight: 600;
-        letter-spacing: -0.03em;
+        font-weight: 200;
     }
 
     .art-container {

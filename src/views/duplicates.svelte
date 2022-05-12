@@ -25,7 +25,7 @@
     };
 </script>
 
-<h1>Duplicates of <em>{songTitle}</em></h1>
+<h1 class="page-title">Duplicates of <em>{songTitle}</em></h1>
 
 {#key songTitle + artistName}
     <CustomSearch useSettings={duplicatesPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />

@@ -68,7 +68,7 @@
         style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
     >
         <div class="header panel-header">
-            <h4>Results for <span class="query">{$SearchQuery}</span></h4>
+            <h4 class="panel-title">Results for <span class="query">{$SearchQuery}</span></h4>
             <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
         </div>
 
@@ -143,7 +143,6 @@
     }
 
     .query {
-        font-weight: 700;
         font-style: italic;
     }
 

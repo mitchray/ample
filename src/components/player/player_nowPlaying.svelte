@@ -11,7 +11,7 @@
     {#if $CurrentSong}
         <img class="nowPlayingArtwork" src="{$CurrentSong.art}&thumb=22" alt="" />
         <div class="details">
-            <div class="title" title="{$CurrentSong.title}">{$CurrentSong.title}</div>
+            <div class="title card-title" title="{$CurrentSong.title}">{$CurrentSong.title}</div>
             <div class="artist" title="{$CurrentSong.artist.name}"><Link to="artists/{$CurrentSong.artist.id}">{$CurrentSong.artist.name}</Link></div>
             <div class="album">
                 {#if $CurrentSong.year > 0}
@@ -29,18 +29,20 @@
         height: 100%;
         align-items: center;
         overflow: hidden;
+        font-stretch: 50%;
+        line-height: 1.5;
     }
 
     .details {
         overflow: hidden;
     }
 
-    .title {
-        font-weight: 700;
-    }
-
     .date {
         margin-right: var(--spacing-md);
+    }
+
+    .title {
+        margin-bottom: var(--spacing-sm);
     }
 
     .title,

@@ -483,7 +483,6 @@
     .c-actions.fullButtons {
         margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
-        font-weight: 700;
     }
 
     .c-actions.fullButtons .button--primary,

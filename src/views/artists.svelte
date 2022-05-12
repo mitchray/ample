@@ -5,7 +5,7 @@
     import { newestArtists, randomArtists } from "../logic/artist";
 </script>
 
-<h1>Artists</h1>
+<h1 class="page-title">Artists</h1>
 
 <section class="link-grid">
     <LinkCard url="artists/all">All Artists</LinkCard>

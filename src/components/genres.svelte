@@ -29,7 +29,7 @@
         color: var(--color-genre-text);
         border-radius: 3px;
         padding: 0.2em 0.5em;
-        letter-spacing: 0.01em;
+        font-stretch: 25%;
         align-items: center;
     }
 

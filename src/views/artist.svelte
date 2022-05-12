@@ -213,7 +213,7 @@
         right: calc(-1 * var(--spacing-xxl));
         pointer-events: none;
         z-index: -1;
-        opacity: 0.3;
+        opacity: 0.2;
     }
     
     .art-container {
@@ -249,9 +249,12 @@
     }
 
     .title {
+        --roboto-opsz: 50;
         line-height: 1;
         text-align: center;
-        font-weight: 700;
+        letter-spacing: 0.02em;
+        font-weight: 300;
+        font-stretch: 80%;
     }
 
     .details {

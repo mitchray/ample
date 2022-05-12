@@ -157,11 +157,6 @@
         justify-content: center;
     }
 
-    .title {
-        font-weight: 700;
-        line-height: 1.2;
-    }
-
     .title,
     .artist {
         white-space: nowrap;
