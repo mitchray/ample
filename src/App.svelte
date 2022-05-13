@@ -45,6 +45,7 @@
     import ForgottenPage from './views/forgotten.svelte';
     import RandomPage from './views/random.svelte';
     import UnratedPage from './views/unrated.svelte';
+    import MultiRaterPage from './views/multiRater.svelte';
 
     import TestPage from './views/test.svelte';
     import AdvancedSearchPage from './views/advancedSearch.svelte';
@@ -89,7 +90,9 @@
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
                     <Route path="test" component={TestPage}/>
+
                     <Route path="search" component={AdvancedSearchPage}/>
+                    <Route path="multi-rater" component={MultiRaterPage}/>
                     <Route path="duplicates/:songTitle/:artistName" component={DuplicatesPage}/>
 
                     <Route path="artists/:id" component={ArtistPage}/>

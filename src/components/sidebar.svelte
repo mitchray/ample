@@ -160,6 +160,25 @@
                 </Link>
             </li>
         </ul>
+
+        <h3 class="panel-title">Tools</h3>
+        <ul>
+            <li class="{basePath === 'search' ? 'current' : ''}">
+                <Link to="search" class="site-sidebar__link " data-label="Advanced Search">
+                    <span class="label">Advanced Search</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'multi-rater' ? 'current' : ''}">
+                <Link to="multi-rater" class="site-sidebar__link " data-label="Multi-rater">
+                    <span class="label">Multi-rater</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'diagnostics' ? 'current' : ''}">
+                <Link to="diagnostics" class="site-sidebar__link " data-label="Tag Diagnostics">
+                    <span class="label">Tag Diagnostics</span>
+                </Link>
+            </li>
+        </ul>
     </div>
 
     {#if initialized}

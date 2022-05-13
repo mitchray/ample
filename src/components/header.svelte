@@ -83,7 +83,7 @@
         {/if}
     </div>
 
-    <Link to="search" class="advanced-search">Advanced search</Link>
+    <Link to="search" class="advanced-search">Advanced Search</Link>
 
     <SongDuplicates />
 
