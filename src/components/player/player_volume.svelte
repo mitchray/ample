@@ -4,6 +4,7 @@
         CurrentSong,
         IsMuted,
         NowPlayingQueue,
+        PlayerVolume,
         VolumeNormalizationEnabled,
         DynamicsCompressorEnabled
     } from "../../stores/status";
@@ -15,7 +16,7 @@
     import SVGVolumeMuted from "../../../public/images/volume_off.svg";
     import SVGTune from "../../../public/images/tune.svg";
 
-    let volumeWidth = $MediaPlayer.globalVolume * 100;
+    let volumeWidth = $PlayerVolume; // volume in this file is treated as a linear 0-100 value
     let mouseDown = false;
     let volumeSlider;
     let menuIsVisible = false;
@@ -57,9 +58,7 @@
         volumeWidth = (volumeWidth > 100) ? 100 : volumeWidth;
         volumeWidth = (volumeWidth < 0) ? 0 : volumeWidth;
 
-        if ($MediaPlayer.wavesurfer) {
-            $MediaPlayer.wavesurfer.setVolume(Math.pow(volumeWidth / 100, 2)); // logarithmic volume control
-        }
+        PlayerVolume.set(volumeWidth);
     }
 
     function handleVolumeMouseDown(event) {

@@ -13,6 +13,7 @@ export let ShowSearch = writable(false);
 export let SidebarIsMini = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
 export let ShowQueue = writable(JSON.parse(localStorage.getItem('ShowQueue')) || false);
 
+export let PlayerVolume = writable(JSON.parse(localStorage.getItem('PlayerVolume')) || 50);
 export let RepeatEnabled = writable(JSON.parse(localStorage.getItem('RepeatEnabled')) || false);
 export let VolumeNormalizationEnabled = writable(JSON.parse(localStorage.getItem('VolumeNormalizationEnabled')) || false);
 export let DynamicsCompressorEnabled = writable(JSON.parse(localStorage.getItem('DynamicsCompressorEnabled')) || false);

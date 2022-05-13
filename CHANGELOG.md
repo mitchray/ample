@@ -1,5 +1,12 @@
 # Changelog
 
+## develop
+### Added
+- Remember volume setting
+
+### Changed
+- Switching back to Roboto font, but the fancy variable version
+
 ## [0.34.0] - 2022-04-27
 ### Requires at least Ampache 5.3.1
 

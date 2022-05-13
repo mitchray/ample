@@ -8,6 +8,7 @@ import {
     IsPlaying,
     IsMuted,
     CurrentSong,
+    PlayerVolume,
     RepeatEnabled,
     VolumeNormalizationEnabled,
     DynamicsCompressorEnabled
@@ -25,7 +26,6 @@ class Player {
         this.defaultTitle = document.title;
         this.id = null;
         this.stopQueued = false;
-        this.globalVolume = 0.5;
 
         // volume normalization
         this.targetVolume = parseInt(-14);
@@ -40,6 +40,19 @@ class Player {
         this.filterGain = null;
         this.filterCompressor = null;
         this.filterBiquad = null; //(for testing only)
+
+        // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
+        PlayerVolume.subscribe(value => {
+            let logarithmicVolume = Math.pow(value / 100, 2); // logarithmic volume control
+
+            this.globalVolume = logarithmicVolume;
+
+            if (this.wavesurfer) {
+                this.wavesurfer.setVolume(logarithmicVolume);
+            }
+
+            localStorage.setItem('PlayerVolume', JSON.stringify(value));
+        });
 
         NowPlayingQueue.subscribe(value => {
             this.nowPlayingQueue = value;
