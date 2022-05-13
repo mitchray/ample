@@ -67,7 +67,6 @@
 html {
     font-family: var(--font-body);
     font-size: 13px;
-    font-optical-sizing: auto;
     line-height: 1.4;
     height: 100%;
     background-color: var(--color-background);
