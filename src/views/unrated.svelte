@@ -21,7 +21,7 @@
     let type = "song";
 
     let batchPreset = {
-        limit: "500",
+        limit: "100",
         rule_1: "myrating",
         rule_1_operator: "5",
         rule_1_input: "1"
