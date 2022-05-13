@@ -1,17 +1,53 @@
 <script>
-    import LinkCard from '../components/linkCard.svelte';
     import CardList from '../components/cardList.svelte';
+    import AlbumsAll from '../components/albumsAll.svelte';
+    import AlbumsByYear from '../components/albumsByYear.svelte';
+    import Tabs from "../components/tabs.svelte";
 
     import { newestAlbums, randomAlbums } from "../logic/album";
+
+    // List of tab items with labels and values.
+    let tabItems = [
+        { label: "Newest",  value: "newest" },
+        { label: "Random",  value: "random" },
+        { label: "By Year", value: "year" },
+        { label: "All",     value: "all" },
+    ];
+
+    let currentTab;
 </script>
 
 <h1 class="page-title">Albums</h1>
 
-<section class="link-grid">
-    <LinkCard url="albums/all">All Albums</LinkCard>
-    <LinkCard url="albums/year">By Year</LinkCard>
-</section>
+<Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+    {#each tabItems as tab}
+        {#if tab.loaded === true}
+            {#if tab.value === 'newest'}
+                <div class="newest" style="display: {currentTab === 'newest' ? 'block' : 'none'}">
+                    <CardList type="album" dataProvider={"newestAlbums"} limit=18 />
+                </div>
+            {/if}
 
-<CardList type="album" dataProvider={"newestAlbums"} limit=6 heading="Newest" />
+            {#if tab.value === 'random'}
+                <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
+                    <CardList type="album" dataProvider={"randomAlbums"} limit=18 refresh=true />
+                </div>
+            {/if}
 
-<CardList type="album" dataProvider={"randomAlbums"} limit=6 refresh=true heading="Random" />
+            {#if tab.value === 'year'}
+                <div class="year" style="display: {currentTab === 'year' ? 'block' : 'none'}">
+                    <AlbumsByYear />
+                </div>
+            {/if}
+
+            {#if tab.value === 'all'}
+                <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
+                    <AlbumsAll />
+                </div>
+            {/if}
+        {/if}
+    {/each}
+</Tabs>
+
+
+

@@ -1,5 +1,4 @@
 <script>
-    import LinkCard from '../components/linkCard.svelte';
     import CardList from '../components/cardList.svelte';
     import ArtistsAll from '../components/artistsAll.svelte';
     import Tabs from "../components/tabs.svelte";
@@ -9,8 +8,8 @@
     // List of tab items with labels and values.
     let tabItems = [
         { label: "Recently Updated", value: "recentlyUpdated" },
-        { label: "Random", value: "random" },
-        { label: "All", value: "all" },
+        { label: "Random",           value: "random" },
+        { label: "All",              value: "all" },
     ];
 
     let currentTab;

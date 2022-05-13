@@ -30,7 +30,6 @@
     import ArtistsPage from './views/artists.svelte';
     import ArtistPage from './views/artist.svelte';
     import AlbumsPage from './views/albums.svelte';
-    import AlbumsAll from './views/albumsAll.svelte';
     import AlbumsByYearPage from './views/albumsByYear.svelte';
     import AlbumPage from './views/album.svelte';
     import PlaylistsPage from './views/playlists.svelte';
@@ -96,7 +95,6 @@
                     <Route path="artists/:id" component={ArtistPage}/>
                     <Route path="artists" component={ArtistsPage}/>
                     <Route path="albums/:id" component={AlbumPage}/>
-                    <Route path="albums/all" component={AlbumsAll}/>
                     <Route path="albums/year/:year" component={AlbumsByYearPage}/>
                     <Route path="albums/year" component={AlbumsByYearPage}/>
                     <Route path="albums" component={AlbumsPage}/>

@@ -11,7 +11,7 @@
 
     export let fromYear = currentYear;
     export let toYear = currentYear;
-    export let showYear;
+    export let showYear = currentYear;
 
     let loadCount = 0;
     let centuries = [];
@@ -22,12 +22,8 @@
     let decadeFinal = currentDecade;
     let yearFinal = currentYear;
 
-    // Begin component
-    let params = (new URL(document.location)).searchParams;
-
-    // Load from URL otherwise set defaults
-    let fromFinal = params.get('from') || showYear || currentYear;
-    let toFinal = params.get('to') || showYear || currentYear;
+    let fromFinal = showYear || currentYear;
+    let toFinal = showYear || currentYear;
 
     $: decades = generateDecades(centuryFinal);
     $: years = generateYears(decadeFinal);
@@ -79,8 +75,6 @@
         centuryFinal = centurySelected || '';
         decadeFinal = decadeSelected || '';
         yearFinal = yearSelected || '';
-
-        updateURL();
     }
 
     const handleRangeSelection = (e) => {
@@ -89,8 +83,6 @@
 
         fromFinal = fromSelected || fromFinal;
         toFinal = toSelected || toFinal;
-
-        updateURL();
     }
 
     // Cap values at currentYear
@@ -103,19 +95,10 @@
         return (currentMonth >= 5) ? year + 1 : year;
     }
 
-    function updateURL() {
-        let url = new URL(window.location);
-        url.searchParams.set('from', fromFinal);
-        url.searchParams.set('to', toFinal);
-        window.history.replaceState({}, '', url);
-    }
-
     const handleValues = (e) => {
         // Ensure values are never higher than current year
         toFinal = maxValueCheck(toFinal);
         fromFinal = maxValueCheck(fromFinal);
-
-        updateURL();
     }
 
     const handleTo = (e) => {
@@ -137,13 +120,6 @@
     const handleSearch = (e) => {
         fromYear = fromFinal;
         toYear = toFinal;
-
-        if (loadCount > 0) {
-            // reset to first page when searching
-            let url = new URL(window.location);
-            url.searchParams.set('page', '1');
-            window.history.replaceState({}, '', url);
-        }
     }
 
     onMount(() => {
