@@ -4,7 +4,7 @@
 
 Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js)
 
-<img src="https://user-images.githubusercontent.com/5735900/150520027-7e351113-29a9-4919-b3e2-10265f6aa524.jpg" width=800 alt="Ample screenshot" />
+<img src="https://user-images.githubusercontent.com/5735900/168279980-e3a91334-fa57-4732-9409-b69f83d89c4e.jpg" width=800 alt="Ample screenshot" />
 
 ## Features
 - Available on the [wiki](https://github.com/mitchray/ample/wiki/Features)
