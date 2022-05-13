@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.35.0] - 2022-05-13
+### Recommend clearing browser cache after install to get latest CSS changes
+
+### Added
+- Sticky columns in Lister will have a 'hovered' style when covering other columns
+- Save volume setting
+
+### Changed
+- Going back to Roboto font, but the fancy variable version this time
+- Reorganised most page layouts into a tab format; showing more items by default
+- Tabs are loaded on demand, which should improve performance
+- Moved "Unrated > Mass Assign" to its own "Multi-rater" page
+- Changed "Favorites" order in sidebar as the following pages all have the same layout
+
+### Fixed
+- Checkbox would squish when Lister is overflowing
+- Sidebar mini mode scrolls now on small screens (hover labels disabled for now)
+- Album card images would collapse during load
+
 ## [0.34.0] - 2022-04-27
 ### Requires at least Ampache 5.3.1
 
