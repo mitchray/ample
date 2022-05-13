@@ -1,16 +1,11 @@
 <script>
-    import { topArtists } from "../logic/artist";
-    import { topAlbums } from "../logic/album";
-    import { topSongs } from "../logic/song";
-
+    import CardList from '../components/cardList.svelte';
     import Tabs from "../components/tabs.svelte";
-    import Lister2 from '../components/lister/lister.svelte';
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
     import SVGSong from "../../public/images/music_note.svg";
 
-    // Current active tab
     let currentTab;
 
     let tabItems = [
@@ -27,49 +22,19 @@
         {#if tab.loaded === true}
             {#if tab.value === 'artists'}
                 <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">
-                    {#await topArtists({limit: 100})}
-                        Loading top artists
-                    {:then artists}
-                        {#if artists.length > 0}
-                            <Lister2 data={artists} type="artist" activeSort="rating" sortReverse="true" />
-                        {:else}
-                            <p>No artists found</p>
-                        {/if}
-                    {:catch error}
-                        <p>An error occurred.</p>
-                    {/await}
+                    <CardList type="artist" dataProvider={"topArtists"} limit=18 />
                 </div>
             {/if}
 
             {#if tab.value === 'albums'}
                 <div class="albums" style="display: {currentTab === 'albums' ? 'block' : 'none'}">
-                    {#await topAlbums({limit: 100})}
-                        Loading top albums
-                    {:then albums}
-                        {#if albums.length > 0}
-                            <Lister2 data={albums} type="album" activeSort="rating" sortReverse="true" />
-                        {:else}
-                            <p>No albums found</p>
-                        {/if}
-                    {:catch error}
-                        <p>An error occurred.</p>
-                    {/await}
+                    <CardList type="album" dataProvider={"topAlbums"} limit=18 />
                 </div>
             {/if}
 
             {#if tab.value === 'songs'}
                 <div class="songs" style="display: {currentTab === 'songs' ? 'block' : 'none'}">
-                    {#await topSongs({limit: 100})}
-                        Loading top songs
-                    {:then songs}
-                        {#if songs.length > 0}
-                            <Lister2 data={songs} type="song" activeSort="rating" sortReverse="true" />
-                        {:else}
-                            <p>No songs found</p>
-                        {/if}
-                    {:catch error}
-                        <p>An error occurred.</p>
-                    {/await}
+                    <CardList type="song" dataProvider={"topSongs"} limit=18 />
                 </div>
             {/if}
         {/if}

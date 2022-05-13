@@ -86,11 +86,6 @@
 
         <h3 class="panel-title">Insights</h3>
         <ul>
-            <li class="{basePath === 'favorites' ? 'current' : ''}">
-                <Link to="favorites" class="site-sidebar__link " data-label="Favorites">
-                    <SVGFavoriteFull class="inline"/> <span class="label">Favorites</span>
-                </Link>
-            </li>
             <li class="{basePath === 'recent' ? 'current' : ''}">
                 <Link to="recent" class="site-sidebar__link " data-label="Recent">
                     <SVGRecent class="inline"/> <span class="label">Recent</span>
@@ -99,6 +94,11 @@
             <li class="{basePath === 'newest' ? 'current' : ''}">
                 <Link to="newest" class="site-sidebar__link " data-label="Newest">
                     <SVGNew class="inline"/> <span class="label">Newest</span>
+                </Link>
+            </li>
+            <li class="{basePath === 'favorites' ? 'current' : ''}">
+                <Link to="favorites" class="site-sidebar__link " data-label="Favorites">
+                    <SVGFavoriteFull class="inline"/> <span class="label">Favorites</span>
                 </Link>
             </li>
             <li class="{basePath === 'trending' ? 'current' : ''}">
