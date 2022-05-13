@@ -9,11 +9,14 @@
         // Set default tab value
         if (Array.isArray(items) && items.length && items[0].value) {
             activeTabValue = items[0].value;
+            items[0].loaded = true;
         }
     });
 
-    function handleClick(tabValue) {
-        activeTabValue = tabValue;
+    function handleClick(tab) {
+        tab.loaded = true;
+        activeTabValue = tab.value;
+        items = items; // this might not be needed
     }
 </script>
 
@@ -21,7 +24,7 @@
     {#if Array.isArray(items)}
         {#each items as item}
             <li class={activeTabValue === item.value ? 'active' : ''}>
-                <span on:click={handleClick(item.value)}>
+                <span on:click={handleClick(item)}>
                     {#if item.icon}
                         <svelte:component this={item.icon} class="inline tab-icon" />
                     {/if}

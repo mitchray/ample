@@ -22,46 +22,56 @@
 
 <h1 class="page-title">Top Rated</h1>
 
-<Tabs bind:activeTabValue={currentTab} items={tabItems}>
-    <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">
-        {#await topArtists({limit: 2000})}
-            Loading top artists
-        {:then artists}
-            {#if artists.length > 0}
-                <Lister2 data={artists} type="artist" activeSort="rating" sortReverse="true" />
-            {:else}
-                <p>No artists found</p>
+<Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+    {#each tabItems as tab}
+        {#if tab.loaded === true}
+            {#if tab.value === 'artists'}
+                <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">
+                    {#await topArtists({limit: 100})}
+                        Loading top artists
+                    {:then artists}
+                        {#if artists.length > 0}
+                            <Lister2 data={artists} type="artist" activeSort="rating" sortReverse="true" />
+                        {:else}
+                            <p>No artists found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
+                </div>
             {/if}
-        {:catch error}
-            <p>An error occurred.</p>
-        {/await}
-    </div>
 
-    <div class="albums" style="display: {currentTab === 'albums' ? 'block' : 'none'}">
-        {#await topAlbums({limit: 2000})}
-            Loading top albums
-        {:then albums}
-            {#if albums.length > 0}
-                <Lister2 data={albums} type="album" activeSort="rating" sortReverse="true" />
-            {:else}
-                <p>No albums found</p>
+            {#if tab.value === 'albums'}
+                <div class="albums" style="display: {currentTab === 'albums' ? 'block' : 'none'}">
+                    {#await topAlbums({limit: 100})}
+                        Loading top albums
+                    {:then albums}
+                        {#if albums.length > 0}
+                            <Lister2 data={albums} type="album" activeSort="rating" sortReverse="true" />
+                        {:else}
+                            <p>No albums found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
+                </div>
             {/if}
-        {:catch error}
-            <p>An error occurred.</p>
-        {/await}
-    </div>
 
-    <div class="songs" style="display: {currentTab === 'songs' ? 'block' : 'none'}">
-        {#await topSongs({limit: 2000})}
-            Loading top songs
-        {:then songs}
-            {#if songs.length > 0}
-                <Lister2 data={songs} type="song" activeSort="rating" sortReverse="true" />
-            {:else}
-                <p>No songs found</p>
+            {#if tab.value === 'songs'}
+                <div class="songs" style="display: {currentTab === 'songs' ? 'block' : 'none'}">
+                    {#await topSongs({limit: 100})}
+                        Loading top songs
+                    {:then songs}
+                        {#if songs.length > 0}
+                            <Lister2 data={songs} type="song" activeSort="rating" sortReverse="true" />
+                        {:else}
+                            <p>No songs found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
+                </div>
             {/if}
-        {:catch error}
-            <p>An error occurred.</p>
-        {/await}
-    </div>
+        {/if}
+    {/each}
 </Tabs>

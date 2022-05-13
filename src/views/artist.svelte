@@ -104,72 +104,88 @@
             </div>
         </div>
 
-        <Tabs bind:activeTabValue={currentTab} items={tabItems} class="tabs">
-            <div class="discography" style="display: {currentTab === 'discography' ? 'block' : 'none'}">
-                <button
-                    class="album-view-toggle button button--regular"
-                    on:click={toggleShowExpanded}>
-                    View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
-                </button>
+        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} class="tabs">
+            {#each tabItems as tab}
+                {#if tab.loaded === true}
+                    {#if tab.value === 'discography'}
+                        <div class="discography" style="display: {currentTab === 'discography' ? 'block' : 'none'}">
+                            <button
+                                class="album-view-toggle button button--regular"
+                                on:click={toggleShowExpanded}>
+                                View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
+                            </button>
 
-                <ArtistReleases artistID={artist.id} />
-            </div>
-
-            <div style="display: {currentTab === 'popular' ? 'block' : 'none'}">
-                {#await getTopSongsFromArtist(id)}
-                    Loading popular songs
-                {:then songs}
-                    {#if songs.length > 0}
-                        <Lister2 data={songs} type="song" showIndex={true} />
-                    {:else}
-                        <p>No songs found</p>
-                    {/if}
-                {:catch error}
-                    <p>An error occurred.</p>
-                {/await}
-            </div>
-
-            <div style="display: {currentTab === 'similar' ? 'block' : 'none'}">
-                {#await similarArtists(id)}
-                    Loading similar artists
-                {:then artists}
-                    {#if artists.length > 0}
-                        <div class="artist-grid">
-                            {#each artists as artist}
-                                {#if artist.name}
-                                    <ArtistCard data="{artist}" />
-                                {/if}
-                            {/each}
+                            <ArtistReleases artistID={artist.id} />
                         </div>
-                    {:else}
-                        <p>No similar artists</p>
                     {/if}
-                {:catch error}
-                    <p>An error occurred.</p>
-                {/await}
-            </div>
 
-            <div style="display: {currentTab === 'all' ? 'block' : 'none'}">
-                {#if artist.songcount > 0}
-                    <ArtistSongs artistID={artist.id} />
-                {:else}
-                    <p>No songs found</p>
+                    {#if tab.value === 'popular'}
+                        <div style="display: {currentTab === 'popular' ? 'block' : 'none'}">
+                            {#await getTopSongsFromArtist(id)}
+                                Loading popular songs
+                            {:then songs}
+                                {#if songs.length > 0}
+                                    <Lister2 data={songs} type="song" showIndex={true} />
+                                {:else}
+                                    <p>No songs found</p>
+                                {/if}
+                            {:catch error}
+                                <p>An error occurred.</p>
+                            {/await}
+                        </div>
+                    {/if}
+
+                    {#if tab.value === 'similar'}
+                        <div style="display: {currentTab === 'similar' ? 'block' : 'none'}">
+                            {#await similarArtists(id)}
+                                Loading similar artists
+                            {:then artists}
+                                {#if artists.length > 0}
+                                    <div class="artist-grid">
+                                        {#each artists as artist}
+                                            {#if artist.name}
+                                                <ArtistCard data="{artist}" />
+                                            {/if}
+                                        {/each}
+                                    </div>
+                                {:else}
+                                    <p>No similar artists</p>
+                                {/if}
+                            {:catch error}
+                                <p>An error occurred.</p>
+                            {/await}
+                        </div>
+                    {/if}
+
+                    {#if tab.value === 'all'}
+                        <div style="display: {currentTab === 'all' ? 'block' : 'none'}">
+                            {#if artist.songcount > 0}
+                                <ArtistSongs artistID={artist.id} />
+                            {:else}
+                                <p>No songs found</p>
+                            {/if}
+                        </div>
+                    {/if}
+
+                    {#if tab.value === 'summary'}
+                        <div style="display: {currentTab === 'summary' ? 'block' : 'none'}">
+                            {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
+                                <div class="summary">
+                                    <p>{artist.summary}</p>
+                                </div>
+                            {:else}
+                                <p>No summary found</p>
+                            {/if}
+                        </div>
+                    {/if}
+
+                    {#if tab.value === 'musicbrainz'}
+                        <div style="display: {currentTab === 'musicbrainz' ? 'block' : 'none'}">
+                            <MusicbrainzScan data={artist} />
+                        </div>
+                    {/if}
                 {/if}
-            </div>
-
-            <div style="display: {currentTab === 'summary' ? 'block' : 'none'}">
-                {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
-                    <div class="summary">
-                        <p>{artist.summary}</p>
-                    </div>
-                {:else}
-                    <p>No summary found</p>
-                {/if}
-            </div>
-
-            <div style="display: {currentTab === 'musicbrainz' ? 'block' : 'none'}">
-                <MusicbrainzScan data={artist} />
-            </div>
+            {/each}
         </Tabs>
     {:else}
         <p>Unable to find artist with that ID</p>

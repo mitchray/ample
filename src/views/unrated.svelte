@@ -30,20 +30,28 @@
 
 <h1 class="page-title">Unrated</h1>
 
-<Tabs bind:activeTabValue={currentTab} items={tabItems}>
-    <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
-        <CardList type="artist" dataProvider={"unratedArtists"} limit=6 refresh=true heading="Artists" />
+<Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+    {#each tabItems as tab}
+        {#if tab.loaded === true}
+            {#if tab.value === 'random'}
+                <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
+                    <CardList type="artist" dataProvider={"unratedArtists"} limit=6 refresh=true heading="Artists" />
 
-        <CardList type="album" dataProvider={"unratedAlbums"} limit=6 refresh=true heading="Albums" />
+                    <CardList type="album" dataProvider={"unratedAlbums"} limit=6 refresh=true heading="Albums" />
 
-        <CardList type="song" dataProvider={"unratedSongs"} limit=9 refresh=true heading="Songs" />
-    </div>
+                    <CardList type="song" dataProvider={"unratedSongs"} limit=9 refresh=true heading="Songs" />
+                </div>
+            {/if}
 
-    <div class="batch" style="display: {currentTab === 'mass' ? 'block' : 'none'}">
-        <CustomSearch useSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
-        <MassRater bind:items={results} bind:type bind:loadedTime />
-        <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
-    </div>
+            {#if tab.value === 'mass'}
+                <div class="batch" style="display: {currentTab === 'mass' ? 'block' : 'none'}">
+                    <CustomSearch useSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
+                    <MassRater bind:items={results} bind:type bind:loadedTime />
+                    <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
+                </div>
+            {/if}
+        {/if}
+    {/each}
 </Tabs>
 
 
