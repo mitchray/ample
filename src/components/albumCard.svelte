@@ -131,6 +131,7 @@
         border-radius: 5px;
         overflow: hidden;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
+        aspect-ratio: 1 / 1;
     }
 
     .image-container :global(img) {
@@ -138,7 +139,6 @@
         height: 100%;
         object-fit: cover;
         width: 100%;
-        aspect-ratio: 1 / 1;
     }
 
     .info {
