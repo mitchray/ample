@@ -14,27 +14,17 @@
         }
     }
 
-    let params = (new URL(document.location)).searchParams;
-
-    // Load from URL otherwise set defaults
-    let charID = params.get('filter') || '';
+    let charID = '';
 
     $: selectedChar = charID;
     $: searchValue = charID.replaceAll("#", "([[:digit:]]|[[:space:]])");
 
     function clear() {
-        let url = new URL(window.location);
-        url.searchParams.delete('filter');
         charID = '';
-        window.history.replaceState({}, '', url);
     }
 
     function handleSelection(e) {
-        let url = new URL(window.location);
-        let charSelected = e.target.dataset.char_id;
-        charID = charSelected;
-        url.searchParams.set('filter', charSelected);
-        window.history.replaceState({}, '', url);
+        charID = e.target.dataset.char_id;
     }
 </script>
 
