@@ -1,12 +1,13 @@
 <script>
-    import { onDestroy, onMount, setContext } from 'svelte';
     import { writable } from 'svelte/store';
+    import { onDestroy, onMount, setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
 
     import TableView from './lister_tableView.svelte';
 
     export let data;
     export let type;
+    export let zone           = "generic";
     export let showIndex      = false;
     export let showCheckboxes = false;
     export let initialSort    = null;
@@ -24,11 +25,14 @@
     let availableColumns = writable([]);   // available columns
     let visibleColumns   = writable([]);   // columns to show
     let currentSort      = writable(initialSort); // the current sort method
+    let listerColumnsID  = `ListerColumns.${type}.${zone}`;
 
     setContext(contextKey, {
         getType: () => type,
         getData: () => data,
+        getZone: () => zone,
         getInitialReverse: () => initialReverse,
+        listerColumnsID,
         showIndex,
         showCheckboxes,
         dataDisplay,

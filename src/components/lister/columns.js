@@ -5,8 +5,6 @@ const columns = [
         widthPreset: "fit",
         fixedSize: true,
         type: "checkbox",
-        show: false,
-        alwaysShow: true,
         object_types: [
             { id: "song" },
             { id: "album" },
@@ -22,8 +20,6 @@ const columns = [
         type: "number",
         sortable: true,
         sortBy: "initialOrder",
-        show: false,
-        alwaysShow: true,
         object_types: [
             { id: "song" },
             { id: "playlist" }
@@ -37,7 +33,6 @@ const columns = [
         sortBy: "name",
         type: "string",
         show: true,
-        alwaysShow: true,
         object_types: [
             { id: "song" },
             { id: "album" },
@@ -53,7 +48,7 @@ const columns = [
         sortable: true,
         sortBy: "artist.name",
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" },
             { id: "album" }
@@ -66,7 +61,7 @@ const columns = [
         sortable: true,
         sortBy: "album.name",
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" }
         ]
@@ -78,7 +73,7 @@ const columns = [
         sortable: true,
         sortBy: "year",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" },
             { id: "album" }
@@ -91,7 +86,7 @@ const columns = [
         sortable: true,
         sortBy: "songcount",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "album" },
             { id: "artist" },
@@ -105,7 +100,7 @@ const columns = [
         sortable: true,
         sortBy: "albumcount",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "artist" }
         ],
@@ -117,7 +112,7 @@ const columns = [
         sortable: true,
         sortBy: "time",
         type: "time",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" },
             { id: "album" },
@@ -131,7 +126,7 @@ const columns = [
         sortable: true,
         sortBy: "type",
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "album" }
         ]
@@ -143,7 +138,7 @@ const columns = [
         sortable: true,
         sortBy: "artists",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "genre" }
         ],
@@ -155,7 +150,7 @@ const columns = [
         sortable: true,
         sortBy: "albums",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "genre" }
         ],
@@ -167,7 +162,7 @@ const columns = [
         sortable: true,
         sortBy: "songs",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "genre" }
         ],
@@ -177,7 +172,7 @@ const columns = [
         label: "Genres",
         widthPreset: "medium",
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "album" },
             { id: "artist" }
@@ -190,7 +185,7 @@ const columns = [
         sortable: true,
         sortBy: "owner",
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "playlist" }
         ]
@@ -202,7 +197,7 @@ const columns = [
         sortable: true,
         sortBy: "privacy",
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "playlist" }
         ]
@@ -214,7 +209,7 @@ const columns = [
         sortable: true,
         sortBy: "playcount",
         type: "number",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" }
         ]
@@ -224,7 +219,7 @@ const columns = [
         label: "Quality",
         fixedSize: true,
         type: "string",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" }
         ]
@@ -236,7 +231,7 @@ const columns = [
         type: "number",
         sortable: true,
         sortBy: "size",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" }
         ]
@@ -249,7 +244,7 @@ const columns = [
         sortable: true,
         sortBy: "rating",
         type: "rating",
-        show: true,
+        canToggle: true,
         object_types: [
             { id: "song" },
             { id: "album" },
@@ -263,7 +258,6 @@ const columns = [
         widthPreset: "actions",
         fixedSize: true,
         show: true,
-        alwaysShow: true,
         object_types: [
             { id: "song" },
             { id: "album" },

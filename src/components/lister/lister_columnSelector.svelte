@@ -6,7 +6,7 @@
     import SVGColumns from "../../../public/images/columns.svg";
 
     export let contextKey;
-    let { availableColumns, listerHeader } = getContext(contextKey);
+    let { listerColumnsID, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);
 
     let menuIsVisible = false;
 
@@ -15,7 +15,20 @@
     }
 
     function toggleSelected() {
+        $visibleColumns = $availableColumns.filter(el => el.show === true);
+
         $listerHeader.calculateWidths();
+
+        let visibleColumnIds = [];
+
+        // store the visible columns that we can toggle
+        for (let i = 0; i < $availableColumns.length; i++) {
+            if ($availableColumns[i].show && $availableColumns[i].canToggle) {
+                visibleColumnIds.push($availableColumns[i].id);
+            }
+        }
+
+        localStorage.setItem(listerColumnsID, JSON.stringify(visibleColumnIds));
     }
 </script>
 
@@ -32,7 +45,7 @@
     <Menu anchor="bottom-left" toggleElement={document.querySelector(`#listerColumns-${contextKey}`)} bind:isVisible={menuIsVisible} >
         <div class="panel-content">
             {#each $availableColumns as col}
-                {#if !col.alwaysShow}
+                {#if col.canToggle}
                     <div>
                         <label class="toggle">
                             <input type="checkbox" bind:checked={col.show} on:change={toggleSelected} />

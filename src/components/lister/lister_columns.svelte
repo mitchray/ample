@@ -10,7 +10,7 @@
 
     let newColumns = JSON.parse(JSON.stringify(columns)); // MAKE AN INDIVIDUAL COPY OF IMPORTED OBJECT
 
-    let { currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);
+    let { listerColumnsID, currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);
     const min = 100;
     let thisType = getType();
     let headerBeingResized;
@@ -19,6 +19,30 @@
     let horizontalScrollOffset = 0;
 
     $: {
+
+    }
+
+    onMount(() => {
+        setAvailableColumns();
+
+        loadSavedColumns();
+
+        calculateWidths();
+
+        applySort($currentSort, getInitialReverse());
+
+        // set initial sort orders
+        updateSortIndexes(true);
+    });
+
+    export function setStaticWidths() {
+        // convert to static widths if lister has been rendered
+        if (window.getComputedStyle($listerObject).gridTemplateColumns.indexOf("repeat") === -1) {
+            $columnWidths = window.getComputedStyle($listerObject).gridTemplateColumns;
+        }
+    }
+
+    function setAvailableColumns() {
         $availableColumns = newColumns.filter((col) => col.object_types.find((type) => type.id === thisType));
 
         // apply any overrides
@@ -43,24 +67,34 @@
             $availableColumns.find(el => el.id === "checkbox").show = true;
         }
 
-        // filter by columns we should be showing
-        $visibleColumns = $availableColumns.filter(el => el.show === true); // one day this will tie in to a selection modal
+        $availableColumns = $availableColumns;
     }
 
-    onMount(() => {
-        calculateWidths();
+    function loadSavedColumns() {
+        let savedColumns = JSON.parse(localStorage.getItem(listerColumnsID));
 
-        applySort($currentSort, getInitialReverse());
-
-        // set initial sort orders
-        updateSortIndexes(true);
-    });
-
-    export function setStaticWidths() {
-        // convert to static widths if lister has been rendered
-        if (window.getComputedStyle($listerObject).gridTemplateColumns.indexOf("repeat") === -1) {
-            $columnWidths = window.getComputedStyle($listerObject).gridTemplateColumns;
+        if (savedColumns !== null) {
+            for (let i = 0; i < $availableColumns.length; i++) {
+                // if show hasn't already been set
+                if ($availableColumns[i].show === undefined) {
+                    // show column if in our savedColumns
+                    if (savedColumns.includes($availableColumns[i].id)) {
+                        $availableColumns[i].show = true;
+                    }
+                }
+            }
+        } else {
+            // show every toggleable column by default
+            $availableColumns.forEach((item) => {
+                if (item.canToggle === true) {
+                    item.show = true;
+                }
+            });
         }
+
+        $availableColumns = $availableColumns;
+
+        $visibleColumns = $availableColumns.filter(el => el.show === true).slice();
     }
 
     function initResize(e) {
