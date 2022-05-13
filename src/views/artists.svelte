@@ -1,16 +1,46 @@
 <script>
     import LinkCard from '../components/linkCard.svelte';
     import CardList from '../components/cardList.svelte';
+    import ArtistsAll from '../components/artistsAll.svelte';
+    import Tabs from "../components/tabs.svelte";
 
     import { newestArtists, randomArtists } from "../logic/artist";
+
+    // List of tab items with labels and values.
+    let tabItems = [
+        { label: "Recently Updated", value: "recentlyUpdated" },
+        { label: "Random", value: "random" },
+        { label: "All", value: "all" },
+    ];
+
+    let currentTab;
 </script>
 
 <h1 class="page-title">Artists</h1>
 
-<section class="link-grid">
-    <LinkCard url="artists/all">All Artists</LinkCard>
-</section>
+<Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+    {#each tabItems as tab}
+        {#if tab.loaded === true}
+            {#if tab.value === 'recentlyUpdated'}
+                <div class="recentlyUpdated" style="display: {currentTab === 'recentlyUpdated' ? 'block' : 'none'}">
+                    <CardList type="artist" dataProvider={"newestArtists"} limit=18 />
+                </div>
+            {/if}
 
-<CardList type="artist" dataProvider={"newestArtists"} limit=6 heading="Recently updated" />
+            {#if tab.value === 'random'}
+                <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
+                    <CardList type="artist" dataProvider={"randomArtists"} limit=18 refresh=true />
+                </div>
+            {/if}
 
-<CardList type="artist" dataProvider={"randomArtists"} limit=6 refresh=true heading="Random" />
+            {#if tab.value === 'all'}
+                <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
+                    <ArtistsAll />
+                </div>
+            {/if}
+        {/if}
+    {/each}
+</Tabs>
+
+
+

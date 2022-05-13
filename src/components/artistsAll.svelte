@@ -38,8 +38,6 @@
     }
 </script>
 
-<h1 class="page-title">All Artists</h1>
-
 <AlphanumericPagination bind:selectedChar bind:searchValue />
 
 <Pagination2 bind:limit bind:page bind:count />

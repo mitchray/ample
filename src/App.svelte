@@ -28,7 +28,6 @@
     import NotFound404Page from './views/notFound404.svelte';
     import HomePage from './views/home.svelte';
     import ArtistsPage from './views/artists.svelte';
-    import ArtistsAll from './views/artistsAll.svelte';
     import ArtistPage from './views/artist.svelte';
     import AlbumsPage from './views/albums.svelte';
     import AlbumsAll from './views/albumsAll.svelte';
@@ -94,7 +93,6 @@
                     <Route path="search" component={AdvancedSearchPage}/>
                     <Route path="duplicates/:songTitle/:artistName" component={DuplicatesPage}/>
 
-                    <Route path="artists/all" component={ArtistsAll}/>
                     <Route path="artists/:id" component={ArtistPage}/>
                     <Route path="artists" component={ArtistsPage}/>
                     <Route path="albums/:id" component={AlbumPage}/>
