@@ -51,10 +51,10 @@
 </script>
 
 <div class="site-sidebar" class:isMini={$SidebarIsMini}>
+    <button class="sidebar-toggle" on:click={toggleMini}>
+        {$SidebarIsMini ? ">>" : "<<"}
+    </button>
     <div class="site-sidebar-inner">
-        <button class="sidebar-toggle" on:click={toggleMini}>
-            {$SidebarIsMini ? ">>" : "<<"}
-        </button>
         <h3 class="panel-title">Library</h3>
         <ul>
             <li class="{basePath === 'artists' ? 'current' : ''}">
@@ -147,7 +147,7 @@
 <style>
     .sidebar-toggle {
         display: flex;
-        position: absolute;
+        position: sticky;
         top: 0;
         left: 0;
         right: 0;
@@ -160,13 +160,14 @@
         justify-content: center;
         align-items: center;
         padding-bottom: 2px;
+        z-index: 100;
     }
 
     .site-sidebar {
         background-color: var(--color-interface);
         border-right: 1px solid var(--color-border);
         width: var(--size-sidebar-width);
-        padding: var(--spacing-lg);
+        padding: 0;
         height: 100%;
         display: flex;
         flex-direction: column;
@@ -188,7 +189,7 @@
         bottom: 0;
         overflow-x: hidden;
         overflow-y: auto;
-        padding: inherit;
+        padding: var(--spacing-lg);
     }
 
     .site-sidebar:not(.isMini) .site-sidebar-inner {
@@ -221,10 +222,6 @@
         position: absolute;
         white-space: nowrap;
         width: 1px;
-    }
-
-    .isMini .site-sidebar-inner {
-        overflow: unset;
     }
 
     .isMini h3 {
@@ -261,6 +258,7 @@
         pointer-events: none;
         white-space: nowrap;
         opacity: 0;
+        display: none; /* disabled in favor of scrollable mini mode, pending solution */
     }
 
     .isMini :global(a:hover:after) {
