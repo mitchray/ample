@@ -6,8 +6,6 @@
     import { SidebarIsMini } from '../stores/status';
     import { customHue } from "../stores/status";
 
-    import SidebarDrawer from './sidebarDrawer.svelte';
-
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
     import SVGPlaylist from "../../public/images/queue_music.svg";
@@ -20,9 +18,9 @@
     import SVGTrending from "../../public/images/trending_up.svg";
     import SVGForgotten from "../../public/images/trending_down.svg";
     import SVGRandom from "../../public/images/random.svg";
-    import SVGArrowLeft from "../../public/images/arrow_left.svg";
-    import SVGArrowRight from "../../public/images/arrow_right.svg";
+    import SVGSearch from "../../public/images/search.svg";
     import SVGGenre from "../../public/images/label.svg";
+    import SVGMultiStar from "../../public/images/hotel-star.svg";
 
 
     const { activeRoute } = getContext(ROUTER);
@@ -45,28 +43,11 @@
         }
     }
 
-    let artistsDrawerIsVisible = false;
-    let albumsDrawerIsVisible = false;
-    let initialized = false;
-
-    function toggleArtistsDrawer() {
-        artistsDrawerIsVisible = !artistsDrawerIsVisible;
-    }
-
-    function toggleAlbumsDrawer() {
-        albumsDrawerIsVisible = !albumsDrawerIsVisible;
-    }
-
     function toggleMini() {
         let inverted = !$SidebarIsMini;
         localStorage.setItem('SidebarIsMini', JSON.stringify(inverted));
         SidebarIsMini.set(inverted);
     }
-
-    onMount(() => {
-        // wait for sidebar to be ready before loading the sidebardrawer components
-        initialized = true;
-    });
 </script>
 
 <div class="site-sidebar" class:isMini={$SidebarIsMini}>
@@ -80,25 +61,11 @@
                 <Link to="artists" class="site-sidebar__link " data-label="Artists">
                     <SVGArtist class="inline"/> <span class="label">Artists</span>
                 </Link>
-                <button id="js-drawer-artists" class="drawer-toggle icon" class:open={artistsDrawerIsVisible} on:click={toggleArtistsDrawer}>
-                    {#if artistsDrawerIsVisible}
-                        <SVGArrowLeft />
-                    {:else}
-                        <SVGArrowRight />
-                    {/if}
-                </button>
             </li>
             <li class="{basePath === 'albums' ? 'current' : ''}">
                 <Link to="albums" class="site-sidebar__link " data-label="Albums">
                     <SVGAlbum class="inline"/> <span class="label">Albums</span>
                 </Link>
-                <button id="js-drawer-albums" class="drawer-toggle icon" class:open={albumsDrawerIsVisible} on:click={toggleAlbumsDrawer}>
-                    {#if albumsDrawerIsVisible}
-                        <SVGArrowLeft />
-                    {:else}
-                        <SVGArrowRight />
-                    {/if}
-                </button>
             </li>
             <li class="{basePath === 'playlists' ? 'current' : ''}">
                 <Link to="playlists" class="site-sidebar__link " data-label="Playlists">
@@ -165,26 +132,16 @@
         <ul>
             <li class="{basePath === 'search' ? 'current' : ''}">
                 <Link to="search" class="site-sidebar__link " data-label="Advanced Search">
-                    <span class="label">Advanced Search</span>
+                    <SVGSearch class="inline"/> <span class="label">Advanced Search</span>
                 </Link>
             </li>
             <li class="{basePath === 'multi-rater' ? 'current' : ''}">
                 <Link to="multi-rater" class="site-sidebar__link " data-label="Multi-rater">
-                    <span class="label">Multi-rater</span>
-                </Link>
-            </li>
-            <li class="{basePath === 'diagnostics' ? 'current' : ''}">
-                <Link to="diagnostics" class="site-sidebar__link " data-label="Tag Diagnostics">
-                    <span class="label">Tag Diagnostics</span>
+                    <SVGMultiStar class="inline"/> <span class="label">Multi-rater</span>
                 </Link>
             </li>
         </ul>
     </div>
-
-    {#if initialized}
-<!--        <SidebarDrawer type="artist" bind:visible={artistsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-artists")} />-->
-<!--        <SidebarDrawer type="album" bind:visible={albumsDrawerIsVisible} toggleElement={document.querySelector("#js-drawer-albums")} />-->
-    {/if}
 </div>
 
 <style>
@@ -327,46 +284,6 @@
         left: calc(-1 * var(--spacing-lg));
         top: 50%;
         transform: translateY(-50%);
-    }
-
-    .drawer-toggle.open {
-        background-color: var(--color-lines);
-    }
-
-    .drawer-toggle {
-        padding: 0;
-        width: 20px;
-        height: 20px;
-        border-radius: 100vh;
-        display: inline-flex;
-        justify-content: center;
-        align-items: center;
-        position: absolute;
-        right: -10px;
-        top: 50%;
-        transform: translateY(-50%);
-        display: none; /* TODO restore if all artists/albums can be handled well */
-    }
-
-    .isMini .drawer-toggle {
-        display: none;
-    }
-
-    /* increase click area */
-    .drawer-toggle:before {
-        content: '';
-        top: -10px;
-        right: -10px;
-        bottom: -10px;
-        left: -10px;
-        display: block;
-        position: absolute;
-        z-index: -1;
-    }
-
-    .drawer-toggle :global(svg) {
-        color: var(--color-highlight);
-        transform: scale(1.5);
     }
 
     h3 {
