@@ -95,12 +95,18 @@
     }
 </script>
 
-{#if heading}
+{#if heading || refresh}
     <h2 class="panel-title">
-        {heading}
+        {#if heading}
+            {heading}
+        {/if}
 
         {#if refresh}
-            <button on:click={refreshItems} class="with-icon refresh-button"><SVGRefresh/></button>
+            {#if heading}
+                <button on:click={refreshItems} class="with-icon refresh-button"><SVGRefresh/></button>
+            {:else}
+                <button on:click={refreshItems} class="with-icon button button--tertiary"><SVGRefresh/> Refresh</button>
+            {/if}
         {/if}
     </h2>
 {/if}
