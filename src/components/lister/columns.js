@@ -262,7 +262,8 @@ const columns = [
             { id: "song" },
             { id: "album" },
             { id: "artist" },
-            { id: "playlist" }
+            { id: "playlist" },
+            { id: "genre" }
         ],
     },
 ];

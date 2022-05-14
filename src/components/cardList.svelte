@@ -64,6 +64,12 @@
                 containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
                 emptyMessage = "No smartlists found";
                 break;
+            case 'genre':
+                logic = await import("../logic/genre");
+                card = (await import('../components/genreCard.svelte')).default;
+                containerClass = (containerType === "grid") ? "genre-grid" : "genre-scroll";
+                emptyMessage = "No genres found";
+                break;
             default:
                 break;
         }

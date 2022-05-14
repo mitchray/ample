@@ -20,6 +20,7 @@
         getSomeSongsFromAlbumsByGenre,
         getSomeSongsByGenre
     } from "../logic/song";
+    import { getGenre } from "../logic/genre";
     import { shuffleArray } from "../logic/helper";
 
     import Menu from '../components/menu.svelte';
@@ -60,7 +61,7 @@
     let showMore        = true;
     let showSkipBelow   = (type !== 'song');
 
-    function determineFetchURL() {
+    async function determineFetchURL() {
         switch (type) {
             case 'artist':
                 fetchURL = getSongsFromArtist(id);
@@ -69,6 +70,11 @@
                 fetchURL = getSongsFromArtistsStartingWith(data.char);
                 break;
             case 'artistGenre':
+            case 'genre':
+                if (data === null) {
+                    let genre = await getGenre(id);
+                    data = genre.name;
+                }
                 fetchURL = getSomeSongsFromArtistsByGenre(data);
                 break;
             case 'album':
