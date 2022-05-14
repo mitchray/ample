@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onDestroy, onMount } from 'svelte';
     import { Link } from "svelte-routing";
 
     import { logout } from "../logic/user";
@@ -59,6 +59,12 @@
         });
 
         contentObserver.observe($SiteContentBind);
+    });
+
+    onDestroy(() => {
+        if (contentObserver) {
+            contentObserver.disconnect();
+        }
     });
 </script>
 

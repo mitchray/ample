@@ -4,6 +4,10 @@
     import { v4 as uuidv4 } from 'uuid';
 
     import TableView from './lister_tableView.svelte';
+    import CardView from './lister_cardView.svelte';
+
+    import SVGList from "../../../public/images/table_rows.svg";
+    import SVGGrid from "../../../public/images/grid.svg";
 
     export let data;
     export let type;
@@ -12,6 +16,7 @@
     export let showCheckboxes = false;
     export let initialSort    = null;
     export let initialReverse = null;
+    export let displayAsTable = true;
 
     const contextKey = uuidv4(); // unique key for each instance of lister
 
@@ -26,6 +31,7 @@
     let visibleColumns   = writable([]);   // columns to show
     let currentSort      = writable(initialSort); // the current sort method
     let listerColumnsID  = `ListerColumns.${type}.${zone}`;
+    let listerDisplayID  = `ListerDisplay.${type}.${zone}`;
 
     setContext(contextKey, {
         getType: () => type,
@@ -50,10 +56,18 @@
     $: $dataDisplay = data.slice();
 
     onMount(() => {
+        let savedDisplayAsTable = JSON.parse(localStorage.getItem(listerDisplayID));
+
+        if (savedDisplayAsTable !== null) {
+            displayAsTable = savedDisplayAsTable;
+        }
+
         // use ResizeObserver on ListerContainer to monitor changes in dimension
         listerObserver = new ResizeObserver(entries => {
             entries.forEach(entry => {
-                $listerHeader.setStaticWidths();
+                if ($listerHeader) {
+                    $listerHeader.setStaticWidths();
+                }
             });
         });
 
@@ -65,12 +79,26 @@
             listerObserver.disconnect();
         }
     });
+
+    function setTableDisplay(pref) {
+        displayAsTable = pref;
+        localStorage.setItem(listerDisplayID, JSON.stringify(displayAsTable));
+    }
 </script>
 
 
 <div class="lister-wrapper" bind:this={$listerWrapper}>
-    <div class="lister-container" bind:this={$listerContainer}>
-        <TableView contextKey={contextKey} />
+    <div class="lister-actions">
+        <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
+        <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
+    </div>
+
+    <div class="lister-container" bind:this={$listerContainer} class:is-table={displayAsTable}>
+        {#if displayAsTable}
+            <TableView contextKey={contextKey} />
+        {:else}
+            <CardView contextKey={contextKey} />
+        {/if}
     </div>
 </div>
 
@@ -80,12 +108,22 @@
         margin-bottom: var(--spacing-lg);
     }
 
+    .lister-actions {
+        display: flex;
+        gap: var(--spacing-sm);
+        margin-bottom: var(--spacing-lg);
+    }
+
     .lister-container {
-        width: fit-content;
+        width: auto;
         max-width: 100%;
         display: flex;
         flex-direction: column;
         contain: content;
+    }
+
+    .lister-container.is-table {
+        width: fit-content;
     }
 
     .lister-container:global(.scroll-start) :global(.name:before) {

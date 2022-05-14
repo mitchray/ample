@@ -14,6 +14,7 @@
     let loadedTime = 0;
 
     $: count = dataDisplay.length || 0;
+    $: dataDisplay = dataDisplay;
 
     $: {
         if (selectedChar || selectedChar === '') {

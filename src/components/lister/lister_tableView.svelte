@@ -1,5 +1,5 @@
 <script>
-    import { onMount, getContext } from 'svelte';
+    import { onMount, getContext, onDestroy, tick } from 'svelte';
 
     import Columns from './lister_columns.svelte';
     import TableRow from './lister_tableRow.svelte';
@@ -10,12 +10,17 @@
     let data = getData();
     let bindForName;
     let bindForActions;
+    let observerName;
+    let observerActions;
 
-    onMount(() => {
+    onMount(async () => {
         // initialise syncscroll
         syncscroll.reset();
 
         const container   = $listerContainer;
+
+        await tick();
+
         let headerName    = $listerContainer.querySelector('.header .name');
         let headerActions = $listerContainer.querySelector('.header .actions');
         let marginName    = '0px 0px 0px 0px';
@@ -24,13 +29,13 @@
         // needs separate IntersectionObservers otherwise only one works at a time
 
         // apply shadow when .name becomes sticky
-        let observerName = new IntersectionObserver(
+        observerName = new IntersectionObserver(
             ([e]) => container.classList.toggle("scroll-start", e.intersectionRatio < 1),
             { root: bindForName, rootMargin: marginName, threshold: 1 }
         );
 
         // apply shadow when .actions becomes sticky
-        let observerActions = new IntersectionObserver(
+        observerActions = new IntersectionObserver(
             ([e]) => container.classList.toggle("scroll-end", e.intersectionRatio === 1),
             { root: bindForActions, rootMargin: marginActions, threshold: 1 }
         );
@@ -38,6 +43,16 @@
         if (headerName && headerActions) {
             observerName.observe(headerName);
             observerActions.observe(headerActions);
+        }
+    });
+
+    onDestroy(() => {
+        if (observerName) {
+            observerName.disconnect();
+        }
+
+        if (observerActions) {
+            observerActions.disconnect();
         }
     });
 </script>

@@ -412,6 +412,10 @@ button.loading:before {
     }
 }
 
+button.active {
+    background-color: var(--color-active-background);
+}
+
 /* display button as a plain text link */
 button.visuallyLink {
     background-color: transparent;

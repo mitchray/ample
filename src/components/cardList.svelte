@@ -6,12 +6,13 @@
 
     export let type;
     export let initialData = [];
-    export let dataProvider;
+    export let dataProvider = null;
     export let refresh = false;
     export let limit;
     export let heading = null;
     export let containerType = "grid";
     export let arg = null;
+    export let showOnlyThese = false;
 
     let data = [];
     let newBatch = [];
@@ -103,9 +104,9 @@
 
         {#if refresh}
             {#if heading}
-                <button on:click={refreshItems} class="with-icon refresh-button"><SVGRefresh/></button>
+                <button on:click={refreshItems} class="refresh-button"><SVGRefresh/></button>
             {:else}
-                <button on:click={refreshItems} class="with-icon button button--tertiary"><SVGRefresh/> Refresh</button>
+                <button on:click={refreshItems} class="button button--tertiary"><SVGRefresh/> Refresh</button>
             {/if}
         {/if}
     </h2>
@@ -131,9 +132,11 @@
                     {/if}
                 {/each}
                 {#if !refresh}
-                    <li>
-                        <button on:click={loadMore} hidden={newBatch.length < limit} class="load-more-button icon-button button--regular"><SVGAdd /></button>
-                    </li>
+                    {#if !showOnlyThese}
+                        <li>
+                            <button on:click={loadMore} hidden={newBatch.length < limit} class="load-more-button icon-button button--regular"><SVGAdd /></button>
+                        </li>
+                    {/if}
                 {/if}
             </ul>
         {:else}
