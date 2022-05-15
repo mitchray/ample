@@ -136,7 +136,7 @@
                 <div class="groups">
                     {#each menu as category}
                         <div class="group">
-                            <h4>{category.title}</h4>
+                            <h4 class="panel-title">{category.title}</h4>
                             <ul class="menu-list">
                                 {#each category.items as link}
                                     <li>
@@ -188,6 +188,5 @@
 
     h4 {
         margin-bottom: var(--spacing-md);
-        text-transform: uppercase;
     }
 </style>
