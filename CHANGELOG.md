@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.36.0] - 2022-05-15
+### Added
+- Remember Lister column selections
+- Option to View Lister in grid layout
+- Genre pagination
+- Genre grid layout
+- Play songs from genre (based on artist genre)
+
 ## [0.35.0] - 2022-05-13
 ### Recommend clearing browser cache after install to get latest CSS changes
 
