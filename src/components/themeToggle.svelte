@@ -9,8 +9,10 @@
         let theme;
         if ($Theme === 'dark') {
             theme = 'light';
+            document.body.classList.add('theme-is-light');
         } else {
             theme = 'dark';
+            document.body.classList.remove('theme-is-light');
         }
 
         localStorage.setItem('AmpleTheme', JSON.stringify(theme));

@@ -28,7 +28,6 @@
 </script>
 
 {#if $Theme === 'light'}
-
     {@html `<style>
 :root {
     --color-background:        rgb(${lchToRgb([ 95,  8, hue])});
