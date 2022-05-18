@@ -28,9 +28,9 @@
         </div>
 
         <div class="meta">
-            <Link to="genres/{genre.id}/artists"><SVGArtist class="inline" /> {genre.artists}</Link>
-            <Link to="genres/{genre.id}/albums"><SVGAlbum class="inline" /> {genre.albums}</Link>
-            <Link to="genres/{genre.id}/songs"><SVGSong class="inline" /> {genre.songs}</Link>
+            <Link to="genres/{genre.id}#artists"><SVGArtist class="inline" /> {genre.artists}</Link>
+            <Link to="genres/{genre.id}#albums"><SVGAlbum class="inline" /> {genre.albums}</Link>
+            <Link to="genres/{genre.id}#songs"><SVGSong class="inline" /> {genre.songs}</Link>
         </div>
 
         <div class="bottom">

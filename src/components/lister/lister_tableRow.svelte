@@ -111,15 +111,15 @@
         {/if}
 
         {#if col.id === "genreArtistsCount"}
-            <Link to="genres/{item.id}/artists"><SVGArtist class="inline" /> {item.artists}</Link>
+            <Link to="genres/{item.id}#artists"><SVGArtist class="inline" /> {item.artists}</Link>
         {/if}
 
         {#if col.id === "genreAlbumsCount"}
-            <Link to="genres/{item.id}/albums"><SVGAlbum class="inline" /> {item.albums}</Link>
+            <Link to="genres/{item.id}#albums"><SVGAlbum class="inline" /> {item.albums}</Link>
         {/if}
 
         {#if col.id === "genreSongsCount"}
-            <Link to="genres/{item.id}/songs"><SVGSong class="inline" /> {item.songs}</Link>
+            <Link to="genres/{item.id}#songs"><SVGSong class="inline" /> {item.songs}</Link>
         {/if}
 
         {#if col.id === "owner"}
