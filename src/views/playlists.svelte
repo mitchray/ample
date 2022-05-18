@@ -4,8 +4,8 @@
 
     import { getPlaylists } from "../logic/playlist";
 
-    import PlaylistEdit from '../components/playlists/playlist_edit.svelte';
-    import PlaylistCard from '../components/playlistCard.svelte';
+    import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
+    import PlaylistCard from '../components/playlist/playlistCard.svelte';
     import Menu from '../components/menu.svelte';
 
     let newPlaylist;

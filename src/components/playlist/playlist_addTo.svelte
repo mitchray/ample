@@ -1,7 +1,7 @@
 <script>
     import { addToPlaylist } from '../../logic/playlist';
 
-    import PlaylistSelector from '../../components/playlists/playlist_selector.svelte';
+    import PlaylistSelector from '../../components/playlist/playlist_selector.svelte';
 
     export let songs;
     export let isVisible;

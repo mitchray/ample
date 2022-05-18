@@ -11,7 +11,7 @@
 
     import Rating from '../../components/rating.svelte';
     import Actions from '../../components/actions.svelte';
-    import Genres from '../../components/genres.svelte';
+    import Genres from '../../components/genre/genres.svelte';
 
     import SVGArtist from "../../../public/images/artist.svg";
     import SVGAlbum from "../../../public/images/album.svg";

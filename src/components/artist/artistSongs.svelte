@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
 
-    import { getSongsFromArtist, sortSongsByName } from "../logic/song";
+    import { getSongsFromArtist, sortSongsByName } from "../../logic/song";
 
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister2 from '../../components/lister/lister.svelte';
 
     export let artistID;
     let songs = [];

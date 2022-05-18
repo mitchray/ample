@@ -1,9 +1,9 @@
 <script>
-    import { getAlbumsStartingWith } from "../logic/album";
+    import { getAlbumsStartingWith } from "../../logic/album";
 
-    import AlphanumericPagination from '../components/alphanumericPagination.svelte';
-    import Pagination2 from '../components/pagination2.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
+    import AlphanumericPagination from '../../components/alphanumericPagination.svelte';
+    import Pagination2 from '../../components/pagination2.svelte';
+    import Lister2 from '../../components/lister/lister.svelte';
 
     let selectedChar = ''; // bound from alphanumericPagination
     let searchValue = ''; // bound from alphanumericPagination

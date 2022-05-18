@@ -1,10 +1,10 @@
 <script>
-    import { getAlbumsByYear } from "../logic/album";
+    import { getAlbumsByYear } from "../../logic/album";
 
-    import YearPagination from '../components/yearPagination.svelte';
-    import Actions from '../components/actions.svelte';
-    import Pagination2 from '../components/pagination2.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
+    import YearPagination from '../../components/yearPagination.svelte';
+    import Actions from '../../components/actions.svelte';
+    import Pagination2 from '../../components/pagination2.svelte';
+    import Lister2 from '../../components/lister/lister.svelte';
 
     export let showYear = new Date().getFullYear();
 

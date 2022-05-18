@@ -1,13 +1,13 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import AlbumSongs from '../components/albumSongs.svelte';
-    import Rating from '../components/rating.svelte';
-    import Visibility from '../components/visibility.svelte';
-    import Actions from '../components/actions.svelte';
+    import AlbumSongs from '../../components/album/albumSongs.svelte';
+    import Rating from '../../components/rating.svelte';
+    import Visibility from '../../components/visibility.svelte';
+    import Actions from '../../components/actions.svelte';
 
-    import SVGArtist from "../../public/images/artist.svg";
-    import SVGYear from "../../public/images/year.svg";
+    import SVGArtist from "../../../public/images/artist.svg";
+    import SVGYear from "../../../public/images/year.svg";
 
     export let data;
 

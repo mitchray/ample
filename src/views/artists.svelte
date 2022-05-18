@@ -1,6 +1,6 @@
 <script>
     import CardList from '../components/cardList.svelte';
-    import ArtistsAll from '../components/artistsAll.svelte';
+    import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs.svelte";
 
     import { newestArtists, randomArtists } from "../logic/artist";

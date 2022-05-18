@@ -1,10 +1,10 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import Rating from '../components/rating.svelte';
-    import Actions from '../components/actions.svelte';
+    import Rating from '../../components/rating.svelte';
+    import Actions from '../../components/actions.svelte';
 
-    import SVGAlbum from "../../public/images/album.svg";
+    import SVGAlbum from "../../../public/images/album.svg";
 
     export let data = null;
 

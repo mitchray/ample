@@ -2,12 +2,12 @@
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
 
-    import { ShowExpandedAlbums } from "../stores/status";
+    import { ShowExpandedAlbums } from "../../stores/status";
 
-    import { getAlbumsByArtist, sortAlbumsByDate, groupAlbumsByReleaseType } from "../logic/album";
+    import { getAlbumsByArtist, sortAlbumsByDate, groupAlbumsByReleaseType } from "../../logic/album";
 
-    import AlbumCard from '../components/albumCard.svelte';
-    import AlbumCardExpanded from '../components/albumCardExpanded.svelte';
+    import AlbumCard from '../../components/album/albumCard.svelte';
+    import AlbumCardExpanded from '../../components/album/albumCardExpanded.svelte';
 
     export let artistID;
     let albums;

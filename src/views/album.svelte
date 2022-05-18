@@ -7,11 +7,11 @@
     import { getAlbum } from "../logic/album";
     import { formatTotalTime } from "../logic/helper";
 
-    import AlbumSongs from '../components/albumSongs.svelte';
+    import AlbumSongs from '../components/album/albumSongs.svelte';
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
-    import Genres from '../components/genres.svelte';
+    import Genres from '../components/genre/genres.svelte';
 
     import SVGYear from "../../public/images/year.svg";
     import SVGTrack from "../../public/images/music_note.svg";

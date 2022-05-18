@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import Rating from '../components/rating.svelte';
+    import Rating from '../../components/rating.svelte';
 
     export let data = null;
 

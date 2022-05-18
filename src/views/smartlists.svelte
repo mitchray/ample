@@ -3,7 +3,7 @@
 
     import { getSmartlists } from "../logic/playlist";
 
-    import SmartlistCard from '../components/smartlistCard.svelte';
+    import SmartlistCard from '../components/playlist/smartlistCard.svelte';
 </script>
 
 <h1 class="page-title">Smartlists</h1>

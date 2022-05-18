@@ -2,7 +2,7 @@
     import { getGenre } from '../logic/genre';
 
     import Tabs from "../components/tabs.svelte";
-    import GenreByType from '../components/genre/genre_type.svelte';
+    import GenreByType from '../components/genre/genreByType.svelte';
 
     import SVGGenre from "../../public/images/label.svg";
     import SVGArtist from "../../public/images/artist.svg";

@@ -3,7 +3,7 @@
 
     import { getSmartlists, getPlaylists, getPlaylist } from "../../logic/playlist";
 
-    import PlaylistEdit from './playlist_edit.svelte';
+    import PlaylistEdit from '../../components/playlist/playlist_edit.svelte';
 
     export let type;
     export let selectedPlaylist;

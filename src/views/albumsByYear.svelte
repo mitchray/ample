@@ -1,5 +1,5 @@
 <script>
-    import AlbumsByYear from '../components/albumsByYear.svelte';
+    import AlbumsByYear from '../components/album/albumsByYear.svelte';
 
     export let year;
 </script>

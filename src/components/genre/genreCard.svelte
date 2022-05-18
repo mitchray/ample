@@ -2,11 +2,11 @@
     import { onMount } from 'svelte';
     import { Link } from "svelte-routing";
 
-    import Actions from '../components/actions.svelte';
+    import Actions from '../../components/actions.svelte';
 
-    import SVGArtist from "../../public/images/artist.svg";
-    import SVGAlbum from "../../public/images/album.svg";
-    import SVGSong from "../../public/images/music_note.svg";
+    import SVGArtist from "../../../public/images/artist.svg";
+    import SVGAlbum from "../../../public/images/album.svg";
+    import SVGSong from "../../../public/images/music_note.svg";
 
     export let data = null;
 

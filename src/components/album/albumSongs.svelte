@@ -2,15 +2,15 @@
     import { fade } from 'svelte/transition';
     import { Link } from 'svelte-routing';
 
-    import { getSongsFromAlbum, groupSongsByDisc } from '../logic/song';
-    import { formatSongLength } from '../logic/helper';
+    import { getSongsFromAlbum, groupSongsByDisc } from '../../logic/song';
+    import { formatSongLength } from '../../logic/helper';
 
-    import { CurrentSong } from '../stores/status';
+    import { CurrentSong } from '../../stores/status';
 
-    import Rating from '../components/rating.svelte';
-    import Actions from '../components/actions.svelte';
+    import Rating from '../../components/rating.svelte';
+    import Actions from '../../components/actions.svelte';
 
-    import SVGCurrent from "../../public/images/play_circle.svg";
+    import SVGCurrent from "../../../public/images/play_circle.svg";
 
     export let id;
     let groupedSongs;

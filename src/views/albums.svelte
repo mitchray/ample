@@ -1,7 +1,7 @@
 <script>
     import CardList from '../components/cardList.svelte';
-    import AlbumsAll from '../components/albumsAll.svelte';
-    import AlbumsByYear from '../components/albumsByYear.svelte';
+    import AlbumsAll from '../components/album/albumsAll.svelte';
+    import AlbumsByYear from '../components/album/albumsByYear.svelte';
     import Tabs from "../components/tabs.svelte";
 
     import { newestAlbums, randomAlbums } from "../logic/album";

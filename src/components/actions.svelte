@@ -24,7 +24,7 @@
     import { shuffleArray } from "../logic/helper";
 
     import Menu from '../components/menu.svelte';
-    import PlaylistAddTo from '../components/playlists/playlist_addTo.svelte';
+    import PlaylistAddTo from '../components/playlist/playlist_addTo.svelte';
 
     import SVGPlay from "../../public/images/play.svg";
     import SVGQueue from "../../public/images/playlist_add.svg";

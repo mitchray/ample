@@ -8,7 +8,7 @@
     import { getPlaylist } from "../../logic/playlist";
     import { getSongsFromPlaylist } from "../../logic/song";
 
-    import PlaylistSelector from '../../components/playlists/playlist_selector.svelte';
+    import PlaylistSelector from '../../components/playlist/playlist_selector.svelte';
     import Menu from '../../components/menu.svelte';
 
     import SVGAutoPlay from "../../../public/images/queue.svg";

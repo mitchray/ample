@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import Actions from '../components/actions.svelte';
+    import Actions from '../../components/actions.svelte';
 
     export let data = null;
 

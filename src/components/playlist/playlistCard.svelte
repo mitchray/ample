@@ -1,13 +1,13 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import Rating from '../components/rating.svelte';
-    import Actions from '../components/actions.svelte';
-    import Menu from '../components/menu.svelte';
-    import PlaylistEdit from './playlists/playlist_edit.svelte';
-    import PlaylistDelete from './playlists/playlist_delete.svelte';
+    import Rating from '../../components/rating.svelte';
+    import Actions from '../../components/actions.svelte';
+    import Menu from '../../components/menu.svelte';
+    import PlaylistEdit from '../../components/playlist/playlist_edit.svelte';
+    import PlaylistDelete from '../../components/playlist/playlist_delete.svelte';
 
-    import SVGMore from "../../public/images/more-hori.svg";
+    import SVGMore from "../../../public/images/more-hori.svg";
 
     export let playlist = null;
 

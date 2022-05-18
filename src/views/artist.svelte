@@ -9,15 +9,15 @@
     import { formatTimeToReadable } from "../logic/helper";
 
     import Tabs from "../components/tabs.svelte";
-    import ArtistCard from '../components/artistCard.svelte';
-    import ArtistReleases from '../components/artistReleases.svelte';
-    import ArtistSongs from '../components/artistSongs.svelte';
+    import ArtistCard from '../components/artist/artistCard.svelte';
+    import ArtistReleases from '../components/artist/artistReleases.svelte';
+    import ArtistSongs from '../components/artist/artistSongs.svelte';
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
     import MusicbrainzScan from '../components/musicbrainzScan.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
-    import Genres from '../components/genres.svelte';
+    import Genres from '../components/genre/genres.svelte';
 
     import SVGAlbum from "../../public/images/album.svg";
     import SVGPopular from "../../public/images/trending_up.svg";
