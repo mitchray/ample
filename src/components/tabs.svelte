@@ -5,18 +5,44 @@
     export let items = [];
     export let activeTabValue = null;
 
+    let hash;
+    let item;
+    let currentURL;
+
     onMount(() => {
-        // Set default tab value
-        if (Array.isArray(items) && items.length && items[0].value) {
-            activeTabValue = items[0].value;
-            items[0].loaded = true;
+        // might need to only set hash when tab is being destroyed
+
+        hash = window.location.hash.substr(1);
+        item = items.find(obj => obj.value === hash) || items[0];
+        setCurrentURL();
+
+        // set active tab from URL hash if present
+        if (item) {
+            activeTabValue = item.value;
+            item.loaded = true;
+        } else {
+            // Fallback default tab value
+            if (Array.isArray(items) && items.length && items[0].value) {
+                activeTabValue = items[0].value;
+                items[0].loaded = true;
+            }
         }
     });
+
+    function setHistory() {
+        window.history.replaceState({}, '', "#" + activeTabValue);
+    }
+
+    function setCurrentURL() {
+        currentURL = window.location.toString();
+    }
 
     function handleClick(tab) {
         tab.loaded = true;
         activeTabValue = tab.value;
         items = items; // this might not be needed
+        setCurrentURL();
+        setHistory();
     }
 </script>
 
