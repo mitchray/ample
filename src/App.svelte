@@ -105,7 +105,6 @@
                     <Route path="playlists" component={PlaylistsPage}/>
                     <Route path="smartlists/:id" component={PlaylistPage}/>
                     <Route path="smartlists" component={SmartlistsPage}/>
-                    <Route path="genres/:id/:type" component={GenrePage}/>
                     <Route path="genres/:id" component={GenrePage}/>
                     <Route path="genres" component={GenresPage}/>
                     <Route path="newest" component={NewestPage}/>
