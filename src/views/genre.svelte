@@ -32,19 +32,19 @@
                 {#if tab.loaded === true}
                     {#if tab.value === 'artists'}
                         <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">
-                            <GenreByType id={genre.id} type={tab.value} />
+                            <GenreByType id={genre.id} type="artist" />
                         </div>
                     {/if}
 
                     {#if tab.value === 'albums'}
                         <div class="albums" style="display: {currentTab === 'albums' ? 'block' : 'none'}">
-                            <GenreByType id={genre.id} type={tab.value} />
+                            <GenreByType id={genre.id} type="album"} />
                         </div>
                     {/if}
 
                     {#if tab.value === 'songs'}
                         <div class="songs" style="display: {currentTab === 'songs' ? 'block' : 'none'}">
-                            <GenreByType id={genre.id} type={tab.value} />
+                            <GenreByType id={genre.id} type="song" />
                         </div>
                     {/if}
                 {/if}

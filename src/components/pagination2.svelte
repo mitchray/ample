@@ -1,14 +1,23 @@
 <script>
-    export let count = 0;
-    export let limit = 10; // default
-    export let page = 0; // default
+    import { onMount } from 'svelte';
 
-    $: if (limit) {
-        resetPage();
-    }
+    export let count = 0;
+    export let limit = 0;
+    export let defaultLimit = 10;
+    export let page = 0;
+    export let type;
+    export let zone = "generic";
+
+    let paginationLimitID = `PaginationLimit.${type}.${zone}`;
+    let loaded = false;
 
     $: limit = limit;
     $: page = page;
+
+    $: if (limit && loaded) {
+        saveLimit();
+        resetPage();
+    }
 
     function nextPage() {
         page = page + 1;
@@ -21,6 +30,15 @@
     function resetPage() {
         page = 0;
     }
+
+    function saveLimit() {
+        localStorage.setItem(paginationLimitID, JSON.stringify(limit));
+    }
+
+    onMount(() => {
+        limit = JSON.parse(localStorage.getItem(paginationLimitID)) || defaultLimit;
+        loaded = true;
+    });
 </script>
 
 <div class="container">

@@ -13,16 +13,17 @@
 
     let genre;
     let data = [];
-    let limit = 50;
+    let defaultLimit = 50;
     let page = 0;
     let count = 0;
     let loadedTime = 0;
+    let limit = 0;
 
     $: count = data.length || 0;
     $: data = data;
 
     $: {
-        if (limit || page) {
+        if (limit > 0 || page) {
             getData();
         }
     }
@@ -32,13 +33,13 @@
 
         if (id && genre.id) {
             switch (type) {
-                case "artists":
+                case "artist":
                     data = await getArtistsByGenre({query: id, limit: limit, page: page});
                     break;
-                case "albums":
+                case "album":
                     data = await getAlbumsByGenre({query: id, limit: limit, page: page});
                     break;
-                case "songs":
+                case "song":
                     data = await getGenreSongs({query: id, limit: limit, page: page});
                     break;
                 default:
@@ -50,29 +51,31 @@
     }
 </script>
 
-{#if genre}
-    {#if data.length > 0}
-        <Pagination2 bind:limit bind:page bind:count />
+<Pagination2 bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />
 
+{#await getGenre(id)}
+    Loading
+{:then genre}
+    {#if genre.id}
         {#key loadedTime}
-            {#if type === 'artists'}
+            {#if type === 'artist'}
                 <Actions type="artistGenre" mode="fullButtons" data="{genre.name}" />
                 <Lister2 data={data} type="artist" activeSort="title"/>
             {/if}
 
-            {#if type === 'albums'}
+            {#if type === 'album'}
                 <Actions type="albumGenre" mode="fullButtons" data="{genre.name}" />
                 <Lister2 data={data} type="album" activeSort="title"/>
             {/if}
 
-            {#if type === 'songs'}
+            {#if type === 'song'}
                 <Actions type="songGenre" mode="fullButtons" data="{genre.name}" />
                 <Lister2 data={data} type="song" activeSort="title"/>
             {/if}
         {/key}
-
-        <Pagination2 bind:limit bind:page bind:count />
     {/if}
-{:else}
-    <p>No results</p>
-{/if}
+{:catch error}
+    <p>An error occurred.</p>
+{/await}
+
+<Pagination2 bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />

@@ -8,23 +8,24 @@
     let selectedChar = ''; // bound from alphanumericPagination
     let searchValue = ''; // bound from alphanumericPagination
     let dataDisplay = [];
-    let limit = 50;
+    let defaultLimit = 50;
     let page = 0;
     let count = 0;
     let loadedTime = 0;
+    let limit = 0;
 
     $: count = dataDisplay.length || 0;
     $: dataDisplay = dataDisplay;
 
     $: {
-        if (selectedChar || selectedChar === '') {
+        if (limit > 0 && (selectedChar || selectedChar === '')) {
             resetPage()
             getData();
         }
     }
 
     $: {
-        if (limit || page) {
+        if (limit > 0 || page) {
             getData();
         }
     }
@@ -41,10 +42,10 @@
 
 <AlphanumericPagination bind:selectedChar bind:searchValue />
 
-<Pagination2 bind:limit bind:page bind:count />
+<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
 
 {#key loadedTime}
     <Lister2 bind:data={dataDisplay} type="album" />
 {/key}
 
-<Pagination2 bind:limit bind:page bind:count />
+<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />

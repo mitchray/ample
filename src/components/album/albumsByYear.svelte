@@ -12,10 +12,11 @@
     let fromYear = showYear; // default to current year
     let toYear = showYear; // default to current year
     let loading = true;
-    let limit = 50;
+    let defaultLimit = 50;
     let page = 0;
     let count = 0;
     let loadedTime = 0;
+    let limit = 0;
 
     $: count = dataDisplay.length || 0;
 
@@ -27,7 +28,7 @@
     }
 
     $: {
-        if (limit || page) {
+        if (limit > 0 || page) {
             getData();
         }
     }
@@ -42,7 +43,7 @@
 
 <YearPagination bind:fromYear bind:toYear showYear={showYear} />
 
-<Pagination2 bind:limit bind:page bind:count />
+<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
 
 {#if fromYear && toYear}
     {#key fromYear+toYear}
@@ -59,4 +60,4 @@
     {/key}
 {/if}
 
-<Pagination2 bind:limit bind:page bind:count />
+<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
