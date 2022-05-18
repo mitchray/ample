@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.37.0] - 2022-05-18
+### Added
+- Dynamic style for genre cards
+
+### Changed
+- Changed genre page to use tabs, instead of Artists/Albums/Songs being separate pages
+
+### Fixed
+- Lister background color glitched sometimes when switching from List to Grid
+
 ## [0.36.0] - 2022-05-15
 ### Added
 - Remember Lister column selections
