@@ -52,7 +52,7 @@
                                     </span>
                                 {/if}
                                 <span class="info">
-                                    <span class="title">
+                                    <span class="name">
                                         {song.name}
                                     </span>
                                     {#if song.albumartist.id !== song.artist.id}
@@ -99,7 +99,7 @@
         padding: var(--spacing-md) var(--spacing-md);
     }
 
-    .title {
+    .name {
         display: flex;
         align-items: center;
     }
@@ -144,6 +144,7 @@
 
     .artist {
         display: block;
+        font-weight: 700;
     }
 
     .disc-info {
