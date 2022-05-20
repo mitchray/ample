@@ -71,10 +71,6 @@
                             <div class="name">
                                 <h1 class="title">
                                     {playlist.name}
-
-                                    {#if isSmartlist}
-                                        <button on:click={handleSongLoad} class="icon-button refresh-button"><SVGRefresh/></button>
-                                    {/if}
                                 </h1>
                             </div>
 
@@ -90,6 +86,10 @@
                                 <span>
                                     <SVGTrack class="inline"/> {songCount} {parseInt(songCount) === 1 ? 'song' : 'songs'}
                                 </span>
+
+                                {#if isSmartlist}
+                                    <button on:click={handleSongLoad} class="button button--regular refresh-button"><SVGRefresh /> Refresh</button>
+                                {/if}
                             </div>
 
                             <div class="actions">
