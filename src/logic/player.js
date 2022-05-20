@@ -292,13 +292,9 @@ class Player {
             this.wavesurfer.on('error', function (e) {
                 debugHelper('Wavesurfer play error', e);
 
-                // TODO clarify these errors
-                // IsPlaying.set(false);
+                IsPlaying.set(false);
 
-                if (e !== null) {
-                    debugHelper('Wavesurfer load error?', e);
-                    // self.next();
-                }
+                self.next();
             });
 
             this.wavesurfer.play();
