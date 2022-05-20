@@ -11,7 +11,7 @@
     let type = "song";
     let duplicatesPreset;
 
-    $: songTitle = songTitle;
+    $: songTitle = songTitle.replace(/\s[\(\[].+[\)\]]/, '');
     $: artistName = artistName;
 
     $: duplicatesPreset = {
@@ -20,7 +20,7 @@
         rule_1_operator: "4",
         rule_1_input: artistName,
         rule_2: "title",
-        rule_2_operator: "4",
+        rule_2_operator: "2",
         rule_2_input: songTitle
     };
 </script>
