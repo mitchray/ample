@@ -1,6 +1,7 @@
 import { tick } from "svelte";
 import { get } from 'svelte/store';
 import WaveSurfer from 'wavesurfer.js';
+import { getSong } from "./song";
 import { debugHelper, shuffleArray, sleep } from './helper';
 import {
     NowPlayingQueue,
@@ -301,6 +302,15 @@ class Player {
             });
 
             this.wavesurfer.play();
+
+            // Now that song has started, refresh the metadata in case it became stale while in the queue
+            let freshSong = Promise.resolve([]);
+            freshSong = getSong(song.id)
+                .then((result) => {
+                    if (!result.error && result.length > 0) {
+                        CurrentSong.set(result[0]);
+                    }
+                });
         } catch (e) {
             console.warn('Something went wrong during start', e);
             self.next();
@@ -338,7 +348,7 @@ class Player {
     }
 
     /**
-     * Play/pause Howl
+     * Play/pause
      */
     async playPause() {
         debugHelper('play/pause!');
