@@ -185,7 +185,7 @@ class Player {
             NowPlayingIndex.set(0);
             this.start(this.nowPlayingQueue[0]);
         } else {
-            this.clearAll();
+            this.stop();
         }
     }
 
@@ -334,6 +334,7 @@ class Player {
      */
     stop() {
         if (this.wavesurfer) {
+            IsPlaying.set(false);
             this.wavesurfer.cancelAjax();
             delete this.wavesurfer.backend.buffer;
             this.wavesurfer.destroy();
