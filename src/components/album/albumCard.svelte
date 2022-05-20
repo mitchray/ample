@@ -122,7 +122,7 @@
     }
 
     .image-container {
-        line-height: 0;
+        font-size: 0;
         position: relative;
         z-index: 1;
         justify-content: center;

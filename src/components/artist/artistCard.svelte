@@ -22,7 +22,9 @@
             <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
         </div>
     {:else}
-        <img class="image" height="400" width="400" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+        <div class="art-container">
+            <img class="image" height="400" width="400" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+        </div>
         <div class="title">Loading</div>
 
         <div class="rating-container">
@@ -65,11 +67,12 @@
     .art-container {
         border-radius: 50%;
         overflow: hidden;
-        height: 0;
         padding-bottom: 100%;
         width: 100%;
         position: relative;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
+        aspect-ratio: 1 / 1;
+        font-size: 0;
     }
 
     .image {

@@ -52,10 +52,13 @@
             <div class="top">
                 <div class="title">Loading</div>
                 <div class="artist"><br></div>
-                <div class="album"><br></div>
             </div>
 
             <div class="bottom">
+                <div class="meta">
+                    <span class="album"><br></span>
+                </div>
+
                 <Rating />
 
                 <div class="actions">
@@ -96,10 +99,10 @@
     }
 
     .image-container {
-        line-height: 0;
+        font-size: 0;
         position: relative;
         height: 100%;
-        max-width: 140px;
+        width: 140px;
         aspect-ratio: 1 / 1;
         flex-shrink: 0;
         flex-grow: 0;
