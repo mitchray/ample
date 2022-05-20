@@ -3,18 +3,18 @@
 
     import { CurrentSong } from "../../stores/status";
 
-    import { hasSongDuplicates } from "../../logic/song";
+    import { getSongVersions } from "../../logic/song";
 
     import SVGWarning from "../../../public/images/warning.svg";
 </script>
 
-<div class="song-duplicates">
+<div class="song-versions">
     {#if $CurrentSong}
         {#key $CurrentSong.title + $CurrentSong.artist.name}
-            {#await hasSongDuplicates($CurrentSong.title, $CurrentSong.artist.name)}
+            {#await getSongVersions($CurrentSong.title, $CurrentSong.artist.name)}
             {:then songs}
                 {#if songs.length > 1}
-                    <Link to="duplicates/{$CurrentSong.title}/{$CurrentSong.artist.name}" title="Duplicates found"><SVGWarning class="inline"/> Duplicates found</Link>
+                    <Link to="versions/{$CurrentSong.title}/{$CurrentSong.artist.name}" title="Alternate versions found"><SVGWarning class="inline"/> Alternate versions found</Link>
                 {/if}
             {/await}
         {/key}

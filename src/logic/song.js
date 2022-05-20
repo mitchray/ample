@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
-import { debugHelper, getRandomInt } from './helper';
+import { debugHelper } from './helper';
 import { v4 as uuidv4 } from 'uuid';
 
 let serverURL_value = get(serverURL);
@@ -66,7 +66,7 @@ export const getSongsFromArtist = async (id) => {
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSongsFromArtist");
 
-    let songs = await fetchSongData(queryURL)
+    let songs = await fetchSongData(queryURL);
     songs = sortSongsByYear(songs);
 
     return songs;
@@ -140,18 +140,30 @@ export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false
 
 /**
  * Find songs with same title from artist
- * @param {string} title
+ * @param songTitle
+ * @param artistName
  * @returns {Promise<*>}
  */
-export const hasSongDuplicates = (songTitle, artistName) => {
+export const getSongVersions = async (songTitle, artistName) => {
+    let cleanedTitle = parseTitle(songTitle);
+
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=2";
+    queryURL += "&limit=100";
     queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=title&rule_1_operator=4&rule_1_input=" + encodeURI(songTitle);
+    queryURL += "&rule_1=title&rule_1_operator=2&rule_1_input=" + encodeURI(cleanedTitle);
     queryURL += "&rule_2=artist&rule_2_operator=4&rule_2_input=" + encodeURI(artistName);
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "hasSongDuplicates");
-    return fetchSongData(queryURL);
+    debugHelper(queryURL, "getSongVersions URL");
+
+    let songs = await fetchSongData(queryURL);
+    debugHelper(songs, "getSongVersions before filtering");
+
+    let theRegex = "^" + cleanedTitle + "$";
+    let re = new RegExp(theRegex,"gi");
+    let filtered = songs.filter(e => parseTitle(e.title).match(re));
+
+    debugHelper(filtered, "getSongVersions after filtering");
+    return filtered;
 }
 
 /**
@@ -450,4 +462,13 @@ export const sortSongsByYear = (songs) => {
     });
 
     return songs;
+}
+
+/**
+ * Strips brackets & parentheses from title; e.g. (acoustic) or [live version]
+ * @param str
+ * @returns {*}
+ */
+function parseTitle(str) {
+    return str.replace(/\s*[\(\[].*[\)\]]/gi, '');
 }

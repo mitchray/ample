@@ -49,7 +49,7 @@
 
     import TestPage from './views/test.svelte';
     import AdvancedSearchPage from './views/advancedSearch.svelte';
-    import DuplicatesPage from './views/duplicates.svelte';
+    import SongVersionsPage from './views/songVersions.svelte';
 
     validateAuthToken();
 
@@ -93,7 +93,7 @@
 
                     <Route path="search" component={AdvancedSearchPage}/>
                     <Route path="multi-rater" component={MultiRaterPage}/>
-                    <Route path="duplicates/:songTitle/:artistName" component={DuplicatesPage}/>
+                    <Route path="versions/:songTitle/:artistName" component={SongVersionsPage}/>
 
                     <Route path="artists/:id" component={ArtistPage}/>
                     <Route path="artists" component={ArtistsPage}/>
