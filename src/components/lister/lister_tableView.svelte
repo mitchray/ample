@@ -108,16 +108,18 @@
     .header > :global(div) {
         text-align: left;
         background-color: var(--color-background);
-        border-bottom: 2px solid var(--color-border);
+        border-bottom: 3px solid var(--color-border);
         position: relative;
     }
 
     .row > :global(div) {
-        background-color: var(--color-card-primary);
+        background-color: var(--color-background);
+        border-bottom: 1px solid var(--color-border);
     }
 
     .stripe > :global(div) {
-        background-color: var(--color-row-stripe);
+        /* testing if I miss the stripes */
+        /*background-color: var(--color-row-stripe);*/
     }
 
     .lister :global(.actions),
