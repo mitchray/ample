@@ -57,14 +57,23 @@
         extendSession();
     }, 1000*60*15);
 
-    // reset scroll position after each 'page' load
+    // hook into page navigation
     history.pushState = new Proxy(history.pushState, {
         apply (target, thisArg, argumentsList) {
             $MediaPlayer.setWaveColors();
+
+            //reset scroll position after each 'page' load
             document.querySelector('.site-content-inner').scrollTop = 0;
+
             Reflect.apply(target, thisArg, argumentsList);
         }
     })
+
+    // hook into back/forward events
+    window.onpopstate = () => {
+        // Needs to be in a zero-length timeout
+        setTimeout(() => $MediaPlayer.setWaveColors(), 0);
+    };
 
     onMount(async () => {
         // get Ampache server version
