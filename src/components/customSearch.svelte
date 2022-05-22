@@ -920,7 +920,7 @@
 
         <div class="maximum">
             <label>
-                Showing
+                Limit to
                 <select bind:value={settings.limit}>
                     <option value="0">unlimited</option>
                     <option value="1">1</option>
@@ -932,7 +932,6 @@
                     <option value="250">250</option>
                     <option value="500">500</option>
                 </select>
-                {parseInt(settings.limit) === 1 ? 'result' : 'results'}
             </label>
         </div>
 
@@ -1130,9 +1129,13 @@
     </div>
 </div>
 
+<svelte:head>
+    <link rel="stylesheet" href='/ample/public/css/containerqueries/customSearch.css'>
+</svelte:head>
 
 <style>
     .container {
+        container: inline-size / custom-search-wrapper;
         border: 2px solid var(--color-input-border);
         border-radius: 10px;
         padding: var(--spacing-lg);
@@ -1140,22 +1143,32 @@
     }
 
     .rules {
-        display: grid;
-        grid-template-columns: repeat(4, auto);
-        width: fit-content;
-        gap: var(--spacing-md);
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        gap: var(--spacing-xl);
         margin: var(--spacing-lg) 0;
     }
 
     .row {
-        display: contents;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: end;
+        width: 100%;
+    }
+
+    .row > :global(*:not(button)) {
+        width: 100%;
     }
 
     .options {
         margin-bottom: var(--spacing-lg);
         display: flex;
-        gap: var(--spacing-xl);
+        gap: var(--spacing-md) var(--spacing-xl);
         align-items: center;
+        flex-wrap: wrap;
+        white-space: nowrap;
     }
 
     button {
