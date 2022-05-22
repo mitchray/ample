@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.38.0] - 2022-05-22
+### Added
+- Save Lister limits for each type (Artist/Album/Song etc)
+- Find alternate versions of currently playing song (instead of exact title matching)
+
+### Changed
+- Don't clear queue when end of list is reached and repeat is not enabled
+- Remove lister table striping (seeing if I miss it)
+- Moved Smartlist refresh button out of the playlist name
+
+### Fixed
+- Songs less than 1 minute were missing the leading zero (e.g. :43)
+- Some items were causing layout shifts while loading
+- Pull the latest metadata for currently playing song to make sure ratings etc are in sync
+- Attempt to play next song in queue if there is an error loading
+
 ## [0.37.0] - 2022-05-18
 ### Added
 - Dynamic style for genre cards
