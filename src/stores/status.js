@@ -21,6 +21,16 @@ export let DynamicsCompressorEnabled = writable(JSON.parse(localStorage.getItem(
 export let AutoPlayEnabled = writable(JSON.parse(localStorage.getItem('AutoPlayEnabled')) || false);
 export let AutoPlayPlaylist = writable(JSON.parse(localStorage.getItem('AutoPlayPlaylist')) || null);
 
+export let ShowNotificationGainTagsMissing = writable(
+    JSON.parse(localStorage.getItem('ShowNotificationGainTagsMissing')) !== null ? JSON.parse(localStorage.getItem('ShowNotificationGainTagsMissing')) : true
+);
+export let ShowNotificationRatingMissing = writable(
+    JSON.parse(localStorage.getItem('ShowNotificationRatingMissing')) !== null ? JSON.parse(localStorage.getItem('ShowNotificationRatingMissing')) : true
+);
+export let ShowNotificationAlternateVersions = writable(
+    JSON.parse(localStorage.getItem('ShowNotificationAlternateVersions')) !== null ? JSON.parse(localStorage.getItem('ShowNotificationAlternateVersions')) : true
+);
+
 export let ShowExpandedAlbums = writable(false);
 
 export let SkipBelow = writable(JSON.parse(localStorage.getItem('SkipBelow')) || false);

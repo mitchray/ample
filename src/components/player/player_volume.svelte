@@ -21,9 +21,6 @@
     let volumeSlider;
     let menuIsVisible = false;
 
-    let missingGainTags;
-    $: missingGainTags = $CurrentSong && !$CurrentSong.r128_track_gain && !$CurrentSong.replaygain_track_gain;
-
     function toggleMenu() {
         menuIsVisible = !menuIsVisible;
     }
@@ -114,7 +111,6 @@
     class="icon-button"
     title="Volume settings"
     on:click={toggleMenu}
-    class:notification-dot={missingGainTags}
 >
     <SVGTune style="padding: 0.15em;" />
 </button>

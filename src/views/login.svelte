@@ -22,7 +22,6 @@
     let password = "";
     let apiKey = "";
     let promise;
-    let legibleColors;
     let randomColor = lchToRgb([50, 50, getRandomInt(360)]);
     let message = '';
 

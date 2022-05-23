@@ -1,7 +1,12 @@
 import { tick } from "svelte";
 import { get } from 'svelte/store';
 import WaveSurfer from 'wavesurfer.js';
-import { getSong } from "./song";
+import { getSong, getSongVersions } from "./song";
+import {
+    addAlternateVersionsNotification,
+    addGainTagsMissingNotification,
+    addRatingMissingNotification
+} from "./notification";
 import { debugHelper, shuffleArray, sleep } from './helper';
 import {
     NowPlayingQueue,
@@ -12,7 +17,10 @@ import {
     PlayerVolume,
     RepeatEnabled,
     VolumeNormalizationEnabled,
-    DynamicsCompressorEnabled
+    DynamicsCompressorEnabled,
+    ShowNotificationRatingMissing,
+    ShowNotificationGainTagsMissing,
+    ShowNotificationAlternateVersions
 } from '../stores/status';
 
 /**
@@ -205,6 +213,11 @@ class Player {
         if (song) {
             CurrentSong.set(song);
             document.title = song.title + " - " + song.artist.name;
+
+            // notify if missing gain tags
+            if (get(ShowNotificationGainTagsMissing) && !song.r128_track_gain && !song.replaygain_track_gain) {
+                addGainTagsMissingNotification(song);
+            }
         } else {
             debugHelper('No song IDs could be found');
             document.title = this.defaultTitle;
@@ -300,17 +313,30 @@ class Player {
             this.wavesurfer.play();
 
             // Now that song has started, refresh the metadata in case it became stale while in the queue
-            let freshSong = Promise.resolve([]);
-            freshSong = getSong(song.id)
+            self.refreshMetadata(song);
+
+            let songVersions = Promise.resolve([]);
+            songVersions = getSongVersions(song.title, song.artist.name)
                 .then((result) => {
-                    if (!result.error && result.length > 0) {
-                        CurrentSong.set(result[0]);
+                    if (get(ShowNotificationAlternateVersions) && !result.error && result.length > 1) {
+                        song.versionsCount = result.length - 1;
+                        addAlternateVersionsNotification(song);
                     }
                 });
         } catch (e) {
             console.warn('Something went wrong during start', e);
             self.next();
         }
+    }
+
+    refreshMetadata(song) {
+        let freshSong = Promise.resolve([]);
+        freshSong = getSong(song.id)
+            .then((result) => {
+                if (!result.error && result.length > 0) {
+                    CurrentSong.set(result[0]);
+                }
+            });
     }
 
     recordLastPlayed() {
@@ -398,6 +424,12 @@ class Player {
         }
 
         this.stop();
+
+        // if song has no rating by the end of play, notify
+        this.refreshMetadata(this.currentSong);
+        if (get(ShowNotificationRatingMissing) && !this.currentSong.rating) {
+            addRatingMissingNotification(this.currentSong);
+        }
 
         // Increment index and play next
         if (this.nowPlayingIndex + 1 < this.nowPlayingQueue.length) {

@@ -161,10 +161,6 @@
     }
 
     /* some default styles for menu items */
-    .c-menu :global(li + li) {
-        margin-top: var(--spacing-md);
-    }
-
     .c-menu :global(.menu-list) {
         display: flex;
         flex-direction: column;

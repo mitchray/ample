@@ -576,7 +576,6 @@ section {
     bottom: calc(100% - 8px);
     left: calc(100% - 8px);
     background-color: var(--color-text-primary);
-    backdrop-filter: blur(3px);
     z-index: 5;
     border-radius: 99px;
     font-size: 0.8em;

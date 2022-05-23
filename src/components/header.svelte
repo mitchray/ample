@@ -9,7 +9,7 @@
 
     import Search from '../components/search.svelte';
     import ThemeToggle from '../components/themeToggle.svelte';
-    import SongVersions from './player/player_songVersions.svelte';
+    import Notifications from '../components/notification/notifications.svelte';
 
     import SVGAmpleLogo from "../../public/images/ample_logo.svg";
     import SVGClose from "../../public/images/close.svg";
@@ -91,7 +91,7 @@
 
     <Link to="search" class="advanced-search">Advanced Search</Link>
 
-    <SongVersions />
+    <Notifications />
 
     <button on:click={handleLogOut} class="logout visuallyLink"><SVGLogout style="transform: scale(0.8);" /> Log out</button>
 
@@ -184,6 +184,10 @@
 
     .site-header :global(.song-versions) {
         display: inline-block;
+        margin-right: auto;
+    }
+
+    .site-header :global(.notifications-toggle) {
         margin-right: auto;
     }
 </style>

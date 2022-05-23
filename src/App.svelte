@@ -23,6 +23,7 @@
     import Sidebar from './components/sidebar.svelte';
     import Queue from './components/queue.svelte';
     import Player from './components/player/player.svelte';
+    import Toasts from './components/notification/toasts.svelte';
 
     import LoginPage from './views/login.svelte';
     import NotFound404Page from './views/notFound404.svelte';
@@ -93,6 +94,7 @@
     {/if}
 
     {#if $isLoggedIn}
+        <Toasts />
         <Header/>
         <div class="site-inner">
             <Sidebar/>
