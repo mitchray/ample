@@ -122,10 +122,6 @@
         margin: var(--spacing-md) 0;
     }
 
-    .message .title {
-        margin-bottom: var(--spacing-sm);
-    }
-
     .message .title,
     .message .artist,
     .message .album {

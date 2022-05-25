@@ -176,6 +176,10 @@
         gap: var(--spacing-sm);
     }
 
+    .c-menu :global(.menu-list li + li) {
+        margin-top: var(--spacing-sm);
+    }
+
     .c-menu :global(.title) {
         margin-bottom: 0;
         display: inline-block;
