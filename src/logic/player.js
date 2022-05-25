@@ -267,7 +267,11 @@ class Player {
             this.initFilters();
             this.filterGain.gain.value = this.calculateGain();
             this.wavesurfer.setVolume(this.globalVolume);
-            this.wavesurfer.load(this.currentSong.url);
+
+            // create custom audio object in order to set crossOrigin
+            let ourSong = new Audio(this.currentSong.url);
+            ourSong.crossOrigin = 'anonymous';
+            this.wavesurfer.load(ourSong);
 
             await this.updateFilters();
 
