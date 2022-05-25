@@ -2,6 +2,11 @@ import { get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import { getSong } from "./song";
 import { NotificationsList } from '../stores/notification';
+import {
+    ShowNotificationRatingMissing,
+    ShowNotificationGainTagsMissing,
+    ShowNotificationAlternateVersions
+} from '../stores/status';
 
 export const addNotification = (settings) => {
     settings.id    = uuidv4();
@@ -34,6 +39,10 @@ export const removeNotification = (id) => {
 }
 
 export const addGainTagsMissingNotification = (data) => {
+    if (!get(ShowNotificationGainTagsMissing)) {
+        return;
+    }
+
     let settings = {
         title: "Missing volume gain tags",
         type: "gainTagsMissing",
@@ -45,6 +54,10 @@ export const addGainTagsMissingNotification = (data) => {
 }
 
 export const addRatingMissingNotification = (data) => {
+    if (!get(ShowNotificationRatingMissing)) {
+        return;
+    }
+
     let settings = {
         title: "Missing rating",
         type: "ratingMissing",
@@ -63,6 +76,10 @@ export const addRatingMissingNotification = (data) => {
 }
 
 export const addAlternateVersionsNotification = (data) => {
+    if (!get(ShowNotificationAlternateVersions)) {
+        return;
+    }
+
     let versionText = data.versionsCount !== 1 ? 'versions' : 'version';
     let title = `${data.versionsCount} alternate ${versionText} found`;
 

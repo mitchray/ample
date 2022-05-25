@@ -17,10 +17,7 @@ import {
     PlayerVolume,
     RepeatEnabled,
     VolumeNormalizationEnabled,
-    DynamicsCompressorEnabled,
-    ShowNotificationRatingMissing,
-    ShowNotificationGainTagsMissing,
-    ShowNotificationAlternateVersions
+    DynamicsCompressorEnabled
 } from '../stores/status';
 
 /**
@@ -215,7 +212,7 @@ class Player {
             document.title = song.title + " - " + song.artist.name;
 
             // notify if missing gain tags
-            if (get(ShowNotificationGainTagsMissing) && !song.r128_track_gain && !song.replaygain_track_gain) {
+            if (!song.r128_track_gain && !song.replaygain_track_gain) {
                 addGainTagsMissingNotification(song);
             }
         } else {
@@ -328,7 +325,7 @@ class Player {
             let songVersions = Promise.resolve([]);
             songVersions = getSongVersions(song.title, song.artist.name)
                 .then((result) => {
-                    if (get(ShowNotificationAlternateVersions) && !result.error && result.length > 1) {
+                    if (!result.error && result.length > 1) {
                         song.versionsCount = result.length - 1;
                         addAlternateVersionsNotification(song);
                     }
@@ -426,9 +423,7 @@ class Player {
         this.stop();
 
         // if song has no rating by the end of play, notify
-        if (get(ShowNotificationRatingMissing)) {
-            addRatingMissingNotification(this.currentSong);
-        }
+        addRatingMissingNotification(this.currentSong);
 
         // Increment index and play next
         if (this.nowPlayingIndex + 1 < this.nowPlayingQueue.length) {
