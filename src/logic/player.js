@@ -320,7 +320,7 @@ class Player {
             let freshSong = Promise.resolve([]);
             freshSong = getSong(song.id)
                 .then((result) => {
-                    if (!result.error && result.length > 0) {
+                    if (!result.error && result.length > 0 && this.currentSong.id === song.id) {
                         CurrentSong.set(result[0]);
                     }
                 });
