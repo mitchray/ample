@@ -11,6 +11,7 @@
 
     import SVGNotifications from '../../../public/images/notifications.svg';
     import SVGNotificationsNone from '../../../public/images/notifications_none.svg';
+    import SVGClose from '../../../public/images/close.svg';
 
     let menuIsVisible = false;
 
@@ -25,6 +26,10 @@
     ];
 
     $: $NotificationsList = $NotificationsList;
+
+    function handleClearNotifications() {
+        $NotificationsList = [];
+    }
 
     function handleAlternateVersionsToggle() {
         let inverted = !$ShowNotificationAlternateVersions;
@@ -59,6 +64,7 @@
             <div class="notifications-view" style="display: {currentTab === 1 ? 'block' : 'none'}">
                 <div class="header panel-header">
                     <h4 class="title panel-title">Notifications</h4>
+                    <button class="clear-notifications icon-button" title="Clear all notifications" on:click={handleClearNotifications}><SVGClose /></button>
                     <button class="button button--regular" on:click={e => currentTab = 2}>Settings</button>
                 </div>
 
@@ -134,6 +140,14 @@
     .header {
         display: flex;
         justify-content: space-between;
+    }
+
+    .title {
+        margin-right: var(--spacing-md);
+    }
+
+    .clear-notifications {
+        margin-right: auto;
     }
 
     .info {
