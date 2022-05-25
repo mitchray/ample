@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
+import { getSong } from "./song";
 import { NotificationsList } from '../stores/notification';
 
 export const addNotification = (settings) => {
@@ -51,7 +52,14 @@ export const addRatingMissingNotification = (data) => {
         data: data
     }
 
-    addNotification(settings);
+    let song = Promise.resolve([]);
+
+    song = getSong(data.id)
+        .then((result) => {
+            if (!result.error && result.length > 0 && !result[0].rating) {
+                addNotification(settings);
+            }
+        });
 }
 
 export const addAlternateVersionsNotification = (data) => {

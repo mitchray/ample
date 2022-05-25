@@ -426,7 +426,7 @@ class Player {
         this.stop();
 
         // if song has no rating by the end of play, notify
-        if (get(ShowNotificationRatingMissing) && !get(CurrentSong).rating) {
+        if (get(ShowNotificationRatingMissing)) {
             addRatingMissingNotification(this.currentSong);
         }
 
