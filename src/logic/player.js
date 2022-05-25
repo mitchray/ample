@@ -313,7 +313,13 @@ class Player {
             this.wavesurfer.play();
 
             // Now that song has started, refresh the metadata in case it became stale while in the queue
-            self.refreshMetadata(song);
+            let freshSong = Promise.resolve([]);
+            freshSong = getSong(song.id)
+                .then((result) => {
+                    if (!result.error && result.length > 0) {
+                        CurrentSong.set(result[0]);
+                    }
+                });
 
             let songVersions = Promise.resolve([]);
             songVersions = getSongVersions(song.title, song.artist.name)
@@ -327,16 +333,6 @@ class Player {
             console.warn('Something went wrong during start', e);
             self.next();
         }
-    }
-
-    refreshMetadata(song) {
-        let freshSong = Promise.resolve([]);
-        freshSong = getSong(song.id)
-            .then((result) => {
-                if (!result.error && result.length > 0) {
-                    CurrentSong.set(result[0]);
-                }
-            });
     }
 
     recordLastPlayed() {
@@ -426,8 +422,7 @@ class Player {
         this.stop();
 
         // if song has no rating by the end of play, notify
-        this.refreshMetadata(this.currentSong);
-        if (get(ShowNotificationRatingMissing) && !this.currentSong.rating) {
+        if (get(ShowNotificationRatingMissing) && !get(CurrentSong).rating) {
             addRatingMissingNotification(this.currentSong);
         }
 
