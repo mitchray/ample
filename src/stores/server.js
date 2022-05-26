@@ -4,7 +4,8 @@ import { readable, writable, derived } from 'svelte/store';
 export let debugMode = writable(false);
 
 // Attempt to obtain the Ampache server installation based on requested path
-let detectedURL = (window.location.origin + window.location.pathname).split(/\/ample/)[0];
+let detectedPathname = (window.location.pathname).split(/\/ample/)[0];
+let detectedURL = (window.location.origin + detectedPathname);
 
 export let APIVersion = writable("5.3.1");
 
@@ -19,6 +20,11 @@ export const serverURL = readable(detectedURL, function start(set) {
     // detectedURL = "https://develop.ampache.dev";
 
     set(detectedURL);
+    return function stop() {};
+});
+
+export const serverPathname = readable(detectedPathname, function start(set) {
+    set(detectedPathname);
     return function stop() {};
 });
 

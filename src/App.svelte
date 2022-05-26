@@ -6,7 +6,7 @@
     import { onMount } from 'svelte';
     import { Router, Route } from "svelte-routing";
 
-    import { serverVersion } from "./stores/server";
+    import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind } from "./stores/player";
 
@@ -84,7 +84,7 @@
 
 <ThemeHandler />
 
-<Router basepath="/ample">
+<Router basepath="{$serverPathname}/ample">
     {#if $isLoggedIn === null && $userToken === null}
         <SiteLoading/>
     {/if}

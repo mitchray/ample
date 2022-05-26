@@ -1,11 +1,12 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
-    import { Link } from "svelte-routing";
+    import { Link, link } from "svelte-routing";
 
     import { logout } from "../logic/user";
 
     import { SearchQuery, ShowSearch } from "../stores/status";
     import { SiteContentBind } from '../stores/player';
+    import { serverURL } from '../stores/server';
 
     import Search from '../components/search.svelte';
     import ThemeToggle from '../components/themeToggle.svelte';
@@ -70,7 +71,7 @@
 
 <div class="site-header">
     <div class="site-logo-container">
-        <Link to="/" class="site-logo"><SVGAmpleLogo /></Link>
+        <a href="{$serverURL}/ample" use:link class="site-logo"><SVGAmpleLogo /></a>
     </div>
 
     <div class="search-container">
