@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.39.0] - 2022-05-26
+### Added
+- Notification system! (enabled by default, specific types can be disabled Notifications > Settings)
+
+### Changed
+- Advanced search fields are now responsive
+
+### Fixed
+- Waveform colours weren't updating after browser back/forward
+- Cross-origin playback from the demo server
+- Support Ampache installations which are in a subdirectory (e.g. yoursite.com/ampache)
+
 ## [0.38.0] - 2022-05-22
 ### Added
 - Save Lister limits for each type (Artist/Album/Song etc)
