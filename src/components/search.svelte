@@ -16,6 +16,8 @@
 
     let initialResults = {};
     let noResults = false;
+    let isExact = false;
+    let queryWithoutQuotes = "";
 
     function handleClick(event) {
         // Close search if we are following a link
@@ -30,6 +32,9 @@
 
     $: {
         if ($SearchQuery) {
+            isExact = new RegExp(/^".*"$/gi).test($SearchQuery);
+            queryWithoutQuotes = $SearchQuery.replaceAll(/(^"|"$)/ig, '');
+
             resetResults();
             doSearch();
         }
@@ -46,11 +51,11 @@
     }
 
     async function doSearch() {
-        const s1 = searchArtists({query: $SearchQuery, page: 0, limit: 6});
-        const s2 = searchAlbums({query: $SearchQuery, page: 0, limit: 6});
-        const s3 = searchSongs({query: $SearchQuery, page: 0, limit: 9});
-        const s4 = searchPlaylists({query: $SearchQuery, page: 0, limit: 6});
-        const s5 = searchSmartlists({query: $SearchQuery, page: 0, limit: 6});
+        const s1 = searchArtists({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
+        const s2 = searchAlbums({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
+        const s3 = searchSongs({query: queryWithoutQuotes, page: 0, limit: 9, exact: isExact});
+        const s4 = searchPlaylists({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
+        const s5 = searchSmartlists({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
 
         [initialResults.artists, initialResults.albums, initialResults.songs, initialResults.playlists, initialResults.smartlists] = await Promise.all([s1, s2, s3, s4, s5]);
 

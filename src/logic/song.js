@@ -238,10 +238,14 @@ export const unratedSongs = ({query = "", page = 0, limit = 50}) => {
  * @param query
  * @param page
  * @param limit
+ * @param exact
  * @returns {Promise<*>}
  */
-export const searchSongs = ({query = "", page = 0, limit = 50}) => {
+export const searchSongs = ({query = "", page = 0, limit = 50, exact = false}) => {
+    exact = (exact) ? 1 : 0;
+
     let queryURL = serverURL_value + "/server/json.server.php?action=songs&filter=" + query;
+    queryURL += "&exact=" + exact;
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
