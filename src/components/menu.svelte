@@ -181,7 +181,6 @@
     }
 
     .c-menu :global(.title) {
-        margin-bottom: 0;
         display: inline-block;
         margin-right: var(--spacing-xl);
     }

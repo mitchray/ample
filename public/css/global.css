@@ -520,6 +520,7 @@ svg.inline {
     --roboto-opsz: 30;
     letter-spacing: 0.03em;
     font-size: 14px;
+    margin-bottom: 0;
 }
 
 @media (min-resolution: 150dpi) {

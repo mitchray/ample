@@ -12,6 +12,7 @@
     import PlayerQueue from './player_queue.svelte';
     import PlayerVolume from '../player/player_volume.svelte';
     import PlayerAutoPlay from '../player/player_autoPlay.svelte';
+    import PlayerLyrics from '../player/player_lyrics.svelte';
 
     import SVGPlay from "../../../public/images/play.svg";
     import SVGPause from "../../../public/images/pause.svg";
@@ -106,6 +107,8 @@
     </div>
 
     <div class="site-player__secondary-controls">
+        <PlayerLyrics />
+
         <button
             class="icon-button icon-repeat"
             class:active={$RepeatEnabled}

@@ -3,7 +3,9 @@
     import {
         ShowNotificationAlternateVersions,
         ShowNotificationGainTagsMissing,
-        ShowNotificationRatingMissing
+        ShowNotificationRatingMissing,
+        ShowNotificationLyricsMissing,
+        ShowNotificationLyricsNotTimestamped,
     } from '../../stores/status';
 
     import Menu from '../../components/menu.svelte';
@@ -43,10 +45,22 @@
         ShowNotificationGainTagsMissing.set(inverted);
     }
 
-    function handleAlternateRatingMissing() {
+    function handleRatingMissingToggle() {
         let inverted = !$ShowNotificationRatingMissing;
         localStorage.setItem('ShowNotificationRatingMissing', JSON.stringify(inverted));
         ShowNotificationRatingMissing.set(inverted);
+    }
+
+    function handleLyricsMissingToggle() {
+        let inverted = !$ShowNotificationLyricsMissing;
+        localStorage.setItem('ShowNotificationLyricsMissing', JSON.stringify(inverted));
+        ShowNotificationLyricsMissing.set(inverted);
+    }
+
+    function handleLyricsNotTimestampedToggle() {
+        let inverted = !$ShowNotificationLyricsNotTimestamped;
+        localStorage.setItem('ShowNotificationLyricsNotTimestamped', JSON.stringify(inverted));
+        ShowNotificationLyricsNotTimestamped.set(inverted);
     }
 </script>
 
@@ -106,11 +120,29 @@
 
                     <div class="group">
                         <label class="toggle">
-                            <input type="checkbox" on:change={handleAlternateRatingMissing} bind:checked={$ShowNotificationRatingMissing} />
+                            <input type="checkbox" on:change={handleRatingMissingToggle} bind:checked={$ShowNotificationRatingMissing} />
                             Missing song rating
                         </label>
 
                         <div class="info">Notify if there was no rating set for the song that just played</div>
+                    </div>
+
+                    <div class="group">
+                        <label class="toggle">
+                            <input type="checkbox" on:change={handleLyricsMissingToggle} bind:checked={$ShowNotificationLyricsMissing} />
+                            Missing lyrics
+                        </label>
+
+                        <div class="info">Notify if currently playing song is missing lyrics</div>
+                    </div>
+
+                    <div class="group">
+                        <label class="toggle">
+                            <input type="checkbox" on:change={handleLyricsNotTimestampedToggle} bind:checked={$ShowNotificationLyricsNotTimestamped} />
+                            Lyrics not timestamped
+                        </label>
+
+                        <div class="info">Notify if lyrics are not timestamped</div>
                     </div>
                 </div>
             </div>

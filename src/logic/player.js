@@ -5,9 +5,11 @@ import { getSong, getSongVersions } from "./song";
 import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,
-    addRatingMissingNotification
+    addRatingMissingNotification,
+    addLyricsMissingNotification,
+    addLyricsNotTimestampedNotification,
 } from "./notification";
-import { debugHelper, shuffleArray, sleep } from './helper';
+import { debugHelper, shuffleArray, sleep, lyricsAreTimestamped } from './helper';
 import {
     NowPlayingQueue,
     NowPlayingIndex,
@@ -215,6 +217,14 @@ class Player {
             if (!song.r128_track_gain && !song.replaygain_track_gain) {
                 addGainTagsMissingNotification(song);
             }
+
+            if (!song.lyrics) {
+                addLyricsMissingNotification(song);
+            }
+
+            if (song.lyrics && !lyricsAreTimestamped(song.lyrics)) {
+                addLyricsNotTimestampedNotification(song);
+            }
         } else {
             debugHelper('No song IDs could be found');
             document.title = this.defaultTitle;
@@ -318,7 +328,9 @@ class Player {
             freshSong = getSong(song.id)
                 .then((result) => {
                     if (!result.error && result.length > 0 && this.currentSong.id === song.id) {
-                        CurrentSong.set(result[0]);
+                        // TODO redo in a way that doesn't after CurrentSong assignment
+                        // which results in things re-triggering
+                        // CurrentSong.set(result[0]);
                     }
                 });
 

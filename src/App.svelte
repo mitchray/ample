@@ -24,6 +24,7 @@
     import Queue from './components/queue.svelte';
     import Player from './components/player/player.svelte';
     import Toasts from './components/notification/toasts.svelte';
+    import Lyrics from './components/lyrics.svelte';
 
     import LoginPage from './views/login.svelte';
     import NotFound404Page from './views/notFound404.svelte';
@@ -129,6 +130,8 @@
                     <Route path="" component={HomePage}/>
                     <Route path="/" component={HomePage}/>
                     <Route path="*" component={NotFound404Page}/>
+
+                    <Lyrics/>
                 </div>
             </div>
             <Queue/>

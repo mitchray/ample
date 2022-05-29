@@ -1,11 +1,11 @@
 import { get } from "svelte/store";
 
-import { serverURL, debugMode } from '../stores/server';
+import { debugMode, serverURL } from '../stores/server';
 import { customHue } from "../stores/status";
 
 import JsSHA from "jssha/dist/sha1";
 import FastAverageColor from "fast-average-color";
-import { rgbToLch, lchToRgb } from 'color-converters';
+import { rgbToLch } from 'color-converters';
 
 let debugEnabled = get(debugMode);
 
@@ -245,3 +245,20 @@ export async function getCustomHue(color) {
 
     customHue.set(theHue);
 }
+
+/**
+ Test if lyrics are timestamped
+ */
+export function lyricsAreTimestamped(lyrics) {
+    return new RegExp(/\[\d\d:/gi).test(lyrics);
+}
+
+/**
+ Wait for an element to exist before continuing
+ */
+export async function waitForElement(selector)  {
+    while ( document.querySelector(selector) === null) {
+        await new Promise( resolve =>  requestAnimationFrame(resolve) )
+    }
+    return document.querySelector(selector);
+};

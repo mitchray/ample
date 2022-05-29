@@ -2,6 +2,7 @@
     import { onMount } from 'svelte';
     import { flip } from 'svelte/animate';
     import { dndzone } from 'svelte-dnd-action';
+    import { waitForElement } from "../logic/helper";
 
     import { NowPlayingQueue, NowPlayingIndex, CurrentSong, ShowQueue } from '../stores/status';
     import { MediaPlayer } from '../stores/player';
@@ -37,15 +38,8 @@
         queueMoreMenuIsOpen = false;
     }
 
-    const checkElement = async selector => {
-        while ( document.querySelector(selector) === null) {
-            await new Promise( resolve =>  requestAnimationFrame(resolve) )
-        }
-        return document.querySelector(selector);
-    };
-
     function showCurrentSong({behavior = 'smooth'}) {
-        checkElement('.site-queue .currentlyPlaying').then((selector) => {
+        waitForElement('.site-queue .currentlyPlaying').then((selector) => {
             selector.scrollIntoView({
                 behavior: behavior,
             });

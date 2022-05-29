@@ -5,7 +5,9 @@ import { NotificationsList } from '../stores/notification';
 import {
     ShowNotificationRatingMissing,
     ShowNotificationGainTagsMissing,
-    ShowNotificationAlternateVersions
+    ShowNotificationAlternateVersions,
+    ShowNotificationLyricsMissing,
+    ShowNotificationLyricsNotTimestamped,
 } from '../stores/status';
 
 export const addNotification = (settings) => {
@@ -59,7 +61,7 @@ export const addRatingMissingNotification = (data) => {
     }
 
     let settings = {
-        title: "Missing rating",
+        title: "Missing song rating",
         type: "ratingMissing",
         style: "warning",
         data: data
@@ -87,6 +89,36 @@ export const addAlternateVersionsNotification = (data) => {
         title: title,
         type: "alternateVersions",
         style: "info",
+        data: data
+    }
+
+    addNotification(settings);
+}
+
+export const addLyricsMissingNotification = (data) => {
+    if (!get(ShowNotificationLyricsMissing)) {
+        return;
+    }
+
+    let settings = {
+        title: "Missing lyrics",
+        type: "lyricsMissing",
+        style: "warning",
+        data: data
+    }
+
+    addNotification(settings);
+}
+
+export const addLyricsNotTimestampedNotification = (data) => {
+    if (!get(ShowNotificationLyricsNotTimestamped)) {
+        return;
+    }
+
+    let settings = {
+        title: "Lyrics not timestamped",
+        type: "lyricsMissingTimestamps",
+        style: "warning",
         data: data
     }
 

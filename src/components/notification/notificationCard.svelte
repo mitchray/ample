@@ -38,7 +38,7 @@
             <div class="message">{item.message}</div>
         {/if}
 
-        {#if item.type === "gainTagsMissing" || item.type === "ratingMissing" || item.type === "alternateVersions"}
+        {#if item.data}
             <div class="message">
                 <div class="title">
                     {item.data.title}

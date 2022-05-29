@@ -12,6 +12,7 @@ export let ShowSearch = writable(false);
 
 export let SidebarIsMini = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
 export let ShowQueue = writable(JSON.parse(localStorage.getItem('ShowQueue')) || false);
+export let ShowLyrics = writable(JSON.parse(localStorage.getItem('ShowLyrics')) || false);
 
 export let PlayerVolume = writable(JSON.parse(localStorage.getItem('PlayerVolume')) || 50);
 export let RepeatEnabled = writable(JSON.parse(localStorage.getItem('RepeatEnabled')) || false);
@@ -29,6 +30,12 @@ export let ShowNotificationRatingMissing = writable(
 );
 export let ShowNotificationAlternateVersions = writable(
     JSON.parse(localStorage.getItem('ShowNotificationAlternateVersions')) !== null ? JSON.parse(localStorage.getItem('ShowNotificationAlternateVersions')) : true
+);
+export let ShowNotificationLyricsMissing = writable(
+    JSON.parse(localStorage.getItem('ShowNotificationLyricsMissing')) !== null ? JSON.parse(localStorage.getItem('ShowNotificationLyricsMissing')) : true
+);
+export let ShowNotificationLyricsNotTimestamped = writable(
+    JSON.parse(localStorage.getItem('ShowNotificationLyricsNotTimestamped')) !== null ? JSON.parse(localStorage.getItem('ShowNotificationLyricsNotTimestamped')) : true
 );
 
 export let ShowExpandedAlbums = writable(false);
