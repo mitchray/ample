@@ -312,7 +312,10 @@
             label: "Filename",
             category: "File Data",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" },
+                { id: "artist" },
+
             ],
             operatorType: "string",
             inputType: "text"
@@ -378,11 +381,42 @@
             inputType: "text"
         },
         {
+            id: "orphaned_album",
+            label: "Orphaned Album",
+            category: "File Data",
+            object_types: [
+                { id: "song" },
+            ],
+            operatorType: "boolean_true",
+            inputType: ""
+        },
+        {
             id: "song_artist",
             label: "Song Artist",
             category: "Album Metadata",
             object_types: [
                 { id: "album" },
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "song_title",
+            label: "Song Title",
+            category: "Metadata",
+            object_types: [
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "album_title",
+            label: "Album Title",
+            category: "Artist Metadata",
+            object_types: [
+                { id: "artist" },
             ],
             operatorType: "string",
             inputType: "text"
