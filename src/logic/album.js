@@ -342,17 +342,26 @@ export const getAlbumsByGenre = ({query, page = 0, limit = 50}) => {
  * @param {array} albums
  * @returns {Map<any, any>}
  */
-export const groupAlbumsByReleaseType = async (albums) => {
+export const groupAlbumsByReleaseType = async (albums, artistID) => {
     let releaseTypes = new Map();
     let preferenceAlbumReleaseType = await getUserPreference('album_release_type');
     let preferenceAlbumReleaseTypeSort = await getUserPreference('album_release_type_sort');
     let preferenceReleaseTypes = preferenceAlbumReleaseTypeSort.value.split(',');
+    let appearanceText = ", appearance";
 
     if (preferenceAlbumReleaseType.value === '1') {
         // Create base types in specified order from server setting
         for (let i = 0; i < preferenceReleaseTypes.length; i++) {
-            if (!releaseTypes.get(preferenceReleaseTypes[i])) {
-                releaseTypes.set(preferenceReleaseTypes[i].toLowerCase(), []);
+            let typeText = preferenceReleaseTypes[i].toLowerCase();
+
+            // for releases by artist
+            if (!releaseTypes.get(typeText)) {
+                releaseTypes.set(typeText, []);
+            }
+
+            // for appearances on releases from other artists
+            if (!releaseTypes.get(typeText + appearanceText)) {
+                releaseTypes.set(typeText + appearanceText, []);
             }
         }
 
@@ -363,10 +372,12 @@ export const groupAlbumsByReleaseType = async (albums) => {
         for (let i = 0; i < albums.length; i++) {
             let type = albums[i].type;
 
+            // standardise else comparison will fail
             if (type) {
                 type = type.toLowerCase();
             }
 
+            // create new type if needed
             if (!releaseTypes.get(type)) {
                 releaseTypes.set(type, []);
             }
@@ -376,7 +387,11 @@ export const groupAlbumsByReleaseType = async (albums) => {
                     releaseTypes.get("unknown").push(albums[i]);
                     break;
                 default:
-                    releaseTypes.get(type).push(albums[i]);
+                    if (albums[i].artist.id === artistID) {
+                        releaseTypes.get(type).push(albums[i]);
+                    } else {
+                        releaseTypes.get(type + appearanceText).push(albums[i]);
+                    }
                     break;
             }
         }

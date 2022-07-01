@@ -18,7 +18,7 @@
     onMount(async () => {
         albums = await getAlbumsByArtist(artistID);
         sortedAlbums = await sortAlbumsByDate(albums);
-        groupedAlbums = await groupAlbumsByReleaseType(sortedAlbums);
+        groupedAlbums = await groupAlbumsByReleaseType(sortedAlbums, artistID);
         loading = false;
     });
 </script>
