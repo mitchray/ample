@@ -7,7 +7,7 @@ export let debugMode = writable(false);
 let detectedPathname = (window.location.pathname).split(/\/ample/)[0];
 let detectedURL = (window.location.origin + detectedPathname);
 
-export let APIVersion = writable("5.4.0");
+export let APIVersion = writable("5.4.1");
 
 export const serverURL = readable(detectedURL, function start(set) {
     // local testing override

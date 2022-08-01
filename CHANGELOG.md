@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.40.0] - 2022-08-01
+### Requires at least Ampache 5.4.1
+
+### Added
+- Lyrics panel, supporting timestamped lyrics if present. New button near the volume slider.
+  - Notification for missing lyrics
+  - Notification for lyrics present, but not timestamped
+- Use quotation marks in Quick Search to perform an exact search, e.g. "Rain" will not show results like *Brain* or *Acid Rain*
+- "Fancy" search from Quick Search, to narrow down results. One or more of *artist*, *album* or *title/song*
+  - e.g. *artist:trivium album:dragon*
+  - If *song* or *title* is present at all, search results will be for songs. E.g. artist:trivium song:fire
+  - Otherwise if *album* is present, search results will be for albums. E.g. artist:trivium album:dragon
+  - Finally, if only *artist* is present, search results will be for artists. E.g. artist:trivium
+
+### Changed
+- Notifications are all disabled by default now
+- Releases featuring an artist (but not by that artist) are separated from that artists releases, denoted by " (appearance)" in the release type
+
+### Fixed
+- Favicon should be back now
+
 ## [0.39.0] - 2022-05-26
 ### Added
 - Notification system! (enabled by default, specific types can be disabled Notifications > Settings)

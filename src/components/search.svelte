@@ -39,9 +39,9 @@
             resetResults();
 
             // parse fancy items from string
-            fancySearchResults.artist    = $SearchQuery.match(new RegExp("(?<=artist:).+?(?=" + regexKeywords + ")", "gi"));
-            fancySearchResults.album     = $SearchQuery.match(new RegExp("(?<=album:).+?(?=" + regexKeywords + ")", "gi"));
-            fancySearchResults.song      = $SearchQuery.match(new RegExp("(?<=(song|title):).+?(?=" + regexKeywords + ")", "gi"));
+            fancySearchResults.artist = $SearchQuery.match(new RegExp("(?<=artist:).+?(?=" + regexKeywords + ")", "gi"));
+            fancySearchResults.album  = $SearchQuery.match(new RegExp("(?<=album:).+?(?=" + regexKeywords + ")", "gi"));
+            fancySearchResults.song   = $SearchQuery.match(new RegExp("(?<=(song|title):).+?(?=" + regexKeywords + ")", "gi"));
 
             // test if every array in fancySearchResults is null
             nothingFancy = Object.values(fancySearchResults).every(value => {
