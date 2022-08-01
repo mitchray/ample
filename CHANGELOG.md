@@ -1,5 +1,9 @@
 # Changelog
 
+## [0.40.1] - 2022-08-01
+### Fixed
+- Rolled back Svelte version as Quick Search became glitchy
+
 ## [0.40.0] - 2022-08-01
 ### Requires at least Ampache 5.4.1
 
