@@ -13,7 +13,6 @@
     import SVGAlbum from "../../../public/images/album.svg";
 
     export let item;
-    export let data = {}; // external object data
 </script>
 
 <div class="notification-card card {item.style}">
