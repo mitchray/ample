@@ -347,7 +347,7 @@ export const groupAlbumsByReleaseType = async (albums, artistID) => {
     let preferenceAlbumReleaseType = await getUserPreference('album_release_type');
     let preferenceAlbumReleaseTypeSort = await getUserPreference('album_release_type_sort');
     let preferenceReleaseTypes = preferenceAlbumReleaseTypeSort.value.split(',');
-    let appearanceText = ", appearance";
+    let appearanceText = " (appearance)";
 
     if (preferenceAlbumReleaseType.value === '1') {
         // Create base types in specified order from server setting
@@ -377,9 +377,14 @@ export const groupAlbumsByReleaseType = async (albums, artistID) => {
                 type = type.toLowerCase();
             }
 
-            // create new type if needed
+            // create new base type if needed
             if (!releaseTypes.get(type)) {
                 releaseTypes.set(type, []);
+            }
+
+            // create new appearance type if needed
+            if (!releaseTypes.get(type + appearanceText)) {
+                releaseTypes.set(type + appearanceText, []);
             }
 
             switch (type) {
