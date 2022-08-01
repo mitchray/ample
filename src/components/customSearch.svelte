@@ -341,6 +341,16 @@
             inputType: "text"
         },
         {
+            id: "track",
+            label: "Track",
+            category: "Song Metadata",
+            object_types: [
+                { id: "song" }
+            ],
+            operatorType: "number",
+            inputType: "number"
+        },
+        {
             id: "artist_tag",
             label: "Artist Genre",
             category: "Song Metadata",
@@ -414,6 +424,16 @@
         {
             id: "album_title",
             label: "Album Title",
+            category: "Artist Metadata",
+            object_types: [
+                { id: "artist" },
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "summary",
+            label: "Summary",
             category: "Artist Metadata",
             object_types: [
                 { id: "artist" },
