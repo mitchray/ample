@@ -46,7 +46,7 @@
             waitForElement('.site-lyrics .current').then((selector) => {
                 selector.scrollIntoView({
                     block: "center",
-                    behavior: "smooth",
+                    behavior: "auto",
                 });
             });
         }
