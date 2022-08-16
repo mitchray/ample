@@ -6,6 +6,7 @@
     import TableView from './lister_tableView.svelte';
     import CardView from './lister_cardView.svelte';
     import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
+    import PlaylistReorder from '../playlist/playlist_reorder.svelte';
 
     import SVGList from "../../../public/images/table_rows.svg";
     import SVGGrid from "../../../public/images/grid.svg";
@@ -33,6 +34,8 @@
     let currentSort      = writable(initialSort); // the current sort method
     let listerColumnsID  = `ListerColumns.${type}.${zone}`;
     let listerDisplayID  = `ListerDisplay.${type}.${zone}`;
+    let isEditMode       = writable(false);
+    let selectedCount    = writable(0);
 
     setContext(contextKey, {
         getType: () => type,
@@ -50,7 +53,9 @@
         listerWrapper,
         availableColumns,
         visibleColumns,
-        currentSort
+        currentSort,
+        isEditMode,
+        selectedCount
     });
 
     $: data         = data; //immutable
@@ -90,11 +95,21 @@
 
 <div class="lister-wrapper" bind:this={$listerWrapper}>
     <div class="lister-actions">
-        <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
-        <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
+        <div class="group">
+            <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
+            <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
+        </div>
 
-        {#if displayAsTable && type === "playlist_songs" && showCheckboxes}
-            <PlaylistRemoveFrom bind:items={$dataDisplay} />
+        {#if displayAsTable && type === "playlist_songs"}
+            {#if showCheckboxes}
+                <div class="group">
+                    <PlaylistRemoveFrom contextKey={contextKey} bind:items={$dataDisplay} />
+                </div>
+            {/if}
+
+            <div class="group">
+                <PlaylistReorder contextKey={contextKey} bind:items={$dataDisplay} />
+            </div>
         {/if}
     </div>
 
@@ -115,11 +130,16 @@
 
     .lister-actions {
         display: flex;
-        gap: var(--spacing-sm);
-        margin-bottom: var(--spacing-lg);
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
         position: sticky;
         top: 0;
         z-index: 1;
+    }
+
+    .lister-actions > .group {
+        display: flex;
+        gap: var(--spacing-sm);
     }
 
     .lister-actions:after {

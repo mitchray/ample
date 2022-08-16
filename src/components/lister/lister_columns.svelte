@@ -10,7 +10,7 @@
 
     let newColumns = JSON.parse(JSON.stringify(columns)); // MAKE AN INDIVIDUAL COPY OF IMPORTED OBJECT
 
-    let { listerColumnsID, currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);
+    let { listerColumnsID, currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader, selectedCount } = getContext(contextKey);
     const min = 100;
     let thisType = getType();
     let headerBeingResized;
@@ -227,6 +227,10 @@
 
     function toggleAllChecked(e) {
         $dataDisplay.forEach(element => element.selected = !!(e.target.checked));
+
+        // reset counts
+        $selectedCount = e.target.checked ? $dataDisplay.length : 0;
+
         $dataDisplay = $dataDisplay;
     }
 </script>

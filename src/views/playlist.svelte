@@ -106,7 +106,7 @@
 
                 <div class="songs-container">
                     {#key loadedTime}
-                        <Lister2 bind:data={songs} type="playlist_songs" showCheckboxes={!isSmartlist} />
+                        <Lister2 bind:data={songs} type="playlist_songs" showCheckboxes={!isSmartlist} showIndex={!isSmartlist} />
                     {/key}
                 </div>
             </div>

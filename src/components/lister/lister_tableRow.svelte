@@ -6,6 +6,9 @@
 
     import { CurrentSong } from '../../stores/status';
 
+    import SVGUp from "../../../public/images/keyboard_arrow_up.svg";
+    import SVGDown from "../../../public/images/keyboard_arrow_down.svg";
+
     export let contextKey;
     export let item;
 
@@ -20,14 +23,54 @@
     import SVGGenre from "../../../public/images/label.svg";
     import SVGCurrent from "../../../public/images/play_circle.svg";
 
-    const { getType, visibleColumns } = getContext(contextKey);
+    const { getType, visibleColumns, selectedCount, isEditMode, dataDisplay } = getContext(contextKey);
+
+    function handleChecked(e) {
+        if (e.target.checked) {
+            $selectedCount++;
+        } else {
+            $selectedCount--;
+        }
+    }
+
+    function handleUp(item) {
+        let thisRowIndex = $dataDisplay.findIndex(el => el === item);
+        let min = thisRowIndex - 1 < 0 ? 0 : thisRowIndex - 1;
+
+        swapArrayElements($dataDisplay, thisRowIndex, min);
+
+        $dataDisplay = $dataDisplay;
+    }
+
+    function handleDown(item) {
+        let thisRowIndex = $dataDisplay.findIndex(el => el === item);
+        let total = $dataDisplay.length - 1;
+        let max = thisRowIndex + 1 > total ? total : thisRowIndex + 1;
+
+        swapArrayElements($dataDisplay, thisRowIndex, max);
+
+        $dataDisplay = $dataDisplay;
+    }
+
+    function swapArrayElements(arr, indexA, indexB) {
+        let temp = arr[indexA];
+        arr[indexA] = arr[indexB];
+        arr[indexB] = temp;
+    }
 </script>
 
 {#each $visibleColumns as col }
     <div class="cell {col.id}" data-type={col.type}>
 
         {#if col.id === "checkbox"}
-            <input type="checkbox" bind:checked={item.selected} />
+            {#if $isEditMode}
+                <span class="reorder">
+                    <button type="button" class="icon-button" on:click={e => handleUp(item)}><SVGUp style="transform: scale(1.25)" /></button>
+                    <button type="button" class="icon-button" on:click={e => handleDown(item)}><SVGDown style="transform: scale(1.25)" /></button>
+                </span>
+            {:else}
+                <input type="checkbox" bind:checked={item.selected} on:change={e => handleChecked(e)} />
+            {/if}
         {/if}
 
         {#if col.id === "index"}
@@ -182,5 +225,17 @@
     .cell[data-type=number],
     .cell[data-type=time] {
         justify-content: end;
+    }
+
+    .reorder {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .reorder button {
+        /*border: 1px solid lime;*/
+        height: unset;
+        padding: 0;
+        /*display: block;*/
     }
 </style>

@@ -159,6 +159,23 @@ export const editPlaylist = ({id = '', name = "Untitled", type = "public"}) => {
 }
 
 /**
+ * Reorder an existing playlist
+ * @param {number} id
+ * @param {string} items
+ * @param {string} tracks
+ * @returns {Promise<*>}
+ */
+export const reorderPlaylist = ({id = '', items = '', tracks = ''}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=playlist_edit&filter=" + id;
+    queryURL += "&items=" + items;
+    queryURL += "&tracks=" + tracks;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "reorderPlaylist");
+
+    return fetchPlaylistData(queryURL);
+}
+
+/**
  * Delete playlist by ID
  * @param {number} id
  * @returns {Promise<*>}
