@@ -9,7 +9,8 @@ const columns = [
             { id: "song" },
             { id: "album" },
             { id: "artist" },
-            { id: "playlist" }
+            { id: "playlist" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -22,7 +23,8 @@ const columns = [
         sortBy: "initialOrder",
         object_types: [
             { id: "song" },
-            { id: "playlist" }
+            { id: "playlist" },
+            { id: "playlist_songs" }
         ],
     },
     {
@@ -38,7 +40,8 @@ const columns = [
             { id: "album" },
             { id: "artist", widthPreset: "medium" },
             { id: "playlist" },
-            { id: "genre", widthPreset: "medium" }
+            { id: "genre", widthPreset: "medium" },
+            { id: "playlist_songs" }
         ],
     },
     {
@@ -51,7 +54,8 @@ const columns = [
         canToggle: true,
         object_types: [
             { id: "song" },
-            { id: "album" }
+            { id: "album" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -63,7 +67,8 @@ const columns = [
         type: "string",
         canToggle: true,
         object_types: [
-            { id: "song" }
+            { id: "song" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -76,7 +81,8 @@ const columns = [
         canToggle: true,
         object_types: [
             { id: "song" },
-            { id: "album" }
+            { id: "album" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -116,7 +122,8 @@ const columns = [
         object_types: [
             { id: "song" },
             { id: "album" },
-            { id: "artist" }
+            { id: "artist" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -211,7 +218,8 @@ const columns = [
         type: "number",
         canToggle: true,
         object_types: [
-            { id: "song" }
+            { id: "song" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -221,7 +229,8 @@ const columns = [
         type: "string",
         canToggle: true,
         object_types: [
-            { id: "song" }
+            { id: "song" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -233,7 +242,8 @@ const columns = [
         sortBy: "size",
         canToggle: true,
         object_types: [
-            { id: "song" }
+            { id: "song" },
+            { id: "playlist_songs" }
         ]
     },
     {
@@ -249,7 +259,8 @@ const columns = [
             { id: "song" },
             { id: "album" },
             { id: "artist" },
-            { id: "playlist" }
+            { id: "playlist" },
+            { id: "playlist_songs" }
         ],
     },
     {
@@ -263,7 +274,8 @@ const columns = [
             { id: "album" },
             { id: "artist" },
             { id: "playlist" },
-            { id: "genre" }
+            { id: "genre" },
+            { id: "playlist_songs" }
         ],
     },
 ];

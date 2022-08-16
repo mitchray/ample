@@ -67,7 +67,9 @@
     <div class="lister" bind:this={$listerObject} style="grid-template-columns: {$columnWidths}">
         {#each $dataDisplay as row, i (i)}
             <div class="row" class:stripe={row.sortOrder % 2}>
-                <TableRow item={row} contextKey={contextKey} />
+                {#if !row.isDeleted}
+                    <TableRow item={row} contextKey={contextKey} />
+                {/if}
             </div>
         {/each}
     </div>
@@ -79,7 +81,7 @@
         flex-shrink: 0;
         flex-grow: 0;
         position: sticky;
-        top: calc(-1 * var(--spacing-xxl));
+        top: var(--spacing-xxxl);
         z-index: 5;
         overflow: hidden auto;
     }

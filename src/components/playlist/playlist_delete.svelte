@@ -20,7 +20,7 @@
 
 <div class="container">
     <div class="panel-header">
-        <h4>Confirm playlist removal</h4>
+        <h4 class="panel-title">Confirm playlist removal</h4>
     </div>
 
     <div class="panel-content">

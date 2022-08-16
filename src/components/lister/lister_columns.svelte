@@ -18,10 +18,6 @@
     let updateIndex;
     let horizontalScrollOffset = 0;
 
-    $: {
-
-    }
-
     onMount(() => {
         setAvailableColumns();
 

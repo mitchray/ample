@@ -5,6 +5,7 @@
 
     import TableView from './lister_tableView.svelte';
     import CardView from './lister_cardView.svelte';
+    import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
 
     import SVGList from "../../../public/images/table_rows.svg";
     import SVGGrid from "../../../public/images/grid.svg";
@@ -91,6 +92,10 @@
     <div class="lister-actions">
         <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
         <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
+
+        {#if displayAsTable && type === "playlist_songs" && showCheckboxes}
+            <PlaylistRemoveFrom bind:items={$dataDisplay} />
+        {/if}
     </div>
 
     <div class="lister-container" bind:this={$listerContainer} class:is-table={displayAsTable}>
@@ -112,6 +117,22 @@
         display: flex;
         gap: var(--spacing-sm);
         margin-bottom: var(--spacing-lg);
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .lister-actions:after {
+        content: '';
+        display: block;
+        background-color: var(--color-background);
+        width: calc(100% + 2rem);
+        position: absolute;
+        top: calc(-1 * var(--spacing-xxl));
+        left: -1rem;
+        bottom: calc(-1 * var(--spacing-lg) - 1px);
+        z-index: -1;
+        pointer-events: none;
     }
 
     .lister-container {

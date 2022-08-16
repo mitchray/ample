@@ -189,10 +189,10 @@ export const addToPlaylist = ({playlistID = '', songID = '', ignoreDuplicates = 
  * Remove song to playlist
  * @returns {Promise<*>}
  */
-export const removeFromPlaylist = ({playlistID = '', trackNo = ''}) => {
+export const removeFromPlaylist = ({playlistID = '', songID = ''}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=playlist_remove_song";
     queryURL += "&filter=" + playlistID;
-    queryURL += "&track=" + trackNo;
+    queryURL += "&song=" + songID;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "removeFromPlaylist");
     return fetchPlaylistData(queryURL);

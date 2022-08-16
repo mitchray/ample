@@ -28,7 +28,7 @@
 
 
 <div class="panel-header">
-    <h4 class="title">Add to Playlist</h4>
+    <h4 class="panel-title">Add to Playlist</h4>
 </div>
 
 <div class="panel-content">
@@ -46,8 +46,5 @@
 
 
 <style>
-    h4 {
-        margin: 0;
-        margin-bottom: var(--spacing-md);
-    }
+
 </style>

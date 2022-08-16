@@ -56,7 +56,7 @@
 
 <div class="container">
     <div class="panel-header">
-        <h4 class="title">{isNew ? 'New' : 'Edit'} Playlist</h4>
+        <h4 class="panel-title">{isNew ? 'New' : 'Edit'} Playlist</h4>
     </div>
 
     <div class="panel-content">
