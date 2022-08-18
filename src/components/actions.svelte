@@ -22,7 +22,7 @@
     } from "../logic/song";
     import { getGenre } from "../logic/genre";
     import { shuffleArray } from "../logic/helper";
-    import { updateFromTags } from "../logic/library";
+    import { updateFromTags, updateArt } from "../logic/library";
 
     import Menu from '../components/menu.svelte';
     import PlaylistAddTo from '../components/playlist/playlist_addTo.svelte';
@@ -62,6 +62,7 @@
     let showMore        = true;
     let showSkipBelow   = (type !== 'song');
     let showUpdateFromTags = (type === "artist" || type === "album" || type === "song");
+    let showUpdateArt   = (type === "artist" || type === "album");
 
     async function determineFetchURL() {
         switch (type) {
@@ -261,6 +262,15 @@
         }
     }
 
+    async function handleUpdateArt(e) {
+        let originalText = startLoad(e.target);
+        let result = await updateArt(type, id);
+
+        if (result) {
+            endLoad(e.target, originalText);
+        }
+    }
+
     function handleMore() {
         moreMenuVisible = !moreMenuVisible;
     }
@@ -345,6 +355,12 @@
         {#if showUpdateFromTags}
             <div class="action">
                 <button type="button" on:click={e => handleUpdateFromTags(e)} title="Update from tags"></button>
+            </div>
+        {/if}
+
+        {#if showUpdateArt}
+            <div class="action">
+                <button type="button" on:click={e => handleUpdateArt(e)} title="Update art"></button>
             </div>
         {/if}
 

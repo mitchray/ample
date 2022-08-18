@@ -69,3 +69,18 @@ export const updateFromTags = (type, id) => {
     debugHelper(queryURL, "updateFromTags");
     return fetchLibraryData(queryURL);
 }
+
+/**
+ * Update art
+ * @param {string} type
+ * @param {number} id
+ * @returns {Promise<*>}
+ */
+export const updateArt = (type, id) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=update_art";
+    queryURL += "&type=" + type + "&id=" + id;
+    queryURL += "&overwrite=1";
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "updateArt");
+    return fetchLibraryData(queryURL);
+}
