@@ -95,10 +95,12 @@
 
 <div class="lister-wrapper" bind:this={$listerWrapper}>
     <div class="lister-actions">
-        <div class="group">
-            <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
-            <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
-        </div>
+        {#if type !== "playlist_songs"}
+            <div class="group">
+                <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
+                <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
+            </div>
+        {/if}
 
         {#if displayAsTable && type === "playlist_songs"}
             {#if showCheckboxes}
@@ -114,7 +116,7 @@
     </div>
 
     <div class="lister-container" bind:this={$listerContainer} class:is-table={displayAsTable}>
-        {#if displayAsTable}
+        {#if type === "playlist_songs" || displayAsTable}
             <TableView contextKey={contextKey} />
         {:else}
             <CardView contextKey={contextKey} />
