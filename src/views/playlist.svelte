@@ -1,6 +1,5 @@
 <script>
     import { onMount } from "svelte";
-    import { fade } from 'svelte/transition';
 
     import { getSongsFromPlaylist } from "../logic/song";
     import { getPlaylist } from '../logic/playlist';
@@ -11,7 +10,6 @@
 
     import SVGPlaylist from "../../public/images/queue_music.svg";
     import SVGSmartlist from "../../public/images/smartlist.svg";
-    import SVGRefresh from "../../public/images/refresh.svg";
     import SVGTrack from "../../public/images/music_note.svg";
 
     export let id;
@@ -86,10 +84,6 @@
                                 <span>
                                     <SVGTrack class="inline"/> {songCount} {parseInt(songCount) === 1 ? 'song' : 'songs'}
                                 </span>
-
-                                {#if isSmartlist}
-                                    <button on:click={handleSongLoad} class="button button--regular refresh-button"><SVGRefresh /> Refresh</button>
-                                {/if}
                             </div>
 
                             <div class="actions">

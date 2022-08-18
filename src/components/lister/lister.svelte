@@ -7,6 +7,7 @@
     import CardView from './lister_cardView.svelte';
     import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
     import PlaylistReorder from '../playlist/playlist_reorder.svelte';
+    import PlaylistRefresh from '../playlist/playlist_refresh.svelte';
 
     import SVGList from "../../../public/images/table_rows.svg";
     import SVGGrid from "../../../public/images/grid.svg";
@@ -109,7 +110,13 @@
                 </div>
 
                 <div class="group">
-                    <PlaylistReorder contextKey={contextKey} bind:items={$dataDisplay} />
+                    <PlaylistReorder contextKey={contextKey} />
+                </div>
+            {/if}
+
+            {#if !showCheckboxes}
+                <div class="group">
+                    <PlaylistRefresh contextKey={contextKey} />
                 </div>
             {/if}
         {/if}
