@@ -29,6 +29,7 @@
         let result = await reorderPlaylist({id: playlistID, items: ids.join(","), tracks: newOrders.join(",")});
 
         if (result.success) {
+            // TODO consolidate as a helper method
             // redo the indexes
             for (let i = 0; i < actual.length; i++) {
                 actual[i].initialOrder = i;
