@@ -137,6 +137,10 @@
         margin-bottom: var(--spacing-lg);
     }
 
+    :global(* +) .lister-wrapper {
+        margin-top: var(--spacing-xxl); /* account for the lister actions background */
+    }
+
     .lister-actions {
         display: flex;
         gap: var(--spacing-lg);

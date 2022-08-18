@@ -70,7 +70,7 @@
         display: flex;
         flex-wrap: wrap;
         margin: 0;
-        margin-bottom: var(--spacing-xxxl); /* big spacing to account for lister actions overflow trick */
+        margin-bottom: var(--spacing-xxl); /* big spacing to account for lister actions overflow trick */
         font-family: var(--font-heading);
     }
 
