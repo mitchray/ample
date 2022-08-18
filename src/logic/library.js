@@ -55,3 +55,17 @@ export const setFlag = (type, id, flag) => {
     debugHelper(queryURL, "setFlag");
     return fetchLibraryData(queryURL);
 }
+
+/**
+ * Update info from tags
+ * @param {string} type
+ * @param {number} id
+ * @returns {Promise<*>}
+ */
+export const updateFromTags = (type, id) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=update_from_tags";
+    queryURL += "&type=" + type + "&id=" + id;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "updateFromTags");
+    return fetchLibraryData(queryURL);
+}
