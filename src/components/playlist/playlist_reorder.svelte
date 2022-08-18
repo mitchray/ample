@@ -1,6 +1,7 @@
 <script>
     import { getContext } from "svelte";
     import { reorderPlaylist } from "../../logic/playlist";
+    import { shuffleArray } from "../../logic/helper";
 
     export let contextKey;
 
@@ -15,7 +16,7 @@
     }
 
     function handleRandom() {
-        console.debug('randomized');
+        $dataDisplay = shuffleArray($dataDisplay);
     }
 
     async function handleSave() {

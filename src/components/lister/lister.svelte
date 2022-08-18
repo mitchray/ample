@@ -105,11 +105,11 @@
                 <div class="group">
                     <PlaylistRemoveFrom contextKey={contextKey} bind:items={$dataDisplay} />
                 </div>
-            {/if}
 
-            <div class="group">
-                <PlaylistReorder contextKey={contextKey} bind:items={$dataDisplay} />
-            </div>
+                <div class="group">
+                    <PlaylistReorder contextKey={contextKey} bind:items={$dataDisplay} />
+                </div>
+            {/if}
         {/if}
     </div>
 
