@@ -1,6 +1,7 @@
 <script>
     import { getContext} from "svelte";
     import { getSongsFromPlaylist } from "../../logic/song";
+    import { setIndexes } from "../../logic/helper";
 
     export let contextKey;
 
@@ -14,13 +15,7 @@
         let results = await getSongsFromPlaylist(playlistID);
 
         if (results) {
-            // TODO consolidate as a helper method
-            // redo the indexes
-            for (let i = 0; i < results.length; i++) {
-                results[i].initialOrder = i;
-            }
-
-            $dataDisplay = results;
+            $dataDisplay = setIndexes(results);
         }
     }
 </script>

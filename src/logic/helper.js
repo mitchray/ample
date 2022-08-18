@@ -261,4 +261,12 @@ export async function waitForElement(selector)  {
         await new Promise( resolve =>  requestAnimationFrame(resolve) )
     }
     return document.querySelector(selector);
-};
+}
+
+export function setIndexes(items) {
+    for (let i = 0; i < items.length; i++) {
+        items[i].initialOrder = i;
+    }
+
+    return items;
+}
