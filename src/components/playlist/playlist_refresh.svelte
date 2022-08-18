@@ -1,6 +1,6 @@
 <script>
-    import {getContext} from "svelte";
-    import {getSongsFromPlaylist} from "../../logic/song";
+    import { getContext} from "svelte";
+    import { getSongsFromPlaylist } from "../../logic/song";
 
     export let contextKey;
 

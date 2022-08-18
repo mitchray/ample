@@ -360,7 +360,7 @@
 
         {#if showUpdateArt}
             <div class="action">
-                <button type="button" on:click={e => handleUpdateArt(e)} title="Update art"></button>
+                <button type="button" on:click={e => handleUpdateArt(e)} title="Update {type === 'artist' ? 'artist image' : 'album art'}"></button>
             </div>
         {/if}
 
