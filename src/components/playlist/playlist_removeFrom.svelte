@@ -1,14 +1,13 @@
 <script>
     import { removeFromPlaylist } from '../../logic/playlist';
     import { getContext } from "svelte";
+    import { getPlaylistIDFromUrl } from "../../logic/helper";
 
     export let contextKey;
 
     const { dataDisplay, isEditMode, selectedCount } = getContext(contextKey);
 
-    // TODO consolidate playlistID getter
-    let urlParts = location.href.split("/"); // 'location' is inherited from Router automatically
-    let playlistID = urlParts.pop() || urlParts.pop(); // trick to handle potential trailing slash
+    let playlistID = getPlaylistIDFromUrl();
 
     function handleRemove() {
         $dataDisplay.forEach((item, index) => {

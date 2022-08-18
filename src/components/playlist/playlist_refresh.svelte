@@ -1,15 +1,13 @@
 <script>
     import { getContext} from "svelte";
     import { getSongsFromPlaylist } from "../../logic/song";
-    import { setIndexes } from "../../logic/helper";
+    import { setIndexes, getPlaylistIDFromUrl } from "../../logic/helper";
 
     export let contextKey;
 
     const { dataDisplay } = getContext(contextKey);
 
-    // TODO consolidate playlistID getter
-    let urlParts = location.href.split("/"); // 'location' is inherited from Router automatically
-    let playlistID = urlParts.pop() || urlParts.pop(); // trick to handle potential trailing slash
+    let playlistID = getPlaylistIDFromUrl();
 
     async function handleRefresh() {
         let results = await getSongsFromPlaylist(playlistID);

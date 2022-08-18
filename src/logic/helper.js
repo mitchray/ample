@@ -270,3 +270,8 @@ export function setIndexes(items) {
 
     return items;
 }
+
+export function getPlaylistIDFromUrl() {
+    let urlParts = location.href.split("/"); // 'location' is inherited from Router automatically
+    return urlParts.pop() || urlParts.pop(); // trick to handle potential trailing slash
+}

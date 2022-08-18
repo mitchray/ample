@@ -1,15 +1,13 @@
 <script>
     import { getContext } from "svelte";
     import { reorderPlaylist } from "../../logic/playlist";
-    import { shuffleArray, setIndexes } from "../../logic/helper";
+    import { shuffleArray, setIndexes, getPlaylistIDFromUrl } from "../../logic/helper";
 
     export let contextKey;
 
     const { dataDisplay, isEditMode } = getContext(contextKey);
 
-    // TODO consolidate playlistID getter
-    let urlParts = location.href.split("/"); // 'location' is inherited from Router automatically
-    let playlistID = urlParts.pop() || urlParts.pop(); // trick to handle potential trailing slash
+    let playlistID = getPlaylistIDFromUrl();
 
     function handleStart() {
         $isEditMode = true;
