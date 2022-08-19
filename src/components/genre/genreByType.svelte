@@ -4,7 +4,6 @@
     import { getArtistsByGenre } from "../../logic/artist";
     import { getAlbumsByGenre } from "../../logic/album";
 
-    import Actions from '../../components/actions.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
 
@@ -59,18 +58,39 @@
     {#if genre.id}
         {#key loadedTime}
             {#if type === 'artist'}
-                <Actions type="artistGenre" mode="fullButtons" data="{genre.name}" />
-                <Lister2 data={data} type="artist" activeSort="title"/>
+                <Lister2
+                    data={data}
+                    type="artist"
+                    activeSort="title"
+                    actionData={{
+                        type: "artistGenre",
+                        data: genre.name,
+                    }}
+                />
             {/if}
 
             {#if type === 'album'}
-                <Actions type="albumGenre" mode="fullButtons" data="{genre.name}" />
-                <Lister2 data={data} type="album" activeSort="title"/>
+                <Lister2
+                    data={data}
+                    type="album"
+                    activeSort="title"
+                    actionData={{
+                        type: "albumGenre",
+                        data: genre.name,
+                    }}
+                />
             {/if}
 
             {#if type === 'song'}
-                <Actions type="songGenre" mode="fullButtons" data="{genre.name}" />
-                <Lister2 data={data} type="song" activeSort="title"/>
+                <Lister2
+                    data={data}
+                    type="song"
+                    activeSort="title"
+                    actionData={{
+                        type: "songGenre",
+                        data: genre.name,
+                    }}
+                />
             {/if}
         {/key}
     {/if}

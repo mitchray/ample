@@ -99,6 +99,29 @@ export const getSongsFromPlaylist = (id) => {
 }
 
 /**
+ * Get songs from playlists
+ * @param {array} playlists
+ * @returns {Promise<*>}
+ */
+export const getSongsFromPlaylists = async (playlists) => {
+    let allResults = [];
+    let promises = [];
+
+    for (let i = 0; i < playlists.length; i++) {
+        let queryURL = serverURL_value + "/server/json.server.php?action=playlist_songs";
+        queryURL += "&filter=" + playlists[i].id;
+        queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+        debugHelper(queryURL, "getSongsFromPlaylists");
+
+        promises[i] = fetchSongData(queryURL);
+    }
+
+    allResults = await Promise.all([...promises]);
+
+    return allResults.flat();
+}
+
+/**
  * Get a single song from playlist ID
  * @param {number} playlistID
  * @param {number} songIndex
@@ -167,6 +190,29 @@ export const getSongVersions = async (songTitle, artistName) => {
 }
 
 /**
+ * Get songs from albums
+ * @param {array} albums
+ * @returns {Promise<*>}
+ */
+export const getSongsFromAlbums = async (albums) => {
+    let allResults = [];
+    let promises = [];
+
+    for (let i = 0; i < albums.length; i++) {
+        let queryURL = serverURL_value + "/server/json.server.php?action=album_songs";
+        queryURL += "&filter=" + albums[i].id;
+        queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+        debugHelper(queryURL, "getSongsFromAlbums");
+
+        promises[i] = fetchSongData(queryURL);
+    }
+
+    allResults = await Promise.all([...promises]);
+
+    return allResults.flat();
+}
+
+/**
  * Get songs from albums starting with specified character
  * @param {string} filterChar
  * @returns {Promise<*>}
@@ -178,6 +224,23 @@ export const getSongsFromAlbumsStartingWith = (filterChar) => {
     queryURL += "&rule_1=album&rule_1_operator=8&rule_1_input=" + encodeURI('^(?!the\\s)') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSongsFromAlbumsStartingWith");
+    return fetchSongData(queryURL);
+}
+
+/**
+ * Get songs from artists
+ * @param {array} artists
+ * @returns {Promise<*>}
+ */
+export const getSongsFromArtists = (artists) => {
+    let artistsFormatted = artists.map((artist) => artist.name).join("|");
+
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&limit=200&random=1";
+    queryURL += "&type=song&operator=and";
+    queryURL += "&rule_1=artist&rule_1_operator=8&rule_1_input=" + encodeURI(artistsFormatted);
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "getSongsFromArtists");
     return fetchSongData(queryURL);
 }
 

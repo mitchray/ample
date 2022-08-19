@@ -12,9 +12,12 @@
         getSongsFromAlbum,
         getSongsFromArtist,
         getSongsFromPlaylist,
+        getSongsFromPlaylists,
         getSong,
         getSongsByYear,
+        getSongsFromAlbums,
         getSongsFromAlbumsStartingWith,
+        getSongsFromArtists,
         getSongsFromArtistsStartingWith,
         getSomeSongsFromArtistsByGenre,
         getSomeSongsFromAlbumsByGenre,
@@ -69,6 +72,9 @@
             case 'artist':
                 fetchURL = getSongsFromArtist(id);
                 break;
+            case 'artists':
+                fetchURL = getSongsFromArtists(data);
+                break;
             case 'artistAlpha':
                 fetchURL = getSongsFromArtistsStartingWith(data.char);
                 break;
@@ -82,6 +88,9 @@
                 break;
             case 'album':
                 fetchURL = getSongsFromAlbum(id);
+                break;
+            case 'albums':
+                fetchURL = getSongsFromAlbums(data);
                 break;
             case 'albumGenre':
                 fetchURL = getSomeSongsFromAlbumsByGenre(data);
@@ -98,6 +107,9 @@
                 break;
             case 'playlist':
                 fetchURL = getSongsFromPlaylist(id);
+                break;
+            case 'playlists':
+                fetchURL = getSongsFromPlaylists(data);
                 break;
             case 'year':
                 fetchURL = getSongsByYear(data.from, data.to);
@@ -520,11 +532,6 @@
     /*
      * FULL BUTTONS SPECIFIC
      */
-    .c-actions.fullButtons {
-        margin-top: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
-    }
-
     .c-actions.fullButtons .button--primary,
     .c-actions.fullButtons .button--secondary {
         padding-left: 1em;

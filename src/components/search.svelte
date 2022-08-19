@@ -186,7 +186,14 @@
                     {#if nothingFancy}
                         <CardList type="artist" initialData={initialResults.artists} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists" />
                     {:else}
-                        <Lister2 data={initialResults.artists} type="artist" />
+                        <Lister2
+                            data={initialResults.artists}
+                            type="artist"
+                            actionData={{
+                                type: "artists",
+                                data: initialResults.artists
+                            }}
+                        />
                     {/if}
                 {/if}
 
@@ -194,7 +201,14 @@
                     {#if nothingFancy}
                         <CardList type="album" initialData={initialResults.albums} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums" />
                     {:else}
-                        <Lister2 data={initialResults.albums} type="album" />
+                        <Lister2
+                            data={initialResults.albums}
+                            type="album"
+                            actionData={{
+                                type: "albums",
+                                data: initialResults.albums
+                            }}
+                        />
                     {/if}
                 {/if}
 
@@ -202,7 +216,13 @@
                     {#if nothingFancy}
                         <CardList type="song" initialData={initialResults.songs} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs" />
                     {:else}
-                        <Lister2 data={initialResults.songs} type="song" />
+                        <Lister2
+                            data={initialResults.songs}
+                            type="song"
+                            actionData={{
+                                direct: initialResults.songs
+                            }}
+                        />
                     {/if}
                 {/if}
 

@@ -3,6 +3,7 @@
     import { onDestroy, onMount, setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
 
+    import Actions from '../../components/actions.svelte';
     import TableView from './lister_tableView.svelte';
     import CardView from './lister_cardView.svelte';
     import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
@@ -14,6 +15,7 @@
 
     export let data;
     export let type;
+    export let actionData;    // additional data object for Actions
     export let zone           = "generic";
     export let showIndex      = false;
     export let showCheckboxes = false;
@@ -62,6 +64,13 @@
     $: data         = data; //immutable
     $: $dataDisplay = data.slice();
 
+    // overwrite any actionData.direct songs with our dataDisplay as it may have updated
+    $: {
+        if (actionData.direct) {
+            actionData.direct = $dataDisplay;
+        }
+    }
+
     onMount(() => {
         let savedDisplayAsTable = JSON.parse(localStorage.getItem(listerDisplayID));
 
@@ -96,6 +105,12 @@
 
 <div class="lister-wrapper" bind:this={$listerWrapper}>
     <div class="lister-actions">
+        {#if !actionData.disable}
+            <div class="group">
+                <Actions mode="fullButtons" {...actionData} />
+            </div>
+        {/if}
+
         {#if type !== "playlist_songs"}
             <div class="group">
                 <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>

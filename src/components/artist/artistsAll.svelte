@@ -45,7 +45,14 @@
 <Pagination2 bind:limit bind:page bind:count type="artist" defaultLimit={defaultLimit} />
 
 {#key loadedTime}
-    <Lister2 bind:data={dataDisplay} type="artist" />
+    <Lister2
+        bind:data={dataDisplay}
+        type="artist"
+        actionData={{
+            type: "artists",
+            data: dataDisplay
+        }}
+    />
 {/key}
 
 <Pagination2 bind:limit bind:page bind:count type="artist" defaultLimit={defaultLimit} />

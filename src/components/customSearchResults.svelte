@@ -5,7 +5,6 @@
     export let loading;
     export let results = [];
     export let type;
-    export let showCheckboxes = false;
 
     $: {
         // reset results if type changes
@@ -21,7 +20,48 @@
     {#if results.length > 0}
         <p>Total: {results.length}</p>
         {#key loadedTime}
-            <Lister2 bind:data={results} type="{type}" showCheckboxes={showCheckboxes} />
+            {#if type === "song"}
+                <Lister2
+                    bind:data={results}
+                    type="{type}"
+                    actionData={{
+                        direct: results
+                    }}
+                />
+            {/if}
+
+            {#if type === "album"}
+                <Lister2
+                    bind:data={results}
+                    type="{type}"
+                    actionData={{
+                        type: "albums",
+                        data: results
+                    }}
+                />
+            {/if}
+
+            {#if type === "artist"}
+                <Lister2
+                    bind:data={results}
+                    type="{type}"
+                    actionData={{
+                        type: "artists",
+                        data: results
+                    }}
+                />
+            {/if}
+
+            {#if type === "playlist"}
+                <Lister2
+                    bind:data={results}
+                    type="{type}"
+                    actionData={{
+                        type: "playlists",
+                        data: results
+                    }}
+                />
+            {/if}
         {/key}
     {:else}
         <p>No items found</p>

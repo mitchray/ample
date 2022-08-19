@@ -125,7 +125,14 @@
                                 Loading popular songs
                             {:then songs}
                                 {#if songs.length > 0}
-                                    <Lister2 data={songs} type="song" showIndex={true} />
+                                    <Lister2
+                                        data={songs}
+                                        type="song"
+                                        showIndex={true}
+                                        actionData={{
+                                            direct: songs
+                                        }}
+                                    />
                                 {:else}
                                     <p>No songs found</p>
                                 {/if}

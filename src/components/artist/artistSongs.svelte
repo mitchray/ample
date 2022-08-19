@@ -24,7 +24,14 @@
 </script>
 
 {#if !loading && songs && songs.length > 0}
-    <Lister2 bind:data={songs} type="song" />
+
+    <Lister2
+        bind:data={songs}
+        type="song"
+        actionData={{
+            direct: songs
+        }}
+    />
 {:else}
     <p>Loading songs</p>
 {/if}

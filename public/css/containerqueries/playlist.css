@@ -27,6 +27,10 @@
     .art-container {
         max-width: 180px;
     }
+
+    .type {
+        justify-content: start;
+    }
 }
 
 @container playlist-details-wrapper size(min-width: 800px) {

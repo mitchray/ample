@@ -45,7 +45,14 @@
 <Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
 
 {#key loadedTime}
-    <Lister2 bind:data={dataDisplay} type="album" />
+    <Lister2
+        bind:data={dataDisplay}
+        type="album"
+        actionData={{
+            type: "albums",
+            data: dataDisplay
+        }}
+    />
 {/key}
 
 <Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />

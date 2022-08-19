@@ -25,7 +25,14 @@
 <h1 class="page-title">Genres</h1>
 
 {#if !loading && genres && genres.length > 0}
-    <Lister2 data={genres} type="genre" initialSort="name" />
+    <Lister2
+        data={genres}
+        type="genre"
+        initialSort="name"
+        actionData={{
+            disable: true
+        }}
+    />
 {:else}
     <p>Loading genres</p>
 {/if}

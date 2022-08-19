@@ -2,7 +2,6 @@
     import { getAlbumsByYear } from "../../logic/album";
 
     import YearPagination from '../../components/yearPagination.svelte';
-    import Actions from '../../components/actions.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
@@ -47,15 +46,16 @@
 
 {#if fromYear && toYear}
     {#key fromYear+toYear}
-        <Actions
-            type="year"
-            mode="fullButtons"
-            data={{from: fromYear, to: toYear}}
-            count="3"
-        />
-
         {#key loadedTime}
-            <Lister2 bind:data={dataDisplay} type="album" />
+            <Lister2
+                bind:data={dataDisplay}
+                type="album"
+                actionData={{
+                    type: "year",
+                    data: {from: fromYear, to: toYear},
+                    count: "3"
+                }}
+            />
         {/key}
     {/key}
 {/if}

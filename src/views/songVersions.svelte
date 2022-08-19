@@ -21,7 +21,13 @@
         Searching for alternate versions
     {:then songs}
         {#if songs.length > 1}
-            <Lister2 data={songs} type="song" />
+            <Lister2
+                data={songs}
+                type="song"
+                actionData={{
+                    direct: songs,
+                }}
+            />
         {:else}
             <p>No alternate versions found</p>
         {/if}

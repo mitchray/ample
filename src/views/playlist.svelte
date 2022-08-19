@@ -5,24 +5,20 @@
     import { getPlaylist } from '../logic/playlist';
 
     import Rating from '../components/rating.svelte';
-    import Actions from '../components/actions.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
     import SVGPlaylist from "../../public/images/queue_music.svg";
     import SVGSmartlist from "../../public/images/smartlist.svg";
-    import SVGTrack from "../../public/images/music_note.svg";
 
     export let id;
 
     let playlist;
     let songs = [];
     let loading = true;
-    let songCount;
     let isSmartlist = false;
     let loadedTime;
 
     $: songs = songs;
-    $: songCount = songs.length;
 
     onMount(async () => {
         playlist = await getPlaylist(id);
@@ -66,33 +62,18 @@
                         </div>
 
                         <div class="info">
+                            <div class="type">
+                                {#if isSmartlist}
+                                    <SVGSmartlist class="inline" /> Smartlist
+                                {:else}
+                                    <SVGPlaylist class="inline" /> Playlist
+                                {/if}
+                            </div>
+
                             <div class="name">
                                 <h1 class="title">
                                     {playlist.name}
                                 </h1>
-                            </div>
-
-                            <div class="meta">
-                                <span>
-                                    {#if isSmartlist}
-                                        <SVGSmartlist class="inline" /> Smartlist
-                                    {:else}
-                                        <SVGPlaylist class="inline" /> Playlist
-                                    {/if}
-                                </span>
-
-                                <span>
-                                    <SVGTrack class="inline"/> {songCount} {parseInt(songCount) === 1 ? 'song' : 'songs'}
-                                </span>
-                            </div>
-
-                            <div class="actions">
-                                <Actions
-                                    type="playlist"
-                                    mode="fullButtons"
-                                    count="{playlist.items}"
-                                    direct={songs}
-                                />
                             </div>
                         </div>
                     </div>
@@ -100,7 +81,15 @@
 
                 <div class="songs-container">
                     {#key loadedTime}
-                        <Lister2 bind:data={songs} type="playlist_songs" showCheckboxes={!isSmartlist} showIndex={true} />
+                        <Lister2
+                            bind:data={songs}
+                            type="playlist_songs"
+                            showCheckboxes={!isSmartlist}
+                            showIndex={true}
+                            actionData={{
+                                direct: songs
+                            }}
+                        />
                     {/key}
                 </div>
             </div>
@@ -180,11 +169,16 @@
         margin-bottom: var(--spacing-lg);
     }
 
+    .info {
+        display: flex;
+        gap: var(--spacing-lg);
+        flex-direction: column;
+    }
+
     .name {
         background-color: var(--color-card-highlight);
         padding: var(--spacing-md);
         border-radius: 5px;
-        margin-bottom: var(--spacing-md);
     }
 
     .title {
@@ -200,11 +194,14 @@
         justify-content: center;
     }
 
-    .meta {
+    .type {
+        --roboto-opsz: 32;
         display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-md) var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
         align-items: center;
+        justify-content: center;
+        font-size: 14px;
+        font-weight: 300;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
     }
 </style>

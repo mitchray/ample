@@ -31,7 +31,14 @@
                         Loading favorite artists
                     {:then artists}
                         {#if artists.length > 0}
-                            <Lister2 data={artists} type="artist" />
+                            <Lister2
+                                data={artists}
+                                type="artist"
+                                actionData={{
+                                    type: "artists",
+                                    data: artists
+                                }}
+                            />
                         {:else}
                             <p>No artists found</p>
                         {/if}
@@ -47,7 +54,14 @@
                         Loading favorite albums
                     {:then albums}
                         {#if albums.length > 0}
-                            <Lister2 data={albums} type="album" />
+                            <Lister2
+                                data={albums}
+                                type="album"
+                                actionData={{
+                                    type: "albums",
+                                    data: albums
+                                }}
+                            />
                         {:else}
                             <p>No albums found</p>
                         {/if}
@@ -63,7 +77,13 @@
                         Loading favorite songs
                     {:then songs}
                         {#if songs.length > 0}
-                            <Lister2 data={songs} type="song" />
+                            <Lister2
+                                data={songs}
+                                type="song"
+                                actionData={{
+                                    direct: songs
+                                }}
+                            />
                         {:else}
                             <p>No songs found</p>
                         {/if}
