@@ -143,6 +143,10 @@
             <span>{item.songcount}</span>
         {/if}
 
+        {#if col.id === "items"}
+            <span>{item.items}</span>
+        {/if}
+
         {#if col.id === "type"}
             {#if item.type !== null}
                 <span style="text-transform: uppercase">{item.type}</span>

@@ -86,6 +86,18 @@ const columns = [
         ]
     },
     {
+        id: "items",
+        label: "Songs",
+        fixedSize: true,
+        sortable: true,
+        sortBy: "items",
+        type: "number",
+        canToggle: true,
+        object_types: [
+            { id: "playlist" }
+        ],
+    },
+    {
         id: "songCount",
         label: "Songs",
         fixedSize: true,
@@ -96,7 +108,6 @@ const columns = [
         object_types: [
             { id: "album" },
             { id: "artist" },
-            { id: "playlist", sortBy: "count", label: "Count" }
         ],
     },
     {
