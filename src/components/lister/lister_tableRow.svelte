@@ -94,7 +94,7 @@
                 <Link to="genres/{item.id}">
                     <SVGGenre class="inline" /> {item.name}
                 </Link>
-            {:else if getType() === "playlists"}
+            {:else if getType() === "playlist"}
                 <Link to="playlists/{item.id}">
                     {item.name}
                 </Link>
