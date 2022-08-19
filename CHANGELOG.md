@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.41.0] - 2022-08-19
+### Added
+- Remove songs from playlists
+- Reorder songs in playlists (press button to enter reorder mode)
+- Randomize order of songs in playlists
+- Update From Tags added to context menu of artists/albums/songs
+- Update Artwork added to context menu of artists/albums
+- Added Actions to all Listers throughout the app (e.g. search results)
+
+### Changed
+- Smartlist Refresh button moved to be above songs
+
 ## [0.40.1] - 2022-08-01
 ### Fixed
 - Rolled back Svelte version as Quick Search became glitchy
