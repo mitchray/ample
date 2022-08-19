@@ -90,6 +90,7 @@
                 fetchURL = getSongsFromAlbumsStartingWith(data.char);
                 break;
             case 'song':
+            case 'playlist_songs':
                 fetchURL = getSong(id);
                 break;
             case 'songGenre':
