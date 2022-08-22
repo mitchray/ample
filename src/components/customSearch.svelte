@@ -27,6 +27,7 @@
     let allCatalogs = [];
     let allPlaylists = [];
     let allSmartlists = [];
+    let containerBind;
 
     // set defaults
     let settings = {
@@ -198,6 +199,8 @@
         allCatalogs = await getCatalogs();
         allPlaylists = await getPlaylists();
         allSmartlists = await getSmartlists(true);
+
+        containerBind.style.width = "calc(100% - 0.1px)"; // workaround for the container queries not triggering for this item
 
         loaded = true;
 
@@ -961,7 +964,7 @@
     <link rel="stylesheet" href='/ample/public/css/containerqueries/customSearch.css'>
 </svelte:head>
 
-<div class="container">
+<div class="container" bind:this={containerBind}>
     <div class="options">
         <div class="type">
             <label>
