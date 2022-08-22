@@ -294,6 +294,7 @@
     .actions {
         display: flex;
         flex-direction: column-reverse;
+        gap: var(--spacing-lg);
     }
 
     .details:after {

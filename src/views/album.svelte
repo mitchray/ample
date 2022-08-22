@@ -161,7 +161,7 @@
         background-color: var(--color-card-highlight);
         padding: var(--spacing-md);
         border-radius: 5px;
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
     }
 
     .title {
@@ -182,6 +182,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-md) var(--spacing-lg);
+        margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
         align-items: center;
     }

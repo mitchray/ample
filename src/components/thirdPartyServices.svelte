@@ -2,8 +2,6 @@
     import { onMount } from 'svelte';
     import { serverURL } from '../stores/server';
 
-    import SVGLaunch from "../../public/images/launch.svg";
-
     import Menu from '../components/menu.svelte';
 
     export let data;
