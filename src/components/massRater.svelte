@@ -25,7 +25,7 @@
 </script>
 
 
-<div class="container well">
+<div class="container">
     <button type="button" class="button button--primary" on:click={handleApply}>Apply</button>
 
     <label>
@@ -47,7 +47,9 @@
 
 <style>
     .container {
+        background-color: var(--color-interface);
         padding: var(--spacing-lg);
         display: inline-block;
+        border-radius: 10px;
     }
 </style>
