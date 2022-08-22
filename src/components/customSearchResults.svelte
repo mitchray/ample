@@ -5,6 +5,7 @@
     export let loading;
     export let results = [];
     export let type;
+    export let showCheckboxes = false;
 
     $: {
         // reset results if type changes
@@ -24,6 +25,7 @@
                 <Lister2
                     bind:data={results}
                     type="{type}"
+                    showCheckboxes={showCheckboxes}
                     actionData={{
                         direct: results
                     }}
@@ -34,6 +36,7 @@
                 <Lister2
                     bind:data={results}
                     type="{type}"
+                    showCheckboxes={showCheckboxes}
                     actionData={{
                         type: "albums",
                         data: results
@@ -45,6 +48,7 @@
                 <Lister2
                     bind:data={results}
                     type="{type}"
+                    showCheckboxes={showCheckboxes}
                     actionData={{
                         type: "artists",
                         data: results
@@ -56,6 +60,7 @@
                 <Lister2
                     bind:data={results}
                     type="{type}"
+                    showCheckboxes={showCheckboxes}
                     actionData={{
                         type: "playlists",
                         data: results
