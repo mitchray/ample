@@ -957,6 +957,9 @@
     ];
 </script>
 
+<svelte:head>
+    <link rel="stylesheet" href='/ample/public/css/containerqueries/customSearch.css'>
+</svelte:head>
 
 <div class="container">
     <div class="options">
@@ -1183,9 +1186,6 @@
     </div>
 </div>
 
-<svelte:head>
-    <link rel="stylesheet" href='/ample/public/css/containerqueries/customSearch.css'>
-</svelte:head>
 
 <style>
     .container {
