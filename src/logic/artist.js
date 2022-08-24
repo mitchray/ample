@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 
 import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
+import { ShowArtistType } from "../stores/status";
 import { MediaPlayer } from "../stores/player";
 
 import { placeholderArtCheck, debugHelper, getAverageColor, getCustomHue } from "./helper";
@@ -30,12 +31,29 @@ const fetchArtistData = async (url) => {
         });
 }
 
+function getArtistType() {
+    let artistType = 'artist';
+    let storeType = get(ShowArtistType);
+
+    if (storeType === 'album_artist') {
+        artistType = 'album_artist';
+    } else if (storeType === 'song_artist') {
+        artistType = 'song_artist';
+    }
+
+    return artistType;
+}
+
 /**
- * Get all artists
+ * Get artists
+ * @param page
+ * @param limit
  * @returns {Promise<*>}
  */
 export const getArtists = async ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=artists";
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + getArtistType();
+
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
@@ -74,7 +92,8 @@ export const getArtistsFromAdvancedSearch = ({rows = [], limit = 0, random = fal
  * @returns {Promise<*>}
  */
 export const getArtistsStartingWith = ({page = 0, limit = 50, filterChar}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=artist";
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + getArtistType();
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
     // ignore punctuation
@@ -88,10 +107,12 @@ export const getArtistsStartingWith = ({page = 0, limit = 50, filterChar}) => {
 /**
  * Test existence of artists starting with specified character
  * @param {string} filterChar
+ * @param {string} type
  * @returns {Promise<*>}
  */
 export const testArtistsStartingWith = async (filterChar) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=artist";
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + getArtistType();
     queryURL += `&limit=1`;
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
@@ -129,15 +150,16 @@ export const getArtist = async (id) => {
  */
 export const unratedArtists = ({query = "", page = 0, limit = 50}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&type=artist&operator=and&random=1";
+    queryURL += "&type=" + getArtistType();
+    queryURL += "&operator=and&random=1";
     queryURL += "&rule_1=myrating&rule_1_operator=2&rule_1_input=0";
 
     if (query) {
         queryURL += "&rule_2=title&rule_2_operator=8&rule_2_input=" + encodeURI(query);
     }
 
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "unratedArtists");
     return fetchArtistData(queryURL);
@@ -246,7 +268,11 @@ export const forgottenArtists = ({page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const randomArtists = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=artist&filter=random";
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + getArtistType();
+    queryURL += "&operator=and&random=1";
+    queryURL += "&rule_1=anywhere&rule_1_operator=0&rule_1_input=";
+
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);

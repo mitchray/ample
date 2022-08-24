@@ -2,6 +2,7 @@
     import CardList from '../components/cardList.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs.svelte";
+    import ArtistTypeSelector from "../components/artist/artistTypeSelector.svelte";
 
     import { newestArtists, randomArtists } from "../logic/artist";
 
@@ -28,12 +29,14 @@
 
             {#if tab.value === 'random'}
                 <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
+<!-- TODO: waiting for next Ampache release <ArtistTypeSelector />-->
                     <CardList type="artist" dataProvider={"randomArtists"} limit=18 refresh=true />
                 </div>
             {/if}
 
             {#if tab.value === 'all'}
                 <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
+<!-- TODO: waiting for next Ampache release <ArtistTypeSelector />-->
                     <ArtistsAll />
                 </div>
             {/if}

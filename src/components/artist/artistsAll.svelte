@@ -1,4 +1,6 @@
 <script>
+    import { ShowArtistType } from "../../stores/status";
+
     import { getArtistsStartingWith } from "../../logic/artist";
 
     import AlphanumericPagination from '../../components/alphanumericPagination.svelte';
@@ -18,7 +20,7 @@
     $: dataDisplay = dataDisplay;
 
     $: {
-        if (limit > 0 && (selectedChar || selectedChar === '')) {
+        if (limit > 0 && ($ShowArtistType || selectedChar || selectedChar === '')) {
             resetPage();
             getData();
         }
