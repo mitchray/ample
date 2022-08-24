@@ -34,7 +34,7 @@ function serve() {
 export default {
 	input: 'src/main.ts',
 	output: {
-		sourcemap: !production,
+		sourcemap: false,
 		format: 'iife',
 		name: 'app',
 		file: 'public/build/bundle.js',
@@ -45,7 +45,7 @@ export default {
 
 		svelte({
 			preprocess: sveltePreprocess({
-				sourceMap: !production ,
+				sourceMap: false,
 				postcss: {
 					plugins: [require('autoprefixer')()]
 				}
