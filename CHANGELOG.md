@@ -1,5 +1,10 @@
 # Changelog
 
+## [0.41.1] - 2022-08-24
+### Fixed
+- Missing checkboxes on Multi-rater page
+- Some search views stuck on 'mobile' layout
+
 ## [0.41.0] - 2022-08-19
 ### Added
 - Remove songs from playlists
