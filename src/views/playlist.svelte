@@ -85,6 +85,7 @@
                             bind:data={songs}
                             type="playlist_songs"
                             showCheckboxes={!isSmartlist}
+                            tableOnly={true}
                             showIndex={true}
                             actionData={{
                                 direct: songs

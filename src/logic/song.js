@@ -47,13 +47,21 @@ export const getSong = (id) => {
 /**
  * Get songs from album ID
  * @param {number} id
+ * @param {boolean} groupByDisc
  * @returns {Promise<*>}
  */
-export const getSongsFromAlbum = (id) => {
+export const getSongsFromAlbum = async ({id, groupByDisc = false}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=album_songs&filter=" + id;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSongsFromAlbum");
-    return fetchSongData(queryURL);
+
+    let songs = await fetchSongData(queryURL);
+
+    if (groupByDisc) {
+        songs = groupSongsByDisc(songs);
+    }
+
+    return songs;
 }
 
 /**

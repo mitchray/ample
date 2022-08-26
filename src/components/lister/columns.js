@@ -15,7 +15,7 @@ const columns = [
     },
     {
         id: "index",
-        label: "#",
+        label: "№",
         widthPreset: "fit",
         fixedSize: true,
         type: "number",
@@ -25,6 +25,19 @@ const columns = [
             { id: "song" },
             { id: "playlist" },
             { id: "playlist_songs" }
+        ],
+    },
+    {
+        id: "track",
+        label: "#",
+        widthPreset: "fit",
+        fixedSize: true,
+        type: "number",
+        sortable: true,
+        canToggle: true,
+        sortBy: "track",
+        object_types: [
+            { id: "song" }
         ],
     },
     {

@@ -84,7 +84,9 @@
 
                         <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
 
-                        <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
+                        {#if artist.time > 0}
+                            <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
+                        {/if}
                     </div>
 
 
@@ -128,6 +130,7 @@
                                     <Lister2
                                         data={songs}
                                         type="song"
+                                        tableOnly={true}
                                         showIndex={true}
                                         actionData={{
                                             direct: songs

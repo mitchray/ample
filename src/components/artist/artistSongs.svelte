@@ -28,6 +28,7 @@
     <Lister2
         bind:data={songs}
         type="song"
+        tableOnly={true}
         actionData={{
             direct: songs
         }}

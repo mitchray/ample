@@ -87,7 +87,7 @@
                 fetchURL = getSomeSongsFromArtistsByGenre(data);
                 break;
             case 'album':
-                fetchURL = getSongsFromAlbum(id);
+                fetchURL = getSongsFromAlbum({id: id});
                 break;
             case 'albums':
                 fetchURL = getSongsFromAlbums(data);

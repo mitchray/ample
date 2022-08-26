@@ -1,5 +1,4 @@
 <script>
-    import { fade } from 'svelte/transition';
     import { Link } from 'svelte-routing';
 
     import { Theme } from '../stores/status';
@@ -7,11 +6,11 @@
     import { getAlbum } from "../logic/album";
     import { formatTotalTime } from "../logic/helper";
 
-    import AlbumSongs from '../components/album/albumSongs.svelte';
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions from '../components/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     import SVGYear from "../../public/images/year.svg";
     import SVGTrack from "../../public/images/music_note.svg";
@@ -27,7 +26,7 @@
     <link rel="stylesheet" href='/ample/public/css/containerqueries/album.css'>
 </svelte:head>
 
-{#await getAlbum(id)}
+{#await getAlbum({id: id, withTracks: true})}
     <p>Loading album</p>
 {:then album}
     {#if album.id}
@@ -74,7 +73,20 @@
                 </div>
                 <div class="songs-container">
                     <div class="songs">
-                        <AlbumSongs id={album.id}/>
+                        {#each [...album.ampleSongs] as [key, value]}
+                            <Lister2
+                                data={value}
+                                type="song"
+                                tableOnly={true}
+                                zone="album-contents"
+                                actionData={{
+                                    type: "album",
+                                    mode: "miniButtons",
+                                    count: value.length,
+                                    direct: value,
+                                }}
+                            />
+                        {/each}
                     </div>
                 </div>
             </div>
@@ -185,9 +197,5 @@
         margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
         align-items: center;
-    }
-
-    .songs {
-        max-width: 700px;
     }
 </style>

@@ -6,6 +6,7 @@ import { MediaPlayer } from '../stores/player';
 
 import { placeholderArtCheck, debugHelper, getCustomHue, getAverageColor } from "./helper";
 import { getUserPreference } from './server';
+import { getSongsFromAlbum } from './song';
 
 let serverURL_value = get(serverURL);
 
@@ -130,14 +131,22 @@ export const testAlbumsStartingWith = (filterChar) => {
 /**
  * Get album by ID
  * @param {number} id
+ * @param {boolean} withTracks
  * @returns {Promise<*>}
  */
-export const getAlbum = async (id) => {
+export const getAlbum = async ({id, withTracks = false}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=album&filter=" + id;
+
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getAlbum");
 
     let album = await fetchAlbumData(queryURL);
+
+    if (withTracks) {
+        album.ampleSongs = await getSongsFromAlbum({id: id, groupByDisc: true});
+        debugHelper(album.ampleSongs, "getAlbum - getSongsFromAlbum");
+    }
+
     album.averageColor = await getAverageColor(album.art + "&thumb=10");
     await getCustomHue(album.averageColor.value);
 

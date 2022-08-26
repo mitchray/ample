@@ -77,6 +77,10 @@
             {item.initialOrder + 1}
         {/if}
 
+        {#if col.id === "track"}
+            {item.track}
+        {/if}
+
         {#if col.id === "name"}
             {#if item.art}
                 <img class="image" src="{item.art}&thumb=1" alt="" height="50" width="50"/>

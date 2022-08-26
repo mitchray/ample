@@ -22,6 +22,7 @@
     export let initialSort    = null;
     export let initialReverse = null;
     export let displayAsTable = true;
+    export let tableOnly      = false;
 
     const contextKey = uuidv4(); // unique key for each instance of lister
 
@@ -111,14 +112,14 @@
             </div>
         {/if}
 
-        {#if type !== "playlist_songs"}
+        {#if !tableOnly}
             <div class="group">
                 <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
                 <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
             </div>
         {/if}
 
-        {#if displayAsTable && type === "playlist_songs"}
+        {#if type === "playlist_songs"}
             {#if showCheckboxes}
                 <div class="group">
                     <PlaylistRemoveFrom contextKey={contextKey} bind:items={$dataDisplay} />

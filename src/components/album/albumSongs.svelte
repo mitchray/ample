@@ -2,7 +2,7 @@
     import { fade } from 'svelte/transition';
     import { Link } from 'svelte-routing';
 
-    import { getSongsFromAlbum, groupSongsByDisc } from '../../logic/song';
+    import { getSongsFromAlbum } from '../../logic/song';
     import { formatSongLength } from '../../logic/helper';
 
     import { CurrentSong } from '../../stores/status';
@@ -13,70 +13,60 @@
     import SVGCurrent from "../../../public/images/play_circle.svg";
 
     export let id;
-    let groupedSongs;
-
-    function _groupSongs(songs) {
-        groupedSongs = groupSongsByDisc(songs);
-        return '';
-    }
 </script>
 
-{#await getSongsFromAlbum(id)}
+{#await getSongsFromAlbum({id: id, groupByDisc: true})}
     <p class="temp">Loading songs</p>
-{:then songs}
-    {#if songs.length > 0}
-        {_groupSongs(songs)}
-        {#if groupedSongs}
-            {#each [...groupedSongs] as [key, value], i}
-                <section in:fade>
-                    {#if groupedSongs.size > 1}
-                        <div class="disc-info">
-                            <p>Disc {i+1}</p>
-                            <span class="disc-actions">
+{:then discs}
+    {#if discs.size > 0}
+        {#each [...discs] as [key, value], i}
+            <section in:fade>
+                {#if discs.size > 1}
+                    <div class="disc-info">
+                        <span class="disc-actions">
+                            <Actions
+                                type="album"
+                                mode="miniButtons"
+                                count="{value.length}"
+                                direct={value}
+                            />
+                        </span>
+                    </div>
+                {/if}
+                <ul class="song-list {value.length > 5 ? 'split' : ''}">
+                    {#each value as song}
+                        <li class="song-row">
+                            <span class="track">{song.track}</span>
+                            {#if $CurrentSong && $CurrentSong.id === song.id}
+                                <span class="current-icon">
+                                    <SVGCurrent class="icon" />
+                                </span>
+                            {/if}
+                            <span class="info">
+                                <span class="name">
+                                    {song.name}
+                                </span>
+                                {#if song.albumartist.id !== song.artist.id}
+                                    <span class="artist"><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
+                                {/if}
+                                </span>
+                            <span class="time">{formatSongLength(song.time)}</span>
+                            <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
+                            <span class="actions">
                                 <Actions
-                                    type="album"
+                                    type="song"
                                     mode="miniButtons"
-                                    count="{value.length}"
-                                    direct={value}
+                                    id="{song.id}"
+                                    count="1"
+                                    artistID="{song.artist.id}"
+                                    albumID="{song.album.id}"
                                 />
                             </span>
-                        </div>
-                    {/if}
-                    <ul class="song-list {value.length > 5 ? 'split' : ''}">
-                        {#each value as song}
-                            <li class="song-row">
-                                <span class="track">{song.track}</span>
-                                {#if $CurrentSong && $CurrentSong.id === song.id}
-                                    <span class="current-icon">
-                                        <SVGCurrent class="icon" />
-                                    </span>
-                                {/if}
-                                <span class="info">
-                                    <span class="name">
-                                        {song.name}
-                                    </span>
-                                    {#if song.albumartist.id !== song.artist.id}
-                                        <span class="artist"><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
-                                    {/if}
-                                </span>
-                                <span class="time">{formatSongLength(song.time)}</span>
-                                <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
-                                <span class="actions">
-                                    <Actions
-                                        type="song"
-                                        mode="miniButtons"
-                                        id="{song.id}"
-                                        count="1"
-                                        artistID="{song.artist.id}"
-                                        albumID="{song.album.id}"
-                                    />
-                                </span>
-                            </li>
-                        {/each}
-                    </ul>
-                </section>
-            {/each}
-        {/if}
+                        </li>
+                    {/each}
+                </ul>
+            </section>
+        {/each}
     {:else}
         <p>Unable to find songs</p>
     {/if}
@@ -154,5 +144,9 @@
 
     .disc-actions {
         margin-left: var(--spacing-lg);
+    }
+
+    section {
+        margin-top: var(--spacing-lg);
     }
 </style>
