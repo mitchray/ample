@@ -91,6 +91,18 @@ export const formatTimeToReadable = (secs) => {
     return (dDisplay + hDisplay + mDisplay + sDisplay).replace(/,\s*$/, "");
 }
 
+export const formatSongQuality = (song) => {
+    let format = song.url.split('.').pop();
+    let bitrate = parseInt(parseInt(song.bitrate) / 1000) ;
+    let variable = song.mode === "vbr" ? "~" : "";
+
+    return format.toUpperCase() + variable + bitrate;
+}
+
+export const formatFilesize = (size) => {
+    return parseFloat(size / 1e+6).toFixed(2) + "MB";
+}
+
 // Courtesy of https://stackoverflow.com/a/23352499
 export const timeSince = (timeStamp) => {
     let now = new Date(),

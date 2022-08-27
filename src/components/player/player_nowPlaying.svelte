@@ -11,7 +11,7 @@
     {#if $CurrentSong}
         <img class="nowPlayingArtwork" src="{$CurrentSong.art}&thumb=22" alt="" />
         <div class="details">
-            <div class="title card-title" title="{$CurrentSong.title}">{$CurrentSong.title}</div>
+            <div class="title card-title" title="{$CurrentSong.title}"><Link to="song/{$CurrentSong.id}">{$CurrentSong.title}</Link></div>
             <div class="artist" title="{$CurrentSong.artist.name}"><Link to="artists/{$CurrentSong.artist.id}">{$CurrentSong.artist.name}</Link></div>
             <div class="album">
                 {#if $CurrentSong.year > 0}

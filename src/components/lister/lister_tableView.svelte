@@ -81,7 +81,7 @@
         flex-shrink: 0;
         flex-grow: 0;
         position: sticky;
-        top: var(--spacing-xxxl);
+        top: calc(var(--spacing-xxxl) - 1px);
         z-index: 5;
         overflow: hidden auto;
     }

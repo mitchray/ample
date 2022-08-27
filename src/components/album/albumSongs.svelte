@@ -44,7 +44,7 @@
                             {/if}
                             <span class="info">
                                 <span class="name">
-                                    {song.name}
+                                    <Link to="song/{song.id}">{song.title}</Link>
                                 </span>
                                 {#if song.albumartist.id !== song.artist.id}
                                     <span class="artist"><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>

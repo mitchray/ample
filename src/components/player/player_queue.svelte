@@ -26,7 +26,7 @@
         {/if}
 
         {#if nextSong}
-            <div class="title card-title"><span>Next:</span> {nextSong.title}</div>
+            <div class="title card-title"><span>Next:</span> <Link to="song/{nextSong.id}">{nextSong.title}</Link></div>
             <div class="artist"><Link to="artists/{nextSong.artist.id}"><SVGArtist class="inline"/> {nextSong.artist.name}</Link></div>
         {:else}
             <div>No upcoming songs</div>

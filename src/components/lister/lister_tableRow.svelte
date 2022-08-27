@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
 
-    import { formatTotalTime } from '../../logic/helper';
+    import { formatTotalTime, formatSongQuality, formatFilesize } from '../../logic/helper';
 
     import { CurrentSong } from '../../stores/status';
 
@@ -102,16 +102,18 @@
                 <Link to="playlists/{item.id}">
                     {item.name}
                 </Link>
-            {:else}
+            {:else if getType() === "song"}
                 {#if $CurrentSong && $CurrentSong.id === item.id}
                     <span class="current-icon">
                         <SVGCurrent class="icon" />
                     </span>
                 {/if}
 
-                <span>
+                <Link to="song/{item.id}">
                     {item.name}
-                </span>
+                </Link>
+            {:else}
+                <span>Uhh missing type</span>
             {/if}
         {/if}
 
@@ -186,11 +188,11 @@
         {/if}
 
         {#if col.id === "quality"}
-            <span style="text-transform: uppercase">{item.url.split('.').pop()}</span>&nbsp;{#if item.mode === "vbr"}~{/if}{parseInt(item.bitrate/1000)}
+            {formatSongQuality(item)}
         {/if}
 
         {#if col.id === "size"}
-            {parseFloat(item.size / 1e+6).toFixed(2)} MB
+            {formatFilesize(item.size)}
         {/if}
 
         {#if col.id === "rating"}

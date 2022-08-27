@@ -31,7 +31,8 @@
                         id: 'ampache',
                         title: 'Ampache',
                         artistURL: `${$serverURL}/artists.php?action=show&artist=${data.id}`,
-                        albumURL: `${$serverURL}/albums.php?action=show&album=${data.id}`
+                        albumURL: `${$serverURL}/albums.php?action=show&album=${data.id}`,
+                        songURL: `${$serverURL}/song.php?action=show_song&song_id=${data.id}`
                     },
                     {
                         id: 'discogs',
@@ -43,13 +44,15 @@
                         id: 'lastfm',
                         title: 'Last.fm',
                         artistURL: `https://www.last.fm/search/artists?q=${encodeURIComponent(data.name)}`,
-                        albumURL: `https://www.last.fm/search/albums?q=${encodeURIComponent(data.name)}+${encodeURIComponent(data.artist.name)}`
+                        albumURL: `https://www.last.fm/search/albums?q=${encodeURIComponent(data.name)}+${encodeURIComponent(data.artist.name)}`,
+                        songURL: `https://www.last.fm/search/tracks?q=${encodeURIComponent(data.name)}+${encodeURIComponent(data.artist.name)}`
                     },
                     {
                         id: 'musicbrainz',
                         title: 'MusicBrainz',
                         artistURL: hasMusicbrainz ? `https://musicbrainz.org/artist/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=artist&method=indexed`,
-                        albumURL: hasMusicbrainz ? `https://musicbrainz.org/release/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=release&method=indexed`
+                        albumURL: hasMusicbrainz ? `https://musicbrainz.org/release/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=release&method=indexed`,
+                        songURL: hasMusicbrainz ? `https://musicbrainz.org/recording/${data.mbid}` : `https://musicbrainz.org/search?query=${encodeURIComponent(data.name)}&type=recording&method=indexed`
                     },
                 ]
             },
@@ -61,19 +64,22 @@
                         id: 'duckduckgo',
                         title: 'Duck Duck Go',
                         artistURL: `https://www.duckduckgo.com/?q="${encodeURIComponent(data.name)}"`,
-                        albumURL: `https://www.duckduckgo.com/?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`
+                        albumURL: `https://www.duckduckgo.com/?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`,
+                        songURL: `https://www.duckduckgo.com/?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`
                     },
                     {
                         id: 'google',
                         title: 'Google',
                         artistURL: `https://www.google.com/search?q="${encodeURIComponent(data.name)}"`,
-                        albumURL: `https://www.google.com/search?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`
+                        albumURL: `https://www.google.com/search?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`,
+                        songURL: `https://www.google.com/search?q="${encodeURIComponent(data.artist.name)}"+"${encodeURIComponent(data.name)}"`
                     },
                     {
                         id: 'wikipedia',
                         title: 'Wikipedia',
                         artistURL: `https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`,
-                        albumURL: `https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`
+                        albumURL: `https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`,
+                        songURL: `https://en.wikipedia.org/wiki/Special:Search?search="${encodeURIComponent(data.name)}"&go=Go`
                     },
                 ]
             },
@@ -85,31 +91,36 @@
                         id: 'apple',
                         title: 'Apple Music',
                         artistURL: `https://music.apple.com/search?term=${encodeURIComponent(data.name)}`,
-                        albumURL: `https://music.apple.com/search?term=${encodeURIComponent(data.name)} ${encodeURIComponent(data.artist.name)}`
+                        albumURL: `https://music.apple.com/search?term=${encodeURIComponent(data.name)} ${encodeURIComponent(data.artist.name)}`,
+                        songURL: `https://music.apple.com/search?term=${encodeURIComponent(data.name)} ${encodeURIComponent(data.artist.name)}`
                     },
                     {
                         id: 'bandcamp',
                         title: 'Bandcamp',
-                        artistURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}`,
-                        albumURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}`
+                        artistURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}&item_type=b`,
+                        albumURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}&item_type=a`,
+                        songURL: `https://bandcamp.com/search?q=${encodeURIComponent(data.name)}&item_type=t`
                     },
                     {
                         id: 'deezer',
                         title: 'Deezer',
                         artistURL: `https://www.deezer.com/search/"${encodeURIComponent(data.name)}"/artist`,
-                        albumURL: `https://www.deezer.com/search/"${encodeURIComponent(data.name)}" "${encodeURIComponent(data.artist.name)}"/album`
+                        albumURL: `https://www.deezer.com/search/"${encodeURIComponent(data.name)}" "${encodeURIComponent(data.artist.name)}"/album`,
+                        songURL: `https://www.deezer.com/search/"${encodeURIComponent(data.name)}" "${encodeURIComponent(data.artist.name)}"/track`
                     },
                     {
                         id: 'spotify',
                         title: 'Spotify',
                         artistURL: `https://open.spotify.com/search/artist:"${encodeURIComponent(data.name)}"`,
-                        albumURL: `https://open.spotify.com/search/album:"${encodeURIComponent(data.name)}" artist:"${encodeURIComponent(data.artist.name)}"`
+                        albumURL: `https://open.spotify.com/search/album:"${encodeURIComponent(data.name)}" artist:"${encodeURIComponent(data.artist.name)}"`,
+                        songURL: `https://open.spotify.com/search/track:"${encodeURIComponent(data.name)}" artist:"${encodeURIComponent(data.artist.name)}"`
                     },
                     {
                         id: 'youtube',
                         title: 'YouTube Music',
                         artistURL: `https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`,
-                        albumURL: `https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`
+                        albumURL: `https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`,
+                        songURL: `https://music.youtube.com/search?q=${encodeURIComponent(data.name)}`
                     },
                 ]
             },
@@ -145,6 +156,11 @@
                                         {/if}
                                         {#if type === 'album'}
                                             <a target="_blank" href={link.albumURL}>
+                                                {link.title}
+                                            </a>
+                                        {/if}
+                                        {#if type === 'song' && link.songURL}
+                                            <a target="_blank" href={link.songURL}>
                                                 {link.title}
                                             </a>
                                         {/if}

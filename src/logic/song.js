@@ -37,7 +37,7 @@ const fetchSongData = async (url) => {
  * @param {number} id
  * @returns {Promise<*>}
  */
-export const getSong = (id) => {
+export const getSong = async (id) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=song&filter=" + id;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSong");

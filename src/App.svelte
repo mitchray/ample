@@ -34,6 +34,7 @@
     import AlbumsPage from './views/albums.svelte';
     import AlbumsByYearPage from './views/albumsByYear.svelte';
     import AlbumPage from './views/album.svelte';
+    import SongPage from './views/song.svelte';
     import PlaylistsPage from './views/playlists.svelte';
     import PlaylistPage from './views/playlist.svelte';
     import SmartlistsPage from './views/smartlists.svelte';
@@ -113,6 +114,7 @@
                     <Route path="albums/year/:year" component={AlbumsByYearPage}/>
                     <Route path="albums/year" component={AlbumsByYearPage}/>
                     <Route path="albums" component={AlbumsPage}/>
+                    <Route path="song/:id" component={SongPage}/>
                     <Route path="playlists/:id" component={PlaylistPage}/>
                     <Route path="playlists" component={PlaylistsPage}/>
                     <Route path="smartlists/:id" component={PlaylistPage}/>

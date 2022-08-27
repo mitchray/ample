@@ -20,7 +20,7 @@
 
         <div class="info">
             <div class="top">
-                <div class="title" title="{song.name}">{song.name}</div>
+                <div class="title" title="{song.name}"><Link to="song/{song.id}">{song.name}</Link></div>
                 <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
             </div>
 
