@@ -1,6 +1,5 @@
 <script>
     import { fade } from 'svelte/transition';
-    import { Link } from 'svelte-routing';
 
     import { ShowExpandedAlbums, Theme } from "../stores/status";
 
@@ -46,7 +45,9 @@
     let currentTab;
 
     function toggleShowExpanded() {
-        ShowExpandedAlbums.set(!$ShowExpandedAlbums);
+        let inverted = !$ShowExpandedAlbums;
+        localStorage.setItem('ShowExpandedAlbums', JSON.stringify(inverted));
+        ShowExpandedAlbums.set(inverted);
     }
 </script>
 
