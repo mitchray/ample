@@ -102,7 +102,7 @@
                 <Link to="playlists/{item.id}">
                     {item.name}
                 </Link>
-            {:else if getType() === "song"}
+            {:else if getType() === "song" || getType() === "playlist_songs"}
                 {#if $CurrentSong && $CurrentSong.id === item.id}
                     <span class="current-icon">
                         <SVGCurrent class="icon" />
