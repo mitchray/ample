@@ -7,7 +7,6 @@
         let newValue = $ShowArtistType;
         localStorage.setItem('ShowArtistType', JSON.stringify(newValue));
         ShowArtistType.set(newValue);
-        console.debug($ShowArtistType);
     }
 </script>
 

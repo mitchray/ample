@@ -10,7 +10,7 @@
     let playlistID = getPlaylistIDFromUrl();
 
     async function handleRefresh() {
-        let results = await getSongsFromPlaylist(playlistID);
+        let results = await getSongsFromPlaylist({id: playlistID});
 
         if (results) {
             $dataDisplay = setIndexes(results);

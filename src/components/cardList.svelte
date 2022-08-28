@@ -23,6 +23,7 @@
     let logic;
     let containerClass;
     let emptyMessage;
+    let options = {};
 
     $: data = [
         ...data,
@@ -54,15 +55,16 @@
                 break;
             case 'playlist':
                 logic = await import("../logic/playlist");
-                card = (await import('../components/playlist/playlistCard.svelte')).default;
+                card = (await import('./playlist/playlistCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
                 emptyMessage = "No playlists found";
                 break;
             case 'smartlist':
                 logic = await import("../logic/playlist");
-                card = (await import('../components/playlist/smartlistCard.svelte')).default;
+                card = (await import('./playlist/playlistCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
                 emptyMessage = "No smartlists found";
+                options = {isSmartlist: true};
                 break;
             case 'genre':
                 logic = await import("../logic/genre");
@@ -123,7 +125,7 @@
         <ul class="{containerClass}">
             {#each Array(parseInt(limit)) as placeholder}
                 <li>
-                    <svelte:component this={card} />
+                    <svelte:component this={card} {...options} />
                 </li>
             {/each}
         </ul>
@@ -133,7 +135,7 @@
                 {#each data as dataSingle}
                     {#if dataSingle.name}
                         <li>
-                            <svelte:component this={card} data={dataSingle} />
+                            <svelte:component this={card} data={dataSingle} {...options} />
                         </li>
                     {/if}
                 {/each}

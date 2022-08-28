@@ -3,7 +3,7 @@
 
     import Rating from '../../components/rating.svelte';
 
-    export let data = null;
+    export let data = null; // needed for cardList dynamic components
 
     let artist;
     $: artist = data;

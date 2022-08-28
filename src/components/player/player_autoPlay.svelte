@@ -21,7 +21,7 @@
         if ($NowPlayingQueue.length > 0 && $AutoPlayEnabled && selectedPlaylist) {
             // when we reach less than 10 songs remaining
             if ($NowPlayingIndex > $NowPlayingQueue.length - 10) {
-                getSongsFromPlaylist(selectedPlaylist.id)
+                getSongsFromPlaylist({id: selectedPlaylist.id})
                     .then((result) => {
                         if (!result.error && result.length > 0) {
                             result = (Array.isArray(result)) ? result : [result];

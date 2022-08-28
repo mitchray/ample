@@ -148,25 +148,23 @@
                             <h4 class="panel-title">{category.title}</h4>
                             <ul class="menu-list">
                                 {#each category.items as link}
-                                    {#if link.songURL}
-                                        <li>
-                                            {#if type === 'artist'}
-                                                <a target="_blank" href={link.artistURL}>
-                                                    {link.title}
-                                                </a>
-                                            {/if}
-                                            {#if type === 'album'}
-                                                <a target="_blank" href={link.albumURL}>
-                                                    {link.title}
-                                                </a>
-                                            {/if}
-                                            {#if type === 'song'}
-                                                <a target="_blank" href={link.songURL}>
-                                                    {link.title}
-                                                </a>
-                                            {/if}
-                                        </li>
-                                    {/if}
+                                    <li>
+                                        {#if type === 'artist'}
+                                            <a target="_blank" href={link.artistURL}>
+                                                {link.title}
+                                            </a>
+                                        {/if}
+                                        {#if type === 'album'}
+                                            <a target="_blank" href={link.albumURL}>
+                                                {link.title}
+                                            </a>
+                                        {/if}
+                                        {#if type === 'song' && link.songURL}
+                                            <a target="_blank" href={link.songURL}>
+                                                {link.title}
+                                            </a>
+                                        {/if}
+                                    </li>
                                 {/each}
                             </ul>
                         </div>

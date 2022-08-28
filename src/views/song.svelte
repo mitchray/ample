@@ -92,7 +92,7 @@
                 {/if}
 
                 {#if song.replaygain_track_peak}
-                    <span class="field">ReplayGain Trach Peak</span> <span>{song.replaygain_track_peak}</span>
+                    <span class="field">ReplayGain Track Peak</span> <span>{song.replaygain_track_peak}</span>
                 {/if}
 
                 {#if song.r128_album_gain}
@@ -164,6 +164,7 @@
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-xl);
+        margin-bottom: var(--spacing-lg);
     }
 
     .grid {

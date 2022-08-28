@@ -106,7 +106,7 @@
                 fetchURL = getSomeSongsByGenre(data);
                 break;
             case 'playlist':
-                fetchURL = getSongsFromPlaylist(id);
+                fetchURL = getSongsFromPlaylist({id: id});
                 break;
             case 'playlists':
                 fetchURL = getSongsFromPlaylists(data);

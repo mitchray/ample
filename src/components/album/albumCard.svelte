@@ -7,7 +7,7 @@
     import SVGYear from "../../../public/images/year.svg";
     import SVGTrack from "../../../public/images/music_note.svg";
 
-    export let data = null;
+    export let data = null; // needed for cardList dynamic components
 
     let album;
     $: album = data;

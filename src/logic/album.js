@@ -4,7 +4,7 @@ import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
 import { MediaPlayer } from '../stores/player';
 
-import { placeholderArtCheck, debugHelper, getCustomHue, getAverageColor } from "./helper";
+import { debugHelper, getCustomHue, getAverageColor } from "./helper";
 import { getUserPreference } from './server';
 import { getSongsFromAlbum } from './song';
 

@@ -4,7 +4,7 @@ import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
 import { MediaPlayer } from "../stores/player";
 
-import { placeholderArtCheck, debugHelper } from "./helper";
+import { debugHelper } from "./helper";
 
 let serverURL_value = get(serverURL);
 

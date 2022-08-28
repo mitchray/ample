@@ -6,7 +6,7 @@
 
     import SVGAlbum from "../../../public/images/album.svg";
 
-    export let data = null;
+    export let data = null; // needed for cardList dynamic components
 
     let song;
     $: song = data;

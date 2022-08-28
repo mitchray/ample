@@ -3,7 +3,7 @@
 
     import { getSmartlists } from "../logic/playlist";
 
-    import SmartlistCard from '../components/playlist/smartlistCard.svelte';
+    import PlaylistCard from '../components/playlist/playlistCard.svelte';
 </script>
 
 <h1 class="page-title">Smartlists</h1>
@@ -15,7 +15,7 @@
         <ul class="playlist-grid" in:fade>
             {#each smartlists as smartlist}
                 <li>
-                    <SmartlistCard data="{smartlist}"/>
+                    <PlaylistCard data={smartlist} isSmartlist={true} />
                 </li>
             {/each}
         </ul>

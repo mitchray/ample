@@ -2,6 +2,7 @@
     import { Link } from "svelte-routing";
 
     import Actions from '../../components/actions.svelte';
+    import PlaylistArt from '../../components/playlist/playlist_art.svelte';
 
     export let data = null;
 
@@ -11,6 +12,12 @@
 
 <div class="playlist-card card">
     {#if smartlist}
+        <div class="image-container">
+            <Link to="smartlists/{smartlist.id}" title="{smartlist.name}">
+                <PlaylistArt bind:playlist={smartlist} fallback="{smartlist.art}" />
+            </Link>
+        </div>
+
         <div class="title">
             <Link to="smartlists/{smartlist.id}" title="{smartlist.name}">{smartlist.name}</Link>
         </div>
@@ -46,6 +53,13 @@
 </div>
 
 <style>
+    .image-container {
+        font-size: 0;
+        border-radius: 5px;
+        overflow: hidden;
+        margin-bottom: var(--spacing-md);
+    }
+
     .title {
         margin-bottom: var(--spacing-md);
         white-space: nowrap;

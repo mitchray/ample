@@ -8,7 +8,7 @@
     import SVGAlbum from "../../../public/images/album.svg";
     import SVGSong from "../../../public/images/music_note.svg";
 
-    export let data = null;
+    export let data = null; // needed for cardList dynamic components
 
     let angle = 0;
     let genre;

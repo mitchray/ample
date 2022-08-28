@@ -6,6 +6,7 @@
 
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
+    import PlaylistArt from '../components/playlist/playlist_art.svelte';
 
     import SVGPlaylist from "../../public/images/queue_music.svg";
     import SVGSmartlist from "../../public/images/smartlist.svg";
@@ -16,7 +17,6 @@
     let songs = [];
     let loading = true;
     let isSmartlist = false;
-    let loadedTime;
 
     $: songs = songs;
 
@@ -32,8 +32,7 @@
     });
 
     async function handleSongLoad() {
-        songs = await getSongsFromPlaylist(id);
-        loadedTime = new Date();
+        songs = await getSongsFromPlaylist({id: id});
     }
 </script>
 
@@ -51,7 +50,7 @@
                     <div class="details">
                         <div class="cover-rating">
                             <div class="art-container">
-                                <img class="art" src="{playlist.art}&thumb=32" alt="Image of {playlist.name}" width="384" height="384" />
+                                <PlaylistArt bind:songs fallback="{playlist.art}" />
                             </div>
 
                             {#if !isSmartlist}
@@ -64,9 +63,9 @@
                         <div class="info">
                             <div class="type">
                                 {#if isSmartlist}
-                                    <SVGSmartlist class="inline" /> Smartlist
+                                    <SVGSmartlist class="inline" /> <span>Smartlist</span>
                                 {:else}
-                                    <SVGPlaylist class="inline" /> Playlist
+                                    <SVGPlaylist class="inline" /> <span>Playlist</span>
                                 {/if}
                             </div>
 
@@ -80,18 +79,16 @@
                 </div>
 
                 <div class="songs-container">
-                    {#key loadedTime}
-                        <Lister2
-                            bind:data={songs}
-                            type="playlist_songs"
-                            showCheckboxes={!isSmartlist}
-                            tableOnly={true}
-                            showIndex={true}
-                            actionData={{
+                    <Lister2
+                        bind:data={songs}
+                        type="playlist_songs"
+                        showCheckboxes={!isSmartlist}
+                        tableOnly={true}
+                        showIndex={true}
+                        actionData={{
                                 direct: songs
                             }}
-                        />
-                    {/key}
+                    />
                 </div>
             </div>
         </div>
@@ -149,6 +146,7 @@
     }
 
     .art-container {
+        width: 240px;
         max-width: 240px;
         aspect-ratio: 1 / 1;
         border-radius: 6px;
@@ -157,13 +155,6 @@
         font-size: 0;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
         margin-bottom: var(--spacing-lg);
-    }
-
-    .art {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-        position: relative;
     }
 
     .rating {
@@ -204,5 +195,9 @@
         font-weight: 300;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+    }
+
+    .type span {
+        margin-left: var(--spacing-sm);
     }
 </style>

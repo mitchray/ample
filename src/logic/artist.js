@@ -5,7 +5,7 @@ import { userToken } from '../stores/user';
 import { ShowArtistType } from "../stores/status";
 import { MediaPlayer } from "../stores/player";
 
-import { placeholderArtCheck, debugHelper, getAverageColor, getCustomHue } from "./helper";
+import { debugHelper, getAverageColor, getCustomHue } from "./helper";
 import { getAlbumsByArtist } from "./album";
 
 let serverURL_value = get(serverURL);

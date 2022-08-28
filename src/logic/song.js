@@ -99,8 +99,13 @@ export const getTopSongsFromArtist = (id) => {
  * @param {number} id
  * @returns {Promise<*>}
  */
-export const getSongsFromPlaylist = (id) => {
+export const getSongsFromPlaylist = ({id, limit = 0}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=playlist_songs&filter=" + id;
+
+    if (limit > 0) {
+        queryURL += "&limit=" + limit;
+    }
+
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSongsFromPlaylist");
     return fetchSongData(queryURL);

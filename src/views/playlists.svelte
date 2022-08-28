@@ -58,7 +58,7 @@
         <ul class="playlist-grid" in:fade>
             {#each playlists as playlist (playlist.id)}
                 <li class:highlight={playlist.isNew} class:hide={playlist.isDeleted}>
-                    <PlaylistCard bind:playlist="{playlist}"/>
+                    <PlaylistCard bind:data={playlist} />
                 </li>
             {/each}
         </ul>
