@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
 
     import { getSongsFromPlaylist } from "../logic/song";
     import { getPlaylist } from '../logic/playlist';
@@ -7,6 +7,9 @@
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
     import PlaylistArt from '../components/playlist/playlist_art.svelte';
+    import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
+    import PlaylistDelete from '../components/playlist/playlist_delete.svelte';
+    import Menu from '../components/menu.svelte';
 
     import SVGPlaylist from "../../public/images/queue_music.svg";
     import SVGSmartlist from "../../public/images/smartlist.svg";
@@ -17,8 +20,22 @@
     let songs = [];
     let loading = true;
     let isSmartlist = false;
+    let playlistEditIsVisible = false;
+    let playlistDeleteIsVisible = false;
 
     $: songs = songs;
+
+    async function handleEditPlaylist() {
+        playlistEditIsVisible = !playlistEditIsVisible;
+
+        await tick();
+    }
+
+    async function handleDeletePlaylist() {
+        playlistDeleteIsVisible = !playlistDeleteIsVisible;
+
+        await tick();
+    }
 
     onMount(async () => {
         playlist = await getPlaylist(id);
@@ -63,9 +80,9 @@
                         <div class="info">
                             <div class="type">
                                 {#if isSmartlist}
-                                    <SVGSmartlist class="inline" /> <span>Smartlist</span>
+                                    <SVGSmartlist class="inline" /> Smartlist
                                 {:else}
-                                    <SVGPlaylist class="inline" /> <span>Playlist</span>
+                                    <SVGPlaylist class="inline" /> Playlist
                                 {/if}
                             </div>
 
@@ -74,6 +91,13 @@
                                     {playlist.name}
                                 </h1>
                             </div>
+
+                            {#if !isSmartlist}
+                                <div class="playlist-actions">
+                                    <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
+                                    <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
+                                </div>
+                            {/if}
                         </div>
                     </div>
                 </div>
@@ -86,12 +110,25 @@
                         tableOnly={true}
                         showIndex={true}
                         actionData={{
-                                direct: songs
-                            }}
+                            type: "song",
+                            direct: songs
+                        }}
                     />
                 </div>
             </div>
         </div>
+
+        {#if playlistEditIsVisible}
+            <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_edit_" + id)} bind:isVisible={playlistEditIsVisible}>
+                <PlaylistEdit bind:playlist={playlist} bind:isVisible={playlistEditIsVisible} />
+            </Menu>
+        {/if}
+
+        {#if playlistDeleteIsVisible}
+            <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_delete_" + id)} bind:isVisible={playlistDeleteIsVisible}>
+                <PlaylistDelete bind:playlist={playlist} bind:isVisible={playlistDeleteIsVisible} />
+            </Menu>
+        {/if}
     {:else}
         <p>Unable to find playlist with that ID</p>
     {/if}
@@ -186,6 +223,11 @@
         justify-content: center;
     }
 
+    .playlist-actions {
+        display: flex;
+        flex-direction: row;
+    }
+
     .type {
         --roboto-opsz: 32;
         display: flex;
@@ -195,9 +237,5 @@
         font-weight: 300;
         text-transform: uppercase;
         letter-spacing: 0.05em;
-    }
-
-    .type span {
-        margin-left: var(--spacing-sm);
     }
 </style>

@@ -29,6 +29,8 @@
 
     import Menu from '../components/menu.svelte';
     import PlaylistAddTo from '../components/playlist/playlist_addTo.svelte';
+    import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
+    import PlaylistDelete from '../components/playlist/playlist_delete.svelte';
 
     import SVGPlay from "../../public/images/play.svg";
     import SVGQueue from "../../public/images/playlist_add.svg";
@@ -50,22 +52,27 @@
     let fetchURL = null;
     let moreMenuVisible = false;
     let playlistAddIsVisible = false;
+    let playlistEditIsVisible = false;
+    let playlistDeleteIsVisible = false;
     let songsForPlaylistAdd = [];
+    let playlistForPlaylistEdit = {};
+    let playlistForPlaylistDelete = {};
     let container;
 
-    let showPlay        = (count > 0 || count === null);
-    let showPlayNext    = (count > 0 || count === null);
-    let showPlayLast    = (count > 0 || count === null);
-    let showShuffle     = (count > 1 || count === null);
-    let showShuffleNext = (count > 1 || count === null);
-    let showShuffleLast = (count > 1 || count === null);
-    let showPlaylistAdd = true;
-    let showGoToArtist  = artistID;
-    let showGoToAlbum   = albumID;
-    let showMore        = true;
-    let showSkipBelow   = (type !== 'song');
+    let showPlay           = (count > 0 || count === null);
+    let showPlayNext       = (count > 0 || count === null);
+    let showPlayLast       = (count > 0 || count === null);
+    let showShuffle        = (count > 1 || count === null);
+    let showShuffleNext    = (count > 1 || count === null);
+    let showShuffleLast    = (count > 1 || count === null);
+    let showPlaylistAdd    = true;
+    let showPlaylistEdit   = (type === "playlist");
+    let showGoToArtist     = artistID;
+    let showGoToAlbum      = albumID;
+    let showMore           = true;
+    let showSkipBelow      = (type !== 'song');
     let showUpdateFromTags = (type === "artist" || type === "album" || type === "song");
-    let showUpdateArt   = (type === "artist" || type === "album");
+    let showUpdateArt      = (type === "artist" || type === "album");
 
     async function determineFetchURL() {
         switch (type) {
@@ -266,6 +273,22 @@
         }
     }
 
+    async function handleEditPlaylist() {
+        playlistForPlaylistEdit = data; // playlist object
+
+        playlistEditIsVisible = !playlistEditIsVisible;
+
+        await tick();
+    }
+
+    async function handleDeletePlaylist() {
+        playlistForPlaylistDelete = data; // playlist object
+
+        playlistDeleteIsVisible = !playlistDeleteIsVisible;
+
+        await tick();
+    }
+
     async function handleUpdateFromTags(e) {
         let originalText = startLoad(e.target);
         let result = await updateFromTags(type, id);
@@ -335,6 +358,18 @@
             {/if}
         {/if}
 
+        {#if showPlaylistEdit}
+            <div class="action">
+                <button type="button" id="js-action-playlist_edit_{type}{mode}{id}" on:click={handleEditPlaylist} title="Edit Playlist"></button>
+            </div>
+
+            <div class="action">
+                <button type="button" id="js-action-playlist_delete_{type}{mode}{id}" on:click={handleDeletePlaylist} title="Delete Playlist"></button>
+            </div>
+
+            <div class="menu-separator"></div>
+        {/if}
+
         {#if showShuffleNext}
             <div class="action">
                 <button type="button" on:click={handleShuffleNext} title="Shuffle next"><SVGShuffle class="inline" /> </button>
@@ -349,7 +384,7 @@
 
         {#if showPlaylistAdd}
             <div class="action">
-                <button type="button" id="js-action-playlist_{type}{mode}{id}" on:click={handleAddToPlaylist} title="Add to playlist"></button>
+                <button type="button" id="js-action-playlist_add_{type}{mode}{id}" on:click={handleAddToPlaylist} title="Add to playlist"></button>
             </div>
         {/if}
 
@@ -399,8 +434,20 @@
 {/if}
 
 {#if playlistAddIsVisible}
-    <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_" + type + mode + id)} bind:isVisible={playlistAddIsVisible}>
+    <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_add_" + type + mode + id)} bind:isVisible={playlistAddIsVisible}>
         <PlaylistAddTo bind:songs={songsForPlaylistAdd} bind:isVisible={playlistAddIsVisible} />
+    </Menu>
+{/if}
+
+{#if playlistEditIsVisible}
+    <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_edit_" + type + mode + id)} bind:isVisible={playlistEditIsVisible}>
+        <PlaylistEdit bind:playlist={playlistForPlaylistEdit} bind:isVisible={playlistEditIsVisible} />
+    </Menu>
+{/if}
+
+{#if playlistDeleteIsVisible}
+    <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_delete_" + type + mode + id)} bind:isVisible={playlistDeleteIsVisible}>
+        <PlaylistDelete bind:playlist={playlistForPlaylistDelete} bind:isVisible={playlistDeleteIsVisible} />
     </Menu>
 {/if}
 

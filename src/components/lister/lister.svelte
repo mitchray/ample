@@ -122,7 +122,7 @@
         {#if type === "playlist_songs"}
             {#if showCheckboxes}
                 <div class="group">
-                    <PlaylistRemoveFrom contextKey={contextKey} bind:items={$dataDisplay} />
+                    <PlaylistRemoveFrom contextKey={contextKey} />
                 </div>
 
                 <div class="group">

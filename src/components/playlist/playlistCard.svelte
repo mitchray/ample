@@ -9,6 +9,8 @@
     export let isSmartlist = false;
 
     let playlist;
+    let parentUrl;
+
     $: playlist = data;
     $: parentUrl = isSmartlist ? 'smartlists' : 'playlists';
 </script>
@@ -49,6 +51,7 @@
                     type="playlist"
                     mode="miniButtons"
                     id="{playlist.id}"
+                    data={playlist}
                 />
             </div>
         </div>
@@ -72,7 +75,7 @@
     :global(.playlist-grid) {
         display: grid;
         gap: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
 
     :global(.playlist-scroll) {
@@ -126,7 +129,6 @@
     .title :global(a) {
         display: block;
         padding: var(--spacing-md);
-        padding-bottom: calc(var(--spacing-md) + 3px);
         font-size: 16px;
     }
 
