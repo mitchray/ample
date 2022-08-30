@@ -64,7 +64,8 @@
                     activeSort="title"
                     actionData={{
                         type: "artistGenre",
-                        data: genre.name,
+                        mode: "fullButtons",
+                        data: Object.create({name: genre.name})
                     }}
                 />
             {/if}
@@ -76,7 +77,8 @@
                     activeSort="title"
                     actionData={{
                         type: "albumGenre",
-                        data: genre.name,
+                        mode: "fullButtons",
+                        data: Object.create({name: genre.name})
                     }}
                 />
             {/if}
@@ -88,7 +90,8 @@
                     activeSort="title"
                     actionData={{
                         type: "songGenre",
-                        data: genre.name,
+                        mode: "fullButtons",
+                        data: Object.create({name: genre.name})
                     }}
                 />
             {/if}

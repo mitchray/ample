@@ -110,8 +110,9 @@
                         tableOnly={true}
                         showIndex={true}
                         actionData={{
-                            type: "song",
-                            direct: songs
+                            type: "",
+                            mode: "fullButtons",
+                            data: Object.create({songs: songs})
                         }}
                     />
                 </div>

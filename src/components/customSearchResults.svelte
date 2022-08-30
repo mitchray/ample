@@ -27,7 +27,9 @@
                     type="{type}"
                     showCheckboxes={showCheckboxes}
                     actionData={{
-                        direct: results
+                        type: "",
+                        mode: "fullButtons",
+                        data: Object.create({songs: results})
                     }}
                 />
             {/if}
@@ -39,7 +41,8 @@
                     showCheckboxes={showCheckboxes}
                     actionData={{
                         type: "albums",
-                        data: results
+                        mode: "fullButtons",
+                        data: Object.create({albums: results})
                     }}
                 />
             {/if}
@@ -51,7 +54,8 @@
                     showCheckboxes={showCheckboxes}
                     actionData={{
                         type: "artists",
-                        data: results
+                        mode: "fullButtons",
+                        data: Object.create({artists: results})
                     }}
                 />
             {/if}
@@ -63,7 +67,8 @@
                     showCheckboxes={showCheckboxes}
                     actionData={{
                         type: "playlists",
-                        data: results
+                        mode: "fullButtons",
+                        data: Object.create({playlists: results})
                     }}
                 />
             {/if}

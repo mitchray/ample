@@ -8,7 +8,7 @@
     import { MediaPlayer } from '../stores/player';
 
     import Menu from '../components/menu.svelte';
-    import Actions from '../components/actions.svelte';
+    import Actions2 from '../components/action/actions.svelte';
 
     import SVGClose from '../../public/images/close.svg';
     import SVGBin from '../../public/images/delete.svg';
@@ -191,13 +191,11 @@
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
                             <Menu anchor="left-center" toggleElement={document.querySelector('#queueMoreToggle-' + queueMoreMenuID)} bind:isVisible={queueMoreMenuIsOpen}>
                                 <div class="panel-content">
-                                    <Actions
+                                    <Actions2
                                         type="song"
                                         mode="subMenu"
                                         id="{song.id}"
-                                        count=1
-                                        albumID="{song.album.id}"
-                                        artistID="{song.artist.id}"
+                                        data={Object.create({albumID: song.album.id, artistID: song.artist.id})}
                                     />
                                 </div>
                             </Menu>

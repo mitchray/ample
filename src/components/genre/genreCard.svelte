@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { Link } from "svelte-routing";
 
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
 
     import SVGArtist from "../../../public/images/artist.svg";
     import SVGAlbum from "../../../public/images/album.svg";
@@ -35,7 +35,11 @@
 
         <div class="bottom">
             <div class="actions">
-                <Actions type="artistGenre" mode="miniButtons" data="{genre.name}" count="1" />
+                <Actions2
+                    type="artistGenre"
+                    mode="miniButtons"
+                    data={Object.create({name: genre.name})}
+                />
             </div>
         </div>
     </div>

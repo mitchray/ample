@@ -3,7 +3,7 @@
     import { onDestroy, onMount, setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
 
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
     import TableView from './lister_tableView.svelte';
     import CardView from './lister_cardView.svelte';
     import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
@@ -65,10 +65,10 @@
     $: data         = data; //immutable
     $: $dataDisplay = data.slice();
 
-    // overwrite any actionData.direct songs with our dataDisplay as it may have updated
+    // overwrite any actionData.songs with our dataDisplay as it may have updated
     $: {
-        if (actionData.direct) {
-            actionData.direct = $dataDisplay;
+        if (actionData.songs) {
+            actionData.songs = $dataDisplay;
         }
     }
 
@@ -108,7 +108,7 @@
     <div class="lister-actions">
         {#if !actionData.disable}
             <div class="group">
-                <Actions mode="fullButtons" {...actionData} />
+                <Actions2 mode="fullButtons" {...actionData} />
             </div>
         {/if}
 

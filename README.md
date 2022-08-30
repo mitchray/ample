@@ -41,7 +41,7 @@ This is a personal hobby project which caters to my own needs, which means
 - Either grab a prebuilt [release](https://github.com/mitchray/ample/releases)
   - Copy the ```ample``` folder into your Ampache ```public``` folder (or just the Ampache directory if using the 'squashed' version)
   - Done!
-- or using Git repository
+- or using Git repository (needs to be compiled, see Developing)
   - Create a symbolic link within your Ampache public/base folder
 
 ## Accessing

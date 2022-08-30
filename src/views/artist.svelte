@@ -15,7 +15,7 @@
     import Lister2 from '../components/lister/lister.svelte';
     import MusicbrainzScan from '../components/musicbrainzScan.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
-    import Actions from '../components/actions.svelte';
+    import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
 
     import SVGAlbum from "../../public/images/album.svg";
@@ -94,11 +94,11 @@
                     <Genres genres="{artist.genre}" />
 
                     <div class="actions">
-                        <Actions
+                        <Actions2
                             type="artist"
                             mode="fullButtons"
+                            showShuffle={artist.songcount > 1}
                             id="{artist.id}"
-                            count={artist.songcount}
                         />
 
                         <ThirdPartyServices data={artist} type="artist" />
@@ -134,7 +134,9 @@
                                         tableOnly={true}
                                         showIndex={true}
                                         actionData={{
-                                            direct: songs
+                                            type: "",
+                                            mode: "fullButtons",
+                                            data: Object.create({songs: songs})
                                         }}
                                     />
                                 {:else}

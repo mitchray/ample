@@ -2,7 +2,7 @@
     import { Link } from "svelte-routing";
 
     import Rating from '../../components/rating.svelte';
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
 
     import SVGYear from "../../../public/images/year.svg";
     import SVGTrack from "../../../public/images/music_note.svg";
@@ -46,13 +46,12 @@
                 </div>
 
                 <div class="actions">
-                    <Actions
+                    <Actions2
                         type="album"
                         mode="miniButtons"
                         id="{album.id}"
-                        count={album.songcount}
-                        albumID="{album.id}"
-                        artistID="{album.artist.id}"
+                        showShuffle={album.songcount > 1}
+                        data={Object.create({albumID: album.id, artistID: album.artist.id})}
                     />
                 </div>
             </div>
@@ -82,7 +81,7 @@
                 </div>
 
                 <div class="actions">
-                    <Actions type="album" mode="miniButtons" />
+                    <Actions2 type="album" mode="miniButtons" />
                 </div>
             </div>
         </div>

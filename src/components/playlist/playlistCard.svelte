@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
     import Rating from '../../components/rating.svelte';
     import PlaylistArt from '../../components/playlist/playlist_art.svelte';
 
@@ -47,11 +47,11 @@
             {/if}
 
             <div class="actions">
-                <Actions
+                <Actions2
                     type="playlist"
                     mode="miniButtons"
                     id="{playlist.id}"
-                    data={playlist}
+                    data={Object.create({playlist: playlist})}
                 />
             </div>
         </div>
@@ -65,7 +65,7 @@
         </div>
 
         <div class="actions">
-            <Actions type="playlist" mode="miniButtons" />
+            <Actions2 type="playlist" mode="miniButtons" />
         </div>
     {/if}
 </div>

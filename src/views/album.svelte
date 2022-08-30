@@ -8,7 +8,7 @@
 
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
-    import Actions from '../components/actions.svelte';
+    import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
@@ -52,12 +52,12 @@
                                 </div>
                             </div>
 
-                            <Actions
+                            <Actions2
                                 type="album"
                                 mode="fullButtons"
                                 id="{album.id}"
-                                count="{album.songcount}"
-                                artistID="{album.artist.id}"
+                                showShuffle={album.songcount > 1}
+                                data={Object.create({artistID: album.artist.id})}
                             />
 
                             <div class="meta">
@@ -82,8 +82,8 @@
                                 actionData={{
                                     type: "album",
                                     mode: "miniButtons",
-                                    count: value.length,
-                                    direct: value,
+                                    showShuffle: value.length > 1,
+                                    data: Object.create({songs: value})
                                 }}
                             />
                         {/each}

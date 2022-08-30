@@ -191,7 +191,8 @@
                             type="artist"
                             actionData={{
                                 type: "artists",
-                                data: initialResults.artists
+                                mode: "fullButtons",
+                                data: Object.create({artists: initialResults.artists})
                             }}
                         />
                     {/if}
@@ -206,7 +207,8 @@
                             type="album"
                             actionData={{
                                 type: "albums",
-                                data: initialResults.albums
+                                mode: "fullButtons",
+                                data: Object.create({albums: initialResults.albums})
                             }}
                         />
                     {/if}
@@ -220,7 +222,9 @@
                             data={initialResults.songs}
                             type="song"
                             actionData={{
-                                direct: initialResults.songs
+                                type: "",
+                                mode: "fullButtons",
+                                data: Object.create({songs: initialResults.songs})
                             }}
                         />
                     {/if}

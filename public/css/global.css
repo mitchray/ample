@@ -553,6 +553,7 @@ section {
     display: block;
     border-bottom: 2px solid var(--color-border);
     margin: var(--spacing-md) 0;
+    width: 100%;
 }
 
 .notification-dot:after {

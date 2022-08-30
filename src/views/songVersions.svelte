@@ -25,7 +25,9 @@
                 data={songs}
                 type="song"
                 actionData={{
-                    direct: songs,
+                    type: "",
+                    mode: "fullButtons",
+                    data: Object.create({songs: songs})
                 }}
             />
         {:else}

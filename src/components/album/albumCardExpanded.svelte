@@ -4,7 +4,7 @@
     import AlbumSongs from '../../components/album/albumSongs.svelte';
     import Rating from '../../components/rating.svelte';
     import Visibility from '../../components/visibility.svelte';
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
 
     import SVGArtist from "../../../public/images/artist.svg";
     import SVGYear from "../../../public/images/year.svg";
@@ -37,13 +37,12 @@
                 <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}"/>
 
                 <div class="actions">
-                    <Actions
+                    <Actions2
                         type="album"
                         mode="miniButtons"
                         id="{album.id}"
-                        count="{album.songcount}"
-                        albumID="{album.id}"
-                        artistID="{album.artist.id}"
+                        showShuffle={album.songcount > 1}
+                        data={Object.create({albumID: album.id, artistID: album.artist.id})}
                     />
                 </div>
             </div>

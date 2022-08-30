@@ -2,7 +2,7 @@
     import { Link } from "svelte-routing";
 
     import Rating from '../../components/rating.svelte';
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
 
     import SVGAlbum from "../../../public/images/album.svg";
 
@@ -32,13 +32,11 @@
                 <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
 
                 <div class="actions">
-                    <Actions
+                    <Actions2
                         type="song"
                         mode="miniButtons"
                         id="{song.id}"
-                        count="1"
-                        albumID="{song.album.id}"
-                        artistID="{song.artist.id}"
+                        data={Object.create({albumID: song.album.id, artistID: song.artist.id})}
                     />
                 </div>
             </div>
@@ -62,7 +60,7 @@
                 <Rating />
 
                 <div class="actions">
-                    <Actions type="song" mode="miniButtons" />
+                    <Actions2 type="song" mode="miniButtons" />
                 </div>
             </div>
         </div>

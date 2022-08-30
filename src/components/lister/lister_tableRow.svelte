@@ -13,7 +13,7 @@
     export let item;
 
     import Rating from '../../components/rating.svelte';
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
     import Genres from '../../components/genre/genres.svelte';
 
     import SVGArtist from "../../../public/images/artist.svg";
@@ -200,13 +200,14 @@
         {/if}
 
         {#if col.id === "actions"}
-            <Actions
+            <Actions2
                 type="{getType()}"
                 mode="miniButtons"
                 id="{item.id}"
-                count="1"
-                artistID="{item.artist ? item.artist.id : null}"
-                albumID="{item.album ? item.album.id : null}"
+                data={Object.create({
+                    albumID: item.album ? item.album.id : null,
+                    artistID: item.artist ? item.artist.id : null
+                })}
             />
         {/if}
 

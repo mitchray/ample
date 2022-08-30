@@ -8,7 +8,7 @@
     import { CurrentSong } from '../../stores/status';
 
     import Rating from '../../components/rating.svelte';
-    import Actions from '../../components/actions.svelte';
+    import Actions2 from '../../components/action/actions.svelte';
 
     import SVGCurrent from "../../../public/images/play_circle.svg";
 
@@ -24,11 +24,11 @@
                 {#if discs.size > 1}
                     <div class="disc-info">
                         <span class="disc-actions">
-                            <Actions
+                            <Actions2
                                 type="album"
                                 mode="miniButtons"
-                                count="{value.length}"
-                                direct={value}
+                                showShuffle={value.length > 1}
+                                data={Object.create({songs: value})}
                             />
                         </span>
                     </div>
@@ -53,13 +53,11 @@
                             <span class="time">{formatSongLength(song.time)}</span>
                             <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
                             <span class="actions">
-                                <Actions
+                                <Actions2
                                     type="song"
                                     mode="miniButtons"
                                     id="{song.id}"
-                                    count="1"
-                                    artistID="{song.artist.id}"
-                                    albumID="{song.album.id}"
+                                    data={Object.create({albumID: song.album.id, artistID: song.artist.id})}
                                 />
                             </span>
                         </li>

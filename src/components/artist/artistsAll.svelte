@@ -52,7 +52,8 @@
         type="artist"
         actionData={{
             type: "artists",
-            data: dataDisplay
+            mode: "fullButtons",
+            data: Object.create({artists: dataDisplay})
         }}
     />
 {/key}

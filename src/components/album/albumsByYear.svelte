@@ -52,8 +52,9 @@
                 type="album"
                 actionData={{
                     type: "year",
-                    data: {from: fromYear, to: toYear},
-                    count: "3"
+                    mode: "fullButtons",
+                    showShuffle: true,
+                    data: Object.create({from: fromYear, to: toYear})
                 }}
             />
         {/key}

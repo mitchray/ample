@@ -36,7 +36,8 @@
                                 type="artist"
                                 actionData={{
                                     type: "artists",
-                                    data: artists
+                                    mode: "fullButtons",
+                                    data: Object.create({artists: artists})
                                 }}
                             />
                         {:else}
@@ -59,7 +60,8 @@
                                 type="album"
                                 actionData={{
                                     type: "albums",
-                                    data: albums
+                                    mode: "fullButtons",
+                                    data: Object.create({albums: albums})
                                 }}
                             />
                         {:else}
@@ -81,7 +83,9 @@
                                 data={songs}
                                 type="song"
                                 actionData={{
-                                    direct: songs
+                                    type: "",
+                                    mode: "fullButtons",
+                                    data: Object.create({songs: songs})
                                 }}
                             />
                         {:else}

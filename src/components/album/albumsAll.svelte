@@ -50,7 +50,8 @@
         type="album"
         actionData={{
             type: "albums",
-            data: dataDisplay
+            mode: "fullButtons",
+            data: Object.create({albums: dataDisplay})
         }}
     />
 {/key}

@@ -5,7 +5,7 @@
     import { formatTotalTime, formatSongQuality, formatFilesize } from '../logic/helper';
 
     import Rating from '../components/rating.svelte';
-    import Actions from '../components/actions.svelte';
+    import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
 
@@ -26,11 +26,10 @@
 
             <Genres genres="{song.genre}" />
 
-            <Actions
+            <Actions2
                 type="song"
                 mode="fullButtons"
                 id="{song.id}"
-                count=1
             />
 
             <div class="grid">

@@ -30,7 +30,9 @@
         type="song"
         tableOnly={true}
         actionData={{
-            direct: songs
+            type: "",
+            mode: "fullButtons",
+            data: Object.create({songs: songs})
         }}
     />
 {:else}
