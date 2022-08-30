@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.42.0] - 2022-08-30
+### Added
+- Dynamic Playlist artwork from songs in the playlist
+- Song detail page
+- Filter album artists (not enabled yet, waiting for Ampache release)
+
+### Changed
+- Album track list now uses the Lister component instead of a simplified track list
+  - Has separate column settings from other Listers, so you can still have less info in album views
+- Remember 'Show Expanded/Condensed' setting on artist pages
+
 ## [0.41.1] - 2022-08-24
 ### Fixed
 - Missing checkboxes on Multi-rater page
