@@ -37,6 +37,7 @@
                                 actionData={{
                                     type: "artists",
                                     mode: "fullButtons",
+                                    showShuffle: artists.length > 1,
                                     data: Object.create({artists: artists})
                                 }}
                             />
@@ -61,6 +62,7 @@
                                 actionData={{
                                     type: "albums",
                                     mode: "fullButtons",
+                                    showShuffle: albums.length > 1,
                                     data: Object.create({albums: albums})
                                 }}
                             />
@@ -85,6 +87,7 @@
                                 actionData={{
                                     type: "",
                                     mode: "fullButtons",
+                                    showShuffle: songs.length > 1,
                                     data: Object.create({songs: songs})
                                 }}
                             />

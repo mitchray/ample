@@ -27,6 +27,7 @@
                 actionData={{
                     type: "",
                     mode: "fullButtons",
+                    showShuffle: songs.length > 1,
                     data: Object.create({songs: songs})
                 }}
             />
