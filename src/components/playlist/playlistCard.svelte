@@ -153,6 +153,7 @@
         font-size: 0.8em;
         box-shadow: var(--shadow-md);
         border: 1px solid var(--color-background);
+        pointer-events: none;
     }
 
     .rating-container {
