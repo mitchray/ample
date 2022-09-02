@@ -261,6 +261,7 @@
     .c-actions.menu :global(svg) {
         height: 1em;
         width: auto;
+        color: var(--color-highlight);
     }
 
     /* resets so buttons and links appear identical */
