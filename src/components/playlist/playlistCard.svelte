@@ -56,16 +56,21 @@
             </div>
         </div>
     {:else}
-        <div class="title">
-            Loading
+        <div class="top">
+            <div class="title">
+                Loading
+            </div>
         </div>
 
-        <div class="count">
-            <br>
+        <div class="image-container">
+            <PlaylistArt fallback="{playlist.art}" />
         </div>
 
-        <div class="actions">
-            <Actions2 type="playlist" mode="miniButtons" />
+
+        <div class="details">
+            <div class="actions">
+                <Actions2 type="playlist" mode="miniButtons" />
+            </div>
         </div>
     {/if}
 </div>
