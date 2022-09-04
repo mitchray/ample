@@ -33,8 +33,6 @@
     }
 
     function handleClickInside(event) {
-        event.stopPropagation();
-
         // Close menu if we are following a link
         if (event.target.href !== undefined) {
             isVisible = false;
