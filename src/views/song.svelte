@@ -149,6 +149,10 @@
                 {#if song.publisher}
                     <span class="field">Publisher</span> <span>{song.publisher}</span>
                 {/if}
+
+                {#if song.lyrics}
+                    <span class="field">Lyrics</span> <span>{@html song.lyrics}</span>
+                {/if}
             </div>
         {:else}
             <p>Unable to find song with that ID</p>
