@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 
 import { debugMode, serverURL } from '../stores/server';
-import { customHue } from "../stores/status";
+import { customHue, SkipBelow, SkipBelowRating } from "../stores/status";
 
 import JsSHA from "jssha/dist/sha1";
 import FastAverageColor from "fast-average-color";
@@ -286,4 +286,18 @@ export function setIndexes(items) {
 export function getPlaylistIDFromUrl() {
     let urlParts = location.href.split("/"); // 'location' is inherited from Router automatically
     return urlParts.pop() || urlParts.pop(); // trick to handle potential trailing slash
+}
+
+/**
+ * Filter out songs below a specified rating
+ * @param {array} arr
+ * @returns array
+ */
+export function filterBelow(arr) {
+    // if length is 1 let's assume we want to play that item regardless of rating
+    if (arr.length > 1 && get(SkipBelow)) {
+        arr = arr.filter(item => item.rating >= get(SkipBelowRating));
+    }
+
+    return arr;
 }

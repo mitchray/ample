@@ -551,7 +551,7 @@ section {
 
 .menu-separator {
     display: block;
-    border-bottom: 2px solid var(--color-border);
+    border-bottom: 2px solid var(--color-menu-border);
     margin: var(--spacing-md) 0;
     width: 100%;
 }

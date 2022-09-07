@@ -132,9 +132,10 @@ export const testAlbumsStartingWith = (filterChar) => {
  * Get album by ID
  * @param {number} id
  * @param {boolean} withTracks
+ * @param {boolean} artAnalysis
  * @returns {Promise<*>}
  */
-export const getAlbum = async ({id, withTracks = false}) => {
+export const getAlbum = async ({id, withTracks = false, artAnalysis = false}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=album&filter=" + id;
 
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
@@ -147,11 +148,13 @@ export const getAlbum = async ({id, withTracks = false}) => {
         debugHelper(album.ampleSongs, "getAlbum - getSongsFromAlbum");
     }
 
-    album.averageColor = await getAverageColor(album.art + "&thumb=10");
-    await getCustomHue(album.averageColor.value);
+    if (artAnalysis) {
+        album.averageColor = await getAverageColor(album.art + "&thumb=10");
+        await getCustomHue(album.averageColor.value);
 
-    let mp = get(MediaPlayer);
-    await mp.setWaveColors();
+        let mp = get(MediaPlayer);
+        await mp.setWaveColors();
+    }
 
     return album;
 }

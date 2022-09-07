@@ -18,6 +18,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists
     } from "../../logic/song";
+    import { filterBelow } from "../../logic/helper";
 
     import { SkipBelow, SkipBelowRating } from "../../stores/status";
 
@@ -28,6 +29,7 @@
     import ActionShuffle        from './action_shuffle.svelte';
     import ActionShuffleNext    from './action_shuffleNext.svelte';
     import ActionShuffleLast    from './action_shuffleLast.svelte';
+    import ActionArtistMix      from './action_artistMix.svelte';
     import ActionAddToPlaylist  from './action_playlistAddTo.svelte';
     import ActionEditPlaylist   from './action_playlistEdit.svelte';
     import ActionDeletePlaylist from './action_playlistDelete.svelte';
@@ -132,20 +134,6 @@
         return filterBelow(result);
     }
 
-    /**
-     * Filter out songs below a specified rating
-     * @param {array} arr
-     * @returns array
-     */
-    function filterBelow(arr) {
-        // if length is 1 let's assume we want to play that item regardless of rating
-        if (arr.length > 1 && $SkipBelow) {
-            arr = arr.filter(item => item.rating >= $SkipBelowRating);
-        }
-
-        return arr;
-    }
-
     function handleMore() {
         moreMenuVisible = !moreMenuVisible;
     }
@@ -168,10 +156,9 @@
         {/if}
 
         <ActionAddToPlaylist contextKey={contextKey} />
+        <ActionArtistMix contextKey={contextKey} />
         <ActionShuffleNext contextKey={contextKey} />
         <ActionShuffleLast contextKey={contextKey} />
-
-        <div class="menu-separator"></div>
 
         {#if data.artistID}
             <Link to="artists/{data.artistID}"><SVGArtist class="inline" /> Go to artist</Link>

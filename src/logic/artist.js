@@ -124,19 +124,23 @@ export const testArtistsStartingWith = async (filterChar) => {
 /**
  * Get artist by ID
  * @param {number} id
+ * @param {boolean} artAnalysis
  * @returns {Promise<*>}
  */
-export const getArtist = async (id) => {
+export const getArtist = async ({id = id, artAnalysis = false}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=artist&filter=" + id;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getArtist");
 
     let artist = await fetchArtistData(queryURL);
-    artist.averageColor = await getAverageColor(artist.art + "&thumb=10");
-    await getCustomHue(artist.averageColor.value);
 
-    let mp = get(MediaPlayer);
-    await mp.setWaveColors();
+    if (artAnalysis) {
+        artist.averageColor = await getAverageColor(artist.art + "&thumb=10");
+        await getCustomHue(artist.averageColor.value);
+
+        let mp = get(MediaPlayer);
+        await mp.setWaveColors();
+    }
 
     let appearances = await getAlbumsByArtist(artist.id);
     artist.appearanceCount = appearances.length - artist.albumcount;

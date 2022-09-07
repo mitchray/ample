@@ -55,7 +55,7 @@
     <link rel="stylesheet" href='/ample/public/css/containerqueries/artist.css'>
 </svelte:head>
 
-{#await getArtist(id)}
+{#await getArtist({id: id, artAnalysis: true})}
     <p>Loading artist</p>
 {:then artist}
     {#if artist.id}

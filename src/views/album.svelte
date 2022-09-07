@@ -26,7 +26,7 @@
     <link rel="stylesheet" href='/ample/public/css/containerqueries/album.css'>
 </svelte:head>
 
-{#await getAlbum({id: id, withTracks: true})}
+{#await getAlbum({id: id, withTracks: true, artAnalysis: true})}
     <p>Loading album</p>
 {:then album}
     {#if album.id}
