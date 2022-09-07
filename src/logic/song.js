@@ -251,7 +251,7 @@ export const getSongsFromArtists = (artists) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
     queryURL += "&limit=200&random=1";
     queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=artist&rule_1_operator=8&rule_1_input=" + encodeURI(artistsFormatted);
+    queryURL += "&rule_1=artist&rule_1_operator=8&rule_1_input=" + encodeURIComponent("^(" + artistsFormatted + ")$");
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getSongsFromArtists");
     return fetchSongData(queryURL);
