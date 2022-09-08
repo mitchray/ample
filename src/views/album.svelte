@@ -81,6 +81,7 @@
                                 zone="album-contents"
                                 actionData={{
                                     type: "album",
+                                    id: album.id,
                                     mode: "miniButtons",
                                     showShuffle: value.length > 1,
                                     data: Object.create({songs: value})
