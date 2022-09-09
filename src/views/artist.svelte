@@ -13,7 +13,7 @@
     import ArtistSongs from '../components/artist/artistSongs.svelte';
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
-    import MusicbrainzScan from '../components/musicbrainzScan.svelte';
+    import MusicbrainzScan2 from '../components/musicbrainzScan2.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
@@ -195,7 +195,7 @@
 
                     {#if tab.value === 'musicbrainz'}
                         <div style="display: {currentTab === 'musicbrainz' ? 'block' : 'none'}">
-                            <MusicbrainzScan data={artist} />
+                            <MusicbrainzScan2 data={artist} />
                         </div>
                     {/if}
                 {/if}

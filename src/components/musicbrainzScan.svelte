@@ -1,4 +1,6 @@
 <script>
+    // deprecated for the much simpler musicbrainzScan2
+
     import { fade } from 'svelte/transition';
     import { throttle } from 'throttle-wait';
 

@@ -434,6 +434,7 @@ button svg {
 
 /* badges */
 .badge {
+    display: inline-flex;
     border-radius: 2px;
     padding: 0.2em 0.4em;
 }
