@@ -1,5 +1,24 @@
 # Changelog
 
+## [0.43.0] - 2022-09-11
+### Added
+- New play option: Start Artist Mix
+  - Loads up to 200 songs by this and related artists
+- Show lyrics (if present) in the song details view
+
+### Changed
+- Improved the MusicBrainz artist scanner (artist page > MusicBrainz compare tab)
+  - Show your songs (indicated with album art) alongside the MB recordings
+  - Remembers filter selections instead of having defaults
+  - Show MBID
+  - Expanded status types
+    - Exact matches: MBID found
+    - Duplicates: MBID didn't match, but there was an exact match with the same name
+    - (NEW) Issues: Something isn't right, e.g. missing/invalid MBID
+    - (NEW) Flagged: In library but not found on MusicBrainz, probably needs to be added to the database
+    - Missing: Song not found in library
+- Refactored Actions component
+
 ## [0.42.0] - 2022-08-30
 ### Added
 - Dynamic Playlist artwork from songs in the playlist
