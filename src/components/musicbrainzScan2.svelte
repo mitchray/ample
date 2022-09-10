@@ -101,7 +101,7 @@
 
             if (filters.hideVideos) {
                 filteredRecordings = filteredRecordings.filter(function(item) {
-                    return !item.video;
+                    return !item.video === true;
                 })
 
                 filteredRecordings = filteredRecordings.filter(function(item) {
@@ -156,6 +156,10 @@
             if (filters.hideInterviews) {
                 filteredRecordings = filteredRecordings.filter(function(item) {
                     return !item.title.match(/(interview|commentary)/i);
+                })
+
+                filteredRecordings = filteredRecordings.filter(function(item) {
+                    return !item.disambiguation.match(/(interview|commentary)/i);
                 })
             }
 
@@ -287,6 +291,7 @@
                 mbid: allRecordings[i].id,
                 time: allRecordings[i].length / 1000,
                 disambiguation: allRecordings[i].disambiguation,
+                video: allRecordings[i].video,
                 message: "MusicBrainz recording not found in library",
                 status: "missing",
             }
@@ -472,7 +477,7 @@
                     </tbody>
                 </table>
             {:else}
-                <p>No recordings found or scan has not begun</p>
+                <p>No recordings to show</p>
             {/if}
         {/if}
     </div>
