@@ -20,8 +20,6 @@
     } from "../../logic/song";
     import { filterBelow } from "../../logic/helper";
 
-    import { SkipBelow, SkipBelowRating } from "../../stores/status";
-
     import Menu                 from '../../components/menu.svelte';
     import ActionPlay           from './action_play.svelte';
     import ActionPlayNext       from './action_playNext.svelte';
@@ -35,7 +33,6 @@
     import ActionDeletePlaylist from './action_playlistDelete.svelte';
     import ActionUpdateFromTags from './action_updateFromTags.svelte';
     import ActionUpdateArt      from './action_updateArt.svelte';
-    import ActionSkipBelow      from './action_skipBelow.svelte';
 
     import SVGMore from "../../../public/images/more-hori.svg";
     import SVGArtist from "../../../public/images/artist.svg";
@@ -175,11 +172,6 @@
         {#if (type === "artist" || type === "album")}
             <ActionUpdateArt contextKey={contextKey} />
         {/if}
-
-        {#if type !== 'song'}
-            <div class="menu-separator"></div>
-            <ActionSkipBelow contextKey={contextKey} />
-        {/if}
     </div>
 {/if}
 
@@ -193,7 +185,7 @@
             <ActionPlayNext contextKey={contextKey} />
             <ActionPlayLast contextKey={contextKey} />
 
-            <div class="action" class:notification-badge={$SkipBelow} data-badge="{$SkipBelowRating}">
+            <div class="action">
                 <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="More"><SVGMore /> </button>
             </div>
         </span>

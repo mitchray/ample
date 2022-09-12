@@ -13,6 +13,7 @@
     import PlayerVolume from '../player/player_volume.svelte';
     import PlayerAutoPlay from '../player/player_autoPlay.svelte';
     import PlayerLyrics from '../player/player_lyrics.svelte';
+    import PlayerSkipBelow from '../player/player_skipBelow.svelte';
 
     import SVGPlay from "../../../public/images/play.svg";
     import SVGPause from "../../../public/images/pause.svg";
@@ -128,6 +129,8 @@
         </button>
 
         <PlayerAutoPlay />
+
+        <PlayerSkipBelow />
     </div>
 
     <div class="site-player__queue">
@@ -273,7 +276,7 @@
             grid-template-areas:
             "main-controls now-playing SPACER1 times  SPACER2 waveform SPACER3 secondary-controls SPACER4 queue"
             "main-controls now-playing SPACER1 rating SPACER2 waveform SPACER3 volume             SPACER4 queue";
-            grid-template-columns: var(--size-sidebar-width) 1fr var(--spacing-xl) min-content var(--spacing-xl) 1fr var(--spacing-xl) min-content var(--spacing-xl) 250px;
+            grid-template-columns: var(--size-sidebar-width) minmax(auto, 350px) var(--spacing-xl) min-content var(--spacing-xl) 1fr var(--spacing-xl) min-content var(--spacing-xl) 250px;
             grid-template-rows: 1fr 1fr;
         }
 
@@ -330,7 +333,7 @@
 
     @media all and (min-width: 1700px) {
         .site-player {
-            grid-template-columns: var(--size-sidebar-width) 2fr var(--spacing-xxl) min-content var(--spacing-xxl) 4fr var(--spacing-xxl) min-content var(--spacing-xxl) 320px;
+            grid-template-columns: var(--size-sidebar-width) minmax(auto, 350px) var(--spacing-xxl) min-content var(--spacing-xxl) 4fr var(--spacing-xxl) min-content var(--spacing-xxl) 320px;
         }
     }
 </style>
