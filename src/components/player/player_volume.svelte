@@ -9,6 +9,7 @@
         DynamicsCompressorEnabled
     } from "../../stores/status";
     import { MediaPlayer } from "../../stores/player";
+    import { debugMode } from "../../stores/server";
 
     import Menu from '../../components/menu.svelte';
 
@@ -76,6 +77,26 @@
                 handleVolumeSlider(event);
             });
         }
+    }
+
+    function handleCompressorThreshold() {
+        $MediaPlayer.filterCompressor.threshold.value = this.value;
+    }
+
+    function handleCompressorRatio() {
+        $MediaPlayer.filterCompressor.ratio.value = this.value;
+    }
+
+    function handleCompressorKnee() {
+        $MediaPlayer.filterCompressor.knee.value = this.value;
+    }
+
+    function handleCompressorAttack() {
+        $MediaPlayer.filterCompressor.attack.value = this.value;
+    }
+
+    function handleCompressorRelease() {
+        $MediaPlayer.filterCompressor.release.value = this.value;
     }
 
     onMount(() => {
@@ -155,12 +176,54 @@
                 </label>
 
                 <div class="info">Boosts quieter parts of songs</div>
+
+                {#if $debugMode && $MediaPlayer.filterCompressor}
+                    <div class="menu-separator"></div>
+
+                    <div class="overrides">
+                        <label>
+                            Threshold <span id="compressor_threshold_value">{$MediaPlayer.filterCompressor.threshold.value}</span>
+                            <input type="range" min="-100" max="0" value={$MediaPlayer.filterCompressor.threshold.value} on:input={handleCompressorThreshold}>
+                        </label>
+
+                        <label>
+                            Ratio <span id="compressor_ratio_value">{$MediaPlayer.filterCompressor.ratio.value}</span>
+                            <input type="range" min="1" max="20" value={$MediaPlayer.filterCompressor.ratio.value} on:input={handleCompressorRatio}>
+                        </label>
+
+                        <label>
+                            Knee <span id="compressor_knee_value">{$MediaPlayer.filterCompressor.knee.value}</span>
+                            <input type="range" min="0" max="40" value={$MediaPlayer.filterCompressor.knee.value} on:input={handleCompressorKnee}>
+                        </label>
+
+                        <label>
+                            Attack <span id="compressor_attack_value">{$MediaPlayer.filterCompressor.attack.value}</span>
+                            <input type="range" min="0" max="1" value={$MediaPlayer.filterCompressor.attack.value} step="0.001" on:input={handleCompressorAttack}>
+                        </label>
+
+                        <label>
+                            Release <span id="compressor_release_value">{$MediaPlayer.filterCompressor.release.value}</span>
+                            <input type="range" min="0" max="1" value={$MediaPlayer.filterCompressor.release.value} step="0.001" on:input={handleCompressorRelease}>
+                        </label>
+                    </div>
+
+                {/if}
             </div>
         </div>
     </Menu>
 {/if}
 
 <style>
+    .overrides :global(label) {
+        margin-top: var(--spacing-md);
+        display: block;
+    }
+
+    .overrides label > input {
+        margin-top: var(--spacing-sm);
+        display: block;
+    }
+
     .info {
         margin-top: var(--spacing-sm);
         color: var(--color-text-secondary);

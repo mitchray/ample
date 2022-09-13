@@ -110,9 +110,9 @@ class Player {
 
             this.filterCompressor = this.wavesurfer.backend.ac.createDynamicsCompressor();
             this.filterCompressor.threshold.value = -50;
-            this.filterCompressor.knee.value = 0.0;
-            this.filterCompressor.ratio.value = 20.0;
-            this.filterCompressor.attack.value = 0.005; // 5ms
+            this.filterCompressor.knee.value = 30.0;
+            this.filterCompressor.ratio.value = 5.0;
+            this.filterCompressor.attack.value = 0.020; // 20ms
             this.filterCompressor.release.value = 0.050; // 50ms
 
             this.filterBiquad = this.wavesurfer.backend.ac.createBiquadFilter();
