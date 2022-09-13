@@ -175,7 +175,7 @@
                     Enable Night Mode
                 </label>
 
-                <div class="info">Boosts quieter parts of songs</div>
+                <div class="info">Compresses the dynamic range</div>
 
                 {#if $debugMode && $MediaPlayer.filterCompressor}
                     <div class="menu-separator"></div>
