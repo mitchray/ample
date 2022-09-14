@@ -275,7 +275,7 @@ export const randomArtists = ({page = 0, limit = 50}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
     queryURL += "&type=" + getArtistType();
     queryURL += "&operator=and&random=1";
-    queryURL += "&rule_1=anywhere&rule_1_operator=0&rule_1_input=";
+    queryURL += "&rule_1=title&rule_1_operator=0&rule_1_input=";
 
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
