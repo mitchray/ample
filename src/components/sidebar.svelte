@@ -1,10 +1,10 @@
 <script>
-    import { onMount, getContext } from 'svelte';
+    import { getContext } from 'svelte';
     import { ROUTER } from 'svelte-routing/src/contexts';
     import { Link } from "svelte-routing";
 
-    import { SidebarIsMini } from '../stores/status';
-    import { customHue } from "../stores/status";
+    import { SidebarIsMini, SidebarIsOpen, SidebarIsPinned, customHue } from '../stores/status';
+    import { SiteSidebarBind } from "../stores/player";
 
     import SVGArtist from "../../public/images/artist.svg";
     import SVGAlbum from "../../public/images/album.svg";
@@ -21,6 +21,10 @@
     import SVGSearch from "../../public/images/search.svg";
     import SVGGenre from "../../public/images/label.svg";
     import SVGMultiStar from "../../public/images/hotel-star.svg";
+    import SVGLock from "../../public/images/lock.svg";
+    import SVGUnlock from "../../public/images/lock_open.svg";
+    import SVGLeft from "../../public/images/double_arrow_left.svg";
+    import SVGRight from "../../public/images/double_arrow_right.svg";
 
 
     const { activeRoute } = getContext(ROUTER);
@@ -48,96 +52,121 @@
         localStorage.setItem('SidebarIsMini', JSON.stringify(inverted));
         SidebarIsMini.set(inverted);
     }
+
+    function togglePinned() {
+        let inverted = !$SidebarIsPinned;
+        localStorage.setItem('SidebarIsPinned', JSON.stringify(inverted));
+        SidebarIsPinned.set(inverted);
+    }
 </script>
 
-<div class="site-sidebar" class:isMini={$SidebarIsMini}>
-    <button class="sidebar-toggle" on:click={toggleMini}>
-        {$SidebarIsMini ? ">>" : "<<"}
-    </button>
+<div class="site-sidebar"
+    class:is-mini={$SidebarIsMini}
+    class:is-open={$SidebarIsOpen}
+    class:is-pinned={$SidebarIsPinned}
+    bind:this={$SiteSidebarBind}
+>
+    <div class="panel-actions">
+        <button class="panel-action" on:click={toggleMini}>
+            {#if $SidebarIsMini}
+                <SVGRight />
+            {:else}
+                <SVGLeft />
+            {/if}
+        </button>
+
+        <button class="panel-action" on:click={togglePinned}>
+            {#if $SidebarIsPinned}
+                <SVGUnlock style="transform: scale(0.8)" />
+            {:else}
+                <SVGLock style="transform: scale(0.8)" />
+            {/if}
+        </button>
+    </div>
     <div class="site-sidebar-inner">
         <h3 class="panel-title">Library</h3>
         <ul>
-            <li class="{basePath === 'artists' ? 'current' : ''}">
+            <li class:current={basePath === 'artists'}>
                 <Link to="artists" class="site-sidebar__link " data-label="Artists">
-                    <SVGArtist class="inline"/> <span class="label">Artists</span>
+                    <SVGArtist /> <span class="label">Artists</span>
                 </Link>
             </li>
-            <li class="{basePath === 'albums' ? 'current' : ''}">
+            <li class:current={basePath === 'albums'}>
                 <Link to="albums" class="site-sidebar__link " data-label="Albums">
-                    <SVGAlbum class="inline"/> <span class="label">Albums</span>
+                    <SVGAlbum /> <span class="label">Albums</span>
                 </Link>
             </li>
-            <li class="{basePath === 'playlists' ? 'current' : ''}">
+            <li class:current={basePath === 'playlists'}>
                 <Link to="playlists" class="site-sidebar__link " data-label="Playlists">
-                    <SVGPlaylist class="inline"/> <span class="label">Playlists</span>
+                    <SVGPlaylist /> <span class="label">Playlists</span>
                 </Link>
             </li>
-            <li class="{basePath === 'smartlists' ? 'current' : ''}">
+            <li class:current={basePath === 'smartlists'}>
                 <Link to="smartlists" class="site-sidebar__link " data-label="Smartlists">
-                    <SVGSmartlist class="inline"/> <span class="label">Smartlists</span>
+                    <SVGSmartlist /> <span class="label">Smartlists</span>
                 </Link>
             </li>
-            <li class="{basePath === 'genres' ? 'current' : ''}">
+            <li class:current={basePath === 'genres'}>
                 <Link to="genres" class="site-sidebar__link " data-label="Genres">
-                    <SVGGenre class="inline"/> <span class="label">Genres</span>
+                    <SVGGenre /> <span class="label">Genres</span>
                 </Link>
             </li>
         </ul>
 
         <h3 class="panel-title">Insights</h3>
         <ul>
-            <li class="{basePath === 'recent' ? 'current' : ''}">
+            <li class:current={basePath === 'recent'}>
                 <Link to="recent" class="site-sidebar__link " data-label="Recent">
-                    <SVGRecent class="inline"/> <span class="label">Recent</span>
+                    <SVGRecent /> <span class="label">Recent</span>
                 </Link>
             </li>
-            <li class="{basePath === 'newest' ? 'current' : ''}">
+            <li class:current={basePath === 'newest'}>
                 <Link to="newest" class="site-sidebar__link " data-label="Newest">
-                    <SVGNew class="inline"/> <span class="label">Newest</span>
+                    <SVGNew /> <span class="label">Newest</span>
                 </Link>
             </li>
-            <li class="{basePath === 'favorites' ? 'current' : ''}">
+            <li class:current={basePath === 'favorites'}>
                 <Link to="favorites" class="site-sidebar__link " data-label="Favorites">
-                    <SVGFavoriteFull class="inline"/> <span class="label">Favorites</span>
+                    <SVGFavoriteFull /> <span class="label">Favorites</span>
                 </Link>
             </li>
-            <li class="{basePath === 'trending' ? 'current' : ''}">
+            <li class:current={basePath === 'trending'}>
                 <Link to="trending" class="site-sidebar__link " data-label="Trending">
-                    <SVGTrending class="inline"/> <span class="label">Trending</span>
+                    <SVGTrending /> <span class="label">Trending</span>
                 </Link>
             </li>
-            <li class="{basePath === 'top' ? 'current' : ''}">
+            <li class:current={basePath === 'top'}>
                 <Link to="top" class="site-sidebar__link " data-label="Top Rated">
-                    <SVGStarFull class="inline"/> <span class="label">Top Rated</span>
+                    <SVGStarFull /> <span class="label">Top Rated</span>
                 </Link>
             </li>
-            <li class="{basePath === 'forgotten' ? 'current' : ''}">
+            <li class:current={basePath === 'forgotten'}>
                 <Link to="forgotten" class="site-sidebar__link " data-label="Forgotten">
-                    <SVGForgotten class="inline"/> <span class="label">Forgotten</span>
+                    <SVGForgotten /> <span class="label">Forgotten</span>
                 </Link>
             </li>
-            <li class="{basePath === 'random' ? 'current' : ''}">
+            <li class:current={basePath === 'random'}>
                 <Link to="random" class="site-sidebar__link " data-label="Random">
-                    <SVGRandom class="inline"/> <span class="label">Random</span>
+                    <SVGRandom /> <span class="label">Random</span>
                 </Link>
             </li>
-            <li class="{basePath === 'unrated' ? 'current' : ''}">
+            <li class:current={basePath === 'unrated'}>
                 <Link to="unrated" class="site-sidebar__link " data-label="Unrated">
-                    <SVGStarOutline class="inline"/> <span class="label">Unrated</span>
+                    <SVGStarOutline /> <span class="label">Unrated</span>
                 </Link>
             </li>
         </ul>
 
         <h3 class="panel-title">Tools</h3>
         <ul>
-            <li class="{basePath === 'search' ? 'current' : ''}">
+            <li class:current={basePath === 'search'}>
                 <Link to="search" class="site-sidebar__link " data-label="Advanced Search">
-                    <SVGSearch class="inline"/> <span class="label">Advanced Search</span>
+                    <SVGSearch /> <span class="label">Advanced Search</span>
                 </Link>
             </li>
-            <li class="{basePath === 'multi-rater' ? 'current' : ''}">
+            <li class:current={basePath === 'multi-rater'}>
                 <Link to="multi-rater" class="site-sidebar__link " data-label="Multi-rater">
-                    <SVGMultiStar class="inline"/> <span class="label">Multi-rater</span>
+                    <SVGMultiStar /> <span class="label">Multi-rater</span>
                 </Link>
             </li>
         </ul>
@@ -145,33 +174,37 @@
 </div>
 
 <style>
-    .sidebar-toggle {
-        display: flex;
-        position: sticky;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        border-radius: 0;
-        text-align: center;
-        line-height: 1;
-        background-color: var(--color-interface);
-        border-bottom: 1px solid var(--color-border);
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 2px;
-        z-index: 100;
-    }
-
     .site-sidebar {
         background-color: var(--color-interface);
         border-right: 1px solid var(--color-border);
         width: var(--size-sidebar-width);
         padding: 0;
-        height: 100%;
         display: flex;
         flex-direction: column;
+        position: absolute;
+        transform: translateX(-100%);
+        left: 0;
+        transition: transform 0.4s ease-out;
+        z-index: 30;
+        will-change: transform;
+    }
+
+    .site-sidebar:not(.is-pinned) {
+        top: var(--size-header-height);
+        bottom: var(--size-webplayer-height);
+    }
+
+    .site-sidebar.is-open {
+        transform: none;
+    }
+
+    .site-sidebar.is-pinned {
         position: relative;
+        transition-duration: 0s;
+    }
+
+    .site-sidebar.is-pinned:not(.is-open) {
+        display: none;
     }
 
     .site-sidebar-inner:after {
@@ -192,80 +225,70 @@
         padding: var(--spacing-lg);
     }
 
-    .site-sidebar:not(.isMini) .site-sidebar-inner {
+    .site-sidebar:not(.is-mini) .site-sidebar-inner {
         padding-top: var(--spacing-xl);
     }
 
     :global(.site-sidebar__link) {
-        display: block;
+        display: flex;
+        align-items: center;
         padding: 0.45em 0;
-        position: relative;
+        flex: 1;
+        gap: var(--spacing-sm);
+    }
+
+    .is-mini :global(.site-sidebar__link) {
+        justify-content: center;
     }
 
     li {
         position: relative;
-        z-index: 1;
+        display: flex;
     }
 
-    .site-sidebar.isMini :global(svg) {
-        color: var(--color-text-primary);
+    .site-sidebar-inner :global(svg) {
+        height: 1em;
+        width: auto;
+        display: inline-block;
+        position: relative;
+        bottom: 0.1em;
+        color: var(--color-icon);
     }
 
-    .site-sidebar.isMini {
+    .site-sidebar.is-mini {
         --size-sidebar-width: 46px;
     }
 
-    .isMini .label {
-        clip-path: inset(50%);
-        height: 1px;
-        overflow: hidden;
-        position: absolute;
-        white-space: nowrap;
-        width: 1px;
+    .is-mini :global(svg) {
+        color: var(--color-text-primary);
     }
 
-    .isMini h3 {
+    .is-mini .label {
+        display: none;
+    }
+
+    .is-mini h3 {
         font-size: 0;
     }
 
-    .isMini :global(svg) {
-        transform: scale(1.5);
+    .is-mini .site-sidebar-inner {
+        padding-left: 0;
+        padding-right: 0;
     }
 
-    .isMini li.current :global(svg) {
+    .is-mini .site-sidebar-inner :global(svg) {
+        height: 1.5em;
+    }
+
+    .is-mini li.current :global(svg) {
         color: var(--color-highlight);
     }
 
-    .isMini li:not(.current) :global(svg) {
+    .is-mini li:not(.current) :global(svg) {
         opacity: 0.5;
     }
 
-    /* hover label for mini mode */
-    .isMini :global(a:after) {
-        background-color: var(--color-interface);
-        color: var(--color-text-primary);
-        box-shadow: var(--shadow-sm);
-        clip-path: inset(-10px -10px -10px 0px); /* clip shadow */
-        content: attr(data-label);
-        display: flex;
-        align-items: center;
-        position: absolute;
-        left: calc(100% + var(--spacing-lg));
-        top: 0;
-        bottom: 0;
-        z-index: 5;
-        padding: var(--spacing-sm) var(--spacing-md);
-        pointer-events: none;
-        white-space: nowrap;
-        opacity: 0;
-        display: none; /* disabled in favor of scrollable mini mode, pending solution */
-    }
-
-    .isMini :global(a:hover:after) {
-        opacity: 1;
-    }
-
-    :global(.site-sidebar__link svg) {
+    .is-mini :global(.site-sidebar__link svg) {
         padding-right: var(--spacing-sm);
     }
 

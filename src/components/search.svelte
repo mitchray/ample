@@ -1,8 +1,8 @@
 <script>
-    import { fade, fly } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
 
     import { SearchQuery, ShowSearch } from '../stores/status';
-    import { SiteContentBind } from '../stores/player';
+    import { SiteMainSpace } from '../stores/player';
 
     import { searchArtists, getArtistsFromAdvancedSearch } from '../logic/artist';
     import { searchAlbums, getAlbumsFromAdvancedSearch } from '../logic/album';
@@ -165,11 +165,11 @@
     }
 </script>
 
-{#if $SearchQuery}
+{#if $SearchQuery && $SiteMainSpace.ready}
     <div class="container"
         on:click={handleClick}
         transition:fade={{ duration: 300 }}
-        style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
+        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
     >
         <div class="header panel-header">
             <h4 class="panel-title">Results for <span class="query">{$SearchQuery}</span></h4>

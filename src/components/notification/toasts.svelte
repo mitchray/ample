@@ -3,7 +3,7 @@
     import { fly, fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
 
-    import { SiteContentBind } from '../../stores/player';
+    import { SiteMainSpace } from '../../stores/player';
     import { NotificationsList } from '../../stores/notification';
 
     import NotificationCard from '../../components/notification/notificationCard.svelte';
@@ -47,9 +47,9 @@
     }
 </script>
 
-{#if $SiteContentBind}
+{#if $SiteMainSpace.ready}
     <div class="toasts-container"
-        style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
+        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
     >
         <div class="list">
             {#each freshNotifications as notification (notification.id)}

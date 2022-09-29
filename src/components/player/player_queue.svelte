@@ -1,7 +1,7 @@
 <script>
     import { Link } from 'svelte-routing';
 
-    import { NowPlayingQueue, NowPlayingIndex, ShowQueue } from '../../stores/status';
+    import { NowPlayingQueue, NowPlayingIndex, QueueIsOpen } from '../../stores/status';
 
     import SVGPlaylistPlay from "../../../public/images/playlist_play.svg";
     import SVGArtist from "../../../public/images/artist.svg";
@@ -11,9 +11,9 @@
     $: nextSong = $NowPlayingQueue[$NowPlayingIndex + 1];
 
     function toggleQueue() {
-        let inverted = !$ShowQueue;
-        localStorage.setItem('ShowQueue', JSON.stringify(inverted));
-        ShowQueue.set(inverted);
+        let inverted = !$QueueIsOpen;
+        localStorage.setItem('QueueIsOpen', JSON.stringify(inverted));
+        QueueIsOpen.set(inverted);
     }
 </script>
 

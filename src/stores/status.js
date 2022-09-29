@@ -9,10 +9,14 @@ export let CurrentSong = writable(null);
 
 export let SearchQuery = writable('');
 export let ShowSearch  = writable(false);
-
-export let SidebarIsMini = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
-export let ShowQueue     = writable(JSON.parse(localStorage.getItem('ShowQueue')) || false);
 export let ShowLyrics    = writable(JSON.parse(localStorage.getItem('ShowLyrics')) || false);
+
+export let SidebarIsMini   = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
+export let SidebarIsOpen   = writable(JSON.parse(localStorage.getItem('SidebarIsOpen')) || false);
+export let SidebarIsPinned = writable(JSON.parse(localStorage.getItem('SidebarIsPinned')) || false);
+
+export let QueueIsOpen   = writable(JSON.parse(localStorage.getItem('QueueIsOpen')) || false);
+export let QueueIsPinned = writable(JSON.parse(localStorage.getItem('QueueIsPinned')) || false);
 
 export let PlayerVolume               = writable(JSON.parse(localStorage.getItem('PlayerVolume')) || 50);
 export let RepeatEnabled              = writable(JSON.parse(localStorage.getItem('RepeatEnabled')) || false);

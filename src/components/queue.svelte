@@ -4,8 +4,8 @@
     import { dndzone } from 'svelte-dnd-action';
     import { waitForElement } from "../logic/helper";
 
-    import { NowPlayingQueue, NowPlayingIndex, CurrentSong, ShowQueue } from '../stores/status';
-    import { MediaPlayer } from '../stores/player';
+    import { NowPlayingQueue, NowPlayingIndex, CurrentSong, QueueIsOpen, QueueIsPinned } from '../stores/status';
+    import { MediaPlayer, SiteQueueBind } from '../stores/player';
 
     import Menu from '../components/menu.svelte';
     import Actions2 from '../components/action/actions.svelte';
@@ -14,6 +14,8 @@
     import SVGBin from '../../public/images/delete.svg';
     import SVGCurrent from '../../public/images/play_circle.svg';
     import SVGMore from '../../public/images/more-hori.svg';
+    import SVGLock from "../../public/images/lock.svg";
+    import SVGUnlock from "../../public/images/lock_open.svg";
 
     const flipDurationMs = 100;
 
@@ -108,6 +110,12 @@
         // console.debug(draggedEl);
     }
 
+    function togglePinned() {
+        let inverted = !$QueueIsPinned;
+        localStorage.setItem('QueueIsPinned', JSON.stringify(inverted));
+        QueueIsPinned.set(inverted);
+    }
+
     onMount(() => {
         // check for stale songs and remove from queue
         const staleTimer = setInterval(() => {
@@ -138,13 +146,32 @@
 
 <div
     class="site-queue"
-    class:visible={$ShowQueue}
+    class:is-open={$QueueIsOpen}
+    class:is-pinned={$QueueIsPinned}
+    bind:this={$SiteQueueBind}
 >
     <div class="site-queue-inner">
         <div class="header panel-header">
-            <h4 class="panel-title" on:click={showCurrentSong}>Now Playing</h4>
-            <button class="clear-played icon-button" title="Clear played songs" on:click={handleClearPlayed}><SVGClose /></button>
+            <h4 class="panel-title">Now Playing</h4>
             <button class="clear-all icon-button button--danger" on:click={handleClearQueue} title="Clear all"><SVGBin /></button>
+        </div>
+
+        <div class="panel-actions">
+            <button class="panel-action" on:click={togglePinned}>
+                {#if $QueueIsPinned}
+                    <SVGUnlock style="transform: scale(0.8)" />
+                {:else}
+                    <SVGLock style="transform: scale(0.8)" />
+                {/if}
+            </button>
+
+            <button class="panel-action" on:click={showCurrentSong} title="Show current song">
+                Show
+            </button>
+
+            <button class="panel-action" on:click={handleClearPlayed} title="Clear played songs">
+                Clear played
+            </button>
         </div>
 
         <div
@@ -209,16 +236,34 @@
 
 <style>
     .site-queue {
+        background-color: var(--color-background);
         border-left: 1px solid var(--color-border);
-        position: relative;
+        position: absolute;
         width: var(--size-queue-width);
-        height: 100%;
         z-index: 10;
-        display: none;
+        display: flex;
+        right: 0;
+        transform: translateX(100%);
+        transition: transform 0.4s ease-out;
+        will-change: transform;
     }
 
-    .visible {
-        display: block;
+    .site-queue:not(.is-pinned) {
+        top: var(--size-header-height);
+        bottom: var(--size-webplayer-height);
+    }
+
+    .site-queue.is-open {
+        transform: none;
+    }
+
+    .site-queue.is-pinned {
+        position: relative;
+        transition-duration: 0s;
+    }
+
+    .site-queue.is-pinned:not(.is-open) {
+        display: none;
     }
 
     .site-queue-inner {
@@ -242,12 +287,6 @@
         justify-content: space-between;
         padding: var(--spacing-md);
         padding-left: var(--spacing-lg);
-    }
-
-    .header h4 {
-        margin: 0;
-        margin-right: var(--spacing-md);
-        cursor: pointer;
     }
 
     button {
@@ -337,10 +376,6 @@
     .remove {
         margin-left: var(--spacing-md);
         margin-right: var(--spacing-md);
-    }
-
-    .clear-played {
-        margin-right: auto;
     }
 
     .more {

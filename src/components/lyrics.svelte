@@ -1,10 +1,9 @@
 <script>
-    import { tick } from "svelte";
     import { waitForElement } from "../logic/helper";
 
     import Lyrics from '../logic/lyrics'
 
-    import { MediaPlayer, SiteContentBind } from "../stores/player";
+    import { MediaPlayer, SiteMainSpace } from "../stores/player";
     import {
         CurrentSong,
         ShowLyrics
@@ -61,9 +60,9 @@
 </script>
 
 
-{#if $SiteContentBind}
+{#if $SiteMainSpace.ready}
     <div class="lyrics-wrapper"
-        style="width: {$SiteContentBind.clientWidth}px; height: {$SiteContentBind.clientHeight}px; top: {$SiteContentBind.getBoundingClientRect().top}px; left: {$SiteContentBind.getBoundingClientRect().left}px;"
+        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
     >
         <div
             class="site-lyrics"

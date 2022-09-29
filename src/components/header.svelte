@@ -4,8 +4,8 @@
 
     import { logout } from "../logic/user";
 
-    import { SearchQuery, ShowSearch } from "../stores/status";
-    import { SiteContentBind } from '../stores/player';
+    import { SearchQuery, ShowSearch, SidebarIsOpen } from "../stores/status";
+    import { SiteContentBind, SiteSidebarBind, SiteQueueBind } from '../stores/player';
     import { serverURL } from '../stores/server';
 
     import Search from '../components/search.svelte';
@@ -16,10 +16,14 @@
     import SVGClose from "../../public/images/close.svg";
     import SVGSearch from "../../public/images/search.svg";
     import SVGLogout from "../../public/images/logout.svg";
+    import SVGMenu from "../../public/images/menu.svg";
 
     let timeout;
     let minimumLength = 3;
+
     let contentObserver;
+    let sidebarObserver;
+    let queueObserver;
 
     function handleFocus() {
         ShowSearch.set(true);
@@ -45,32 +49,60 @@
         ShowSearch.set(false);
     }
 
+    function handleSidebarToggle() {
+        let inverted = !$SidebarIsOpen;
+        localStorage.setItem('SidebarIsOpen', JSON.stringify(inverted));
+        SidebarIsOpen.set(inverted);
+    }
+
     function handleLogOut() {
         logout();
     }
 
     onMount(() => {
-        // use ResizeObserver on .site-content to monitor changes in dimension,
-        // done in Header to give the bind time to initialise
+        // use ResizeObserver to monitor changes in dimension,
+        // done in Header to give the binds time to initialise
         contentObserver = new ResizeObserver(entries => {
             entries.forEach(entry => {
                 $SiteContentBind = $SiteContentBind;
-                // console.debug($SiteContentBind.clientWidth);
+            });
+        });
+
+        sidebarObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+                $SiteSidebarBind = $SiteSidebarBind;
+            });
+        });
+
+        queueObserver = new ResizeObserver(entries => {
+            entries.forEach(entry => {
+                $SiteQueueBind = $SiteQueueBind;
             });
         });
 
         contentObserver.observe($SiteContentBind);
+        sidebarObserver.observe($SiteSidebarBind);
+        queueObserver.observe($SiteQueueBind);
     });
 
     onDestroy(() => {
         if (contentObserver) {
             contentObserver.disconnect();
         }
+
+        if (sidebarObserver) {
+            sidebarObserver.disconnect();
+        }
+
+        if (queueObserver) {
+            queueObserver.disconnect();
+        }
     });
 </script>
 
 <div class="site-header">
     <div class="site-logo-container">
+        <button class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
         <a href="{$serverURL}/ample" use:link class="site-logo"><SVGAmpleLogo /></a>
     </div>
 
@@ -119,16 +151,23 @@
 
     .site-logo-container {
         width: var(--size-sidebar-width);
-        padding: 0 var(--spacing-xl);
-        margin-right: var(--spacing-sm);
+        padding: 0 var(--spacing-md);
         display: flex;
         align-items: center;
+        gap: var(--spacing-sm);
     }
 
     :global(.site-logo) {
         display: block;
         width: 100%;
         line-height: 0;
+        margin-right: var(--spacing-sm);
+    }
+
+    @media all and (max-width: 700px) {
+        :global(.site-logo) {
+            display: none;
+        }
     }
 
     :global(.ample-logo) {
