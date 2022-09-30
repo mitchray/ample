@@ -57,7 +57,7 @@
     }
 
     .queue-toggle {
-        height: 100%; /* fill height */
+        height: calc(var(--size-webplayer-height) - var(--spacing-lg));
         width: auto;
         padding: 0;
         flex-shrink: 0;
@@ -74,8 +74,7 @@
         justify-content: space-between;
         padding: var(--spacing-md);
         padding-right: var(--spacing-sm);
-        margin-right: var(--spacing-lg);
-        width: 100%;
+        width: calc(100% - var(--spacing-lg));
         height: 85%;
     }
 
@@ -97,6 +96,10 @@
     @media all and (min-width: 1000px) {
         .queueInfo {
             display: block;
+        }
+
+        .queue-toggle {
+            height: unset;
         }
 
         .container {
