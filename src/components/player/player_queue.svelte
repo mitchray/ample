@@ -57,7 +57,7 @@
     }
 
     .queue-toggle {
-        height: unset; /* fill height */
+        height: 100%; /* fill height */
         width: auto;
         padding: 0;
         flex-shrink: 0;
@@ -69,18 +69,19 @@
     }
 
     .container {
-        background-color: var(--color-card-primary);
-        box-shadow: var(--shadow-sm);
         border-radius: 5px;
         display: flex;
         justify-content: space-between;
         padding: var(--spacing-md);
         padding-right: var(--spacing-sm);
         margin-right: var(--spacing-lg);
+        width: 100%;
+        height: 85%;
     }
 
     .queueInfo {
         overflow: hidden;
+        display: none;
     }
 
     .title {
@@ -91,5 +92,16 @@
 
     .artist {
         font-stretch: 50%;
+    }
+
+    @media all and (min-width: 1000px) {
+        .queueInfo {
+            display: block;
+        }
+
+        .container {
+            background-color: var(--color-card-primary);
+            box-shadow: var(--shadow-sm);
+        }
     }
 </style>

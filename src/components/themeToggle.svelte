@@ -26,6 +26,7 @@
 <button
     class="icon-button theme-toggle"
     on:click={toggleTheme}
+    title="Toggle theme"
 >
     {#if $Theme === 'dark'}
         <SVGLightMode />

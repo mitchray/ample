@@ -147,7 +147,6 @@
         display: flex;
         flex-direction: column;
         height: 100vh;
-        overflow: hidden;
         background-color: var(--color-background);
         color: var(--color-text-primary);
     }

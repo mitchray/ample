@@ -166,7 +166,7 @@
             </button>
 
             <button class="panel-action" on:click={showCurrentSong} title="Show current song">
-                Show
+                Current
             </button>
 
             <button class="panel-action" on:click={handleClearPlayed} title="Clear played songs">

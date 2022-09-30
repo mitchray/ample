@@ -13,6 +13,7 @@
     import Notifications from '../components/notification/notifications.svelte';
 
     import SVGAmpleLogo from "../../public/images/ample_logo.svg";
+    import SVGAmpleLetter from "../../public/images/ample_letter.svg";
     import SVGClose from "../../public/images/close.svg";
     import SVGSearch from "../../public/images/search.svg";
     import SVGLogout from "../../public/images/logout.svg";
@@ -103,14 +104,14 @@
 <div class="site-header">
     <div class="site-logo-container">
         <button class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
-        <a href="{$serverURL}/ample" use:link class="site-logo"><SVGAmpleLogo /></a>
+        <a href="{$serverURL}/ample" use:link class="site-logo"><SVGAmpleLetter /><SVGAmpleLogo /></a>
     </div>
 
     <div class="search-container">
         <SVGSearch class="search-icon" />
         <input
             type="text"
-            placeholder="Quick search"
+            placeholder="Search"
             class="site-search"
             on:focus={handleFocus}
             on:paste={handleInputChange}
@@ -126,7 +127,14 @@
 
     <Notifications />
 
-    <button on:click={handleLogOut} class="logout visuallyLink"><SVGLogout style="transform: scale(0.8);" /> Log out</button>
+    <button
+        on:click={handleLogOut}
+        class="logout visuallyLink"
+        title="Log out"
+    >
+        <SVGLogout style="transform: scale(0.8);" />
+        <span class="text">Log out</span>
+    </button>
 
     <ThemeToggle />
 </div>
@@ -150,7 +158,6 @@
     }
 
     .site-logo-container {
-        width: var(--size-sidebar-width);
         padding: 0 var(--spacing-md);
         display: flex;
         align-items: center;
@@ -164,13 +171,16 @@
         margin-right: var(--spacing-sm);
     }
 
-    @media all and (max-width: 700px) {
-        :global(.site-logo) {
-            display: none;
-        }
+    :global(.ample-logo) {
+        display: none;
     }
 
-    :global(.ample-logo) {
+    :global(.ample-letter) {
+        height: 14px;
+    }
+
+    :global(.ample-logo),
+    :global(.ample-letter) {
         color: var(--color-highlight);
     }
 
@@ -182,8 +192,14 @@
         opacity: 1;
     }
 
-    :global(.ample-logo:hover) {
+    :global(.ample-logo:hover),
+    :global(.ample-letter:hover) {
         color: var(--color-text-primary);
+    }
+
+    .search-container {
+        width: 100%;
+        max-width: 250px;
     }
 
     input.site-search {
@@ -192,6 +208,7 @@
         position: relative;
         display: block;
         margin-right: var(--spacing-md);
+        width: 100%;
     }
 
     .search-container :global(.search-icon) {
@@ -218,16 +235,44 @@
     }
 
     .site-header :global(.advanced-search) {
-        display: inline-block;
         margin-right: var(--spacing-lg);
-    }
-
-    .site-header :global(.song-versions) {
-        display: inline-block;
-        margin-right: auto;
+        display: none;
+        flex-shrink: 0;
     }
 
     .site-header :global(.notifications-toggle) {
         margin-right: auto;
+    }
+
+    .logout {
+        margin-left: var(--spacing-lg);
+    }
+
+    .logout .text {
+        display: none;
+    }
+
+    @media all and (min-width: 500px) {
+        .site-header :global(.advanced-search) {
+            display: inline-block;
+        }
+    }
+
+    @media all and (min-width: 720px) {
+        .site-logo-container {
+            width: var(--size-sidebar-width);
+        }
+
+        :global(.ample-logo) {
+            display: block;
+        }
+
+        :global(.ample-letter) {
+            display: none;
+        }
+
+        .logout .text {
+            display: block;
+        }
     }
 </style>

@@ -83,9 +83,11 @@
         <div id="waveform"></div>
     </div>
 
-    <div class="site-player__rating">
+    <div class="site-player__rating" class:disabled={!$CurrentSong}>
         {#if $CurrentSong}
             <Rating type="song" id="{$CurrentSong.id}" rating="{$CurrentSong.rating}" flag="{$CurrentSong.flag}" averageRating="{$CurrentSong.averagerating}" />
+        {:else}
+            <Rating type="song" />
         {/if}
     </div>
 
@@ -153,12 +155,13 @@
         height: var(--size-webplayer-height);
         display: grid;
         grid-template-areas:
-            "main-controls now-playing SPACER1 times    SPACER2  secondary-controls SPACER4 queue"
-            "main-controls now-playing SPACER1 waveform waveform waveform           SPACER4 queue"
-            "main-controls now-playing SPACER1 rating   SPACER3  volume             SPACER4 queue"
+            "SPACER1 SPACER2       SPACER4 SPACER5            SPACER7 SPACER8 SPACER10"
+            "SPACER1 main-controls SPACER4 secondary-controls SPACER7 queue   SPACER10"
+            "SPACER1 rating        SPACER4 volume             SPACER7 queue   SPACER10"
+            "SPACER1 SPACER3       SPACER4 SPACER6            SPACER7 SPACER9 SPACER10"
         ;
-        grid-template-columns: var(--size-sidebar-width) 2fr var(--spacing-lg) auto var(--spacing-lg) auto var(--spacing-lg) 250px;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr;
         align-items: center;
         padding: 0;
         z-index: 100;
@@ -171,12 +174,14 @@
         display: flex;
         justify-content: center;
         align-items: center;
+        transform: scale(0.9);
     }
 
     .site-player__now-playing {
         grid-area: now-playing;
         height: 100%;
         overflow: hidden;
+        display: none;
     }
 
     .site-player__waveform {
@@ -184,6 +189,7 @@
         min-height: 100%;
         cursor: pointer;
         position: relative;
+        display: none;
     }
 
     #waveform {
@@ -202,11 +208,17 @@
         grid-area: rating;
         display: flex;
         justify-content: space-around;
+        transform: scale(0.9);
+    }
+
+    .site-player__rating.disabled {
+        pointer-events: none;
+        opacity: 0.7;
     }
 
     .site-player__times {
         grid-area: times;
-        display: flex;
+        display: none;
         justify-content: space-around;
         align-self: center;
     }
@@ -215,7 +227,7 @@
         grid-area: volume;
         display: flex;
         align-items: center;
-        transform: scale(0.8);
+        transform: scale(0.9);
     }
 
     .site-player__secondary-controls {
@@ -224,13 +236,17 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        transform: scale(0.8);
+        transform: scale(0.9);
         position: relative;
         z-index: 200;
     }
 
     .site-player__queue {
         grid-area: queue;
+        display: flex;
+        justify-content: center;
+        height: 100%;
+        align-items: center;
     }
 
     :global(.dragging .site-player__volume-value:before),
@@ -271,12 +287,36 @@
         color: var(--color-background);
     }
 
+    @media all and (min-width: 680px) {
+        .site-player {
+            grid-template-areas:
+                "main-controls now-playing SPACER1 times    SPACER2  secondary-controls SPACER4 queue"
+                "main-controls now-playing SPACER1 waveform waveform waveform           SPACER4 queue"
+                "main-controls now-playing SPACER1 rating   SPACER3  volume             SPACER4 queue"
+            ;
+            grid-template-columns: auto 2fr var(--spacing-lg) auto var(--spacing-lg) auto var(--spacing-lg) auto;
+            grid-template-rows: 1fr 1fr 1fr;
+        }
+
+        .site-player__now-playing,
+        .site-player__times,
+        .site-player__waveform {
+            display: flex;
+        }
+    }
+
+    @media all and (min-width: 1000px) {
+        .site-player {
+            grid-template-columns: auto 2fr var(--spacing-lg) auto var(--spacing-lg) auto var(--spacing-lg) 250px;
+        }
+    }
+
     @media all and (min-width: 1300px) {
         .site-player {
             grid-template-areas:
             "main-controls now-playing SPACER1 times  SPACER2 waveform SPACER3 secondary-controls SPACER4 queue"
             "main-controls now-playing SPACER1 rating SPACER2 waveform SPACER3 volume             SPACER4 queue";
-            grid-template-columns: var(--size-sidebar-width) minmax(auto, 350px) var(--spacing-xl) min-content var(--spacing-xl) 1fr var(--spacing-xl) min-content var(--spacing-xl) 250px;
+            grid-template-columns: var(--size-sidebar-width) 320px var(--spacing-xl) min-content var(--spacing-xl) 1fr var(--spacing-xl) min-content var(--spacing-xl) 250px;
             grid-template-rows: 1fr 1fr;
         }
 
@@ -317,6 +357,8 @@
             margin-left: auto;
         }
 
+        .site-player__controls,
+        .site-player__rating,
         .site-player__volume,
         .site-player__secondary-controls {
             transform: unset;
@@ -328,12 +370,6 @@
 
         .site-player__volume {
             margin-bottom: var(--spacing-sm);
-        }
-    }
-
-    @media all and (min-width: 1700px) {
-        .site-player {
-            grid-template-columns: var(--size-sidebar-width) minmax(auto, 350px) var(--spacing-xxl) min-content var(--spacing-xxl) 4fr var(--spacing-xxl) min-content var(--spacing-xxl) 320px;
         }
     }
 </style>

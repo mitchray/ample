@@ -55,6 +55,7 @@
 
     .nowPlayingArtwork {
         height: 85%;
+        aspect-ratio: 1 / 1;
         border-radius: 3px;
         margin-right: var(--spacing-md);
         display: none;
@@ -62,7 +63,7 @@
         outline-offset: -1px;
     }
 
-    @media all and (min-width: 1080px) {
+    @media all and (min-width: 800px) {
         .nowPlayingArtwork {
             display: block;
         }

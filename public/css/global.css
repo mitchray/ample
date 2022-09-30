@@ -64,6 +64,12 @@
     font-variation-settings: "GRAD" var(--roboto-grad), "opsz" var(--roboto-opsz);
 }
 
+html,
+body {
+    position: relative;
+    overflow: hidden;
+}
+
 html {
     font-family: var(--font-body);
     font-size: 13px;
