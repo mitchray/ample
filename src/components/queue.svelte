@@ -159,9 +159,9 @@
         <div class="panel-actions">
             <button class="panel-action" on:click={togglePinned}>
                 {#if $QueueIsPinned}
-                    <SVGUnlock style="transform: scale(0.8)" />
-                {:else}
                     <SVGLock style="transform: scale(0.8)" />
+                {:else}
+                    <SVGUnlock style="transform: scale(0.8)" />
                 {/if}
             </button>
 
