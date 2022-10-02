@@ -32,7 +32,7 @@
     // set defaults
     let settings = {
         type: "song",
-        limit: "0",
+        limit: "500",
         random: false,
         operator: "and"
     };
@@ -262,6 +262,17 @@
             category: "Metadata",
             object_types: [
                 { id: "song", category: "Song Metadata" },
+                { id: "album", category: "Album Metadata" },
+                { id: "artist", category: "Artist Metadata" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "song_tag",
+            label: "Song Genre",
+            category: "Metadata",
+            object_types: [
                 { id: "album", category: "Album Metadata" },
                 { id: "artist", category: "Artist Metadata" }
             ],
@@ -883,11 +894,23 @@
             inputType: "text"
         },
         {
+            id: "mbid_song",
+            label: "MusicBrainz ID (Song)",
+            category: "MusicBrainz",
+            object_types: [
+                { id: "album" },
+                { id: "artist" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
             id: "mbid_album",
             label: "MusicBrainz ID (Album)",
             category: "MusicBrainz",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "artist" }
             ],
             operatorType: "string",
             inputType: "text"
@@ -897,7 +920,8 @@
             label: "MusicBrainz ID (Artist)",
             category: "MusicBrainz",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" }
             ],
             operatorType: "string",
             inputType: "text"
@@ -916,9 +940,10 @@
         },
         {
             id: "possible_duplicate_album",
-            label: "Possible Duplicate Albums",
+            label: "Possible Duplicate Album",
             category: "File Data",
             object_types: [
+                { id: "song" },
                 { id: "artist" }
             ],
             operatorType: "true",
