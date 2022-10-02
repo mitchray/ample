@@ -9,6 +9,8 @@
 - Filter album artists
 
 ### Changed
+- Dedicated 'Current' button for scrolling to currently playing song instead of clicking 'Now Playing'
+- Changed 'Clear played' to be a text button instead of X
 - Moved "Skip Below # Rating" from context menu into main player interface (near volume controls)
 - Improved volume compressor (Night Mode), fixes the volume slider having no effect over 50% when enabled
 
