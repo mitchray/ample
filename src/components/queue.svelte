@@ -3,8 +3,14 @@
     import { flip } from 'svelte/animate';
     import { dndzone } from 'svelte-dnd-action';
     import { waitForElement } from "../logic/helper";
-
-    import { NowPlayingQueue, NowPlayingIndex, CurrentSong, QueueIsOpen, QueueIsPinned } from '../stores/status';
+    import { clickOutsideDetector } from '../actions/clickOutsideDetector';
+    import {
+        NowPlayingQueue,
+        NowPlayingIndex,
+        CurrentSong,
+        QueueIsOpen,
+        QueueIsPinned
+    } from '../stores/status';
     import { MediaPlayer, SiteQueueBind } from '../stores/player';
 
     import Menu from '../components/menu.svelte';
@@ -116,6 +122,14 @@
         QueueIsPinned.set(inverted);
     }
 
+    function handleClickOutside() {
+        if (!$QueueIsPinned) {
+            let status = false;
+            localStorage.setItem('QueueIsOpen', JSON.stringify(status));
+            QueueIsOpen.set(status);
+        }
+    }
+
     onMount(() => {
         // check for stale songs and remove from queue
         const staleTimer = setInterval(() => {
@@ -149,6 +163,11 @@
     class:is-open={$QueueIsOpen}
     class:is-pinned={$QueueIsPinned}
     bind:this={$SiteQueueBind}
+    use:clickOutsideDetector={{
+        toggle: document.getElementById("queue-button"),
+        ignore: '.site-queue'
+    }}
+    on:clickedOutside={handleClickOutside}
 >
     <div class="site-queue-inner">
         <div class="header panel-header">

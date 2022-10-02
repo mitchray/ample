@@ -35,6 +35,7 @@
     </div>
 
     <button
+        id="queue-button"
         class="queue-toggle icon-button button--regular"
         on:click={toggleQueue}
         title="Toggle queue"

@@ -103,7 +103,7 @@
 
 <div class="site-header">
     <div class="site-logo-container">
-        <button class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
+        <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
         <a href="{$serverURL}/ample" use:link class="site-logo"><SVGAmpleLetter /><SVGAmpleLogo /></a>
     </div>
 

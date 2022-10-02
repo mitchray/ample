@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import { ROUTER } from 'svelte-routing/src/contexts';
     import { Link } from "svelte-routing";
-
+    import { clickOutsideDetector } from '../actions/clickOutsideDetector';
     import { SidebarIsMini, SidebarIsOpen, SidebarIsPinned, customHue } from '../stores/status';
     import { SiteSidebarBind } from "../stores/player";
 
@@ -25,7 +25,6 @@
     import SVGUnlock from "../../public/images/lock_open.svg";
     import SVGLeft from "../../public/images/double_arrow_left.svg";
     import SVGRight from "../../public/images/double_arrow_right.svg";
-
 
     const { activeRoute } = getContext(ROUTER);
     let basePath = '';
@@ -58,6 +57,14 @@
         localStorage.setItem('SidebarIsPinned', JSON.stringify(inverted));
         SidebarIsPinned.set(inverted);
     }
+
+    function handleClickOutside() {
+        if (!$SidebarIsPinned) {
+            let status = false;
+            localStorage.setItem('SidebarIsOpen', JSON.stringify(status));
+            SidebarIsOpen.set(status);
+        }
+    }
 </script>
 
 <div class="site-sidebar"
@@ -65,6 +72,11 @@
     class:is-open={$SidebarIsOpen}
     class:is-pinned={$SidebarIsPinned}
     bind:this={$SiteSidebarBind}
+    use:clickOutsideDetector={{
+        toggle: document.getElementById("sidebar-button"),
+        ignore: '.site-sidebar'
+    }}
+    on:clickedOutside={handleClickOutside}
 >
     <div class="panel-actions">
         <button class="panel-action" on:click={toggleMini}>
