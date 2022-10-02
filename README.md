@@ -34,7 +34,7 @@ This is a personal hobby project which caters to my own needs, which means
 
 ## Requirements
 - Ampache 5.x
-- A modern desktop web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
+- A modern web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
 - Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
 ## Installing

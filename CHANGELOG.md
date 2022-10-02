@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.44.0-develop] - 2022-XX-XX
+### Added
+- Interface improvements for smaller screens
+  - Sidebar and queue can be pinned to the interface (this was the previous behaviour) or floating above it
+  - Sidebar can be hidden
+  - Player improvements for small screens
+- Filter album artists
+
+### Changed
+- Moved "Skip Below # Rating" from context menu into main player interface (near volume controls)
+- Improved volume compressor (Night Mode), fixes the volume slider having no effect over 50% when enabled
+
 ## [0.43.0] - 2022-09-11
 ### Added
 - New play option: Start Artist Mix
