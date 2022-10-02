@@ -171,7 +171,7 @@
         margin-right: var(--spacing-sm);
     }
 
-    :global(.ample-logo) {
+    .site-header :global(.ample-logo) {
         display: none;
     }
 
@@ -263,7 +263,7 @@
             width: var(--size-sidebar-width);
         }
 
-        :global(.ample-logo) {
+        .site-header :global(.ample-logo) {
             display: block;
         }
 
