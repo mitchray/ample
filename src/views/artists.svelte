@@ -29,14 +29,14 @@
 
             {#if tab.value === 'random'}
                 <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
-<!-- TODO: waiting for next Ampache release <ArtistTypeSelector />-->
+                    <ArtistTypeSelector />
                     <CardList type="artist" dataProvider={"randomArtists"} limit=18 refresh=true />
                 </div>
             {/if}
 
             {#if tab.value === 'all'}
                 <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
-<!-- TODO: waiting for next Ampache release <ArtistTypeSelector />-->
+                    <ArtistTypeSelector />
                     <ArtistsAll />
                 </div>
             {/if}
