@@ -121,13 +121,13 @@
         </div>
 
         {#if playlistEditIsVisible}
-            <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_edit_" + id)} bind:isVisible={playlistEditIsVisible}>
+            <Menu anchor="left-center" toggleSelector={"#js-action-playlist_edit_" + id} bind:isVisible={playlistEditIsVisible}>
                 <PlaylistEdit bind:playlist={playlist} bind:isVisible={playlistEditIsVisible} />
             </Menu>
         {/if}
 
         {#if playlistDeleteIsVisible}
-            <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_delete_" + id)} bind:isVisible={playlistDeleteIsVisible}>
+            <Menu anchor="left-center" toggleSelector={"#js-action-playlist_delete_" + id} bind:isVisible={playlistDeleteIsVisible}>
                 <PlaylistDelete bind:playlist={playlist} bind:isVisible={playlistDeleteIsVisible} />
             </Menu>
         {/if}

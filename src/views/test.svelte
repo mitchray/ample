@@ -235,7 +235,7 @@
                         </div>
 
                         {#if isVisible}
-                            <Menu anchor="{menuAnchor}" toggleElement={document.querySelector("#testToggleMenu")} bind:isVisible>
+                            <Menu anchor="{menuAnchor}" toggleSelector={"#testToggleMenu"} bind:isVisible>
                                 <div class="panel-content">
                                     <ul style="margin: 0;">
                                         <li>One</li>

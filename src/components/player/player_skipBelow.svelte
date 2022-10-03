@@ -51,7 +51,7 @@
 </button>
 
 {#if isVisible}
-    <Menu anchor="top-center" toggleElement={document.querySelector("#skipBelowMenu")} bind:isVisible >
+    <Menu anchor="top-center" toggleSelector={"#skipBelowMenu"} bind:isVisible >
         <div class="header panel-header">
             <h4 class="title panel-title">Skip songs below rating</h4>
 

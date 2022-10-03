@@ -73,7 +73,7 @@
     class:is-pinned={$SidebarIsPinned}
     bind:this={$SiteSidebarBind}
     use:clickOutsideDetector={{
-        toggle: document.getElementById("sidebar-button"),
+        toggle: "#sidebar-button",
         ignore: '.site-sidebar'
     }}
     on:clickedOutside={handleClickOutside}

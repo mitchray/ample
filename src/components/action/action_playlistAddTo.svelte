@@ -35,7 +35,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="left-center" toggleElement={document.querySelector("#js-action-playlist_add_" + type + mode + id)} bind:isVisible={menuIsVisible}>
+    <Menu anchor="left-center" toggleSelector={"#js-action-playlist_add_" + type + mode + id} bind:isVisible={menuIsVisible}>
         <PlaylistAddTo bind:songs={songsForPlaylistAdd} bind:isVisible={menuIsVisible} />
     </Menu>
 {/if}

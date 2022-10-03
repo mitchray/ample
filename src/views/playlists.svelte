@@ -12,7 +12,6 @@
     let playlists = [];
     let showPlaylistCreation = false;
     let loading = true;
-    let playlistsNewToggle;
 
     $: {
         if (newPlaylist) {
@@ -43,10 +42,10 @@
 
 <h1 class="page-title">Playlists</h1>
 
-<button id="js-playlistsNew" bind:this={playlistsNewToggle} on:click={handleShowPlaylistCreator} class="button button--primary">New playlist</button>
+<button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="button button--primary">New playlist</button>
 
 {#if showPlaylistCreation}
-    <Menu anchor="right-top" toggleElement={playlistsNewToggle} bind:isVisible={showPlaylistCreation} >
+    <Menu anchor="bottom-center" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
         <PlaylistEdit isNew={true} bind:playlist={newPlaylist} bind:isVisible={showPlaylistCreation} />
     </Menu>
 {/if}

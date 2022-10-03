@@ -164,7 +164,7 @@
     class:is-pinned={$QueueIsPinned}
     bind:this={$SiteQueueBind}
     use:clickOutsideDetector={{
-        toggle: document.getElementById("queue-button"),
+        toggle: "#queue-button",
         ignore: '.site-queue'
     }}
     on:clickedOutside={handleClickOutside}
@@ -235,7 +235,7 @@
                         <button id="queueMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleSongMenu(i)}><SVGMore /></button>
 
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
-                            <Menu anchor="left-center" toggleElement={document.querySelector('#queueMoreToggle-' + queueMoreMenuID)} bind:isVisible={queueMoreMenuIsOpen}>
+                            <Menu anchor="left-center" toggleSelector={'#queueMoreToggle-' + queueMoreMenuID} bind:isVisible={queueMoreMenuIsOpen}>
                                 <div class="panel-content">
                                     <Actions2
                                         type="song"

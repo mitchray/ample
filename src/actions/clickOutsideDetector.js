@@ -1,17 +1,20 @@
 export function clickOutsideDetector(node, options) {
     function handleEvent(e) {
+        let toggleElement = document.querySelector(options.toggle) || null;
+        let ignoreElement = document.querySelector(options.ignore) || null;
+
         // ignore clicks without our object
         if (node.contains(e.target)) {
             return;
         }
 
         // ignore clicks on the toggle
-        if (options.toggle && options.toggle.contains && options.toggle.contains(e.target)) {
+        if (toggleElement && toggleElement.contains && toggleElement.contains(e.target)) {
             return;
         }
 
         // ignore clicks on specified items
-        if (options.ignore && e.target.closest(options.ignore)) {
+        if (ignoreElement && e.target.closest(options.ignore)) {
             return;
         }
 

@@ -5,7 +5,7 @@
     import { clickOutsideDetector } from '../actions/clickOutsideDetector';
 
     export let isVisible;
-    export let toggleElement;
+    export let toggleSelector;
     export let anchor;
 
     let spacing = 10;
@@ -13,9 +13,11 @@
     let menuBounds;
     let coords = [];
     let toggleBounds;
+    let toggleElement;
 
     $: {
-        if (toggleElement && menu) {
+        if (toggleSelector && menu) {
+            toggleElement = document.querySelector(toggleSelector);
             toggleBounds = toggleElement.getBoundingClientRect();
             menuBounds = menu.getBoundingClientRect();
 
@@ -128,7 +130,7 @@
     bind:this={menu}
     transition:fly={{ x: 0, y: 0, duration: 300 }}
     use:clickOutsideDetector={{
-        toggle: toggleElement,
+        toggle: toggleSelector,
         ignore: '.c-menu'
     }}
     on:clickedOutside={handleClickOutside}

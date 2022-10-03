@@ -73,7 +73,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="bottom-left" toggleElement={document.querySelector("#notifications-toggle")} bind:isVisible={menuIsVisible} >
+    <Menu anchor="bottom-left" toggleSelector={"#notifications-toggle"} bind:isVisible={menuIsVisible} >
         <div class="container">
             <div class="notifications-view" style="display: {currentTab === 1 ? 'block' : 'none'}">
                 <div class="header panel-header">
