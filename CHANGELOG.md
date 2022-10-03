@@ -1,6 +1,6 @@
 # Changelog
 
-## [0.44.0-develop] - 2022-XX-XX
+## [0.44.0] - 2022-10-03
 ### Added
 - Interface improvements for smaller screens
   - Sidebar and queue can be pinned to the interface (this was the previous behaviour) or floating above it
