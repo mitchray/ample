@@ -92,17 +92,6 @@
         overflow: auto;
     }
 
-    .header :global(.name),
-    .header :global(.actions) {
-        position: sticky;
-        top: 0;
-        z-index: 3;
-    }
-
-    .header :global(.name) {
-        left: -1px;
-    }
-
     .header :global(.actions) {
         right: 0;
     }
@@ -124,14 +113,24 @@
         /*background-color: var(--color-row-stripe);*/
     }
 
-    .lister :global(.actions),
-    .lister :global(.name) {
-        position: sticky;
-        z-index: 1;
-    }
+    @media all and (min-width: 800px) {
+        .header :global(.name),
+        .header :global(.actions) {
+            position: sticky;
+            top: 0;
+            z-index: 3;
+        }
 
-    .lister :global(.name) {
-        left: -1px;
+        .lister :global(.actions),
+        .lister :global(.name) {
+            position: sticky;
+            z-index: 1;
+        }
+
+        .header :global(.name),
+        .lister :global(.name) {
+            left: -1px;
+        }
     }
 
     .lister :global(.actions) {
