@@ -1,6 +1,6 @@
 import { get } from 'svelte/store';
 import JsSHA from "jssha/dist/sha256";
-import { APIVersion, serverURL, serverTotals } from '../stores/server';
+import { APIVersion, serverURL } from '../stores/server';
 import { userName, isLoggedIn, userToken } from '../stores/user';
 import { debugHelper } from './helper';
 
@@ -59,11 +59,10 @@ export let handshake = async (username, password) => {
 
     let fullURL = serverURL_value + "/server/json.server.php?action=handshake&auth=" + passphrase + "&timestamp=" + time + "&version=" + get(APIVersion) + "&user=" + username;
 
-    let result = await fetch(fullURL)
+    await fetch(fullURL)
         .then(response => response.json())
         .then(data => {
             debugHelper(data, "handshake");
-            serverTotals.set(data);
 
             if (data.auth) {
                 login(data.auth, username);
@@ -80,8 +79,6 @@ export let handshake = async (username, password) => {
             console.log("Error reading data " + err);
             return err;
         });
-
-    return result;
 }
 
 /**
@@ -96,8 +93,6 @@ export let handshakeAPI = async (apikey) => {
         .then(response => response.json())
         .then(data => {
             debugHelper(data, "handshakeAPI");
-
-            serverTotals.set(data);
 
             if (data.auth) {
                 login(data.auth);
@@ -150,10 +145,11 @@ export let logout = () => {
 };
 
 /**
- * Check if our auth token is still valid
+ * Check if a cached auth token is still valid
  */
 export let validateAuthToken = () => {
     let cachedUserInfo = JSON.parse(localStorage.getItem('AmpleAuth'));
+    debugHelper(cachedUserInfo, "cached user info");
 
     if (cachedUserInfo === null) {
         logout();
@@ -165,7 +161,7 @@ export let validateAuthToken = () => {
     fetch(fullURL)
         .then(response => response.json())
         .then(data => {
-            serverTotals.set(data);
+            debugHelper(data, "returned data from attempted auth ping");
 
             if (data.session_expire) {
                 userToken.set(cachedUserInfo.userToken);
@@ -182,18 +178,22 @@ export let validateAuthToken = () => {
 }
 
 /**
- * Extend an existing session by pinging the server
+ * Ping the server
  */
-export let extendSession = () => {
-    let fullURL = serverURL_value + "/server/json.server.php?action=ping&auth=" +  get(userToken);
+export let pingServer = (sessionID) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=ping";
 
-    fetch(fullURL)
+    if (sessionID) {
+        queryURL += "&auth=" + sessionID;
+    }
+
+    fetch(queryURL)
         .then(response => response.json())
         .then(data => {
-            serverTotals.set(data);
-
             if (data.session_expire) {
+                debugHelper(data, "extending session");
             } else {
+                debugHelper(data, "no session_expire, forcing log out");
                 logout();
             }
         })
@@ -201,4 +201,11 @@ export let extendSession = () => {
             console.log("Error Reading data " + err);
             return err;
         });
+}
+
+/**
+ * Extend an existing session by pinging the server
+ */
+export let extendSession = () => {
+    pingServer(get(userToken));
 }
