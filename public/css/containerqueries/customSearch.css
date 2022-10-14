@@ -1,12 +1,12 @@
-@container custom-search-wrapper size(min-width: 700px) {
-    .rules {
+@container custom-search-wrapper (min-width: 700px) {
+    .rules.rules {
         display: grid;
         grid-template-columns: repeat(4, auto);
         width: fit-content;
         gap: var(--spacing-md);
     }
 
-    .row {
+    .row.row {
         display: contents;
     }
 }

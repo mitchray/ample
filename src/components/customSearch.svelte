@@ -8,6 +8,7 @@
     import { getUsers } from '../logic/user';
     import { getCatalogs } from '../logic/catalog';
 
+    import '../../public/css/containerqueries/customSearch.css';
     import SVGClose from "../../public/images/close.svg";
 
     export let loading = false;
@@ -27,7 +28,6 @@
     let allCatalogs = [];
     let allPlaylists = [];
     let allSmartlists = [];
-    let containerBind;
 
     // set defaults
     let settings = {
@@ -199,8 +199,6 @@
         allCatalogs = await getCatalogs();
         allPlaylists = await getPlaylists();
         allSmartlists = await getSmartlists(true);
-
-        containerBind.style.width = "calc(100% - 0.1px)"; // workaround for the container queries not triggering for this item
 
         loaded = true;
 
@@ -985,11 +983,7 @@
     ];
 </script>
 
-<svelte:head>
-    <link rel="stylesheet" href='/ample/public/css/containerqueries/customSearch.css'>
-</svelte:head>
-
-<div class="container" bind:this={containerBind}>
+<div class="container">
     <div class="options">
         <div class="type">
             <label>
@@ -1217,7 +1211,8 @@
 
 <style>
     .container {
-        container: inline-size / custom-search-wrapper;
+        container-name: custom-search-wrapper;
+        container-type: inline-size;
         border: 2px solid var(--color-input-border);
         border-radius: 10px;
         padding: var(--spacing-lg);

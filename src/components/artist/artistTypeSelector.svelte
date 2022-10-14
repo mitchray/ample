@@ -11,17 +11,17 @@
 </script>
 
 <div class="container">
-    Showing
-
+    Artist Mode:
     <select bind:value={$ShowArtistType} on:change={handleArtistType}>
-        <option value="all" selected={$ShowArtistType === "all"}>all artists</option>
-        <option value="album_artist" selected={$ShowArtistType === "album_artist"}>album artists</option>
+        <option value="all" selected={$ShowArtistType === "all"}>All artists</option>
+        <option value="album_artist" selected={$ShowArtistType === "album_artist"}>Album artists</option>
     </select>
 </div>
 
 <style>
     .container {
-        margin-top: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
+        position: absolute;
+        right: 0;
+        top: 0;
     }
 </style>

@@ -6,9 +6,10 @@
     import { onMount } from 'svelte';
     import { Router, Route } from "svelte-routing";
 
-    import { serverVersion, serverPathname } from "./stores/server";
+    import { serverVersion, serverPathname, APIVersion, serverURL, allArtists, filteredArtists } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind } from "./stores/player";
+    import { ShowArtistType } from "./stores/status";
 
     import { validateAuthToken, extendSession } from './logic/user';
     import { getServerVersion } from './logic/server';
@@ -77,6 +78,34 @@
         // Needs to be in a zero-length timeout
         setTimeout(() => $MediaPlayer.setWaveColors(), 0);
     };
+
+    // Creating new web worker using constructor
+    let worker = new Worker('/ample/public/js/workers/refreshArtists.js');
+
+    // On response
+    worker.onmessage = function(e) {
+        allArtists.set(e.data.allArtists);
+        filteredArtists.set(e.data.filteredArtists);
+        console.log('Web Worker: Updated artists');
+    };
+
+    $: {
+        if ($userToken && $APIVersion && $serverURL && $ShowArtistType) {
+            let message = {
+                serverURL: $serverURL,
+                userToken: $userToken,
+                APIVersion: $APIVersion,
+                ShowArtistType: $ShowArtistType,
+            };
+
+            // Sending the message using postMessage
+            worker.postMessage(message);
+
+            window.setInterval(function(){
+                worker.postMessage(message);
+            }, 1000*60*10);
+        }
+    }
 
     onMount(async () => {
         // get Ampache server version
@@ -185,6 +214,8 @@
         bottom: 0;
         overflow-y: auto;
         padding: inherit;
+        container-name: site-content-inner;
+        container-type: inline-size;
     }
 
     /* needed as flex doesn't include padding in height calc */

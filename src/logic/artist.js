@@ -45,24 +45,6 @@ function getArtistType() {
 }
 
 /**
- * Get artists
- * @param page
- * @param limit
- * @returns {Promise<*>}
- */
-export const getArtists = async ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + getArtistType();
-
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getArtists");
-
-    return fetchArtistData(queryURL);
-}
-
-/**
  * Get artists through advanced search
  * @returns {Promise<*>}
  */

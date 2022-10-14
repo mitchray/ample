@@ -18,6 +18,7 @@
     import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
 
+    import '../../public/css/containerqueries/artist.css';
     import SVGAlbum from "../../public/images/album.svg";
     import SVGPopular from "../../public/images/trending_up.svg";
     import SVGSongs from "../../public/images/songs.svg";
@@ -50,10 +51,6 @@
         ShowExpandedAlbums.set(inverted);
     }
 </script>
-
-<svelte:head>
-    <link rel="stylesheet" href='/ample/public/css/containerqueries/artist.css'>
-</svelte:head>
 
 {#await getArtist({id: id, artAnalysis: true})}
     <p>Loading artist</p>
@@ -210,7 +207,8 @@
 
 <style>
     .container {
-        container: inline-size / artist-info-wrapper;
+        container-name: artist-info-wrapper;
+        container-type: inline-size;
     }
 
     .header {
@@ -288,7 +286,8 @@
     }
 
     .details {
-        container: inline-size / artist-details-wrapper;
+        container-name: artist-details-wrapper;
+        container-type: inline-size;
     }
 
     .meta {

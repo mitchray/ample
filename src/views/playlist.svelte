@@ -14,6 +14,8 @@
     import SVGPlaylist from "../../public/images/queue_music.svg";
     import SVGSmartlist from "../../public/images/smartlist.svg";
 
+    import '../../public/css/containerqueries/playlist.css';
+
     export let id;
 
     let playlist;
@@ -52,10 +54,6 @@
         songs = await getSongsFromPlaylist({id: id});
     }
 </script>
-
-<svelte:head>
-    <link rel="stylesheet" href='/ample/public/css/containerqueries/playlist.css'>
-</svelte:head>
 
 {#if loading}
     <p>Loading playlist</p>
@@ -138,7 +136,8 @@
 
 <style>
     .wrapper {
-        container: size / playlist-page-wrapper;
+        container-name: playlist-page-wrapper;
+        container-type: size;
         height: 100%;
         width: 100%;
         position: absolute;
@@ -161,11 +160,13 @@
     }
 
     .container {
-        container: inline-size / playlist-wrapper;
+        container-name: playlist-wrapper;
+        container-type: inline-size;
     }
 
     .details-container {
-        container: inline-size / playlist-details-wrapper;
+        container-name: playlist-details-wrapper;
+        container-type: inline-size;
         padding-bottom: 0;
     }
 

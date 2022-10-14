@@ -12,6 +12,7 @@
     import Genres from '../components/genre/genres.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
+    import '../../public/css/containerqueries/album.css';
     import SVGYear from "../../public/images/year.svg";
     import SVGTrack from "../../public/images/music_note.svg";
     import SVGClock from "../../public/images/clock.svg";
@@ -21,10 +22,6 @@
     let theme;
     $: theme = $Theme;
 </script>
-
-<svelte:head>
-    <link rel="stylesheet" href='/ample/public/css/containerqueries/album.css'>
-</svelte:head>
 
 {#await getAlbum({id: id, withTracks: true, artAnalysis: true})}
     <p>Loading album</p>
@@ -101,7 +98,8 @@
 
 <style>
     .wrapper {
-        container: size / album-page-wrapper;
+        container-name: album-page-wrapper;
+        container-type: size;
         height: 100%;
         width: 100%;
         position: absolute;
@@ -125,11 +123,13 @@
     }
 
     .container {
-        container: inline-size / album-wrapper;
+        container-name: album-wrapper;
+        container-type: inline-size;
     }
 
     .details-container {
-        container: inline-size / album-details-wrapper;
+        container-name: album-details-wrapper;
+        container-type: inline-size;
         padding-bottom: 0;
     }
 

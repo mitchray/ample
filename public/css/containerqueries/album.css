@@ -1,62 +1,62 @@
-@container album-details-wrapper size(min-width: 500px) {
-    .details {
+@container album-details-wrapper (min-width: 500px) {
+    .details.details {
         display: flex;
         gap: var(--spacing-xl);
         margin-bottom: 0;
         padding: unset;
     }
 
-    .details,
-    .name {
+    .details.details,
+    .name.name {
         background-color: unset;
         box-shadow: unset;
     }
 
-    .name {
+    .name.name {
         padding: unset;
     }
 
-    .title {
+    .title.title {
         text-align: left;
     }
 
-    .artist {
+    .artist.artist {
         text-align: left;
     }
 
-    .art-container {
+    .art-container.art-container {
         max-width: 180px;
     }
 }
 
-@container album-details-wrapper size(min-width: 800px) {
-    .title {
+@container album-details-wrapper (min-width: 800px) {
+    .title.title {
         font-size: 40px;
         font-weight: 200;
     }
 
-    .art-container {
+    .art-container.art-container {
         max-width: 240px;
     }
 }
 
 @container album-page-wrapper (min-width: 1200px) {
-    .wrapper > .container {
+    .wrapper.wrapper > .container.container {
         display: flex;
         overflow: hidden;
     }
 
-    .album-container {
+    .album-container.album-container {
         display: flex;
     }
 
-    .details-container {
+    .details-container.details-container {
         width: 400px;
         padding-right: var(--spacing-xl);
         flex-shrink: 0;
     }
 
-    .songs-container {
+    .songs-container.songs-container {
         flex: 1;
     }
 }
