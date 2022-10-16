@@ -1,4 +1,4 @@
-@container site-content-inner (min-width: 900px) {
+@container artists-page-wrapper (min-width: 900px) {
     .artists-page-container.artists-page-container {
         grid-template-columns: 200px 1fr;
     }

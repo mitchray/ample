@@ -214,8 +214,6 @@
         bottom: 0;
         overflow-y: auto;
         padding: inherit;
-        container-name: site-content-inner;
-        container-type: inline-size;
     }
 
     /* needed as flex doesn't include padding in height calc */
