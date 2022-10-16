@@ -122,6 +122,9 @@
 
     .sidebar-artist {
         padding: var(--spacing-sm) var(--spacing-lg);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
     }
     
     .title {
