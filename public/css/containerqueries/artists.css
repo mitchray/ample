@@ -1,3 +1,16 @@
+@container artists-page-wrapper (min-width: 400px) {
+    .title {
+        position: relative;
+    }
+
+    .artist-selector-container {
+        position: absolute;
+        right: 0;
+        top: 0;
+
+    }
+}
+
 @container artists-page-wrapper (min-width: 900px) {
     .artists-page-container.artists-page-container {
         grid-template-columns: 200px 1fr;

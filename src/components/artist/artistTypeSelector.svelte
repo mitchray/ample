@@ -10,7 +10,7 @@
     }
 </script>
 
-<div class="container">
+<div class="artist-selector-container">
     Artist Mode:
     <select bind:value={$ShowArtistType} on:change={handleArtistType}>
         <option value="all" selected={$ShowArtistType === "all"}>All artists</option>
@@ -19,9 +19,7 @@
 </div>
 
 <style>
-    .container {
-        position: absolute;
-        right: 0;
-        top: 0;
+    .artist-selector-container {
+        margin-bottom: var(--spacing-xxl);
     }
 </style>

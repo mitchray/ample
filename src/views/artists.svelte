@@ -133,8 +133,4 @@
         text-overflow: ellipsis;
         overflow: hidden;
     }
-    
-    .title {
-        position: relative;
-    }
 </style>
