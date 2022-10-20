@@ -31,4 +31,4 @@ export const serverPathname = readable(detectedPathname, function start(set) {
 export let serverVersion = writable('');
 
 export let allArtists = writable([]);
-export let filteredArtists = writable([]);
+export let groupedArtists = writable(null);

@@ -1,13 +1,16 @@
 <script>
     import { Link } from "svelte-routing";
+
+    import { groupedArtists } from "../stores/server";
+    import { SiteMainSpace } from "../stores/player";
+    import { ShowArtistType } from "../stores/status";
+
+    import { newestArtists, randomArtists } from "../logic/artist";
+
     import CardList from '../components/cardList.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs.svelte";
     import ArtistTypeSelector from "../components/artist/artistTypeSelector.svelte";
-    import { filteredArtists } from "../stores/server";
-    import { SiteMainSpace } from "../stores/player";
-    import { ShowArtistType } from "../stores/status";
-    import { newestArtists, randomArtists } from "../logic/artist";
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -28,13 +31,17 @@
         >
             <div class="sidebar">
                 <div class="sidebar-inner">
-                    {#if $filteredArtists.length > 0}
-                        {#each $filteredArtists as artist (artist.id)}
-                            <div class="sidebar-artist">
-                                <Link to="artists/{artist.id}" title="{artist.name}">
-                                    {artist.name}
-                                </Link>
-                            </div>
+                    {#if $groupedArtists}
+                        {#each Object.entries($groupedArtists) as [key, value], i}
+                            <div class="sidebar-index">{key.toUpperCase()}</div>
+
+                            {#each value as artist}
+                                <div class="sidebar-artist">
+                                    <Link to="artists/{artist.id}" title="{artist.name}">
+                                        {artist.name}
+                                    </Link>
+                                </div>
+                            {/each}
                         {/each}
                     {/if}
                 </div>
@@ -127,8 +134,29 @@
         padding: var(--spacing-xxl);
     }
 
+    .sidebar-index,
     .sidebar-artist {
         padding: var(--spacing-sm) var(--spacing-lg);
+    }
+
+    .sidebar-index {
+        font-weight: 700;
+        color: var(--color-highlight);
+        font-size: 20px;
+    }
+
+    .sidebar-artist + .sidebar-index {
+        margin-top: var(--spacing-lg);
+    }
+
+    .sidebar-index:after {
+        content: '';
+        display: block;
+        border-bottom: 2px solid var(--color-separator);
+        padding-top: var(--spacing-sm);
+    }
+
+    .sidebar-artist {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

@@ -38,6 +38,17 @@ export const getAllUserPreferences = () => {
 }
 
 /**
+ * Get all system preferences
+ * @returns {Promise<*>}
+ */
+export const getAllSystemPreferences = () => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=system_preferences";
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "all system_preferences");
+    return fetchServerData(queryURL);
+}
+
+/**
  * Get a single user preference by name
  * @returns {Promise<*>}
  */
@@ -46,6 +57,18 @@ export const getUserPreference = (name) => {
     queryURL += "&filter=" + name;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getUserPreference");
+    return fetchServerData(queryURL);
+}
+
+/**
+ * Get a single system preference by name
+ * @returns {Promise<*>}
+ */
+export const getSystemPreference = (name) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=system_preference";
+    queryURL += "&filter=" + name;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "getSystemPreference");
     return fetchServerData(queryURL);
 }
 

@@ -14,6 +14,7 @@ onmessage = async function(message) {
     // Do work
     final.allArtists = await getAllArtists();
     final.filteredArtists = (ShowArtistType === "album_artist") ? final.allArtists.filter((item) => item.albumcount > 0) : final.allArtists;
+    final.groupedArtists = group(final.filteredArtists);
 
     // Posting back to the page
     self.postMessage(final);
@@ -45,4 +46,30 @@ const getAllArtists = async () => {
     queryURL += "&auth=" + userToken + "&version=" + APIVersion;
 
     return fetchArtistData(queryURL);
+}
+
+function group(arr) {
+    let result = arr.reduce((store, artist) => {
+        let letter = artist.name.replace(/^(the |a |an |\p{P}+)/giu, '').charAt(0).toLowerCase();
+
+        if (letter.match(/[0-9]/g)) {
+            letter = "#";
+        }
+
+        const keyStore = (store[letter] || (store[letter] = [])); // assign to letter or create if needed
+
+        keyStore.push(artist);
+
+        return store;
+    }, {});
+
+    const ordered = Object.keys(result).sort().reduce(
+        (obj, key) => {
+            obj[key] = result[key];
+            return obj;
+        },
+        {}
+    );
+
+    return ordered;
 }
