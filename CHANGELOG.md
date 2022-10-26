@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.45.0] - 2022-10-26
+### Added
+- Alphabetised list of all artists/album artists on the Artists page
+
+### Changed
+- The 'artist' column will always show when an album is by Various Artists
+- Minimum 2 chars needed for quick search, down from 3
+- *Name* and *Actions* columns won't become sticky unless there is enough room to comfortably show both
+
+### Fixed
+- Layout glitches in Chrome 105+ related to CSS Container Queries
+
 ## [0.44.0] - 2022-10-03
 ### Added
 - Interface improvements for smaller screens
