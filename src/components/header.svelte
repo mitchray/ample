@@ -20,7 +20,7 @@
     import SVGMenu from "../../public/images/menu.svg";
 
     let timeout;
-    let minimumLength = 3;
+    let minimumLength = 2;
 
     let contentObserver;
     let sidebarObserver;
@@ -36,7 +36,7 @@
         timeout = setTimeout(function () {
             let chars = event.target.value;
 
-            if (chars.length >= 3) {
+            if (chars.length >= minimumLength) {
                 ShowSearch.set(true);
                 SearchQuery.set(chars);
             } else {
