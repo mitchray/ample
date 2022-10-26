@@ -76,6 +76,7 @@
                                 type="song"
                                 tableOnly={true}
                                 zone="album-contents"
+                                showArtist={album.artist.name === "Various Artists"}
                                 actionData={{
                                     type: "album",
                                     id: album.id,

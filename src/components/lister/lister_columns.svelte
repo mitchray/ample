@@ -10,7 +10,7 @@
 
     let newColumns = JSON.parse(JSON.stringify(columns)); // MAKE AN INDIVIDUAL COPY OF IMPORTED OBJECT
 
-    let { listerColumnsID, currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader, selectedCount } = getContext(contextKey);
+    let { listerColumnsID, currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, showArtist, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader, selectedCount } = getContext(contextKey);
     const min = 100;
     let thisType = getType();
     let headerBeingResized;
@@ -53,14 +53,20 @@
             }
         }
 
-        // enable any special columns
+        // enable index
         if (showIndex) {
             $availableColumns.find(el => el.id === "index").show = true;
         }
 
-        // enable any special columns
+        // enable checkboxes
         if (showCheckboxes) {
             $availableColumns.find(el => el.id === "checkbox").show = true;
+        }
+
+        // force artist column
+        if (showArtist) {
+            $availableColumns.find(el => el.id === "artist").show = true;
+            $availableColumns.find(el => el.id === "artist").canToggle = false;
         }
 
         $availableColumns = $availableColumns;
