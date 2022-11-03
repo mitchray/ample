@@ -50,7 +50,7 @@ function getSHA256(text) {
  * Handshake with username/password to Ampache server for authentication
  * @param {string} username
  * @param {string} password
- * @returns {Promise<void>}
+ * @returns {string}
  */
 export let handshake = async (username, password) => {
     let time = Math.floor(new Date().getTime() / 1000);
@@ -59,7 +59,7 @@ export let handshake = async (username, password) => {
 
     let fullURL = serverURL_value + "/server/json.server.php?action=handshake&auth=" + passphrase + "&timestamp=" + time + "&version=" + get(APIVersion) + "&user=" + username;
 
-    await fetch(fullURL)
+    return await fetch(fullURL)
         .then(response => response.json())
         .then(data => {
             debugHelper(data, "handshake");
