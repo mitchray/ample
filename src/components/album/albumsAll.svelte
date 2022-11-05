@@ -1,5 +1,5 @@
 <script>
-    import { getAlbumsStartingWith } from "../../logic/album";
+    import { getAlbumsStartingWithChar } from "../../logic/album";
 
     import AlphanumericPagination from '../../components/alphanumericPagination.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
@@ -31,7 +31,7 @@
     }
 
     async function getData() {
-        dataDisplay = await getAlbumsStartingWith({limit: limit, page: page, filterChar: searchValue});
+        dataDisplay = await getAlbumsStartingWithChar({limit: limit, page: page, filterChar: searchValue});
         loadedTime = new Date();
     }
 

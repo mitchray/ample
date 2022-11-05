@@ -102,14 +102,33 @@ export const getAlbumsFromAdvancedSearch = ({rows = [], limit = 0, random = fals
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getAlbumsStartingWith = ({page = 0, limit = 50, filterChar}) => {
+export const getAlbumsStartingWithChar = ({page = 0, limit = 50, filterChar}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=album";
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
     // ignore punctuation
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getAlbumsStartingWith");
+    debugHelper(queryURL, "getAlbumsStartingWithChar");
+
+    return fetchAlbumData(queryURL);
+}
+
+/**
+ * Search albums starting with specified string
+ * @param page
+ * @param limit
+ * @param {string} query
+ * @returns {Promise<*>}
+ */
+export const searchAlbumsStartingWith = ({page = 0, limit = 50, query}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + "album";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=2&rule_1_input=" + query;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "searchAlbumsStartingWith");
 
     return fetchAlbumData(queryURL);
 }
@@ -119,12 +138,12 @@ export const getAlbumsStartingWith = ({page = 0, limit = 50, filterChar}) => {
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const testAlbumsStartingWith = (filterChar) => {
+export const testAlbumsStartingWithChar = (filterChar) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=album";
     queryURL += "&limit=1";
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "testAlbumsStartingWith");
+    debugHelper(queryURL, "testAlbumsStartingWithChar");
     return fetchAlbumData(queryURL);
 }
 

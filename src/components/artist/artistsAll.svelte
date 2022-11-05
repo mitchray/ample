@@ -1,7 +1,7 @@
 <script>
     import { ShowArtistType } from "../../stores/status";
 
-    import { getArtistsStartingWith } from "../../logic/artist";
+    import { getArtistsStartingWithChar } from "../../logic/artist";
 
     import AlphanumericPagination from '../../components/alphanumericPagination.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
@@ -33,7 +33,7 @@
     }
 
     async function getData() {
-        dataDisplay = await getArtistsStartingWith({limit: limit, page: page, filterChar: searchValue});
+        dataDisplay = await getArtistsStartingWithChar({limit: limit, page: page, filterChar: searchValue});
         loadedTime = new Date();
     }
 

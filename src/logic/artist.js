@@ -73,7 +73,7 @@ export const getArtistsFromAdvancedSearch = ({rows = [], limit = 0, random = fal
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getArtistsStartingWith = ({page = 0, limit = 50, filterChar}) => {
+export const getArtistsStartingWithChar = ({page = 0, limit = 50, filterChar}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
     queryURL += "&type=" + getArtistType();
     queryURL += "&offset=" + page * limit;
@@ -81,7 +81,26 @@ export const getArtistsStartingWith = ({page = 0, limit = 50, filterChar}) => {
     // ignore punctuation
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getArtistsStartingWith");
+    debugHelper(queryURL, "getArtistsStartingWithChar");
+
+    return fetchArtistData(queryURL);
+}
+
+/**
+ * Search artists starting with specified string
+ * @param page
+ * @param limit
+ * @param {string} query
+ * @returns {Promise<*>}
+ */
+export const searchArtistsStartingWith = ({page = 0, limit = 50, query}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + "artist";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=2&rule_1_input=" + query;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "searchArtistsStartingWith");
 
     return fetchArtistData(queryURL);
 }
@@ -92,13 +111,13 @@ export const getArtistsStartingWith = ({page = 0, limit = 50, filterChar}) => {
  * @param {string} type
  * @returns {Promise<*>}
  */
-export const testArtistsStartingWith = async (filterChar) => {
+export const testArtistsStartingWithChar = async (filterChar) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
     queryURL += "&type=" + getArtistType();
     queryURL += `&limit=1`;
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "testArtistsStartingWith");
+    debugHelper(queryURL, "testArtistsStartingWithChar");
 
     return fetchArtistData(queryURL);
 }

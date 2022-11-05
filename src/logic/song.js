@@ -175,6 +175,25 @@ export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false
 }
 
 /**
+ * Search songs starting with specified string
+ * @param page
+ * @param limit
+ * @param {string} query
+ * @returns {Promise<*>}
+ */
+export const searchSongsStartingWith = ({page = 0, limit = 50, query}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + "song";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=2&rule_1_input=" + query;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "searchSongsStartingWith");
+
+    return fetchSongData(queryURL);
+}
+
+/**
  * Find songs with same title from artist
  * @param songTitle
  * @param artistName

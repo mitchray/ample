@@ -4,24 +4,17 @@
     import { SearchQuery, ShowSearch } from '../stores/status';
     import { SiteMainSpace } from '../stores/player';
 
-    import { searchArtists, getArtistsFromAdvancedSearch } from '../logic/artist';
-    import { searchAlbums, getAlbumsFromAdvancedSearch } from '../logic/album';
-    import { searchSongs, getSongsFromAdvancedSearch } from '../logic/song';
-    import { searchPlaylists, searchSmartlists } from '../logic/playlist';
+    import { searchArtistsStartingWith, searchArtists } from '../logic/artist';
+    import { searchAlbumsStartingWith, searchAlbums } from '../logic/album';
+    import { searchSongsStartingWith, searchSongs } from '../logic/song';
+    import { searchPlaylists, searchSmartlists  } from '../logic/playlist';
 
     import CardList from './cardList.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
 
     import SVGClose from "../../public/images/close.svg";
 
     let initialResults = {};
     let noResults = false;
-    let isExact = false;
-    let queryWithoutQuotes = "";
-    let fancySearchResults = {};
-    let nothingFancy = true;
-
-    let regexKeywords = "artist|album|song|title|playlist|smartlist|$";
 
     function handleClick(event) {
         // Close search if we are following a link
@@ -37,126 +30,61 @@
     $: {
         if ($SearchQuery) {
             resetResults();
-
-            // parse fancy items from string
-            fancySearchResults.artist = $SearchQuery.match(new RegExp("(?<=artist:).+?(?=" + regexKeywords + ")", "gi"));
-            fancySearchResults.album  = $SearchQuery.match(new RegExp("(?<=album:).+?(?=" + regexKeywords + ")", "gi"));
-            fancySearchResults.song   = $SearchQuery.match(new RegExp("(?<=(song|title):).+?(?=" + regexKeywords + ")", "gi"));
-
-            // test if every array in fancySearchResults is null
-            nothingFancy = Object.values(fancySearchResults).every(value => {
-                return value === null;
-            });
-
             doSearch();
         }
     }
 
     function resetResults() {
         initialResults = {
-            artists: [],
-            albums: [],
-            songs: [],
-            playlists: [],
-            smartlists: [],
-        };
-
-        fancySearchResults = {
-            artist: null,
-            album: null,
-            song: null
+            artistsStartsWith: [],
+            artistsContains:   [],
+            albumsStartsWith:  [],
+            albumsContains:    [],
+            songsStartsWith:   [],
+            songsContains:     [],
+            playlists:         [],
+            smartlists:        [],
         };
     }
 
     async function doSearch() {
-        let s1 = [];
-        let s2 = [];
-        let s3 = [];
-        let s4 = [];
-        let s5 = [];
-        let rows = [];
-        let counter = 0;
+        let sArtistsStartsWith = [];
+        let sArtistsContains   = [];
+        let sAlbumsStartsWith  = [];
+        let sAlbumsContains    = [];
+        let sSongsStartsWith   = [];
+        let sSongsContains     = [];
+        let sPlaylists         = [];
+        let sSmartlists        = [];
 
-        if (nothingFancy) {
-            isExact = new RegExp(/^".*"$/gi).test($SearchQuery);
-            queryWithoutQuotes = $SearchQuery.replaceAll(/(^"|"$)/ig, '');
+        sArtistsStartsWith   = searchArtistsStartingWith({query: $SearchQuery, page: 0, limit: 6});
+        sArtistsContains     = searchArtists({query: $SearchQuery, page: 0, limit: 6});
+        sAlbumsStartsWith    = searchAlbumsStartingWith({query: $SearchQuery, page: 0, limit: 6});
+        sAlbumsContains      = searchAlbums({query: $SearchQuery, page: 0, limit: 6});
+        sSongsStartsWith     = searchSongsStartingWith({query: $SearchQuery, page: 0, limit: 9});
+        sSongsContains       = searchSongs({query: $SearchQuery, page: 0, limit: 9});
+        sPlaylists           = searchPlaylists({query: $SearchQuery, page: 0, limit: 6});
+        sSmartlists          = searchSmartlists({query: $SearchQuery, page: 0, limit: 6});
 
-            s1 = searchArtists({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
-            s2 = searchAlbums({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
-            s3 = searchSongs({query: queryWithoutQuotes, page: 0, limit: 9, exact: isExact});
-            s4 = searchPlaylists({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
-            s5 = searchSmartlists({query: queryWithoutQuotes, page: 0, limit: 6, exact: isExact});
-        } else {
-            if (fancySearchResults.song) {
-                rows.push({
-                    field: "title",
-                    id: ++counter,
-                    input: fancySearchResults.song,
-                    inputType: "text",
-                    operator: "0",
-                    operatorType: "string",
-                });
-
-                if (fancySearchResults.artist) {
-                    rows.push({
-                        field: "artist",
-                        id: ++counter,
-                        input: fancySearchResults.artist,
-                        inputType: "text",
-                        operator: "0",
-                        operatorType: "string",
-                    })
-                }
-
-                if (fancySearchResults.album) {
-                    rows.push({
-                        field: "album",
-                        id: ++counter,
-                        input: fancySearchResults.album,
-                        inputType: "text",
-                        operator: "0",
-                        operatorType: "string",
-                    });
-                }
-
-                s3 = getSongsFromAdvancedSearch({rows: rows, limit: 100, random: false, match: "all"});
-            } else if (fancySearchResults.album) {
-                rows.push({
-                    field: "title",
-                    id: ++counter,
-                    input: fancySearchResults.album,
-                    inputType: "text",
-                    operator: "0",
-                    operatorType: "string",
-                });
-
-                if (fancySearchResults.artist) {
-                    rows.push({
-                        field: "artist",
-                        id: ++counter,
-                        input: fancySearchResults.artist,
-                        inputType: "text",
-                        operator: "0",
-                        operatorType: "string",
-                    })
-                }
-
-                s2 = getAlbumsFromAdvancedSearch({rows: rows, limit: 100, random: false, match: "all"});
-            } else if (fancySearchResults.artist) {
-                rows.push({
-                    field: "title",
-                    id: ++counter,
-                    input: fancySearchResults.artist,
-                    inputType: "text",
-                    operator: "0",
-                    operatorType: "string",
-                });
-
-                s1 = getArtistsFromAdvancedSearch({rows: rows, limit: 100, random: false, match: "all"});
-            }
-        }
-
-        [initialResults.artists, initialResults.albums, initialResults.songs, initialResults.playlists, initialResults.smartlists] = await Promise.all([s1, s2, s3, s4, s5]);
+        [
+            initialResults.artistsStartsWith,
+            initialResults.artistsContains,
+            initialResults.albumsStartsWith,
+            initialResults.albumsContains,
+            initialResults.songsStartsWith,
+            initialResults.songsContains,
+            initialResults.playlists,
+            initialResults.smartlists,
+        ] = await Promise.all([
+            sArtistsStartsWith,
+            sArtistsContains,
+            sAlbumsStartsWith,
+            sAlbumsContains,
+            sSongsStartsWith,
+            sSongsContains,
+            sPlaylists,
+            sSmartlists
+        ]);
 
         // test if every array in initialResults is empty
         noResults = Object.values(initialResults).every(value => {
@@ -182,52 +110,28 @@
                     <p>No results found</p>
                 {/if}
 
-                {#if initialResults.artists.length > 0}
-                    {#if nothingFancy}
-                        <CardList type="artist" initialData={initialResults.artists} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists" />
-                    {:else}
-                        <Lister2
-                            data={initialResults.artists}
-                            type="artist"
-                            actionData={{
-                                type: "artists",
-                                mode: "fullButtons",
-                                data: Object.create({artists: initialResults.artists})
-                            }}
-                        />
-                    {/if}
+                {#if initialResults.artistsStartsWith.length > 0}
+                    <CardList type="artist" initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Starting With" />
                 {/if}
 
-                {#if initialResults.albums.length > 0}
-                    {#if nothingFancy}
-                        <CardList type="album" initialData={initialResults.albums} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums" />
-                    {:else}
-                        <Lister2
-                            data={initialResults.albums}
-                            type="album"
-                            actionData={{
-                                type: "albums",
-                                mode: "fullButtons",
-                                data: Object.create({albums: initialResults.albums})
-                            }}
-                        />
-                    {/if}
+                {#if initialResults.artistsContains.length > 0}
+                    <CardList type="artist" initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Containing" />
                 {/if}
 
-                {#if initialResults.songs.length > 0}
-                    {#if nothingFancy}
-                        <CardList type="song" initialData={initialResults.songs} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs" />
-                    {:else}
-                        <Lister2
-                            data={initialResults.songs}
-                            type="song"
-                            actionData={{
-                                type: "",
-                                mode: "fullButtons",
-                                data: Object.create({songs: initialResults.songs})
-                            }}
-                        />
-                    {/if}
+                {#if initialResults.albumsStartsWith.length > 0}
+                    <CardList type="album" initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Starting With" />
+                {/if}
+
+                {#if initialResults.albumsContains.length > 0}
+                    <CardList type="album" initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Containing" />
+                {/if}
+
+                {#if initialResults.songsStartsWith.length > 0}
+                    <CardList type="song" initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Starting With" />
+                {/if}
+
+                {#if initialResults.songsContains.length > 0}
+                    <CardList type="song" initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Containing" />
                 {/if}
 
                 {#if initialResults.playlists.length > 0}
