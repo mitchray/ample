@@ -166,13 +166,4 @@
     .load-more-button:not([hidden]) {
         height: 100%;
     }
-
-    ul {
-        scroll-snap-type: x mandatory;
-        scroll-padding: var(--spacing-md);
-    }
-
-    li {
-        scroll-snap-align: start;
-    }
 </style>
