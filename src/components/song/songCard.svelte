@@ -1,5 +1,6 @@
 <script>
     import { Link } from "svelte-routing";
+    import { serverURL } from "../../stores/server";
 
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
@@ -15,7 +16,13 @@
 <div class="song-card card">
     {#if song}
         <div class="image-container">
-            <img class="image" src="{song.art}&thumb=22" alt="Image of {song.name}" width="200" height="200" />
+            <img class="image"
+                src="{song.art}&thumb=22"
+                alt="Image of {song.name}"
+                width="200"
+                height="200"
+                on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
+            />
         </div>
 
         <div class="info">
@@ -43,7 +50,12 @@
         </div>
     {:else}
         <div class="image-container">
-            <img class="image" height="200" width="200" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+            <img class="image"
+                height="200"
+                width="200"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt=""
+            >
         </div>
 
         <div class="info">

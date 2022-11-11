@@ -1,5 +1,6 @@
 <script>
     import { Link } from "svelte-routing";
+    import { serverURL } from "../../stores/server";
 
     import Rating from '../../components/rating.svelte';
 
@@ -13,7 +14,13 @@
     {#if artist}
         <div class="art-container">
             <Link to="artists/{artist.id}" title="{artist.name}">
-                <img class="image" src="{artist.art}&thumb=22" alt="Image of {artist.name}" width="400" height="400" />
+                <img class="image"
+                    src="{artist.art}&thumb=22"
+                    alt="Image of {artist.name}"
+                    width="400"
+                    height="400"
+                    on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
+                />
             </Link>
         </div>
         <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
@@ -23,7 +30,12 @@
         </div>
     {:else}
         <div class="art-container">
-            <img class="image" height="400" width="400" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="">
+            <img class="image"
+                height="400"
+                width="400"
+                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                alt=""
+            >
         </div>
         <div class="title">Loading</div>
 

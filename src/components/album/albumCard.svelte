@@ -1,5 +1,6 @@
 <script>
     import { Link } from "svelte-routing";
+    import { serverURL } from "../../stores/server";
 
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
@@ -17,7 +18,13 @@
     {#if album}
         <div class="image-container">
             <Link to="albums/{album.id}" title="{album.name}">
-                <img class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" width="200" height="200" />
+                <img class="image"
+                    src="{album.art}&thumb=22"
+                    alt="Image of {album.name}"
+                    width="200"
+                    height="200"
+                    on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=22' }}
+                />
             </Link>
         </div>
 

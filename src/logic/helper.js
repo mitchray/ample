@@ -192,20 +192,22 @@ export async function placeholderArtCheck(url) {
  Get dominant color from image
  */
 export async function getAverageColor(url) {
-    let finalColor;
+    let finalColor = null;
     const img = new Image();
     const fac = new FastAverageColor();
 
     img.setAttribute('crossOrigin', 'anonymous');
     img.src = url;
-    await img.decode();
-
-    finalColor = fac.getColor(img, {
-        ignoredColor: [
-            [255, 255, 255, 255, 128], // white, with threshold
-            [0, 0, 0, 255, 30] // black, with threshold
-        ]
-    });
+    await img.decode()
+        .then(() => {
+            finalColor = fac.getColor(img, {
+                ignoredColor: [
+                    [255, 255, 255, 255, 128], // white, with threshold
+                    [0, 0, 0, 255, 30] // black, with threshold
+                ]
+            });
+        })
+        .catch((e) => { return null });
 
     debugHelper(finalColor, "getAverageColor");
 

@@ -5,6 +5,7 @@
     import { formatTotalTime, formatSongQuality, formatFilesize } from '../../logic/helper';
 
     import { CurrentSong } from '../../stores/status';
+    import { serverURL } from "../../stores/server";
 
     import SVGUp from "../../../public/images/keyboard_arrow_up.svg";
     import SVGDown from "../../../public/images/keyboard_arrow_down.svg";
@@ -83,7 +84,13 @@
 
         {#if col.id === "name"}
             {#if item.art}
-                <img class="image" src="{item.art}&thumb=1" alt="" height="50" width="50"/>
+                <img class="image"
+                    src="{item.art}&thumb=1"
+                    alt=""
+                    height="50"
+                    width="50"
+                    on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
+                />
             {/if}
 
             {#if getType() === "artist"}

@@ -3,6 +3,7 @@
     import { Link } from "svelte-routing";
     import { throttle } from 'throttle-wait';
     import { ampleVersion } from "../stores/player";
+    import { serverURL } from "../stores/server";
     import { formatTotalTime } from "../logic/helper";
     import { getSongsFromArtist } from "../logic/song";
 
@@ -444,7 +445,13 @@
                             <td class="title">
                                 {#if !item.isRemote}
                                     <Link to="song/{item.id}">
-                                        <img class="image" src="{item.art}&thumb=1" alt="" height="30" width="30"/>
+                                        <img class="image"
+                                            src="{item.art}&thumb=1"
+                                            alt=""
+                                            height="30"
+                                            width="30"
+                                            on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
+                                        />
                                         {item.title}
                                     </Link>
                                 {:else}

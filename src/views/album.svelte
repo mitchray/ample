@@ -2,6 +2,7 @@
     import { Link } from 'svelte-routing';
 
     import { Theme } from '../stores/status';
+    import { serverURL } from "../stores/server";
 
     import { getAlbum } from "../logic/album";
     import { formatTotalTime } from "../logic/helper";
@@ -33,7 +34,13 @@
                     <div class="details">
                         <div class="cover-rating">
                             <div class="art-container">
-                                <img class="art" src="{album.art}&thumb=32" alt="Image of {album.name}" width="384" height="384" />
+                                <img class="art"
+                                    src="{album.art}&thumb=32"
+                                    alt="Image of {album.name}"
+                                    width="384"
+                                    height="384"
+                                    on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
+                                />
                             </div>
 
                             <div class="rating">

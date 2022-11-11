@@ -169,10 +169,13 @@ export const getAlbum = async ({id, withTracks = false, artAnalysis = false}) =>
 
     if (artAnalysis) {
         album.averageColor = await getAverageColor(album.art + "&thumb=10");
-        await getCustomHue(album.averageColor.value);
 
-        let mp = get(MediaPlayer);
-        await mp.setWaveColors();
+        if (album.averageColor) {
+            await getCustomHue(album.averageColor.value);
+
+            let mp = get(MediaPlayer);
+            await mp.setWaveColors();
+        }
     }
 
     return album;

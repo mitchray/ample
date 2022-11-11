@@ -1,5 +1,6 @@
 <script>
     import { Link } from "svelte-routing";
+    import { serverURL } from "../../stores/server";
 
     import AlbumSongs from '../../components/album/albumSongs.svelte';
     import Rating from '../../components/rating.svelte';
@@ -18,7 +19,14 @@
 <div class="album-card-expanded card">
     <div class="info">
         <div class="image-container">
-            <img width="125" height="125" class="image" src="{album.art}&thumb=22" alt="Image of {album.name}" loading="lazy">
+            <img width="125"
+                height="125"
+                class="image"
+                src="{album.art}&thumb=22"
+                alt="Image of {album.name}"
+                loading="lazy"
+                on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=22' }}
+            >
         </div>
 
         <div class="details">

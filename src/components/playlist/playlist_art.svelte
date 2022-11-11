@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
+    import { serverURL } from "../../stores/server";
 
     import { getSongsFromPlaylist } from '../../logic/song';
     import { shuffleArray } from "../../logic/helper";
@@ -62,12 +63,25 @@
     <div class="container {cssClass}">
         {#if chosenSongs.length > 0}
             {#each chosenSongs as song}
-                <img src="{song.art}&thumb={thumbLevel}"  alt="" loading="lazy" in:fade width="384" height="384" />
+                <img src="{song.art}&thumb={thumbLevel}"
+                    alt=""
+                    loading="lazy"
+                    in:fade
+                    width="384"
+                    height="384"
+                    on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
+                />
             {/each}
         {/if}
     </div>
 
-    <img class="art" src="{fallback}&thumb=32" alt="" width="384" height="384" />
+    <img class="art"
+        src="{fallback}&thumb=32"
+        alt=""
+        width="384"
+        height="384"
+        on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
+    />
 </div>
 
 <style>

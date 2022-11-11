@@ -137,10 +137,13 @@ export const getArtist = async ({id = id, artAnalysis = false}) => {
 
     if (artAnalysis) {
         artist.averageColor = await getAverageColor(artist.art + "&thumb=10");
-        await getCustomHue(artist.averageColor.value);
 
-        let mp = get(MediaPlayer);
-        await mp.setWaveColors();
+        if (artist.averageColor) {
+            await getCustomHue(artist.averageColor.value);
+
+            let mp = get(MediaPlayer);
+            await mp.setWaveColors();
+        }
     }
 
     let appearances = await getAlbumsByArtist(artist.id);

@@ -2,6 +2,7 @@
     import { Link } from 'svelte-routing';
 
     import { CurrentSong } from "../../stores/status";
+    import { serverURL } from "../../stores/server";
 
     import SVGAlbum from "../../../public/images/album.svg";
     import SVGYear from "../../../public/images/year.svg";
@@ -9,7 +10,11 @@
 
 <div class="container">
     {#if $CurrentSong}
-        <img class="nowPlayingArtwork" src="{$CurrentSong.art}&thumb=22" alt="" />
+        <img class="nowPlayingArtwork"
+            src="{$CurrentSong.art}&thumb=22"
+            alt=""
+            on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
+        />
         <div class="details">
             <div class="title card-title" title="{$CurrentSong.title}"><Link to="song/{$CurrentSong.id}">{$CurrentSong.title}</Link></div>
             <div class="artist" title="{$CurrentSong.artist.name}"><Link to="artists/{$CurrentSong.artist.id}">{$CurrentSong.artist.name}</Link></div>

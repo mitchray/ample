@@ -12,6 +12,7 @@
         QueueIsPinned
     } from '../stores/status';
     import { MediaPlayer, SiteQueueBind } from '../stores/player';
+    import { serverURL } from "../stores/server";
 
     import Menu from '../components/menu.svelte';
     import Actions2 from '../components/action/actions.svelte';
@@ -220,7 +221,11 @@
                             on:mousedown={startDrag}
                             on:touchstart={startDrag}
                         >
-                            <img src="{song.art}&thumb=1" alt="" loading="lazy"/>
+                            <img src="{song.art}&thumb=1"
+                                alt=""
+                                loading="lazy"
+                                on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
+                            />
                         </span>
 
                         {#if $NowPlayingIndex === i}

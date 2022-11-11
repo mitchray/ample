@@ -2,6 +2,7 @@
     import { fade } from 'svelte/transition';
 
     import { ShowExpandedAlbums, Theme } from "../stores/status";
+    import { serverURL } from "../stores/server";
 
     import { getArtist, similarArtists } from "../logic/artist";
     import { getTopSongsFromArtist } from "../logic/song";
@@ -62,7 +63,13 @@
 
                 <div class="profile">
                     <div class="art-container" >
-                        <img class="art" src="{artist.art}&thumb=32" alt="Image of {artist.name}" width="240" height="240"  />
+                        <img class="art"
+                            src="{artist.art}&thumb=32"
+                            alt="Image of {artist.name}"
+                            width="240"
+                            height="240"
+                            on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
+                        />
                     </div>
 
                     <div class="rating">
