@@ -158,7 +158,7 @@ export const getArtist = async ({id = id, artAnalysis = false}) => {
  */
 export const unratedArtists = ({query = "", page = 0, limit = 50}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + getArtistType();
+    queryURL += "&type=artist";
     queryURL += "&operator=and&random=1";
     queryURL += "&rule_1=myrating&rule_1_operator=2&rule_1_input=0";
 
