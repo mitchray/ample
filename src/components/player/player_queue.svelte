@@ -58,7 +58,6 @@
     }
 
     .queue-toggle {
-        height: calc(var(--size-webplayer-height) - var(--spacing-lg));
         width: auto;
         padding: 0;
         flex-shrink: 0;
@@ -72,11 +71,8 @@
     .container {
         border-radius: 5px;
         display: flex;
-        justify-content: space-between;
-        padding: var(--spacing-md);
-        padding-right: var(--spacing-sm);
+        padding-bottom: var(--spacing-md);
         width: calc(100% - var(--spacing-lg));
-        height: 85%;
     }
 
     .queueInfo {
@@ -94,6 +90,12 @@
         font-stretch: 50%;
     }
 
+    @media all and (min-width: 680px) {
+        .container {
+            padding: var(--spacing-md);
+        }
+    }
+
     @media all and (min-width: 1000px) {
         .queueInfo {
             display: block;
@@ -106,6 +108,8 @@
         .container {
             background-color: var(--color-card-primary);
             box-shadow: var(--shadow-sm);
+            justify-content: space-between;
+            margin: 10px;
         }
     }
 </style>

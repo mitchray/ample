@@ -1,89 +1,44 @@
 <script>
-    import { onMount } from 'svelte';
-
     import { MediaPlayer } from '../../stores/player';
-    import { NowPlayingQueue, IsPlaying, CurrentSong, RepeatEnabled } from "../../stores/status";
-
-    import { formatSongLength } from "../../logic/helper";
+    import { NowPlayingQueue, CurrentSong, RepeatEnabled, FullScreenEnabled } from "../../stores/status";
 
     import Rating from '../rating.svelte';
     import PlayerSeekBar from './player_seekBar.svelte';
-    import PlayerNowPlaying from './player_nowPlaying.svelte';
+    import PlayerTimeCurrent from './player_timeCurrent.svelte';
+    import PlayerTimeEnd from './player_timeEnd.svelte';
+    import PlayerPrimaryControls from './player_primaryControls.svelte';
+    import PlayerArtwork from './player_artwork.svelte';
+    import PlayerCurrentDetails from './player_currentDetails.svelte';
     import PlayerQueue from './player_queue.svelte';
     import PlayerVolume from '../player/player_volume.svelte';
     import PlayerAutoPlay from '../player/player_autoPlay.svelte';
     import PlayerLyrics from '../player/player_lyrics.svelte';
     import PlayerSkipBelow from '../player/player_skipBelow.svelte';
 
-    import SVGPlay from "../../../public/images/play.svg";
-    import SVGPause from "../../../public/images/pause.svg";
-    import SVGNext from "../../../public/images/skip_next.svg";
-    import SVGPrevious from "../../../public/images/skip_previous.svg";
     import SVGShuffle from "../../../public/images/shuffle.svg";
     import SVGRepeat from "../../../public/images/repeat.svg";
-
-    let duration;
-    let currentTime;
-    let timeToggled = false;
-
-    function updateProgress() {
-        duration = ($MediaPlayer.wavesurfer) ? parseInt($MediaPlayer.wavesurfer.getDuration()) || 0 : 0;
-        currentTime = ($MediaPlayer.wavesurfer) ? parseInt($MediaPlayer.wavesurfer.getCurrentTime()) || 0 : 0;
-
-        requestAnimationFrame(updateProgress);
-    }
-
-    function handleTimeToggle() {
-        timeToggled = !timeToggled;
-    }
-
-    onMount(() => {
-        requestAnimationFrame(updateProgress);
-    });
+    import SVGUp from "../../../public/images/keyboard_arrow_up.svg";
 </script>
 
 <div class="site-player">
-    <PlayerSeekBar />
+    <div class="site-player__seekBar">
+        <PlayerSeekBar/>
+    </div>
 
     <div class="site-player__controls">
-        <button
-            class="icon-button"
-            on:click={(e) => { $MediaPlayer.previous(e) }}
-            disabled={$NowPlayingQueue.length === 0}
-        >
-            <SVGPrevious />
-        </button>
-
-        <button
-            class="icon-button button--regular play"
-            on:click={$MediaPlayer.playPause()}
-            disabled={$NowPlayingQueue.length === 0}
-        >
-            {#if $IsPlaying}
-                <SVGPause style="transform: scale(1.3);" />
-            {:else}
-                <SVGPlay style="transform: scale(1.3);" />
-            {/if}
-        </button>
-
-        <button
-            class="icon-button"
-            on:click={(e) => { $MediaPlayer.next(e) }}
-            disabled={$NowPlayingQueue.length === 0}
-        >
-            <SVGNext />
-        </button>
+        <PlayerPrimaryControls/>
     </div>
 
     <div class="site-player__now-playing">
-        <PlayerNowPlaying/>
+        <PlayerArtwork/>
+        <PlayerCurrentDetails/>
     </div>
 
     <div class="site-player__waveform">
         <div id="waveform"></div>
     </div>
 
-    <div class="site-player__rating" class:disabled={!$CurrentSong}>
+    <div class="site-player__rating">
         {#if $CurrentSong}
             <Rating type="song" id="{$CurrentSong.id}" rating="{$CurrentSong.rating}" flag="{$CurrentSong.flag}" averageRating="{$CurrentSong.averagerating}" />
         {:else}
@@ -92,19 +47,7 @@
     </div>
 
     <div class="site-player__times">
-        {#if $CurrentSong}
-            <span on:click={handleTimeToggle}>
-                {#if timeToggled}
-                    -{formatSongLength(duration - currentTime)}
-                {:else}
-                    {formatSongLength(currentTime)}
-                {/if}
-
-                / {formatSongLength(duration)}
-            </span>
-        {:else}
-            -:-- / -:--
-        {/if}
+        <PlayerTimeCurrent/> / <PlayerTimeEnd/>
     </div>
 
     <div class="site-player__volume">
@@ -137,29 +80,30 @@
         <PlayerSkipBelow />
     </div>
 
+    <div class="site-player__fullscreen">
+        <button
+            class="icon-button"
+            on:click={() => { $FullScreenEnabled = true }}
+        >
+            <SVGUp />
+        </button>
+    </div>
+
     <div class="site-player__queue">
         <PlayerQueue />
     </div>
 </div>
 
 <style>
-    .play {
-        width: 45px;
-        height: 45px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
     .site-player {
         background-color: var(--color-interface);
         border-top: 1px solid var(--color-border);
         height: var(--size-webplayer-height);
         display: grid;
         grid-template-areas:
-            "SPACER1 main-controls SPACER2 secondary-controls SPACER3 queue SPACER4"
-            "SPACER1 times         SPACER2 now-playing        SPACER3 queue SPACER4"
-            "SPACER1 rating        SPACER2 volume             SPACER3 queue SPACER4"
+            "SPACER1 main-controls SPACER2 secondary-controls SPACER3 fullscreen SPACER4"
+            "SPACER1 times         SPACER2 now-playing        SPACER3 queue      SPACER4"
+            "SPACER1 rating        SPACER2 volume             SPACER3 queue      SPACER4"
         ;
         grid-template-columns: 1fr auto 1fr 2fr 1fr min-content 1fr;
         grid-template-rows: 1fr 1fr 1fr;
@@ -169,13 +113,19 @@
         position: relative;
     }
 
+    .site-player__seekBar :global(.seekBar) {
+        position: absolute;
+        top: calc(-1 * var(--size-seekbar-height));
+        left: 0;
+        right: 0;
+    }
+
+    .site-player__times :global(.current) {
+        text-align: right;
+    }
+
     .site-player__controls {
         grid-area: main-controls;
-        gap: var(--spacing-sm);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transform: scale(0.9);
         z-index: 200;
     }
 
@@ -184,6 +134,7 @@
         height: 100%;
         overflow: hidden;
         display: flex;
+        align-items: center;
     }
 
     .site-player__waveform {
@@ -213,15 +164,19 @@
         transform: scale(0.9);
     }
 
-    .site-player__rating.disabled {
-        pointer-events: none;
-        opacity: 0.7;
+    .site-player__now-playing :global(.nowPlayingArtwork) {
+        height: 85%;
+        border-radius: 3px;
+        margin-right: var(--spacing-md);
+        outline: 1px solid hsla(0, 0%, 50%, 0.2);
+        outline-offset: -1px;
     }
 
     .site-player__times {
         grid-area: times;
         display: flex;
-        justify-content: space-around;
+        justify-content: center;
+        gap: var(--spacing-sm);
         align-self: center;
     }
 
@@ -243,25 +198,33 @@
         z-index: 200;
     }
 
+    .site-player__fullscreen {
+        grid-area: fullscreen;
+        justify-content: center;
+        display: none;
+    }
+
     .site-player__queue {
         grid-area: queue;
+        display: flex;
+        height: 100%;
     }
 
     :global(.dragging .site-player__volume-value:before),
-    :global(.dragging .site-player__progress:before),
-    :global(.site-player__seekBar:hover .site-player__progress:before){
+    :global(.dragging .progress:before),
+    :global(.seekBar:hover .progress:before){
         opacity: 1 !important;
     }
 
-    :global(.dragging .site-player__progress),
+    :global(.dragging .progress),
     :global(.dragging .site-player__volume-value) {
         transition: none !important;
     }
 
     :global(.site-player__volume-value:before),
     :global(.site-player__volume-value:after),
-    :global(.site-player__progress:after),
-    :global(.site-player__progress:before) {
+    :global(.progress:after),
+    :global(.progress:before) {
         content: '';
         height: 12px;
         min-width: 12px;
@@ -275,7 +238,7 @@
 
     /* value popups */
     :global(.site-player__volume-value:before),
-    :global(.site-player__progress:before) {
+    :global(.progress:before) {
         width: 6ch;
         content: attr(data-value);
         font-size: 10px;
@@ -307,7 +270,6 @@
         }
 
         .site-player__now-playing :global(.nowPlayingArtwork) {
-            display: block;
             margin-right: var(--spacing-sm);
         }
 
@@ -319,8 +281,7 @@
         }
 
         .site-player__now-playing :global(.artist),
-        .site-player__now-playing :global(.album),
-        .site-player__now-playing :global(date) {
+        .site-player__now-playing :global(.album) {
             display: none;
         }
 
@@ -335,6 +296,10 @@
         .site-player__volume :global(.site-player__volume-slider) {
             min-width: unset !important;
         }
+
+        .site-player__fullscreen {
+            display: flex;
+        }
     }
 
     @media all and (min-width: 680px) {
@@ -348,8 +313,18 @@
             grid-template-rows: 1fr 1fr 1fr;
         }
 
+        .site-player__now-playing :global(.nowPlayingArtwork) {
+            display: none;
+        }
+
         .site-player__waveform {
             display: flex;
+        }
+    }
+
+    @media all and (min-width: 800px) {
+        .site-player__now-playing :global(.nowPlayingArtwork) {
+            display: block;
         }
     }
 
@@ -401,8 +376,8 @@
             padding: var(--spacing-md) 0;
         }
 
-        .site-player__times span {
-            margin-left: auto;
+        .site-player__times {
+            justify-content: right;
         }
 
         .site-player__controls,

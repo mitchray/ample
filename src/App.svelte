@@ -23,6 +23,7 @@
     import Sidebar from './components/sidebar.svelte';
     import Queue from './components/queue.svelte';
     import Player from './components/player/player.svelte';
+    import Fullscreen from './components/fullscreen/fullscreen.svelte';
     import Toasts from './components/notification/toasts.svelte';
     import Lyrics from './components/lyrics.svelte';
     import ArtistsSync from './components/artistsSync.svelte';
@@ -141,6 +142,7 @@
             <Queue/>
         </div>
         <Player/>
+        <Fullscreen/>
     {/if}
 </Router>
 

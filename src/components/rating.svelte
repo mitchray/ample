@@ -87,7 +87,7 @@
     }
 </script>
 
-<div class="c-rating">
+<div class="c-rating" class:disabled={!id}>
     <span class="c-rating__clear" on:click={handleRating} data-rating="0">
         <SVGClear />
     </span>
@@ -149,6 +149,11 @@
         display: inline-flex;
         align-items: center;
         line-height: 0;
+    }
+
+    .c-rating.disabled {
+        pointer-events: none;
+        opacity: 0.7;
     }
 
     .c-rating__stars {

@@ -4,7 +4,8 @@ import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
 import { MediaPlayer } from '../stores/player';
 
-import { debugHelper, getCustomHue, getAverageColor } from "./helper";
+import { debugHelper } from "./helper";
+import { setCustomHue, getAverageColor } from "./color";
 import { getUserPreference } from './server';
 import { getSongsFromAlbum } from './song';
 
@@ -171,7 +172,7 @@ export const getAlbum = async ({id, withTracks = false, artAnalysis = false}) =>
         album.averageColor = await getAverageColor(album.art + "&thumb=10");
 
         if (album.averageColor) {
-            await getCustomHue(album.averageColor.value);
+            await setCustomHue(album.averageColor.value);
 
             let mp = get(MediaPlayer);
             await mp.setWaveColors();

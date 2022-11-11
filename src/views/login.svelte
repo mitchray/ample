@@ -8,7 +8,8 @@
     import { ampleVersion } from "../stores/player";
 
     import { handshake, handshakeAPI } from '../logic/user';
-    import { getCustomHue, getRandomInt } from '../logic/helper';
+    import { getRandomInt } from '../logic/helper';
+    import { setCustomHue } from '../logic/color';
 
     import Tabs from "../components/tabs.svelte";
     import ThemeToggle from '../components/themeToggle.svelte';
@@ -49,7 +50,7 @@
     }
 
     onMount(async () => {
-        await getCustomHue(randomColor);
+        await setCustomHue(randomColor);
     });
 </script>
 

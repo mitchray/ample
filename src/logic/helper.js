@@ -1,11 +1,9 @@
 import { get } from "svelte/store";
 
 import { debugMode, serverURL } from '../stores/server';
-import { customHue, SkipBelow, SkipBelowRating } from "../stores/status";
+import { SkipBelow, SkipBelowRating } from "../stores/status";
 
 import JsSHA from "jssha/dist/sha1";
-import FastAverageColor from "fast-average-color";
-import { rgbToLch } from 'color-converters';
 
 let debugEnabled = get(debugMode);
 
@@ -186,78 +184,6 @@ export async function placeholderArtCheck(url) {
         console.warn('error during placeholder art check', e);
         return false;
     }
-}
-
-/**
- Get dominant color from image
- */
-export async function getAverageColor(url) {
-    let finalColor = null;
-    const img = new Image();
-    const fac = new FastAverageColor();
-
-    img.setAttribute('crossOrigin', 'anonymous');
-    img.src = url;
-    await img.decode()
-        .then(() => {
-            finalColor = fac.getColor(img, {
-                ignoredColor: [
-                    [255, 255, 255, 255, 128], // white, with threshold
-                    [0, 0, 0, 255, 30] // black, with threshold
-                ]
-            });
-        })
-        .catch((e) => { return null });
-
-    debugHelper(finalColor, "getAverageColor");
-
-    return finalColor;
-}
-
-/**
- * Expects Lch colorArray
- * @param color
- * @returns {boolean}
- */
-function colorIsAcceptable(color) {
-    // If not enough color
-    if (color.chroma < 10) {
-        debugHelper(color, "not enough color");
-        return false;
-    }
-
-    // If too dark
-    if (color.lightness < 10) {
-        debugHelper(color, "too dark");
-        return false;
-    }
-
-    return true;
-}
-
-/**
- Turn color into legible versions
- */
-export async function getCustomHue(color) {
-    let theHue;
-    let colorArray = [];
-
-    // Convert RGB (normalized to 0-1) to Lch
-    let lchColor = rgbToLch([color[0], color[1], color[2]]);
-
-    colorArray.lightness = lchColor[0];
-    colorArray.chroma    = lchColor[1];
-    colorArray.hue       = lchColor[2];
-
-    if (!colorIsAcceptable(colorArray)) {
-        customHue.set(null);
-    }
-
-    theHue = colorArray.hue;
-
-    debugHelper(theHue, "customHue");
-
-    customHue.set(theHue);
 }
 
 /**

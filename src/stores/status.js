@@ -6,10 +6,12 @@ export let NowPlayingIndex = writable(0);
 export let IsPlaying   = writable(false);
 export let IsMuted     = writable(false);
 export let CurrentSong = writable(null);
+export let TimeToggled = writable(false);
 
 export let SearchQuery = writable('');
 export let ShowSearch  = writable(false);
 export let ShowLyrics    = writable(JSON.parse(localStorage.getItem('ShowLyrics')) || false);
+export let FullScreenEnabled = writable(false);
 
 export let SidebarIsMini   = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
 export let SidebarIsOpen   = writable(JSON.parse(localStorage.getItem('SidebarIsOpen')) || false);
