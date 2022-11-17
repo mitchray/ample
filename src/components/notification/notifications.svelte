@@ -11,9 +11,9 @@
     import Menu from '../../components/menu.svelte';
     import NotificationCard from '../../components/notification/notificationCard.svelte';
 
-    import SVGNotifications from '../../../public/images/notifications.svg';
-    import SVGNotificationsNone from '../../../public/images/notifications_none.svg';
-    import SVGClose from '../../../public/images/close.svg';
+    import SVGNotifications from '/src/images/notifications.svg';
+    import SVGNotificationsNone from '/src/images/notifications_none.svg';
+    import SVGClose from '/src/images/close.svg';
 
     let menuIsVisible = false;
 

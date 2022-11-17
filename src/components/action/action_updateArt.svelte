@@ -2,8 +2,8 @@
     import { getContext } from 'svelte';
     import { updateArt } from "../../logic/library";
     import { loadingSpinner } from "../../actions/loadingSpinner";
-    import SVGImage from "../../../public/images/image.svg";
-    import SVGPhoto from "../../../public/images/portrait.svg";
+    import SVGImage from "/src/images/image.svg";
+    import SVGPhoto from "/src/images/portrait.svg";
 
     export let contextKey;
 

@@ -3,10 +3,10 @@
 
     import { NowPlayingQueue, IsPlaying } from "../../stores/status";
 
-    import SVGPlay from "../../../public/images/play.svg";
-    import SVGPause from "../../../public/images/pause.svg";
-    import SVGNext from "../../../public/images/skip_next.svg";
-    import SVGPrevious from "../../../public/images/skip_previous.svg";
+    import SVGPlay from "/src/images/play.svg";
+    import SVGPause from "/src/images/pause.svg";
+    import SVGNext from "/src/images/skip_next.svg";
+    import SVGPrevious from "/src/images/skip_previous.svg";
 </script>
 
 <div class="primary-controls">

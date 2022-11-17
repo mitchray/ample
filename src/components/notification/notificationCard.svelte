@@ -5,12 +5,12 @@
 
     import Rating from '../../components/rating.svelte';
 
-    import SVGClose from '../../../public/images/close.svg';
-    import SVGInfo from "../../../public/images/info.svg";
-    import SVGSuccess from "../../../public/images/check.svg";
-    import SVGWarning from "../../../public/images/warning.svg";
-    import SVGError from "../../../public/images/error.svg";
-    import SVGAlbum from "../../../public/images/album.svg";
+    import SVGClose from '/src/images/close.svg';
+    import SVGInfo from "/src/images/info.svg";
+    import SVGSuccess from "/src/images/check.svg";
+    import SVGWarning from "/src/images/warning.svg";
+    import SVGError from "/src/images/error.svg";
+    import SVGAlbum from "/src/images/album.svg";
 
     export let item;
 </script>

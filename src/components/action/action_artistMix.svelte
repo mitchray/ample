@@ -7,7 +7,7 @@
     import { getArtist } from "../../logic/artist";
     import { similarArtists } from "../../logic/artist";
     import { filterBelow } from "../../logic/helper";
-    import SVGRadio from "../../../public/images/radio.svg";
+    import SVGRadio from "/src/images/radio.svg";
 
     export let contextKey;
 

@@ -1,11 +1,11 @@
 <script context="module">
     import { writable } from 'svelte/store';
 
-    import SVGClear from "../../public/images/remove_circle_outline.svg";
-    import SVGStarFull from "../../public/images/star_full.svg";
-    import SVGStarOutline from "../../public/images/star_outline.svg";
-    import SVGFavoriteFull from "../../public/images/favorite_full.svg";
-    import SVGFavoriteOutline from "../../public/images/favorite_outline.svg";
+    import SVGClear from "/src/images/remove_circle_outline.svg";
+    import SVGStarFull from "/src/images/star_full.svg";
+    import SVGStarOutline from "/src/images/star_outline.svg";
+    import SVGFavoriteFull from "/src/images/favorite_full.svg";
+    import SVGFavoriteOutline from "/src/images/favorite_outline.svg";
 
     // shared across component instances
     let recentRating = writable({

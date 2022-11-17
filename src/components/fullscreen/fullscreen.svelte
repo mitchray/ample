@@ -6,7 +6,7 @@
     import FullScreenNowPlaying from './fullscreen_nowPlaying.svelte';
     import Queue from '../queue.svelte';
 
-    import SVGDown from "../../../public/images/keyboard_arrow_down.svg";
+    import SVGDown from "/src/images/keyboard_arrow_down.svg";
 
     let hue;
     let defaultHue = 240;

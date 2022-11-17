@@ -8,8 +8,8 @@
     import { getUsers } from '../logic/user';
     import { getCatalogs } from '../logic/catalog';
 
-    import '../../public/css/containerqueries/customSearch.css';
-    import SVGClose from "../../public/images/close.svg";
+    import '/src/css/containerqueries/customSearch.css';
+    import SVGClose from "/src/images/close.svg";
 
     export let loading = false;
     export let loadedTime;

@@ -4,7 +4,7 @@
     import { ShowArtistType } from "../stores/status";
 
     // Creating new web worker using constructor
-    let worker = new Worker('/ample/public/js/workers/refreshArtists.js');
+    const worker = new Worker(new URL('/js/workers/refreshArtists.js', import.meta.url));
 
     // On response
     worker.onmessage = async function(e) {

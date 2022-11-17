@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import { updateFromTags } from "../../logic/library";
     import { loadingSpinner } from "../../actions/loadingSpinner";
-    import SVGUpdate from "../../../public/images/sync.svg";
+    import SVGUpdate from "/src/images/sync.svg";
 
     export let contextKey;
 

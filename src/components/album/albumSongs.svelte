@@ -10,7 +10,7 @@
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
 
-    import SVGCurrent from "../../../public/images/play_circle.svg";
+    import SVGCurrent from "/src/images/play_circle.svg";
 
     export let id;
 </script>

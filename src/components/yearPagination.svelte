@@ -1,8 +1,8 @@
 <script>
     import { onMount } from "svelte";
 
-    import SVGPlus from "../../public/images/plus.svg";
-    import SVGMinus from "../../public/images/minus.svg";
+    import SVGPlus from "/src/images/plus.svg";
+    import SVGMinus from "/src/images/minus.svg";
 
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();

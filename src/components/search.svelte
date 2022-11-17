@@ -11,7 +11,7 @@
 
     import CardList from './cardList.svelte';
 
-    import SVGClose from "../../public/images/close.svg";
+    import SVGClose from "/src/images/close.svg";
 
     let initialResults = {};
     let noResults = false;

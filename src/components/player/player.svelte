@@ -15,9 +15,9 @@
     import PlayerLyrics from '../player/player_lyrics.svelte';
     import PlayerSkipBelow from '../player/player_skipBelow.svelte';
 
-    import SVGShuffle from "../../../public/images/shuffle.svg";
-    import SVGRepeat from "../../../public/images/repeat.svg";
-    import SVGUp from "../../../public/images/keyboard_arrow_up.svg";
+    import SVGShuffle from "/src/images/shuffle.svg";
+    import SVGRepeat from "/src/images/repeat.svg";
+    import SVGUp from "/src/images/keyboard_arrow_up.svg";
 </script>
 
 <div class="site-player">

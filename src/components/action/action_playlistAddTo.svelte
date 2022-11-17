@@ -2,7 +2,7 @@
     import { getContext, tick } from 'svelte';
     import Menu from '../../components/menu.svelte';
     import PlaylistAddTo from '../../components/playlist/playlist_addTo.svelte';
-    import SVGPlaylist from "../../../public/images/queue_music.svg";
+    import SVGPlaylist from "/src/images/queue_music.svg";
 
     export let contextKey;
 

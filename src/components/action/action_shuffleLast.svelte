@@ -3,7 +3,7 @@
     import { MediaPlayer } from "../../stores/player";
     import { shuffleArray } from "../../logic/helper";
     import { loadingSpinner } from "../../actions/loadingSpinner";
-    import SVGShuffle from "../../../public/images/shuffle.svg";
+    import SVGShuffle from "/src/images/shuffle.svg";
 
     export let contextKey;
 

@@ -6,17 +6,17 @@
     import Tabs from "../components/tabs.svelte";
     import Actions2 from "../components/action/actions.svelte";
 
-    import SVGPlay from "../../public/images/play.svg";
-    import SVGQueue from "../../public/images/playlist_add.svg";
-    import SVGPlayNext from "../../public/images/menu_open.svg";
-    import SVGShuffle from "../../public/images/shuffle.svg";
-    import SVGMore from "../../public/images/more-hori.svg";
-    import SVGArtist from "../../public/images/artist.svg";
-    import SVGAlbum from "../../public/images/album.svg";
-    import SVGPopular from "../../public/images/trending_up.svg";
-    import SVGSongs from "../../public/images/songs.svg";
-    import SVGSimilar from "../../public/images/people.svg";
-    import SVGArticle from "../../public/images/article.svg";
+    import SVGPlay from "/src/images/play.svg";
+    import SVGQueue from "/src/images/playlist_add.svg";
+    import SVGPlayNext from "/src/images/menu_open.svg";
+    import SVGShuffle from "/src/images/shuffle.svg";
+    import SVGMore from "/src/images/more-hori.svg";
+    import SVGArtist from "/src/images/artist.svg";
+    import SVGAlbum from "/src/images/album.svg";
+    import SVGPopular from "/src/images/trending_up.svg";
+    import SVGSongs from "/src/images/songs.svg";
+    import SVGSimilar from "/src/images/people.svg";
+    import SVGArticle from "/src/images/article.svg";
 
     let isVisible = false;
     let menuAnchor;

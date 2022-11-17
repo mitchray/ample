@@ -13,10 +13,10 @@
     import Genres from '../components/genre/genres.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
-    import '../../public/css/containerqueries/album.css';
-    import SVGYear from "../../public/images/year.svg";
-    import SVGTrack from "../../public/images/music_note.svg";
-    import SVGClock from "../../public/images/clock.svg";
+    import '/src/css/containerqueries/album.css';
+    import SVGYear from "/src/images/year.svg";
+    import SVGTrack from "/src/images/music_note.svg";
+    import SVGClock from "/src/images/clock.svg";
 
     export let id;
 

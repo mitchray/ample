@@ -17,12 +17,12 @@
     import Menu from '../components/menu.svelte';
     import Actions2 from '../components/action/actions.svelte';
 
-    import SVGClose from '../../public/images/close.svg';
-    import SVGBin from '../../public/images/delete.svg';
-    import SVGCurrent from '../../public/images/play_circle.svg';
-    import SVGMore from '../../public/images/more-hori.svg';
-    import SVGLock from "../../public/images/lock.svg";
-    import SVGUnlock from "../../public/images/lock_open.svg";
+    import SVGClose from '/src/images/close.svg';
+    import SVGBin from '/src/images/delete.svg';
+    import SVGCurrent from '/src/images/play_circle.svg';
+    import SVGMore from '/src/images/more-hori.svg';
+    import SVGLock from "/src/images/lock.svg";
+    import SVGUnlock from "/src/images/lock_open.svg";
 
     const flipDurationMs = 100;
 

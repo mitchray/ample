@@ -11,10 +11,10 @@
     import PlaylistDelete from '../components/playlist/playlist_delete.svelte';
     import Menu from '../components/menu.svelte';
 
-    import SVGPlaylist from "../../public/images/queue_music.svg";
-    import SVGSmartlist from "../../public/images/smartlist.svg";
+    import SVGPlaylist from "/src/images/queue_music.svg";
+    import SVGSmartlist from "/src/images/smartlist.svg";
 
-    import '../../public/css/containerqueries/playlist.css';
+    import '/src/css/containerqueries/playlist.css';
 
     export let id;
 

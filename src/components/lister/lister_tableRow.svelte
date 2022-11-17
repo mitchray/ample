@@ -7,8 +7,8 @@
     import { CurrentSong } from '../../stores/status';
     import { serverURL } from "../../stores/server";
 
-    import SVGUp from "../../../public/images/keyboard_arrow_up.svg";
-    import SVGDown from "../../../public/images/keyboard_arrow_down.svg";
+    import SVGUp from "/src/images/keyboard_arrow_up.svg";
+    import SVGDown from "/src/images/keyboard_arrow_down.svg";
 
     export let contextKey;
     export let item;
@@ -17,12 +17,12 @@
     import Actions2 from '../../components/action/actions.svelte';
     import Genres from '../../components/genre/genres.svelte';
 
-    import SVGArtist from "../../../public/images/artist.svg";
-    import SVGAlbum from "../../../public/images/album.svg";
-    import SVGSong from "../../../public/images/music_note.svg";
-    import SVGYear from "../../../public/images/year.svg";
-    import SVGGenre from "../../../public/images/label.svg";
-    import SVGCurrent from "../../../public/images/play_circle.svg";
+    import SVGArtist from "/src/images/artist.svg";
+    import SVGAlbum from "/src/images/album.svg";
+    import SVGSong from "/src/images/music_note.svg";
+    import SVGYear from "/src/images/year.svg";
+    import SVGGenre from "/src/images/label.svg";
+    import SVGCurrent from "/src/images/play_circle.svg";
 
     const { getType, visibleColumns, selectedCount, isEditMode, dataDisplay } = getContext(contextKey);
 

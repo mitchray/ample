@@ -189,7 +189,7 @@
     button:after {
         content: '';
         background-color: currentColor;
-        mask-image: url('/ample/public/images/arrow_left.svg');
+        mask-image: url('/src/images/arrow_left.svg');
         mask-size: cover;
         mask-position: center;
         width: 25px;

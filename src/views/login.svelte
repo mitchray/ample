@@ -14,8 +14,8 @@
     import Tabs from "../components/tabs.svelte";
     import ThemeToggle from '../components/themeToggle.svelte';
 
-    import SVGAmpleLogo from "../../public/images/ample_logo.svg";
-    import SVGLogin from "../../public/images/login.svg";
+    import SVGAmpleLogo from "/src/images/ample_logo.svg";
+    import SVGLogin from "/src/images/login.svg";
 
     let theme;
     let versionCheck;

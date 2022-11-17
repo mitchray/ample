@@ -21,7 +21,7 @@
 
     let currentTab;
 
-    import "../../public/css/containerqueries/artists.css";
+    import "/src/css/containerqueries/artists.css";
 </script>
 
 {#if $SiteMainSpace.ready}

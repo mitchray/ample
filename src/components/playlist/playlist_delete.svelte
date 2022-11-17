@@ -1,7 +1,7 @@
 <script>
     import { deletePlaylist } from "../../logic/playlist";
 
-    import SVGBin from "../../../public/images/delete.svg";
+    import SVGBin from "/src/images/delete.svg";
 
     export let playlist = null;
     export let isVisible;

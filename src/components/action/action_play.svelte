@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import { MediaPlayer } from "../../stores/player";
     import { loadingSpinner } from "../../actions/loadingSpinner";
-    import SVGPlay from "../../../public/images/play.svg";
+    import SVGPlay from "/src/images/play.svg";
 
     export let contextKey;
 

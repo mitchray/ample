@@ -3,8 +3,8 @@
 
     import { NowPlayingQueue, NowPlayingIndex, QueueIsOpen } from '../../stores/status';
 
-    import SVGPlaylistPlay from "../../../public/images/playlist_play.svg";
-    import SVGArtist from "../../../public/images/artist.svg";
+    import SVGPlaylistPlay from "/src/images/playlist_play.svg";
+    import SVGArtist from "/src/images/artist.svg";
 
     let nextSong;
 

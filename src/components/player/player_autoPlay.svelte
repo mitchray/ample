@@ -11,7 +11,7 @@
     import PlaylistSelector from '../../components/playlist/playlist_selector.svelte';
     import Menu from '../../components/menu.svelte';
 
-    import SVGAutoPlay from "../../../public/images/queue.svg";
+    import SVGAutoPlay from "/src/images/queue.svg";
 
     let isVisible = false;
     let selectedPlaylist;

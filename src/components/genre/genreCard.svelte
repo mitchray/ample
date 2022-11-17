@@ -4,9 +4,9 @@
 
     import Actions2 from '../../components/action/actions.svelte';
 
-    import SVGArtist from "../../../public/images/artist.svg";
-    import SVGAlbum from "../../../public/images/album.svg";
-    import SVGSong from "../../../public/images/music_note.svg";
+    import SVGArtist from "/src/images/artist.svg";
+    import SVGAlbum from "/src/images/album.svg";
+    import SVGSong from "/src/images/music_note.svg";
 
     export let data = null; // needed for cardList dynamic components
 

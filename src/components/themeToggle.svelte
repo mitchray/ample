@@ -2,8 +2,8 @@
     import { Theme } from "../stores/status";
     import { MediaPlayer } from "../stores/player";
 
-    import SVGDarkMode from "../../public/images/dark_mode.svg";
-    import SVGLightMode from "../../public/images/light_mode.svg";
+    import SVGDarkMode from "/src/images/dark_mode.svg";
+    import SVGLightMode from "/src/images/light_mode.svg";
 
     function toggleTheme() {
         let theme;

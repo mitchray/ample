@@ -13,9 +13,9 @@
 
     import Menu from '../../components/menu.svelte';
 
-    import SVGVolumeUp from "../../../public/images/volume_up.svg";
-    import SVGVolumeMuted from "../../../public/images/volume_off.svg";
-    import SVGTune from "../../../public/images/tune.svg";
+    import SVGVolumeUp from "/src/images/volume_up.svg";
+    import SVGVolumeMuted from "/src/images/volume_off.svg";
+    import SVGTune from "/src/images/tune.svg";
 
     let volumeWidth = $PlayerVolume; // volume in this file is treated as a linear 0-100 value
     let mouseDown = false;

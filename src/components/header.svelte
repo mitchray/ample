@@ -12,12 +12,12 @@
     import ThemeToggle from '../components/themeToggle.svelte';
     import Notifications from '../components/notification/notifications.svelte';
 
-    import SVGAmpleLogo from "../../public/images/ample_logo.svg";
-    import SVGAmpleLetter from "../../public/images/ample_letter.svg";
-    import SVGClose from "../../public/images/close.svg";
-    import SVGSearch from "../../public/images/search.svg";
-    import SVGLogout from "../../public/images/logout.svg";
-    import SVGMenu from "../../public/images/menu.svg";
+    import SVGAmpleLogo from "/src/images/ample_logo.svg";
+    import SVGAmpleLetter from "/src/images/ample_letter.svg";
+    import SVGClose from "/src/images/close.svg";
+    import SVGSearch from "/src/images/search.svg";
+    import SVGLogout from "/src/images/logout.svg";
+    import SVGMenu from "/src/images/menu.svg";
 
     let timeout;
     let minimumLength = 2;

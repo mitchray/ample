@@ -2,8 +2,8 @@
     import { Link } from 'svelte-routing';
     import { CurrentSong, FullScreenEnabled } from "../../stores/status";
 
-    import SVGAlbum from "../../../public/images/album.svg";
-    import SVGYear from "../../../public/images/year.svg";
+    import SVGAlbum from "/src/images/album.svg";
+    import SVGYear from "/src/images/year.svg";
 
     function handleClick(e) {
         // Close fullscreen if we are following a link

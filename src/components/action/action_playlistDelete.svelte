@@ -2,7 +2,7 @@
     import { getContext, tick } from 'svelte';
     import Menu from '../../components/menu.svelte';
     import PlaylistDelete from '../../components/playlist/playlist_delete.svelte';
-    import SVGDelete from "../../../public/images/delete.svg";
+    import SVGDelete from "/src/images/delete.svg";
 
     export let contextKey;
 

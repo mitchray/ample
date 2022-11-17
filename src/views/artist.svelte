@@ -19,14 +19,14 @@
     import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
 
-    import '../../public/css/containerqueries/artist.css';
-    import SVGAlbum from "../../public/images/album.svg";
-    import SVGPopular from "../../public/images/trending_up.svg";
-    import SVGSongs from "../../public/images/songs.svg";
-    import SVGSimilar from "../../public/images/people.svg";
-    import SVGArticle from "../../public/images/article.svg";
-    import SVGTrack from "../../public/images/music_note.svg";
-    import SVGClock from "../../public/images/clock.svg";
+    import '/src/css/containerqueries/artist.css';
+    import SVGAlbum from "/src/images/album.svg";
+    import SVGPopular from "/src/images/trending_up.svg";
+    import SVGSongs from "/src/images/songs.svg";
+    import SVGSimilar from "/src/images/people.svg";
+    import SVGArticle from "/src/images/article.svg";
+    import SVGTrack from "/src/images/music_note.svg";
+    import SVGClock from "/src/images/clock.svg";
 
     export let id;
 

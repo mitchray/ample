@@ -1,7 +1,7 @@
 <script>
     import { Link } from 'svelte-routing';
 
-    import SVGGenre from "../../../public/images/label.svg";
+    import SVGGenre from "/src/images/label.svg";
 
     export let genres;
 </script>

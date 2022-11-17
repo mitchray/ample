@@ -1,7 +1,7 @@
 <script>
     import { ShowLyrics } from "../../stores/status";
 
-    import SVGLyrics from "../../../public/images/lyrics.svg";
+    import SVGLyrics from "/src/images/lyrics.svg";
 
     function toggleLyrics() {
         let inverted = !$ShowLyrics;

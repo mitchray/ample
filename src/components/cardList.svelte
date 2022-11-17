@@ -1,8 +1,8 @@
 <script>
     import { onMount } from 'svelte';
 
-    import SVGAdd from "../../public/images/add.svg";
-    import SVGRefresh from "../../public/images/refresh.svg";
+    import SVGAdd from "/src/images/add.svg";
+    import SVGRefresh from "/src/images/refresh.svg";
 
     export let type;
     export let initialData = [];

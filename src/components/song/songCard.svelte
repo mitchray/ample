@@ -5,7 +5,7 @@
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
 
-    import SVGAlbum from "../../../public/images/album.svg";
+    import SVGAlbum from "/src/images/album.svg";
 
     export let data = null; // needed for cardList dynamic components
 

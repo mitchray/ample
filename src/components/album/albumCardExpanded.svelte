@@ -7,8 +7,8 @@
     import Visibility from '../../components/visibility.svelte';
     import Actions2 from '../../components/action/actions.svelte';
 
-    import SVGArtist from "../../../public/images/artist.svg";
-    import SVGYear from "../../../public/images/year.svg";
+    import SVGArtist from "/src/images/artist.svg";
+    import SVGYear from "/src/images/year.svg";
 
     export let data;
 

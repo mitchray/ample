@@ -10,8 +10,8 @@
     import PlaylistReorder from '../playlist/playlist_reorder.svelte';
     import PlaylistRefresh from '../playlist/playlist_refresh.svelte';
 
-    import SVGList from "../../../public/images/table_rows.svg";
-    import SVGGrid from "../../../public/images/grid.svg";
+    import SVGList from "/src/images/table_rows.svg";
+    import SVGGrid from "/src/images/grid.svg";
 
     export let data;
     export let type;

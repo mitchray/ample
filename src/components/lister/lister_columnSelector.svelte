@@ -3,7 +3,7 @@
 
     import Menu from '../../components/menu.svelte';
 
-    import SVGColumns from "../../../public/images/columns.svg";
+    import SVGColumns from "/src/images/columns.svg";
 
     export let contextKey;
     let { listerColumnsID, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);

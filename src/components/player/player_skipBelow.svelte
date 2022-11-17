@@ -4,12 +4,12 @@
 
     import Menu from '../../components/menu.svelte';
 
-    import SVGFilterNone from "../../../public/images/filter_none.svg";
-    import SVGFilter1 from "../../../public/images/filter_1.svg";
-    import SVGFilter2 from "../../../public/images/filter_2.svg";
-    import SVGFilter3 from "../../../public/images/filter_3.svg";
-    import SVGFilter4 from "../../../public/images/filter_4.svg";
-    import SVGFilter5 from "../../../public/images/filter_5.svg";
+    import SVGFilterNone from "/src/images/filter_none.svg";
+    import SVGFilter1 from "/src/images/filter_1.svg";
+    import SVGFilter2 from "/src/images/filter_2.svg";
+    import SVGFilter3 from "/src/images/filter_3.svg";
+    import SVGFilter4 from "/src/images/filter_4.svg";
+    import SVGFilter5 from "/src/images/filter_5.svg";
 
     let isVisible = false;
 

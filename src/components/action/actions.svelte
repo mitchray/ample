@@ -34,9 +34,9 @@
     import ActionUpdateFromTags from './action_updateFromTags.svelte';
     import ActionUpdateArt      from './action_updateArt.svelte';
 
-    import SVGMore from "../../../public/images/more-hori.svg";
-    import SVGArtist from "../../../public/images/artist.svg";
-    import SVGAlbum from "../../../public/images/album.svg";
+    import SVGMore from "/src/images/more-hori.svg";
+    import SVGArtist from "/src/images/artist.svg";
+    import SVGAlbum from "/src/images/album.svg";
 
     export let type;               // artist, album, playlist, song etc
     export let mode;               // menu, miniButtons or fullButtons

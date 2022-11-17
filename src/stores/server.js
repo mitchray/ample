@@ -11,13 +11,15 @@ export let APIVersion = writable("5.5.3");
 
 export const serverURL = readable(detectedURL, function start(set) {
     // local testing override
-    // detectedURL = "http://ampache-preview";
+    if (import.meta.env.DEV) {
+        detectedURL = "http://ampache-preview";
 
-    // stable demo server override
-    // detectedURL = "https://demo.ampache.dev";
+        // stable demo server override
+        // detectedURL = "https://demo.ampache.dev";
 
-    // develop demo server override
-    // detectedURL = "https://develop.ampache.dev";
+        // develop demo server override
+        // detectedURL = "https://develop.ampache.dev";
+    }
 
     set(detectedURL);
     return function stop() {};
