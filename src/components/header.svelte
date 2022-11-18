@@ -2,20 +2,17 @@
     import { onDestroy, onMount } from 'svelte';
     import { Link } from "svelte-routing";
 
-    import { logout } from "../logic/user";
-
     import { SearchQuery, ShowSearch, SidebarIsOpen } from "../stores/status";
     import { SiteContentBind, SiteSidebarBind, SiteQueueBind } from '../stores/player';
 
     import Search from '../components/search.svelte';
-    import ThemeToggle from '../components/themeToggle.svelte';
+    import UserMenu from '../components/userMenu.svelte';
     import Notifications from '../components/notification/notifications.svelte';
 
     import SVGAmpleLogo from "/src/images/ample_logo.svg";
     import SVGAmpleLetter from "/src/images/ample_letter.svg";
     import SVGClose from "/src/images/close.svg";
     import SVGSearch from "/src/images/search.svg";
-    import SVGLogout from "/src/images/logout.svg";
     import SVGMenu from "/src/images/menu.svg";
 
     let timeout;
@@ -53,10 +50,6 @@
         let inverted = !$SidebarIsOpen;
         localStorage.setItem('SidebarIsOpen', JSON.stringify(inverted));
         SidebarIsOpen.set(inverted);
-    }
-
-    function handleLogOut() {
-        logout();
     }
 
     onMount(() => {
@@ -126,16 +119,7 @@
 
     <Notifications />
 
-    <button
-        on:click={handleLogOut}
-        class="logout visuallyLink"
-        title="Log out"
-    >
-        <SVGLogout style="transform: scale(0.8);" />
-        <span class="text">Log out</span>
-    </button>
-
-    <ThemeToggle />
+    <UserMenu />
 </div>
 
 {#if $ShowSearch && $SearchQuery.length >= minimumLength}
@@ -244,14 +228,6 @@
         margin-right: auto;
     }
 
-    .logout {
-        margin-left: var(--spacing-lg);
-    }
-
-    .logout .text {
-        display: none;
-    }
-
     @media all and (min-width: 500px) {
         .site-header :global(.advanced-search) {
             display: inline-block;
@@ -269,10 +245,6 @@
 
         :global(.ample-letter) {
             display: none;
-        }
-
-        .logout .text {
-            display: block;
         }
     }
 </style>

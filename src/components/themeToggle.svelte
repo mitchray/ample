@@ -33,11 +33,13 @@
     {:else}
         <SVGDarkMode />
     {/if}
+
+    Toggle theme
 </button>
 
 <style>
     .theme-toggle {
-        margin-left: var(--spacing-lg);
-        margin-right: var(--spacing-md);
+        display: flex;
+        gap: var(--spacing-sm);
     }
 </style>
