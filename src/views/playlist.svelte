@@ -148,20 +148,18 @@
     }
 
     .container {
+        container-name: playlist-wrapper;
+        container-type: inline-size;
         height: 100%;
         width: 100%;
         will-change: overflow;
+        overflow: auto;
     }
 
     .details-container,
     .songs-container {
         height: auto;
         padding: var(--spacing-xxl);
-    }
-
-    .container {
-        container-name: playlist-wrapper;
-        container-type: inline-size;
     }
 
     .details-container {
