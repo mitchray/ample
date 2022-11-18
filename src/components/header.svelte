@@ -1,12 +1,11 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
-    import { Link, link } from "svelte-routing";
+    import { Link } from "svelte-routing";
 
     import { logout } from "../logic/user";
 
     import { SearchQuery, ShowSearch, SidebarIsOpen } from "../stores/status";
     import { SiteContentBind, SiteSidebarBind, SiteQueueBind } from '../stores/player';
-    import { serverURL } from '../stores/server';
 
     import Search from '../components/search.svelte';
     import ThemeToggle from '../components/themeToggle.svelte';
@@ -104,7 +103,7 @@
 <div class="site-header">
     <div class="site-logo-container">
         <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
-        <a href="{$serverURL}/ample" use:link class="site-logo"><SVGAmpleLetter /><SVGAmpleLogo /></a>
+        <Link to="/" class="site-logo " data-label="Artists"><SVGAmpleLetter /><SVGAmpleLogo /></Link>
     </div>
 
     <div class="search-container">
@@ -175,7 +174,8 @@
         display: none;
     }
 
-    :global(.ample-letter) {
+    :global(.ample-letter),
+    .site-header :global(.ample-logo){
         height: 14px;
     }
 
