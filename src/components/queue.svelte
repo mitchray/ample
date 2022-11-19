@@ -367,8 +367,10 @@
         font-stretch: 50%;
     }
 
-    .queue-item:hover {
-        background-color: var(--color-row-hover);
+    @media (hover: hover) {
+        .queue-item:hover {
+            background-color: var(--color-row-hover);
+        }
     }
 
     :global(.queue-dragging) {

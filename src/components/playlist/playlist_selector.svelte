@@ -164,8 +164,10 @@
         max-width: 100%; /* key to having overflow take effect with the flex-start items */
     }
 
-    .item:hover {
-        background-color: var(--color-card-highlight);
+    @media (hover: hover) {
+        .item:hover {
+            background-color: var(--color-card-highlight);
+        }
     }
 
     .item + .item {

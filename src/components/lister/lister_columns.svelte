@@ -284,8 +284,13 @@
         z-index: 10;
     }
 
-    .cell:hover .resize-handle,
-    .resize-handle:hover,
+    @media (hover: hover) {
+        .cell:hover .resize-handle,
+        .resize-handle:hover {
+            opacity: 0.3;
+        }
+    }
+
     :global(.header--being-resized) .resize-handle {
         opacity: 0.3;
     }

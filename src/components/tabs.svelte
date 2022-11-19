@@ -90,8 +90,10 @@
         cursor: pointer;
     }
 
-    li:hover {
-        background-color: var(--color-card-highlight);
+    @media (hover: hover) {
+        li:hover {
+            background-color: var(--color-card-highlight);
+        }
     }
 
     li {

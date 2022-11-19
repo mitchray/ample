@@ -126,9 +126,11 @@
         transition: all 50ms linear;
     }
 
-    .c-rating__star:hover,
-    .c-rating__flag:hover {
-        transform: scale(1.2);
+    @media (hover: hover) {
+        .c-rating__star:hover,
+        .c-rating__flag:hover {
+            transform: scale(1.2);
+        }
     }
 
     ul {
@@ -192,12 +194,14 @@
         }
     }
 
-    .c-rating:hover .c-rating__stars {
-        color: var(--color-rating);
-    }
+    @media (hover: hover) {
+        .c-rating:hover .c-rating__stars {
+            color: var(--color-rating);
+        }
 
-    .c-rating:hover .c-rating__flag {
-        color: var(--color-favorite);
+        .c-rating:hover .c-rating__flag {
+            color: var(--color-favorite);
+        }
     }
 </style>
 

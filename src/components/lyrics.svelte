@@ -146,9 +146,11 @@
         color: var(--color-text-secondary);
     }
 
-    .hasTimestamps .line:hover {
-        cursor: pointer;
-        color: var(--color-text-primary);
+    @media (hover: hover) {
+        .hasTimestamps .line:hover {
+            cursor: pointer;
+            color: var(--color-text-primary);
+        }
     }
 
     .site-lyrics {

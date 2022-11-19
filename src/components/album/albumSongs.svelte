@@ -96,10 +96,12 @@
         border-top: 2px solid var(--color-separator);
     }
 
-    li:hover {
-        background-color: var(--color-row-hover);
-        box-shadow: var(--shadow-md);
-        border-radius: 6px;
+    @media (hover: hover) {
+        li:hover {
+            background-color: var(--color-row-hover);
+            box-shadow: var(--shadow-md);
+            border-radius: 6px;
+        }
     }
 
     .track {

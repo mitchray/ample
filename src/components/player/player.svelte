@@ -211,9 +211,14 @@
     }
 
     :global(.dragging .site-player__volume-value:before),
-    :global(.dragging .progress:before),
-    :global(.seekBar:hover .progress:before){
+    :global(.dragging .progress:before) {
         opacity: 1 !important;
+    }
+
+    @media (hover: hover) {
+        :global(.seekBar:hover .progress:before) {
+            opacity: 1 !important;
+        }
     }
 
     :global(.dragging .progress),

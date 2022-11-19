@@ -172,9 +172,11 @@
         opacity: 1;
     }
 
-    :global(.ample-logo:hover),
-    :global(.ample-letter:hover) {
-        color: var(--color-text-primary);
+    @media (hover: hover) {
+        :global(.ample-logo:hover),
+        :global(.ample-letter:hover) {
+            color: var(--color-text-primary);
+        }
     }
 
     .search-container {
