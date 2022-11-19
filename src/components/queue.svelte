@@ -268,7 +268,7 @@
         display: flex;
         right: 0;
         transform: translateX(100%);
-        transition: transform 0.4s ease-out;
+        transition: transform 0.3s ease-out;
         will-change: transform;
     }
 

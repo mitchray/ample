@@ -1,7 +1,6 @@
 <script>
-    // TODO when rollup-plugin-css-only releases v4
-    // import '../src/css/normalize.css';
-    // import '../src/css/global.css';
+    import '/src/css/normalize.css';
+    import '/src/css/global.css';
 
     import { onMount } from 'svelte';
     import { Router, Route } from "svelte-routing";

@@ -207,7 +207,7 @@
         position: absolute;
         transform: translateX(-100%);
         left: 0;
-        transition: transform 0.4s ease-out;
+        transition: transform 0.3s ease-out;
         z-index: 30;
         will-change: transform;
     }
