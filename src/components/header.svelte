@@ -96,7 +96,7 @@
 <div class="site-header">
     <div class="site-logo-container">
         <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
-        <Link to="/" class="site-logo " data-label="Artists"><SVGAmpleLetter /><SVGAmpleLogo /></Link>
+        <Link to="{import.meta.env.BASE_URL}" class="site-logo " data-label="Artists"><SVGAmpleLetter /><SVGAmpleLogo /></Link>
     </div>
 
     <div class="search-container">
