@@ -268,20 +268,6 @@ export const newestAlbums = ({page = 0, limit = 50}) => {
 }
 
 /**
- * Get newly released albums
- * @returns {Promise<*>}
- */
-// TODO: not currently possible from API
-export const newReleases = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=album&filter=newest";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "newReleases");
-    return fetchAlbumData(queryURL);
-}
-
-/**
  * Get recently played albums
  * @returns {Promise<*>}
  */

@@ -135,24 +135,6 @@ export const getSongsFromPlaylists = async (playlists) => {
 }
 
 /**
- * Get a single song from playlist ID
- * @param {number} playlistID
- * @param {number} songIndex
- * @param {number} limit
- * @returns {Promise<*>}
- */
-// TODO can probably refactor into getSongsFromPlaylist
-export const getSongFromPlaylist = ({playlistID = '', songIndex = '', limit = 1}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=playlist_songs";
-    queryURL += "&filter=" + playlistID;
-    queryURL += "&offset=" + songIndex;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongFromPlaylist");
-    return fetchSongData(queryURL);
-}
-
-/**
  * Get songs through advanced search
  * @returns {Promise<*>}
  */

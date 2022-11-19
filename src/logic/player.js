@@ -328,7 +328,7 @@ class Player {
             freshSong = getSong(song.id)
                 .then((result) => {
                     if (!result.error && result.length > 0 && this.currentSong.id === song.id) {
-                        // TODO redo in a way that doesn't after CurrentSong assignment
+                        // TODO redo in a way that doesn't alter CurrentSong assignment
                         // which results in things re-triggering
                         // CurrentSong.set(result[0]);
                     }
