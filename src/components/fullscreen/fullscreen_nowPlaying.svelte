@@ -59,7 +59,7 @@
             "controls"
         ;
         grid-template-columns: 1fr;
-        grid-template-rows: min-content min-content min-content 1fr min-content;
+        grid-template-rows: 2fr min-content min-content 1fr min-content;
         gap: var(--spacing-lg);
         height: 100%;
     }
@@ -95,16 +95,21 @@
 
     .fullscreen__art {
         grid-area: artwork;
-        display: flex;
-        justify-self: center;
-        padding: var(--spacing-xl);
-        padding-bottom: 0;
-        max-width: 300px;
+        position: relative;
     }
 
     .fullscreen__art :global(img) {
-        border-radius: 10px;
         box-shadow: var(--shadow-xxl);
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 0;
+        max-width: 100%;
+        max-height: 100%;
+        padding: var(--spacing-lg);
+        padding-bottom: 0;
+        box-sizing: border-box;
+        clip-path: inset(var(--spacing-lg) var(--spacing-lg) 0% var(--spacing-lg) round 3%);
     }
 
     .fullscreen__rating {
