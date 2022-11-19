@@ -2,7 +2,6 @@ import { get } from "svelte/store";
 
 import { serverURL, APIVersion } from '../stores/server';
 import { userToken } from '../stores/user';
-import { ShowArtistType } from "../stores/status";
 import { MediaPlayer } from "../stores/player";
 
 import { debugHelper } from "./helper";
@@ -32,19 +31,6 @@ const fetchArtistData = async (url) => {
         });
 }
 
-function getArtistType() {
-    let artistType = 'artist';
-    let storeType = get(ShowArtistType);
-
-    if (storeType === 'album_artist') {
-        artistType = 'album_artist';
-    } else if (storeType === 'song_artist') {
-        artistType = 'song_artist';
-    }
-
-    return artistType;
-}
-
 /**
  * Get artists through advanced search
  * @returns {Promise<*>}
@@ -72,11 +58,12 @@ export const getArtistsFromAdvancedSearch = ({rows = [], limit = 0, random = fal
  * @param page
  * @param limit
  * @param {string} filterChar
+ * @param {string} type
  * @returns {Promise<*>}
  */
-export const getArtistsStartingWithChar = ({page = 0, limit = 50, filterChar}) => {
+export const getArtistsStartingWithChar = ({page = 0, limit = 50, filterChar, type = 'artist'}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + getArtistType();
+    queryURL += "&type=" + type;
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
     // ignore punctuation
@@ -114,7 +101,7 @@ export const searchArtistsStartingWith = ({page = 0, limit = 50, query}) => {
  */
 export const testArtistsStartingWithChar = async (filterChar) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + getArtistType();
+    queryURL += "&type=artist";
     queryURL += `&limit=1`;
     queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
@@ -278,7 +265,7 @@ export const forgottenArtists = ({page = 0, limit = 50}) => {
  */
 export const randomArtists = ({page = 0, limit = 50}) => {
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + getArtistType();
+    queryURL += "&type=artist";
     queryURL += "&operator=and&random=1";
     queryURL += "&rule_1=title&rule_1_operator=0&rule_1_input=";
 
@@ -286,6 +273,23 @@ export const randomArtists = ({page = 0, limit = 50}) => {
     queryURL += "&limit=" + limit;
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "randomArtists");
+    return fetchArtistData(queryURL);
+}
+
+/**
+ * Get random artists
+ * @returns {Promise<*>}
+ */
+export const randomAlbumArtists = ({page = 0, limit = 50}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=artist";
+    queryURL += "&operator=and&random=1";
+    queryURL += "&rule_1=album_count&rule_1_operator=4&rule_1_input=0";
+
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "randomAlbumArtists");
     return fetchArtistData(queryURL);
 }
 

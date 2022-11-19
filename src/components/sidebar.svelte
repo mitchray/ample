@@ -3,7 +3,7 @@
     import { ROUTER } from 'svelte-routing/src/contexts';
     import { Link } from "svelte-routing";
     import { clickOutsideDetector } from '../actions/clickOutsideDetector';
-    import { SidebarIsMini, SidebarIsOpen, SidebarIsPinned, customHue, ShowArtistType } from '../stores/status';
+    import { SidebarIsMini, SidebarIsOpen, SidebarIsPinned, customHue } from '../stores/status';
     import { SiteSidebarBind } from "../stores/player";
 
     import SVGArtist from "/src/images/artist.svg";
@@ -102,10 +102,15 @@
                 <Link to="artists" class="site-sidebar__link " data-label="Artists">
                     <SVGArtist />
                     <span class="label">
-                        {#if $ShowArtistType === "album_artist"}
-                            Album
-                        {/if}
                         Artists
+                    </span>
+                </Link>
+            </li>
+            <li class:current={basePath === 'album-artists'}>
+                <Link to="album-artists" class="site-sidebar__link " data-label="Album Artists">
+                    <SVGArtist />
+                    <span class="label">
+                        Album Artists
                     </span>
                 </Link>
             </li>

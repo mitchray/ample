@@ -2,19 +2,19 @@
 let serverURL;
 let userToken;
 let APIVersion;
-let ShowArtistType;
 let final = {};
 
 onmessage = async function(message) {
     userToken = message.data.userToken;
     APIVersion = message.data.APIVersion;
     serverURL = message.data.serverURL;
-    ShowArtistType = message.data.ShowArtistType;
 
     // Do work
     final.allArtists = await getAllArtists();
-    final.filteredArtists = (ShowArtistType === "album_artist") ? final.allArtists.filter((item) => item.albumcount > 0) : final.allArtists;
-    final.groupedArtists = group(final.filteredArtists);
+    final.allAlbumArtists = final.allArtists.filter((item) => item.albumcount > 0);
+
+    final.groupedArtists = group(final.allArtists);
+    final.groupedAlbumArtists = group(final.allAlbumArtists);
 
     // Posting back to the page
     self.postMessage(final);

@@ -31,6 +31,7 @@
     import LoginPage from './views/login.svelte';
     import NotFound404Page from './views/notFound404.svelte';
     import HomePage from './views/home.svelte';
+    import AlbumArtistsPage from './views/albumArtists.svelte';
     import ArtistsPage from './views/artists.svelte';
     import ArtistPage from './views/artist.svelte';
     import AlbumsPage from './views/albums.svelte';
@@ -113,6 +114,7 @@
 
                     <Route path="artists/:id" component={ArtistPage}/>
                     <Route path="artists" component={ArtistsPage}/>
+                    <Route path="album-artists" component={AlbumArtistsPage}/>
                     <Route path="albums/:id" component={AlbumPage}/>
                     <Route path="albums/year/:year" component={AlbumsByYearPage}/>
                     <Route path="albums/year" component={AlbumsByYearPage}/>

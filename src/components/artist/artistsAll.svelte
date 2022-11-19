@@ -1,11 +1,11 @@
 <script>
-    import { ShowArtistType } from "../../stores/status";
-
     import { getArtistsStartingWithChar } from "../../logic/artist";
 
     import AlphanumericPagination from '../../components/alphanumericPagination.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
+
+    export let type = "artist";
 
     let selectedChar = ''; // bound from alphanumericPagination
     let searchValue = ''; // bound from alphanumericPagination
@@ -20,7 +20,7 @@
     $: dataDisplay = dataDisplay;
 
     $: {
-        if (limit > 0 && ($ShowArtistType || selectedChar || selectedChar === '')) {
+        if (limit > 0 && (selectedChar || selectedChar === '')) {
             resetPage();
             getData();
         }
@@ -33,7 +33,7 @@
     }
 
     async function getData() {
-        dataDisplay = await getArtistsStartingWithChar({limit: limit, page: page, filterChar: searchValue});
+        dataDisplay = await getArtistsStartingWithChar({limit: limit, page: page, filterChar: searchValue, type: type});
         loadedTime = new Date();
     }
 

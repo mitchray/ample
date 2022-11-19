@@ -1,10 +1,10 @@
 <script>
     import { Link } from "svelte-routing";
 
-    import { groupedArtists } from "../stores/server";
+    import { groupedAlbumArtists } from "../stores/server";
     import { SiteMainSpace } from "../stores/player";
 
-    import { newestArtists, randomArtists } from "../logic/artist";
+    import { randomAlbumArtists } from "../logic/artist";
 
     import CardList from '../components/cardList.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
@@ -12,9 +12,8 @@
 
     // List of tab items with labels and values.
     let tabItems = [
-        { label: "Recently Updated", value: "recentlyUpdated" },
-        { label: "Random",           value: "random" },
-        { label: "All",              value: "all" },
+        { label: "Random", value: "random" },
+        { label: "All",    value: "all" },
     ];
 
     let currentTab;
@@ -29,8 +28,8 @@
         >
             <div class="sidebar">
                 <div class="sidebar-inner">
-                    {#if $groupedArtists}
-                        {#each Object.entries($groupedArtists) as [key, value], i}
+                    {#if $groupedAlbumArtists}
+                        {#each Object.entries($groupedAlbumArtists) as [key, value], i}
                             <div class="sidebar-index">{key.toUpperCase()}</div>
 
                             {#each value as artist}
@@ -48,27 +47,21 @@
             <div class="main">
                 <div class="main-inner">
                     <div class="title">
-                        <h1 class="page-title">Artists</h1>
+                        <h1 class="page-title">Album Artists</h1>
                     </div>
 
                     <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
                         {#each tabItems as tab}
                             {#if tab.loaded === true}
-                                {#if tab.value === 'recentlyUpdated'}
-                                    <div class="recentlyUpdated" style="display: {currentTab === 'recentlyUpdated' ? 'block' : 'none'}">
-                                        <CardList type="artist" dataProvider={"newestArtists"} limit=18 />
-                                    </div>
-                                {/if}
-
                                 {#if tab.value === 'random'}
                                     <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
-                                        <CardList type="artist" dataProvider={"randomArtists"} limit=18 refresh=true />
+                                        <CardList type="artist" dataProvider={"randomAlbumArtists"} limit=18 refresh=true />
                                     </div>
                                 {/if}
 
                                 {#if tab.value === 'all'}
                                     <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
-                                        <ArtistsAll />
+                                        <ArtistsAll type="album_artist" />
                                     </div>
                                 {/if}
                             {/if}
