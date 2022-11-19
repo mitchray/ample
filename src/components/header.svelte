@@ -122,11 +122,7 @@
     <UserMenu />
 </div>
 
-{#if $ShowSearch && $SearchQuery.length >= minimumLength}
-    {#key $SearchQuery}
-        <Search />
-    {/key}
-{/if}
+<Search />
 
 <style>
     .site-header {

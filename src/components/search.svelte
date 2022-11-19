@@ -93,19 +93,19 @@
     }
 </script>
 
-{#if $SearchQuery && $SiteMainSpace.ready}
+{#if $SiteMainSpace.ready && $ShowSearch && $SearchQuery}
     <div class="container"
         on:click={handleClick}
         transition:fade={{ duration: 300 }}
         style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
     >
-        <div class="header panel-header">
-            <h4 class="panel-title">Results for <span class="query">{$SearchQuery}</span></h4>
-            <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
-        </div>
+        {#key $SearchQuery}
+            <div class="header panel-header">
+                <h4 class="panel-title">Results for <span class="query">{$SearchQuery}</span></h4>
+                <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
+            </div>
 
-        <div class="results">
-            {#key $SearchQuery}
+            <div class="results">
                 {#if noResults}
                     <p>No results found</p>
                 {/if}
@@ -141,8 +141,8 @@
                 {#if initialResults.smartlists.length > 0}
                     <CardList type="smartlist" initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} limit=6 arg={encodeURI($SearchQuery)} heading="Smartlists" />
                 {/if}
-            {/key}
-        </div>
+            </div>
+        {/key}
     </div>
 {/if}
 
