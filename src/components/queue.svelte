@@ -114,7 +114,6 @@
 
     function transformDraggedElement(draggedEl, data, index) {
         draggedEl.classList.add('queue-dragging');
-        // console.debug(draggedEl);
     }
 
     function togglePinned() {

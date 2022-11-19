@@ -50,7 +50,6 @@
 
     function handleSeek(event) {
         let seekElementWidth = event.target.offsetWidth;
-        console.debug(event);
         let seekClickLocation = (event.clientX || event.targetTouches[0].screenX) - event.target.getBoundingClientRect().left;
 
         if ($MediaPlayer.wavesurfer) {
