@@ -50,7 +50,7 @@ const getAllArtists = async () => {
 
 function group(arr) {
     let result = arr.reduce((store, artist) => {
-        let letter = artist.name.replace(/^(the |a |an |\p{P}+)/giu, '').charAt(0).toLowerCase();
+        let letter = artist.name.replace(/^(the |a |an |\p{P}+)/giu, '').normalize('NFD').charAt(0).toLowerCase(); // normalize NFD splits special chars into plain + accents
 
         if (letter.match(/[0-9]/g)) {
             letter = "#";
