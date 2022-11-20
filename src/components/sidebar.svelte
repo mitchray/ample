@@ -7,6 +7,7 @@
     import { SiteSidebarBind } from "../stores/player";
 
     import SVGArtist from "/src/images/artist.svg";
+    import SVGArtistHollow from "/src/images/person_outline.svg";
     import SVGAlbum from "/src/images/album.svg";
     import SVGPlaylist from "/src/images/queue_music.svg";
     import SVGSmartlist from "/src/images/smartlist.svg";
@@ -100,7 +101,7 @@
         <ul>
             <li class:current={basePath === 'artists'}>
                 <Link to="artists" class="site-sidebar__link " data-label="Artists">
-                    <SVGArtist />
+                    <SVGArtistHollow />
                     <span class="label">
                         Artists
                     </span>
