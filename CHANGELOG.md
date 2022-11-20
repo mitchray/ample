@@ -1,5 +1,27 @@
 # Changelog
 
+## [0.50.0] - 2022-11-20
+### The folder structure has changed due to switching to Vite for compiling. Remove contents of ```ample``` folder before updating.
+### Additionally Vite has a different method of URL management, let me know if things break for you.
+### NGINX users update your rewrite from ```index.php``` to ```index.html```
+
+### Added
+- Search results are split into 'starts with' and 'contains' groups
+- Start of a 'fullscreen' mode for Now Playing on smaller devices
+  - <img src="https://user-images.githubusercontent.com/5735900/202880766-78bac0cc-328d-40da-93d4-ff7bffa0dce5.jpg" width=261 alt="Ample fullscreen mode" />
+
+### Changed
+- Header logout and theme switch combined into a menu
+- Separate "Artist" and "Album Artist" views instead of having a toggle
+
+### Removed
+- 'Fancy' search queries e.g. "artist:king"
+
+### Fixed
+- Login errors not shown
+- Handle image loading errors and show fallback image
+- Chrome playlist view not scrolling on smaller screens
+
 ## [0.45.0] - 2022-10-26
 ### Added
 - Alphabetised list of all artists/album artists on the Artists page
