@@ -2,6 +2,7 @@ import { get } from 'svelte/store';
 import JsSHA from "jssha/dist/sha256";
 import { APIVersion, serverURL } from '../stores/server';
 import { userName, isLoggedIn, userToken } from '../stores/user';
+import { MediaPlayer } from "../stores/player";
 import { debugHelper } from './helper';
 
 let serverURL_value = get(serverURL);
@@ -160,6 +161,14 @@ export let logout = () => {
     localStorage.setItem('AmpleAPIKey', null);
     userName.set(null);
     isLoggedIn.set(false);
+
+    // stop playing
+    let mp = get(MediaPlayer);
+
+    if (mp) {
+        mp.clearAll();
+        mp.next();
+    }
 };
 
 /**
