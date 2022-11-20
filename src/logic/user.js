@@ -66,51 +66,68 @@ export let handshake = async (username, password) => {
 
             if (data.auth) {
                 login(data.auth, username);
-                return 'Login successful';
+                return {
+                    status: "success", message: "Login successful"
+                }
             } else {
                 if (data.error) {
-                    return data.error.errorMessage;
+                    return {
+                        status: "error", message: data.error.errorMessage
+                    }
                 } else {
-                    return 'Unknown login error';
+                    return {
+                        status: "error", message: "Unknown login error"
+                    }
                 }
             }
         })
         .catch(err => {
             console.log("Error reading data " + err);
-            return err;
+            return {
+                status: "error", message: "Login error caught"
+            }
         });
 }
 
 /**
  * Handshake with API key to Ampache server for authentication
  * @param {string} apikey
- * @returns {Promise<void>}
+ * @returns {Promise<T|{message: string, status: string}>}
  */
 export let handshakeAPI = async (apikey) => {
     let fullURL = serverURL_value + "/server/json.server.php?action=handshake&auth=" + apikey + "&version=" + get(APIVersion);
 
-    let result = await fetch(fullURL)
+    return await fetch(fullURL)
         .then(response => response.json())
         .then(data => {
             debugHelper(data, "handshakeAPI");
 
             if (data.auth) {
                 login(data.auth);
-                return 'Login successful';
+                localStorage.setItem('AmpleAPIKey', JSON.stringify(apikey));
+                return {
+                    status: "success", message: "Login successful"
+                }
             } else {
+                localStorage.setItem('AmpleAPIKey', JSON.stringify(null));
+
                 if (data.error) {
-                    return data.error.errorMessage;
+                    return {
+                        status: "error", message: data.error.errorMessage
+                    }
                 } else {
-                    return 'Unknown login error';
+                    return {
+                        status: "error", message: "Unknown login error"
+                    }
                 }
             }
         })
         .catch(err => {
             console.log("Error reading data " + err);
-            return err;
+            return {
+                status: "error", message: "Login error caught"
+            }
         });
-
-    return result;
 }
 
 /**
@@ -140,14 +157,39 @@ export let login = (token, user) => {
  */
 export let logout = () => {
     localStorage.setItem('AmpleAuth', null);
+    localStorage.setItem('AmpleAPIKey', null);
     userName.set(null);
     isLoggedIn.set(false);
 };
 
 /**
+ * Login with a cached auth
+ */
+export let validateCachedAuth = async () => {
+    // Attempt with an API key first
+    let cachedAPIKey = JSON.parse(localStorage.getItem('AmpleAPIKey'));
+
+    if (cachedAPIKey !== null) {
+        let result = await handshakeAPI(cachedAPIKey);
+
+        if (result.status !== "success") {
+            localStorage.setItem('AmpleAPIKey', null);
+            logout();
+            return;
+        }
+    }
+
+    // If not logged in from API key, see if we already have a session going
+    if (get(isLoggedIn) !== true) {
+        checkExistingSession();
+    }
+}
+
+
+/**
  * Check if a cached auth token is still valid
  */
-export let validateAuthToken = () => {
+export let checkExistingSession = () => {
     let cachedUserInfo = JSON.parse(localStorage.getItem('AmpleAuth'));
     debugHelper(cachedUserInfo, "cached user info");
 

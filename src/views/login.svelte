@@ -24,7 +24,7 @@
     let apiKey = "";
     let promise;
     let randomColor = lchToRgb([50, 50, getRandomInt(360)]);
-    let message = '';
+    let result;
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -40,13 +40,11 @@
     $: versionCheck = $serverVersion.charAt(0);
 
     const handleSubmitUsername = async (e) => {
-        message = '';
-        message = await handshake(username, password);
+        result = await handshake(username, password);
     }
 
     const handleSubmitAPI = async (e) => {
-        message = '';
-        message = await handshakeAPI(apiKey);
+        result = await handshakeAPI(apiKey);
     }
 
     onMount(async () => {
@@ -91,13 +89,17 @@
                         </label>
                     </p>
 
+                    <p>
+                        You will remain logged in until you log out. <br>Not recommended for shared devices.
+                    </p>
+
                     <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
                 </form>
             </div>
         </Tabs>
 
-        {#if message}
-            <p class="login-message badge badge--warning" in:fade>{message}</p>
+        {#if result && result.message}
+            <p class="login-message badge badge--warning" in:fade>{result.message}</p>
         {/if}
 
         <div class="meta">
