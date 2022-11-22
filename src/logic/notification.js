@@ -41,7 +41,7 @@ export const removeNotification = (id) => {
 }
 
 export const addGainTagsMissingNotification = (data) => {
-    if (!get(ShowNotificationGainTagsMissing)) {
+    if (!get(ShowNotificationGainTagsMissing) || !data) {
         return;
     }
 
@@ -56,7 +56,7 @@ export const addGainTagsMissingNotification = (data) => {
 }
 
 export const addRatingMissingNotification = (data) => {
-    if (!get(ShowNotificationRatingMissing)) {
+    if (!get(ShowNotificationRatingMissing) || !data) {
         return;
     }
 
@@ -78,7 +78,7 @@ export const addRatingMissingNotification = (data) => {
 }
 
 export const addAlternateVersionsNotification = (data) => {
-    if (!get(ShowNotificationAlternateVersions)) {
+    if (!get(ShowNotificationAlternateVersions) || !data) {
         return;
     }
 
@@ -96,7 +96,7 @@ export const addAlternateVersionsNotification = (data) => {
 }
 
 export const addLyricsMissingNotification = (data) => {
-    if (!get(ShowNotificationLyricsMissing)) {
+    if (!get(ShowNotificationLyricsMissing) || !data) {
         return;
     }
 
@@ -111,7 +111,7 @@ export const addLyricsMissingNotification = (data) => {
 }
 
 export const addLyricsNotTimestampedNotification = (data) => {
-    if (!get(ShowNotificationLyricsNotTimestamped)) {
+    if (!get(ShowNotificationLyricsNotTimestamped) || !data) {
         return;
     }
 
