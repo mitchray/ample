@@ -1,5 +1,5 @@
 @container artist-details-wrapper (min-width: 500px) {
-    .actions.actions {
+    .actions.actions.actions {
         flex-direction: row;
         gap: var(--spacing-xxl);
         align-items: center;
@@ -7,7 +7,7 @@
 }
 
 @container artist-info-wrapper (min-width: 500px) {
-    .title.title {
+    .title.title.title {
         font-size: 40px;
         text-align: left;
         margin-bottom: 0.2em;
@@ -16,11 +16,11 @@
         padding-left: calc(180px + var(--spacing-xxl));
     }
 
-    .art-container.art-container {
+    .art-container.art-container.art-container {
         max-width: 180px;
     }
 
-    .profile.profile {
+    .profile.profile.profile {
         justify-content: start;
         width: fit-content;
         margin-top: -60px;
@@ -28,7 +28,7 @@
         z-index: 10;
     }
 
-    .details.details {
+    .details.details.details {
         margin-top: var(--spacing-lg);
         margin-left: calc(180px + var(--spacing-xxl));
         position: relative;
@@ -36,26 +36,26 @@
 }
 
 @container artist-info-wrapper (min-width: 800px) {
-    .title.title {
+    .title.title.title {
         font-size: 50px;
         font-weight: 200;
     }
 
-    .art-container.art-container {
+    .art-container.art-container.art-container {
         width: 240px;
         max-width: unset;
     }
 
-    .details.details {
+    .details.details.details {
         margin-left: calc(240px + var(--spacing-xxl));
     }
 
-    .title.title {
+    .title.title.title {
         padding-top: var(--spacing-xxl);
         padding-left: calc(240px + var(--spacing-xxl));
     }
 
-    .profile.profile {
+    .profile.profile.profile {
         margin-top: -90px;
     }
 }
