@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.50.1] - 2022-11-26
+### Fixed
+- Container queries on Chrome
+- Drag and drop broke
+- Media would still play after logging out
+
 ## [0.50.0] - 2022-11-20
 ### The folder structure has changed due to switching to Vite for compiling. Remove contents of ```ample``` folder before updating.
 ### Additionally Vite has a different method of URL management, let me know if things break for you.
