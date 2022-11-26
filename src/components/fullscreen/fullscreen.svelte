@@ -1,4 +1,5 @@
 <script>
+    import { fade } from 'svelte/transition';
     import { FullScreenEnabled, CurrentSong, Theme } from "../../stores/status";
     import { getAverageColor, findCustomHue, outputThemeVariables } from "../../logic/color";
 
@@ -25,30 +26,30 @@
     }
 </script>
 
-<div class="fullscreen"
-    class:visible={$FullScreenEnabled}
->
-    <!--        <div class="tabs">-->
-    <!--            <button on:click={() => currentTab = 'nowPlaying'}>Now Playing</button>-->
-    <!--            <button on:click={() => currentTab = 'queue'}>Queue</button>-->
-    <!--        </div>-->
+{#if $FullScreenEnabled}
+    <div class="fullscreen" transition:fade>
+<!--        <div class="tabs">-->
+<!--            <button on:click={() => currentTab = 'nowPlaying'}>Now Playing</button>-->
+<!--            <button on:click={() => currentTab = 'queue'}>Queue</button>-->
+<!--        </div>-->
 
-    <div class="inner">
-        <div class="nowPlaying" style="display: {currentTab === 'nowPlaying' ? 'block' : 'none'}">
-            <FullScreenNowPlaying/>
+        <div class="inner">
+            <div class="nowPlaying" style="display: {currentTab === 'nowPlaying' ? 'block' : 'none'}">
+                <FullScreenNowPlaying/>
+            </div>
+
+            <div class="queue" style="display: {currentTab === 'queue' ? 'block' : 'none'}">
+            <!--<Queue/>-->
+            </div>
         </div>
 
-        <div class="queue" style="display: {currentTab === 'queue' ? 'block' : 'none'}">
-            <Queue/>
-        </div>
+        <button class="close icon-button"
+            on:click={() => $FullScreenEnabled = false}
+        >
+            <SVGDown style="transform: scale(1.25)" />
+        </button>
     </div>
-
-    <button class="close icon-button"
-        on:click={() => $FullScreenEnabled = false}
-    >
-        <SVGDown style="transform: scale(1.25)" />
-    </button>
-</div>
+{/if}
 
 {#key $Theme+hue}
     {@html outputThemeVariables(hue, ".fullscreen")}
@@ -73,14 +74,6 @@
         height: 100%;
         width: 100%;
         z-index: 1000;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    .visible {
-        pointer-events: initial;
-        opacity: 1;
     }
 
     .tabs {
