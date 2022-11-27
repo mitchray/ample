@@ -136,11 +136,13 @@
                     <SVGGenre /> <span class="label">Genres</span>
                 </Link>
             </li>
+            <!--
             <li class:current={basePath === 'podcasts'}>
                 <Link to="podcasts" class="site-sidebar__link " data-label="Podcasts">
                     <SVGPodcast /> <span class="label">Podcasts</span>
                 </Link>
             </li>
+            -->
         </ul>
 
         <h3 class="panel-title">Insights</h3>
