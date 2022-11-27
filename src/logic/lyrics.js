@@ -1,7 +1,7 @@
 import { writable } from "svelte/store";
 import { lyricsAreTimestamped } from "./helper";
 
-import { CurrentSong } from "../stores/status";
+import { CurrentMedia } from "../stores/status";
 
 class Lyrics {
     constructor() {
@@ -12,8 +12,8 @@ class Lyrics {
         this.lyricsFinal     = [];
         this.isTimestamped = false;
 
-        CurrentSong.subscribe(value => {
-            this.currentSong = value;
+        CurrentMedia.subscribe(value => {
+            this.currentMedia = value;
 
             this.setLyrics();
         });
@@ -26,8 +26,8 @@ class Lyrics {
     }
 
     setLyrics() {
-        if (this.currentSong) {
-            this.lyricsRaw = this.currentSong.lyrics || "";
+        if (this.currentMedia) {
+            this.lyricsRaw = this.currentMedia.lyrics || "";
             this.lyricsFinal = [];
 
             this.currentLine = null;

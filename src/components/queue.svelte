@@ -7,7 +7,7 @@
     import {
         NowPlayingQueue,
         NowPlayingIndex,
-        CurrentSong,
+        CurrentMedia,
         QueueIsOpen,
         QueueIsPinned
     } from '../stores/status';
@@ -26,7 +26,7 @@
 
     const flipDurationMs = 100;
 
-    let nextSong;
+    let nextMedia;
     let staleTime = Date.now();
     let staleThreshold = 1000 * 60 * 60 * 6; // 6 hours
 
@@ -35,10 +35,10 @@
     let dragDisabled = true;
 
     $: queueMoreMenuID;
-    $: nextSong = $NowPlayingQueue[$NowPlayingIndex + 1];
+    $: nextMedia = $NowPlayingQueue[$NowPlayingIndex + 1];
     $: staleTime = staleTime;
 
-    // TODO when queue is opened show the current song
+    // TODO when queue is opened show the current media
 
     function handleAction(event, index) {
         $MediaPlayer.playSelected(index);
@@ -47,7 +47,7 @@
         queueMoreMenuIsOpen = false;
     }
 
-    function showCurrentSong({behavior = 'smooth'}) {
+    function showCurrentMedia({behavior = 'smooth'}) {
         waitForElement('.site-queue .currentlyPlaying').then((selector) => {
             selector.scrollIntoView({
                 behavior: behavior,
@@ -58,7 +58,7 @@
     function handleRemove(index) {
         $NowPlayingQueue.splice(index, 1);
 
-        // If playing song is removed, load new track
+        // If playing media is removed, load new media
         if ($NowPlayingIndex === index) {
             $MediaPlayer.stop();
             $MediaPlayer.start();
@@ -72,7 +72,7 @@
         $NowPlayingQueue = $NowPlayingQueue;
     }
 
-    function handleSongMenu(index) {
+    function handleMoreMenu(index) {
         queueMoreMenuID = index;
         queueMoreMenuIsOpen = !queueMoreMenuIsOpen;
     }
@@ -80,7 +80,7 @@
     function handleClearPlayed() {
         let foundIndex = 0;
 
-        // find next item to remove, that isn't the currently playing song
+        // find next item to remove, that isn't the currently playing media
         while (foundIndex !== -1) {
             foundIndex = $NowPlayingQueue.findIndex((item, index) => index !== $NowPlayingIndex && item.lastPlayed);
 
@@ -97,7 +97,7 @@
     function handleSort(e) {
         NowPlayingQueue.set([...e.detail.items]);
 
-        let currentIndex = $NowPlayingQueue.findIndex(item => item._id === $CurrentSong._id);
+        let currentIndex = $NowPlayingQueue.findIndex(item => item._id === $CurrentMedia._id);
 
         if (currentIndex !== -1) {
             NowPlayingIndex.set(currentIndex);
@@ -131,11 +131,11 @@
     }
 
     onMount(() => {
-        // check for stale songs and remove from queue
+        // check for stale media and remove from queue
         const staleTimer = setInterval(() => {
             staleTime = Date.now();
 
-            // remove any stale songs
+            // remove any stale media
             let indexes = $NowPlayingQueue.reduce( (a,curr,index) => {
                 if (curr.lastPlayed + staleThreshold < staleTime) {
                     a.push(index);
@@ -145,7 +145,7 @@
             }, []);
 
             indexes.forEach(function(index) {
-                // don't remove an old song being replayed, and preserve the previous 10 songs before current song
+                // don't remove an old media being replayed, and preserve the previous 10 media before current media
                 if (index !== $NowPlayingIndex && index < $NowPlayingIndex - 10) {
                     handleRemove(index);
                 }
@@ -184,11 +184,11 @@
                 {/if}
             </button>
 
-            <button class="panel-action" on:click={showCurrentSong} title="Show current song">
+            <button class="panel-action" on:click={showCurrentMedia} title="Show current item">
                 Current
             </button>
 
-            <button class="panel-action" on:click={handleClearPlayed} title="Clear played songs">
+            <button class="panel-action" on:click={handleClearPlayed} title="Clear played items">
                 Clear played
             </button>
         </div>
@@ -206,7 +206,7 @@
             on:finalize={handleSort}
         >
             {#if $NowPlayingQueue && $NowPlayingQueue.length > 0}
-                {#each $NowPlayingQueue as song, i (song._id)}
+                {#each $NowPlayingQueue as media, i (media._id)}
                     <div
                         on:click={(e) => { handleAction(e, i) }}
                         class="queue-item"
@@ -220,7 +220,7 @@
                             on:mousedown={startDrag}
                             on:touchstart={startDrag}
                         >
-                            <img src="{song.art}&thumb=1"
+                            <img src="{media.art}&thumb=1"
                                 alt=""
                                 loading="lazy"
                                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
@@ -232,21 +232,26 @@
                         {/if}
 
                         <span class="details">
-                            <div class="queue-title card-title" title="{song.name}">{song.name}</div>
-                            <div class="queue-artist" title="{song.artist.name}">{song.artist.name}</div>
+                            <div class="queue-title card-title" title="{media.name}">{media.name}</div>
+
+                            {#if media.artist}
+                                <div class="queue-artist" title="{media.artist.name}">{media.artist.name}</div>
+                            {/if}
                         </span>
 
-                        <button id="queueMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleSongMenu(i)}><SVGMore /></button>
+                        <button id="queueMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleMoreMenu(i)}><SVGMore /></button>
 
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
                             <Menu anchor="left-center" toggleSelector={'#queueMoreToggle-' + queueMoreMenuID} bind:isVisible={queueMoreMenuIsOpen}>
                                 <div class="panel-content">
-                                    <Actions2
-                                        type="song"
-                                        mode="subMenu"
-                                        id="{song.id}"
-                                        data={Object.create({albumID: song.album.id, artistID: song.artist.id})}
-                                    />
+                                    {#if media.artist}
+                                        <Actions2
+                                            type="song"
+                                            mode="subMenu"
+                                            id="{media.id}"
+                                            data={Object.create({albumID: media.album.id, artistID: media.artist.id})}
+                                        />
+                                    {/if}
                                 </div>
                             </Menu>
                         {/if}

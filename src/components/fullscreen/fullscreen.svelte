@@ -1,6 +1,6 @@
 <script>
     import { fade } from 'svelte/transition';
-    import { FullScreenEnabled, CurrentSong, Theme } from "../../stores/status";
+    import { FullScreenEnabled, CurrentMedia, Theme } from "../../stores/status";
     import { getAverageColor, findCustomHue, outputThemeVariables } from "../../logic/color";
 
     import FullScreenNowPlaying from './fullscreen_nowPlaying.svelte';
@@ -15,8 +15,8 @@
     $: hue = hue || defaultHue;
 
     $: {
-        if ($CurrentSong) {
-            getAverageColor($CurrentSong.art + "&thumb=10")
+        if ($CurrentMedia) {
+            getAverageColor($CurrentMedia.art + "&thumb=10")
                 .then(data => {
                     findCustomHue(data.value).then(d => {
                         hue = d;

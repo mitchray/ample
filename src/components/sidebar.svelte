@@ -21,6 +21,7 @@
     import SVGRandom from "/src/images/random.svg";
     import SVGSearch from "/src/images/search.svg";
     import SVGGenre from "/src/images/label.svg";
+    import SVGPodcast from "/src/images/podcasts.svg";
     import SVGMultiStar from "/src/images/hotel-star.svg";
     import SVGLock from "/src/images/lock.svg";
     import SVGUnlock from "/src/images/lock_open.svg";
@@ -133,6 +134,11 @@
             <li class:current={basePath === 'genres'}>
                 <Link to="genres" class="site-sidebar__link " data-label="Genres">
                     <SVGGenre /> <span class="label">Genres</span>
+                </Link>
+            </li>
+            <li class:current={basePath === 'podcasts'}>
+                <Link to="podcasts" class="site-sidebar__link " data-label="Podcasts">
+                    <SVGPodcast /> <span class="label">Podcasts</span>
                 </Link>
             </li>
         </ul>

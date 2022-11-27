@@ -5,7 +5,7 @@
     import { getSongsFromAlbum } from '../../logic/song';
     import { formatSongLength } from '../../logic/helper';
 
-    import { CurrentSong } from '../../stores/status';
+    import { CurrentMedia } from '../../stores/status';
 
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
@@ -37,7 +37,7 @@
                     {#each value as song}
                         <li class="song-row">
                             <span class="track">{song.track}</span>
-                            {#if $CurrentSong && $CurrentSong.id === song.id}
+                            {#if $CurrentMedia && $CurrentMedia.id === song.id}
                                 <span class="current-icon">
                                     <SVGCurrent class="icon" />
                                 </span>

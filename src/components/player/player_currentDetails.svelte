@@ -1,6 +1,6 @@
 <script>
     import { Link } from 'svelte-routing';
-    import { CurrentSong, FullScreenEnabled } from "../../stores/status";
+    import { CurrentMedia, FullScreenEnabled } from "../../stores/status";
 
     import SVGAlbum from "/src/images/album.svg";
     import SVGYear from "/src/images/year.svg";
@@ -13,15 +13,21 @@
     }
 </script>
 
-{#if $CurrentSong}
+{#if $CurrentMedia}
     <div class="details" on:click={handleClick}>
-        <div class="title card-title" title="{$CurrentSong.title}"><Link to="song/{$CurrentSong.id}">{$CurrentSong.title}</Link></div>
-        <div class="artist" title="{$CurrentSong.artist.name}"><Link to="artists/{$CurrentSong.artist.id}">{$CurrentSong.artist.name}</Link></div>
+        <div class="title card-title" title="{$CurrentMedia.title}"><Link to="song/{$CurrentMedia.id}">{$CurrentMedia.title}</Link></div>
+
+        {#if $CurrentMedia.artist}
+            <div class="artist" title="{$CurrentMedia.artist.name}"><Link to="artists/{$CurrentMedia.artist.id}">{$CurrentMedia.artist.name}</Link></div>
+        {/if}
+
         <div class="album">
-            {#if $CurrentSong.year > 0}
-                <span class="date"><Link to="albums/year/{$CurrentSong.year}"><SVGYear class="inline"/> {$CurrentSong.year}</Link></span>
+            {#if $CurrentMedia.year > 0}
+                <span class="date"><Link to="albums/year/{$CurrentMedia.year}"><SVGYear class="inline"/> {$CurrentMedia.year}</Link></span>
             {/if}
-            <Link to="albums/{$CurrentSong.album.id}" title="{$CurrentSong.album.name}"><SVGAlbum class="inline"/> {$CurrentSong.album.name}</Link>
+            {#if $CurrentMedia.album}
+                <Link to="albums/{$CurrentMedia.album.id}" title="{$CurrentMedia.album.name}"><SVGAlbum class="inline"/> {$CurrentMedia.album.name}</Link>
+            {/if}
         </div>
     </div>
 {/if}

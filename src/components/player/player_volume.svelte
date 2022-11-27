@@ -1,7 +1,7 @@
 <script>
     import { onMount, tick } from 'svelte';
     import {
-        CurrentSong,
+        CurrentMedia,
         IsMuted,
         NowPlayingQueue,
         PlayerVolume,
@@ -151,7 +151,7 @@
 
                 <div class="info">Keeps volume consistent between different tracks</div>
 
-                {#if $CurrentSong}
+                {#if $CurrentMedia}
                     <div class="current">
                         <div>Current type: {$MediaPlayer.gainType}</div>
 

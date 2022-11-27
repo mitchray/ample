@@ -42,6 +42,7 @@
     import SmartlistsPage from './views/smartlists.svelte';
     import GenresPage from './views/genres.svelte';
     import GenrePage from './views/genre.svelte';
+    import PodcastsPage from './views/podcasts.svelte';
     import NewestPage from './views/newest.svelte';
     import RecentPage from './views/recent.svelte';
     import FavoritesPage from './views/favorites.svelte';
@@ -125,6 +126,7 @@
                     <Route path="smartlists" component={SmartlistsPage}/>
                     <Route path="genres/:id" component={GenrePage}/>
                     <Route path="genres" component={GenresPage}/>
+                    <Route path="podcasts" component={PodcastsPage}/>
                     <Route path="newest" component={NewestPage}/>
                     <Route path="recent" component={RecentPage}/>
                     <Route path="favorites" component={FavoritesPage}/>

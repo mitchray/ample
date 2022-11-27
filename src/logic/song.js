@@ -19,7 +19,8 @@ const fetchSongData = async (url) => {
                 // if a single object is returned place into array so map works
                 let dataPlaceholder = (data.song) ? data.song : [data];
 
-                dataPlaceholder = dataPlaceholder.map((item, index) => ({ ...item, _id: uuidv4()}));
+                // each media item needs a unique _id
+                dataPlaceholder = dataPlaceholder.map((item, index) => ({ ...item, _id: uuidv4(), isSong: true}));
 
                 return dataPlaceholder;
             } else {

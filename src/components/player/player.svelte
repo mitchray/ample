@@ -1,6 +1,6 @@
 <script>
     import { MediaPlayer } from '../../stores/player';
-    import { NowPlayingQueue, CurrentSong, RepeatEnabled, FullScreenEnabled } from "../../stores/status";
+    import { NowPlayingQueue, CurrentMedia, RepeatEnabled, FullScreenEnabled } from "../../stores/status";
 
     import Rating from '../rating.svelte';
     import PlayerSeekBar from './player_seekBar.svelte';
@@ -39,8 +39,8 @@
     </div>
 
     <div class="site-player__rating">
-        {#if $CurrentSong}
-            <Rating type="song" id="{$CurrentSong.id}" rating="{$CurrentSong.rating}" flag="{$CurrentSong.flag}" averageRating="{$CurrentSong.averagerating}" />
+        {#if $CurrentMedia}
+            <Rating type="song" id="{$CurrentMedia.id}" rating="{$CurrentMedia.rating}" flag="{$CurrentMedia.flag}" averageRating="{$CurrentMedia.averagerating}" />
         {:else}
             <Rating type="song" />
         {/if}

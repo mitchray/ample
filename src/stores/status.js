@@ -5,7 +5,7 @@ export let NowPlayingIndex = writable(0);
 
 export let IsPlaying   = writable(false);
 export let IsMuted     = writable(false);
-export let CurrentSong = writable(null);
+export let CurrentMedia = writable(null);
 export let TimeToggled = writable(false);
 
 export let SearchQuery = writable('');

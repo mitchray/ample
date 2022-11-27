@@ -4,7 +4,7 @@
 
     import { formatTotalTime, formatSongQuality, formatFilesize } from '../../logic/helper';
 
-    import { CurrentSong } from '../../stores/status';
+    import { CurrentMedia } from '../../stores/status';
     import { serverURL } from "../../stores/server";
 
     import SVGUp from "/src/images/keyboard_arrow_up.svg";
@@ -22,6 +22,7 @@
     import SVGSong from "/src/images/music_note.svg";
     import SVGYear from "/src/images/year.svg";
     import SVGGenre from "/src/images/label.svg";
+    import SVGPodcast from "/src/images/podcasts.svg";
     import SVGCurrent from "/src/images/play_circle.svg";
 
     const { getType, visibleColumns, selectedCount, isEditMode, dataDisplay } = getContext(contextKey);
@@ -105,12 +106,16 @@
                 <Link to="genres/{item.id}">
                     <SVGGenre class="inline" /> {item.name}
                 </Link>
+            {:else if getType() === "podcast"}
+                <Link to="podcasts/{item.id}">
+                    <SVGPodcast class="inline" /> {item.name}
+                </Link>
             {:else if getType() === "playlist"}
                 <Link to="playlists/{item.id}">
                     {item.name}
                 </Link>
             {:else if getType() === "song" || getType() === "playlist_songs"}
-                {#if $CurrentSong && $CurrentSong.id === item.id}
+                {#if $CurrentMedia && $CurrentMedia.id === item.id}
                     <span class="current-icon">
                         <SVGCurrent class="icon" />
                     </span>

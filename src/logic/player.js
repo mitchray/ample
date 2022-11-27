@@ -15,7 +15,7 @@ import {
     NowPlayingIndex,
     IsPlaying,
     IsMuted,
-    CurrentSong,
+    CurrentMedia,
     PlayerVolume,
     RepeatEnabled,
     VolumeNormalizationEnabled,
@@ -86,8 +86,8 @@ class Player {
             this.dynamicsCompressorEnabled = value;
         });
 
-        CurrentSong.subscribe(value => {
-            this.currentSong = value;
+        CurrentMedia.subscribe(value => {
+            this.currentMedia = value;
         });
 
         RepeatEnabled.subscribe(value => {
@@ -168,7 +168,7 @@ class Player {
     clearAll() {
         this.stopQueued = true;
         this.stop();
-        CurrentSong.set(null);
+        CurrentMedia.set(null);
         NowPlayingQueue.set([]);
         NowPlayingIndex.set(0);
         IsPlaying.set(false);
@@ -210,8 +210,14 @@ class Player {
         }
 
         if (song) {
-            CurrentSong.set(song);
-            document.title = song.title + " - " + song.artist.name;
+            CurrentMedia.set(song);
+
+            document.title = song.title;
+
+            // append artist name if present (i.e. songs)
+            if (song.artist) {
+                document.title += " - " + song.artist.name;
+            }
 
             // notify if missing gain tags
             if (!song.r128_track_gain && !song.replaygain_track_gain) {
@@ -247,8 +253,8 @@ class Player {
             if ('mediaSession' in navigator) {
                 navigator.mediaSession.metadata = new MediaMetadata({
                     title: song.title || '',
-                    artist: song.artist.name || '',
-                    album: song.album.name || '',
+                    artist: (song.artist) ? song.artist.name : '',
+                    album: (song.album) ? song.album.name : '',
                     artwork: [
                         { src: `${song.art}&thumb=22` },
                     ]
@@ -276,11 +282,21 @@ class Player {
             this.wavesurfer.setVolume(this.globalVolume);
 
             // create custom audio object in order to set crossOrigin
-            let ourSong = new Audio(this.currentSong.url);
-            ourSong.crossOrigin = 'anonymous';
-            this.wavesurfer.load(ourSong);
+            let ourMedia = new Audio(this.currentMedia.url);
+            ourMedia.crossOrigin = 'anonymous';
+            this.wavesurfer.load(ourMedia);
 
             await this.updateFilters();
+
+            let playPromise = this.wavesurfer.play();
+
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                })
+                .catch(error => {
+                    console.warn('Failed to start playing', error);
+                });
+            }
 
             this.wavesurfer.on('play', function () {
                 debugHelper('Wavesurfer playing');
@@ -321,27 +337,17 @@ class Player {
                 self.next();
             });
 
-            this.wavesurfer.play();
-
-            // Now that song has started, refresh the metadata in case it became stale while in the queue
-            let freshSong = Promise.resolve([]);
-            freshSong = getSong(song.id)
-                .then((result) => {
-                    if (!result.error && result.length > 0 && this.currentSong.id === song.id) {
-                        // TODO redo in a way that doesn't alter CurrentSong assignment
-                        // which results in things re-triggering
-                        // CurrentSong.set(result[0]);
-                    }
-                });
-
-            let songVersions = Promise.resolve([]);
-            songVersions = getSongVersions(song.title, song.artist.name)
-                .then((result) => {
-                    if (!result.error && result.length > 1) {
-                        song.versionsCount = result.length - 1;
-                        addAlternateVersionsNotification(song);
-                    }
-                });
+            // Search for song versions if artist is present (i.e. songs)
+            if (song.artist) {
+                let songVersions = Promise.resolve([]);
+                songVersions = getSongVersions(song.title, song.artist.name)
+                    .then((result) => {
+                        if (!result.error && result.length > 1) {
+                            song.versionsCount = result.length - 1;
+                            addAlternateVersionsNotification(song);
+                        }
+                    });
+            }
         } catch (e) {
             console.warn('Something went wrong during start', e);
             self.next();
@@ -435,7 +441,7 @@ class Player {
         this.stop();
 
         // if song has no rating by the end of play, notify
-        addRatingMissingNotification(this.currentSong);
+        addRatingMissingNotification(this.currentMedia);
 
         // Increment index and play next
         if (this.nowPlayingIndex + 1 < this.nowPlayingQueue.length) {
@@ -550,8 +556,8 @@ class Player {
         this.masteredVolume = 0;
         this.gainNeeded = 0;
 
-        let r128_track_gain = this.currentSong.r128_track_gain;
-        let rg_track_gain = this.currentSong.replaygain_track_gain;
+        let r128_track_gain = this.currentMedia.r128_track_gain || null;
+        let rg_track_gain = this.currentMedia.replaygain_track_gain || null;
 
         if (r128_track_gain !== null) { // R128 PREFERRED
             this.gainType = 'EBU R128';

@@ -18,6 +18,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists
     } from "../../logic/song";
+    import { getEpisodesFromPodcast } from "../../logic/podcast";
     import { filterBelow } from "../../logic/helper";
 
     import Menu                 from '../../components/menu.svelte';
@@ -81,6 +82,9 @@
                     data.name = genre.name;
                 }
                 fetchURL = getSomeSongsFromArtistsByGenre(data.name);
+                break;
+            case 'podcast':
+                fetchURL = getEpisodesFromPodcast(id);
                 break;
             case 'album':
                 fetchURL = getSongsFromAlbum({id: id});

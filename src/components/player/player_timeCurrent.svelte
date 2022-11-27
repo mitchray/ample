@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { CurrentSong, TimeToggled } from "../../stores/status";
+    import { CurrentMedia, TimeToggled } from "../../stores/status";
 
     import { formatSongLength } from "../../logic/helper";
     import { MediaPlayer } from "../../stores/player";
@@ -24,7 +24,7 @@
     });
 </script>
 
-{#if $CurrentSong}
+{#if $CurrentMedia}
     <span class="current" on:click={handleTimeToggle}>
         {#if $TimeToggled}
             -{formatSongLength(duration - currentTime)}

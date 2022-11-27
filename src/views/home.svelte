@@ -1,7 +1,7 @@
 <script>
     import CardList from '../components/cardList.svelte';
 
-    import { CurrentSong } from "../stores/status";
+    import { CurrentMedia } from "../stores/status";
 
     import { recentSongs } from "../logic/song";
     import { newestAlbums, randomAlbums } from "../logic/album";
@@ -9,7 +9,7 @@
 
 <CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest Albums" />
 
-{#key ($CurrentSong) ? $CurrentSong.id : 0}
+{#key ($CurrentMedia) ? $CurrentMedia.id : 0}
     <CardList type="song" dataProvider={"recentSongs"} limit=9 containerType="scroll" heading="Recently Played" />
 {/key}
 

@@ -55,13 +55,13 @@
                 break;
             case 'playlist':
                 logic = await import("../logic/playlist");
-                card = (await import('./playlist/playlistCard.svelte')).default;
+                card = (await import('../components/playlist/playlistCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
                 emptyMessage = "No playlists found";
                 break;
             case 'smartlist':
                 logic = await import("../logic/playlist");
-                card = (await import('./playlist/playlistCard.svelte')).default;
+                card = (await import('../components/playlist/playlistCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
                 emptyMessage = "No smartlists found";
                 options = {isSmartlist: true};
@@ -71,6 +71,12 @@
                 card = (await import('../components/genre/genreCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "genre-grid" : "genre-scroll";
                 emptyMessage = "No genres found";
+                break;
+            case 'podcast':
+                logic = await import("../logic/podcast");
+                card = (await import('../components/podcast/podcastCard.svelte')).default;
+                containerClass = (containerType === "grid") ? "podcast-grid" : "podcast-scroll";
+                emptyMessage = "No podcast found";
                 break;
             default:
                 break;

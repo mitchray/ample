@@ -5,7 +5,7 @@
 
     import { MediaPlayer, SiteMainSpace } from "../stores/player";
     import {
-        CurrentSong,
+        CurrentMedia,
         ShowLyrics
     } from "../stores/status";
 
@@ -14,7 +14,7 @@
     let loading = true;
 
     $: {
-        if (lyrics && $CurrentSong && $MediaPlayer.wavesurfer) {
+        if (lyrics && $CurrentMedia && $MediaPlayer.wavesurfer) {
             loading = true;
 
             // reset any previous instance
@@ -53,7 +53,7 @@
 
     function handleClick(time) {
         if (time > 0) {
-            $MediaPlayer.wavesurfer.seekTo(time / $CurrentSong.time);
+            $MediaPlayer.wavesurfer.seekTo(time / $CurrentMedia.time);
             follow = true;
         }
     }
@@ -85,8 +85,8 @@
                     on:touchstart={handleScroll}
                     class:disable-scroll={follow}
                 >
-                    {#if $CurrentSong}
-                        {#if $CurrentSong.lyrics && !loading}
+                    {#if $CurrentMedia}
+                        {#if $CurrentMedia.lyrics && !loading}
                             <div
                                 class="lyrics"
                                 class:hasTimestamps={$lyrics.isTimestamped}

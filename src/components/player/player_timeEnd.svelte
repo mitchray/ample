@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import { CurrentSong } from "../../stores/status";
+    import { CurrentMedia } from "../../stores/status";
 
     import { formatSongLength } from "../../logic/helper";
     import { MediaPlayer } from "../../stores/player";
@@ -18,7 +18,7 @@
     });
 </script>
 
-{#if $CurrentSong}
+{#if $CurrentMedia}
     {formatSongLength(duration)}
 {:else}
     -:--

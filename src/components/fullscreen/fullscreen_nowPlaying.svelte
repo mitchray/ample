@@ -1,5 +1,5 @@
 <script>
-    import { CurrentSong } from "../../stores/status";
+    import { CurrentMedia } from "../../stores/status";
 
     import Rating from '../rating.svelte';
     import PlayerSeekBar from '../player/player_seekBar.svelte';
@@ -16,8 +16,8 @@
     </div>
 
     <div class="fullscreen__rating">
-        {#if $CurrentSong}
-            <Rating type="song" id="{$CurrentSong.id}" flag="{$CurrentSong.flag}" rating="{$CurrentSong.rating}" averageRating="{$CurrentSong.averageRating}" />
+        {#if $CurrentMedia}
+            <Rating type="song" id="{$CurrentMedia.id}" flag="{$CurrentMedia.flag}" rating="{$CurrentMedia.rating}" averageRating="{$CurrentMedia.averageRating}" />
         {:else}
             <Rating />
         {/if}
