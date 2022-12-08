@@ -140,13 +140,10 @@
         container-name: album-details-wrapper;
         container-type: inline-size;
         padding-bottom: 0;
+        background-color: var(--color-interface-secondary);
     }
 
     .details {
-        background-color: var(--color-card-primary);
-        border-radius: 10px;
-        padding: var(--spacing-lg);
-        box-shadow: var(--shadow-md);
         margin-bottom: var(--spacing-xl);
     }
 
@@ -180,24 +177,16 @@
     }
 
     .name {
-        background-color: var(--color-card-highlight);
-        padding: var(--spacing-md);
-        border-radius: 5px;
         margin-bottom: var(--spacing-lg);
     }
 
     .title {
         --roboto-opsz: 50;
         line-height: 1.1;
-        text-align: center;
         margin-bottom: var(--spacing-sm);
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;
-    }
-
-    .artist {
-        text-align: center;
     }
 
     .meta {
@@ -206,6 +195,5 @@
         gap: var(--spacing-md) var(--spacing-lg);
         margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
-        align-items: center;
     }
 </style>

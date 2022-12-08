@@ -89,10 +89,6 @@
                         </label>
                     </p>
 
-                    <p>
-                        You will remain logged in until you log out. <br>Not recommended for shared devices.
-                    </p>
-
                     <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
                 </form>
             </div>
@@ -101,15 +97,11 @@
         {#if result && result.message}
             <p class="login-message badge badge--warning" in:fade>{result.message}</p>
         {/if}
-
-        <div class="meta">
-            <span>Ample v{$ampleVersion}</span> {#if $serverVersion}- <span>Ampache v{$serverVersion}</span>{/if}
-        </div>
     </div>
-</div>
 
-<div class="bg-container" out:fade>
-    <div class="bg"></div>
+    <div class="meta">
+        <span>Ample v{$ampleVersion}</span> {#if $serverVersion}- <span>Ampache v{$serverVersion}</span>{/if}
+    </div>
 </div>
 
 <style>
@@ -138,10 +130,7 @@
         width: 100%;
         max-width: 400px;
         padding: var(--spacing-xxl);
-        background-color: var(--color-interface);
-        border-radius: 15px;
         z-index: 10;
-        box-shadow: var(--shadow-xl);
     }
 
     label > * {
@@ -166,26 +155,14 @@
 
     .login-message {
         position: absolute;
-        top: 100%;
-        left: 0;
-        width: 100%;
+        left: var(--spacing-xxl);
+        right: var(--spacing-xxl);
     }
 
     .meta {
         position: absolute;
-        bottom: var(--spacing-xxl);
-        right: var(--spacing-xxl);
+        bottom: var(--spacing-lg);
+        right: var(--spacing-lg);
         opacity: 0.4;
-    }
-
-    .bg {
-        background-color: var(--color-background);
-        bottom: 0;
-        left: -50%;
-        position: fixed;
-        right: -50%;
-        top: 0;
-        z-index: 1;
-        opacity: 0.1;
     }
 </style>

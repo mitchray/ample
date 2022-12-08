@@ -264,7 +264,7 @@
 
 <style>
     .site-queue {
-        background-color: var(--color-background);
+        background-color: var(--color-interface);
         border-left: 1px solid var(--color-border);
         position: absolute;
         width: var(--size-queue-width);
@@ -374,7 +374,7 @@
 
     @media (hover: hover) {
         .queue-item:hover {
-            background-color: var(--color-row-hover);
+            background-color: var(--color-background);
         }
     }
 
@@ -392,7 +392,7 @@
     }
 
     .currentlyPlaying {
-        background-color: var(--color-card-highlight);
+        box-shadow: inset 0 0 0 1px var(--color-highlight);
     }
 
     .details {

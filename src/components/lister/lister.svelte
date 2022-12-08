@@ -166,6 +166,7 @@
         position: sticky;
         top: 0;
         z-index: 1;
+        align-items: start;
     }
 
     .lister-actions > .group {
@@ -199,12 +200,12 @@
     }
 
     .lister-container.is-table:global(.scroll-start) :global(.name:before) {
-        box-shadow: 2px 0 6px rgba(0,0,0,0.2);
+        box-shadow: 2px 0 6px rgba(var(--color-shadow-val),0.2);
         clip-path: inset(0px -10px 0px 0px);
     }
 
     .lister-container.is-table:global(.scroll-end) :global(.actions:before) {
-        box-shadow: -2px 0 6px rgba(0,0,0,0.2);
+        box-shadow: -2px 0 6px rgba(var(--color-shadow-val),0.2);
         clip-path: inset(0px 0px 0px -10px);
     }
 

@@ -126,8 +126,8 @@
 
 <style>
     .site-header {
-        border-bottom: 1px solid var(--color-border);
         background-color: var(--color-interface);
+        border-bottom: 1px solid var(--color-border);
         width: 100%;
         height: var(--size-header-height);
         display: flex;
@@ -162,14 +162,6 @@
     :global(.ample-logo),
     :global(.ample-letter) {
         color: var(--color-highlight);
-    }
-
-    :global(.ample-logo > *) {
-        opacity: 0.7;
-    }
-
-    :global(.ample-logo .amp) {
-        opacity: 1;
     }
 
     @media (hover: hover) {

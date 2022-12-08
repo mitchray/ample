@@ -75,6 +75,9 @@
         position: relative;
         z-index: 1;
         overflow: hidden;
+        background-color: var(--color-card-primary);
+        box-shadow: var(--shadow-md);
+        border-radius: 5px;
     }
 
     .info {

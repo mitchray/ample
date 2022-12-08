@@ -1,5 +1,9 @@
 # Changelog
 
+## [1.0.0] - 202X-XX-XX
+### Added
+- Sidebar grid display
+
 ## [0.50.1] - 2022-11-26
 ### Fixed
 - Container queries on Chrome

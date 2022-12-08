@@ -79,7 +79,8 @@
     /* Playlist grids should have this on the containing element */
     :global(.playlist-grid) {
         display: grid;
-        gap: 20px;
+        column-gap: var(--spacing-lg);
+        row-gap: var(--spacing-xl);
         grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
 
@@ -96,8 +97,6 @@
     }
 
     :global(.playlist-card) {
-        padding: var(--spacing-md);
-        padding-top: 0;
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;

@@ -224,11 +224,6 @@
         display: block;
     }
 
-    .info {
-        margin-top: var(--spacing-sm);
-        color: var(--color-text-secondary);
-    }
-
     .group + .group {
         padding-top: var(--spacing-lg);
     }

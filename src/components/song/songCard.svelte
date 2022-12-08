@@ -29,13 +29,10 @@
             <div class="top">
                 <div class="title" title="{song.name}"><Link to="song/{song.id}">{song.name}</Link></div>
                 <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
+                <div class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
             </div>
 
             <div class="bottom">
-                <div class="meta">
-                    <span class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></span>
-                </div>
-
                 <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
 
                 <div class="actions">
@@ -62,13 +59,10 @@
             <div class="top">
                 <div class="title">Loading</div>
                 <div class="artist"><br></div>
+                <div class="album"><br></div>
             </div>
 
             <div class="bottom">
-                <div class="meta">
-                    <span class="album"><br></span>
-                </div>
-
                 <Rating />
 
                 <div class="actions">
@@ -83,15 +77,15 @@
     /* Song grids should have this on the containing element */
     :global(.song-grid) {
         display: grid;
-        gap: 20px;
-        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--spacing-xxl);
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     }
 
     :global(.song-scroll) {
         border: 2px solid var(--color-separator);
         border-radius: 15px;
         padding: var(--spacing-lg);
-        gap: 20px;
+        gap: var(--spacing-xxl);
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -99,11 +93,10 @@
     }
 
     :global(.song-scroll) .song-card {
-        width: 350px;
+        width: 280px;
     }
 
     .song-card {
-        padding: var(--spacing-md);
         height: 100%; /* equal height with siblings */
         display: flex;
     }
@@ -112,7 +105,7 @@
         font-size: 0;
         position: relative;
         height: 100%;
-        width: 140px;
+        width: 120px;
         aspect-ratio: 1 / 1;
         flex-shrink: 0;
         flex-grow: 0;
@@ -137,10 +130,7 @@
     }
 
     .top {
-        background-color: var(--color-card-highlight);
-        padding: var(--spacing-md) var(--spacing-md);
         margin-bottom: var(--spacing-sm);
-        border-radius: 5px;
     }
 
     .title,
@@ -153,11 +143,6 @@
 
     .album {
         margin-bottom: var(--spacing-sm);
-    }
-
-    .meta {
-        display: flex;
-        gap: var(--spacing-lg);
     }
 
     .bottom {

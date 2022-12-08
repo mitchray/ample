@@ -159,6 +159,9 @@
         overflow: auto;
         max-height: 400px;
         padding: var(--spacing-md);
+    }
+
+    .notifications-view .panel-content {
         background-color: var(--color-background);
     }
 
@@ -180,11 +183,6 @@
 
     .clear-notifications {
         margin-right: auto;
-    }
-
-    .info {
-        margin-top: var(--spacing-sm);
-        color: var(--color-text-secondary);
     }
 
     .group + .group {

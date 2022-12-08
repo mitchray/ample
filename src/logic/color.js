@@ -102,8 +102,9 @@ export function outputThemeVariables(hue, selector) {
     if (get(Theme) === 'light') {
         return `<style>
         ${selector} {
-            --color-background:        rgb(${lchToRgb([ 95,  6, hue])});
-            --color-interface:         rgb(${lchToRgb([ 98,  3, hue])});
+            --color-background:           rgb(${lchToRgb([ 97,  3, hue])});
+            --color-interface:            rgb(${lchToRgb([100,  0, hue])});
+            --color-interface-secondary:  rgb(${lchToRgb([ 94,  6, hue])});
             --color-border:            rgb(${lchToRgb([ 80, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 70, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 90, 15, hue])});
@@ -152,8 +153,9 @@ export function outputThemeVariables(hue, selector) {
     if (get(Theme) === 'dark') {
         return `<style>
         ${selector} {
-            --color-background:        rgb(${lchToRgb([  4,  2, hue])});
-            --color-interface:         rgb(${lchToRgb([  9,  3, hue])});
+            --color-background:           rgb(${lchToRgb([  4,  3, hue])});
+            --color-interface:            rgb(${lchToRgb([  9,  3, hue])});
+            --color-interface-secondary:  rgb(${lchToRgb([ 12,  6, hue])});
             --color-border:            rgb(${lchToRgb([ 20, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 30, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 25, 15, hue])});

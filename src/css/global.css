@@ -47,12 +47,12 @@
     --roboto-opsz: 13;
 
     /* Shadows */
-    --shadow-inner: rgba(0, 0, 0, 0.06) 0px 2px 4px 0px inset;
-    --shadow-sm:  rgba(var(--color-shadow-val), 0.1) 0px 1px 3px 0px,    rgba(var(--color-shadow-val), 0.06) 0px 1px 2px 0px;
-    --shadow-md:  rgba(var(--color-shadow-val), 0.1) 0px 4px 6px -1px,   rgba(var(--color-shadow-val), 0.06) 0px 2px 4px -1px;
-    --shadow-lg:  rgba(var(--color-shadow-val), 0.1) 0px 10px 15px -3px, rgba(var(--color-shadow-val), 0.05) 0px 4px 6px -2px;
-    --shadow-xl:  rgba(var(--color-shadow-val), 0.1) 0px 20px 25px -5px, rgba(var(--color-shadow-val), 0.04) 0px 10px 10px -5px;
-    --shadow-xxl: rgba(var(--color-shadow-val), 0.1) 0px 20px 25px -5px, rgba(var(--color-shadow-val), 0.04) 0px 10px 10px -5px;
+    --shadow-inner: rgba(var(--color-shadow-val), 0.12) 0px 2px 4px 0px inset;
+    --shadow-sm:  rgba(var(--color-shadow-val), 0.2) 0px 1px 3px 0px,    rgba(var(--color-shadow-val), 0.12) 0px 1px 2px 0px;
+    --shadow-md:  rgba(var(--color-shadow-val), 0.2) 0px 4px 6px -1px,   rgba(var(--color-shadow-val), 0.12) 0px 2px 4px -1px;
+    --shadow-lg:  rgba(var(--color-shadow-val), 0.2) 0px 10px 15px -3px, rgba(var(--color-shadow-val), 0.10) 0px 4px 6px -2px;
+    --shadow-xl:  rgba(var(--color-shadow-val), 0.2) 0px 20px 25px -5px, rgba(var(--color-shadow-val), 0.08) 0px 10px 10px -5px;
+    --shadow-xxl: rgba(var(--color-shadow-val), 0.2) 0px 20px 25px -5px, rgba(var(--color-shadow-val), 0.08) 0px 10px 10px -5px;
 }
 
 /* --------------------------
@@ -502,19 +502,6 @@ svg.inline {
    Shared
    -------------------------- */
 
-.card:not(.album-card-expanded) {
-    background-color: var(--color-card-primary);
-    border-radius: 10px;
-    box-shadow: var(--shadow-sm);
-}
-
-@media (hover: hover) {
-    .card:not(.album-card-expanded):hover {
-        box-shadow: var(--shadow-xl);
-        background-color: var(--color-card-hover);
-    }
-}
-
 .card {
     font-stretch: 50%;
 }
@@ -629,10 +616,17 @@ section {
 .panel-header,
 .panel-footer {
     min-height: 48px;
-    background-color: var(--color-interface);
     align-items: center;
     padding: var(--spacing-md) var(--spacing-lg);
     padding-right: var(--spacing-md);
+}
+
+.panel-header {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.panel-footer {
+    border-top: 1px solid var(--color-border);
 }
 
 .panel-content {
@@ -658,10 +652,6 @@ section {
     z-index: 100;
 }
 
-.panel-header + .panel-actions {
-    border-top: 1px solid var(--color-border);
-}
-
 .panel-action {
     display: flex;
     justify-content: center;
@@ -685,4 +675,9 @@ section {
 
 .panel-action + .panel-action {
     border-left: 1px solid var(--color-border);
+}
+
+.panel-content .group .info {
+    margin-top: var(--spacing-sm);
+    color: var(--color-text-secondary);
 }

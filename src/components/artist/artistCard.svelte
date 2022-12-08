@@ -49,7 +49,8 @@
     /* Artist grids should have this on the containing element */
     :global(.artist-grid) {
         display: grid;
-        gap: var(--spacing-md);
+        row-gap: var(--spacing-xxl);
+        column-gap: var(--spacing-lg);
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 
@@ -69,15 +70,13 @@
     }
 
     .artist-card {
-        padding: var(--spacing-md);
-        padding-bottom: var(--spacing-lg);
         height: 100%; /* equal height with siblings */
         display: flex;
         flex-direction: column;
     }
 
     .art-container {
-        border-radius: 50%;
+        border-radius: 5px;
         overflow: hidden;
         padding-bottom: 100%;
         width: 100%;
@@ -99,8 +98,7 @@
     }
 
     .title {
-        text-align: center;
-        margin: var(--spacing-lg) var(--spacing-sm) var(--spacing-md);
+        margin: var(--spacing-md) 0 var(--spacing-md);
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -108,7 +106,5 @@
 
     .rating-container {
         display: flex;
-        justify-content: center;
-        margin-top: auto;
     }
 </style>

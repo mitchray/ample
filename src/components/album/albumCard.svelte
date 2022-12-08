@@ -37,17 +37,6 @@
             </div>
 
             <div class="bottom">
-                <div class="meta">
-                    {#if album.year > 0}
-                        <span>
-                            <Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link>
-                        </span>
-                    {/if}
-                    <span>
-                        <SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}
-                    </span>
-                </div>
-
                 <div class="rating-container">
                     <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}"/>
                 </div>
@@ -77,12 +66,6 @@
             </div>
 
             <div class="bottom">
-                <div class="meta">
-                    <span>
-                        <SVGTrack class="inline"/> &nbsp;<br>
-                    </span>
-                </div>
-
                 <div class="rating-container">
                     <Rating />
                 </div>
@@ -99,8 +82,8 @@
     /* Album grids should have this on the containing element */
     :global(.album-grid) {
         display: grid;
-        row-gap: var(--spacing-lg);
-        column-gap: var(--spacing-md);
+        row-gap: var(--spacing-xxl);
+        column-gap: var(--spacing-lg);
         grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
 
@@ -108,7 +91,7 @@
         border: 2px solid var(--color-separator);
         border-radius: 15px;
         padding: var(--spacing-lg);
-        gap: var(--spacing-md);
+        gap: var(--spacing-lg);
         display: flex;
         flex-wrap: nowrap;
         overflow-x: auto;
@@ -124,7 +107,6 @@
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        padding: var(--spacing-md);
     }
 
     .image-container {
@@ -152,15 +134,7 @@
     }
 
     .top {
-        background-color: var(--color-card-highlight);
-        padding: var(--spacing-md);
-        border-radius: 5px;
         margin-bottom: var(--spacing-md);
-    }
-
-    .actions {
-        display: flex;
-        justify-content: center;
     }
 
     .title,
@@ -168,13 +142,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        text-align: center;
-    }
-
-    .meta {
-        display: flex;
-        gap: var(--spacing-lg);
-        justify-content: center;
     }
 
     .bottom {
@@ -184,7 +151,6 @@
     .rating-container {
         display: flex;
         flex-direction: column;
-        align-items: center;
-        margin: var(--spacing-md);
+        margin-bottom: var(--spacing-md);
     }
 </style>

@@ -84,11 +84,9 @@
                                 {/if}
                             </div>
 
-                            <div class="name">
-                                <h1 class="title">
-                                    {playlist.name}
-                                </h1>
-                            </div>
+                            <h1 class="title">
+                                {playlist.name}
+                            </h1>
 
                             {#if !isSmartlist}
                                 <div class="playlist-actions">
@@ -165,15 +163,7 @@
     .details-container {
         container-name: playlist-details-wrapper;
         container-type: inline-size;
-        padding-bottom: 0;
-    }
-
-    .details {
-        background-color: var(--color-card-primary);
-        border-radius: 10px;
-        padding: var(--spacing-lg);
-        box-shadow: var(--shadow-md);
-        margin-bottom: var(--spacing-xl);
+        background-color: var(--color-interface-secondary);
     }
 
     .cover-rating {
@@ -184,7 +174,6 @@
     }
 
     .art-container {
-        width: 240px;
         max-width: 240px;
         aspect-ratio: 1 / 1;
         border-radius: 6px;
@@ -195,33 +184,20 @@
         margin-bottom: var(--spacing-lg);
     }
 
-    .rating {
-        margin-bottom: var(--spacing-lg);
-    }
-
     .info {
         display: flex;
-        gap: var(--spacing-lg);
+        gap: var(--spacing-sm);
         flex-direction: column;
-    }
-
-    .name {
-        background-color: var(--color-card-highlight);
-        padding: var(--spacing-md);
-        border-radius: 5px;
     }
 
     .title {
         --roboto-opsz: 50;
         line-height: 1.1;
-        text-align: center;
-        margin-bottom: var(--spacing-sm);
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;
         display: flex;
-        align-items: center;
-        justify-content: center;
+        margin-bottom: var(--spacing-lg);
     }
 
     .playlist-actions {
@@ -232,8 +208,6 @@
     .type {
         --roboto-opsz: 32;
         display: flex;
-        align-items: center;
-        justify-content: center;
         font-size: 14px;
         font-weight: 300;
         text-transform: uppercase;

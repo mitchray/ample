@@ -16,6 +16,7 @@ export let FullScreenEnabled = writable(false);
 export let SidebarIsMini   = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
 export let SidebarIsOpen   = writable(JSON.parse(localStorage.getItem('SidebarIsOpen')) || false);
 export let SidebarIsPinned = writable(JSON.parse(localStorage.getItem('SidebarIsPinned')) || false);
+export let SidebarIsGrid     = writable(JSON.parse(localStorage.getItem('SidebarIsGrid')) || false);
 
 export let QueueIsOpen   = writable(JSON.parse(localStorage.getItem('QueueIsOpen')) || false);
 export let QueueIsPinned = writable(JSON.parse(localStorage.getItem('QueueIsPinned')) || false);

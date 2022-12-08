@@ -73,6 +73,7 @@
 
 <style>
     .notification-card {
+        background-color: var(--color-interface);
         padding: var(--spacing-md);
         border-radius: 4px;
         border-left: 4px solid var(--color-regular-background);
