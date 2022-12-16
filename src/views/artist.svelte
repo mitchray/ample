@@ -254,7 +254,7 @@
     .art-container {
         max-width: 240px;
         aspect-ratio: 1 / 1;
-        border-radius: 50%;
+        border-radius: 6px;
         overflow: hidden;
         font-size: 0;
         position: relative;
