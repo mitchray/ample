@@ -102,11 +102,10 @@
         display: grid;
         grid-template-areas:
             "SPACER1 main-controls SPACER2 secondary-controls SPACER3 fullscreen SPACER4"
-            "SPACER1 times         SPACER2 now-playing        SPACER3 queue      SPACER4"
             "SPACER1 rating        SPACER2 volume             SPACER3 queue      SPACER4"
         ;
         grid-template-columns: 1fr auto 1fr 2fr 1fr min-content 1fr;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-template-rows: 1fr 1fr;
         align-items: center;
         padding: 0;
         z-index: 100;
@@ -256,12 +255,11 @@
     /* mobile only tweaks */
     @media all and (max-width: 679px) {
         .site-player__times {
-            top: 4px;
-            position: relative;
+            display: none;
         }
 
         .site-player__now-playing {
-            display: flex;
+            display: none;
             justify-content: center;
             align-self: center;
         }
