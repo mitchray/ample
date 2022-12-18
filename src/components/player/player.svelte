@@ -255,7 +255,7 @@
             ;
             grid-template-columns: 1fr auto var(--spacing-sm) auto var(--spacing-sm) auto 1fr;
             grid-template-rows: 1fr 1fr;
-            padding: var(--spacing-md);
+            padding: var(--spacing-md) 0;
         }
 
         /* UI volume controls not needed for mobile */
