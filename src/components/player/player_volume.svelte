@@ -1,5 +1,6 @@
 <script>
     import { onMount, tick } from 'svelte';
+    import { v4 as uuidv4 } from 'uuid';
     import {
         CurrentMedia,
         IsMuted,
@@ -16,6 +17,8 @@
     import SVGVolumeUp from "/src/images/volume_up.svg";
     import SVGVolumeMuted from "/src/images/volume_off.svg";
     import SVGTune from "/src/images/tune.svg";
+
+    const uniqueMenuID = "volumeMenu_" + uuidv4();
 
     let volumeWidth = $PlayerVolume; // volume in this file is treated as a linear 0-100 value
     let mouseDown = false;
@@ -62,13 +65,13 @@
     function handleVolumeMouseDown(event) {
         mouseDown = true;
         document.addEventListener('mouseup', handleVolumeMouseUp);
-        volumeSlider.classList.add("dragging");
+        volumeSlider?.classList.add("dragging");
     }
 
     function handleVolumeMouseUp(event) {
         mouseDown = false;
         document.removeEventListener('mouseup', handleVolumeMouseUp);
-        volumeSlider.classList.remove("dragging");
+        volumeSlider?.classList.remove("dragging");
     }
 
     function handleVolumeDrag(event) {
@@ -128,7 +131,7 @@
 </div>
 
 <button
-    id="volumeMenu"
+    id={uniqueMenuID}
     class="icon-button"
     title="Volume settings"
     on:click={toggleMenu}
@@ -137,7 +140,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="top-center" toggleSelector={"#volumeMenu"} bind:isVisible={menuIsVisible} >
+    <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible={menuIsVisible} >
         <div class="header panel-header">
             <h4 class="title panel-title">Volume Settings</h4>
         </div>
