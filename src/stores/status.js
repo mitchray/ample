@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { readable, writable } from 'svelte/store';
 
 export let NowPlayingQueue = writable([]);
 export let NowPlayingIndex = writable(0);
@@ -42,3 +42,20 @@ export let SkipBelowRating = writable(JSON.parse(localStorage.getItem('SkipBelow
 
 export let Theme     = writable(JSON.parse(localStorage.getItem('AmpleTheme')) || null);
 export let customHue = writable();
+
+export const IsMobile = readable(false, function start(set) {
+    const mobile = window.matchMedia("(max-width: 679.99px)");
+
+    mobile.onchange = (e) => {
+        handleDeviceChange(e);
+    };
+
+    function handleDeviceChange(e) {
+        set(e.matches);
+    }
+
+    // Kick-off
+    handleDeviceChange(mobile);
+
+    return function stop() {};
+});

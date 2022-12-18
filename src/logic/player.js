@@ -19,7 +19,8 @@ import {
     PlayerVolume,
     RepeatEnabled,
     VolumeNormalizationEnabled,
-    DynamicsCompressorEnabled
+    DynamicsCompressorEnabled,
+    IsMobile
 } from '../stores/status';
 
 /**
@@ -51,12 +52,10 @@ class Player {
 
         // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
         PlayerVolume.subscribe(value => {
-            let logarithmicVolume = Math.pow(value / 100, 2); // logarithmic volume control
-
-            this.globalVolume = logarithmicVolume;
+            this.globalVolume = this.logVolume(value);
 
             if (this.wavesurfer) {
-                this.wavesurfer.setVolume(logarithmicVolume);
+                this.wavesurfer.setVolume(this.globalVolume);
             }
 
             localStorage.setItem('PlayerVolume', JSON.stringify(value));
@@ -64,6 +63,15 @@ class Player {
 
         NowPlayingQueue.subscribe(value => {
             this.nowPlayingQueue = value;
+        });
+
+        // Set current wavesurfer volume to max if mobile
+        IsMobile.subscribe(value => {
+            this.globalVolume = (value) ? 1.0 : this.logVolume(get(PlayerVolume));
+
+            if (this.wavesurfer) {
+                this.wavesurfer.setVolume(this.globalVolume);
+            }
         });
 
         NowPlayingIndex.subscribe(value => {
@@ -148,6 +156,10 @@ class Player {
             // redraw waveform regardless
             this.wavesurfer.drawBuffer();
         }
+    }
+
+    logVolume(val) {
+        return Math.pow(val / 100, 2);
     }
 
     /**
