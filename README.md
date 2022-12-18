@@ -5,7 +5,7 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 
 #### Disclaimer
 This is a personal hobby project which caters to my own needs, which means
-- Music only, no video or podcast support sorry!
+- Music only (+podcasts in future), no video support sorry! 
 - As configuration-free as possible, i.e. limited customisation
 - Simpler feature requests are preferred
 
@@ -26,6 +26,7 @@ This is a personal hobby project which caters to my own needs, which means
   - Alternate song versions (acoustic, live, demo etc)
   - Missing volume gain tags
   - Missing song rating
+  - Missing/untimestamped song lyrics
 - Same powerful Advanced Search as Ampache
 - Compare an artist's collection with MusicBrainz recordings (if the artist has an MBID associated with it)
 - Skip songs below a specified rating when adding to queue
@@ -33,7 +34,7 @@ This is a personal hobby project which caters to my own needs, which means
 - Search albums by date range
 
 ## Requirements
-- Ampache 5.x
+- Ampache 5+
 - A modern web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
 - Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
@@ -55,4 +56,4 @@ This is a personal hobby project which caters to my own needs, which means
 
 Additional console logging can be enabled by setting ```debugMode true``` in ```src/stores/server.js```
 
-You can override the ```detectedURL``` in ```src/stores/server.js``` for testing with another Ampache server
+Change the ```DEV detectedURL``` in ```src/stores/server.js``` to your desired Ampache server
