@@ -1,8 +1,4 @@
 <script>
-    import { MediaPlayer } from '../../stores/player';
-    import { NowPlayingQueue, CurrentMedia, RepeatEnabled, FullScreenEnabled } from "../../stores/status";
-
-    import Rating from '../rating.svelte';
     import PlayerSeekBar from './player_seekBar.svelte';
     import PlayerTimeCurrent from './player_timeCurrent.svelte';
     import PlayerTimeEnd from './player_timeEnd.svelte';
@@ -11,13 +7,13 @@
     import PlayerCurrentDetails from './player_currentDetails.svelte';
     import PlayerQueue from './player_queue.svelte';
     import PlayerVolume from '../player/player_volume.svelte';
+    import PlayerRepeat from '../player/player_repeat.svelte';
+    import PlayerShuffle from '../player/player_shuffle.svelte';
+    import PlayerRating from '../player/player_rating.svelte';
+    import PlayerFullscreen from '../player/player_fullscreen.svelte';
     import PlayerAutoPlay from '../player/player_autoPlay.svelte';
     import PlayerLyrics from '../player/player_lyrics.svelte';
     import PlayerSkipBelow from '../player/player_skipBelow.svelte';
-
-    import SVGShuffle from "/src/images/shuffle.svg";
-    import SVGRepeat from "/src/images/repeat.svg";
-    import SVGUp from "/src/images/keyboard_arrow_up.svg";
 </script>
 
 <div class="site-player">
@@ -39,11 +35,7 @@
     </div>
 
     <div class="site-player__rating">
-        {#if $CurrentMedia}
-            <Rating type="song" id="{$CurrentMedia.id}" rating="{$CurrentMedia.rating}" flag="{$CurrentMedia.flag}" averageRating="{$CurrentMedia.averagerating}" />
-        {:else}
-            <Rating type="song" />
-        {/if}
+        <PlayerRating />
     </div>
 
     <div class="site-player__times">
@@ -54,39 +46,31 @@
        <PlayerVolume />
     </div>
 
-    <div class="site-player__secondary-controls">
+    <!-- feature-specific player controls -->
+    <div class="site-player__feature-controls">
         <PlayerLyrics />
-
-        <button
-            class="icon-button icon-repeat"
-            class:active={$RepeatEnabled}
-            on:click={$MediaPlayer.repeat()}
-            title="Repeat"
-        >
-            <SVGRepeat style="transform: scale(0.85);" />
-        </button>
-
-        <button
-            class="icon-button icon-shuffle"
-            on:click={$MediaPlayer.shuffle()}
-            disabled={$NowPlayingQueue.length === 0}
-            title="Shuffle"
-        >
-            <SVGShuffle style="transform: scale(0.85);" />
-        </button>
-
         <PlayerAutoPlay />
-
         <PlayerSkipBelow />
     </div>
 
+    <!-- playback-specific player controls -->
+    <div class="site-player__playback-controls">
+        <PlayerRepeat />
+        <PlayerShuffle />
+        <PlayerVolume />
+    </div>
+
+    <!-- all the player options together -->
+    <div class="site-player__secondary-controls">
+        <PlayerLyrics />
+        <PlayerAutoPlay />
+        <PlayerSkipBelow />
+        <PlayerRepeat />
+        <PlayerShuffle />
+    </div>
+
     <div class="site-player__fullscreen">
-        <button
-            class="icon-button"
-            on:click={() => { $FullScreenEnabled = true }}
-        >
-            <SVGUp />
-        </button>
+        <PlayerFullscreen />
     </div>
 
     <div class="site-player__queue">
@@ -95,21 +79,29 @@
 </div>
 
 <style>
+    /*
+     * Common
+     */
     .site-player {
         background-color: var(--color-interface);
         border-top: 1px solid var(--color-border);
         height: var(--size-webplayer-height);
         display: grid;
-        grid-template-areas:
-            "SPACER1 main-controls SPACER2 secondary-controls SPACER3 fullscreen SPACER4"
-            "SPACER1 rating        SPACER2 volume             SPACER3 queue      SPACER4"
-        ;
-        grid-template-columns: 1fr auto 1fr 2fr 1fr min-content 1fr;
-        grid-template-rows: 1fr 1fr;
         align-items: center;
-        padding: 0;
         z-index: 100;
         position: relative;
+    }
+
+    /* hide non-permanent items */
+    .site-player__now-playing,
+    .site-player__waveform,
+    .site-player__volume,
+    .site-player__feature-controls,
+    .site-player__playback-controls,
+    .site-player__secondary-controls,
+    .site-player__fullscreen,
+    .site-player__queue {
+        display: none;
     }
 
     .site-player__seekBar :global(.seekBar) {
@@ -132,7 +124,6 @@
         grid-area: now-playing;
         height: 100%;
         overflow: hidden;
-        display: flex;
         align-items: center;
     }
 
@@ -141,7 +132,6 @@
         min-height: 100%;
         cursor: pointer;
         position: relative;
-        display: none;
     }
 
     #waveform {
@@ -181,15 +171,21 @@
 
     .site-player__volume {
         grid-area: volume;
-        display: flex;
         align-items: center;
         transform: scale(0.9);
+    }
+
+    .site-player__feature-controls {
+        grid-area: feature-controls;
+    }
+
+    .site-player__playback-controls {
+        grid-area: playback-controls;
     }
 
     .site-player__secondary-controls {
         grid-area: secondary-controls;
         gap: var(--spacing-sm);
-        display: flex;
         justify-content: center;
         align-items: center;
         transform: scale(0.9);
@@ -200,12 +196,10 @@
     .site-player__fullscreen {
         grid-area: fullscreen;
         justify-content: center;
-        display: none;
     }
 
     .site-player__queue {
         grid-area: queue;
-        display: flex;
         height: 100%;
     }
 
@@ -253,51 +247,28 @@
     }
 
     /* mobile only tweaks */
-    @media all and (max-width: 679px) {
-        .site-player__times {
-            display: none;
+    @media all and (max-width: 679.99px) {
+        .site-player {
+            grid-template-areas:
+                "SPACER1 times             SPACER2 main-controls SPACER3 fullscreen       SPACER4"
+                "SPACER1 playback-controls SPACER2 rating        SPACER3 feature-controls SPACER4"
+            ;
+            grid-template-columns: 1fr auto var(--spacing-sm) auto var(--spacing-sm) auto 1fr;
+            grid-template-rows: 1fr 1fr;
+            padding: var(--spacing-md);
         }
 
-        .site-player__now-playing {
-            display: none;
-            justify-content: center;
-            align-self: center;
+        /* UI volume controls not needed for mobile */
+        .site-player :global(.volume-control) {
+            display: none !important;
         }
 
-        .site-player__now-playing :global(.container) {
+        .site-player__feature-controls {
             display: flex;
-            justify-content: center;
-            align-self: center;
-            position: relative;
-            bottom: 2px;
         }
 
-        .site-player__now-playing :global(.nowPlayingArtwork) {
-            margin-right: var(--spacing-sm);
-        }
-
-        .site-player__now-playing :global(.title) {
-            margin: 0;
-            --roboto-grad: 0;
-            --roboto-opsz: 13;
-            font-weight: 400;
-        }
-
-        .site-player__now-playing :global(.artist),
-        .site-player__now-playing :global(.album) {
-            display: none;
-        }
-
-        .site-player__secondary-controls {
-            gap: unset;
-        }
-
-        .site-player__secondary-controls :global(.icon-button) {
-            padding: 1px;
-        }
-
-        .site-player__volume :global(.site-player__volume-slider) {
-            min-width: unset !important;
+        .site-player__playback-controls {
+            display: flex;
         }
 
         .site-player__fullscreen {
@@ -320,7 +291,23 @@
             display: none;
         }
 
+        .site-player__now-playing {
+            display: flex;
+        }
+
+        .site-player__secondary-controls {
+            display: flex;
+        }
+
         .site-player__waveform {
+            display: flex;
+        }
+
+        .site-player__volume {
+            display: flex;
+        }
+
+        .site-player__queue {
             display: flex;
         }
     }

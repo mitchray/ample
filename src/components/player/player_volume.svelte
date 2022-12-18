@@ -105,7 +105,7 @@
 </script>
 
 <button
-    class="icon-button"
+    class="icon-button volume-control"
     on:click={handleMuteToggle}
     disabled={$NowPlayingQueue.length === 0}
     title="{$IsMuted ? 'Unmute' : 'Mute'}"
@@ -118,7 +118,7 @@
 </button>
 
 <div
-    class="site-player__volume-slider"
+    class="site-player__volume-slider volume-control"
     on:click={handleVolumeSlider}
     on:mousedown={handleVolumeMouseDown}
     on:mousemove={handleVolumeDrag}
