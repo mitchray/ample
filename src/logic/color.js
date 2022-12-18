@@ -155,7 +155,7 @@ export function outputThemeVariables(hue, selector) {
         ${selector} {
             --color-background:           rgb(${lchToRgb([  4,  1, hue])});
             --color-interface:            rgb(${lchToRgb([  9,  1, hue])});
-            --color-interface-secondary:  rgb(${lchToRgb([ 12,  2, hue])});
+            --color-interface-secondary:  rgb(${lchToRgb([ 12,  3, hue])});
             --color-border:            rgb(${lchToRgb([ 20, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 30, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 25, 15, hue])});
