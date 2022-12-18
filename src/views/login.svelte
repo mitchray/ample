@@ -123,6 +123,7 @@
     }
 
     .form {
+        background-color: var(--color-background); /* cover version details when the mobile keyboard appears */
         position: absolute;
         left: 50%;
         top: 50%;
