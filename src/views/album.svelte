@@ -84,6 +84,7 @@
                                 tableOnly={true}
                                 zone="album-contents"
                                 showArtist={album.artist.name === "Various Artists"}
+                                showArt={false}
                                 actionData={{
                                     disable: [...album.ampleSongs].length < 2,
                                     type: "album",

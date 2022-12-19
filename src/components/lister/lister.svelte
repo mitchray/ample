@@ -19,6 +19,7 @@
     export let zone           = "generic";
     export let showIndex      = false;
     export let showCheckboxes = false;
+    export let showArt        = true;
     export let showArtist     = false;
     export let initialSort    = null;
     export let initialReverse = null;
@@ -51,6 +52,7 @@
         showIndex,
         showCheckboxes,
         showArtist,
+        showArt,
         dataDisplay,
         columnWidths,
         listerObject,

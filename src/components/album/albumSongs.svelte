@@ -15,6 +15,7 @@
                 <Lister2
                     data={value}
                     type="song"
+                    showArt={false}
                     tableOnly={true}
                     zone="album-contents"
                     actionData={{

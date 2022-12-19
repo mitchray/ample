@@ -25,7 +25,7 @@
     import SVGPodcast from "/src/images/podcasts.svg";
     import SVGCurrent from "/src/images/play_circle.svg";
 
-    const { getType, visibleColumns, selectedCount, isEditMode, dataDisplay } = getContext(contextKey);
+    const { getType, visibleColumns, selectedCount, isEditMode, dataDisplay, showArt } = getContext(contextKey);
 
     function handleChecked(e) {
         if (e.target.checked) {
@@ -84,7 +84,7 @@
         {/if}
 
         {#if col.id === "name"}
-            {#if item.art}
+            {#if item.art && showArt}
                 <img class="image"
                     src="{item.art}&thumb=1"
                     alt=""
