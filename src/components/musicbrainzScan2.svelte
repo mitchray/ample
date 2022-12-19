@@ -336,81 +336,87 @@
 
 <div class="container">
     <div class="sidebar">
-        <div class="total badge badge--info">Showing {filteredRecordings.length} of {combinedSources.length}</div>
+        <div class="total">
+            <div class="badge badge--info">Showing {filteredRecordings.length} of {combinedSources.length}</div>
+        </div>
 
-        <h4 class="panel-title">Hide by status</h4>
+        <div class="group">
+            <h4 class="panel-title">Hide by status</h4>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideMatches} />
-            Exact matches ({counts.matches})
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideMatches} />
+                Exact matches ({counts.matches})
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideDuplicates} />
-            Duplicates ({counts.duplicates})
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideDuplicates} />
+                Duplicates ({counts.duplicates})
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideIssues} />
-            Issues ({counts.issues})
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideIssues} />
+                Issues ({counts.issues})
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideFlagged} />
-            Flagged ({counts.flagged})
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideFlagged} />
+                Flagged ({counts.flagged})
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideMissing} />
-            Missing ({counts.missing})
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideMissing} />
+                Missing ({counts.missing})
+            </label>
+        </div>
 
-        <h4 class="panel-title">Hide by type</h4>
+        <div class="group">
+            <h4 class="panel-title">Hide by type</h4>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideRemixes} />
-            Remixes
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideRemixes} />
+                Remixes
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideInstrumentals} />
-            Instrumentals/Acapellas
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideInstrumentals} />
+                Instrumentals/Acapellas
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideRadioEdits} />
-            Radio edits
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideRadioEdits} />
+                Radio edits
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideLive} />
-            Live recordings
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideLive} />
+                Live recordings
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideShortSongs} />
-            Under 60 seconds
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideShortSongs} />
+                Under 60 seconds
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideDemos} />
-            Demos
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideDemos} />
+                Demos
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideInterviews} />
-            Interviews/commentary
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideInterviews} />
+                Interviews/commentary
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideZeroTimes} />
-            Zero length tracks
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideZeroTimes} />
+                Zero length tracks
+            </label>
 
-        <label>
-            <input type=checkbox bind:checked={filters.hideVideos} />
-            Videos
-        </label>
+            <label>
+                <input type=checkbox bind:checked={filters.hideVideos} />
+                Videos
+            </label>
+        </div>
     </div>
 
     <div class="results">
@@ -493,33 +499,33 @@
 <style>
     .container {
         display: flex;
+        gap: var(--spacing-xl);
     }
 
     .sidebar {
         display: flex;
-        flex-direction: column;
-        margin-right: var(--spacing-xxl);
-        position: sticky;
         top: 0;
         align-self: flex-start; /* needed for sticky to activate */
-        max-width: fit-content;
         background-color: var(--color-card-primary);
         padding: var(--spacing-lg);
         border-radius: 6px;
         box-shadow: var(--shadow-md);
+        column-gap: var(--spacing-xl);
+        row-gap: var(--spacing-lg);
+        flex-shrink: 0;
+    }
+
+    h4 {
+        margin-bottom: var(--spacing-md);
     }
 
     .submit {
         margin-bottom: var(--spacing-lg);
     }
 
-    h4 {
-        margin-top: var(--spacing-md);
-        margin-bottom: var(--spacing-sm);
-    }
-
     .total {
         align-self: flex-start;
+        width: 100%;
     }
 
     label {
@@ -552,19 +558,20 @@
         text-align: left;
     }
 
-    .results :global(tr) {
+    tr {
         border-bottom: 1px solid var(--color-border);
     }
 
-    .results :global(.image) {
+    .image {
         margin: -5px 0;
     }
 
-    .results :global(td), .results :global(th) {
+    td,
+    th {
         padding: 0.8em 0.6em;
     }
 
-    .results :global(table) {
+    table {
         border-collapse: collapse;
     }
 
@@ -577,5 +584,54 @@
         display: flex;
         align-items: center;
         gap: var(--spacing-md);
+    }
+
+    .group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    @media (max-width: 700px) {
+        thead {
+            display: none;
+        }
+
+        tr {
+            display: flex;
+            flex-direction: column;
+            padding: var(--spacing-lg) 0;
+        }
+
+        td {
+            padding: var(--spacing-sm);
+        }
+
+        .time {
+            text-align: left;
+        }
+
+        .mbid {
+            word-break: break-all;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .container {
+            flex-direction: column;
+        }
+
+        .sidebar {
+            width: 100%;
+            flex-direction: row;
+            flex-wrap: wrap;
+        }
+    }
+
+    @media (min-width: 900px) {
+        .sidebar {
+            position: sticky;
+            max-width: fit-content;
+            flex-direction: column;
+        }
     }
 </style>
