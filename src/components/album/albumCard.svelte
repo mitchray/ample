@@ -98,7 +98,8 @@
         padding-bottom: 20px;
     }
 
-    :global(.album-scroll) .album-card {
+    :global(.album-scroll) .album-card,
+    :global(.album-card-expanded) .album-card {
         width: 190px;
     }
 
