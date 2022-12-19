@@ -18,6 +18,7 @@
                     tableOnly={true}
                     zone="album-contents"
                     actionData={{
+                        disable: [...discs].length < 2,
                         type: "album",
                         id: key,
                         mode: "miniButtons",

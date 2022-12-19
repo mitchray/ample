@@ -86,6 +86,10 @@
         overflow: hidden auto;
     }
 
+    :global(.actions-disabled) .header-flex {
+        top: -1px;
+    }
+
     .lister-flex {
         display: flex;
         flex: 1;

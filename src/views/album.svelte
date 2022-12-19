@@ -85,6 +85,7 @@
                                 zone="album-contents"
                                 showArtist={album.artist.name === "Various Artists"}
                                 actionData={{
+                                    disable: [...album.ampleSongs].length < 2,
                                     type: "album",
                                     id: album.id,
                                     mode: "miniButtons",

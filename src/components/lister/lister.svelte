@@ -106,7 +106,7 @@
 </script>
 
 
-<div class="lister-wrapper" bind:this={$listerWrapper}>
+<div class="lister-wrapper" bind:this={$listerWrapper} class:actions-disabled={actionData.disable}>
     <div class="lister-actions">
         {#if !actionData.disable}
             <div class="group">
@@ -185,6 +185,14 @@
         bottom: calc(-1 * var(--spacing-lg) - 1px);
         z-index: -1;
         pointer-events: none;
+    }
+
+    .actions-disabled .lister-actions {
+        margin-bottom: 0;
+    }
+
+    .actions-disabled .lister-actions:after {
+        bottom: calc(-1 * var(--spacing-sm) - 1px);
     }
 
     .lister-container {
