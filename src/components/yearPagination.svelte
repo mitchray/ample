@@ -4,95 +4,20 @@
     import SVGPlus from "/src/images/plus.svg";
     import SVGMinus from "/src/images/minus.svg";
 
-    const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
-    const currentDecade = Math.floor(currentYear / 10) * 10;
-    const currentCentury = Math.floor(currentYear / 100) * 100;
 
     export let fromYear = currentYear;
     export let toYear = currentYear;
     export let showYear = currentYear;
 
     let loadCount = 0;
-    let centuries = [];
-    let decades;
-    let years;
-    let lastYears = [2, 5, 10, 15, 20, 30, 40, 50];
-    let centuryFinal = currentCentury;
-    let decadeFinal = currentDecade;
-    let yearFinal = currentYear;
 
     let fromFinal = showYear || currentYear;
     let toFinal = showYear || currentYear;
 
-    $: decades = generateDecades(centuryFinal);
-    $: years = generateYears(decadeFinal);
-
-    generateCenturies();
-
-    function generateCenturies() {
-        // generate centuries
-        for (let i = currentCentury; i > 1400; i = i - 100) {
-            centuries.push(i);
-        }
-
-        centuries.reverse();
-    }
-
-    function generateDecades(val) {
-        let tempDecades = [];
-
-        for (let i = parseInt(val); i < parseInt(val) + 100; i = i + 10) {
-            if (i <= currentDecade) {
-                tempDecades.push(i);
-            }
-        }
-
-        return tempDecades;
-    }
-
-    function generateYears(val) {
-        let tempYears = [];
-
-        for (let i = parseInt(val); i < parseInt(val) + 10; i = i + 1) {
-            if (i <= currentYear) {
-                tempYears.push(i);
-            }
-        }
-
-        return tempYears;
-    }
-
-    const handleDateSelection = (e) => {
-        let fromSelected = e.target.dataset.from;
-        let toSelected = e.target.dataset.to;
-        let centurySelected = e.target.dataset.century;
-        let decadeSelected = e.target.dataset.decade;
-        let yearSelected = e.target.dataset.year;
-
-        fromFinal = fromSelected || fromFinal;
-        toFinal = toSelected || toFinal;
-        centuryFinal = centurySelected || '';
-        decadeFinal = decadeSelected || '';
-        yearFinal = yearSelected || '';
-    }
-
-    const handleRangeSelection = (e) => {
-        let fromSelected = e.target.dataset.from;
-        let toSelected = e.target.dataset.to;
-
-        fromFinal = fromSelected || fromFinal;
-        toFinal = toSelected || toFinal;
-    }
-
     // Cap values at currentYear
     function maxValueCheck(val) {
         return (val > currentYear) ? currentYear : val;
-    }
-
-    // Include more time in range if current year is still newish
-    function yearRangeAdjustment(year) {
-        return (currentMonth >= 5) ? year + 1 : year;
     }
 
     const handleValues = (e) => {
@@ -133,8 +58,14 @@
         <div class="input-group">
             <label>
                 From
-                <input type="number" bind:value={fromFinal} size="4" maxlength="4" on:change={handleFrom}>
+                <input type="number"
+                    bind:value={fromFinal}
+                    size="4"
+                    maxlength="4"
+                    on:change={handleFrom}
+                >
             </label>
+
             <button class="minus button" on:click={() => {--fromFinal; handleFrom()}}><SVGMinus /></button>
             <button class="plus button" on:click={() => {++fromFinal; handleFrom()}}><SVGPlus /></button>
         </div>
@@ -142,108 +73,34 @@
         <div class="input-group">
             <label>
                 To
-                <input type="number" bind:value={toFinal} size="4" maxlength="4" on:change={handleTo}>
+                <input type="number"
+                    bind:value={toFinal}
+                    size="4"
+                    maxlength="4"
+                    on:change={handleTo}
+                >
             </label>
+
             <button class="minus button" on:click={() => {--toFinal; handleTo()}}><SVGMinus /></button>
             <button class="plus button" on:click={() => {++toFinal; handleTo()}}><SVGPlus /></button>
         </div>
-
-        <button class="submit button button--primary" on:click={handleSearch}>Search</button>
     </div>
 
-    <div class="presets">
-        <div class="row ranges">
-            <div class="label">Ranges</div>
-            <ul>
-                {#each lastYears as chunk}
-                    <li>
-                        <button
-                            on:click={handleRangeSelection}
-                            data-from={yearRangeAdjustment(currentYear - chunk)}
-                            data-to={currentYear}
-                            class="button"
-                        >
-                            Last <span class="emphasis">{chunk} years</span>
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-        </div>
-
-        <div class="row timeframe centuries">
-            <div class="label">Centuries</div>
-            <ul>
-                {#each centuries as century}
-                    <li>
-                        <button
-                            on:click={handleDateSelection}
-                            data-from={century}
-                            data-to={maxValueCheck(century + 99)}
-                            data-century={century}
-                            class:active={century.toString() === centuryFinal.toString()}
-                            class="button"
-                        >
-                            {century}
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-        </div>
-
-        <div class="row timeframe decades">
-            <div class="label">Decades</div>
-            <ul>
-                {#each decades as decade}
-                    <li>
-                        <button
-                            on:click={handleDateSelection}
-                            data-from={decade}
-                            data-to={maxValueCheck(decade + 9)}
-                            data-century={centuryFinal}
-                            data-decade={decade}
-                            class:active={decade.toString() === decadeFinal.toString()}
-                            class="button"
-                        >
-                            {decade}
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-        </div>
-
-        <div class="row timeframe years">
-            <div class="label">Years</div>
-            <ul>
-                {#each years as year}
-                    <li>
-                        <button
-                            on:click={handleDateSelection}
-                            data-from={year}
-                            data-to={year}
-                            data-century={centuryFinal}
-                            data-decade={decadeFinal}
-                            data-year={year}
-                            class="button"
-                        >
-                            {year}
-                        </button>
-                    </li>
-                {/each}
-            </ul>
-        </div>
-    </div>
-
+    <button class="submit button button--primary" on:click={handleSearch}>Search</button>
 </div>
 
 <style>
     .container {
         display: flex;
+        flex-direction: column;
         align-items: center;
         background-color: var(--color-card-primary);
         border-radius: 10px;
         margin-bottom: var(--spacing-xxl);
         overflow: hidden;
         box-shadow: var(--shadow-md);
+        padding: var(--spacing-lg);
+        max-width: min-content;
     }
 
     /* hide number spinners */
@@ -261,8 +118,8 @@
     .inputs {
         flex-shrink: 0;
         display: flex;
-        flex-direction: column;
-        margin: 0 var(--spacing-lg);
+        flex-direction: row;
+        gap: var(--spacing-lg);
     }
 
     .input-group {
@@ -293,83 +150,17 @@
 
     .inputs label {
         margin: 0 var(--spacing-md);
+        color: var(--color-text-heading)
     }
 
     .inputs input {
         box-sizing: content-box; /* don't include padding for this */
         width: 4ch; /* declare as Chrome doesn't honor size attribute */
-        font-size: 2rem;
+        font-size: 1.2rem;
     }
 
     .submit {
         display: inline-block;
         text-align: center;
-        width: 100%;
-    }
-
-    .presets {
-        display: table;
-        border-left: 2px solid var(--color-border);
-    }
-
-    .presets .label,
-    .presets ul {
-        display: table-cell;
-        vertical-align: middle;
-    }
-
-    .row {
-        display: table-row;
-        height: 50px;
-    }
-
-    .row:nth-child(even) {
-        background-color: var(--color-row-stripe);
-    }
-
-    .label {
-        text-align: right;
-        padding-right: var(--spacing-lg);
-        padding-left: var(--spacing-xxl);
-    }
-
-    .timeframe ul {
-        margin: 0;
-    }
-
-    .timeframe li {
-        display: inline-block;
-    }
-
-    .timeframe button {
-        border: 0;
-    }
-
-    .timeframe button.active:not(:hover) {
-        background-color: var(--color-active-background);
-    }
-
-    .ranges ul {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-md);
-    }
-
-    .ranges button {
-        display: inline-block;
-        text-align: center;
-        min-width: 17ch;
-        margin: 0;
-        font-weight: normal;
-    }
-
-    .emphasis {
-        pointer-events: none;
-    }
-
-    @media all and (min-width: 1080px) {
-        .container {
-            max-width: 920px;
-        }
     }
 </style>
