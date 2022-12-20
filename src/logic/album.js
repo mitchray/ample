@@ -107,8 +107,7 @@ export const getAlbumsStartingWithChar = ({page = 0, limit = 50, filterChar}) =>
     let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search&type=album";
     queryURL += "&offset=" + page * limit;
     queryURL += "&limit=" + limit;
-    // ignore punctuation
-    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURI('^[[:punct:]]*') + filterChar;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURIComponent('^' + filterChar);
     queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
     debugHelper(queryURL, "getAlbumsStartingWithChar");
 

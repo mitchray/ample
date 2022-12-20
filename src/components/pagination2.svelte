@@ -59,6 +59,7 @@
     .limit {
         box-sizing: content-box;
         width: 8ch;
+        margin-left: var(--spacing-sm);
     }
 
     .button {

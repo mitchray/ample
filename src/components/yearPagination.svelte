@@ -150,7 +150,7 @@
 
     .inputs label {
         margin: 0 var(--spacing-md);
-        color: var(--color-text-heading)
+        color: var(--color-text-heading);
     }
 
     .inputs input {

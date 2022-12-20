@@ -1,12 +1,11 @@
 <script>
     import { getAlbumsStartingWithChar } from "../../logic/album";
 
-    import AlphanumericPagination from '../../components/alphanumericPagination.svelte';
+    import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
-    let selectedChar = ''; // bound from alphanumericPagination
-    let searchValue = ''; // bound from alphanumericPagination
+    let filterValue = ''; // bound from AlphanumericFilter
     let dataDisplay = [];
     let defaultLimit = 50;
     let page = 0;
@@ -18,7 +17,7 @@
     $: dataDisplay = dataDisplay;
 
     $: {
-        if (limit > 0 && (selectedChar || selectedChar === '')) {
+        if (limit > 0 && (filterValue || filterValue === '')) {
             resetPage()
             getData();
         }
@@ -31,7 +30,7 @@
     }
 
     async function getData() {
-        dataDisplay = await getAlbumsStartingWithChar({limit: limit, page: page, filterChar: searchValue});
+        dataDisplay = await getAlbumsStartingWithChar({limit: limit, page: page, filterChar: filterValue});
         loadedTime = new Date();
     }
 
@@ -40,9 +39,7 @@
     }
 </script>
 
-<AlphanumericPagination bind:selectedChar bind:searchValue />
-
-<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
+<AlphanumericFilter bind:filterValue />
 
 {#key loadedTime}
     <Lister2
