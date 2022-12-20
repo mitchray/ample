@@ -1,6 +1,7 @@
 <script>
     import CardList from '../components/cardList.svelte';
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
 
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
@@ -22,21 +23,21 @@
     {#each tabItems as tab}
         {#if tab.loaded === true}
             {#if tab.value === 'artists'}
-                <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">
+                <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
                     <CardList type="artist" dataProvider={"frequentArtists"} limit=18 />
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'albums'}
-                <div class="albums" style="display: {currentTab === 'albums' ? 'block' : 'none'}">
+                <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
                     <CardList type="album" dataProvider={"frequentAlbums"} limit=18 />
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'songs'}
-                <div class="songs" style="display: {currentTab === 'songs' ? 'block' : 'none'}">
+                <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
                     <CardList type="song" dataProvider={"frequentSongs"} limit=18 />
-                </div>
+                </Tab>
             {/if}
         {/if}
     {/each}

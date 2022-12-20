@@ -163,6 +163,7 @@
     h2 {
         display: flex;
         align-items: center;
+        font-size: 20px;
     }
 
     .refresh-button {

@@ -11,7 +11,8 @@
     import { getRandomInt } from '../logic/helper';
     import { setCustomHue } from '../logic/color';
 
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
     import ThemeToggle from '../components/themeToggle.svelte';
 
     import SVGAmpleLogo from "/src/images/ample_logo.svg";
@@ -64,8 +65,8 @@
             <SVGAmpleLogo />
         </div>
 
-        <Tabs bind:activeTabValue={currentTab} items={tabItems}>
-            <div class="username" style="display: {currentTab === 1 ? 'block' : 'none'}">
+        <Tabs bind:activeTabValue={currentTab} items={tabItems} enableHash={false}>
+            <Tab id={1} bind:activeTabValue={currentTab} class="username">
                 <form on:submit|preventDefault={handleSubmitUsername}>
                     <p>
                         <label>Ampache username
@@ -79,9 +80,9 @@
                     </p>
                     <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
                 </form>
-            </div>
+            </Tab>
 
-            <div class="api" style="display: {currentTab === 2 ? 'block' : 'none'}">
+            <Tab id={2} bind:activeTabValue={currentTab} class="api">
                 <form on:submit|preventDefault={handleSubmitAPI}>
                     <p>
                         <label>API key
@@ -91,7 +92,7 @@
 
                     <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
                 </form>
-            </div>
+            </Tab>
         </Tabs>
 
         {#if result && result.message}

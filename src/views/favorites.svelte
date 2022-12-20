@@ -3,7 +3,8 @@
     import { favoriteAlbums } from "../logic/album";
     import { favoriteSongs } from "../logic/song";
 
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
     import Lister2 from '../components/lister/lister.svelte';
 
     import SVGArtist from "/src/images/artist.svg";
@@ -26,7 +27,7 @@
     {#each tabItems as tab}
         {#if tab.loaded === true}
             {#if tab.value === 'artists'}
-                <div class="artists" style="display: {currentTab === 'artists' ? 'block' : 'none'}">
+                <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
                     {#await favoriteArtists({limit: 100})}
                         Loading favorite artists
                     {:then artists}
@@ -47,11 +48,11 @@
                     {:catch error}
                         <p>An error occurred.</p>
                     {/await}
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'albums'}
-                <div class="albums" style="display: {currentTab === 'albums' ? 'block' : 'none'}">
+                <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
                     {#await favoriteAlbums({limit: 100})}
                         Loading favorite albums
                     {:then albums}
@@ -72,11 +73,11 @@
                     {:catch error}
                         <p>An error occurred.</p>
                     {/await}
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'songs'}
-                <div class="songs" style="display: {currentTab === 'songs' ? 'block' : 'none'}">
+                <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
                     {#await favoriteSongs({limit: 100})}
                         Loading favorite songs
                     {:then songs}
@@ -97,7 +98,7 @@
                     {:catch error}
                         <p>An error occurred.</p>
                     {/await}
-                </div>
+                </Tab>
             {/if}
         {/if}
     {/each}

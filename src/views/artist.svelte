@@ -8,7 +8,8 @@
     import { getTopSongsFromArtist } from "../logic/song";
     import { formatTimeToReadable } from "../logic/helper";
 
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
     import ArtistCard from '../components/artist/artistCard.svelte';
     import ArtistReleases from '../components/artist/artistReleases.svelte';
     import ArtistSongs from '../components/artist/artistSongs.svelte';
@@ -111,11 +112,11 @@
             </div>
         </div>
 
-        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} class="tabs">
+        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
             {#each tabItems as tab}
                 {#if tab.loaded === true}
                     {#if tab.value === 'discography'}
-                        <div class="discography" style="display: {currentTab === 'discography' ? 'block' : 'none'}">
+                        <Tab id="discography" class="discography" bind:activeTabValue={currentTab}>
                             <button
                                 class="album-view-toggle button button--regular"
                                 on:click={toggleShowExpanded}>
@@ -123,11 +124,11 @@
                             </button>
 
                             <ArtistReleases artistID={artist.id} />
-                        </div>
+                        </Tab>
                     {/if}
 
                     {#if tab.value === 'popular'}
-                        <div style="display: {currentTab === 'popular' ? 'block' : 'none'}">
+                        <Tab id="popular" bind:activeTabValue={currentTab}>
                             {#await getTopSongsFromArtist(id)}
                                 Loading popular songs
                             {:then songs}
@@ -150,11 +151,11 @@
                             {:catch error}
                                 <p>An error occurred.</p>
                             {/await}
-                        </div>
+                        </Tab>
                     {/if}
 
                     {#if tab.value === 'similar'}
-                        <div style="display: {currentTab === 'similar' ? 'block' : 'none'}">
+                        <Tab id="similar" bind:activeTabValue={currentTab}>
                             {#await similarArtists(id)}
                                 Loading similar artists
                             {:then artists}
@@ -172,21 +173,21 @@
                             {:catch error}
                                 <p>An error occurred.</p>
                             {/await}
-                        </div>
+                        </Tab>
                     {/if}
 
                     {#if tab.value === 'all'}
-                        <div style="display: {currentTab === 'all' ? 'block' : 'none'}">
+                        <Tab id="all" bind:activeTabValue={currentTab}>
                             {#if artist.songcount > 0}
                                 <ArtistSongs artistID={artist.id} />
                             {:else}
                                 <p>No songs found</p>
                             {/if}
-                        </div>
+                        </Tab>
                     {/if}
 
                     {#if tab.value === 'summary'}
-                        <div style="display: {currentTab === 'summary' ? 'block' : 'none'}">
+                        <Tab id="summary" bind:activeTabValue={currentTab}>
                             {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
                                 <div class="summary">
                                     <p>{artist.summary}</p>
@@ -194,13 +195,13 @@
                             {:else}
                                 <p>No summary found</p>
                             {/if}
-                        </div>
+                        </Tab>
                     {/if}
 
                     {#if tab.value === 'musicbrainz'}
-                        <div style="display: {currentTab === 'musicbrainz' ? 'block' : 'none'}">
+                        <Tab id="musicbrainz" bind:activeTabValue={currentTab}>
                             <MusicbrainzScan2 data={artist} />
-                        </div>
+                        </Tab>
                     {/if}
                 {/if}
             {/each}

@@ -3,7 +3,8 @@
     import { getPlaylist } from "../logic/playlist";
 
     import Menu from '../components/menu.svelte';
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
     import Actions2 from "../components/action/actions.svelte";
 
     import SVGPlay from "/src/images/play.svg";
@@ -46,7 +47,7 @@
         {#each tabItems as tab}
             {#if tab.loaded === true}
                 {#if tab.value === 'general'}
-                    <div class="tab-general" style="display: {currentTab === 'general' ? 'block' : 'none'}">
+                    <Tab id="general" class="tab-general" bind:activeTabValue={currentTab}>
                         <h2>Form elements</h2>
                         <label>
                             <input type="checkbox" />
@@ -187,11 +188,11 @@
                             <button class="button button--tertiary" disabled>Secondary</button>
                             <hr>
                         </section>
-                    </div>
+                    </Tab>
                 {/if}
 
                 {#if tab.value === 'actions'}
-                    <div class="tab-actions" style="display: {currentTab === 'actions' ? 'block' : 'none'}">
+                    <Tab id="actions" class="tab-actions" bind:activeTabValue={currentTab}>
                         <h2>Actions</h2>
 
                         <h4>Full</h4>
@@ -206,11 +207,11 @@
 
                         <h4>Menu</h4>
                         <Actions2 mode="menu" type="album" id={4399} />
-                    </div>
+                    </Tab>
                 {/if}
 
                 {#if tab.value === 'menus'}
-                    <div class="tab-actions" style="display: {currentTab === 'menus' ? 'block' : 'none'}">
+                    <Tab id="menus" class="tab-actions" bind:activeTabValue={currentTab}>
                         <h2>Menus</h2>
                         <div style="padding: 100px;">
                             <select bind:value={menuAnchor}>
@@ -245,7 +246,7 @@
                                 </div>
                             </Menu>
                         {/if}
-                    </div>
+                    </Tab>
                 {/if}
             {/if}
         {/each}

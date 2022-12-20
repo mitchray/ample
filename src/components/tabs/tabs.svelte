@@ -1,17 +1,15 @@
 <script>
-    // Courtesy of https://linguinecode.com/post/svelte-tabs-component
     import { onMount } from "svelte";
 
     export let items = [];
     export let activeTabValue = null;
+    export let enableHash = true;
 
     let hash;
     let item;
     let currentURL;
 
     onMount(() => {
-        // might need to only set hash when tab is being destroyed
-
         hash = window.location.hash.substr(1);
         item = items.find(obj => obj.value === hash) || items[0];
         setCurrentURL();
@@ -30,17 +28,21 @@
     });
 
     function setHistory() {
-        window.history.replaceState({}, '', "#" + activeTabValue);
+        if (enableHash) {
+            window.history.replaceState({}, '', "#" + activeTabValue);
+        }
     }
 
     function setCurrentURL() {
-        currentURL = window.location.toString();
+        if (enableHash) {
+            currentURL = window.location.toString();
+        }
     }
 
     function handleClick(tab) {
         tab.loaded = true;
         activeTabValue = tab.value;
-        items = items; // this might not be needed
+        items = items;
         setCurrentURL();
         setHistory();
     }
@@ -49,7 +51,9 @@
 <ul class="tabs">
     {#if Array.isArray(items)}
         {#each items as item}
-            <li class={activeTabValue === item.value ? 'active' : ''}>
+            <li
+                class:active={activeTabValue === item.value}
+            >
                 <span on:click={handleClick(item)}>
                     {#if item.icon}
                         <svelte:component this={item.icon} class="inline tab-icon" />
@@ -71,37 +75,45 @@
         flex-wrap: wrap;
         margin: 0;
         margin-bottom: var(--spacing-xxl); /* big spacing to account for lister actions overflow trick */
-        font-family: var(--font-heading);
-    }
-
-    @media all and (min-width: 1300px) {
-        ul {
-            width: fit-content;
-            border-radius: 100vh;
-            padding: var(--spacing-sm);
-            background-color: var(--color-card-primary);
-            box-shadow: var(--shadow-md);
-        }
+        column-gap: var(--spacing-xl);
+        row-gap: var(--spacing-md);
+        font-weight: 700;
     }
 
     span {
         display: block;
-        padding: 0.7em 1.2em;
+        padding: 0.3em 0;
         cursor: pointer;
+        border-bottom: 3px solid transparent;
     }
 
     @media (hover: hover) {
-        li:hover {
-            background-color: var(--color-card-highlight);
+        span:hover {
+            border-color: var(--color-active-background);
         }
     }
 
-    li {
-        border-radius: 100vh;
+    li:not(.active) span {
+        color: var(--color-text-secondary);
     }
 
-    li.active {
-        position: relative;
-        background-color: var(--color-active-background);
+    li.active span {
+        border-color: var(--color-highlight);
+    }
+
+    .tab-content {
+        display: grid;
+    }
+
+    /* hide by default */
+    .tab-content > :global(*) {
+        display: none;
+        grid-column: 1 / -1;
+        grid-row: 1 / -1;
+        overflow-x: hidden;
+    }
+
+    .tab-content > :global( .active-tab) {
+        display: block;
     }
 </style>

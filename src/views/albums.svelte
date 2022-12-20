@@ -2,7 +2,8 @@
     import CardList from '../components/cardList.svelte';
     import AlbumsAll from '../components/album/albumsAll.svelte';
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
 
     import { newestAlbums, randomAlbums } from "../logic/album";
 
@@ -23,27 +24,27 @@
     {#each tabItems as tab}
         {#if tab.loaded === true}
             {#if tab.value === 'newest'}
-                <div class="newest" style="display: {currentTab === 'newest' ? 'block' : 'none'}">
+                <Tab id="newest" class="newest" bind:activeTabValue={currentTab}>
                     <CardList type="album" dataProvider={"newestAlbums"} limit=18 />
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'random'}
-                <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
+                <Tab id="random" class="random" bind:activeTabValue={currentTab}>
                     <CardList type="album" dataProvider={"randomAlbums"} limit=18 refresh=true />
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'year'}
-                <div class="year" style="display: {currentTab === 'year' ? 'block' : 'none'}">
+                <Tab id="year" class="year" bind:activeTabValue={currentTab}>
                     <AlbumsByYear />
-                </div>
+                </Tab>
             {/if}
 
             {#if tab.value === 'all'}
-                <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
+                <Tab id="all" class="all" bind:activeTabValue={currentTab}>
                     <AlbumsAll />
-                </div>
+                </Tab>
             {/if}
         {/if}
     {/each}

@@ -8,7 +8,8 @@
 
     import CardList from '../components/cardList.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
-    import Tabs from "../components/tabs.svelte";
+    import Tabs from "../components/tabs/tabs.svelte";
+    import Tab from "../components/tabs/tab.svelte";
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -54,15 +55,15 @@
                         {#each tabItems as tab}
                             {#if tab.loaded === true}
                                 {#if tab.value === 'random'}
-                                    <div class="random" style="display: {currentTab === 'random' ? 'block' : 'none'}">
+                                    <Tab id="random" class="random" bind:activeTabValue={currentTab}>
                                         <CardList type="artist" dataProvider={"randomAlbumArtists"} limit=18 refresh=true />
-                                    </div>
+                                    </Tab>
                                 {/if}
 
                                 {#if tab.value === 'all'}
-                                    <div class="all" style="display: {currentTab === 'all' ? 'block' : 'none'}">
+                                    <Tab id="all" class="all" bind:activeTabValue={currentTab}>
                                         <ArtistsAll type="album_artist" />
-                                    </div>
+                                    </Tab>
                                 {/if}
                             {/if}
                         {/each}
