@@ -50,6 +50,7 @@
                 <Actions2
                     type="playlist"
                     mode="miniButtons"
+                    showShuffle={playlist.items > 1}
                     id="{playlist.id}"
                     data={Object.create({playlist: playlist})}
                 />
