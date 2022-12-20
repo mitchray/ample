@@ -110,10 +110,14 @@
         display: none;
         grid-column: 1 / -1;
         grid-row: 1 / -1;
-        overflow-x: hidden;
     }
 
-    .tab-content > :global( .active-tab) {
+    /* lister workaround */
+    .tab-content :global(.lister-wrapper) {
+        max-width: calc(100vw - 2 * var(--spacing-xxl));
+    }
+
+    .tab-content > :global(.active-tab) {
         display: block;
     }
 </style>
