@@ -5,7 +5,7 @@
 
 <div
     class:active-tab={activeTabValue === id}
-    class="{$$restProps.class}"
+    class="tab tab-hidden tab-visuallyHidden {$$restProps.class || ''}"
 >
     <slot></slot>
 </div>

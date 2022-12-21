@@ -1,5 +1,6 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
+    import { v4 as uuidv4 } from 'uuid';
 
     export let items = [];
     export let activeTabValue = null;
@@ -8,6 +9,7 @@
     let hash;
     let item;
     let currentURL;
+    let uniqueID = uuidv4();
 
     onMount(() => {
         hash = window.location.hash.substr(1);
@@ -25,6 +27,8 @@
                 items[0].loaded = true;
             }
         }
+
+        showHide();
     });
 
     function setHistory() {
@@ -45,6 +49,32 @@
         items = items;
         setCurrentURL();
         setHistory();
+        showHide();
+    }
+
+    async function showHide() {
+        await tick();
+        let allTabs = document.querySelectorAll(".tab-content_" + uniqueID + " .tab");
+
+        allTabs.forEach((tab) => {
+            if (tab.classList.contains('active-tab')) {
+                tab.classList.remove('tab-hidden');
+                setTimeout(function () {
+                    tab.classList.remove('tab-visuallyHidden');
+                }, 20);
+            } else {
+                if (!tab.classList.contains('tab-hidden')) {
+                    tab.classList.add('tab-visuallyHidden');
+                    tab.addEventListener('transitionend', function(e) {
+                        tab.classList.add('tab-hidden');
+                    }, {
+                        capture: false,
+                        once: true,
+                        passive: false
+                    });
+                }
+            }
+        });
     }
 </script>
 
@@ -65,7 +95,7 @@
     {/if}
 </ul>
 
-<div class="tab-content">
+<div class="tab-content tab-content_{uniqueID}">
     <slot></slot>
 </div>
 
@@ -107,9 +137,19 @@
 
     /* hide by default */
     .tab-content > :global(*) {
-        display: none;
+        display: block;
         grid-column: 1 / -1;
         grid-row: 1 / -1;
+        transition: all 0.2s linear;
+    }
+
+    .tab-content :global(.tab-hidden) {
+        display: none;
+    }
+
+    .tab-content :global(.tab-visuallyHidden) {
+        opacity: 0;
+        transform: translateY(20px);
     }
 
     /* lister workaround */
@@ -118,6 +158,6 @@
     }
 
     .tab-content > :global(.active-tab) {
-        display: block;
+        /*display: block;*/
     }
 </style>

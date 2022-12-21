@@ -128,7 +128,7 @@
                     {/if}
 
                     {#if tab.value === 'popular'}
-                        <Tab id="popular" bind:activeTabValue={currentTab}>
+                        <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
                             {#await getTopSongsFromArtist(id)}
                                 Loading popular songs
                             {:then songs}
@@ -155,7 +155,7 @@
                     {/if}
 
                     {#if tab.value === 'similar'}
-                        <Tab id="similar" bind:activeTabValue={currentTab}>
+                        <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
                             {#await similarArtists(id)}
                                 Loading similar artists
                             {:then artists}
@@ -177,7 +177,7 @@
                     {/if}
 
                     {#if tab.value === 'all'}
-                        <Tab id="all" bind:activeTabValue={currentTab}>
+                        <Tab id="all" class="all" bind:activeTabValue={currentTab}>
                             {#if artist.songcount > 0}
                                 <ArtistSongs artistID={artist.id} />
                             {:else}
@@ -187,7 +187,7 @@
                     {/if}
 
                     {#if tab.value === 'summary'}
-                        <Tab id="summary" bind:activeTabValue={currentTab}>
+                        <Tab id="summary" class="summary" bind:activeTabValue={currentTab}>
                             {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
                                 <div class="summary">
                                     <p>{artist.summary}</p>
@@ -199,7 +199,7 @@
                     {/if}
 
                     {#if tab.value === 'musicbrainz'}
-                        <Tab id="musicbrainz" bind:activeTabValue={currentTab}>
+                        <Tab id="musicbrainz" class="musicbrainz" bind:activeTabValue={currentTab}>
                             <MusicbrainzScan2 data={artist} />
                         </Tab>
                     {/if}

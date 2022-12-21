@@ -66,7 +66,7 @@
         </div>
 
         <Tabs bind:activeTabValue={currentTab} items={tabItems} enableHash={false}>
-            <Tab id={1} bind:activeTabValue={currentTab} class="username">
+            <Tab id={1} bind:activeTabValue={currentTab} class="username login-tab">
                 <form on:submit|preventDefault={handleSubmitUsername}>
                     <p>
                         <label>Ampache username
@@ -82,7 +82,7 @@
                 </form>
             </Tab>
 
-            <Tab id={2} bind:activeTabValue={currentTab} class="api">
+            <Tab id={2} bind:activeTabValue={currentTab} class="api login-tab">
                 <form on:submit|preventDefault={handleSubmitAPI}>
                     <p>
                         <label>API key
@@ -166,5 +166,10 @@
         bottom: var(--spacing-lg);
         right: var(--spacing-lg);
         opacity: 0.4;
+    }
+
+    /* don't shift layout when tabs change */
+    .form :global(.login-tab) {
+        min-height: 190px;
     }
 </style>
