@@ -412,7 +412,6 @@
     }
 
     .is-grid li :global(a > svg)  {
-        flex: 1;
         height: 100%;
         width: 100%;
     }
