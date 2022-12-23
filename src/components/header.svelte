@@ -115,8 +115,6 @@
         {/if}
     </div>
 
-    <Link to="search" class="advanced-search">Advanced Search</Link>
-
     <Notifications />
 
     <UserMenu />
@@ -208,20 +206,8 @@
         z-index: 1;
     }
 
-    .site-header :global(.advanced-search) {
-        margin-right: var(--spacing-lg);
-        display: none;
-        flex-shrink: 0;
-    }
-
     .site-header :global(.notifications-toggle) {
         margin-right: auto;
-    }
-
-    @media all and (min-width: 500px) {
-        .site-header :global(.advanced-search) {
-            display: inline-block;
-        }
     }
 
     @media all and (min-width: 720px) {
