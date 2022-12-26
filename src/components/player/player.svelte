@@ -99,8 +99,7 @@
     .site-player__feature-controls,
     .site-player__playback-controls,
     .site-player__secondary-controls,
-    .site-player__fullscreen,
-    .site-player__queue {
+    .site-player__fullscreen {
         display: none;
     }
 
@@ -200,7 +199,8 @@
 
     .site-player__queue {
         grid-area: queue;
-        height: 100%;
+        justify-content: center;
+        display: flex;
     }
 
     :global(.dragging .site-player__volume-value:before),
@@ -250,10 +250,10 @@
     @media all and (max-width: 679.99px) {
         .site-player {
             grid-template-areas:
-                "SPACER1 times             SPACER2 main-controls SPACER3 fullscreen       SPACER4"
-                "SPACER1 playback-controls SPACER2 rating        SPACER3 feature-controls SPACER4"
+                "SPACER1 times             SPACER2 main-controls SPACER3 fullscreen       queue            SPACER4"
+                "SPACER1 playback-controls SPACER2 rating        SPACER3 feature-controls feature-controls SPACER4"
             ;
-            grid-template-columns: 1fr auto var(--spacing-sm) auto var(--spacing-sm) auto 1fr;
+            grid-template-columns: 1fr auto var(--spacing-sm) auto var(--spacing-sm) auto auto 1fr;
             grid-template-rows: 1fr 1fr;
             padding: var(--spacing-md) 0;
         }
@@ -287,6 +287,10 @@
             grid-template-rows: 1fr 1fr 1fr;
         }
 
+        .site-player__queue {
+            height: 100%;
+        }
+
         .site-player__now-playing :global(.nowPlayingArtwork) {
             display: none;
         }
@@ -304,10 +308,6 @@
         }
 
         .site-player__volume {
-            display: flex;
-        }
-
-        .site-player__queue {
             display: flex;
         }
     }

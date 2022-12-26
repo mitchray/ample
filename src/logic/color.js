@@ -103,8 +103,12 @@ export function outputThemeVariables(hue, selector) {
         return `<style>
         ${selector} {
             --color-background:           rgb(${lchToRgb([ 97,  1, hue])});
+            --color-sidebar-background:   rgb(${lchToRgb([ 30, 50, hue])});
+            --color-header:               rgb(${lchToRgb([ 40, 60, hue])});
             --color-interface:            rgb(${lchToRgb([100,  0, hue])});
             --color-interface-secondary:  rgb(${lchToRgb([ 94,  3, hue])});
+            --color-sidebar-primary:      rgb(${lchToRgb([100,  0, hue])});
+            --color-sidebar-secondary:    rgb(${lchToRgb([ 90, 30, hue])});
             --color-border:            rgb(${lchToRgb([ 80, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 70, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 90, 15, hue])});
@@ -114,6 +118,7 @@ export function outputThemeVariables(hue, selector) {
             --color-text-heading:      rgb(${lchToRgb([ 30, 70, hue])});
             --color-icon:              rgb(${lchToRgb([ 50, 50, hue])});
             --color-highlight:         rgb(${lchToRgb([ 50, 60, hue])});
+            --color-highlight-alt:     rgb(${lchToRgb([ 70, 100, hue])});
             --color-link-hover:        rgb(${lchToRgb([ 25, 70, hue])});
             --color-card-primary:      rgb(${lchToRgb([100,  0, hue])});
             --color-card-hover:        rgb(${lchToRgb([100,  0, hue])});
@@ -153,9 +158,13 @@ export function outputThemeVariables(hue, selector) {
     if (get(Theme) === 'dark') {
         return `<style>
         ${selector} {
-            --color-background:           rgb(${lchToRgb([  4,  1, hue])});
-            --color-interface:            rgb(${lchToRgb([  9,  1, hue])});
-            --color-interface-secondary:  rgb(${lchToRgb([ 12,  3, hue])});
+            --color-background:           rgb(${lchToRgb([  4,  4, hue])});
+            --color-sidebar-background:   rgb(${lchToRgb([ 10,  4, hue])});
+            --color-header:               rgb(${lchToRgb([ 16,  4, hue])});
+            --color-interface:            rgb(${lchToRgb([  8,  1, hue])});
+            --color-interface-secondary:  rgb(${lchToRgb([  6,  4, hue])});
+            --color-sidebar-primary:      rgb(${lchToRgb([ 80,  4, hue])});
+            --color-sidebar-secondary:    var(--color-text-heading);
             --color-border:            rgb(${lchToRgb([ 20, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 30, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 25, 15, hue])});
@@ -165,6 +174,7 @@ export function outputThemeVariables(hue, selector) {
             --color-text-heading:      rgb(${lchToRgb([ 75, 50, hue])});
             --color-icon:              rgb(${lchToRgb([ 70, 40, hue])});
             --color-highlight:         rgb(${lchToRgb([ 70, 70, hue])});
+            --color-highlight-alt:     rgb(${lchToRgb([ 70, 70, hue])});
             --color-link-hover:        rgb(${lchToRgb([ 75, 70, hue])});
             --color-card-primary:      rgb(${lchToRgb([ 15,  1, hue])});
             --color-card-hover:        rgb(${lchToRgb([ 20,  3, hue])});

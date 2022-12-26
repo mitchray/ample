@@ -8,11 +8,8 @@
         SidebarIsOpen,
         SidebarIsPinned,
         customHue,
-        SidebarIsGrid
     } from '../stores/status';
     import { SiteSidebarBind } from "../stores/player";
-
-    import Menu from '../components/menu.svelte';
 
     import SVGArtist from "/src/images/artist.svg";
     import SVGArtistHollow from "/src/images/person_outline.svg";
@@ -35,7 +32,6 @@
     import SVGUnlock from "/src/images/lock_open.svg";
     import SVGLeft from "/src/images/double_arrow_left.svg";
     import SVGRight from "/src/images/double_arrow_right.svg";
-    import SVGMenu from "/src/images/more-hori.svg";
 
     const { activeRoute } = getContext(ROUTER);
     let basePath = '';
@@ -62,12 +58,6 @@
         menuIsVisible = !menuIsVisible;
     }
 
-    function handleDisplayMode() {
-        let inverted = !$SidebarIsGrid;
-        localStorage.setItem('SidebarIsGrid', JSON.stringify(inverted));
-        SidebarIsGrid.set(inverted);
-    }
-
     function toggleMini() {
         let inverted = !$SidebarIsMini;
         localStorage.setItem('SidebarIsMini', JSON.stringify(inverted));
@@ -90,10 +80,10 @@
 </script>
 
 <div class="site-sidebar"
+    class:is-list={!$SidebarIsMini}
     class:is-mini={$SidebarIsMini}
     class:is-open={$SidebarIsOpen}
     class:is-pinned={$SidebarIsPinned}
-    class:is-grid={$SidebarIsGrid || $SidebarIsMini}
     bind:this={$SiteSidebarBind}
     use:clickOutsideDetector={{
         toggle: "#sidebar-button",
@@ -116,15 +106,6 @@
             {:else}
                 <SVGUnlock style="transform: scale(0.8)" />
             {/if}
-        </button>
-
-        <button
-            id="sidebarMenu"
-            class="panel-action"
-            title="Sidebar settings"
-            on:click={toggleMenu}
-        >
-            <SVGMenu />
         </button>
     </div>
     <div class="site-sidebar-inner">
@@ -235,32 +216,12 @@
     </div>
 </div>
 
-{#if menuIsVisible}
-    <Menu anchor="bottom-left" toggleSelector={"#sidebarMenu"} bind:isVisible={menuIsVisible} >
-        <div class="header panel-header">
-            <h4 class="title panel-title">Sidebar Settings</h4>
-        </div>
-
-        <div class="panel-content">
-            <div class="group">
-                <label class="toggle">
-                    <input type="checkbox" on:change={handleDisplayMode} bind:checked={$SidebarIsGrid} />
-                    Display as grid
-                </label>
-
-                <div class="info">Menu items will be shown in a grid</div>
-            </div>
-        </div>
-    </Menu>
-{/if}
-
 <style>
     /*
     Sidebar base
     */
     .site-sidebar {
-        background-color: var(--color-interface);
-        border-right: 1px solid var(--color-border);
+        background-color: var(--color-sidebar-background);
         width: var(--size-sidebar-width);
         padding: 0;
         display: flex;
@@ -273,9 +234,24 @@
         will-change: transform;
     }
 
-    .site-sidebar:not(.is-pinned) {
-        top: var(--size-header-height);
-        bottom: var(--size-webplayer-height);
+    .site-sidebar li:not(.current) :global(*) {
+        color: var(--color-sidebar-primary);
+    }
+
+    @media (hover: hover) {
+        .site-sidebar :global(a:hover) {
+            color: unset;
+        }
+    }
+
+    .site-sidebar .panel-action,
+    .site-sidebar .panel-actions {
+        border-color: var(--color-header);
+    }
+
+    .site-sidebar .panel-actions {
+        background-color: var(--color-sidebar-background);
+        color: var(--color-sidebar-primary);
     }
 
     .site-sidebar.is-open {
@@ -307,39 +283,50 @@
         overflow-y: auto;
     }
 
-    .site-sidebar:not(.is-mini) .site-sidebar-inner {
-        padding-top: var(--spacing-xl);
-    }
-
-    /*
-    Contents - Common
-    */
     .site-sidebar .panel-title {
         padding: var(--spacing-md) var(--spacing-lg) 0;
+        color: var(--color-sidebar-secondary);
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
     }
 
-    .site-sidebar-inner :global(svg) {
-        fill: var(--color-icon);
+    .site-sidebar li:not(.current) :global(svg) {
+        fill: var(--color-sidebar-secondary);
     }
 
     .site-sidebar ul {
         margin-top: var(--spacing-sm);
     }
 
+    .site-sidebar li.current :global(a) {
+        background-color: var(--color-background);
+    }
+
+    .site-sidebar:not(.is-pinned) {
+        top: var(--size-header-height);
+        bottom: var(--size-webplayer-height);
+    }
+
     /*
     Contents - List
     */
-    .site-sidebar:not(.is-grid) .label {
+
+    .site-sidebar.is-list .site-sidebar-inner {
+        padding-top: var(--spacing-xl);
+    }
+
+    .site-sidebar.is-list .label {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
     }
 
-    .site-sidebar:not(.is-grid) :global(a) {
+    .site-sidebar.is-list :global(a) {
         padding-left: var(--spacing-lg);
     }
 
-    .site-sidebar:not(.is-grid) :global(.site-sidebar__link) {
+    .site-sidebar.is-list :global(.site-sidebar__link) {
         display: flex;
         align-items: center;
         padding: 0.45em var(--spacing-md) 0.45em var(--spacing-lg);
@@ -347,7 +334,7 @@
         gap: var(--spacing-sm);
     }
 
-    .site-sidebar:not(.is-grid) .site-sidebar-inner :global(svg) {
+    .site-sidebar.is-list .site-sidebar-inner :global(svg) {
         height: 1em;
         width: 1em;
         display: inline-block;
@@ -357,74 +344,16 @@
         flex-shrink: 0;
     }
 
-    .site-sidebar:not(.is-grid) li.current :global(a) {
-        background-color: var(--color-background);
-    }
-
-    /*
-    Contents - Grid
-    */
-    .is-grid ul {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 3px;
-        padding: 5px;
-    }
-
-    .is-grid li :global(a) {
-        display: grid;
-        border: 1px solid var(--color-border);
-        border-radius: 3px;
-        aspect-ratio: 1 / 1;
-        grid-template-rows: 1fr 1fr;
-        line-height: 1.1;
-        font-size: 11px;
-        letter-spacing: 0.03em;
-        padding: var(--spacing-md) 0 var(--spacing-md);
-    }
-
-    @media (hover: hover) {
-        .is-grid .site-sidebar-inner :global(a:hover) {
-            background-color: var(--color-regular-background);
-            border-color: var(--color-regular-background);
-            color: var(--color-regular-foreground-hover);
-
-        }
-
-        .is-grid .site-sidebar-inner :global(a:hover svg) {
-            fill: var(--color-regular-foreground-hover);
-        }
-    }
-
-    .is-grid li.current :global(a) {
-        border-color: var(--color-highlight);
-        box-shadow: inset 0 0 0 1px var(--color-highlight);
-    }
-
-    .is-grid li :global(a > *)  {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        text-align: center;
-        padding-left: var(--spacing-md);
-        padding-right: var(--spacing-md);
-    }
-
-    .is-grid li :global(a > svg)  {
-        height: 100%;
-        width: 100%;
-    }
-
-    .site-sidebar.is-grid .label {
-        word-break: break-word;
-    }
-
     /*
     Contents - Mini
     */
     .site-sidebar.is-mini {
-        --size-sidebar-width: 60px;
+        --size-sidebar-width: 50px;
+    }
+
+    .site-sidebar.is-mini .site-sidebar-inner :global(a) {
+        display: flex;
+        justify-content: center;
     }
 
     .site-sidebar.is-mini .site-sidebar-inner {

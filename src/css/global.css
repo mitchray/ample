@@ -145,7 +145,7 @@ ul {
    -------------------------- */
 
 ::placeholder {
-    color: var(--color-text-primary);
+    color: inherit;
     opacity: 0.7;
 }
 
@@ -536,13 +536,6 @@ svg.inline {
     letter-spacing: 0.03em;
     font-size: 14px;
     margin-bottom: 0;
-}
-
-@media (min-resolution: 150dpi) {
-    .page-title,
-    .panel-title {
-        font-weight: 330;
-    }
 }
 
 .art-background {

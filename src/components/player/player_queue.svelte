@@ -60,22 +60,9 @@
         color: var(--color-highlight);
     }
 
-    .queue-toggle {
-        width: auto;
-        padding: 0;
-        flex-shrink: 0;
-        margin-right: var(--spacing-sm);
-    }
-
     .queue-toggle :global(svg) {
-        margin-left: 6px;
-    }
-
-    .container {
-        border-radius: 5px;
-        display: flex;
-        padding-bottom: var(--spacing-md);
-        width: calc(100% - var(--spacing-lg));
+        left: 2px;
+        position: relative;
     }
 
     .queueInfo {
@@ -91,6 +78,10 @@
 
     .artist {
         font-stretch: 50%;
+    }
+
+    .container {
+        display: flex;
     }
 
     @media all and (min-width: 680px) {
@@ -113,6 +104,8 @@
             box-shadow: var(--shadow-sm);
             justify-content: space-between;
             margin: 10px;
+            width: calc(100% - var(--spacing-lg));
+            border-radius: 5px;
         }
     }
 </style>

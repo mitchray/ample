@@ -67,7 +67,6 @@
     }
 
     .userMenu-toggle {
-        margin-left: auto;
         margin-right: var(--spacing-sm);
     }
 </style>

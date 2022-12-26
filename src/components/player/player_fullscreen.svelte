@@ -10,11 +10,3 @@
 >
     <SVGUp />
 </button>
-
-<style>
-    button {
-        margin: 0 var(--spacing-lg);
-        width: 100%;
-        justify-content: center;
-    }
-</style>

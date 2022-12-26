@@ -115,30 +115,44 @@
         {/if}
     </div>
 
-    <Notifications />
+    <div class="misc-container">
+        <Notifications />
 
-    <UserMenu />
+        <UserMenu />
+    </div>
 </div>
 
 <Search />
 
 <style>
     .site-header {
-        background-color: var(--color-interface);
-        border-bottom: 1px solid var(--color-border);
+        background-color: var(--color-header);
         width: 100%;
         height: var(--size-header-height);
-        display: flex;
         align-items: center;
         z-index: 20;
         line-height: 1;
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+    }
+
+    .site-header :global(*) {
+        color: var(--color-sidebar-primary);
     }
 
     .site-logo-container {
         padding: 0 var(--spacing-md);
+    }
+
+    .site-logo-container,
+    .misc-container {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
+    }
+
+    .misc-container {
+        justify-content: end;
     }
 
     :global(.site-logo) {
@@ -171,7 +185,9 @@
 
     .search-container {
         width: 100%;
-        max-width: 250px;
+        max-width: 500px;
+        justify-self: center;
+        height: calc(100% - 8px);
     }
 
     input.site-search {
@@ -179,13 +195,22 @@
         padding-right: var(--spacing-xxl);
         position: relative;
         display: block;
-        margin-right: var(--spacing-md);
         width: 100%;
+        height: 100%;
+        border: 0;
+        background-color: var(--color-sidebar-background);
+        border-radius: 0;
+    }
+
+    input.site-search:focus-visible {
+        box-shadow: inset 0 0 0 2px var(--color-highlight-alt);
     }
 
     .search-container :global(.search-icon) {
         position: absolute;
         left: var(--spacing-md);
+        z-index: 10;
+        fill: var(--color-sidebar-secondary);
     }
 
     .close {
@@ -204,10 +229,6 @@
         align-items: center;
         position: relative;
         z-index: 1;
-    }
-
-    .site-header :global(.notifications-toggle) {
-        margin-right: auto;
     }
 
     @media all and (min-width: 720px) {
