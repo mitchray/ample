@@ -134,6 +134,25 @@ export const searchAlbumsStartingWith = ({page = 0, limit = 50, query}) => {
 }
 
 /**
+ * Search albums containing (but not starting with) specified string
+ * @param page
+ * @param limit
+ * @param {string} query
+ * @returns {Promise<*>}
+ */
+export const searchAlbumsContaining = ({page = 0, limit = 50, query}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + "album";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURIComponent("^(?!" + query + ").*" + query);
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "searchAlbumsContaining");
+
+    return fetchAlbumData(queryURL);
+}
+
+/**
  * Test existence of artists starting with specified character
  * @param {string} filterChar
  * @returns {Promise<*>}

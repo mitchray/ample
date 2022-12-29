@@ -93,6 +93,25 @@ export const searchArtistsStartingWith = ({page = 0, limit = 50, query}) => {
 }
 
 /**
+ * Search artists containing (but not starting with) specified string
+ * @param page
+ * @param limit
+ * @param {string} query
+ * @returns {Promise<*>}
+ */
+export const searchArtistsContaining = ({page = 0, limit = 50, query}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + "artist";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURIComponent("^(?!" + query + ").*" + query);
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "searchArtistsContaining");
+
+    return fetchArtistData(queryURL);
+}
+
+/**
  * Test existence of artists starting with specified character
  * @param {string} filterChar
  * @param {string} type

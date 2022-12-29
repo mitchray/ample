@@ -177,6 +177,25 @@ export const searchSongsStartingWith = ({page = 0, limit = 50, query}) => {
 }
 
 /**
+ * Search songs containing (but not starting with) specified string
+ * @param page
+ * @param limit
+ * @param {string} query
+ * @returns {Promise<*>}
+ */
+export const searchSongsContaining = ({page = 0, limit = 50, query}) => {
+    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
+    queryURL += "&type=" + "song";
+    queryURL += "&offset=" + page * limit;
+    queryURL += "&limit=" + limit;
+    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURIComponent("^(?!" + query + ").*" + query);
+    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
+    debugHelper(queryURL, "searchSongsContaining");
+
+    return fetchSongData(queryURL);
+}
+
+/**
  * Find songs with same title from artist
  * @param songTitle
  * @param artistName

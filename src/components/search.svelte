@@ -4,9 +4,9 @@
     import { SearchQuery, ShowSearch } from '../stores/status';
     import { SiteMainSpace } from '../stores/player';
 
-    import { searchArtistsStartingWith, searchArtists } from '../logic/artist';
-    import { searchAlbumsStartingWith, searchAlbums } from '../logic/album';
-    import { searchSongsStartingWith, searchSongs } from '../logic/song';
+    import { searchArtistsStartingWith, searchArtists, searchArtistsContaining } from '../logic/artist';
+    import { searchAlbumsStartingWith, searchAlbums, searchAlbumsContaining } from '../logic/album';
+    import { searchSongsStartingWith, searchSongs, searchSongsContaining } from '../logic/song';
     import { searchPlaylists, searchSmartlists  } from '../logic/playlist';
 
     import CardList from './cardList.svelte';
@@ -58,11 +58,11 @@
         let sSmartlists        = [];
 
         sArtistsStartsWith   = searchArtistsStartingWith({query: $SearchQuery, page: 0, limit: 6});
-        sArtistsContains     = searchArtists({query: $SearchQuery, page: 0, limit: 6});
+        sArtistsContains     = searchArtistsContaining({query: $SearchQuery, page: 0, limit: 6});
         sAlbumsStartsWith    = searchAlbumsStartingWith({query: $SearchQuery, page: 0, limit: 6});
-        sAlbumsContains      = searchAlbums({query: $SearchQuery, page: 0, limit: 6});
+        sAlbumsContains      = searchAlbumsContaining({query: $SearchQuery, page: 0, limit: 6});
         sSongsStartsWith     = searchSongsStartingWith({query: $SearchQuery, page: 0, limit: 9});
-        sSongsContains       = searchSongs({query: $SearchQuery, page: 0, limit: 9});
+        sSongsContains       = searchSongsContaining({query: $SearchQuery, page: 0, limit: 9});
         sPlaylists           = searchPlaylists({query: $SearchQuery, page: 0, limit: 6});
         sSmartlists          = searchSmartlists({query: $SearchQuery, page: 0, limit: 6});
 
