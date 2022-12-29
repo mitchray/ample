@@ -1,5 +1,6 @@
 <script>
     import { tick } from 'svelte';
+    import { v4 as uuidv4 } from "uuid";
     import { SkipBelow, SkipBelowRating } from "../../stores/status";
 
     import Menu from '../../components/menu.svelte';
@@ -10,6 +11,8 @@
     import SVGFilter3 from "/src/images/filter_3.svg";
     import SVGFilter4 from "/src/images/filter_4.svg";
     import SVGFilter5 from "/src/images/filter_5.svg";
+
+    const uniqueMenuID = "skipBelowMenu_" + uuidv4();
 
     let isVisible = false;
 
@@ -33,7 +36,7 @@
 </script>
 
 <button
-    id="skipBelowMenu"
+    id="{uniqueMenuID}"
     class="icon-button"
     title="Skip songs below rating"
     on:click={toggleMenu}
@@ -51,7 +54,7 @@
 </button>
 
 {#if isVisible}
-    <Menu anchor="top-center" toggleSelector={"#skipBelowMenu"} bind:isVisible >
+    <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
         <div class="header panel-header">
             <h4 class="title panel-title">Skip songs below rating</h4>
 

@@ -1,5 +1,6 @@
 <script>
     import { onMount } from 'svelte';
+    import { v4 as uuidv4 } from "uuid";
 
     import { MediaPlayer } from "../../stores/player";
     import { NowPlayingIndex, NowPlayingQueue } from "../../stores/status";
@@ -12,6 +13,8 @@
     import Menu from '../../components/menu.svelte';
 
     import SVGAutoPlay from "/src/images/queue.svg";
+
+    const uniqueMenuID = "autoPlayMenu_" + uuidv4();
 
     let isVisible = false;
     let selectedPlaylist;
@@ -61,7 +64,7 @@
 </script>
 
 <button
-    id="autoPlayMenu"
+    id="{uniqueMenuID}"
     class="icon-button"
     title="Smartlist AutoPlay"
     on:click={toggleMenu}
@@ -70,7 +73,7 @@
 </button>
 
 {#if isVisible}
-    <Menu anchor="top-center" toggleSelector={"#autoPlayMenu"} bind:isVisible >
+    <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
         <div class="header panel-header">
             <h4 class="title panel-title">Smartlist AutoPlay</h4>
 
