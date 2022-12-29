@@ -370,7 +370,7 @@
             justify-content: right;
         }
 
-        .site-player__controls,
+        .site-player :global(.primary-controls),
         .site-player__rating,
         .site-player__volume,
         .site-player__secondary-controls {
