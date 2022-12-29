@@ -1,8 +1,21 @@
 # Changelog
 
 ## [1.0.0] - 202X-XX-XX
-### Added
-- Sidebar grid display
+### Changed
+- 'Contains' search results won't include anything 'Starting With' to avoid duplicates
+- Improved player layout for mobile
+- Responsive layout for MusicBrainz Compare
+- Simplified Albums By Year range interface
+- Replaced alphanumeric buttons on Artists/Albums > All tab with a filter field
+- Cleaner/simplified Artist/Album/Song cards
+- Header layout reworked
+- Header and sidebar color for light mode
+- Player will be set to full volume when mobile device is detected, assuming hardware volume controls to be used instead
+- Use standard Lister and Album Card when showing expanded albums
+
+### Fixed
+- Don't show album art in Lister when viewing an album
+- Restore Shuffle for playlists
 
 ## [0.50.1] - 2022-11-26
 ### Fixed

@@ -1,7 +1,7 @@
 import { tick } from "svelte";
 import { get } from 'svelte/store';
 import WaveSurfer from 'wavesurfer.js';
-import { getSong, getSongVersions } from "./song";
+import { getSongVersions } from "./song";
 import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,

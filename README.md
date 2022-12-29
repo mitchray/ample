@@ -3,15 +3,8 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 
 <img src="https://user-images.githubusercontent.com/5735900/168279980-e3a91334-fa57-4732-9409-b69f83d89c4e.jpg" width=800 alt="Ample screenshot" />
 
-#### Disclaimer
-This is a personal hobby project which caters to my own needs, which means
-- Music only (+podcasts in future), no video support sorry! 
-- As configuration-free as possible, i.e. limited customisation
-- Simpler feature requests are preferred
-
 ## Demo
-
-[View demo](https://develop.ampache.dev/ample/) (might not be the latest version)
+[View demo](https://demo.ampache.dev/ample/) (might not be the latest version)
 - User ```demo``` 
 - Password ```demodemo```
 
@@ -42,8 +35,7 @@ This is a personal hobby project which caters to my own needs, which means
 - Either grab a prebuilt [release](https://github.com/mitchray/ample/releases)
   - Copy the ```ample``` folder into your Ampache ```public``` folder (or just the Ampache directory if using the 'squashed' version)
   - Done!
-- or using Git repository (needs to be compiled, see Developing)
-  - Create a symbolic link within your Ampache public/base folder
+- or build from Git repository (see Developing)
 
 ## Accessing
 - Add ```/ample``` to your Ampache server address. e.g ```yourampache.com/ample``` or ```localhost/ampache/ample```
@@ -51,9 +43,8 @@ This is a personal hobby project which caters to my own needs, which means
 ## Developing
 - Clone the Ample repository and from the ample directory ```cd ample```
 - Install packages ```npm install```
+- Change the ```DEV detectedURL``` in ```src/stores/server.js``` to your desired Ampache server
 - For development and hot reloading ```npm run dev```
 - For building ```npm run build```
 
 Additional console logging can be enabled by setting ```debugMode true``` in ```src/stores/server.js```
-
-Change the ```DEV detectedURL``` in ```src/stores/server.js``` to your desired Ampache server
