@@ -1,7 +1,7 @@
 ## *Ample*: A simple web browser client for [Ampache](https://ampache.org/) 
 Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js)
 
-<img src="https://user-images.githubusercontent.com/5735900/168279980-e3a91334-fa57-4732-9409-b69f83d89c4e.jpg" width=800 alt="Ample screenshot" />
+<img src="https://user-images.githubusercontent.com/5735900/210019624-4e60d4b4-624c-42bb-ab45-1c3d244e66a6.jpg" width=800 alt="Ample screenshot" />
 
 ## Demo
 [View demo](https://demo.ampache.dev/ample/) (might not be the latest version)
