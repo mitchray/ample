@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.0.0] - 202X-XX-XX
+## [1.0.0] - 2022-12-30
 ### Changed
 - 'Contains' search results won't include anything 'Starting With' to avoid duplicates
 - Improved player layout for mobile
@@ -8,8 +8,6 @@
 - Simplified Albums By Year range interface
 - Replaced alphanumeric buttons on Artists/Albums > All tab with a filter field
 - Cleaner/simplified Artist/Album/Song cards
-- Header layout reworked
-- Header and sidebar color for light mode
 - Player will be set to full volume when mobile device is detected, assuming hardware volume controls to be used instead
 - Use standard Lister and Album Card when showing expanded albums
 
