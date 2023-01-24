@@ -21,12 +21,20 @@ export const serverURL = readable(detectedURL, function start(set) {
         // detectedURL = "https://develop.ampache.dev";
     }
 
+    if (import.meta.env.MODE === "remote") {
+        detectedURL = import.meta.env.VITE_REMOTE_URL;
+    }
+
     set(detectedURL);
     return function stop() {};
 });
 
 export const serverPathname = readable(detectedPathname, function start(set) {
-    set(detectedPathname);
+    if (import.meta.env.MODE === "remote") {
+        set(detectedURL);
+    } else {
+        set(detectedPathname + "/ample");
+    }
     return function stop() {};
 });
 

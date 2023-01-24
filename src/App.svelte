@@ -89,7 +89,7 @@
 
 <ThemeHandler />
 
-<Router basepath="{$serverPathname}/ample">
+<Router basepath="{$serverPathname}">
     {#if $isLoggedIn === null && $userToken === null}
         <SiteLoading/>
     {/if}

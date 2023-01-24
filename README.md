@@ -47,4 +47,8 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - For development and hot reloading ```npm run dev```
 - For building ```npm run build```
 
+- If you want to use a remote server:
+  - Change ```VITE_REMOTE_URL``` in ```.env.remote``` to your desired server URL
+  - Build with ```npm run build:remote```
+
 Additional console logging can be enabled by setting ```debugMode true``` in ```src/stores/server.js```

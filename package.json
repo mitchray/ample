@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "vite build && npm run copy",
+    "build:remote": "vite build --mode remote && npm run copy",
     "dev": "vite",
     "start": "vite preview",
     "validate": "svelte-check",
