@@ -7,7 +7,7 @@
     import { Theme } from "../stores/status";
     import { ampleVersion } from "../stores/player";
 
-    import { handshake, handshakeAPI } from '../logic/user';
+    import { loginNew } from '../logic/user';
     import { getRandomInt } from '../logic/helper';
     import { setCustomHue } from '../logic/color';
 
@@ -41,11 +41,11 @@
     $: versionCheck = $serverVersion.charAt(0);
 
     const handleSubmitUsername = async (e) => {
-        result = await handshake(username, password);
+        result = await loginNew({ passphrase: password, username: username });
     }
 
     const handleSubmitAPI = async (e) => {
-        result = await handshakeAPI(apiKey);
+        result = await loginNew({ passphrase: apiKey });
     }
 
     onMount(async () => {
@@ -95,8 +95,8 @@
             </Tab>
         </Tabs>
 
-        {#if result && result.message}
-            <p class="login-message badge badge--warning" in:fade>{result.message}</p>
+        {#if result && result.error && result.error.errorMessage}
+            <p class="login-message badge badge--warning" in:fade>{result.error.errorMessage}</p>
         {/if}
     </div>
 

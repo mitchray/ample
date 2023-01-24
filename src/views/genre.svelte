@@ -1,5 +1,5 @@
 <script>
-    import { getGenre } from '../logic/genre';
+    import { API } from "../stores/api";
 
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -20,7 +20,7 @@
     ];
 </script>
 
-{#await getGenre(id)}
+{#await $API.genre({ filter: id })}
     Loading genre
 {:then genre}
     {#if genre.id}

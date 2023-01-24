@@ -34,7 +34,7 @@
     let listerHeader     = writable(null); // the separate header for the lister table
     let listerContainer  = writable(null); // containing element of the lister object
     let listerWrapper    = writable(null); // outer wrapper of lister, currently unused except for CSS
-    let dataDisplay      = writable([]);   // editable/sortable/etc copy of the data
+    let dataDisplay      = writable([]);   // editable/sortable/etc. copy of the data
     let availableColumns = writable([]);   // available columns
     let visibleColumns   = writable([]);   // columns to show
     let currentSort      = writable(initialSort); // the current sort method

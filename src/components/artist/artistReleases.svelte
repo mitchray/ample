@@ -1,10 +1,10 @@
 <script>
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
-
+    import { API } from "../../stores/api";
     import { ShowExpandedAlbums } from "../../stores/status";
 
-    import { getAlbumsByArtist, sortAlbumsByDate, groupAlbumsByReleaseType } from "../../logic/album";
+    import { sortAlbumsByDate, groupAlbumsByReleaseType } from "../../logic/album";
 
     import AlbumCard from '../../components/album/albumCard.svelte';
     import AlbumCardExpanded from '../../components/album/albumCardExpanded.svelte';
@@ -16,7 +16,7 @@
     let loading = true;
 
     onMount(async () => {
-        albums = await getAlbumsByArtist(artistID);
+        albums = await $API.artistAlbums({ filter: artistID });
         sortedAlbums = await sortAlbumsByDate(albums);
         groupedAlbums = await groupAlbumsByReleaseType(sortedAlbums, artistID);
         loading = false;

@@ -1,6 +1,6 @@
 <script>
     import { getContext } from 'svelte';
-    import { updateFromTags } from "../../logic/library";
+    import { API } from "../../stores/api";
     import { loadingSpinner } from "../../actions/loadingSpinner";
     import SVGUpdate from "/src/images/sync.svg";
 
@@ -14,7 +14,7 @@
 
     async function handleAction() {
         loaded = false;
-        let result = await updateFromTags(type, id);
+        let result = await $API.updateFromTags({ type: type, id: id });
         if (result) {
             loaded = true;
         }

@@ -6,7 +6,6 @@
     export let songTitle;
     export let artistName;
 
-    let loadedTime;
     let loading;
     let results = [];
 

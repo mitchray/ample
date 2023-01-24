@@ -64,7 +64,7 @@
         sSongsStartsWith     = searchSongsStartingWith({query: $SearchQuery, page: 0, limit: 9});
         sSongsContains       = searchSongsContaining({query: $SearchQuery, page: 0, limit: 9});
         sPlaylists           = searchPlaylists({query: $SearchQuery, page: 0, limit: 6});
-        sSmartlists          = searchSmartlists({query: $SearchQuery, page: 0, limit: 6});
+        sSmartlists          = searchSmartlists({query: $SearchQuery});
 
         [
             initialResults.artistsStartsWith,
@@ -139,7 +139,7 @@
                 {/if}
 
                 {#if initialResults.smartlists.length > 0}
-                    <CardList type="smartlist" initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} limit=6 arg={encodeURI($SearchQuery)} heading="Smartlists" />
+                    <CardList type="smartlist" initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} heading="Smartlists" />
                 {/if}
             </div>
         {/key}

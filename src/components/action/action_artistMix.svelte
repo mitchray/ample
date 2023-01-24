@@ -1,14 +1,14 @@
 <script>
     import { getContext } from 'svelte';
+    import { API } from "../../stores/api";
     import { MediaPlayer } from "../../stores/player";
     import { loadingSpinner } from "../../actions/loadingSpinner";
-    import { getSong, getSongsFromArtists } from "../../logic/song";
+    import { getSongsFromArtists } from "../../logic/song";
     import { getAlbum } from "../../logic/album";
     import { getArtist } from "../../logic/artist";
-    import { similarArtists } from "../../logic/artist";
     import { filterBelow } from "../../logic/helper";
     import SVGRadio from "/src/images/radio.svg";
-
+    
     export let contextKey;
 
     const { getType, getID } = getContext(contextKey);
@@ -22,7 +22,7 @@
         loaded = false;
 
         let artistID = await getArtistID();
-        let artists  = await similarArtists(artistID);
+        let artists  = await $API.getSimilar({ type: "artist", filter: artistID, limit: 15 });
         let baseArtist   = await getArtist({id: artistID});
 
         if (baseArtist) {
@@ -47,7 +47,7 @@
                 break;
             case "song":
             case "playlist_songs":
-                let song = await getSong(id);
+                let song = await $API.song({ filter: id });
                 tempID = song[0].artist.id;
                 break;
             default:

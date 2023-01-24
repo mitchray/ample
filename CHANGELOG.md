@@ -23,7 +23,7 @@
 
 ## [0.50.0] - 2022-11-20
 ### The folder structure has changed due to switching to Vite for compiling. Remove contents of ```ample``` folder before updating.
-### Additionally Vite has a different method of URL management, let me know if things break for you.
+### Additionally, Vite has a different method of URL management, let me know if things break for you.
 ### NGINX users update your rewrite from ```index.php``` to ```index.html```
 
 ### Added
@@ -131,7 +131,7 @@
 - "Fancy" search from Quick Search, to narrow down results. One or more of *artist*, *album* or *title/song*
   - e.g. *artist:trivium album:dragon*
   - If *song* or *title* is present at all, search results will be for songs. E.g. artist:trivium song:fire
-  - Otherwise if *album* is present, search results will be for albums. E.g. artist:trivium album:dragon
+  - Otherwise, if *album* is present, search results will be for albums. E.g. artist:trivium album:dragon
   - Finally, if only *artist* is present, search results will be for artists. E.g. artist:trivium
 
 ### Changed
@@ -166,7 +166,7 @@
 ### Fixed
 - Songs less than 1 minute were missing the leading zero (e.g. :43)
 - Some items were causing layout shifts while loading
-- Pull the latest metadata for currently playing song to make sure ratings etc are in sync
+- Pull the latest metadata for currently playing song to make sure ratings etc. are in sync
 - Attempt to play next song in queue if there is an error loading
 
 ## [0.37.0] - 2022-05-18
@@ -188,7 +188,7 @@
 - Play songs from genre (based on artist genre)
 
 ## [0.35.0] - 2022-05-13
-### Recommend clearing browser cache after install to get latest CSS changes
+### Recommend clearing browser cache after install to get the latest CSS changes
 
 ### Added
 - Sticky columns in Lister will have a 'hovered' style when covering other columns
@@ -269,7 +269,7 @@ Just catching up on updates from Ampache
 - Basic media keys ([mediasession](https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API)) support in [browsers which have it](https://caniuse.com/mdn-api_mediasession)
 
 ### Changed
-- Album actions (play, shuffle etc) now always visible instead of revealed on hover
+- Album actions (play, shuffle etc.) now always visible instead of revealed on hover
 - Album/artist images are now links
 
 ## [0.21.0] - 2021-12-03
@@ -277,7 +277,7 @@ Just catching up on updates from Ampache
 - Search results won't show categories with zero results
 - Revised table display
     - Predefined column widths instead of autofit (still resizable), with horizontal scrolling
-    - Name and actions (play, shuffle etc) always visible
+    - Name and actions (play, shuffle etc.) always visible
     - Larger artwork
     - Double-click any column resizer bar to reset all columns to default widths
     

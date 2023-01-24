@@ -1,5 +1,5 @@
 <script>
-    import { deletePlaylist } from "../../logic/playlist";
+    import { API } from "../../stores/api";
 
     import SVGBin from "/src/images/delete.svg";
 
@@ -7,7 +7,7 @@
     export let isVisible;
 
     function handleDelete() {
-        deletePlaylist(playlist.id);
+        $API.playlistDelete({ filter: playlist.id });
         playlist.isDeleted = true;
         playlist = playlist;
         isVisible = false;

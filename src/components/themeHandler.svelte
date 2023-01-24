@@ -5,12 +5,6 @@
     import { Theme } from '../stores/status';
     import { customHue } from "../stores/status";
 
-    function removeClassByPrefix(node, prefix) {
-        const regx = new RegExp('\\b' + prefix + '[^ ]*[ ]?\\b', 'g');
-        node.className = node.className.replace(regx, '');
-        return node;
-    }
-
     let hue;
     let defaultHue = 240;
 

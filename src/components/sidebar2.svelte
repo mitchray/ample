@@ -26,7 +26,6 @@
     import SVGRandom from "/src/images/random.svg";
     import SVGSearch from "/src/images/search.svg";
     import SVGGenre from "/src/images/label.svg";
-    import SVGPodcast from "/src/images/podcasts.svg";
     import SVGMultiStar from "/src/images/hotel-star.svg";
     import SVGLock from "/src/images/lock.svg";
     import SVGUnlock from "/src/images/lock_open.svg";
@@ -52,10 +51,6 @@
                     break;
             }
         }
-    }
-
-    function toggleMenu() {
-        menuIsVisible = !menuIsVisible;
     }
 
     function toggleMini() {

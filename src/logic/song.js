@@ -1,49 +1,6 @@
 import { get } from "svelte/store";
-import { serverURL, APIVersion } from '../stores/server';
-import { userToken } from '../stores/user';
+import { API } from "../stores/api";
 import { debugHelper } from './helper';
-import { v4 as uuidv4 } from 'uuid';
-
-let serverURL_value = get(serverURL);
-
-/**
- * Make API request for song data
- * @param {string} url
- * @returns {Promise<*>}
- */
-const fetchSongData = async (url) => {
-    return await fetch(url)
-        .then(response => response.json())
-        .then(data => {
-            if (!data.error) {
-                // if a single object is returned place into array so map works
-                let dataPlaceholder = (data.song) ? data.song : [data];
-
-                // each media item needs a unique _id
-                dataPlaceholder = dataPlaceholder.map((item, index) => ({ ...item, _id: uuidv4(), isSong: true}));
-
-                return dataPlaceholder;
-            } else {
-                return [];
-            }
-        })
-        .catch(err => {
-            console.log("Error Reading data " + err);
-            return err;
-        });
-}
-
-/**
- * Get song by ID
- * @param {number} id
- * @returns {Promise<*>}
- */
-export const getSong = async (id) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=song&filter=" + id;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSong");
-    return fetchSongData(queryURL);
-}
 
 /**
  * Get songs from album ID
@@ -52,15 +9,13 @@ export const getSong = async (id) => {
  * @returns {Promise<*>}
  */
 export const getSongsFromAlbum = async ({id, groupByDisc = false}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=album_songs&filter=" + id;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromAlbum");
-
-    let songs = await fetchSongData(queryURL);
+    let songs = await get(API).albumSongs({ filter: id });
 
     if (groupByDisc) {
         songs = groupSongsByDisc(songs);
     }
+
+    debugHelper(songs, "getSongsFromAlbum");
 
     return songs;
 }
@@ -71,45 +26,10 @@ export const getSongsFromAlbum = async ({id, groupByDisc = false}) => {
  * @returns {Promise<*>}
  */
 export const getSongsFromArtist = async (id) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=artist_songs&filter=" + id;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromArtist");
-
-    let songs = await fetchSongData(queryURL);
+    let songs = await get(API).artistSongs({ filter: id });
     songs = sortSongsByYear(songs);
 
     return songs;
-}
-
-/**
- * Get top songs from artist ID
- * @param {number} id
- * @returns {Promise<*>}
- */
-export const getTopSongsFromArtist = (id) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=artist_songs&filter=" + id;
-    queryURL += "&top50=1";
-    queryURL += "&limit=20";
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getTopSongsFromArtist");
-    return fetchSongData(queryURL);
-}
-
-/**
- * Get songs from playlist ID
- * @param {number} id
- * @returns {Promise<*>}
- */
-export const getSongsFromPlaylist = ({id, limit = 0}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=playlist_songs&filter=" + id;
-
-    if (limit > 0) {
-        queryURL += "&limit=" + limit;
-    }
-
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromPlaylist");
-    return fetchSongData(queryURL);
 }
 
 /**
@@ -122,39 +42,12 @@ export const getSongsFromPlaylists = async (playlists) => {
     let promises = [];
 
     for (let i = 0; i < playlists.length; i++) {
-        let queryURL = serverURL_value + "/server/json.server.php?action=playlist_songs";
-        queryURL += "&filter=" + playlists[i].id;
-        queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-        debugHelper(queryURL, "getSongsFromPlaylists");
-
-        promises[i] = fetchSongData(queryURL);
+        promises[i] = await get(API).playlistSongs({ filter: playlists[i].id });
     }
 
     allResults = await Promise.all([...promises]);
 
     return allResults.flat();
-}
-
-/**
- * Get songs through advanced search
- * @returns {Promise<*>}
- */
-export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false, match = "and"}) => {
-    random = (random) ? 1 : 0;
-
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=" + limit;
-    queryURL += "&random=" + random;
-    queryURL += "&type=song&operator=" + match;
-
-    for (let i = 0; i < rows.length; i++) {
-        let counter = parseInt(i + 1);
-        queryURL += `&rule_${counter}=${rows[i].field}&rule_${counter}_operator=${rows[i].operator}&rule_${counter}_input=${encodeURI(rows[i].input)}`;
-    }
-
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromAdvancedSearch");
-    return fetchSongData(queryURL);
 }
 
 /**
@@ -165,15 +58,15 @@ export const getSongsFromAdvancedSearch = ({rows = [], limit = 0, random = false
  * @returns {Promise<*>}
  */
 export const searchSongsStartingWith = ({page = 0, limit = 50, query}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + "song";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&operator=and&rule_1=title&rule_1_operator=2&rule_1_input=" + query;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "searchSongsStartingWith");
-
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        operator: "and",
+        limit: 100,
+        offset: page * limit,
+        rules: [
+            ["title", 2, query]
+        ]
+    })
 }
 
 /**
@@ -184,15 +77,15 @@ export const searchSongsStartingWith = ({page = 0, limit = 50, query}) => {
  * @returns {Promise<*>}
  */
 export const searchSongsContaining = ({page = 0, limit = 50, query}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&type=" + "song";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&operator=and&rule_1=title&rule_1_operator=8&rule_1_input=" + encodeURIComponent("^(?!" + query + ").*" + query);
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "searchSongsContaining");
-
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        operator: "and",
+        limit: 100,
+        offset: page * limit,
+        rules: [
+            ["title", 8, "^(?!" + query + ").*" + query]
+        ]
+    })
 }
 
 /**
@@ -204,16 +97,15 @@ export const searchSongsContaining = ({page = 0, limit = 50, query}) => {
 export const getSongVersions = async (songTitle, artistName) => {
     let cleanedTitle = parseTitle(songTitle);
 
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=100";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=title&rule_1_operator=2&rule_1_input=" + encodeURI(cleanedTitle);
-    queryURL += "&rule_2=artist&rule_2_operator=4&rule_2_input=" + encodeURI(artistName);
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongVersions URL");
-
-    let songs = await fetchSongData(queryURL);
-    debugHelper(songs, "getSongVersions before filtering");
+    let songs = await get(API).advancedSearch({
+        type: "song",
+        operator: "and",
+        limit: 100,
+        rules: [
+            ["title", 2, cleanedTitle],
+            ["artist", 4, artistName],
+        ]
+    })
 
     let theRegex = "^" + cleanedTitle + "$";
     let re = new RegExp(theRegex,"gi");
@@ -233,12 +125,7 @@ export const getSongsFromAlbums = async (albums) => {
     let promises = [];
 
     for (let i = 0; i < albums.length; i++) {
-        let queryURL = serverURL_value + "/server/json.server.php?action=album_songs";
-        queryURL += "&filter=" + albums[i].id;
-        queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-        debugHelper(queryURL, "getSongsFromAlbums");
-
-        promises[i] = fetchSongData(queryURL);
+        promises[i] = get(API).albumSongs({ filter: albums[i].id })
     }
 
     allResults = await Promise.all([...promises]);
@@ -252,13 +139,15 @@ export const getSongsFromAlbums = async (albums) => {
  * @returns {Promise<*>}
  */
 export const getSongsFromAlbumsStartingWith = (filterChar) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=album&rule_1_operator=8&rule_1_input=" + encodeURI('^(?!the\\s)') + filterChar;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromAlbumsStartingWith");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        rules: [
+            ["album", 8, encodeURI('^(?!the\\s)') + filterChar]
+        ]
+    })
 }
 
 /**
@@ -269,13 +158,15 @@ export const getSongsFromAlbumsStartingWith = (filterChar) => {
 export const getSongsFromArtists = (artists) => {
     let artistsFormatted = artists.map((artist) => artist.name).join("|");
 
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=artist&rule_1_operator=8&rule_1_input=" + encodeURIComponent("^(" + artistsFormatted + ")$");
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromArtists");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        rules: [
+            ["artist", 8, encodeURIComponent("^(" + artistsFormatted + ")$")]
+        ]
+    })
 }
 
 /**
@@ -284,13 +175,15 @@ export const getSongsFromArtists = (artists) => {
  * @returns {Promise<*>}
  */
 export const getSongsFromArtistsStartingWith = (filterChar) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=artist&rule_1_operator=8&rule_1_input=" + encodeURI('^(?!the\\s)') + filterChar;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsFromArtistsStartingWith");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        rules: [
+            ["artist", 8, encodeURI('^(?!the\\s)') + filterChar]
+        ]
+    })
 }
 
 /**
@@ -300,14 +193,17 @@ export const getSongsFromArtistsStartingWith = (filterChar) => {
  * @returns {Promise<*>}
  */
 export const getSongsByYear = async (from, to) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=year&rule_1_operator=0&rule_1_input=" + from;
-    queryURL += "&rule_2=year&rule_2_operator=1&rule_2_input=" + to;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSongsByYear");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        offset: page * limit,
+        rules: [
+            ["year", 0, from],
+            ["year", 1, to]
+        ]
+    })
 }
 
 /**
@@ -315,19 +211,16 @@ export const getSongsByYear = async (from, to) => {
  * @returns {Promise<*>}
  */
 export const unratedSongs = ({query = "", page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&type=song&operator=and&random=1";
-    queryURL += "&rule_1=myrating&rule_1_operator=2&rule_1_input=0";
-
-    if (query) {
-        queryURL += "&rule_2=title&rule_2_operator=8&rule_2_input=" + encodeURI(query);
-    }
-
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "unratedSongs");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: limit,
+        offset: page * limit,
+        rules: [
+            ["myrating", 2, 0]
+        ]
+    })
 }
 
 /**
@@ -339,15 +232,12 @@ export const unratedSongs = ({query = "", page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const searchSongs = ({query = "", page = 0, limit = 50, exact = false}) => {
-    exact = (exact) ? 1 : 0;
-
-    let queryURL = serverURL_value + "/server/json.server.php?action=songs&filter=" + query;
-    queryURL += "&exact=" + exact;
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "searchSongs");
-    return fetchSongData(queryURL);
+    return get(API).songs({
+        exact: (exact) ? 1 : 0,
+        filter: query,
+        offset: page * limit,
+        limit: limit,
+    })
 }
 
 /**
@@ -355,12 +245,12 @@ export const searchSongs = ({query = "", page = 0, limit = 50, exact = false}) =
  * @returns {Promise<*>}
  */
 export const newestSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=newest";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "newestSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({
+        type: "song",
+        filter: "newest",
+        limit: limit,
+        offset: page * limit,
+    })
 }
 
 /**
@@ -368,12 +258,12 @@ export const newestSongs = ({page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const recentSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=recent";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "recentSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({
+        type: "song",
+        filter: "recent",
+        limit: limit,
+        offset: page * limit,
+    })
 }
 
 /**
@@ -381,12 +271,12 @@ export const recentSongs = ({page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const favoriteSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=flagged";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "favoriteSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({
+        type: "song",
+        filter: "flagged",
+        limit: limit,
+        offset: page * limit,
+    })
 }
 
 /**
@@ -394,25 +284,25 @@ export const favoriteSongs = ({page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const frequentSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=frequent";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "frequentSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({
+        type: "song",
+        filter: "frequent",
+        limit: limit,
+        offset: page * limit,
+    })
 }
 
 /**
- * Get top rated songs
+ * Get top-rated songs
  * @returns {Promise<*>}
  */
 export const topSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=highest";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "topSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({
+        type: "song",
+        filter: "highest",
+        limit: limit,
+        offset: page * limit,
+    })
 }
 
 /**
@@ -420,12 +310,12 @@ export const topSongs = ({page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const forgottenSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=forgotten";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "forgottenSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({
+        type: "song",
+        filter: "forgotten",
+        limit: limit,
+        offset: page * limit,
+    })
 }
 
 /**
@@ -433,25 +323,7 @@ export const forgottenSongs = ({page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const randomSongs = ({page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=stats&type=song&filter=random";
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "randomSongs");
-    return fetchSongData(queryURL);
-}
-
-/**
- * Get genre songs (non-advanced search method)
- * @returns {Promise<*>}
- */
-export const getGenreSongs = ({query, page = 0, limit = 50}) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=genre_songs&filter=" + query;
-    queryURL += "&offset=" + page * limit;
-    queryURL += "&limit=" + limit;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getGenreSongs");
-    return fetchSongData(queryURL);
+    return get(API).stats({ type: "song", limit: limit, offset: page * limit, filter: "random" })
 }
 
 /**
@@ -460,13 +332,15 @@ export const getGenreSongs = ({query, page = 0, limit = 50}) => {
  * @returns {Promise<*>}
  */
 export const getSomeSongsByGenre = (genre) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=tag&rule_1_operator=4&rule_1_input=" + genre;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSomeSongsByGenre");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        rules: [
+            ["tag", 4, genre]
+        ]
+    })
 }
 
 /**
@@ -475,13 +349,15 @@ export const getSomeSongsByGenre = (genre) => {
  * @returns {Promise<*>}
  */
 export const getSomeSongsFromAlbumsByGenre = (genre) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=album_tag&rule_1_operator=4&rule_1_input=" + genre;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSomeSongsFromAlbumsByGenre");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        rules: [
+            ["album_tag", 4, genre]
+        ]
+    })
 }
 
 /**
@@ -490,13 +366,15 @@ export const getSomeSongsFromAlbumsByGenre = (genre) => {
  * @returns {Promise<*>}
  */
 export const getSomeSongsFromArtistsByGenre = (genre) => {
-    let queryURL = serverURL_value + "/server/json.server.php?action=advanced_search";
-    queryURL += "&limit=200&random=1";
-    queryURL += "&type=song&operator=and";
-    queryURL += "&rule_1=artist_tag&rule_1_operator=4&rule_1_input=" + genre;
-    queryURL += "&auth=" + get(userToken) + "&version=" + get(APIVersion);
-    debugHelper(queryURL, "getSomeSongsFromArtistsByGenre");
-    return fetchSongData(queryURL);
+    return get(API).advancedSearch({
+        type: "song",
+        random: 1,
+        operator: "and",
+        limit: 200,
+        rules: [
+            ["artist_tag", 4, genre]
+        ]
+    })
 }
 
 /**
@@ -526,24 +404,6 @@ export const groupSongsByDisc = (songs) => {
  */
 export const sortSongsByName = (songs) => {
     return songs.sort(function(obj1, obj2) { return obj1.name.localeCompare(obj2.name) })
-}
-
-/**
- * Sort songs by album
- * @param {array} songs
- * @returns {*}
- */
-export const sortSongsByAlbum = (songs) => {
-    return songs.sort(function(obj1, obj2) { return obj1.album.name.localeCompare(obj2.album.name) })
-}
-
-/**
- * Sort songs by rating
- * @param {array} songs
- * @returns {*}
- */
-export const sortSongsByRating = (songs) => {
-    return songs.sort(function(obj1, obj2) { return obj1.rating < obj2.rating })
 }
 
 /**

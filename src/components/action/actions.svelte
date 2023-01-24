@@ -2,12 +2,11 @@
     import { setContext } from 'svelte';
     import { Link } from 'svelte-routing';
     import { v4 as uuidv4 } from 'uuid';
-    import { getGenre } from "../../logic/genre";
+    import { API } from "../../stores/api";
     import {
         getSomeSongsByGenre,
         getSomeSongsFromAlbumsByGenre,
         getSomeSongsFromArtistsByGenre,
-        getSong,
         getSongsByYear,
         getSongsFromAlbum,
         getSongsFromAlbums,
@@ -15,10 +14,8 @@
         getSongsFromArtist,
         getSongsFromArtists,
         getSongsFromArtistsStartingWith,
-        getSongsFromPlaylist,
         getSongsFromPlaylists
     } from "../../logic/song";
-    import { getEpisodesFromPodcast } from "../../logic/podcast";
     import { filterBelow } from "../../logic/helper";
 
     import Menu                 from '../../components/menu.svelte';
@@ -43,7 +40,7 @@
     export let mode;               // menu, miniButtons or fullButtons
     export let id          = null; // id of the item passed specified by type
     export let showShuffle = false;
-    export let data        = {};   // any extra data needed, passed as an object key e.g data.playlist
+    export let data        = {};   // any extra data needed, passed as an object key e.g. data.playlist
 
     const contextKey = uuidv4(); // unique key for each instance of lister
 
@@ -78,13 +75,13 @@
             case 'artistGenre':
             case 'genre':
                 if (data.name === null) {
-                    let genre = await getGenre(id);
+                    let genre = await $API.genre({ filter: id });
                     data.name = genre.name;
                 }
                 fetchURL = getSomeSongsFromArtistsByGenre(data.name);
                 break;
             case 'podcast':
-                fetchURL = getEpisodesFromPodcast(id);
+                fetchURL = $API.podcastEpisodes({ filter: id });
                 break;
             case 'album':
                 fetchURL = getSongsFromAlbum({id: id});
@@ -100,13 +97,13 @@
                 break;
             case 'song':
             case 'playlist_songs':
-                fetchURL = getSong(id);
+                fetchURL = $API.song({ filter: id });
                 break;
             case 'songGenre':
                 fetchURL = getSomeSongsByGenre(data.name);
                 break;
             case 'playlist':
-                fetchURL = getSongsFromPlaylist({id: id});
+                fetchURL = $API.playlistSongs({ filter: id });
                 break;
             case 'playlists':
                 fetchURL = getSongsFromPlaylists(data.playlists);
@@ -130,6 +127,9 @@
 
         // make sure results are an array
         result = (Array.isArray(result)) ? result : [result];
+
+        // each media item needs a unique _id
+        result = result.map((item, index) => ({ ...item, _id: uuidv4()}));
 
         // filter out songs below desired rating
         return filterBelow(result);

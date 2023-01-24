@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
-
-    import { getGenres, sortGenresByName } from "../logic/genre";
+    import { API } from "../stores/api";
+    import { sortGenresByName } from "../logic/genre";
 
     import Lister2 from '../components/lister/lister.svelte';
 
@@ -17,7 +17,7 @@
     }
 
     onMount(async () => {
-        genres = await getGenres();
+        genres = await $API.genres();
         handleSortByName();
     });
 </script>

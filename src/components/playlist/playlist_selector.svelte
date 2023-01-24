@@ -1,7 +1,6 @@
 <script>
     import { onMount, createEventDispatcher  } from "svelte";
-
-    import { getSmartlists, getPlaylists, getPlaylist } from "../../logic/playlist";
+    import { API } from "../../stores/api";
 
     import PlaylistEdit from '../../components/playlist/playlist_edit.svelte';
 
@@ -37,7 +36,7 @@
 
     async function handleSelection(playlist) {
         // test if selected playlist is still valid (i.e. not deleted)
-        let testPlaylist = await getPlaylist(playlist.id);
+        let testPlaylist = await $API.playlist({ filter: playlist.id });
 
         // if invalid, remove from the list and reload the playlists
         if (!testPlaylist.id) {
@@ -63,9 +62,9 @@
 
     async function loadData() {
         if (type === 'smartlists') {
-            playlistItems = await getSmartlists();
+            playlistItems = await $API.smartlists();
         } else {
-            playlistItems = await getPlaylists();
+            playlistItems = await $API.playlists({ hide_search: 1 });
         }
     }
 

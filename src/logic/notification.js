@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
-import { getSong } from "./song";
+import { API } from "../stores/api";
 import { NotificationsList } from '../stores/notification';
 import {
     ShowNotificationRatingMissing,
@@ -69,7 +69,7 @@ export const addRatingMissingNotification = (data) => {
 
     let song = Promise.resolve([]);
 
-    song = getSong(data.id)
+    song = get(API).song({ filter: data.id })
         .then((result) => {
             if (!result.error && result.length > 0 && !result[0].rating) {
                 addNotification(settings);

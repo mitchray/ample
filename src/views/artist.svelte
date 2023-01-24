@@ -4,8 +4,7 @@
     import { ShowExpandedAlbums, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
 
-    import { getArtist, similarArtists } from "../logic/artist";
-    import { getTopSongsFromArtist } from "../logic/song";
+    import { getArtist } from "../logic/artist";
     import { formatTimeToReadable } from "../logic/helper";
 
     import Tabs from "../components/tabs/tabs.svelte";
@@ -28,6 +27,7 @@
     import SVGArticle from "/src/images/article.svg";
     import SVGTrack from "/src/images/music_note.svg";
     import SVGClock from "/src/images/clock.svg";
+    import {API} from "../stores/api";
 
     export let id;
 
@@ -129,7 +129,7 @@
 
                     {#if tab.value === 'popular'}
                         <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
-                            {#await getTopSongsFromArtist(id)}
+                            {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
                                 Loading popular songs
                             {:then songs}
                                 {#if songs.length > 0}
@@ -156,7 +156,7 @@
 
                     {#if tab.value === 'similar'}
                         <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
-                            {#await similarArtists(id)}
+                            {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
                                 Loading similar artists
                             {:then artists}
                                 {#if artists.length > 0}

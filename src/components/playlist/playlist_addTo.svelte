@@ -1,5 +1,5 @@
 <script>
-    import { addToPlaylist } from '../../logic/playlist';
+    import { API } from "../../stores/api";
 
     import PlaylistSelector from '../../components/playlist/playlist_selector.svelte';
 
@@ -11,10 +11,10 @@
 
     function handleSelected() {
         songs.forEach(element => {
-            addToPlaylist({
-                playlistID: selectedPlaylist.id,
-                songID: element.id,
-                ignoreDuplicates: ignoreDuplicates ? 1 : 0
+            $API.playlistAddSong({
+                filter: selectedPlaylist.id,
+                song: element.id,
+                check: ignoreDuplicates ? 1 : 0
             });
         });
 

@@ -6,6 +6,13 @@ import sveltePreprocess from 'svelte-preprocess';
 export default defineConfig({
     base: "/ample/",
 
+    // TODO temporary while javascript-ampache is still local
+    server: {
+        fs: {
+            allow: ['..']
+        }
+    },
+
     plugins: [
         svelteSVG({
             enforce: "pre",

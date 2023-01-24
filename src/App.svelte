@@ -9,7 +9,7 @@
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind } from "./stores/player";
 
-    import { validateCachedAuth, extendSession } from './logic/user';
+    import { extendSession, validateSession } from './logic/user';
     import { getServerVersion } from './logic/server';
 
     // Use custom string as dnd-action ID
@@ -57,9 +57,9 @@
     import AdvancedSearchPage from './views/advancedSearch.svelte';
     import SongVersionsPage from './views/songVersions.svelte';
 
-    validateCachedAuth();
+    validateSession();
 
-    let intervalId = window.setInterval(function(){
+    window.setInterval(function(){
         extendSession();
     }, 1000*60*15);
 

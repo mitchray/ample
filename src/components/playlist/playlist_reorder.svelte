@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { reorderPlaylist } from "../../logic/playlist";
+    import { API } from "../../stores/api";
     import { shuffleArray, setIndexes, getPlaylistIDFromUrl } from "../../logic/helper";
 
     export let contextKey;
@@ -24,7 +24,7 @@
         let ids = actual.map((obj) => obj.id);
         let newOrders = Array.from(actual.keys(), n => n + 1);
 
-        let result = await reorderPlaylist({id: playlistID, items: ids.join(","), tracks: newOrders.join(",")});
+        let result = await $API.playlistEdit({ filter: playlistID, items: ids.join(","), tracks: newOrders.join(",")} );
 
         if (result.success) {
             $dataDisplay = setIndexes(actual);

@@ -72,12 +72,6 @@
                 containerClass = (containerType === "grid") ? "genre-grid" : "genre-scroll";
                 emptyMessage = "No genres found";
                 break;
-            case 'podcast':
-                logic = await import("../logic/podcast");
-                card = (await import('../components/podcast/podcastCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "podcast-grid" : "podcast-scroll";
-                emptyMessage = "No podcast found";
-                break;
             default:
                 break;
         }

@@ -1,7 +1,6 @@
 <script>
     import { onMount } from "svelte";
-
-    import { getPodcasts } from "../logic/podcast";
+    import { API } from "../stores/api";
 
     import Lister2 from '../components/lister/lister.svelte';
 
@@ -9,7 +8,7 @@
     let loading = true;
 
     onMount(async () => {
-        podcasts = await getPodcasts();
+        podcasts = await $API.podcasts();
         loading = false;
     });
 </script>

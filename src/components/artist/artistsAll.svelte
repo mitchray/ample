@@ -1,6 +1,5 @@
 <script>
-    import { getArtistsStartingWithChar } from "../../logic/artist";
-
+    import { API } from "../../stores/api";
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
@@ -32,7 +31,15 @@
     }
 
     async function getData() {
-        dataDisplay = await getArtistsStartingWithChar({limit: limit, page: page, filterChar: filterValue, type: type});
+        dataDisplay = await $API.advancedSearch({
+            type: "artist",
+            operator: "and",
+            limit: limit,
+            offset: limit * page,
+            rules: [
+                ['title', 8, '^' + filterValue]
+            ]
+        });
         loadedTime = new Date();
     }
 

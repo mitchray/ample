@@ -1,13 +1,10 @@
 <script>
     import { onMount } from 'svelte';
     import { v4 as uuidv4 } from "uuid";
-
+    import { API } from "../../stores/api";
     import { MediaPlayer } from "../../stores/player";
     import { NowPlayingIndex, NowPlayingQueue } from "../../stores/status";
     import { AutoPlayEnabled, AutoPlayPlaylist } from "../../stores/status";
-
-    import { getPlaylist } from "../../logic/playlist";
-    import { getSongsFromPlaylist } from "../../logic/song";
 
     import PlaylistSelector from '../../components/playlist/playlist_selector.svelte';
     import Menu from '../../components/menu.svelte';
@@ -24,7 +21,7 @@
         if ($NowPlayingQueue.length > 0 && $AutoPlayEnabled && selectedPlaylist) {
             // when we reach less than 10 songs remaining
             if ($NowPlayingIndex > $NowPlayingQueue.length - 10) {
-                getSongsFromPlaylist({id: selectedPlaylist.id})
+                $API.playlistSongs({ filter: selectedPlaylist.id })
                     .then((result) => {
                         if (!result.error && result.length > 0) {
                             result = (Array.isArray(result)) ? result : [result];
@@ -58,7 +55,7 @@
     onMount(async () => {
         // load from localstorage
         if ($AutoPlayPlaylist) {
-            selectedPlaylist = await getPlaylist($AutoPlayPlaylist);
+            selectedPlaylist = await $API.playlist({ filter: $AutoPlayPlaylist });
         }
     });
 </script>

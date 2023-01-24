@@ -1,8 +1,6 @@
 <script>
     import { onMount, tick } from "svelte";
-
-    import { getSongsFromPlaylist } from "../logic/song";
-    import { getPlaylist } from '../logic/playlist';
+    import { API } from "../stores/api";
 
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
@@ -40,7 +38,7 @@
     }
 
     onMount(async () => {
-        playlist = await getPlaylist(id);
+        playlist = await $API.playlist({ filter: id });
 
         if (playlist && playlist.id) {
             await handleSongLoad();
@@ -51,7 +49,7 @@
     });
 
     async function handleSongLoad() {
-        songs = await getSongsFromPlaylist({id: id});
+        songs = await $API.playlistSongs({ filter: id });
     }
 </script>
 

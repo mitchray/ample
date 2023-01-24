@@ -1,15 +1,7 @@
 <script>
-    import { Link } from "svelte-routing";
-    import { serverURL } from "../../stores/server";
-
     import AlbumCard from '../../components/album/albumCard.svelte';
     import AlbumSongs from '../../components/album/albumSongs.svelte';
-    import Rating from '../../components/rating.svelte';
     import Visibility from '../../components/visibility.svelte';
-    import Actions2 from '../../components/action/actions.svelte';
-
-    import SVGArtist from "/src/images/artist.svg";
-    import SVGYear from "/src/images/year.svg";
 
     export let data;
 

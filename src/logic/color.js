@@ -53,7 +53,7 @@ function colorIsAcceptable(color) {
 
 export async function findCustomHue(color) {
     let theHue;
-    let colorArray = [];
+    let colorArray = {};
 
     // Convert RGB (normalized to 0-1) to Lch
     let lchColor = rgbToLch([color[0], color[1], color[2]]);

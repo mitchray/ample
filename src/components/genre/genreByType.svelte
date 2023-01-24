@@ -1,9 +1,5 @@
 <script>
-    import { getGenre } from '../../logic/genre';
-    import { getGenreSongs } from "../../logic/song";
-    import { getArtistsByGenre } from "../../logic/artist";
-    import { getAlbumsByGenre } from "../../logic/album";
-
+    import { API } from "../../stores/api";
     import Lister2 from '../../components/lister/lister.svelte';
     import Pagination2 from '../../components/pagination2.svelte';
 
@@ -28,18 +24,18 @@
     }
 
     async function getData() {
-        genre = await getGenre(id);
+        genre = await $API.genre({ filter: id });
 
         if (id && genre.id) {
             switch (type) {
                 case "artist":
-                    data = await getArtistsByGenre({query: id, limit: limit, page: page});
+                    data = await $API.genreArtists({ filter: id, limit: limit, offset: limit * page });
                     break;
                 case "album":
-                    data = await getAlbumsByGenre({query: id, limit: limit, page: page});
+                    data = await $API.genreAlbums({ filter: id, limit: limit, offset: limit * page });
                     break;
                 case "song":
-                    data = await getGenreSongs({query: id, limit: limit, page: page});
+                    data = await $API.genreSongs({ filter: id, limit: limit, offset: limit * page });
                     break;
                 default:
                     break;
@@ -52,7 +48,7 @@
 
 <Pagination2 bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />
 
-{#await getGenre(id)}
+{#await $API.genre({ filter: id })}
     Loading
 {:then genre}
     {#if genre.id}

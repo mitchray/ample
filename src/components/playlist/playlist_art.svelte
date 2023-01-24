@@ -1,9 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
+    import { API } from "../../stores/api";
     import { serverURL } from "../../stores/server";
 
-    import { getSongsFromPlaylist } from '../../logic/song';
     import { shuffleArray } from "../../logic/helper";
 
     export let playlist = null;
@@ -24,7 +24,7 @@
         }
 
         if (playlist && playlist.id) {
-            initialSongs = await getSongsFromPlaylist({id: playlist.id, limit: 30});
+            initialSongs = await $API.playlistSongs({ filter: playlist.id, limit: 30 });
         }
 
         keepSongs = keepUnique(initialSongs);

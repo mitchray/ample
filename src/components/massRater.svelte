@@ -1,5 +1,5 @@
 <script>
-    import { setRating } from "../logic/library";
+    import { API } from "../stores/api";
 
     export let items = [];
     export let type;
@@ -10,7 +10,7 @@
     function handleApply() {
         items.forEach((item, index) => {
             if (item.selected === true) {
-                setRating(type, item.id, newRating);
+                $API.rate({ type: type, id: item.id, rating: newRating });
                 items[index].rating = newRating;
             }
         });

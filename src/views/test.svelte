@@ -1,7 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-    import { getPlaylist } from "../logic/playlist";
-
+    import { API } from "../stores/api";
     import Menu from '../components/menu.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -36,7 +35,7 @@
     }
 
     onMount(async () => {
-        data.playlist = await getPlaylist(26);
+        data.playlist = await $API.playlist({ filter: 26 });
     });
 </script>
 

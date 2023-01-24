@@ -1,6 +1,6 @@
 <script>
     import { getContext} from "svelte";
-    import { getSongsFromPlaylist } from "../../logic/song";
+    import { API } from "../../stores/api";
     import { setIndexes, getPlaylistIDFromUrl } from "../../logic/helper";
 
     export let contextKey;
@@ -10,7 +10,7 @@
     let playlistID = getPlaylistIDFromUrl();
 
     async function handleRefresh() {
-        let results = await getSongsFromPlaylist({id: playlistID});
+        let results = await $API.playlistSongs({ filter: playlistID });
 
         if (results) {
             $dataDisplay = setIndexes(results);

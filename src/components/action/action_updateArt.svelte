@@ -1,6 +1,6 @@
 <script>
     import { getContext } from 'svelte';
-    import { updateArt } from "../../logic/library";
+    import { API } from "../../stores/api";
     import { loadingSpinner } from "../../actions/loadingSpinner";
     import SVGImage from "/src/images/image.svg";
     import SVGPhoto from "/src/images/portrait.svg";
@@ -15,7 +15,7 @@
 
     async function handleAction() {
         loaded = false;
-        let result = await updateArt(type, id);
+        let result = await $API.updateArt({ type: type, id: id });
         if (result) {
             loaded = true;
         }

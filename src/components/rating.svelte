@@ -23,7 +23,7 @@
 </script>
 
 <script>
-    import { setRating, setFlag } from "../logic/library";
+    import { API } from "../stores/api";
 
     export let id = null;
     export let type = null;
@@ -55,7 +55,7 @@
         let newRating = parseInt(this.dataset.rating);
         pendingRating = newRating;
 
-        update = setRating(type, id, newRating)
+        update = $API.rate({ type: type, id: id, rating: newRating })
             .then((result) => {
                 if (!result.error) {
                     rating = newRating;
@@ -73,7 +73,7 @@
     function handleFlag() {
         let newFlag = (flag ? 0 : 1);
 
-        update = setFlag(type, id, newFlag)
+        update = $API.flag({ type: type, id: id, flag: newFlag })
             .then((result) => {
                 if (!result.error) {
                     flag = newFlag;

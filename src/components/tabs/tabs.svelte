@@ -12,7 +12,7 @@
     let uniqueID = uuidv4();
 
     onMount(() => {
-        hash = window.location.hash.substr(1);
+        hash = window.location.hash.substring(1);
         item = items.find(obj => obj.value === hash) || items[0];
         setCurrentURL();
 

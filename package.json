@@ -24,6 +24,7 @@
     "autoprefixer": "^10.3.1",
     "color-converters": "^0.1.1",
     "fast-average-color": "^6.4.0",
+    "javascript-ampache": "^0.0.1",
     "jssha": "^3.2.0",
     "postcss": "^8.3.6",
     "svelte-dnd-action": "^0.9.8",

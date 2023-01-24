@@ -1,9 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { fade } from 'svelte/transition';
-
-    import { getPlaylists } from "../logic/playlist";
-
+    import { API } from "../stores/api";
     import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
     import PlaylistCard from '../components/playlist/playlistCard.svelte';
     import Menu from '../components/menu.svelte';
@@ -35,7 +33,7 @@
     }
 
     onMount(async () => {
-        playlists = await getPlaylists();
+        playlists = await $API.playlists({ hide_search: 1 });
         loading = false;
     });
 </script>

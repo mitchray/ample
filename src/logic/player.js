@@ -166,7 +166,7 @@ class Player {
      * Clear the queue
      */
     clearQueue() {
-        // clear all tracks EXCEPT currently playing, unless its the only item in queue
+        // clear all tracks EXCEPT currently playing, unless it is the only item in queue
         if (this.nowPlayingQueue.length > 1) {
             this.clearAllExceptCurrent();
         } else {

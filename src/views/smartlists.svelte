@@ -1,14 +1,13 @@
 <script>
     import { fade } from 'svelte/transition';
-
-    import { getSmartlists } from "../logic/playlist";
+    import { API } from "../stores/api";
 
     import PlaylistCard from '../components/playlist/playlistCard.svelte';
 </script>
 
 <h1 class="page-title">Smartlists</h1>
 
-{#await getSmartlists()}
+{#await $API.smartlists()}
     <p>Loading smartlists</p>
 {:then smartlists}
     {#if smartlists.length > 0}

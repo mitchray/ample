@@ -1,12 +1,6 @@
 <script>
     import { onMount } from 'svelte';
-
-    import { getSongsFromAdvancedSearch } from '../logic/song';
-    import { getAlbumsFromAdvancedSearch } from '../logic/album';
-    import { getArtistsFromAdvancedSearch } from '../logic/artist';
-    import { getPlaylistsFromAdvancedSearch, getPlaylists, getSmartlists } from '../logic/playlist';
-    import { getUsers } from '../logic/user';
-    import { getCatalogs } from '../logic/catalog';
+    import { API } from "../stores/api";
 
     import '/src/css/containerqueries/customSearch.css';
     import SVGClose from "/src/images/close.svg";
@@ -171,18 +165,45 @@
         loading = true;
         loadedTime = null;
 
+        // transform rows into simple array for API call
+        let simpleRows = rows.map(row => [row.field, row.operator, row.input]);
+
         switch (settings.type) {
             case "song":
-                results = await getSongsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
+                results = await $API.advancedSearch({
+                    type: "song",
+                    limit: settings.limit,
+                    random: (settings.random) ? 1 : 0,
+                    operator: settings.operator,
+                    rules: simpleRows,
+                });
                 break;
             case "album":
-                results = await getAlbumsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
+                results = await $API.advancedSearch({
+                    type: "album",
+                    limit: settings.limit,
+                    random: (settings.random) ? 1 : 0,
+                    operator: settings.operator,
+                    rules: simpleRows,
+                });
                 break;
             case "artist":
-                results = await getArtistsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
+                results = await $API.advancedSearch({
+                    type: "artist",
+                    limit: settings.limit,
+                    random: (settings.random) ? 1 : 0,
+                    operator: settings.operator,
+                    rules: simpleRows,
+                });
                 break;
             case "playlist":
-                results = await getPlaylistsFromAdvancedSearch({rows: rows, limit: settings.limit, random: settings.random, match: settings.operator});
+                results = await $API.advancedSearch({
+                    type: "playlist",
+                    limit: settings.limit,
+                    random: (settings.random) ? 1 : 0,
+                    operator: settings.operator,
+                    rules: simpleRows,
+                });
                 break;
             default:
                 break;
@@ -195,10 +216,10 @@
     onMount(async () => {
         parseParams();
 
-        allUsers = await getUsers();
-        allCatalogs = await getCatalogs();
-        allPlaylists = await getPlaylists();
-        allSmartlists = await getSmartlists(true);
+        allUsers = await $API.users();
+        allCatalogs = await $API.catalogs();
+        allPlaylists = await $API.playlists({ hide_search: 1 });
+        allSmartlists = await $API.smartlists();
 
         loaded = true;
 

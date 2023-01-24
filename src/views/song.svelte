@@ -1,7 +1,6 @@
 <script>
     import { Link } from 'svelte-routing';
-
-    import { getSong } from '../logic/song';
+    import { API } from "../stores/api";
     import { formatTotalTime, formatSongQuality, formatFilesize } from '../logic/helper';
 
     import Rating from '../components/rating.svelte';
@@ -12,7 +11,7 @@
     export let id;
 </script>
 
-{#await getSong(id)}
+{#await $API.song({ filter: id })}
     <p>Loading song</p>
 {:then data}
     {#each data as song}

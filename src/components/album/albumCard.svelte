@@ -5,9 +5,6 @@
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
 
-    import SVGYear from "/src/images/year.svg";
-    import SVGTrack from "/src/images/music_note.svg";
-
     export let data = null; // needed for cardList dynamic components
 
     let album;

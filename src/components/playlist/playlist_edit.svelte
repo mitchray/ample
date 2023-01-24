@@ -1,5 +1,5 @@
 <script>
-    import { createPlaylist, editPlaylist, getPlaylist, getPlaylistByName } from "../../logic/playlist";
+    import { API } from "../../stores/api";
 
     export let playlist = null;
     export let isNew = false;
@@ -10,12 +10,11 @@
     let playlistExists;
 
     async function savePlaylist() {
-        let tempPlaylist = null;
         playlistExists = false;
         playlistName = playlistName.trim();
 
         if (playlistName && playlistType) {
-            let playlistTest = await getPlaylistByName(playlistName);
+            let playlistTest = await $API.playlist({ filter: playlistName });
 
             if (isNew) {
                 if (playlistTest && playlistTest.id) {
@@ -23,7 +22,7 @@
                     return;
                 }
 
-                playlist = await createPlaylist({name: playlistName, type: playlistType});
+                playlist = await $API.playlistCreate({ name: playlistName, type: playlistType });
                 isVisible = false;
             } else {
                 if (playlistTest && playlistTest.id && playlistTest.id !== playlist.id) {
@@ -31,10 +30,10 @@
                     return;
                 }
 
-                let result = await editPlaylist({id: playlist.id, name: playlistName, type: playlistType});
+                let result = await $API.playlistEdit({ filter: playlist.id, name: playlistName, type: playlistType });
 
                 if (result.success) {
-                    let tempPlaylist = await getPlaylist(playlist.id);
+                    let tempPlaylist = await $API.playlist({ filter: playlist.id });
                     if (playlist.isNew) {
                         tempPlaylist.isNew = true;
                     }

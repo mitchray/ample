@@ -1,5 +1,5 @@
 <script>
-    import { removeFromPlaylist } from '../../logic/playlist';
+    import { API } from "../../stores/api";
     import { getContext } from "svelte";
     import { getPlaylistIDFromUrl } from "../../logic/helper";
 
@@ -12,9 +12,9 @@
     function handleRemove() {
         $dataDisplay.forEach((item, index) => {
             if (item.selected === true && !item.isDeleted) {
-                let result = removeFromPlaylist({
-                    playlistID: playlistID,
-                    songID: item.id
+                $API.playlistRemoveSong({
+                    filter: playlistID,
+                    song: item.id
                 }).then((result) => {
                     if (result.success) {
                         item.selected === false;
