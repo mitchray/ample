@@ -31,7 +31,7 @@ export const serverURL = readable(detectedURL, function start(set) {
 
 export const serverPathname = readable(detectedPathname, function start(set) {
     if (import.meta.env.MODE === "remote") {
-        set(detectedURL);
+        set("/");
     } else {
         set(detectedPathname + "/ample");
     }

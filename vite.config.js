@@ -7,7 +7,7 @@ export default defineConfig(({ command, mode, ssrBuild }) => {
     // Default the base path to /ample/ but set it to / if we're using a remote server
     var basePath = "/ample/"
     if (mode === "remote") {
-        basePath = "/";
+        basePath = "/"
     }
 
     return {
