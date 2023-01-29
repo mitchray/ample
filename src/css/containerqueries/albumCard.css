@@ -1,0 +1,13 @@
+@container album-card-expanded (min-width: 320px) {
+    .album-card.album-card.album-card {
+        display: flex;
+        flex-direction: row;
+        width: min-content;
+        gap: var(--spacing-md);
+    }
+
+    .album-card.album-card.album-card .image-container.image-container.image-container {
+        height: 150px;
+        flex-shrink: 0;
+    }
+}

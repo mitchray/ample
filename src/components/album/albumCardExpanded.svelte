@@ -3,6 +3,8 @@
     import AlbumSongs from '../../components/album/albumSongs.svelte';
     import Visibility from '../../components/visibility.svelte';
 
+    import '/src/css/containerqueries/albumCard.css';
+
     export let data;
 
     let album;
@@ -27,6 +29,11 @@
 <style>
     :global(.album-card-expanded + .album-card-expanded) {
         margin-top: calc(var(--spacing-xxxl) + var(--spacing-xxxl));
+    }
+
+    .album-card-expanded {
+        container-name: album-card-expanded;
+        container-type: inline-size
     }
 
     .info {
