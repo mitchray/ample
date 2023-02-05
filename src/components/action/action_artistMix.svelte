@@ -22,7 +22,7 @@
         loaded = false;
 
         let artistID = await getArtistID();
-        let artists  = await $API.getSimilar({ type: "artist", filter: artistID, limit: 15 });
+        let artists  = await $API.getSimilar({ type: "artist", filter: artistID, limit: 20 });
         let baseArtist   = await getArtist({id: artistID});
 
         if (baseArtist) {
