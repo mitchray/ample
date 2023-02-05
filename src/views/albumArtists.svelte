@@ -22,6 +22,10 @@
     import "/src/css/containerqueries/artists.css";
 </script>
 
+<svelte:head>
+    <title>Album Artists</title>
+</svelte:head>
+
 {#if $SiteMainSpace.ready}
     <div class="artists-page-wrapper">
         <div class="artists-page-container"

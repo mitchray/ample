@@ -21,6 +21,10 @@
     ];
 </script>
 
+<svelte:head>
+    <title>Favorites</title>
+</svelte:head>
+
 <h1 class="page-title">Favorites</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>

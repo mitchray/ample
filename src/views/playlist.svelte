@@ -53,81 +53,81 @@
     }
 </script>
 
-{#if loading}
-    <p>Loading playlist</p>
-{:else}
-    {#if playlist.id}
-        <div class="wrapper">
-            <div class="container">
-                <div class="details-container">
-                    <div class="details">
-                        <div class="cover-rating">
-                            <div class="art-container">
-                                <PlaylistArt bind:songs fallback="{playlist.art}" />
-                            </div>
+<svelte:head>
+    <title>{(loading) ? 'Loading' : (isSmartlist) ? 'Smartlist' : 'Playlist'}{`: ${playlist?.name}`}</title>
+</svelte:head>
 
-                            {#if !isSmartlist}
-                                <div class="rating">
-                                    <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
-                                </div>
+{#if playlist?.id && !loading}
+    <div class="wrapper">
+        <div class="container">
+            <div class="details-container">
+                <div class="details">
+                    <div class="cover-rating">
+                        <div class="art-container">
+                            <PlaylistArt bind:songs fallback="{playlist.art}" />
+                        </div>
+
+                        {#if !isSmartlist}
+                            <div class="rating">
+                                <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
+                            </div>
+                        {/if}
+                    </div>
+
+                    <div class="info">
+                        <div class="type">
+                            {#if isSmartlist}
+                                <SVGSmartlist class="inline" /> Smartlist
+                            {:else}
+                                <SVGPlaylist class="inline" /> Playlist
                             {/if}
                         </div>
 
-                        <div class="info">
-                            <div class="type">
-                                {#if isSmartlist}
-                                    <SVGSmartlist class="inline" /> Smartlist
-                                {:else}
-                                    <SVGPlaylist class="inline" /> Playlist
-                                {/if}
+                        <h1 class="title">
+                            {playlist.name}
+                        </h1>
+
+                        {#if !isSmartlist}
+                            <div class="playlist-actions">
+                                <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
+                                <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
                             </div>
-
-                            <h1 class="title">
-                                {playlist.name}
-                            </h1>
-
-                            {#if !isSmartlist}
-                                <div class="playlist-actions">
-                                    <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
-                                    <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
-                                </div>
-                            {/if}
-                        </div>
+                        {/if}
                     </div>
                 </div>
+            </div>
 
-                <div class="songs-container">
-                    <Lister2
-                        bind:data={songs}
-                        type="playlist_songs"
-                        showCheckboxes={!isSmartlist}
-                        tableOnly={true}
-                        showIndex={true}
-                        actionData={{
-                            type: "",
-                            mode: "fullButtons",
-                            showShuffle: songs.length > 1,
-                            data: Object.create({songs: songs})
-                        }}
-                    />
-                </div>
+            <div class="songs-container">
+                <Lister2
+                    bind:data={songs}
+                    type="playlist_songs"
+                    showCheckboxes={!isSmartlist}
+                    tableOnly={true}
+                    showIndex={true}
+                    actionData={{
+                        type: "",
+                        mode: "fullButtons",
+                        showShuffle: songs.length > 1,
+                        data: Object.create({songs: songs})
+                    }}
+                />
             </div>
         </div>
+    </div>
 
-        {#if playlistEditIsVisible}
-            <Menu anchor="left-center" toggleSelector={"#js-action-playlist_edit_" + id} bind:isVisible={playlistEditIsVisible}>
-                <PlaylistEdit bind:playlist={playlist} bind:isVisible={playlistEditIsVisible} />
-            </Menu>
-        {/if}
-
-        {#if playlistDeleteIsVisible}
-            <Menu anchor="left-center" toggleSelector={"#js-action-playlist_delete_" + id} bind:isVisible={playlistDeleteIsVisible}>
-                <PlaylistDelete bind:playlist={playlist} bind:isVisible={playlistDeleteIsVisible} />
-            </Menu>
-        {/if}
-    {:else}
-        <p>Unable to find playlist with that ID</p>
+    {#if playlistEditIsVisible}
+        <Menu anchor="left-center" toggleSelector={"#js-action-playlist_edit_" + id} bind:isVisible={playlistEditIsVisible}>
+            <PlaylistEdit bind:playlist={playlist} bind:isVisible={playlistEditIsVisible} />
+        </Menu>
     {/if}
+
+    {#if playlistDeleteIsVisible}
+        <Menu anchor="left-center" toggleSelector={"#js-action-playlist_delete_" + id} bind:isVisible={playlistDeleteIsVisible}>
+            <PlaylistDelete bind:playlist={playlist} bind:isVisible={playlistDeleteIsVisible} />
+        </Menu>
+    {/if}
+{:else}
+    <p>Loading playlist</p>
 {/if}
 
 <style>

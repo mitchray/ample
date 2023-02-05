@@ -16,6 +16,10 @@
     };
 </script>
 
+<svelte:head>
+    <title>Multi-rater</title>
+</svelte:head>
+
 <h1 class="page-title">Multi-rater</h1>
 
 <CustomSearch useSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />

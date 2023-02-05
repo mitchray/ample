@@ -1,8 +1,10 @@
 <script>
+    import { onMount } from "svelte";
     import { fade } from 'svelte/transition';
 
     import { ShowExpandedAlbums, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
+    import { API } from "../stores/api";
 
     import { getArtist } from "../logic/artist";
     import { formatTimeToReadable } from "../logic/helper";
@@ -27,10 +29,10 @@
     import SVGArticle from "/src/images/article.svg";
     import SVGTrack from "/src/images/music_note.svg";
     import SVGClock from "/src/images/clock.svg";
-    import {API} from "../stores/api";
 
     export let id;
 
+    let artist;
     let theme;
     $: theme = $Theme;
 
@@ -52,166 +54,169 @@
         localStorage.setItem('ShowExpandedAlbums', JSON.stringify(inverted));
         ShowExpandedAlbums.set(inverted);
     }
+
+    onMount(async () => {
+        artist = await getArtist({id: id, artAnalysis: true});
+    });
 </script>
 
-{#await getArtist({id: id, artAnalysis: true})}
-    <p>Loading artist</p>
-{:then artist}
-    {#if artist.id}
-        <div class="container" in:fade>
-            <div class="header">
-                <h1 class="title">{artist.name}</h1>
+<svelte:head>
+    <title>Artist: {`${artist?.name}` || 'Loading'}</title>
+</svelte:head>
 
-                <div class="profile">
-                    <div class="art-container" >
-                        <img class="art"
-                            src="{artist.art}&thumb=32"
-                            alt="Image of {artist.name}"
-                            width="240"
-                            height="240"
-                            on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
-                        />
-                    </div>
+{#if artist?.id}
+    <div class="container" in:fade>
+        <div class="header">
+            <h1 class="title">{artist.name}</h1>
 
-                    <div class="rating">
-                        <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
-                    </div>
+            <div class="profile">
+                <div class="art-container" >
+                    <img class="art"
+                         src="{artist.art}&thumb=32"
+                         alt="Image of {artist.name}"
+                         width="240"
+                         height="240"
+                         on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
+                    />
                 </div>
 
-                <div class="details">
-                    <div class="meta">
-                        {#if artist.albumcount > 0}
-                            <span><SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'}</span>
-                        {/if}
+                <div class="rating">
+                    <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                </div>
+            </div>
 
-                        {#if artist.appearanceCount > 0}
-                            <span><SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'}</span>
-                        {/if}
+            <div class="details">
+                <div class="meta">
+                    {#if artist.albumcount > 0}
+                        <span><SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'}</span>
+                    {/if}
 
-                        <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
+                    {#if artist.appearanceCount > 0}
+                        <span><SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'}</span>
+                    {/if}
 
-                        {#if artist.time > 0}
-                            <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
-                        {/if}
-                    </div>
+                    <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
+
+                    {#if artist.time > 0}
+                        <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
+                    {/if}
+                </div>
 
 
-                    <Genres genres="{artist.genre}" />
+                <Genres genres="{artist.genre}" />
 
-                    <div class="actions">
-                        <Actions2
-                            type="artist"
-                            mode="fullButtons"
-                            showShuffle={artist.songcount > 1}
-                            id="{artist.id}"
-                        />
+                <div class="actions">
+                    <Actions2
+                        type="artist"
+                        mode="fullButtons"
+                        showShuffle={artist.songcount > 1}
+                        id="{artist.id}"
+                    />
 
-                        <ThirdPartyServices data={artist} type="artist" />
-                    </div>
+                    <ThirdPartyServices data={artist} type="artist" />
                 </div>
             </div>
         </div>
+    </div>
 
-        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
-            {#each tabItems as tab}
-                {#if tab.loaded === true}
-                    {#if tab.value === 'discography'}
-                        <Tab id="discography" class="discography" bind:activeTabValue={currentTab}>
-                            <button
-                                class="album-view-toggle button button--regular"
-                                on:click={toggleShowExpanded}>
-                                View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
-                            </button>
+    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+        {#each tabItems as tab}
+            {#if tab.loaded === true}
+                {#if tab.value === 'discography'}
+                    <Tab id="discography" class="discography" bind:activeTabValue={currentTab}>
+                        <button
+                            class="album-view-toggle button button--regular"
+                            on:click={toggleShowExpanded}
+                        >
+                            View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
+                        </button>
 
-                            <ArtistReleases artistID={artist.id} />
-                        </Tab>
-                    {/if}
+                        <ArtistReleases artistID={artist.id} />
+                    </Tab>
+                {/if}
 
-                    {#if tab.value === 'popular'}
-                        <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
-                            {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
-                                Loading popular songs
-                            {:then songs}
-                                {#if songs.length > 0}
-                                    <Lister2
-                                        data={songs}
-                                        type="song"
-                                        tableOnly={true}
-                                        showIndex={true}
-                                        actionData={{
-                                            type: "",
-                                            mode: "fullButtons",
-                                            showShuffle: songs.length > 1,
-                                            data: Object.create({songs: songs})
-                                        }}
-                                    />
-                                {:else}
-                                    <p>No songs found</p>
-                                {/if}
-                            {:catch error}
-                                <p>An error occurred.</p>
-                            {/await}
-                        </Tab>
-                    {/if}
-
-                    {#if tab.value === 'similar'}
-                        <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
-                            {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
-                                Loading similar artists
-                            {:then artists}
-                                {#if artists.length > 0}
-                                    <div class="artist-grid">
-                                        {#each artists as artist}
-                                            {#if artist.name}
-                                                <ArtistCard data="{artist}" />
-                                            {/if}
-                                        {/each}
-                                    </div>
-                                {:else}
-                                    <p>No similar artists</p>
-                                {/if}
-                            {:catch error}
-                                <p>An error occurred.</p>
-                            {/await}
-                        </Tab>
-                    {/if}
-
-                    {#if tab.value === 'all'}
-                        <Tab id="all" class="all" bind:activeTabValue={currentTab}>
-                            {#if artist.songcount > 0}
-                                <ArtistSongs artistID={artist.id} />
+                {#if tab.value === 'popular'}
+                    <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
+                        {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
+                            Loading popular songs
+                        {:then songs}
+                            {#if songs.length > 0}
+                                <Lister2
+                                    data={songs}
+                                    type="song"
+                                    tableOnly={true}
+                                    showIndex={true}
+                                    actionData={{
+                                        type: "",
+                                        mode: "fullButtons",
+                                        showShuffle: songs.length > 1,
+                                        data: Object.create({songs: songs})
+                                    }}
+                                />
                             {:else}
                                 <p>No songs found</p>
                             {/if}
-                        </Tab>
-                    {/if}
+                        {:catch error}
+                            <p>An error occurred.</p>
+                        {/await}
+                    </Tab>
+                {/if}
 
-                    {#if tab.value === 'summary'}
-                        <Tab id="summary" class="summary" bind:activeTabValue={currentTab}>
-                            {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
-                                <div class="summary">
-                                    <p>{artist.summary}</p>
+                {#if tab.value === 'similar'}
+                    <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
+                        {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
+                            Loading similar artists
+                        {:then artists}
+                            {#if artists.length > 0}
+                                <div class="artist-grid">
+                                    {#each artists as artist}
+                                        {#if artist.name}
+                                            <ArtistCard data="{artist}" />
+                                        {/if}
+                                    {/each}
                                 </div>
                             {:else}
-                                <p>No summary found</p>
+                                <p>No similar artists</p>
                             {/if}
-                        </Tab>
-                    {/if}
-
-                    {#if tab.value === 'musicbrainz'}
-                        <Tab id="musicbrainz" class="musicbrainz" bind:activeTabValue={currentTab}>
-                            <MusicbrainzScan2 data={artist} />
-                        </Tab>
-                    {/if}
+                        {:catch error}
+                            <p>An error occurred.</p>
+                        {/await}
+                    </Tab>
                 {/if}
-            {/each}
-        </Tabs>
-    {:else}
-        <p>Unable to find artist with that ID</p>
-    {/if}
-{:catch error}
-    <p>Something went wrong: {error.message}</p>
-{/await}
+
+                {#if tab.value === 'all'}
+                    <Tab id="all" class="all" bind:activeTabValue={currentTab}>
+                        {#if artist.songcount > 0}
+                            <ArtistSongs artistID={artist.id} />
+                        {:else}
+                            <p>No songs found</p>
+                        {/if}
+                    </Tab>
+                {/if}
+
+                {#if tab.value === 'summary'}
+                    <Tab id="summary" class="summary" bind:activeTabValue={currentTab}>
+                        {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
+                            <div class="summary">
+                                <p>{artist.summary}</p>
+                            </div>
+                        {:else}
+                            <p>No summary found</p>
+                        {/if}
+                    </Tab>
+                {/if}
+
+                {#if tab.value === 'musicbrainz'}
+                    <Tab id="musicbrainz" class="musicbrainz" bind:activeTabValue={currentTab}>
+                        <MusicbrainzScan2 data={artist} />
+                    </Tab>
+                {/if}
+            {/if}
+        {/each}
+    </Tabs>
+{:else}
+    <p>Loading artist</p>
+{/if}
 
 <style>
     .container {

@@ -8,6 +8,10 @@
     let type;
 </script>
 
+<svelte:head>
+    <title>Advanced Search</title>
+</svelte:head>
+
 <h1 class="page-title">Advanced Search</h1>
 
 <CustomSearch bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />

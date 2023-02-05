@@ -22,6 +22,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Genres</title>
+</svelte:head>
+
 <h1 class="page-title">Genres</h1>
 
 {#if !loading && genres && genres.length > 0}

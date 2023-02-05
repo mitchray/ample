@@ -7,6 +7,10 @@
     import { newestAlbums, randomAlbums } from "../logic/album";
 </script>
 
+<svelte:head>
+    <title>Ample</title>
+</svelte:head>
+
 <CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest Albums" />
 
 {#key ($CurrentMedia) ? $CurrentMedia.id : 0}

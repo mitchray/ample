@@ -17,6 +17,10 @@
     let currentTab;
 </script>
 
+<svelte:head>
+    <title>Random</title>
+</svelte:head>
+
 <h1 class="page-title">Random</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>

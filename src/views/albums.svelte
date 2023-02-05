@@ -18,6 +18,10 @@
     let currentTab;
 </script>
 
+<svelte:head>
+    <title>Albums</title>
+</svelte:head>
+
 <h1 class="page-title">Albums</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>

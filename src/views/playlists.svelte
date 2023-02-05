@@ -38,6 +38,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Playlists</title>
+</svelte:head>
+
 <h1 class="page-title">Playlists</h1>
 
 <button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="button button--primary">New playlist</button>

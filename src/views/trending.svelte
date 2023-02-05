@@ -17,6 +17,10 @@
     let currentTab;
 </script>
 
+<svelte:head>
+    <title>Trending</title>
+</svelte:head>
+
 <h1 class="page-title">Trending</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>

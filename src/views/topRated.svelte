@@ -16,6 +16,10 @@
     ];
 </script>
 
+<svelte:head>
+    <title>Top Rated</title>
+</svelte:head>
+
 <h1 class="page-title">Top Rated</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>

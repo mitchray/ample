@@ -5,6 +5,10 @@
     import PlaylistCard from '../components/playlist/playlistCard.svelte';
 </script>
 
+<svelte:head>
+    <title>Smartlists</title>
+</svelte:head>
+
 <h1 class="page-title">Smartlists</h1>
 
 {#await $API.smartlists()}

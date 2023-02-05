@@ -13,6 +13,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Podcasts</title>
+</svelte:head>
+
 <h1 class="page-title">Podcasts</h1>
 
 {#if !loading && podcasts && podcasts.length > 0}

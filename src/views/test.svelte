@@ -39,6 +39,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Test page</title>
+</svelte:head>
+
 <h1 class="page-title">Test page yo</h1>
 
 <div style="margin: 2rem 0;">

@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import { API } from "../stores/api";
 
     import Tabs from "../components/tabs/tabs.svelte";
@@ -11,6 +12,7 @@
     import SVGSong from "/src/images/music_note.svg";
 
     export let id;
+    let genre;
     let currentTab;
 
     let tabItems = [
@@ -18,42 +20,44 @@
         { label: "Albums",  value: "albums",  icon: SVGAlbum },
         { label: "Songs",   value: "songs",   icon: SVGSong },
     ];
+
+    onMount(async () => {
+        genre = await $API.genre({ filter: id });
+    });
 </script>
 
-{#await $API.genre({ filter: id })}
-    Loading genre
-{:then genre}
-    {#if genre.id}
-        <h1 class="page-title">
-            <SVGGenre class="inline" /> {genre.name}
-        </h1>
+<svelte:head>
+    <title>Genre: {`${genre?.name}` || 'Loading'}</title>
+</svelte:head>
 
-        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
-            {#each tabItems as tab}
-                {#if tab.loaded === true}
-                    {#if tab.value === 'artists'}
-                        <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
-                            <GenreByType id={genre.id} type="artist" />
-                        </Tab>
-                    {/if}
+{#if genre?.id}
+    <h1 class="page-title">
+        <SVGGenre class="inline" /> {genre.name}
+    </h1>
 
-                    {#if tab.value === 'albums'}
-                        <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                            <GenreByType id={genre.id} type="album"} />
-                        </Tab>
-                    {/if}
-
-                    {#if tab.value === 'songs'}
-                        <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
-                            <GenreByType id={genre.id} type="song" />
-                        </Tab>
-                    {/if}
+    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+        {#each tabItems as tab}
+            {#if tab.loaded === true}
+                {#if tab.value === 'artists'}
+                    <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
+                        <GenreByType id={genre.id} type="artist" />
+                    </Tab>
                 {/if}
-            {/each}
-        </Tabs>
-    {:else}
-        <p>No genre found with that ID</p>
-    {/if}
-{:catch error}
-    <p>An error occurred.</p>
-{/await}
+
+                {#if tab.value === 'albums'}
+                    <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
+                        <GenreByType id={genre.id} type="album"} />
+                    </Tab>
+                {/if}
+
+                {#if tab.value === 'songs'}
+                    <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
+                        <GenreByType id={genre.id} type="song" />
+                    </Tab>
+                {/if}
+            {/if}
+        {/each}
+    </Tabs>
+{:else}
+    <p>Loading genre</p>
+{/if}
