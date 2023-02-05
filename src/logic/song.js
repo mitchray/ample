@@ -164,7 +164,7 @@ export const getSongsFromArtists = (artists) => {
         operator: "and",
         limit: 200,
         rules: [
-            ["artist", 8, encodeURIComponent("^(" + artistsFormatted + ")$")]
+            ["artist", 8, "^(" + artistsFormatted + ")$"]
         ]
     })
 }

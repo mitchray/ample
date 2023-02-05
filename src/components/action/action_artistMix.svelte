@@ -1,5 +1,6 @@
 <script>
     import { getContext } from 'svelte';
+    import { v4 as uuidv4 } from "uuid";
     import { API } from "../../stores/api";
     import { MediaPlayer } from "../../stores/player";
     import { loadingSpinner } from "../../actions/loadingSpinner";
@@ -23,13 +24,18 @@
 
         let artistID = await getArtistID();
         let artists  = await $API.getSimilar({ type: "artist", filter: artistID, limit: 20 });
-        let baseArtist   = await getArtist({id: artistID});
+        let baseArtist   = await getArtist({ id: artistID });
 
         if (baseArtist) {
             artists.push(baseArtist);
         }
 
         let songs = await getSongsFromArtists(artists);
+
+        // TODO: refactor all this fetching into main Actions component to keep _id assignments centralised
+        // each media item needs a unique _id
+        songs = songs.map((item, index) => ({ ...item, _id: uuidv4()}));
+
         $MediaPlayer.playNow(filterBelow(songs));
         loaded = true;
     }
@@ -54,7 +60,7 @@
                 break;
         }
 
-        return tempID;
+        return parseInt(tempID);
     }
 </script>
 
