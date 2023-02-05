@@ -32,7 +32,6 @@ class Player {
      */
     constructor() {
         this.wavesurfer = null;
-        this.defaultTitle = document.title;
         this.id = null;
         this.stopQueued = false;
 
@@ -224,13 +223,6 @@ class Player {
         if (song) {
             CurrentMedia.set(song);
 
-            document.title = song.title;
-
-            // append artist name if present (i.e. songs)
-            if (song.artist) {
-                document.title += " - " + song.artist.name;
-            }
-
             // notify if missing gain tags
             if (!song.r128_track_gain && !song.replaygain_track_gain) {
                 addGainTagsMissingNotification(song);
@@ -245,7 +237,6 @@ class Player {
             }
         } else {
             debugHelper('No song IDs could be found');
-            document.title = this.defaultTitle;
             this.clearAll();
             return false;
         }
