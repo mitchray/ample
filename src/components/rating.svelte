@@ -1,7 +1,6 @@
 <script context="module">
     import { writable } from 'svelte/store';
 
-    import SVGClear from "/src/images/remove_circle_outline.svg";
     import SVGStarFull from "/src/images/star_full.svg";
     import SVGStarOutline from "/src/images/star_outline.svg";
     import SVGFavoriteFull from "/src/images/favorite_full.svg";
@@ -52,7 +51,11 @@
     function handleRating() {
         loading = true;
 
-        let newRating = parseInt(this.dataset.rating);
+        let parsedRating = parseInt(this.dataset.rating);
+
+        // clear rating if it matches existing
+        let newRating = (parsedRating === rating) ? 0 : parsedRating;
+
         pendingRating = newRating;
 
         update = $API.rate({ type: type, id: id, rating: newRating })
@@ -88,10 +91,6 @@
 </script>
 
 <div class="c-rating" class:disabled={!id}>
-    <span class="c-rating__clear" on:click={handleRating} data-rating="0">
-        <SVGClear />
-    </span>
-
     <ul class="c-rating__stars">
         {#each values as ratingValue, i}
             <li on:click={handleRating} data-rating="{ratingValue}" class="c-rating__star" class:current={rating === ratingValue} class:new={loading && pendingRating === ratingValue}>
