@@ -1,6 +1,7 @@
 import { tick } from "svelte";
 import { get } from 'svelte/store';
 import WaveSurfer from 'wavesurfer.js';
+import { v4 as uuidv4 } from "uuid";
 import { getSongVersions } from "./song";
 import {
     addAlternateVersionsNotification,
@@ -180,7 +181,7 @@ class Player {
         this.stopQueued = true;
         this.stop();
         CurrentMedia.set(null);
-        NowPlayingQueue.set([]);
+        this.setQueueItems([])
         NowPlayingIndex.set(0);
         IsPlaying.set(false);
     }
@@ -190,7 +191,7 @@ class Player {
      */
     clearAllExceptCurrent() {
         let current = this.nowPlayingQueue.filter(a => this.nowPlayingQueue.indexOf(a) === this.nowPlayingIndex);
-        NowPlayingQueue.set(current);
+        this.setQueueItems(current);
         NowPlayingIndex.set(0);
     }
 
@@ -357,6 +358,13 @@ class Player {
         }
     }
 
+    setQueueItems(arr) {
+        // each media item needs a unique _id
+        arr = arr.map((item, index) => ({ ...item, _id: uuidv4()}));
+
+        NowPlayingQueue.set(arr);
+    }
+
     recordLastPlayed() {
         let self = this;
 
@@ -365,7 +373,7 @@ class Player {
             this.nowPlayingQueue[this.nowPlayingIndex].lastPlayed = Date.now();
 
             // update the store with our modified object
-            NowPlayingQueue.set(this.nowPlayingQueue);
+            this.setQueueItems(this.nowPlayingQueue);
         } else {
             window.setTimeout(function() {
                 self.recordLastPlayed();
@@ -465,7 +473,7 @@ class Player {
 
         tempArray = shuffleArray(tempArray);
 
-        NowPlayingQueue.set(tempArray);
+        this.setQueueItems(tempArray);
         NowPlayingIndex.set(0);
         this.start();
     }
@@ -486,7 +494,7 @@ class Player {
      */
     playNow(songs) {
         this.clearAll();
-        NowPlayingQueue.set(songs);
+        this.setQueueItems(songs);
         this.start();
     }
 
@@ -498,7 +506,7 @@ class Player {
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
         tempArray.splice(this.nowPlayingIndex + 1, 0, ...songs);
-        NowPlayingQueue.set(tempArray);
+        this.setQueueItems(tempArray);
 
         // Start playing if queue was empty
         if (queueLength === 0) {
@@ -514,7 +522,7 @@ class Player {
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
         tempArray.push(...songs);
-        NowPlayingQueue.set(tempArray);
+        this.setQueueItems(tempArray);
 
         // Start playing if queue was empty
         if (queueLength === 0) {

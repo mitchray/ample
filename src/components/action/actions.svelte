@@ -128,9 +128,6 @@
         // make sure results are an array
         result = (Array.isArray(result)) ? result : [result];
 
-        // each media item needs a unique _id
-        result = result.map((item, index) => ({ ...item, _id: uuidv4()}));
-
         // filter out songs below desired rating
         return filterBelow(result);
     }

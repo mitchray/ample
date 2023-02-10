@@ -32,10 +32,6 @@
 
         let songs = await getSongsFromArtists(artists);
 
-        // TODO: refactor all this fetching into main Actions component to keep _id assignments centralised
-        // each media item needs a unique _id
-        songs = songs.map((item, index) => ({ ...item, _id: uuidv4()}));
-
         $MediaPlayer.playNow(filterBelow(songs));
         loaded = true;
     }
