@@ -61,7 +61,7 @@ export const searchSongsStartingWith = ({page = 0, limit = 50, query}) => {
     return get(API).advancedSearch({
         type: "song",
         operator: "and",
-        limit: 100,
+        limit: limit,
         offset: page * limit,
         rules: [
             ["title", 2, query]
@@ -80,7 +80,7 @@ export const searchSongsContaining = ({page = 0, limit = 50, query}) => {
     return get(API).advancedSearch({
         type: "song",
         operator: "and",
-        limit: 100,
+        limit: limit,
         offset: page * limit,
         rules: [
             ["title", 8, "^(?!" + query + ").*" + query]

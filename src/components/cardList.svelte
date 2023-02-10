@@ -121,7 +121,7 @@
 {/if}
 
 <section>
-    {#if loading && (loadCount < 1 || refresh)}
+    {#if loading && (loadCount < 1 || refresh) && limit}
         <ul class="{containerClass}">
             {#each Array(parseInt(limit)) as placeholder}
                 <li>
