@@ -13,6 +13,10 @@
     $: artistName = artistName;
 </script>
 
+<svelte:head>
+    <title>Versions of {`${songTitle} - ${artistName}` || 'Loading'}</title>
+</svelte:head>
+
 <h1 class="page-title">Versions of <em>{songTitle}</em> by <em>{artistName}</em></h1>
 
 {#key songTitle + artistName}
