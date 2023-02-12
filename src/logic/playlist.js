@@ -1,5 +1,8 @@
 import { get } from "svelte/store";
+import samplesize from "lodash/sampleSize";
+import uniqby from "lodash/uniqby";
 import { API } from "../stores/api";
+import { frequentArtists, topArtists } from "./artist";
 
 /**
  * Returns playlists for search
@@ -30,4 +33,36 @@ export const searchSmartlists = ({query = "", exact = false}) => {
         filter: query,
         exact: (exact) ? 1 : 0,
     })
+}
+
+export const artistMixes = async () => {
+    // get mix of trending and top-rated artists
+    let top = await get(API).advancedSearch({
+        type: "artist",
+        operator: "and",
+        limit: 10,
+        random: 1,
+        rules: [
+            ['myrating', 0, 4]
+        ]
+    });
+
+    let trending = await frequentArtists({ limit: 5 });
+
+    let mixedArtists = [...top,...trending];
+
+    // filter out duplicates
+    let uniqueArtists = uniqby(mixedArtists, (item) => {
+       return item.id;
+    });
+
+    // filter Various Artists
+    uniqueArtists = uniqueArtists.filter(item => item.name !== "Various Artists");
+
+    // select 5 randomly
+    let finalArtists = samplesize(uniqueArtists, 5);
+
+    finalArtists = finalArtists.map((item, index) => ({ ...item, playlistType: "artist"}));
+
+    return [...finalArtists];
 }

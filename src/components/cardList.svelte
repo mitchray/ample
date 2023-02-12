@@ -66,6 +66,13 @@
                 emptyMessage = "No smartlists found";
                 options = {isSmartlist: true};
                 break;
+            case 'artist_mix':
+                logic = await import("../logic/playlist");
+                card = (await import('../components/playlist/playlistMixCard.svelte')).default;
+                containerClass = (containerType === "grid") ? "mix-grid" : "mix-scroll";
+                emptyMessage = "No mixes available";
+                options = {isSmartlist: true};
+                break;
             case 'genre':
                 logic = await import("../logic/genre");
                 card = (await import('../components/genre/genreCard.svelte')).default;

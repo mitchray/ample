@@ -13,6 +13,8 @@
 
 <CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest Albums" />
 
+<CardList type="artist_mix" dataProvider={"artistMixes"} limit=5 refresh=true containerType="scroll" heading="Artist Mixes" />
+
 {#key ($CurrentMedia) ? $CurrentMedia.id : 0}
     <CardList type="song" dataProvider={"recentSongs"} limit=9 containerType="scroll" heading="Recently Played" />
 {/key}

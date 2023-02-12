@@ -14,6 +14,7 @@
         getSongsFromArtist,
         getSongsFromArtists,
         getSongsFromArtistsStartingWith,
+        getSongsFromPlaylist,
         getSongsFromPlaylists
     } from "../../logic/song";
     import { filterBelow } from "../../logic/helper";
@@ -110,6 +111,9 @@
                 break;
             case 'year':
                 fetchURL = getSongsByYear(data.from, data.to);
+                break;
+            case 'artistMix':
+                fetchURL = getSongsFromPlaylist({ id: id, type: "artist_mix" });
                 break;
             default:
                 break;

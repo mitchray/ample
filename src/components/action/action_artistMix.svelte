@@ -1,12 +1,10 @@
 <script>
     import { getContext } from 'svelte';
-    import { v4 as uuidv4 } from "uuid";
     import { API } from "../../stores/api";
     import { MediaPlayer } from "../../stores/player";
     import { loadingSpinner } from "../../actions/loadingSpinner";
-    import { getSongsFromArtists } from "../../logic/song";
+    import { getSongsFromPlaylist } from "../../logic/song";
     import { getAlbum } from "../../logic/album";
-    import { getArtist } from "../../logic/artist";
     import { filterBelow } from "../../logic/helper";
     import SVGRadio from "/src/images/radio.svg";
     
@@ -23,14 +21,7 @@
         loaded = false;
 
         let artistID = await getArtistID();
-        let artists  = await $API.getSimilar({ type: "artist", filter: artistID, limit: 20 });
-        let baseArtist   = await getArtist({ id: artistID });
-
-        if (baseArtist) {
-            artists.push(baseArtist);
-        }
-
-        let songs = await getSongsFromArtists(artists);
+        let songs = await getSongsFromPlaylist({ id: artistID, type: "artist_mix" });
 
         $MediaPlayer.playNow(filterBelow(songs));
         loaded = true;

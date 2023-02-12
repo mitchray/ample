@@ -123,6 +123,7 @@ export function outputThemeVariables(hue, selector) {
             --color-card-primary:      rgb(${lchToRgb([100,  0, hue])});
             --color-card-hover:        rgb(${lchToRgb([100,  0, hue])});
             --color-card-highlight:    rgb(${lchToRgb([ 96,  6, hue])});
+            --color-mix-background:    rgb(${lchToRgb([ 30, 50, hue])});
             --color-menu-background:   rgb(${lchToRgb([100,  0, hue])});
             --color-menu-border:       rgb(${lchToRgb([ 90,  5, hue])});
             --color-genre-background: rgba(${lchToRgb([ 98,  3, hue])}, 0.75);
@@ -179,6 +180,7 @@ export function outputThemeVariables(hue, selector) {
             --color-card-primary:      rgb(${lchToRgb([ 15,  1, hue])});
             --color-card-hover:        rgb(${lchToRgb([ 20,  3, hue])});
             --color-card-highlight:    rgb(${lchToRgb([ 10,  3, hue])});
+            --color-mix-background:    rgb(${lchToRgb([ 10, 40, hue])});
             --color-menu-background:   rgb(${lchToRgb([ 15,  3, hue])});
             --color-menu-border:       rgb(${lchToRgb([ 20, 10, hue])});
             --color-genre-background: rgba(${lchToRgb([  9,  3, hue])}, 0.75);

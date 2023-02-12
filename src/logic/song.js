@@ -1,6 +1,7 @@
 import { get } from "svelte/store";
 import { API } from "../stores/api";
 import { debugHelper } from './helper';
+import { getArtist } from "./artist";
 
 /**
  * Get songs from album ID
@@ -30,6 +31,36 @@ export const getSongsFromArtist = async (id) => {
     songs = sortSongsByYear(songs);
 
     return songs;
+}
+
+/**
+ * Gets songs from different types of playlist
+ * @param {string} id
+ * @param {('playlist'|'smartlist'|'artist_mix')} type
+ */
+export const getSongsFromPlaylist = async ({id, type}) => {
+    let results = [];
+
+    switch (type) {
+        case 'playlist':
+        case 'smartlist':
+            results = await get(API).playlistSongs({ filter: id });
+            break;
+        case 'artist_mix':
+            let artists = await get(API).getSimilar({ type: "artist", filter: id, limit: 20 });
+            let baseArtist   = await getArtist({ id: id });
+
+            if (baseArtist) {
+                artists.push(baseArtist);
+            }
+
+            results = await getSongsFromArtists(artists);
+            break;
+        default:
+            break;
+    }
+
+    return results;
 }
 
 /**
@@ -143,7 +174,7 @@ export const getSongsFromAlbumsStartingWith = (filterChar) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         rules: [
             ["album", 8, encodeURI('^(?!the\\s)') + filterChar]
         ]
@@ -162,7 +193,7 @@ export const getSongsFromArtists = (artists) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         rules: [
             ["artist", 8, "^(" + artistsFormatted + ")$"]
         ]
@@ -179,7 +210,7 @@ export const getSongsFromArtistsStartingWith = (filterChar) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         rules: [
             ["artist", 8, encodeURI('^(?!the\\s)') + filterChar]
         ]
@@ -197,7 +228,7 @@ export const getSongsByYear = async (from, to) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         offset: page * limit,
         rules: [
             ["year", 0, from],
@@ -336,7 +367,7 @@ export const getSomeSongsByGenre = (genre) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         rules: [
             ["tag", 4, genre]
         ]
@@ -353,7 +384,7 @@ export const getSomeSongsFromAlbumsByGenre = (genre) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         rules: [
             ["album_tag", 4, genre]
         ]
@@ -370,7 +401,7 @@ export const getSomeSongsFromArtistsByGenre = (genre) => {
         type: "song",
         random: 1,
         operator: "and",
-        limit: 200,
+        limit: 100,
         rules: [
             ["artist_tag", 4, genre]
         ]

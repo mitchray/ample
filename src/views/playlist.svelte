@@ -1,6 +1,8 @@
 <script>
-    import { onMount, tick } from "svelte";
+    import {onMount, tick} from "svelte";
+    import upperfirst from "lodash/upperfirst";
     import { API } from "../stores/api";
+    import { getSongsFromPlaylist } from "../logic/song";
 
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
@@ -11,19 +13,22 @@
 
     import SVGPlaylist from "/src/images/queue_music.svg";
     import SVGSmartlist from "/src/images/smartlist.svg";
+    import SVGRadio from "/src/images/radio.svg";
 
     import '/src/css/containerqueries/playlist.css';
 
     export let id;
+    export let mixType = null;
 
     let playlist;
     let songs = [];
     let loading = true;
-    let isSmartlist = false;
+    let playlistType = "playlist";
     let playlistEditIsVisible = false;
     let playlistDeleteIsVisible = false;
 
     $: songs = songs;
+    $: playlist = playlist;
 
     async function handleEditPlaylist() {
         playlistEditIsVisible = !playlistEditIsVisible;
@@ -40,21 +45,25 @@
     onMount(async () => {
         playlist = await $API.playlist({ filter: id });
 
-        if (playlist && playlist.id) {
-            await handleSongLoad();
-            isSmartlist = playlist.id.match(/^smart_/);
+        if (playlist?.id) {
+            songs = await getSongsFromPlaylist({ id: id, type: "playlist" });
+
+            if (playlist.id.match(/^smart_/)) {
+                playlistType = "smartlist";
+            }
+        } else {
+            // artist mix
+            playlistType = "mix";
+            playlist = await $API.artist({filter: id});
+            songs = await getSongsFromPlaylist({ id: id, type: "artist_mix" });
         }
 
         loading = false;
     });
-
-    async function handleSongLoad() {
-        songs = await $API.playlistSongs({ filter: id });
-    }
 </script>
 
 <svelte:head>
-    <title>{(loading) ? 'Loading' : (isSmartlist) ? 'Smartlist' : 'Playlist'}{`: ${playlist?.name}`}</title>
+    <title>{(loading) ? 'Loading' : upperfirst(playlistType)}{`: ${playlist?.name}`}</title>
 </svelte:head>
 
 {#if playlist?.id && !loading}
@@ -67,7 +76,7 @@
                             <PlaylistArt bind:songs fallback="{playlist.art}" />
                         </div>
 
-                        {#if !isSmartlist}
+                        {#if playlistType === "playlist"}
                             <div class="rating">
                                 <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
                             </div>
@@ -76,10 +85,12 @@
 
                     <div class="info">
                         <div class="type">
-                            {#if isSmartlist}
-                                <SVGSmartlist class="inline" /> Smartlist
+                            {#if playlistType === "smartlist"}
+                                <SVGSmartlist class="inline" />&nbsp;Smartlist
+                            {:else if playlistType === "mix"}
+                                <SVGRadio class="inline" />&nbsp;Mix
                             {:else}
-                                <SVGPlaylist class="inline" /> Playlist
+                                <SVGPlaylist class="inline" />&nbsp;Playlist
                             {/if}
                         </div>
 
@@ -87,7 +98,7 @@
                             {playlist.name}
                         </h1>
 
-                        {#if !isSmartlist}
+                        {#if playlistType === "playlist"}
                             <div class="playlist-actions">
                                 <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
                                 <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
@@ -101,7 +112,7 @@
                 <Lister2
                     bind:data={songs}
                     type="playlist_songs"
-                    showCheckboxes={!isSmartlist}
+                    showCheckboxes={playlistType === "playlist"}
                     tableOnly={true}
                     showIndex={true}
                     actionData={{
@@ -210,5 +221,6 @@
         font-weight: 300;
         text-transform: uppercase;
         letter-spacing: 0.05em;
+        align-items: center;
     }
 </style>
