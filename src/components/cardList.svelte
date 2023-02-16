@@ -71,7 +71,6 @@
                 card = (await import('../components/playlist/playlistMixCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "mix-grid" : "mix-scroll";
                 emptyMessage = "No mixes available";
-                options = {isSmartlist: true};
                 break;
             case 'genre':
                 logic = await import("../logic/genre");
