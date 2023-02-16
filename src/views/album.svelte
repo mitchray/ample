@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from "svelte";
     import { Link } from 'svelte-routing';
 
     import { Theme } from '../stores/status';
@@ -23,93 +22,98 @@
 
     let theme;
     $: theme = $Theme;
+    $: if (id) {
+        loadData();
+    }
 
     let album;
 
-    onMount(async () => {
+    async function loadData() {
         album = await getAlbum({id: id, withTracks: true, artAnalysis: true});
-    });
+    }
 </script>
 
 <svelte:head>
     <title>Album: {`${album?.name} - ${album?.artist?.name}` || 'Loading'}</title>
 </svelte:head>
 
-{#if album?.id}
-    <div class="wrapper">
-        <div class="container">
-            <div class="details-container">
-                <div class="details">
-                    <div class="cover-rating">
-                        <div class="art-container">
-                            <img class="art"
-                                 src="{album.art}&thumb=32"
-                                 alt="Image of {album.name}"
-                                 width="384"
-                                 height="384"
-                                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
-                            />
-                        </div>
+{#key id || 0}
+    {#if album?.id}
+        <div class="wrapper">
+            <div class="container">
+                <div class="details-container">
+                    <div class="details">
+                        <div class="cover-rating">
+                            <div class="art-container">
+                                <img class="art"
+                                     src="{album.art}&thumb=32"
+                                     alt="Image of {album.name}"
+                                     width="384"
+                                     height="384"
+                                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
+                                />
+                            </div>
 
-                        <div class="rating">
-                            <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
-                        </div>
-                    </div>
-
-                    <div class="info">
-                        <div class="name">
-                            <h1 class="title">{album.name}</h1>
-                            <div class="artist">
-                                <Link to="artists/{album.artist.id}">{album.artist.name}</Link>
+                            <div class="rating">
+                                <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
                             </div>
                         </div>
 
-                        <Actions2
-                            type="album"
-                            mode="fullButtons"
-                            id="{album.id}"
-                            showShuffle={album.songcount > 1}
-                            data={Object.create({artistID: album.artist.id})}
-                        />
+                        <div class="info">
+                            <div class="name">
+                                <h1 class="title">{album.name}</h1>
+                                <div class="artist">
+                                    <Link to="artists/{album.artist.id}">{album.artist.name}</Link>
+                                </div>
+                            </div>
 
-                        <div class="meta">
-                            <span class="date"><Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link></span>
-                            <span><SVGClock class="inline"/> {formatTotalTime(album.time)}</span>
-                            <span><SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}</span>
-                            <ThirdPartyServices data={album} type="album" />
+                            <Actions2
+                                type="album"
+                                mode="fullButtons"
+                                id="{album.id}"
+                                showShuffle={album.songcount > 1}
+                                data={Object.create({artistID: album.artist.id})}
+                            />
+
+                            <div class="meta">
+                                <span class="date"><Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link></span>
+                                <span><SVGClock class="inline"/> {formatTotalTime(album.time)}</span>
+                                <span><SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}</span>
+                                <ThirdPartyServices data={album} type="album" />
+                            </div>
+
+                            <Genres genres="{album.genre}" />
                         </div>
-
-                        <Genres genres="{album.genre}" />
+                    </div>
+                </div>
+                <div class="songs-container">
+                    <div class="songs">
+                        {#each [...album.ampleSongs] as [key, value]}
+                            <Lister2
+                                data={value}
+                                type="song"
+                                tableOnly={true}
+                                zone="album-contents"
+                                showArtist={album.artist.name === "Various Artists"}
+                                showArt={false}
+                                actionData={{
+                                    disable: [...album.ampleSongs].length < 2,
+                                    type: "album",
+                                    id: album.id,
+                                    mode: "miniButtons",
+                                    showShuffle: value.length > 1,
+                                    data: Object.create({songs: value})
+                                }}
+                            />
+                        {/each}
                     </div>
                 </div>
             </div>
-            <div class="songs-container">
-                <div class="songs">
-                    {#each [...album.ampleSongs] as [key, value]}
-                        <Lister2
-                            data={value}
-                            type="song"
-                            tableOnly={true}
-                            zone="album-contents"
-                            showArtist={album.artist.name === "Various Artists"}
-                            showArt={false}
-                            actionData={{
-                                disable: [...album.ampleSongs].length < 2,
-                                type: "album",
-                                id: album.id,
-                                mode: "miniButtons",
-                                showShuffle: value.length > 1,
-                                data: Object.create({songs: value})
-                            }}
-                        />
-                    {/each}
-                </div>
-            </div>
         </div>
-    </div>
-{:else}
-    <p>Loading album</p>
-{/if}
+    {:else}
+        <p>Loading album</p>
+    {/if}
+{/key}
 
 <style>
     .wrapper {

@@ -6,4 +6,6 @@
 
 <h1 class="page-title">Albums by Year</h1>
 
-<AlbumsByYear showYear={year} />
+{#key year || 0}
+    <AlbumsByYear showYear={year} />
+{/key}

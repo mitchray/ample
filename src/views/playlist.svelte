@@ -1,5 +1,5 @@
 <script>
-    import {onMount, tick} from "svelte";
+    import { onMount, tick } from "svelte";
     import upperfirst from "lodash/upperfirst";
     import { API } from "../stores/api";
     import { getSongsFromPlaylist } from "../logic/song";
@@ -18,7 +18,7 @@
     import '/src/css/containerqueries/playlist.css';
 
     export let id;
-    export let mixType = null;
+    export let mixType = null; // for future expansion
 
     let playlist;
     let songs = [];
