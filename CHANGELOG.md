@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0] - 2023-XX-XX
+### Changed
+- Removed rating clear button; now click the current rating to clear it
+
+### Added
+- Artist Mix recommendations on the home page (based on trending and 4/5 rated artists)
+- Give each page its own title
+
 ## [1.0.0] - 2022-12-30
 ### Changed
 - 'Contains' search results won't include anything 'Starting With' to avoid duplicates
