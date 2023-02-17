@@ -31,7 +31,7 @@
             {#if value.length > 0}
                 <section in:fade={{ duration: i === 0 ? undefined : 0 }}>
                     {#if key !== "ungrouped"}
-                        <h3 class="release-type panel-title">{key}</h3>
+                        <div class="release-type label" title="Release type: {key}">{key}</div>
                     {/if}
                     <div class="items">
                         {#if $ShowExpandedAlbums}
@@ -58,8 +58,21 @@
 
 <style>
     .release-type {
-        text-transform: uppercase;
         margin-bottom: var(--spacing-md);
+    }
+
+    .label {
+        background-color: var(--color-text-secondary);
+        display: inline-block;
+        color: var(--color-background);
+        padding: 0.3em 0.6em;
+        font-weight: 700;
+        border-radius: 4px;
+        font-size: 12px;
+        letter-spacing: 0.03em;
+        font-optical-sizing: 11px;
+        font-stretch: 50%;
+        text-transform: uppercase;
     }
 
     .items {
