@@ -19,6 +19,7 @@
                     alt="Image of {artist.name}"
                     width="400"
                     height="400"
+                    data-id="art-artist-{artist.id}"
                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
                 />
             </Link>

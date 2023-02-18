@@ -1,5 +1,5 @@
 <script>
-    import { NotificationsList } from '../../stores/notification';
+    import { NotificationsList } from '../../stores/message';
     import {
         ShowNotificationAlternateVersions,
         ShowNotificationGainTagsMissing,

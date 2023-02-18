@@ -159,7 +159,6 @@
 
     .image-text {
         z-index: 100;
-        /*outline: 3px solid lime;*/
         position: absolute;
         bottom: 0;
         left: 0;

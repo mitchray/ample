@@ -170,7 +170,7 @@
             <Link to="albums/{data.albumID}"><SVGAlbum class="inline" /> Go to album</Link>
         {/if}
 
-        {#if (type === "artist" || type === "album" || type === "song")}
+        {#if (!data.artistID || !data.albumID)}
             <ActionUpdateFromTags contextKey={contextKey} />
         {/if}
 

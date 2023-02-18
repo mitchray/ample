@@ -32,9 +32,11 @@
     export let id;
 
     let artist;
+    let hash;
     let theme;
     $: theme = $Theme;
-    $: if (id) {
+
+    $: if (id)  {
         loadData();
     }
 
@@ -59,6 +61,7 @@
 
     async function loadData() {
         artist = await getArtist({id: id, artAnalysis: true});
+        hash = Date.now().toString();
     }
 </script>
 
@@ -66,7 +69,9 @@
     <title>Artist: {`${artist?.name}` || 'Loading'}</title>
 </svelte:head>
 
-{#key id || 0}
+<svelte:window on:hashchange={loadData}/>
+
+{#key hash || 0}
     {#if artist?.id}
         <div class="container" in:fade>
             <div class="header">
@@ -79,6 +84,7 @@
                              alt="Image of {artist.name}"
                              width="240"
                              height="240"
+                             data-id="art-artist-{artist.id}"
                              on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
                         />
                     </div>

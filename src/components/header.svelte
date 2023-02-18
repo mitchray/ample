@@ -7,7 +7,7 @@
 
     import Search from '../components/search.svelte';
     import UserMenu from '../components/userMenu.svelte';
-    import Notifications from '../components/notification/notifications.svelte';
+    import NotificationsMenu from '../components/notification/notificationsMenu.svelte';
 
     import SVGAmpleLogo from "/src/images/ample_logo.svg";
     import SVGAmpleLetter from "/src/images/ample_letter.svg";
@@ -116,7 +116,7 @@
     </div>
 
     <div class="misc-container">
-        <Notifications />
+        <NotificationsMenu />
 
         <UserMenu />
     </div>

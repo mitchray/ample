@@ -46,8 +46,6 @@
         }
     }
 
-    let update = Promise.resolve([]);
-
     function handleRating() {
         loading = true;
 
@@ -58,7 +56,7 @@
 
         pendingRating = newRating;
 
-        update = $API.rate({ type: type, id: id, rating: newRating })
+        $API.rate({ type: type, id: id, rating: newRating })
             .then((result) => {
                 if (!result.error) {
                     rating = newRating;
@@ -76,7 +74,7 @@
     function handleFlag() {
         let newFlag = (flag ? 0 : 1);
 
-        update = $API.flag({ type: type, id: id, flag: newFlag })
+        $API.flag({ type: type, id: id, flag: newFlag })
             .then((result) => {
                 if (!result.error) {
                     flag = newFlag;

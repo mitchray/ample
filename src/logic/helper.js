@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-
+import { addAlert } from "./alert";
 import { debugMode, serverURL } from '../stores/server';
 import { SkipBelow, SkipBelowRating } from "../stores/status";
 
@@ -222,9 +222,17 @@ export function getPlaylistIDFromUrl() {
  * @returns array
  */
 export function filterBelow(arr) {
+    let originalCount = arr.length;
+
     // if length is 1 let's assume we want to play that item regardless of rating
     if (arr.length > 1 && get(SkipBelow)) {
         arr = arr.filter(item => item.rating >= get(SkipBelowRating));
+    }
+
+    let filteredCount = originalCount - arr.length;
+
+    if (filteredCount > 0) {
+        addAlert({title: `Skipped ${filteredCount} items below ${get(SkipBelowRating)} stars`, style: 'info'});
     }
 
     return arr;

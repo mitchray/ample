@@ -3,6 +3,7 @@
     import { API } from "../../stores/api";
     import { loadingSpinner } from "../../actions/loadingSpinner";
     import SVGUpdate from "/src/images/sync.svg";
+    import { addAlert } from "../../logic/alert";
 
     export let contextKey;
 
@@ -14,10 +15,27 @@
 
     async function handleAction() {
         loaded = false;
-        let result = await $API.updateFromTags({ type: type, id: id });
-        if (result) {
-            loaded = true;
-        }
+
+        addAlert({title: 'Starting update from tags', style: 'info'});
+
+        let urlBefore = window.location.href.replace(location.hash,"")
+
+        $API.updateFromTags({ type: type, id: id })
+            .then(result => {
+                if (result?.success) {
+                    let urlAfter = window.location.href.replace(location.hash,"")
+
+                    if (urlBefore === urlAfter) {
+                        window.location.hash = Date.now().toString();
+                    }
+
+                    addAlert({title: 'Updated from tags', style: 'success'});
+                } else {
+                    addAlert({title: 'Failed to update from tags', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
+                }
+
+                loaded = true;
+            })
     }
 </script>
 

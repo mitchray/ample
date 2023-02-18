@@ -1,15 +1,26 @@
 <script>
     import { API } from "../../stores/api";
-
+    import { addAlert } from "../../logic/alert";
     import SVGBin from "/src/images/delete.svg";
 
     export let playlist = null;
     export let isVisible;
 
     function handleDelete() {
-        $API.playlistDelete({ filter: playlist.id });
-        playlist.isDeleted = true;
-        playlist = playlist;
+        $API.playlistDelete({ filter: playlist.id })
+            .then(result => {
+                if (result.success) {
+                    let playlists = document.querySelectorAll(`[data-id=playlist-${playlist.id}]`);
+                    playlists.forEach(p => {
+                        p.style.display = 'none';
+                    })
+
+                    addAlert({title: 'Playlist deleted', style: 'success'});
+                } else {
+                    addAlert({title: 'Failed to delete playlist', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
+                }
+            });
+
         isVisible = false;
     }
 

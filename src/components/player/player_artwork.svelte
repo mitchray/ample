@@ -7,6 +7,7 @@
     <img class="nowPlayingArtwork"
         src="{$CurrentMedia.art}&thumb=32"
         alt=""
+        data-id="art-album-{$CurrentMedia.album?.id}"
         on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=32' }}
     />
 {:else}

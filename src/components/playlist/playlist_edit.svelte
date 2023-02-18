@@ -1,5 +1,6 @@
 <script>
     import { API } from "../../stores/api";
+    import { addAlert } from "../../logic/alert";
 
     export let playlist = null;
     export let isNew = false;
@@ -7,26 +8,25 @@
 
     let playlistName = playlist ? playlist.name : '';
     let playlistType = playlist ? playlist.type : 'private';
-    let playlistExists;
 
     async function savePlaylist() {
-        playlistExists = false;
         playlistName = playlistName.trim();
 
-        if (playlistName && playlistType) {
-            let playlistTest = await $API.playlist({ filter: playlistName });
+        if (playlistName) {
+            let playlistTest = await $API.playlists({ filter: playlistName, exact: 1, limit: 1, hide_search: 1 });
 
             if (isNew) {
-                if (playlistTest && playlistTest.id) {
-                    playlistExists = true;
+                if (playlistTest.length > 0 && playlistTest[0].id) {
+                    addAlert({title: `Playlist "${playlistName}" already exists`, style: 'warning'});
                     return;
                 }
 
                 playlist = await $API.playlistCreate({ name: playlistName, type: playlistType });
                 isVisible = false;
+
+                addAlert({title: 'Playlist created', style: 'success'});
             } else {
-                if (playlistTest && playlistTest.id && playlistTest.id !== playlist.id) {
-                    playlistExists = true;
+                if (playlistTest?.id && playlistTest?.id !== playlist.id) {
                     return;
                 }
 
@@ -39,13 +39,11 @@
                     }
                     playlist = tempPlaylist;
                     isVisible = false;
+
+                    addAlert({title: 'Playlist updated', style: 'success'});
                 }
             }
         }
-    }
-
-    function handleInputChange() {
-        playlistExists = false;
     }
 
     function handleCancel() {
@@ -64,8 +62,6 @@
             <input
                 type="text"
                 bind:value={playlistName}
-                on:paste={handleInputChange}
-                on:keyup={handleInputChange}
             />
         </label>
 
@@ -80,8 +76,6 @@
                 Public
             </label>
         </div>
-
-        <div class="message badge badge--warning" class:visible={playlistExists}>Playlist <em>{playlistName}</em> already exists</div>
     </div>
 
     <div class="panel-footer">

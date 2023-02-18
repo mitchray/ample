@@ -4,11 +4,10 @@
     import { flip } from 'svelte/animate';
 
     import { SiteMainSpace } from '../../stores/player';
-    import { NotificationsList } from '../../stores/notification';
+    import { NotificationsList } from '../../stores/message';
 
     import NotificationCard from '../../components/notification/notificationCard.svelte';
 
-    let height = "100%";
     let timeout;
     let freshNotifications = [];
 
@@ -48,7 +47,7 @@
 </script>
 
 {#if $SiteMainSpace.ready}
-    <div class="toasts-container"
+    <div class="notifications-container"
         style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
     >
         <div class="list">
@@ -69,20 +68,16 @@
 {/if}
 
 <style>
-    .toasts-container {
+    .notifications-container {
         position: fixed;
         z-index: 25;
         pointer-events: none;
         overflow: hidden;
     }
 
-    .toasts-container :global(.notification-card) {
+    .notifications-container :global(.notification-card) {
         box-shadow: var(--shadow-xxl), var(--shadow-xxl), var(--shadow-xxl);
         border: 2px solid var(--color-menu-border);
-    }
-
-    .toasts-container :global(.notification-card.most-recent) {
-        outline: 3px solid lime;
     }
 
     .card-container {

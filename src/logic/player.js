@@ -343,8 +343,7 @@ class Player {
 
             // Search for song versions if artist is present (i.e. songs)
             if (song.artist) {
-                let songVersions = Promise.resolve([]);
-                songVersions = getSongVersions(song.title, song.artist.name)
+                getSongVersions(song.title, song.artist.name)
                     .then((result) => {
                         if (!result.error && result.length > 1) {
                             song.versionsCount = result.length - 1;

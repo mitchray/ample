@@ -4,6 +4,7 @@
     import { loadingSpinner } from "../../actions/loadingSpinner";
     import SVGImage from "/src/images/image.svg";
     import SVGPhoto from "/src/images/portrait.svg";
+    import { addAlert } from "../../logic/alert";
 
     export let contextKey;
 
@@ -15,10 +16,24 @@
 
     async function handleAction() {
         loaded = false;
-        let result = await $API.updateArt({ type: type, id: id });
-        if (result) {
-            loaded = true;
-        }
+
+        addAlert({title: 'Starting art update', style: 'info'});
+
+        $API.updateArt({ type: type, id: id })
+            .then(result => {
+                if (result?.success) {
+                    addAlert({title: 'Updated art', style: 'success'});
+
+                    let images = document.querySelectorAll(`img[data-id=art-${type}-${id}]`);
+                    images.forEach(image => {
+                        image.src = result.art;
+                    })
+                } else {
+                    addAlert({title: 'Failed to update art', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
+                }
+
+                loaded = true;
+            })
     }
 </script>
 

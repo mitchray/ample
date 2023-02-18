@@ -1,6 +1,13 @@
+<script context="module">
+    import { writable } from 'svelte/store';
+
+    let isFetching = writable(false);
+</script>
+
 <script>
     import { onMount } from 'svelte';
     import { v4 as uuidv4 } from "uuid";
+    import { addAlert } from "../../logic/alert";
     import { API } from "../../stores/api";
     import { MediaPlayer } from "../../stores/player";
     import { NowPlayingIndex, NowPlayingQueue } from "../../stores/status";
@@ -20,12 +27,15 @@
         // load more songs into queue from AutoPlay
         if ($NowPlayingQueue.length > 0 && $AutoPlayEnabled && selectedPlaylist) {
             // when we reach less than 10 songs remaining
-            if ($NowPlayingIndex > $NowPlayingQueue.length - 10) {
+            if (!$isFetching && $NowPlayingIndex > $NowPlayingQueue.length - 10) {
+                $isFetching = true;
                 $API.playlistSongs({ filter: selectedPlaylist.id })
                     .then((result) => {
                         if (!result.error && result.length > 0) {
                             result = (Array.isArray(result)) ? result : [result];
                             $MediaPlayer.playLast(result);
+                            $isFetching = (false);
+                            addAlert({title: `AutoPlay`, message: `Added ${result.length} items to queue from ${selectedPlaylist.name}`, style: 'info'});
                         }
                     });
             }

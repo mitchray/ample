@@ -21,6 +21,7 @@
                 alt="Image of {song.name}"
                 width="200"
                 height="200"
+                data-id="art-album-{song.album?.id}"
                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
             />
         </div>

@@ -20,6 +20,7 @@
 
     export let id;
 
+    let hash;
     let theme;
     $: theme = $Theme;
     $: if (id) {
@@ -30,6 +31,7 @@
 
     async function loadData() {
         album = await getAlbum({id: id, withTracks: true, artAnalysis: true});
+        hash = Date.now().toString();
     }
 </script>
 
@@ -37,7 +39,9 @@
     <title>Album: {`${album?.name} - ${album?.artist?.name}` || 'Loading'}</title>
 </svelte:head>
 
-{#key id || 0}
+<svelte:window on:hashchange={loadData}/>
+
+{#key hash || 0}
     {#if album?.id}
         <div class="wrapper">
             <div class="container">
@@ -50,6 +54,7 @@
                                      alt="Image of {album.name}"
                                      width="384"
                                      height="384"
+                                     data-id="art-album-{album.id}"
                                      on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
                                 />
                             </div>

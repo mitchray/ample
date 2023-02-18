@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { fly } from 'svelte/transition';
 
     import { clickOutsideDetector } from '../actions/clickOutsideDetector';
@@ -49,6 +49,12 @@
             menuContainer.append(menu);
         }
     });
+
+    onDestroy(() => {
+        if (menu) {
+            menu.remove();
+        }
+    })
 
     // in reference to clicked item
     function getAnchorCoordinates() {

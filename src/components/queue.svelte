@@ -223,6 +223,7 @@
                             <img src="{media.art}&thumb=1"
                                 alt=""
                                 loading="lazy"
+                                data-id="art-album-{media.album?.id}"
                                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
                             />
                         </span>
