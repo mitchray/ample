@@ -6,6 +6,7 @@
 
 ### Added
 - Artist Mix recommendations on the home page (based on trending and 4/5 rated artists)
+- New event alerts, e.g. when AutoPlay adds songs to queue or when songs below set rating are skipped
 - Give each page its own title
 
 ## [1.0.0] - 2022-12-30
