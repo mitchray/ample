@@ -22,7 +22,7 @@
 </script>
 
 <svelte:head>
-    <title>Song: {`${song?.title} - ${song?.artist?.name}` || 'Loading'}</title>
+    <title>{`${song?.title} by ${song?.artist?.name}` || 'Loading'} (song)</title>
 </svelte:head>
 
 {#key id || 0}

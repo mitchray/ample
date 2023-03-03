@@ -63,7 +63,7 @@
 </script>
 
 <svelte:head>
-    <title>{(loading) ? 'Loading' : upperfirst(playlistType)}{`: ${playlist?.name}`}</title>
+    <title>{(loading) ? 'Loading' : `${playlist?.name} (${playlistType})`}</title>
 </svelte:head>
 
 {#if playlist?.id && !loading}

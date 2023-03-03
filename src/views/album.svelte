@@ -36,7 +36,7 @@
 </script>
 
 <svelte:head>
-    <title>Album: {`${album?.name} - ${album?.artist?.name}` || 'Loading'}</title>
+    <title>{`${album?.name} by ${album?.artist?.name}` || 'Loading'} (album)</title>
 </svelte:head>
 
 <svelte:window on:hashchange={loadData}/>

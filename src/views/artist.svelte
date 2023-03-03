@@ -66,7 +66,7 @@
 </script>
 
 <svelte:head>
-    <title>Artist: {`${artist?.name}` || 'Loading'}</title>
+    <title>{`${artist?.name}` || 'Loading'} (artist)</title>
 </svelte:head>
 
 <svelte:window on:hashchange={loadData}/>

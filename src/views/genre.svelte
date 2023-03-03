@@ -27,7 +27,7 @@
 </script>
 
 <svelte:head>
-    <title>Genre: {`${genre?.name}` || 'Loading'}</title>
+    <title>{`${genre?.name}` || 'Loading'} (genre)</title>
 </svelte:head>
 
 {#if genre?.id}
