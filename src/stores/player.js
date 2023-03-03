@@ -2,7 +2,7 @@ import { readable, writable, derived } from 'svelte/store';
 import { SidebarIsOpen, SidebarIsPinned, QueueIsOpen, QueueIsPinned } from './status';
 import Player from '../logic/player'
 
-export let ampleVersion = readable("1.0.0");
+export let ampleVersion = readable("1.1.0");
 
 export let MediaPlayer = writable(new Player);
 

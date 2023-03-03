@@ -1,13 +1,17 @@
 # Changelog
 
-## [1.1.0] - 2023-XX-XX
-### Changed
-- Removed rating clear button; now click the current rating to clear it
-
+## [1.1.0] - 2023-03-03
 ### Added
 - Artist Mix recommendations on the home page (based on trending and 4/5 rated artists)
-- New event alerts, e.g. when AutoPlay adds songs to queue or when songs below set rating are skipped
-- Give each page its own title
+- Alert popups, e.g. when AutoPlay adds songs to queue or when songs below set rating are skipped
+- Give each page its own title to avoid a sea of "Ample" in browser history
+- 
+### Changed
+- Removed rating clear button; now click the current rating to clear it
+- Backend now uses the 'javascript-ampache' library for API calls
+
+### Fixed
+- AutoPlay would add process twice
 
 ## [1.0.0] - 2022-12-30
 ### Changed
