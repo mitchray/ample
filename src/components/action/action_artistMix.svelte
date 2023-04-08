@@ -41,7 +41,7 @@
             case "song":
             case "playlist_songs":
                 let song = await $API.song({ filter: id });
-                tempID = song[0].artist.id;
+                tempID = song.artist.id;
                 break;
             default:
                 break;
