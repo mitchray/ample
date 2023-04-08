@@ -417,7 +417,7 @@ export const groupSongsByDisc = (songs) => {
     let discs = new Map();
 
     for (let i = 0; i < songs.length; i++) {
-        let discID = songs[i].album.id;
+        let discID = songs[i].disk;
         if (!discs.get(discID)) {
             discs.set(discID, []);
         }
