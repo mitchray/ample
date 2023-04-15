@@ -19,8 +19,6 @@
     ];
 
     let currentTab;
-
-    import "/src/css/containerqueries/artists.css";
 </script>
 
 <svelte:head>
@@ -158,5 +156,21 @@
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+    }
+
+    @container artists-page-wrapper (min-width: 400px) {
+        .title {
+            position: relative;
+        }
+    }
+
+    @container artists-page-wrapper (min-width: 900px) {
+        .artists-page-container {
+            grid-template-columns: 200px 1fr !important;
+        }
+
+        .sidebar {
+            display: block !important;
+        }
     }
 </style>

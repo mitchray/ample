@@ -2,7 +2,6 @@
     import { onMount } from 'svelte';
     import { API } from "../stores/api";
 
-    import '/src/css/containerqueries/customSearch.css';
     import SVGClose from "/src/images/close.svg";
 
     export let loading = false;
@@ -1303,5 +1302,18 @@
 
     button {
         margin-right: 0;
+    }
+
+    @container custom-search-wrapper (min-width: 700px) {
+        .rules {
+            display: grid;
+            grid-template-columns: repeat(4, auto);
+            width: fit-content;
+            gap: var(--spacing-md);
+        }
+
+        .row {
+            display: contents;
+        }
     }
 </style>

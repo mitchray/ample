@@ -13,7 +13,6 @@
     import Genres from '../components/genre/genres.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
-    import '/src/css/containerqueries/album.css';
     import SVGYear from "/src/images/year.svg";
     import SVGTrack from "/src/images/music_note.svg";
     import SVGClock from "/src/images/clock.svg";
@@ -211,5 +210,64 @@
         gap: var(--spacing-md) var(--spacing-lg);
         margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
+    }
+
+    @container album-details-wrapper (min-width: 500px) {
+        .details {
+            display: flex;
+            gap: var(--spacing-xl);
+            margin-bottom: 0;
+            padding: unset;
+        }
+
+        .details,
+        .name {
+            background-color: unset;
+            box-shadow: unset;
+        }
+
+        .name {
+            padding: unset;
+        }
+
+        .title {
+            text-align: left;
+        }
+
+        .artist {
+            text-align: left;
+        }
+
+        .art-container {
+            max-width: 180px;
+        }
+    }
+
+    @container album-details-wrapper (min-width: 800px) {
+        .title {
+            font-size: 40px;
+            font-weight: 200;
+        }
+
+        .art-container {
+            max-width: 240px;
+        }
+    }
+
+    @container album-page-wrapper (min-width: 1200px) {
+        .wrapper > .container {
+            display: flex;
+            overflow: hidden;
+        }
+
+        .details-container {
+            width: 400px;
+            padding-right: var(--spacing-xl);
+            flex-shrink: 0;
+        }
+
+        .songs-container {
+            flex: 1;
+        }
     }
 </style>

@@ -3,8 +3,6 @@
     import AlbumSongs from '../../components/album/albumSongs.svelte';
     import Visibility from '../../components/visibility.svelte';
 
-    import '/src/css/containerqueries/albumCard.css';
-
     export let data;
 
     let album;
@@ -38,5 +36,19 @@
 
     .info {
         margin-bottom: var(--spacing-xxl);
+    }
+
+    @container album-card-expanded (min-width: 320px) {
+        .album-card-expanded :global(.album-card) {
+            display: flex;
+            flex-direction: row;
+            width: min-content;
+            gap: var(--spacing-md);
+        }
+
+        .album-card-expanded :global(.album-card .image-container) {
+            height: 150px;
+            flex-shrink: 0;
+        }
     }
 </style>

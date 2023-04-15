@@ -20,7 +20,6 @@
     import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
 
-    import '/src/css/containerqueries/artist.css';
     import SVGAlbum from "/src/images/album.svg";
     import SVGPopular from "/src/images/trending_up.svg";
     import SVGSongs from "/src/images/songs.svg";
@@ -343,5 +342,67 @@
     .summary {
         max-width: 80ch;
         line-height: 1.5;
+    }
+
+    @container artist-details-wrapper (min-width: 500px) {
+        .actions {
+            flex-direction: row;
+            gap: var(--spacing-xxl);
+            align-items: center;
+        }
+    }
+
+    @container artist-info-wrapper (min-width: 500px) {
+        .title {
+            font-size: 40px;
+            text-align: left;
+            margin-bottom: 0.2em;
+            padding-right: var(--spacing-xxl);
+            padding-top: var(--spacing-lg);
+            padding-left: calc(180px + var(--spacing-xxl));
+        }
+
+        .art-container {
+            max-width: 180px;
+        }
+
+        .profile {
+            justify-content: start;
+            width: fit-content;
+            margin-top: -60px;
+            float: left;
+            z-index: 10;
+        }
+
+        .details {
+            margin-top: var(--spacing-lg);
+            margin-left: calc(180px + var(--spacing-xxl));
+            position: relative;
+        }
+    }
+
+    @container artist-info-wrapper (min-width: 800px) {
+        .title {
+            font-size: 50px;
+            font-weight: 200;
+        }
+
+        .art-container {
+            width: 240px;
+            max-width: unset;
+        }
+
+        .details {
+            margin-left: calc(240px + var(--spacing-xxl));
+        }
+
+        .title {
+            padding-top: var(--spacing-xxl);
+            padding-left: calc(240px + var(--spacing-xxl));
+        }
+
+        .profile {
+            margin-top: -90px;
+        }
     }
 </style>

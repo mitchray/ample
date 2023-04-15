@@ -15,8 +15,6 @@
     import SVGSmartlist from "/src/images/smartlist.svg";
     import SVGRadio from "/src/images/radio.svg";
 
-    import '/src/css/containerqueries/playlist.css';
-
     export let id;
     export let mixType = null; // for future expansion
 
@@ -222,5 +220,72 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
         align-items: center;
+    }
+
+    @container playlist-details-wrapper (min-width: 500px) {
+        .details {
+            display: flex;
+            gap: var(--spacing-xl);
+            margin-bottom: 0;
+            padding: unset;
+        }
+
+        .details,
+        .name {
+            background-color: unset;
+            box-shadow: unset;
+        }
+
+        .name {
+            padding: unset;
+        }
+
+        .title {
+            justify-content: left;
+        }
+
+        .artist {
+            text-align: left;
+        }
+
+        .art-container {
+            max-width: 180px;
+        }
+
+        .type {
+            justify-content: start;
+        }
+    }
+
+    @container playlist-details-wrapper (min-width: 800px) {
+        .title {
+            font-size: 40px;
+        }
+
+        .art-container {
+            max-width: 240px;
+        }
+    }
+
+    @container playlist-page-wrapper (min-width: 1400px) {
+        .wrapper > .container {
+            display: flex;
+            overflow: hidden;
+        }
+
+        .details-container,
+        .songs-container {
+            overflow: auto;
+        }
+
+        .details-container {
+            width: 400px;
+            padding-right: var(--spacing-xl);
+            flex-shrink: 0;
+        }
+
+        .songs-container {
+            flex: 1;
+        }
     }
 </style>
