@@ -279,7 +279,7 @@ export const groupAlbumsByReleaseType = async (albums, artistID) => {
         }
 
         // Add a catchall for missing/others
-        releaseTypes.set("unknown release type", []);
+        releaseTypes.set("missing release type", []);
 
         // Assign to existing types or create new ones as needed
         for (let i = 0; i < albums.length; i++) {
@@ -302,7 +302,7 @@ export const groupAlbumsByReleaseType = async (albums, artistID) => {
 
             switch (type) {
                 case null:
-                    releaseTypes.get("unknown release type").push(albums[i]);
+                    releaseTypes.get("missing release type").push(albums[i]);
                     break;
                 default:
                     if (albums[i].artist.id === artistID) {
