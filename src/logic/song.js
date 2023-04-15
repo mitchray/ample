@@ -369,7 +369,7 @@ export const getSomeSongsByGenre = (genre) => {
         operator: "and",
         limit: 100,
         rules: [
-            ["tag", 4, genre]
+            ["genre", 4, genre]
         ]
     })
 }
@@ -386,7 +386,7 @@ export const getSomeSongsFromAlbumsByGenre = (genre) => {
         operator: "and",
         limit: 100,
         rules: [
-            ["album_tag", 4, genre]
+            ["album_genre", 4, genre]
         ]
     })
 }
@@ -403,7 +403,7 @@ export const getSomeSongsFromArtistsByGenre = (genre) => {
         operator: "and",
         limit: 100,
         rules: [
-            ["artist_tag", 4, genre]
+            ["artist_genre", 4, genre]
         ]
     })
 }

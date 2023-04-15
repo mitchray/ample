@@ -276,7 +276,7 @@
             inputType: "number"
         },
         {
-            id: "tag",
+            id: "genre",
             label: "Genre",
             category: "Metadata",
             object_types: [
@@ -288,7 +288,7 @@
             inputType: "text"
         },
         {
-            id: "song_tag",
+            id: "song_genre",
             label: "Song Genre",
             category: "Metadata",
             object_types: [
@@ -299,7 +299,7 @@
             inputType: "text"
         },
         {
-            id: "album_tag",
+            id: "album_genre",
             label: "Album Genre",
             category: "Song Metadata",
             object_types: [
@@ -309,7 +309,7 @@
             inputType: "text"
         },
         {
-            id: "no_tag",
+            id: "no_genre",
             label: "No Genre",
             category: "Metadata",
             object_types: [
@@ -384,7 +384,7 @@
             inputType: "number"
         },
         {
-            id: "artist_tag",
+            id: "artist_genre",
             label: "Artist Genre",
             category: "Song Metadata",
             object_types: [
