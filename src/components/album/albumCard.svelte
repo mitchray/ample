@@ -29,6 +29,11 @@
         <div class="info">
             <div class="top">
                 <div class="details">
+                        {#if album.year}
+                            <div class="date">
+                                <Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link>
+                            </div>
+                        {/if}
                     <div class="title"><Link to="albums/{album.id}" title="{album.name}">{album.name}</Link></div>
                     <div class="artist"><Link to="artists/{album.artist.id}" title="{album.artist.name}">{album.artist.name}</Link></div>
                 </div>
@@ -141,6 +146,10 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+    }
+
+    .date :global(a) {
+        color: var(--color-text-secondary);
     }
 
     .bottom {

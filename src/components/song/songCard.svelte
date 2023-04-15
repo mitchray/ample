@@ -28,6 +28,11 @@
 
         <div class="info">
             <div class="top">
+                {#if song.year}
+                    <div class="date">
+                        <Link to="songs/year/{song.year}" title="{song.year}">{song.year}</Link>
+                    </div>
+                {/if}
                 <div class="title" title="{song.name}"><Link to="song/{song.id}">{song.name}</Link></div>
                 <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
                 <div class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
@@ -153,5 +158,9 @@
 
     .actions {
         margin-top: var(--spacing-md);
+    }
+
+    .date :global(a) {
+        color: var(--color-text-secondary);
     }
 </style>
