@@ -546,6 +546,26 @@
             inputType: "text"
         },
         {
+            id: "barcode",
+            label: "Barcode",
+            category: "Album Metadata",
+            object_types: [
+                { id: "album" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
+            id: "catalog_number",
+            label: "Catalog Number",
+            category: "Album Metadata",
+            object_types: [
+                { id: "album" }
+            ],
+            operatorType: "string",
+            inputType: "text"
+        },
+        {
             id: "myrating",
             label: "My Rating",
             category: "Rating",
@@ -830,7 +850,8 @@
             label: "Smartlist",
             category: "Playlist",
             object_types: [
-                { id: "song" }
+                { id: "song" },
+                { id: "album" }
             ],
             operatorType: "boolean_is",
             inputType: "smartlist"
@@ -964,6 +985,17 @@
             object_types: [
                 { id: "song" },
                 { id: "artist" }
+            ],
+            operatorType: "true",
+            inputType: ""
+        },
+        {
+            id: "duplicate_tracks",
+            label: "Duplicate Album Tracks",
+            category: "File Data",
+            object_types: [
+                { id: "song" },
+                { id: "album" }
             ],
             operatorType: "true",
             inputType: ""
