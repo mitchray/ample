@@ -16,6 +16,7 @@
 
     import Menu from '../components/menu.svelte';
     import Actions2 from '../components/action/actions.svelte';
+    import ArtistList from '../components/artist/artistList.svelte';
 
     import SVGClose from '/src/images/close.svg';
     import SVGBin from '/src/images/delete.svg';
@@ -235,8 +236,8 @@
                         <span class="details">
                             <div class="queue-title card-title" title="{media.name}">{media.name}</div>
 
-                            {#if media.artist}
-                                <div class="queue-artist" title="{media.artist.name}">{media.artist.name}</div>
+                            {#if media.artists.length > 0}
+                                <ArtistList artists={media.artists} disabled={true} />
                             {/if}
                         </span>
 
@@ -339,8 +340,7 @@
         display: block;
     }
 
-    .queue-title,
-    .queue-artist {
+    .queue-title {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;

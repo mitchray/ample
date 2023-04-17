@@ -1,8 +1,7 @@
 <script>
     import { Link } from 'svelte-routing';
-
     import { NowPlayingQueue, NowPlayingIndex, QueueIsOpen } from '../../stores/status';
-
+    import ArtistList from '../../components/artist/artistList.svelte';
     import SVGPlaylistPlay from "/src/images/playlist_play.svg";
     import SVGArtist from "/src/images/artist.svg";
 
@@ -28,8 +27,10 @@
         {#if nextSong}
             <div class="title card-title"><span>Next:</span> <Link to="song/{nextSong.id}">{nextSong.title}</Link></div>
 
-            {#if nextSong.artist}
-                <div class="artist"><Link to="artists/{nextSong.artist.id}"><SVGArtist class="inline"/> {nextSong.artist.name}</Link></div>
+            {#if nextSong.artists.length > 0}
+                <div class="artist">
+                    <ArtistList artists={nextSong.artists} />
+                </div>
             {/if}
         {:else}
             <div>No upcoming songs</div>

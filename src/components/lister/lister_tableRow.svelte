@@ -16,6 +16,7 @@
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
     import Genres from '../../components/genre/genres.svelte';
+    import ArtistList from '../../components/artist/artistList.svelte';
 
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
@@ -130,9 +131,7 @@
         {/if}
 
         {#if col.id === "artist"}
-            <Link to="artists/{item.artist.id}">
-                <SVGArtist class="inline"/> {item.artist.name}
-            </Link>
+            <ArtistList artists={item.artists} />
         {/if}
 
         {#if col.id === "album"}

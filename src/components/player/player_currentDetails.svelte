@@ -2,6 +2,8 @@
     import { Link } from 'svelte-routing';
     import { CurrentMedia, FullScreenEnabled } from "../../stores/status";
 
+    import ArtistList from '../../components/artist/artistList.svelte';
+
     import SVGAlbum from "/src/images/album.svg";
     import SVGYear from "/src/images/year.svg";
 
@@ -17,8 +19,10 @@
     <div class="details" on:click={handleClick}>
         <div class="title card-title" title="{$CurrentMedia.title}"><Link to="song/{$CurrentMedia.id}">{$CurrentMedia.title}</Link></div>
 
-        {#if $CurrentMedia.artist}
-            <div class="artist" title="{$CurrentMedia.artist.name}"><Link to="artists/{$CurrentMedia.artist.id}">{$CurrentMedia.artist.name}</Link></div>
+        {#if $CurrentMedia.artists.length > 0}
+            <div class="artist">
+                <ArtistList artists={$CurrentMedia.artists} />
+            </div>
         {/if}
 
         <div class="album">
