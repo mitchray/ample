@@ -23,7 +23,6 @@
     let username = "";
     let password = "";
     let apiKey = "";
-    let promise;
     let randomColor = lchToRgb([50, 50, getRandomInt(360)]);
     let result;
 
@@ -57,8 +56,8 @@
     <ThemeToggle />
 
     <div class="form" in:fade out:fade>
-        {#if versionCheck && versionCheck < 5}
-            <p class="server-message badge badge--danger" in:fade>Ample only supports Ampache v5 and up. Version {$serverVersion} detected.</p>
+        {#if versionCheck && versionCheck < 6}
+            <p class="server-message badge badge--danger" in:fade>This version of Ample only supports Ampache v6 and up. Version {$serverVersion} detected.</p>
         {/if}
 
         <div class="logo">
