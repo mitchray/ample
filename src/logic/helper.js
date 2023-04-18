@@ -90,11 +90,10 @@ export const formatTimeToReadable = (secs) => {
 }
 
 export const formatSongQuality = (song) => {
-    let format = song.url.split('.').pop();
     let bitrate = parseInt(parseInt(song.bitrate) / 1000) ;
     let variable = song.mode === "vbr" ? "~" : " ";
 
-    return format.toUpperCase() + variable + bitrate;
+    return song.format.toUpperCase() + variable + bitrate;
 }
 
 export const formatFilesize = (size) => {
