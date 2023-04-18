@@ -251,7 +251,7 @@
                                             type="song"
                                             mode="subMenu"
                                             id="{media.id}"
-                                            data={Object.create({albumID: media.album.id, artistID: media.artist.id})}
+                                            data={Object.create({albumID: media.album.id, artistID: media.artist.id, artists: media.artists})}
                                         />
                                     {/if}
                                 </div>

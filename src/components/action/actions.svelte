@@ -166,6 +166,12 @@
             <Link to="artists/{data.artistID}"><SVGArtist class="inline" /> Go to artist</Link>
         {/if}
 
+        {#if data.artists?.length > 0}
+            {#each data.artists as artist}
+                <Link to="artists/{artist.id}"><SVGArtist class="inline" /> {artist.name}</Link>
+            {/each}
+        {/if}
+
         {#if data.albumID}
             <Link to="albums/{data.albumID}"><SVGAlbum class="inline" /> Go to album</Link>
         {/if}
