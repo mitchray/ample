@@ -246,14 +246,12 @@
                         {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
                             <Menu anchor="left-center" toggleSelector={'#queueMoreToggle-' + queueMoreMenuID} bind:isVisible={queueMoreMenuIsOpen}>
                                 <div class="panel-content">
-                                    {#if media.artist}
-                                        <Actions2
-                                            type="song"
-                                            mode="subMenu"
-                                            id="{media.id}"
-                                            data={Object.create({albumID: media.album.id, artistID: media.artist.id, artists: media.artists})}
-                                        />
-                                    {/if}
+                                    <Actions2
+                                        type="song"
+                                        mode="subMenu"
+                                        id="{media.id}"
+                                        data={Object.create({album: media.album, artists: media.artists})}
+                                    />
                                 </div>
                             </Menu>
                         {/if}

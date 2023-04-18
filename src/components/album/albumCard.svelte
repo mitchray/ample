@@ -50,7 +50,7 @@
                         mode="miniButtons"
                         id="{album.id}"
                         showShuffle={album.songcount > 1}
-                        data={Object.create({albumID: album.id, artistID: album.artist.id})}
+                        data={Object.create({album: album, artist: album.artist})}
                     />
                 </div>
             </div>

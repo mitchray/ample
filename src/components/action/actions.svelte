@@ -162,8 +162,8 @@
         <ActionShuffleNext contextKey={contextKey} />
         <ActionShuffleLast contextKey={contextKey} />
 
-        {#if data.artistID}
-            <Link to="artists/{data.artistID}"><SVGArtist class="inline" /> Go to artist</Link>
+        {#if data.artist?.id}
+            <Link to="artists/{data.artist.id}"><SVGArtist class="inline" /> {data.artist.name}</Link>
         {/if}
 
         {#if data.artists?.length > 0}
@@ -172,11 +172,11 @@
             {/each}
         {/if}
 
-        {#if data.albumID}
-            <Link to="albums/{data.albumID}"><SVGAlbum class="inline" /> Go to album</Link>
+        {#if data.album?.id}
+            <Link to="albums/{data.album.id}"><SVGAlbum class="inline" /> {data.album.name}</Link>
         {/if}
 
-        {#if (!data.artistID || !data.albumID)}
+        {#if (type === "artist" || type === "album" || type === "song")}
             <ActionUpdateFromTags contextKey={contextKey} />
         {/if}
 

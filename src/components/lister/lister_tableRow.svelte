@@ -216,8 +216,8 @@
                 mode="miniButtons"
                 id="{item.id}"
                 data={Object.create({
-                    albumID: item.album ? item.album.id : null,
-                    artistID: item.artist ? item.artist.id : null
+                    album: item.album ? item.album : null,
+                    artists: item.artists?.length > 0 ? item.artists : null
                 })}
             />
         {/if}

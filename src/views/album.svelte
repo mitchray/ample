@@ -76,7 +76,7 @@
                                 mode="fullButtons"
                                 id="{album.id}"
                                 showShuffle={album.songcount > 1}
-                                data={Object.create({artistID: album.artist.id})}
+                                data={Object.create({artist: album.artist})}
                             />
 
                             <div class="meta">
