@@ -225,7 +225,7 @@ class Player {
             CurrentMedia.set(song);
 
             // notify if missing gain tags
-            if (!song.r128_track_gain && !song.replaygain_track_gain) {
+            if (song.r128_track_gain === null && song.replaygain_track_gain === null) {
                 addGainTagsMissingNotification(song);
             }
 
@@ -566,8 +566,8 @@ class Player {
         this.masteredVolume = 0;
         this.gainNeeded = 0;
 
-        let r128_track_gain = this.currentMedia.r128_track_gain || null;
-        let rg_track_gain = this.currentMedia.replaygain_track_gain || null;
+        let r128_track_gain = (this.currentMedia.r128_track_gain !== null) ? this.currentMedia.r128_track_gain.toString() : null;
+        let rg_track_gain = (this.currentMedia.replaygain_track_gain !== null) ? this.currentMedia.replaygain_track_gain.toString() : null;
 
         if (r128_track_gain !== null) { // R128 PREFERRED
             this.gainType = 'EBU R128';
