@@ -166,6 +166,11 @@
             <Link to="artists/{data.artist.id}"><SVGArtist class="inline" /> {data.artist.name}</Link>
         {/if}
 
+        <!-- add album artist if not already in artists -->
+        {#if data.albumArtist?.id && (data.artists?.length > 0 && !data.artists.find(artist => artist.id === data.albumArtist.id))}
+            <Link to="artists/{data.albumArtist.id}"><SVGArtist class="inline" /> {data.albumArtist.name}</Link>
+        {/if}
+
         {#if data.artists?.length > 0}
             {#each data.artists as artist}
                 <Link to="artists/{artist.id}"><SVGArtist class="inline" /> {artist.name}</Link>

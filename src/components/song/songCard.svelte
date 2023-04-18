@@ -46,7 +46,11 @@
                         type="song"
                         mode="miniButtons"
                         id="{song.id}"
-                        data={Object.create({album: song.album, artists: song.artists})}
+                        data={Object.create({
+                            album: song.album,
+                            artists: song.artists,
+                            albumArtist: song.albumartist
+                        })}
                     />
                 </div>
             </div>
