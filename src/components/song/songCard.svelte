@@ -1,6 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
+    import { formatTotalTime } from "../../logic/helper";
 
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
@@ -15,70 +16,62 @@
 
 <div class="song-card card">
     {#if song}
-        <div class="image-container">
-            <img class="image"
-                src="{song.art}&thumb=22"
-                alt="Image of {song.name}"
-                width="200"
-                height="200"
-                data-id="art-album-{song.album?.id}"
-                on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
-            />
-        </div>
+        <div class="top">
+            <div class="image-container">
+                <img class="image"
+                     src="{song.art}&thumb=11"
+                     alt="Image of {song.name}"
+                     width="96"
+                     height="96"
+                     data-id="art-album-{song.album?.id}"
+                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
+                />
+            </div>
 
-        <div class="info">
-            <div class="top">
-                {#if song.year}
-                    <div class="date">
-                        <Link to="songs/year/{song.year}" title="{song.year}">{song.year}</Link>
-                    </div>
-                {/if}
+            <div class="info">
+                <div class="time">{formatTotalTime(song.time)}</div>
                 <div class="title" title="{song.name}"><Link to="song/{song.id}">{song.name}</Link></div>
                 <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
                 <div class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
-            </div>
 
-            <div class="bottom">
                 <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
-
-                <div class="actions">
-                    <Actions2
-                        type="song"
-                        mode="miniButtons"
-                        id="{song.id}"
-                        data={Object.create({
-                            album: song.album,
-                            artists: song.artists,
-                            albumArtist: song.albumartist
-                        })}
-                    />
-                </div>
             </div>
+        </div>
+
+        <div class="actions">
+            <Actions2
+                type="song"
+                mode="miniButtons"
+                id="{song.id}"
+                data={Object.create({
+                    album: song.album,
+                    artists: song.artists,
+                    albumArtist: song.albumartist
+                })}
+            />
         </div>
     {:else}
-        <div class="image-container">
-            <img class="image"
-                height="200"
-                width="200"
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
-                alt=""
-            >
-        </div>
+        <div class="top">
+            <div class="image-container">
+                <img class="image"
+                     height="96"
+                     width="96"
+                     src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+                     alt=""
+                >
+            </div>
 
-        <div class="info">
-            <div class="top">
+            <div class="info">
+                <div class="time">0:00</div>
                 <div class="title">Loading</div>
                 <div class="artist"><br></div>
                 <div class="album"><br></div>
-            </div>
-
-            <div class="bottom">
                 <Rating />
-
-                <div class="actions">
-                    <Actions2 type="song" mode="miniButtons" />
-                </div>
             </div>
+        </div>
+
+        <div class="actions">
+            <Actions2 type="song" mode="miniButtons" />
         </div>
     {/if}
 </div>
@@ -88,7 +81,7 @@
     :global(.song-grid) {
         display: grid;
         gap: var(--spacing-xxl);
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
     }
 
     :global(.song-scroll) {
@@ -103,31 +96,33 @@
     }
 
     :global(.song-scroll) .song-card {
-        width: 280px;
+        width: 215px;
     }
 
     .song-card {
         height: 100%; /* equal height with siblings */
+    }
+
+    .top {
         display: flex;
     }
 
     .image-container {
         font-size: 0;
         position: relative;
-        height: 100%;
-        width: 120px;
+        height: 96px;
         aspect-ratio: 1 / 1;
         flex-shrink: 0;
         flex-grow: 0;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
-        border-radius: 5px;
+        border-radius: 3px;
         overflow: hidden;
+        align-self: start;
     }
 
     .image-container :global(.image) {
         object-fit: cover;
         color: transparent;
-        height: 100%;
         width: 100%;
     }
 
@@ -137,10 +132,6 @@
         flex-direction: column;
         flex: 1;
         overflow: hidden;
-    }
-
-    .top {
-        margin-bottom: var(--spacing-sm);
     }
 
     .title,
@@ -155,16 +146,11 @@
         margin-bottom: var(--spacing-sm);
     }
 
-    .bottom {
-        display: flex;
-        flex-direction: column;
-    }
-
     .actions {
         margin-top: var(--spacing-md);
     }
 
-    .date :global(a) {
+    .time {
         color: var(--color-text-secondary);
     }
 </style>
