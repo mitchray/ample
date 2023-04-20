@@ -40,12 +40,10 @@ export const logout = () => {
 
 export const validateSession = async () => {
     let cachedSession = JSON.parse(localStorage.getItem('AmpleAuth'));
-    let cachedSessionKey = (cachedSession) ? cachedSession.userToken : null;
-
-    let result = await get(API).ping({ auth: cachedSessionKey });
+    let result = await get(API).ping({ auth: cachedSession?.userToken });
 
     if (result.auth) {
-        await login({ auth: result.auth, username: cachedSession.username })
+        await login({ auth: result.auth, username: cachedSession.username });
     } else {
         logout();
     }

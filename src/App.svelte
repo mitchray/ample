@@ -58,8 +58,6 @@
     import AdvancedSearchPage from './views/advancedSearch.svelte';
     import SongVersionsPage from './views/songVersions.svelte';
 
-    validateSession();
-
     window.setInterval(function(){
         extendSession();
     }, 1000*60*15);
@@ -85,6 +83,8 @@
     onMount(async () => {
         // get Ampache server version
         serverVersion.set(await getServerVersion());
+
+        await validateSession();
     });
 </script>
 
