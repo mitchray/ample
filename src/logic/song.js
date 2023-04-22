@@ -288,12 +288,12 @@ export const newestSongs = ({page = 0, limit = 50}) => {
  * Get recently played songs
  * @returns {Promise<*>}
  */
-export const recentSongs = ({page = 0, limit = 50}) => {
+export const recentSongs = ({page = 0, limit = 50, offset = null}) => {
     return get(API).stats({
         type: "song",
         filter: "recent",
         limit: limit,
-        offset: page * limit,
+        offset: offset || page * limit,
     })
 }
 

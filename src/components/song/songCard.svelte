@@ -81,7 +81,7 @@
     :global(.song-grid) {
         display: grid;
         gap: var(--spacing-xxl);
-        grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     }
 
     :global(.song-scroll) {
@@ -96,7 +96,7 @@
     }
 
     :global(.song-scroll) .song-card {
-        width: 215px;
+        width: 230px;
     }
 
     .song-card {
