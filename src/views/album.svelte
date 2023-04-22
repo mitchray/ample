@@ -1,11 +1,10 @@
 <script>
     import { Link } from 'svelte-routing';
-
     import { Theme } from '../stores/status';
     import { serverURL } from "../stores/server";
-
     import { getAlbum } from "../logic/album";
     import { formatTotalTime } from "../logic/helper";
+    import MusicBrainz from "../logic/musicbrainz";
 
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
@@ -19,8 +18,10 @@
 
     export let id;
 
+    let mb = new MusicBrainz;
     let hash;
     let theme;
+
     $: theme = $Theme;
     $: if (id) {
         loadData();
@@ -31,6 +32,29 @@
     async function loadData() {
         album = await getAlbum({id: id, withTracks: true, artAnalysis: true});
         hash = Date.now().toString();
+
+        album.discsubtitles = [];
+
+        if (mb.hasMBID(album)) {
+            album.discsubtitles = await loadMBData(album.mbid);
+        }
+    }
+
+    async function loadMBData(mbid) {
+        let queryURL = `https://musicbrainz.org/ws/2/release/${mbid}?inc=discids&fmt=json`;
+
+        return await fetch(queryURL, {
+            method  : 'GET',
+            headers : mb.headers
+        })
+            .then(response => response.json())
+            .then(data => {
+                return data.media;
+            })
+            .catch(err => {
+                console.log("Error Reading data " + err);
+                return err;
+            });
     }
 </script>
 
@@ -93,6 +117,7 @@
                 <div class="songs-container">
                     <div class="songs">
                         {#each [...album.ampleSongs] as [key, value]}
+                            {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
                             <Lister2
                                 data={value}
                                 type="song"
@@ -100,6 +125,7 @@
                                 zone="album-contents"
                                 showArtist={album.artist.name === "Various Artists"}
                                 showArt={false}
+                                discSubtitle={subtitle}
                                 actionData={{
                                     disable: [...album.ampleSongs].length < 2,
                                     type: "album",

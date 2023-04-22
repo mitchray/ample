@@ -2,22 +2,15 @@
     import { fade } from 'svelte/transition';
     import { Link } from "svelte-routing";
     import { throttle } from 'throttle-wait';
-    import { ampleVersion } from "../stores/player";
     import { serverURL } from "../stores/server";
     import { formatTotalTime } from "../logic/helper";
     import { getSongsFromArtist } from "../logic/song";
+    import MusicBrainz from "../logic/musicbrainz";
 
     export let data;
 
-    const musicbrainzRegex = new RegExp('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}');
-
-    let hasMusicbrainz = musicbrainzRegex.test(data.mbid) && data.name !== "Various Artists";
-
-    let headers = new Headers({
-        "Accept"       : "application/json",
-        "Content-Type" : "application/json",
-        "User-Agent"   : `Ample - Ampache client/${$ampleVersion} ( github.com/mitchray/ample )`
-    });
+    let mb = new MusicBrainz;
+    let hasMusicbrainz = mb.hasMBID(data);
 
     let combinedSources = [];
     let songs = [];
@@ -194,7 +187,7 @@
     async function mbQuery() {
         return await fetch(queryURL, {
             method  : 'GET',
-            headers : headers
+            headers : mb.headers
         })
             .then(response => response.json())
             .then(data => {
@@ -270,7 +263,7 @@
                         songs[i].message = "No MBID, and no MusicBrainz recordings match";
                         songs[i].status = "flag";
                     }
-                } else if (musicbrainzRegex.test(songs[i].mbid)) {
+                } else if (mb.regex.test(songs[i].mbid)) {
                     songs[i].message = "Valid MBID, but missing in this artist collection";
                     songs[i].status = "issue";
                 } else {

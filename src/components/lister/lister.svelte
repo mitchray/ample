@@ -16,6 +16,7 @@
     export let data;
     export let type;
     export let actionData;    // additional data object for Actions
+    export let discSubtitle   = null;
     export let zone           = "generic";
     export let showIndex      = false;
     export let showCheckboxes = false;
@@ -53,6 +54,7 @@
         showCheckboxes,
         showArtist,
         showArt,
+        discSubtitle,
         dataDisplay,
         columnWidths,
         listerObject,
@@ -116,6 +118,10 @@
             </div>
         {/if}
 
+        {#if discSubtitle}
+            <div class="disc-subtitle">{discSubtitle}</div>
+        {/if}
+
         {#if !tableOnly}
             <div class="group">
                 <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
@@ -168,7 +174,7 @@
         position: sticky;
         top: 0;
         z-index: 1;
-        align-items: start;
+        align-items: center;
     }
 
     .lister-actions > .group {
@@ -237,5 +243,10 @@
     .lister-container.is-table:global(.scroll-start) :global(.name:before),
     .lister-container.is-table:global(.scroll-end) :global(.actions:before) {
         opacity: 1;
+    }
+
+    .disc-subtitle {
+        color: var(--color-highlight);
+        font-weight: 700;
     }
 </style>
