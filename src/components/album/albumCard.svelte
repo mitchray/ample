@@ -133,10 +133,6 @@
         width: 100%;
     }
 
-    .info {
-        /*padding: var(--spacing-md) var(--spacing-lg) var(--spacing-md) var(--spacing-lg);*/
-    }
-
     .top {
         margin-bottom: var(--spacing-md);
     }

@@ -76,6 +76,7 @@
         display: flex;
         flex-direction: column;
         width: 100%;
+        overflow: hidden;
     }
 
     .top {

@@ -1,6 +1,6 @@
 <script>
     import { fade } from 'svelte/transition';
-
+    import { Link } from "svelte-routing";
     import { ShowExpandedAlbums, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
     import { API } from "../stores/api";
@@ -24,9 +24,6 @@
     import SVGPopular from "/src/images/trending_up.svg";
     import SVGSongs from "/src/images/songs.svg";
     import SVGSimilar from "/src/images/people.svg";
-    import SVGArticle from "/src/images/article.svg";
-    import SVGTrack from "/src/images/music_note.svg";
-    import SVGClock from "/src/images/clock.svg";
 
     export let id;
 
@@ -45,7 +42,6 @@
         { label: "Popular Songs",       value: "popular",     icon: SVGPopular },
         { label: "All Songs",           value: "all",         icon: SVGSongs },
         { label: "Similar Artists",     value: "similar",     icon: SVGSimilar },
-        { label: "Summary",             value: "summary",     icon: SVGArticle },
         { label: "MusicBrainz Compare", value: "musicbrainz" },
     ];
 
@@ -61,6 +57,7 @@
     async function loadData() {
         artist = await getArtist({id: id, artAnalysis: true});
         hash = Date.now().toString();
+        console.debug(artist);
     }
 </script>
 
@@ -81,35 +78,71 @@
                         <img class="art"
                              src="{artist.art}&thumb=32"
                              alt="Image of {artist.name}"
-                             width="240"
-                             height="240"
+                             width="250"
+                             height="250"
                              data-id="art-artist-{artist.id}"
                              on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
                         />
                     </div>
 
-                    <div class="rating">
-                        <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                    <div class="below-image">
+                        <div class="rating">
+                            <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                        </div>
+
+                        <div class="third-party-links">
+                            <ThirdPartyServices data={artist} type="artist" />
+                        </div>
                     </div>
+
                 </div>
 
                 <div class="details">
                     <div class="meta">
                         {#if artist.albumcount > 0}
-                            <span><SVGAlbum class="inline"/> {artist.albumcount} {artist.albumcount !== 1 ? 'releases' : 'release'}</span>
+                            <div class="entry">
+                                <span class="value">{artist.albumcount}</span>
+                                <span class="field">{artist.albumcount !== 1 ? 'Releases' : 'Release'}</span>
+                            </div>
                         {/if}
 
                         {#if artist.appearanceCount > 0}
-                            <span><SVGAlbum class="inline"/> {artist.appearanceCount} {artist.appearanceCount !== 1 ? 'appearances' : 'appearance'}</span>
+                            <div class="entry">
+                                <span class="value">{artist.appearanceCount}</span>
+                                <span class="field">{artist.appearanceCount !== 1 ? 'Appearances' : 'Appearance'}</span>
+                            </div>
                         {/if}
 
-                        <span><SVGTrack class="inline"/> {artist.songcount} {artist.songcount !== 1 ? 'songs' : 'song'}</span>
+                        <div class="entry">
+                            <span class="value">{artist.songcount}</span>
+                            <span class="field">{artist.songcount !== 1 ? 'Songs' : 'Song'}</span>
+                        </div>
 
                         {#if artist.time > 0}
-                            <span><SVGClock class="inline"/> {formatTimeToReadable(artist.time)}</span>
+                            <div class="entry">
+                                <span class="value">{formatTimeToReadable(artist.time)}</span>
+                                <span class="field">Length</span>
+                            </div>
+                        {/if}
+
+                        {#if artist.yearformed}
+                            <div class="entry">
+                                <span class="value">
+                                    <Link to="albums/year/{artist.yearformed}" title="{artist.yearformed}">
+                                        {artist.yearformed}
+                                    </Link>
+                                </span>
+                                <span class="field">Year Formed</span>
+                            </div>
+                        {/if}
+
+                        {#if artist.placeformed}
+                            <div class="entry">
+                                <span class="value">{artist.placeformed}</span>
+                                <span class="field">Place Formed</span>
+                            </div>
                         {/if}
                     </div>
-
 
                     <Genres genres="{artist.genre}" />
 
@@ -120,10 +153,14 @@
                             showShuffle={artist.songcount > 1}
                             id="{artist.id}"
                         />
-
-                        <ThirdPartyServices data={artist} type="artist" />
                     </div>
                 </div>
+
+                {#if artist.summary?.replace(/\s/g, "").length > 0}
+                    <div class="summary">
+                        <p>{artist.summary}</p>
+                    </div>
+                {/if}
             </div>
         </div>
 
@@ -202,18 +239,6 @@
                         </Tab>
                     {/if}
 
-                    {#if tab.value === 'summary'}
-                        <Tab id="summary" class="summary" bind:activeTabValue={currentTab}>
-                            {#if artist.summary && artist.summary.replace(/\s/g, "").length > 0}
-                                <div class="summary">
-                                    <p>{artist.summary}</p>
-                                </div>
-                            {:else}
-                                <p>No summary found</p>
-                            {/if}
-                        </Tab>
-                    {/if}
-
                     {#if tab.value === 'musicbrainz'}
                         <Tab id="musicbrainz" class="musicbrainz" bind:activeTabValue={currentTab}>
                             <MusicbrainzScan2 data={artist} />
@@ -235,6 +260,16 @@
 
     .header {
         position: relative;
+        display: grid;
+        grid-template-areas:
+            "title"
+            "profile"
+            "details"
+            "summary"
+        ;
+        grid-template-rows: auto auto auto auto;
+        gap: var(--spacing-xl);
+        padding-bottom: var(--spacing-xxl);
     }
     
     .header:before {
@@ -267,7 +302,6 @@
     }
     
     .art-container {
-        max-width: 240px;
         aspect-ratio: 1 / 1;
         border-radius: 6px;
         overflow: hidden;
@@ -285,51 +319,74 @@
     }
 
     .profile {
+        grid-area: profile;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
-        position: relative;
+        min-width: 200px;
+        max-width: 250px;
+        justify-self: center;
     }
 
-    .rating {
-        display: inline-block;
-        margin-top: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
+    .below-image {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        flex-wrap: wrap;
+        padding-top: var(--spacing-md);
     }
 
     .title {
+        grid-area: title;
         --roboto-opsz: 50;
         line-height: 1;
-        text-align: center;
+        justify-self: center;
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;
+        margin-bottom: 0;
     }
 
     .details {
-        container-name: artist-details-wrapper;
-        container-type: inline-size;
+        grid-area: details;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xl);
     }
 
     .meta {
         display: flex;
+        flex-direction: row;
+        column-gap: var(--spacing-xl);
+        row-gap: var(--spacing-lg);
         flex-wrap: wrap;
-        gap: var(--spacing-md) var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
+    }
+
+    .meta .entry {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .meta .field {
+        color: var(--color-text-secondary);
+        flex-shrink: 0;
+    }
+
+    .meta .value {
+        font-size: 1.2em;
+        font-weight: 700;
+    }
+
+    .meta .graphic :global(svg) {
+        width: 100%;
+        height: 100%;
     }
     
     .actions {
         display: flex;
         flex-direction: column-reverse;
         gap: var(--spacing-lg);
-    }
-
-    .details:after {
-        content: '';
-        display: table;
-        clear: both;
-        padding-bottom: var(--spacing-xxl);
     }
 
     .album-view-toggle {
@@ -340,69 +397,56 @@
     }
 
     .summary {
-        max-width: 80ch;
+        grid-area: summary;
         line-height: 1.5;
     }
 
-    @container artist-details-wrapper (min-width: 500px) {
-        .actions {
-            flex-direction: row;
-            gap: var(--spacing-xxl);
-            align-items: center;
-        }
+    .summary :global(p:first-of-type) {
+        margin-top: 0;
     }
 
-    @container artist-info-wrapper (min-width: 500px) {
+    @container artist-info-wrapper (min-width: 530px) {
+        .header {
+            grid-template-areas:
+                "profile title"
+                "profile details"
+                "summary summary"
+            ;
+            grid-template-rows: auto 1fr auto;
+            grid-template-columns: min-content auto;
+            column-gap: var(--spacing-xl);
+        }
+
         .title {
-            font-size: 40px;
-            text-align: left;
-            margin-bottom: 0.2em;
-            padding-right: var(--spacing-xxl);
-            padding-top: var(--spacing-lg);
-            padding-left: calc(180px + var(--spacing-xxl));
-        }
-
-        .art-container {
-            max-width: 180px;
-        }
-
-        .profile {
-            justify-content: start;
-            width: fit-content;
-            margin-top: -60px;
-            float: left;
-            z-index: 10;
-        }
-
-        .details {
-            margin-top: var(--spacing-lg);
-            margin-left: calc(180px + var(--spacing-xxl));
-            position: relative;
+            justify-self: unset;
         }
     }
 
     @container artist-info-wrapper (min-width: 800px) {
+        .profile {
+            width: 250px;
+        }
+
         .title {
             font-size: 50px;
             font-weight: 200;
         }
+    }
 
-        .art-container {
-            width: 240px;
-            max-width: unset;
+    @container artist-info-wrapper (min-width: 1200px) {
+        .header {
+            grid-template-areas:
+                "profile title   title   title"
+                "profile details summary SPACER"
+                "profile details summary SPACER"
+            ;
+            grid-template-rows: min-content auto 1fr;
+            grid-template-columns: min-content auto auto 1fr;
+            column-gap: var(--spacing-xxl);
         }
 
-        .details {
-            margin-left: calc(240px + var(--spacing-xxl));
-        }
-
-        .title {
-            padding-top: var(--spacing-xxl);
-            padding-left: calc(240px + var(--spacing-xxl));
-        }
-
-        .profile {
-            margin-top: -90px;
+        .summary {
+            max-width: 80ch;
         }
     }
 </style>

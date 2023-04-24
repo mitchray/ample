@@ -19,7 +19,8 @@
         display: flex;
         gap: var(--spacing-md);
         flex-wrap: wrap;
-        margin-bottom: var(--spacing-lg);
+        margin-top: 0;
+        margin-bottom: 0;
     }
 
     .genre-tag :global(a) {

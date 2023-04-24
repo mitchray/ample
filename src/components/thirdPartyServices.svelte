@@ -178,12 +178,16 @@
 <style>
     .container {
         display: flex;
-        gap: var(--spacing-sm);
     }
 
     .groups {
         display: flex;
         gap: var(--spacing-xxl);
+    }
+
+    .button {
+        margin-right: 0;
+        padding-right: 10px;
     }
 
     button:after {
@@ -194,10 +198,11 @@
         mask-position: center;
         width: 25px;
         position: absolute;
-        left: calc(100% - 5px);
+        left: calc(100% - 15px);
         bottom: 0;
         top: 0;
         transform: rotate(270deg);
+        display: inline-block;
     }
 
     h4 {
