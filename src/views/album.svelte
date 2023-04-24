@@ -11,6 +11,7 @@
     import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
     import Lister2 from '../components/lister/lister.svelte';
+    import AlbumsAround from '../components/album/albumsAround.svelte';
 
     import SVGYear from "/src/images/year.svg";
     import SVGTrack from "/src/images/music_note.svg";
@@ -137,6 +138,10 @@
                             />
                         {/each}
                     </div>
+
+                    <div class="albums-around-time">
+                        <AlbumsAround album={album} />
+                    </div>
                 </div>
             </div>
         </div>
@@ -236,6 +241,10 @@
         gap: var(--spacing-md) var(--spacing-lg);
         margin-top: var(--spacing-lg);
         margin-bottom: var(--spacing-lg);
+    }
+
+    .albums-around-time {
+        margin-top: var(--spacing-xxl);
     }
 
     @container album-details-wrapper (min-width: 500px) {

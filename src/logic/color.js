@@ -177,8 +177,8 @@ export function outputThemeVariables(hue, selector) {
             --color-highlight:         rgb(${lchToRgb([ 70, 70, hue])});
             --color-highlight-alt:     rgb(${lchToRgb([ 70, 70, hue])});
             --color-link-hover:        rgb(${lchToRgb([ 75, 70, hue])});
-            --color-card-primary:      rgb(${lchToRgb([ 15,  1, hue])});
-            --color-card-hover:        rgb(${lchToRgb([ 20,  3, hue])});
+            --color-card-primary:      rgb(${lchToRgb([ 12,  1, hue])});
+            --color-card-hover:        rgb(${lchToRgb([ 15,  3, hue])});
             --color-card-highlight:    rgb(${lchToRgb([ 10,  3, hue])});
             --color-mix-background:    rgb(${lchToRgb([ 10, 40, hue])});
             --color-menu-background:   rgb(${lchToRgb([ 15,  3, hue])});
