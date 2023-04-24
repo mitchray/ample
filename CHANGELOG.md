@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.2.0] - 2023-??-??
+### Requires at least Ampache 6.0.0
+
+### Added
+- Multi-artist support
+- Album page has Previous/Next releases underneath songs
+- Fetch album disk subtitles from MusicBrainz
+
+### Changed
+- Rebuilt "Recently Played" on main page; handles song updates much better now
+- CSS container queries polyfill removed as browser support is stable now
+
+### Fixed
+- Volume gain was ignored if values were "0"
+
 ## [1.1.0] - 2023-03-03
 ### Added
 - Artist Mix recommendations on the home page (based on trending and 4/5 rated artists)
