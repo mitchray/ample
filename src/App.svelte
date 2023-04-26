@@ -108,6 +108,8 @@
             <Sidebar2/>
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
+                    <Lyrics/>
+
                     <Route path="test" component={TestPage}/>
 
                     <Route path="search" component={AdvancedSearchPage}/>
@@ -142,7 +144,7 @@
                     <Route path="/" component={HomePage}/>
                     <Route path="*" component={NotFound404Page}/>
 
-                    <Lyrics/>
+                    <!-- put components before routes -->
                 </div>
             </div>
             <Queue/>
@@ -182,27 +184,46 @@
 
     :global(.site-content) {
         position: relative;
-        padding: var(--spacing-xxl);
+        /*padding: var(--spacing-xxl);*/
         flex: 1;
         z-index: -10;
+        /*background-color: aquamarine;*/
+        /*width: 100%;*/
+        /*height: 100%;*/
     }
 
     :global(.site-content-inner) {
+        --content-padding: var(--spacing-xxl);
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         overflow-y: auto;
-        padding: inherit;
+        padding-top: var(--content-padding);
+        padding-bottom: var(--content-padding);
+        display: grid;
+        grid-template-columns:
+            [full-start]
+            var(--content-padding)
+            [content-start]
+            calc(100% - (2 * var(--content-padding)))
+            [content-end]
+            var(--content-padding)
+            [full-end];
+        grid-auto-rows: min-content;
+    }
+
+    :global(.site-content-inner > *) {
+        grid-column: content;
     }
 
     /* needed as flex doesn't include padding in height calc */
     :global(.site-content-inner:after) {
-        content: '';
-        padding: inherit;
-        padding-top: 0;
-        display: block;
+        /*content: '';*/
+        /*padding: inherit;*/
+        /*padding-top: 0;*/
+        /*display: block;*/
     }
 
     :global(.site-player) {

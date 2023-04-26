@@ -56,7 +56,7 @@
     <p>Loading playlists</p>
 {:else}
     {#if playlists && playlists.length > 0}
-        <ul class="playlist-grid" in:fade>
+        <ul class="cardlist-grid playlist-grid" in:fade>
             {#each playlists as playlist (playlist.id)}
                 <li class:highlight={playlist.isNew} data-id="playlist-{playlist.id}">
                     <PlaylistCard bind:data={playlist} />

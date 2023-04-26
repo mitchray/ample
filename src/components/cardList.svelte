@@ -1,8 +1,9 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, onDestroy } from 'svelte';
 
     import SVGAdd from "/src/images/add.svg";
     import SVGRefresh from "/src/images/refresh.svg";
+    import { v4 as uuidv4 } from "uuid";
 
     export let type;
     export let initialData = [];
@@ -18,12 +19,17 @@
     let newBatch = [];
     let loadCount = 0;
     let loading = true;
+    let recentSongLoop;
 
     let card;
     let logic;
     let containerClass;
     let emptyMessage;
     let options = {};
+    let isScroll = false;
+    let containerBind;
+    let containerScrollX;
+    let observer;
 
     $: data = [
         ...data,
@@ -34,48 +40,51 @@
 
     // Load initial data
     onMount(async () => {
+        isScroll = (containerType === "scroll");
+
         switch (type) {
             case 'artist':
                 logic = await import("../logic/artist");
                 card = (await import('../components/artist/artistCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "artist-grid" : "artist-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid artist-grid" : "cardlist-scroll artist-scroll";
                 emptyMessage = "No artists found";
                 break;
             case 'album':
                 logic = await import("../logic/album");
                 card = (await import('../components/album/albumCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "album-grid" : "album-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid album-grid" : "cardlist-scroll album-scroll";
                 emptyMessage = "No albums found";
                 break;
             case 'song':
+            case 'recent_songs':
                 logic = await import("../logic/song");
                 card = (await import('../components/song/songCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "song-grid" : "song-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid song-grid" : "cardlist-scroll song-scroll";
                 emptyMessage = "No songs found";
                 break;
             case 'playlist':
                 logic = await import("../logic/playlist");
                 card = (await import('../components/playlist/playlistCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
                 emptyMessage = "No playlists found";
                 break;
             case 'smartlist':
                 logic = await import("../logic/playlist");
                 card = (await import('../components/playlist/playlistCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "playlist-grid" : "playlist-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
                 emptyMessage = "No smartlists found";
                 options = {isSmartlist: true};
                 break;
             case 'artist_mix':
                 logic = await import("../logic/playlist");
                 card = (await import('../components/playlist/playlistMixCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "mix-grid" : "mix-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid mix-grid" : "cardlist-scroll mix-scroll";
                 emptyMessage = "No mixes available";
                 break;
             case 'genre':
                 logic = await import("../logic/genre");
                 card = (await import('../components/genre/genreCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "genre-grid" : "genre-scroll";
+                containerClass = (containerType === "grid") ? "cardlist-grid genre-grid" : "cardlist-scroll genre-scroll";
                 emptyMessage = "No genres found";
                 break;
             default:
@@ -90,7 +99,41 @@
         } else {
             await loadMore();
         }
+
+        // initial parse (then onScroll event takes over)
+        parseScroll();
+
+        // also reparse on resize as a failsafe
+        observer = new ResizeObserver(entries => {
+            parseScroll();
+        });
+
+        observer.observe(containerBind);
+
+        // recent_songs has its own interval to check for fresh songs
+        if (type === "recent_songs") {
+            recentSongLoop = window.setInterval(function () {
+                getMostRecentSong();
+            }, 1000*5);
+        }
     });
+
+    onDestroy(() => {
+        if (observer) {
+            observer.disconnect();
+        }
+
+        clearInterval(recentSongLoop);
+    });
+
+    async function getMostRecentSong() {
+        let newestSong = await logic[dataProvider]({query: arg, limit: 1, page: 0});
+
+        if (newestSong[0].id !== data[0].id) {
+            newestSong[0]._id = uuidv4();
+            data = [newestSong[0], ...data];
+        }
+    }
 
     // Append extra data to existing
     async function loadMore() {
@@ -100,6 +143,14 @@
         loadCount++;
     }
 
+    async function loadMoreAndScroll() {
+        await loadMore();
+
+        if (loadCount > 0) {
+            scroll("end");
+        }
+    }
+
     // Replace existing data with new
     async function refreshItems() {
         loading = true;
@@ -107,6 +158,17 @@
         newBatch = [];
         newBatch = await logic[dataProvider]({query: arg, limit: limit});
         loading = false;
+        parseScroll();
+    }
+
+    function scroll(direction) {
+        let width = containerBind.clientWidth;
+        let value = (direction === "end") ? width : -width;
+        containerBind.scrollLeft += value;
+    }
+
+    function parseScroll() {
+        containerScrollX = containerBind.scrollLeft;
     }
 </script>
 
@@ -123,41 +185,44 @@
                 <button on:click={refreshItems} class="button button--tertiary"><SVGRefresh/> Refresh</button>
             {/if}
         {/if}
+
+        {#if isScroll}
+            <div class="scroll-buttons">
+                <button class="icon-button circle-button" on:click={() => { scroll("start") }} disabled={containerScrollX < 1}>&lt;</button>
+                <button class="icon-button circle-button" on:click={() => { scroll("end") }} disabled={containerScrollX > containerBind?.scrollWidth - containerBind?.clientWidth - 50}>&gt;</button>
+            </div>
+        {/if}
     </h2>
 {/if}
 
-<section>
+<ul class="{containerClass}" bind:this={containerBind} on:scroll={parseScroll}>
     {#if loading && (loadCount < 1 || refresh) && limit}
-        <ul class="{containerClass}">
-            {#each Array(parseInt(limit)) as placeholder}
-                <li>
-                    <svelte:component this={card} {...options} />
-                </li>
-            {/each}
-        </ul>
+        {#each Array(parseInt(limit)) as placeholder}
+            <li>
+                <svelte:component this={card} {...options} />
+            </li>
+        {/each}
     {:else}
         {#if data.length > 0}
-            <ul class="{containerClass}">
-                {#each data as dataSingle}
-                    {#if dataSingle.name}
-                        <li>
-                            <svelte:component this={card} data={dataSingle} {...options} />
-                        </li>
-                    {/if}
-                {/each}
-                {#if !refresh}
-                    {#if !showOnlyThese}
-                        <li>
-                            <button on:click={loadMore} hidden={newBatch.length < limit} class="load-more-button icon-button button--regular"><SVGAdd /></button>
-                        </li>
-                    {/if}
+            {#each data as dataSingle}
+                {#if dataSingle.name}
+                    <li>
+                        <svelte:component this={card} data={dataSingle} {...options} />
+                    </li>
                 {/if}
-            </ul>
+            {/each}
+            {#if !refresh}
+                {#if !showOnlyThese}
+                    <li>
+                        <button on:click={loadMoreAndScroll} hidden={newBatch.length < limit} class="load-more-button icon-button button--regular"><SVGAdd /></button>
+                    </li>
+                {/if}
+            {/if}
         {:else}
-            <p>{emptyMessage}</p>
+            <li><p>{emptyMessage}</p></li>
         {/if}
     {/if}
-</section>
+</ul>
 
 <style>
     h2 {
@@ -172,5 +237,48 @@
 
     .load-more-button:not([hidden]) {
         height: 100%;
+    }
+
+    ul {
+        margin: var(--spacing-md) 0 0;
+        scroll-behavior: smooth;
+        scroll-padding-inline-start: var(--content-padding);
+        scroll-snap-type: x;
+    }
+
+    li {
+        scroll-snap-align: start;
+    }
+
+    li:last-of-type {
+        scroll-snap-align: end;
+    }
+
+    .scroll-buttons {
+        margin-left: auto;
+    }
+
+    :global(.cardlist-grid) {
+        display: grid;
+        row-gap: var(--spacing-lg); /* default spacing */
+        column-gap: var(--spacing-lg); /* default spacing */
+    }
+
+    :global(.cardlist-scroll) {
+        padding-left: var(--content-padding);
+        padding-right: var(--content-padding);
+        overflow-x: scroll;
+        scrollbar-width: none;
+        display: flex;
+        gap: var(--spacing-md); /* default spacing */
+    }
+
+    :global(.cardlist-grid:not(:last-child), .cardlist-scroll:not(:last-child)) {
+        margin-bottom: var(--spacing-xxl);
+    }
+
+    /* override specificity */
+    :global(.cardlist-scroll.cardlist-scroll) {
+        grid-column: full; /* extend beyond content boundary */
     }
 </style>

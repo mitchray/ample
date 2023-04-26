@@ -39,7 +39,7 @@
                                 <AlbumCardExpanded data="{album}"/>
                             {/each}
                         {:else}
-                            <ul class="album-grid">
+                            <ul class="cardlist-grid album-grid">
                                 {#each value as album}
                                     <li>
                                         <AlbumCard data="{album}"/>

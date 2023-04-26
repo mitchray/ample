@@ -48,20 +48,8 @@
 <style>
     /* Genre grids should have this on the containing element */
     :global(.genre-grid) {
-        display: grid;
         gap: 20px;
         grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    }
-
-    :global(.genre-scroll) {
-        border: 2px solid var(--color-separator);
-        border-radius: 15px;
-        padding: var(--spacing-lg);
-        gap: 20px;
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 20px;
     }
 
     :global(.genre-scroll) .genre-card {

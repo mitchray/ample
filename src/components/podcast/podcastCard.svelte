@@ -77,20 +77,8 @@
 <style>
     /* Podcast grids should have this on the containing element */
     :global(.podcast-grid) {
-        display: grid;
         gap: 20px;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    }
-
-    :global(.podcast-scroll) {
-        border: 2px solid var(--color-separator);
-        border-radius: 15px;
-        padding: var(--spacing-lg);
-        gap: 20px;
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 20px;
     }
 
     :global(.podcast-scroll) .podcast-card {

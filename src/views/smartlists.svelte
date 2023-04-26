@@ -15,7 +15,7 @@
     <p>Loading smartlists</p>
 {:then smartlists}
     {#if smartlists.length > 0}
-        <ul class="playlist-grid" in:fade>
+        <ul class="cardlist-grid playlist-grid" in:fade>
             {#each smartlists as smartlist}
                 <li>
                     <PlaylistCard data={smartlist} isSmartlist={true} />

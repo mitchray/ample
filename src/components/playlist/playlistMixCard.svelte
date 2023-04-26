@@ -95,21 +95,9 @@
 <style>
     /* Playlist grids should have this on the containing element */
     :global(.mix-grid) {
-        display: grid;
         column-gap: var(--spacing-lg);
         row-gap: var(--spacing-xl);
         grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    }
-
-    :global(.mix-scroll) {
-        border: 2px solid var(--color-separator);
-        border-radius: 15px;
-        padding: var(--spacing-lg);
-        gap: var(--spacing-lg);
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 20px;
     }
 
     :global(.mix-scroll) .mix-card {

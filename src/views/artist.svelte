@@ -211,7 +211,7 @@
                                 Loading similar artists
                             {:then artists}
                                 {#if artists.length > 0}
-                                    <div class="artist-grid">
+                                    <div class="cardlist-grid artist-grid">
                                         {#each artists as artist}
                                             {#if artist.name}
                                                 <ArtistCard data="{artist}" />

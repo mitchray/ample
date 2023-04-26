@@ -63,8 +63,9 @@
         <div class="info">
             <div class="top">
                 <div class="details">
-                    <div class="title">Loading</div>
-                    <div class="artist">&nbsp;<br></div>
+                    <div class="date">0000</div>
+                    <div class="title">Loading album</div>
+                    <div class="artist">Loading<br></div>
                 </div>
             </div>
 
@@ -84,21 +85,13 @@
 <style>
     /* Album grids should have this on the containing element */
     :global(.album-grid) {
-        display: grid;
         row-gap: var(--spacing-xxl);
-        column-gap: var(--spacing-lg);
+        column-gap: var(--spacing-md);
         grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
 
     :global(.album-scroll) {
-        border: 2px solid var(--color-separator);
-        border-radius: 15px;
-        padding: var(--spacing-lg);
-        gap: var(--spacing-lg);
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 20px;
+        /*grid-template-columns: inherit;*/
     }
 
     :global(.album-scroll) .album-card,
@@ -144,6 +137,7 @@
         text-overflow: ellipsis;
     }
 
+    .date,
     .date :global(a) {
         color: var(--color-text-secondary);
     }

@@ -79,20 +79,13 @@
 <style>
     /* Song grids should have this on the containing element */
     :global(.song-grid) {
-        display: grid;
-        gap: var(--spacing-xxl);
+        row-gap: var(--spacing-xl);
+        column-gap: var(--spacing-md);
         grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
     }
 
     :global(.song-scroll) {
-        border: 2px solid var(--color-separator);
-        border-radius: 15px;
-        padding: var(--spacing-lg);
         gap: var(--spacing-xxl);
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 20px;
     }
 
     :global(.song-scroll) .song-card {

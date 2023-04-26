@@ -49,21 +49,13 @@
 <style>
     /* Artist grids should have this on the containing element */
     :global(.artist-grid) {
-        display: grid;
         row-gap: var(--spacing-xxl);
-        column-gap: var(--spacing-lg);
+        column-gap: var(--spacing-md);
         grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 
     :global(.artist-scroll) {
-        border: 2px solid var(--color-separator);
-        border-radius: 15px;
-        padding: var(--spacing-lg);
         gap: var(--spacing-md);
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: auto;
-        padding-bottom: 20px;
     }
 
     :global(.artist-scroll) .artist-card {

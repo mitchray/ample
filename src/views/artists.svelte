@@ -94,6 +94,7 @@
     .artists-page-wrapper {
         container-name: artists-page-wrapper;
         container-type: inline-size;
+        grid-column: full;
     }
 
     .artists-page-container {
