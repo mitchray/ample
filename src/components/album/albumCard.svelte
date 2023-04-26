@@ -119,7 +119,7 @@
         z-index: 1;
         justify-content: center;
         display: flex;
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
         border-radius: 5px;
         overflow: hidden;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
