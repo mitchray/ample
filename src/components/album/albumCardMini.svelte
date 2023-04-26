@@ -25,7 +25,7 @@
                 {/if}
 
                 {#if album.type}
-                    <div class="release-type">{album.type}</div>
+                    <div class="release-type-label">{album.type}</div>
                 {/if}
             </div>
 
@@ -91,20 +91,5 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .release-type {
-        background-color: var(--color-text-secondary);
-        display: inline-block;
-        color: var(--color-background);
-        padding: 0.2em 0.3em;
-        font-weight: 700;
-        border-radius: 2px;
-        font-size: 10px;
-        letter-spacing: 0.03em;
-        font-optical-sizing: 10px;
-        font-stretch: 50%;
-        text-transform: uppercase;
-        line-height: 1;
     }
 </style>

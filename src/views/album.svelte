@@ -96,6 +96,11 @@
 
                         <div class="info">
                             <div class="name">
+                                {#if album.type}
+                                    <div class="release-type-label">
+                                        {album.type}
+                                    </div>
+                                {/if}
                                 <h1 class="title">{album.name}</h1>
                                 <div class="artist">
                                     <Link to="artists/{album.artist.id}">{album.artist.name}</Link>
@@ -262,10 +267,17 @@
         position: relative;
     }
 
+    .name {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-sm);
+        align-items: start;
+    }
+
     .title {
         --roboto-opsz: 50;
         line-height: 1.1;
-        margin-bottom: var(--spacing-sm);
+        margin-bottom: 0;
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;

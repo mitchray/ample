@@ -484,6 +484,20 @@ button svg {
     color: var(--color-danger-foreground-hover);
 }
 
+.release-type-label {
+    background-color: var(--color-text-secondary);
+    display: inline-block;
+    color: var(--color-background);
+    padding: 0.2em 0.3em;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    font-stretch: 50%;
+    text-transform: uppercase;
+    line-height: 1;
+    border-radius: 0.2em;
+    font-size: 0.75em;
+}
+
 /* --------------------------
    SVG
    -------------------------- */
