@@ -7,6 +7,7 @@
     import Actions2 from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
+    import ArtistList from '../components/artist/artistList.svelte';
 
     export let id;
 
@@ -27,24 +28,28 @@
 
 {#key id || 0}
     {#if song?.id}
-        <h1>{song.title}</h1>
+        <div class="info">
+            <h1 class="title">{song.title}</h1>
 
-        <div class="meta">
-            <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
-            <ThirdPartyServices data={song} type="song" />
+            <div class="meta">
+                <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
+                <ThirdPartyServices data={song} type="song" />
+            </div>
+
+            <Genres genres="{song.genre}" />
+
+            <Actions2
+                    type="song"
+                    mode="fullButtons"
+                    id="{song.id}"
+            />
         </div>
-
-        <Genres genres="{song.genre}" />
-
-        <Actions2
-            type="song"
-            mode="fullButtons"
-            id="{song.id}"
-        />
 
         <div class="grid">
             <span class="field"></span> <span></span>
-            {#if song.artist.name}
+            {#if song.artists?.length > 1}
+                <span class="field">Song Artists</span> <span><ArtistList artists={song.artists} /></span>
+            {:else if song.artist.name}
                 <span class="field">Song Artist</span> <span><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
             {/if}
 
@@ -170,11 +175,20 @@
 {/key}
 
 <style>
+    .title {
+        margin-bottom: 0;
+    }
+
+    .info {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+    }
+
     .meta {
         display: flex;
         flex-wrap: wrap;
         gap: var(--spacing-xl);
-        margin-bottom: var(--spacing-lg);
     }
 
     .grid {
@@ -189,10 +203,5 @@
     .field {
         opacity: 0.6;
         text-align: right;
-        /*margin-right: var(--spacing-sm);*/
-    }
-
-    .field + span {
-        /*background-color: lime;*/
     }
 </style>
