@@ -75,5 +75,5 @@ export const loginNew = async ({passphrase = null, username = null }) => {
  * Extend an existing session by pinging the server with auth
  */
 export let extendSession = () => {
-    get(API).ping({ auth: get(userToken) }).then(r => console.log('Session extended'));
+    get(API).ping({ auth: get(userToken) });
 }
