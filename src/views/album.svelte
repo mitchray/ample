@@ -83,8 +83,14 @@
                                 />
                             </div>
 
-                            <div class="rating">
-                                <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
+                            <div class="below-image">
+                                <div class="rating">
+                                    <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
+                                </div>
+
+                                <div class="third-party-links">
+                                    <ThirdPartyServices data={album} type="album" />
+                                </div>
                             </div>
                         </div>
 
@@ -105,10 +111,27 @@
                             />
 
                             <div class="meta">
-                                <span class="date"><Link to="albums/year/{album.year}"><SVGYear class="inline"/> {album.year}</Link></span>
-                                <span><SVGClock class="inline"/> {formatTotalTime(album.time)}</span>
-                                <span><SVGTrack class="inline"/> {album.songcount} {parseInt(album.songcount) === 1 ? 'song' : 'songs'}</span>
-                                <ThirdPartyServices data={album} type="album" />
+                                <div class="entry">
+                                    <span class="value"><Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link></span>
+                                    <span class="field">Year</span>
+                                </div>
+
+                                {#if album.diskcount > 1}
+                                    <div class="entry">
+                                        <span class="value">{album.diskcount}</span>
+                                        <span class="field">{album.diskcount !== 1 ? 'Discs' : 'Disc'}</span>
+                                    </div>
+                                {/if}
+
+                                <div class="entry">
+                                    <span class="value">{album.songcount}</span>
+                                    <span class="field">{album.songcount !== 1 ? 'Songs' : 'Song'}</span>
+                                </div>
+
+                                <div class="entry">
+                                    <span class="value">{formatTotalTime(album.time)}</span>
+                                    <span class="field">Total</span>
+                                </div>
                             </div>
 
                             <Genres genres="{album.genre}" />
@@ -185,23 +208,45 @@
     .details-container {
         container-name: album-details-wrapper;
         container-type: inline-size;
-        padding-bottom: 0;
         background-color: var(--color-interface-secondary);
     }
 
     .details {
-        margin-bottom: var(--spacing-xl);
+        display: grid;
+        gap: var(--spacing-xl);
+        grid-template-areas:
+            "image"
+            "info"
+        ;
+    }
+
+    .info {
+        grid-area: info;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xl);
     }
 
     .cover-rating {
+        grid-area: image;
         display: flex;
         flex-direction: column;
         align-items: center;
-        position: relative;
+        min-width: 200px;
+        max-width: 250px;
+        justify-self: center;
+    }
+
+    .below-image {
+        display: flex;
+        justify-content: space-between;
+        align-items: start;
+        width: 100%;
+        flex-wrap: wrap;
+        padding-top: var(--spacing-md);
     }
 
     .art-container {
-        max-width: 240px;
         aspect-ratio: 1 / 1;
         border-radius: 6px;
         overflow: hidden;
@@ -217,15 +262,6 @@
         position: relative;
     }
 
-    .rating {
-        margin-top: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
-    }
-
-    .name {
-        margin-bottom: var(--spacing-lg);
-    }
-
     .title {
         --roboto-opsz: 50;
         line-height: 1.1;
@@ -237,44 +273,37 @@
 
     .meta {
         display: flex;
+        flex-direction: row;
+        column-gap: var(--spacing-xl);
+        row-gap: var(--spacing-lg);
         flex-wrap: wrap;
-        gap: var(--spacing-md) var(--spacing-lg);
-        margin-top: var(--spacing-lg);
-        margin-bottom: var(--spacing-lg);
+    }
+
+    .meta .entry {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .meta .field {
+        color: var(--color-text-secondary);
+        flex-shrink: 0;
+    }
+
+    .meta .value {
+        font-size: 1.2em;
+        font-weight: 700;
     }
 
     .albums-around-time {
         margin-top: var(--spacing-xxl);
     }
 
-    @container album-details-wrapper (min-width: 500px) {
+    @container album-details-wrapper (min-width: 530px) {
         .details {
-            display: flex;
-            gap: var(--spacing-xl);
-            margin-bottom: 0;
-            padding: unset;
-        }
-
-        .details,
-        .name {
-            background-color: unset;
-            box-shadow: unset;
-        }
-
-        .name {
-            padding: unset;
-        }
-
-        .title {
-            text-align: left;
-        }
-
-        .artist {
-            text-align: left;
-        }
-
-        .art-container {
-            max-width: 180px;
+            grid-template-areas:
+                "image info"
+            ;
+            grid-template-columns: min-content 1fr;
         }
     }
 
@@ -284,8 +313,8 @@
             font-weight: 200;
         }
 
-        .art-container {
-            max-width: 240px;
+        .cover-rating {
+            width: 250px;
         }
     }
 

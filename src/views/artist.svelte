@@ -57,7 +57,6 @@
     async function loadData() {
         artist = await getArtist({id: id, artAnalysis: true});
         hash = Date.now().toString();
-        console.debug(artist);
     }
 </script>
 
@@ -94,7 +93,6 @@
                             <ThirdPartyServices data={artist} type="artist" />
                         </div>
                     </div>
-
                 </div>
 
                 <div class="details">
@@ -376,11 +374,6 @@
     .meta .value {
         font-size: 1.2em;
         font-weight: 700;
-    }
-
-    .meta .graphic :global(svg) {
-        width: 100%;
-        height: 100%;
     }
     
     .actions {
