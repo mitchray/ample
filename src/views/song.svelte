@@ -130,33 +130,6 @@
             </span>
             {/if}
 
-            {#if song.album_mbid}
-                <span class="field">Album MBID</span>
-                <span>
-                <a target="_blank" href="https://musicbrainz.org/release/{song.album_mbid}">
-                    {song.album_mbid}
-                </a>
-            </span>
-            {/if}
-
-            {#if song.artist_mbid}
-                <span class="field">Artist MBID</span>
-                <span>
-                <a target="_blank" href="https://musicbrainz.org/artist/{song.artist_mbid}">
-                    {song.artist_mbid}
-                </a>
-            </span>
-            {/if}
-
-            {#if song.albumartist_mbid}
-                <span class="field">Album Artist MBID</span>
-                <span>
-                <a target="_blank" href="https://musicbrainz.org/artist/{song.albumartist_mbid}">
-                    {song.albumartist_mbid}
-                </a>
-            </span>
-            {/if}
-
             {#if song.license}
                 <span class="field">License</span> <span>{song.license}</span>
             {/if}
