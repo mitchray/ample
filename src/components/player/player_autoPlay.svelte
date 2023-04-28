@@ -84,10 +84,7 @@
         <div class="header panel-header">
             <h4 class="title panel-title">Smartlist AutoPlay</h4>
 
-            <label class="toggle">
-                <input type="checkbox" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
-                Enable
-            </label>
+            <input type="checkbox" class="switch" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
         </div>
 
         <div class="panel-content">

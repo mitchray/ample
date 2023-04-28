@@ -188,7 +188,7 @@
 
     .c-menu :global(.title) {
         display: inline-block;
-        margin-right: var(--spacing-xl);
+        margin-right: var(--spacing-md);
     }
 
     .c-menu :global(label) {

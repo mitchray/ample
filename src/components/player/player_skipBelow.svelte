@@ -58,10 +58,7 @@
         <div class="header panel-header">
             <h4 class="title panel-title">Skip songs below rating</h4>
 
-            <label class="toggle">
-                <input type="checkbox" bind:checked={$SkipBelow} on:change={handleSkipBelow} />
-                Enable
-            </label>
+            <input type="checkbox" class="switch" bind:checked={$SkipBelow} on:change={handleSkipBelow} />
         </div>
 
         <div class="panel-content">

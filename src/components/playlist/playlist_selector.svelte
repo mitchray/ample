@@ -129,6 +129,7 @@
     }
 
     .playlists {
+        margin-top: var(--spacing-md);
         height: 200px;
         overflow-y: auto;
         border: 2px solid var(--color-border);
