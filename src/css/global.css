@@ -212,6 +212,7 @@ input[type="checkbox"].switch {
     position: relative;
     border-radius: 99px;
     width: 36px;
+    transition: all 0.2s linear;
 }
 
 input[type="checkbox"].switch:after {
@@ -219,10 +220,15 @@ input[type="checkbox"].switch:after {
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background-color: var(--color-highlight);
+    background-color: var(--color-input-border);
     position: absolute;
     left: 1px;
     top: 1px;
+    transition: inherit;
+}
+
+input[type="checkbox"].switch:checked {
+    background-color: var(--color-highlight);
 }
 
 input[type="checkbox"].switch:checked:after {

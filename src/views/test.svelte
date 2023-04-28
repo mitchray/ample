@@ -52,51 +52,53 @@
                 {#if tab.value === 'general'}
                     <Tab id="general" class="tab-general" bind:activeTabValue={currentTab}>
                         <h2>Form elements</h2>
-                        <label>
-                            <input type="checkbox" />
-                            Check me
-                        </label>
+                        <div class="forms">
+                            <label>
+                                <input type="checkbox" />
+                                Check me
+                            </label>
 
-                        <label>
-                            <input type="checkbox" class="switch">
-                            Switch!
-                        </label>
+                            <label>
+                                <input type="checkbox" class="switch">
+                                Switch!
+                            </label>
 
-                        <label>
-                            <input type="radio" value="1" name="radioTest" />
-                            This
-                        </label>
+                            <label>
+                                <input type="radio" value="1" name="radioTest" />
+                                This
+                            </label>
 
-                        <label>
-                            <input type="radio" value="2" name="radioTest" />
-                            That
-                        </label>
+                            <label>
+                                <input type="radio" value="2" name="radioTest" />
+                                That
+                            </label>
 
-                        <input type="text" placeholder="Example" />
+                            <input type="text" placeholder="Example" />
 
-                        <button>Button</button>
+                            <button>Button</button>
 
-                        <select>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-
-                        <select>
-                            <optgroup label="Fruit">
+                            <select>
                                 <option value="1">One</option>
                                 <option value="2">Two</option>
                                 <option value="3">Three</option>
-                            </optgroup>
+                            </select>
 
-                            <optgroup label="Vegetables">
-                                <option value="4">Four</option>
-                                <option value="5">Five</option>
-                                <option value="6">Six</option>
-                            </optgroup>
-                        </select>
+                            <select>
+                                <optgroup label="Fruit">
+                                    <option value="1">One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                </optgroup>
 
-                        <div style="margin: 2rem 0;">
+                                <optgroup label="Vegetables">
+                                    <option value="4">Four</option>
+                                    <option value="5">Five</option>
+                                    <option value="6">Six</option>
+                                </optgroup>
+                            </select>
+
+                            <hr>
+
                             <label>
                                 <input type="checkbox" disabled />
                                 Check me
@@ -262,5 +264,9 @@
     hr {
         margin: 1rem 0;
         opacity: 0.2;
+    }
+
+    :global(.tab-general .forms) > * {
+        margin-right: 1em;
     }
 </style>
