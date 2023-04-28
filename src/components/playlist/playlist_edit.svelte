@@ -6,13 +6,19 @@
     export let isNew = false;
     export let isVisible;
 
-    let playlistName = playlist ? playlist.name : '';
-    let playlistType = playlist ? playlist.type : 'private';
+    let playlistName = playlist?.name || '';
+    let playlistType = playlist?.type || 'private';
+    let playlistTypeValue = playlist?.type === "public";
+
+    $: {
+        playlistType = playlistTypeValue ? "public" : "private";
+    }
 
     async function savePlaylist() {
         playlistName = playlistName.trim();
 
         if (playlistName) {
+            // TODO: this won't be necessary anymore
             let playlistTest = await $API.playlists({ filter: playlistName, exact: 1, limit: 1, hide_search: 1 });
 
             if (isNew) {
@@ -67,13 +73,8 @@
 
         <div class="types">
             <label>
-                <input type="radio" bind:group={playlistType} value="private" />
-                Private
-            </label>
-
-            <label>
-                <input type="radio" bind:group={playlistType} value="public" />
                 Public
+                <input type="checkbox" class="switch" bind:checked={playlistTypeValue} />
             </label>
         </div>
     </div>

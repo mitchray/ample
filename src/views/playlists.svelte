@@ -44,7 +44,7 @@
 
 <h1 class="page-title">Playlists</h1>
 
-<button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="button button--primary">New playlist</button>
+<button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="new-playlist-button button button--primary">New</button>
 
 {#if showPlaylistCreation}
     <Menu anchor="bottom-center" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
@@ -71,6 +71,10 @@
 <style>
     .hide {
         display: none;
+    }
+
+    .new-playlist-button {
+        margin-bottom: var(--spacing-lg);
     }
 </style>
 
