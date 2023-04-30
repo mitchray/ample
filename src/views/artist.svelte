@@ -427,7 +427,7 @@
         }
     }
 
-    @container artist-info-wrapper (min-width: 1200px) {
+    @container artist-info-wrapper (min-width: 1100px) {
         .header {
             grid-template-areas:
                 "profile title   title   title"
