@@ -1,10 +1,9 @@
 <script>
     import { onMount } from "svelte";
-    import { fade } from 'svelte/transition';
     import { API } from "../stores/api";
     import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
-    import PlaylistCard from '../components/playlist/playlistCard.svelte';
     import Menu from '../components/menu.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
 
     let newPlaylist;
     let playlists = [];
@@ -56,25 +55,16 @@
     <p>Loading playlists</p>
 {:else}
     {#if playlists && playlists.length > 0}
-        <ul class="cardlist-grid playlist-grid" in:fade>
-            {#each playlists as playlist (playlist.id)}
-                <li class:highlight={playlist.isNew} data-id="playlist-{playlist.id}">
-                    <PlaylistCard bind:data={playlist} />
-                </li>
-            {/each}
-        </ul>
+        <Lister2
+            data={playlists}
+            type="playlist"
+            initialSort="name"
+            actionData={{
+                disable: true
+            }}
+        />
     {:else}
         <p>No playlists found</p>
     {/if}
 {/if}
-
-<style>
-    .hide {
-        display: none;
-    }
-
-    .new-playlist-button {
-        margin-bottom: var(--spacing-lg);
-    }
-</style>
 

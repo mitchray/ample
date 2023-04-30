@@ -115,6 +115,10 @@
                 <Link to="playlists/{item.id}">
                     {item.name}
                 </Link>
+            {:else if getType() === "smartlist"}
+                <Link to="smartlists/{item.id}">
+                    {item.name}
+                </Link>
             {:else if getType() === "song" || getType() === "playlist_songs"}
                 {#if $CurrentMedia && $CurrentMedia.id === item.id}
                     <span class="current-icon">

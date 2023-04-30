@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
     import { API } from "../stores/api";
-
+    import Lister2 from '../components/lister/lister.svelte';
     import PlaylistCard from '../components/playlist/playlistCard.svelte';
 </script>
 
@@ -15,13 +15,14 @@
     <p>Loading smartlists</p>
 {:then smartlists}
     {#if smartlists.length > 0}
-        <ul class="cardlist-grid playlist-grid" in:fade>
-            {#each smartlists as smartlist}
-                <li>
-                    <PlaylistCard data={smartlist} isSmartlist={true} />
-                </li>
-            {/each}
-        </ul>
+        <Lister2
+            data={smartlists}
+            type="smartlist"
+            initialSort="name"
+            actionData={{
+                disable: true
+            }}
+        />
     {:else}
         <p>Unable to find any smartlists</p>
     {/if}
