@@ -119,7 +119,7 @@
                         {#if artist.time > 0}
                             <div class="entry">
                                 <span class="value">{formatTimeToReadable(artist.time)}</span>
-                                <span class="field">Length</span>
+                                <span class="field">Total</span>
                             </div>
                         {/if}
 
@@ -373,7 +373,8 @@
 
     .meta .value {
         font-size: 1.2em;
-        font-weight: 700;
+        font-weight: 500;
+        font-stretch: 50%;
     }
     
     .actions {

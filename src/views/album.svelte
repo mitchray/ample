@@ -135,7 +135,7 @@
 
                                 <div class="entry">
                                     <span class="value">{formatTotalTime(album.time)}</span>
-                                    <span class="field">Total</span>
+                                    <span class="field">Length</span>
                                 </div>
                             </div>
 
@@ -304,7 +304,8 @@
 
     .meta .value {
         font-size: 1.2em;
-        font-weight: 700;
+        font-weight: 500;
+        font-stretch: 50%;
     }
 
     .albums-around-time {
