@@ -212,6 +212,10 @@
 </div>
 
 <style>
+    ul {
+        margin-bottom: var(--spacing-lg);
+    }
+
     /*
     Sidebar base
     */
