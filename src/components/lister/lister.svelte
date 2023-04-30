@@ -163,7 +163,7 @@
         margin-bottom: var(--spacing-lg);
     }
 
-    :global(* +) .lister-wrapper {
+    :global(*:not(h1) +) .lister-wrapper {
         margin-top: var(--spacing-xxl); /* account for the lister actions background */
     }
 
