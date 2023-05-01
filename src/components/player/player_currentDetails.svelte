@@ -41,6 +41,7 @@
     }
 
     .date :global(a),
+    .album,
     .album :global(a) {
         color: var(--color-text-secondary);
     }
