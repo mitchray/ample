@@ -133,6 +133,7 @@
 
     .tab-content {
         display: grid;
+        grid-template-columns: auto 1fr; /* 1fr is to trick content into only taking up auto space */
     }
 
     /* hide by default */
