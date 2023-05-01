@@ -117,7 +117,8 @@
         /*background-color: var(--color-row-stripe);*/
     }
 
-    @media all and (min-width: 800px) {
+    /* show full lister if not enough room to have name and action columns always present */
+    @container lister-wrapper (min-width: 700px) {
         .header :global(.name),
         .header :global(.actions) {
             position: sticky;

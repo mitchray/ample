@@ -160,6 +160,8 @@
 
 <style>
     .lister-wrapper {
+        container-name: lister-wrapper;
+        container-type: inline-size;
         margin-bottom: var(--spacing-lg);
     }
 
