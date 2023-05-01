@@ -201,7 +201,6 @@
 
     .details-container,
     .songs-container {
-        overflow: auto;
         height: auto;
         padding: var(--spacing-xxl);
     }
@@ -346,6 +345,11 @@
 
         .songs-container {
             flex: 1;
+        }
+
+        .details-container,
+        .songs-container {
+            overflow: auto;
         }
     }
 </style>
