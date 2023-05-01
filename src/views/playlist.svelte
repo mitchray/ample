@@ -1,6 +1,5 @@
 <script>
     import { onMount, tick } from "svelte";
-    import upperfirst from "lodash/upperfirst";
     import { API } from "../stores/api";
     import { getSongsFromPlaylist } from "../logic/song";
 
@@ -265,6 +264,13 @@
 
         .art-container {
             max-width: 240px;
+        }
+    }
+
+    /* sticky position is treated differently below this for an unknown reason */
+    @container playlist-page-wrapper (max-width: 1400px) {
+        :global(.header-flex.header-flex.header-flex) {
+            top: 0;
         }
     }
 

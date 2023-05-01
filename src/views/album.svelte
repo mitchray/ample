@@ -331,6 +331,13 @@
         }
     }
 
+    /* sticky position is treated differently below this for an unknown reason */
+    @container album-page-wrapper (max-width: 1200px) {
+        :global(.header-flex.header-flex.header-flex) {
+            top: 0;
+        }
+    }
+
     @container album-page-wrapper (min-width: 1200px) {
         .wrapper > .container {
             display: flex;

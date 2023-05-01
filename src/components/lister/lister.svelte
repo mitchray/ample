@@ -110,7 +110,7 @@
 </script>
 
 
-<div class="lister-wrapper" bind:this={$listerWrapper} class:actions-disabled={actionData.disable}>
+<div class="lister-wrapper" bind:this={$listerWrapper}>
     <div class="lister-actions">
         {#if !actionData.disable}
             <div class="group">
@@ -173,8 +173,6 @@
         display: flex;
         gap: var(--spacing-lg);
         margin-bottom: var(--spacing-xl);
-        position: sticky;
-        top: 0;
         z-index: 1;
         align-items: center;
     }
@@ -182,27 +180,6 @@
     .lister-actions > .group {
         display: flex;
         gap: var(--spacing-sm);
-    }
-
-    .lister-actions:after {
-        content: '';
-        display: block;
-        background-color: var(--color-background);
-        width: calc(100% + 2rem);
-        position: absolute;
-        top: calc(-1 * var(--spacing-xxl));
-        left: -1rem;
-        bottom: calc(-1 * var(--spacing-lg) - 1px);
-        z-index: -1;
-        pointer-events: none;
-    }
-
-    .actions-disabled .lister-actions {
-        margin-bottom: 0;
-    }
-
-    .actions-disabled .lister-actions:after {
-        bottom: calc(-1 * var(--spacing-sm) - 1px);
     }
 
     .lister-container {

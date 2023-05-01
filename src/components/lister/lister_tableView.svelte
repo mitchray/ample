@@ -81,13 +81,9 @@
         flex-shrink: 0;
         flex-grow: 0;
         position: sticky;
-        top: calc(var(--spacing-xxxl) - 1px);
+        top: calc(var(--spacing-xxl) * -1);
         z-index: 5;
         overflow: hidden auto;
-    }
-
-    :global(.actions-disabled) .header-flex {
-        top: -1px;
     }
 
     .lister-flex {
