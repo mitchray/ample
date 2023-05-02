@@ -19,7 +19,7 @@
     import ThemeHandler from './components/themeHandler.svelte';
     import SiteLoading from './components/siteLoading.svelte';
     import Header from './components/header.svelte';
-    import Sidebar2 from './components/sidebar2.svelte';
+    import Sidebar3 from './components/sidebar3.svelte';
     import Queue from './components/queue.svelte';
     import Player from './components/player/player.svelte';
     import Fullscreen from './components/fullscreen/fullscreen.svelte';
@@ -105,7 +105,7 @@
         <Notifications />
         <Header/>
         <div class="site-inner">
-            <Sidebar2/>
+            <Sidebar3/>
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
                     <Lyrics/>

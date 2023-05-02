@@ -21,6 +21,7 @@
     "vite": "^3.2.4"
   },
   "dependencies": {
+    "@floating-ui/dom": "^1.2.7",
     "autoprefixer": "^10.3.1",
     "color-converters": "^0.1.1",
     "fast-average-color": "^6.4.0",

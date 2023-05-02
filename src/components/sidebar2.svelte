@@ -11,6 +11,7 @@
     } from '../stores/status';
     import { SiteSidebarBind } from "../stores/player";
 
+    import SVGGrid from "/src/images/grid.svg";
     import SVGArtist from "/src/images/artist.svg";
     import SVGArtistHollow from "/src/images/person_outline.svg";
     import SVGAlbum from "/src/images/album.svg";
@@ -104,6 +105,17 @@
         </button>
     </div>
     <div class="site-sidebar-inner">
+        <ul>
+            <li class:current={basePath === '/'}>
+                <Link to="{import.meta.env.BASE_URL}" class="site-sidebar__link " data-label="Dashboard">
+                    <SVGGrid />
+                    <span class="label">
+                Dashboard
+            </span>
+                </Link>
+            </li>
+        </ul>
+
         <h3 class="panel-title">Library</h3>
         <ul>
             <li class:current={basePath === 'artists'}>

@@ -96,7 +96,6 @@
 <div class="site-header">
     <div class="site-logo-container">
         <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
-        <Link to="{import.meta.env.BASE_URL}" class="site-logo " data-label="Artists"><SVGAmpleLetter /><SVGAmpleLogo /></Link>
     </div>
 
     <div class="search-container">
@@ -155,34 +154,6 @@
         justify-content: end;
     }
 
-    :global(.site-logo) {
-        display: block;
-        width: 100%;
-        line-height: 0;
-        margin-right: var(--spacing-sm);
-    }
-
-    .site-header :global(.ample-logo) {
-        display: none;
-    }
-
-    :global(.ample-letter),
-    .site-header :global(.ample-logo){
-        height: 14px;
-    }
-
-    :global(.ample-logo),
-    :global(.ample-letter) {
-        color: var(--color-highlight);
-    }
-
-    @media (hover: hover) {
-        :global(.ample-logo:hover),
-        :global(.ample-letter:hover) {
-            color: var(--color-text-primary);
-        }
-    }
-
     .search-container {
         width: 100%;
         max-width: 500px;
@@ -234,14 +205,6 @@
     @media all and (min-width: 720px) {
         .site-logo-container {
             width: var(--size-sidebar-width);
-        }
-
-        .site-header :global(.ample-logo) {
-            display: block;
-        }
-
-        :global(.ample-letter) {
-            display: none;
         }
     }
 </style>
