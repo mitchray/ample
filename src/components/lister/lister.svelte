@@ -172,9 +172,13 @@
     .lister-actions {
         display: flex;
         gap: var(--spacing-lg);
-        margin-bottom: var(--spacing-xl);
         z-index: 1;
         align-items: center;
+    }
+
+    /* collapses space if empty */
+    .lister-actions > :last-child {
+        margin-bottom: var(--spacing-lg);
     }
 
     .lister-actions > .group {

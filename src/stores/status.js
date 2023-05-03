@@ -8,6 +8,7 @@ export let IsMuted     = writable(false);
 export let CurrentMedia = writable(null);
 export let TimeToggled = writable(false);
 
+export let PageTitle = writable('');
 export let SearchQuery = writable('');
 export let ShowSearch  = writable(false);
 export let ShowLyrics    = writable(JSON.parse(localStorage.getItem('ShowLyrics')) || false);

@@ -1,18 +1,23 @@
 <script>
     import CustomSearch from '../components/customSearch.svelte';
     import CustomSearchResults from '../components/customSearchResults.svelte';
+    import { PageTitle } from "../stores/status";
 
     let loadedTime;
     let loading;
     let results = [];
     let type;
+
+    let title = "Advanced Search";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Advanced Search</title>
+    <title>{title}</title>
 </svelte:head>
 
-<h1 class="page-title">Advanced Search</h1>
-
 <CustomSearch bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />
-<CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />
+
+<div class="page-main">
+    <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />
+</div>

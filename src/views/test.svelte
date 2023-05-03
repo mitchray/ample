@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import { API } from "../stores/api";
+    import { PageTitle } from "../stores/status";
     import Menu from '../components/menu.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -30,6 +31,9 @@
         { label: "Actions", value: "actions" },
     ];
 
+    let title = "Test Page";
+    $PageTitle = title;
+
     function toggleMenu() {
         isVisible = !isVisible;
     }
@@ -40,10 +44,8 @@
 </script>
 
 <svelte:head>
-    <title>Test page</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Test page yo</h1>
 
 <div style="margin: 2rem 0;">
     <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} class="tabs">

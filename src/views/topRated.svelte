@@ -1,4 +1,5 @@
 <script>
+    import { PageTitle } from "../stores/status";
     import CardList from '../components/cardList.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -14,13 +15,14 @@
         { label: "Albums",  value: "albums",  icon: SVGAlbum },
         { label: "Songs",   value: "songs",   icon: SVGSong },
     ];
+
+    let title = "Top Rated";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Top Rated</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Top Rated</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
     {#each tabItems as tab}

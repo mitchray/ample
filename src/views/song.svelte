@@ -1,6 +1,7 @@
 <script>
     import { Link } from 'svelte-routing';
     import { API } from "../stores/api";
+    import { PageTitle } from "../stores/status";
     import { formatTotalTime, formatSongQuality, formatFilesize } from '../logic/helper';
 
     import Rating from '../components/rating.svelte';
@@ -12,6 +13,9 @@
     export let id;
 
     let song;
+
+    let title = "Song";
+    $PageTitle = title;
 
     $: if (id) {
         loadData();

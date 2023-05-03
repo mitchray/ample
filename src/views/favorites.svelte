@@ -2,6 +2,7 @@
     import { favoriteArtists } from "../logic/artist";
     import { favoriteAlbums } from "../logic/album";
     import { favoriteSongs } from "../logic/song";
+    import { PageTitle } from "../stores/status";
 
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -10,6 +11,9 @@
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
     import SVGSong from "/src/images/music_note.svg";
+
+    let title = "Favorites";
+    $PageTitle = title;
 
     // Current active tab
     let currentTab;
@@ -22,10 +26,8 @@
 </script>
 
 <svelte:head>
-    <title>Favorites</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Favorites</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
     {#each tabItems as tab}

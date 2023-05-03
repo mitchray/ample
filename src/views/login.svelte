@@ -4,7 +4,7 @@
     import { lchToRgb } from 'color-converters';
 
     import { serverVersion } from "../stores/server";
-    import { Theme } from "../stores/status";
+    import { PageTitle, Theme } from "../stores/status";
     import { ampleVersion } from "../stores/player";
 
     import { loginNew } from '../logic/user';
@@ -32,6 +32,9 @@
         { label: "API key",  value: 2 }
     ];
 
+    let title = "Login";
+    $PageTitle = title;
+
     // Current active tab
     let currentTab;
 
@@ -51,6 +54,10 @@
         await setCustomHue(randomColor);
     });
 </script>
+
+<svelte:head>
+    <title>{title}</title>
+</svelte:head>
 
 <div class="container">
     <ThemeToggle />

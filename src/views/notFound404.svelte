@@ -1,5 +1,12 @@
+<script>
+    import {PageTitle} from "../stores/status";
+
+    let title = "Not found";
+    $PageTitle = title;
+</script>
+
 <svelte:head>
-    <title>Not found</title>
+    <title>{title}</title>
 </svelte:head>
 
 <p>Sorry not found</p>

@@ -1,15 +1,15 @@
 <script>
-    import { fade } from 'svelte/transition';
     import { API } from "../stores/api";
+    import { PageTitle } from "../stores/status";
     import Lister2 from '../components/lister/lister.svelte';
-    import PlaylistCard from '../components/playlist/playlistCard.svelte';
+
+    let title = "Smartlists";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Smartlists</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Smartlists</h1>
 
 {#await $API.smartlists()}
     <p>Loading smartlists</p>

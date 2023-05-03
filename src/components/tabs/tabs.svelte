@@ -95,7 +95,7 @@
     {/if}
 </ul>
 
-<div class="tab-content tab-content_{uniqueID}">
+<div class="tab-content tab-content_{uniqueID} page-main">
     <slot></slot>
 </div>
 

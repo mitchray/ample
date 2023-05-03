@@ -2,6 +2,7 @@
     import { onMount, tick } from "svelte";
     import { API } from "../stores/api";
     import { getSongsFromPlaylist } from "../logic/song";
+    import { PageTitle } from "../stores/status";
 
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
@@ -26,6 +27,9 @@
 
     $: songs = songs;
     $: playlist = playlist;
+
+    let title = "Playlist";
+    $PageTitle = title;
 
     async function handleEditPlaylist() {
         playlistEditIsVisible = !playlistEditIsVisible;

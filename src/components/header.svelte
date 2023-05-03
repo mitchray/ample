@@ -1,16 +1,13 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
-    import { Link } from "svelte-routing";
 
-    import { SearchQuery, ShowSearch, SidebarIsOpen } from "../stores/status";
+    import { SearchQuery, ShowSearch, SidebarIsOpen, PageTitle } from "../stores/status";
     import { SiteContentBind, SiteSidebarBind, SiteQueueBind } from '../stores/player';
 
     import Search from '../components/search.svelte';
     import UserMenu from '../components/userMenu.svelte';
     import NotificationsMenu from '../components/notification/notificationsMenu.svelte';
 
-    import SVGAmpleLogo from "/src/images/ample_logo.svg";
-    import SVGAmpleLetter from "/src/images/ample_letter.svg";
     import SVGClose from "/src/images/close.svg";
     import SVGSearch from "/src/images/search.svg";
     import SVGMenu from "/src/images/menu.svg";
@@ -96,6 +93,9 @@
 <div class="site-header">
     <div class="site-logo-container">
         <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
+        <div class="header-title">
+            {$PageTitle}
+        </div>
     </div>
 
     <div class="search-container">

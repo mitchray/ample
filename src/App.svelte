@@ -8,6 +8,7 @@
     import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind } from "./stores/player";
+    import { PageTitle } from "./stores/status";
 
     import { extendSession, validateSession } from './logic/user';
     import { getServerVersion } from './logic/server';
@@ -67,10 +68,13 @@
         apply (target, thisArg, argumentsList) {
             $MediaPlayer.setWaveColors();
 
-            //reset scroll position after each 'page' load
+            // reset scroll position after each 'page' load
             document.querySelector('.site-content-inner').scrollTop = 0;
 
             Reflect.apply(target, thisArg, argumentsList);
+
+            // reset page title
+            $PageTitle = "";
         }
     })
 
@@ -193,15 +197,15 @@
     }
 
     :global(.site-content-inner) {
-        --content-padding: var(--spacing-xxl);
+        --content-padding: var(--spacing-lg);
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
         overflow-y: auto;
-        padding-top: var(--content-padding);
-        padding-bottom: var(--content-padding);
+        padding-top: var(--spacing-xxl);
+        padding-bottom: var(--spacing-xxl);
         display: grid;
         grid-template-columns:
             [full-start]

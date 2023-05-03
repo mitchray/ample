@@ -2,6 +2,7 @@
     import CardList from '../components/cardList.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
+    import { PageTitle } from "../stores/status";
 
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
@@ -15,13 +16,14 @@
     ];
 
     let currentTab;
+
+    let title = "Unrated";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Unrated</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Unrated</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
     {#each tabItems as tab}

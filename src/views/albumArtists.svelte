@@ -3,6 +3,7 @@
 
     import { groupedAlbumArtists } from "../stores/server";
     import { SiteMainSpace } from "../stores/player";
+    import { PageTitle } from "../stores/status";
 
     import { randomAlbumArtists } from "../logic/artist";
 
@@ -18,10 +19,13 @@
     ];
 
     let currentTab;
+
+    let title = "Album Artists";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Album Artists</title>
+    <title>{title}</title>
 </svelte:head>
 
 {#if $SiteMainSpace.ready}
@@ -49,10 +53,6 @@
 
             <div class="main">
                 <div class="main-inner">
-                    <div class="title">
-                        <h1 class="page-title">Album Artists</h1>
-                    </div>
-
                     <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
                         {#each tabItems as tab}
                             {#if tab.loaded === true}

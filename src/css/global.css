@@ -528,6 +528,14 @@ svg.inline {
    Shared
    -------------------------- */
 
+.page-main {
+    background-color: var(--color-interface);
+    box-shadow: var(--shadow-lg);
+    padding: var(--spacing-xl);
+    border-radius: 10px;
+    z-index: 1;
+}
+
 .card {
     font-stretch: 50%;
 }

@@ -6,6 +6,7 @@
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
     import SVGSong from "/src/images/music_note.svg";
+    import { PageTitle } from "../stores/status";
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -15,13 +16,14 @@
     ];
 
     let currentTab;
+
+    let title = "Forgotten";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Forgotten</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Forgotten</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
     {#each tabItems as tab}

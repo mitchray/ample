@@ -1,6 +1,6 @@
 <script>
     import Lister2 from '../components/lister/lister.svelte';
-
+    import { PageTitle } from "../stores/status";
     import { getSongVersions } from "../logic/song";
 
     export let songTitle;
@@ -8,6 +8,9 @@
 
     let loading;
     let results = [];
+
+    let title = "Song Versions";
+    $PageTitle = title;
 
     $: songTitle = songTitle;
     $: artistName = artistName;

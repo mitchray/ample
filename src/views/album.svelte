@@ -1,6 +1,6 @@
 <script>
     import { Link } from 'svelte-routing';
-    import { Theme } from '../stores/status';
+    import { PageTitle, Theme } from '../stores/status';
     import { serverURL } from "../stores/server";
     import { getAlbum } from "../logic/album";
     import { formatTotalTime } from "../logic/helper";
@@ -13,10 +13,6 @@
     import Lister2 from '../components/lister/lister.svelte';
     import AlbumsAround from '../components/album/albumsAround.svelte';
 
-    import SVGYear from "/src/images/year.svg";
-    import SVGTrack from "/src/images/music_note.svg";
-    import SVGClock from "/src/images/clock.svg";
-
     export let id;
 
     let mb = new MusicBrainz;
@@ -27,6 +23,8 @@
     $: if (id) {
         loadData();
     }
+
+    $PageTitle = "Album";
 
     let album;
 
@@ -144,7 +142,7 @@
                     </div>
                 </div>
                 <div class="songs-container">
-                    <div class="songs">
+                    <div class="songs page-main">
                         {#each [...album.ampleSongs] as [key, value]}
                             {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
                             <Lister2
@@ -213,7 +211,6 @@
     .details-container {
         container-name: album-details-wrapper;
         container-type: inline-size;
-        background-color: var(--color-interface-secondary);
     }
 
     .details {
@@ -255,7 +252,6 @@
         aspect-ratio: 1 / 1;
         border-radius: 6px;
         overflow: hidden;
-        box-shadow: var(--shadow-lg);
         font-size: 0;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
     }
@@ -335,6 +331,10 @@
     @container album-page-wrapper (max-width: 1200px) {
         :global(.header-flex.header-flex.header-flex) {
             top: 0;
+        }
+
+        .details-container {
+            padding-bottom: 0;
         }
     }
 

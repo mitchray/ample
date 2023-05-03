@@ -112,7 +112,7 @@ export function outputThemeVariables(hue, selector) {
             --color-border:            rgb(${lchToRgb([ 80, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 70, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 90, 15, hue])});
-            --color-shadow-val:            ${lchToRgb([  5,100, hue])};
+            --color-shadow-val:            ${lchToRgb([ 50, 20, hue])};
             --color-text-primary:      rgb(${lchToRgb([ 15, 50, hue])});
             --color-text-secondary:    rgb(${lchToRgb([ 60, 25, hue])});
             --color-text-heading:      rgb(${lchToRgb([ 30, 70, hue])});

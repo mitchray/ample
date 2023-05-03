@@ -6,6 +6,7 @@
     import Tab from "../components/tabs/tab.svelte";
 
     import { newestAlbums, randomAlbums } from "../logic/album";
+    import { PageTitle } from "../stores/status";
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -16,13 +17,14 @@
     ];
 
     let currentTab;
+
+    let title = "Albums";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Albums</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Albums</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
     {#each tabItems as tab}

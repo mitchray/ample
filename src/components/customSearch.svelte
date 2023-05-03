@@ -1085,10 +1085,6 @@
         </div>
     </div>
 
-    <div>
-        <button type="button" class="button button--secondary" on:click={addNewRow}>Add another rule</button>
-    </div>
-
     <div class="rules">
         {#each rows as row (row.id)}
             <div class="row">
@@ -1255,8 +1251,9 @@
         {/each}
     </div>
 
-    <div>
+    <div class="actions">
         <button type="button" class="button button--primary" on:click={search}>Search</button>
+        <button type="button" class="button button--secondary" on:click={addNewRow}>Add another rule</button>
     </div>
 </div>
 
@@ -1265,10 +1262,7 @@
     .container {
         container-name: custom-search-wrapper;
         container-type: inline-size;
-        border: 2px solid var(--color-input-border);
-        border-radius: 10px;
-        padding: var(--spacing-lg);
-        margin: var(--spacing-lg) 0;
+        margin-bottom: var(--spacing-xxl);
     }
 
     .rules {

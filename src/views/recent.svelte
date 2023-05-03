@@ -1,11 +1,13 @@
 <script>
+    import { PageTitle } from "../stores/status";
     import CardList from '../components/cardList.svelte';
+
+    let title = "Recent";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Recent</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Recently Played</h1>
 
 <CardList type="song" dataProvider={"recentSongs"} limit=20 />

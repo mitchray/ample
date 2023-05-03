@@ -1,4 +1,5 @@
 <script>
+    import { PageTitle } from "../stores/status";
     import CardList from '../components/cardList.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -15,13 +16,14 @@
     ];
 
     let currentTab;
+
+    let title = "Random";
+    $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Random</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Random</h1>
 
 <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
     {#each tabItems as tab}

@@ -10,6 +10,7 @@
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
     import SVGSong from "/src/images/music_note.svg";
+    import { PageTitle } from "../stores/status";
 
     export let id;
     let genre;
@@ -24,6 +25,9 @@
     onMount(async () => {
         genre = await $API.genre({ filter: id });
     });
+
+    let title = "Genre";
+    $PageTitle = title;
 </script>
 
 <svelte:head>

@@ -309,8 +309,6 @@
         height: 1.5em;
         width: 1.5em;
         display: inline-flex;
-        position: relative;
-        bottom: 0.1em;
         color: var(--color-icon);
         flex-shrink: 0;
     }
@@ -338,6 +336,11 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    .site-sidebar.is-list :global(svg) {
+        position: relative;
+        bottom: 0.06em;
     }
 
     /*

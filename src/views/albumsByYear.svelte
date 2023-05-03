@@ -1,11 +1,19 @@
 <script>
+    import { PageTitle } from "../stores/status";
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
 
     export let year;
+
+    let title = "Albums by Year";
+    $PageTitle = title;
 </script>
 
-<h1 class="page-title">Albums by Year</h1>
+<svelte:head>
+    <title>{title}</title>
+</svelte:head>
 
-{#key year || 0}
-    <AlbumsByYear showYear={year} />
-{/key}
+<div class="page-main">
+    {#key year || 0}
+        <AlbumsByYear showYear={year} />
+    {/key}
+</div>

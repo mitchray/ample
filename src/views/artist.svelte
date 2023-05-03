@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
     import { Link } from "svelte-routing";
-    import { ShowExpandedAlbums, Theme } from "../stores/status";
+    import { PageTitle, ShowExpandedAlbums, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
     import { API } from "../stores/api";
 
@@ -35,6 +35,9 @@
     $: if (id)  {
         loadData();
     }
+
+    let title = "Artist";
+    $PageTitle = title;
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -290,13 +293,18 @@
                 hsla(0, 0%, 0%, 0) 100%
         );
         position: absolute;
-        bottom: 0;
+        height: 400px;
         top: calc(-1 * var(--spacing-xxl));
         left: calc(-1 * var(--spacing-xxl));
         right: calc(-1 * var(--spacing-xxl));
         pointer-events: none;
         z-index: -1;
         opacity: 0.2;
+    }
+
+    /* looks like a weird bruise so don't bother */
+    :global(.theme-is-light) .header:before {
+        display: none;
     }
     
     .art-container {
@@ -305,7 +313,6 @@
         overflow: hidden;
         font-size: 0;
         position: relative;
-        box-shadow: var(--shadow-lg);
     }
 
     .art {
@@ -409,6 +416,11 @@
             grid-template-rows: auto 1fr auto;
             grid-template-columns: min-content auto;
             column-gap: var(--spacing-xl);
+        }
+
+        .header:before {
+            mask-image: radial-gradient(50% 100% at 50% top, hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0));
+            height: 125%;
         }
 
         .title {

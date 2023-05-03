@@ -1,11 +1,14 @@
 <script>
     import { onMount } from "svelte";
     import { API } from "../stores/api";
-
+    import { PageTitle } from "../stores/status";
     import Lister2 from '../components/lister/lister.svelte';
 
     let podcasts = [];
     let loading = true;
+
+    let title = "Podcasts";
+    $PageTitle = title;
 
     onMount(async () => {
         podcasts = await $API.podcasts();
@@ -14,10 +17,8 @@
 </script>
 
 <svelte:head>
-    <title>Podcasts</title>
+    <title>{title}</title>
 </svelte:head>
-
-<h1 class="page-title">Podcasts</h1>
 
 {#if !loading && podcasts && podcasts.length > 0}
     <Lister2

@@ -98,13 +98,13 @@
 
     .header > :global(div) {
         text-align: left;
-        background-color: var(--color-background);
+        background-color: var(--color-interface);
         border-bottom: 3px solid var(--color-border);
         position: relative;
     }
 
     .row > :global(div) {
-        background-color: var(--color-background);
+        background-color: var(--color-interface);
         border-bottom: 1px solid var(--color-border);
     }
 
