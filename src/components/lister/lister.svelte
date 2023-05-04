@@ -43,6 +43,7 @@
     let listerDisplayID  = `ListerDisplay.${type}.${zone}`;
     let isEditMode       = writable(false);
     let selectedCount    = writable(0);
+    let actionsBind;
 
     setContext(contextKey, {
         getType: () => type,
@@ -111,7 +112,7 @@
 
 
 <div class="lister-wrapper" bind:this={$listerWrapper}>
-    <div class="lister-actions">
+    <div class="lister-actions" bind:this={actionsBind} class:not-empty={actionsBind?.firstElementChild}>
         {#if !actionData.disable}
             <div class="group">
                 <Actions2 mode="fullButtons" {...actionData} />
@@ -162,11 +163,6 @@
     .lister-wrapper {
         container-name: lister-wrapper;
         container-type: inline-size;
-        margin-bottom: var(--spacing-lg);
-    }
-
-    :global(*:not(h1) +) .lister-wrapper {
-        margin-top: var(--spacing-xxl); /* account for the lister actions background */
     }
 
     .lister-actions {
@@ -177,7 +173,7 @@
     }
 
     /* collapses space if empty */
-    .lister-actions > :last-child {
+    .lister-actions.not-empty {
         margin-bottom: var(--spacing-lg);
     }
 
