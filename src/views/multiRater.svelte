@@ -26,7 +26,10 @@
 
 <CustomSearch useSettings={batchPreset} bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} immediateSearch={true} />
 <MassRater bind:items={results} bind:type bind:loadedTime />
-<CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
+
+<div class="page-main">
+    <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type showCheckboxes={true} />
+</div>
 
 <style>
 

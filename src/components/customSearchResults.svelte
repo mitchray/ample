@@ -19,7 +19,7 @@
     <p>Searching for items</p>
 {:else}
     {#if results.length > 0}
-        <p>Total: {results.length}</p>
+        <div class="total">Total: {results.length}</div>
         {#key loadedTime}
             {#if type === "song"}
                 <Lister2
@@ -77,3 +77,9 @@
         <p>No items found</p>
     {/if}
 {/if}
+
+<style>
+    .total {
+        margin-bottom: var(--spacing-lg);
+    }
+</style>

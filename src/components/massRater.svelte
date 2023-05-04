@@ -51,5 +51,6 @@
         padding: var(--spacing-lg);
         display: inline-block;
         border-radius: 10px;
+        margin-bottom: var(--spacing-lg);
     }
 </style>
