@@ -10,4 +10,6 @@
     <title>{title}</title>
 </svelte:head>
 
-<CardList type="album" dataProvider={"newestAlbums"} limit=18 />
+<div class="page-main">
+    <CardList type="album" dataProvider={"newestAlbums"} limit=18 />
+</div>
