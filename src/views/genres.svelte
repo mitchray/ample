@@ -29,18 +29,20 @@
     <title>{title}</title>
 </svelte:head>
 
-{#if !loading && genres && genres.length > 0}
-    <Lister2
-        data={genres}
-        type="genre"
-        initialSort="name"
-        actionData={{
-            disable: true
-        }}
-    />
-{:else}
-    <p>Loading genres</p>
-{/if}
+<div class="page-main">
+    {#if !loading && genres && genres.length > 0}
+        <Lister2
+            data={genres}
+            type="genre"
+            initialSort="name"
+            actionData={{
+                disable: true
+            }}
+        />
+    {:else}
+        <p>Loading genres</p>
+    {/if}
+</div>
 
 <style>
 
