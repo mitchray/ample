@@ -188,16 +188,13 @@
 
     :global(.site-content) {
         position: relative;
-        /*padding: var(--spacing-xxl);*/
         flex: 1;
         z-index: -10;
-        /*background-color: aquamarine;*/
-        /*width: 100%;*/
-        /*height: 100%;*/
     }
 
     :global(.site-content-inner) {
         --content-padding: var(--spacing-lg);
+        --content-padding-end: var(--spacing-lg);
         position: absolute;
         top: 0;
         left: 0;
@@ -211,11 +208,17 @@
             [full-start]
             var(--content-padding)
             [content-start]
-            calc(100% - (2 * var(--content-padding)))
+            1fr
             [content-end]
-            var(--content-padding)
+            var(--content-padding-end)
             [full-end];
         grid-auto-rows: min-content;
+    }
+
+    @media (min-width: 679.99px) {
+        :global(.site-content-inner) {
+            --content-padding-end: var(--spacing-xxl);
+        }
     }
 
     :global(.site-content-inner > *) {
