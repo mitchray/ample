@@ -195,6 +195,8 @@
     :global(.site-content-inner) {
         --content-padding: var(--spacing-lg);
         --content-padding-end: var(--spacing-xxl);
+        container-name: site-content-inner;
+        container-type: size;
         position: absolute;
         top: 0;
         left: 0;

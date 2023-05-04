@@ -66,95 +66,94 @@
 {#key hash || 0}
     {#if album?.id}
         <div class="page-wrapper">
-            <div class="container">
-                <div class="details-container">
-                    <div class="details">
-                        <div class="cover-rating">
-                            <div class="art-container">
-                                <img class="art"
-                                     src="{album.art}&thumb=32"
-                                     alt="Image of {album.name}"
-                                     width="384"
-                                     height="384"
-                                     data-id="art-album-{album.id}"
-                                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
-                                />
+            <div class="details-container">
+                <div class="details">
+                    <div class="cover-rating">
+                        <div class="art-container">
+                            <img class="art"
+                                 src="{album.art}&thumb=32"
+                                 alt="Image of {album.name}"
+                                 width="384"
+                                 height="384"
+                                 data-id="art-album-{album.id}"
+                                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
+                            />
+                        </div>
+
+                        <div class="below-image">
+                            <div class="rating">
+                                <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
                             </div>
 
-                            <div class="below-image">
-                                <div class="rating">
-                                    <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
-                                </div>
+                            <div class="third-party-links">
+                                <ThirdPartyServices data={album} type="album" />
+                            </div>
+                        </div>
+                    </div>
 
-                                <div class="third-party-links">
-                                    <ThirdPartyServices data={album} type="album" />
+                    <div class="info">
+                        <div class="name">
+                            {#if album.type}
+                                <div class="release-type-label">
+                                    {album.type}
                                 </div>
+                            {/if}
+                            <h1 class="title">{album.name}</h1>
+                            <div class="artist">
+                                <Link to="artists/{album.artist.id}">{album.artist.name}</Link>
                             </div>
                         </div>
 
-                        <div class="info">
-                            <div class="name">
-                                {#if album.type}
-                                    <div class="release-type-label">
-                                        {album.type}
-                                    </div>
-                                {/if}
-                                <h1 class="title">{album.name}</h1>
-                                <div class="artist">
-                                    <Link to="artists/{album.artist.id}">{album.artist.name}</Link>
-                                </div>
-                            </div>
-
-                            <Actions2
+                        <Actions2
                                 type="album"
                                 mode="fullButtons"
                                 id="{album.id}"
                                 showShuffle={album.songcount > 1}
                                 data={Object.create({artist: album.artist})}
-                            />
+                        />
 
-                            <div class="meta">
-                                <div class="entry">
-                                    <span class="value"><Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link></span>
-                                    <span class="field">Year</span>
-                                </div>
-
-                                {#if album.diskcount > 1}
-                                    <div class="entry">
-                                        <span class="value">{album.diskcount}</span>
-                                        <span class="field">{album.diskcount !== 1 ? 'Discs' : 'Disc'}</span>
-                                    </div>
-                                {/if}
-
-                                <div class="entry">
-                                    <span class="value">{album.songcount}</span>
-                                    <span class="field">{album.songcount !== 1 ? 'Songs' : 'Song'}</span>
-                                </div>
-
-                                <div class="entry">
-                                    <span class="value">{formatTotalTime(album.time)}</span>
-                                    <span class="field">Length</span>
-                                </div>
+                        <div class="meta">
+                            <div class="entry">
+                                <span class="value"><Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link></span>
+                                <span class="field">Year</span>
                             </div>
 
-                            <Genres genres="{album.genre}" />
+                            {#if album.diskcount > 1}
+                                <div class="entry">
+                                    <span class="value">{album.diskcount}</span>
+                                    <span class="field">{album.diskcount !== 1 ? 'Discs' : 'Disc'}</span>
+                                </div>
+                            {/if}
+
+                            <div class="entry">
+                                <span class="value">{album.songcount}</span>
+                                <span class="field">{album.songcount !== 1 ? 'Songs' : 'Song'}</span>
+                            </div>
+
+                            <div class="entry">
+                                <span class="value">{formatTotalTime(album.time)}</span>
+                                <span class="field">Length</span>
+                            </div>
                         </div>
+
+                        <Genres genres="{album.genre}" />
                     </div>
                 </div>
-                <div class="songs-container">
-                    <div class="songs page-main">
-                        {#each [...album.ampleSongs] as [key, value]}
-                            {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
-                            <section>
-                                <Lister2
-                                        data={value}
-                                        type="song"
-                                        tableOnly={true}
-                                        zone="album-contents"
-                                        showArtist={album.artist.name === "Various Artists"}
-                                        showArt={false}
-                                        discSubtitle={subtitle}
-                                        actionData={{
+            </div>
+            <div class="songs-container">
+                <div class="songs page-main">
+                    {#each [...album.ampleSongs] as [key, value]}
+                        {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
+                        <section>
+                            <Lister2
+                                    data={value}
+                                    type="song"
+                                    tableOnly={true}
+                                    zone="album-contents"
+                                    showArtist={album.artist.name === "Various Artists"}
+                                    showArt={false}
+                                    discSubtitle={subtitle}
+                                    actionData={{
                                     disable: [...album.ampleSongs].length < 2,
                                     type: "album",
                                     id: album.id,
@@ -162,14 +161,13 @@
                                     showShuffle: value.length > 1,
                                     data: Object.create({songs: value})
                                 }}
-                                />
-                            </section>
-                        {/each}
-                    </div>
+                            />
+                        </section>
+                    {/each}
+                </div>
 
-                    <div class="albums-around-time">
-                        <AlbumsAround album={album} />
-                    </div>
+                <div class="albums-around-time">
+                    <AlbumsAround album={album} />
                 </div>
             </div>
         </div>
@@ -180,34 +178,17 @@
 
 <style>
     .page-wrapper {
-        container-name: album-page-wrapper;
-        container-type: size;
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        grid-column: full;
-    }
-
-    .container {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        overflow: auto;
-    }
-
-    .details-container,
-    .songs-container {
-        height: auto;
-        padding: var(--spacing-xxl) var(--spacing-lg);
+        display: grid;
+        gap: var(--spacing-xxl);
     }
 
     .details-container {
         container-name: album-details-wrapper;
         container-type: inline-size;
+    }
+
+    .songs-container {
+        padding-bottom: var(--spacing-xxl);
     }
 
     .details {
@@ -339,22 +320,28 @@
         }
     }
 
-    @container album-page-wrapper (min-width: 1200px) {
-        .page-wrapper > .container {
-            display: flex;
+    @container site-content-inner (min-width: 1200px) {
+        .page-wrapper {
+            grid-template-columns: 400px 1fr;
+            grid-template-rows: 1fr;
+            min-height: 0;
             overflow: hidden;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0;
+            grid-column: full;
+            gap: 0;
         }
 
         .details-container {
-            width: 400px;
-            padding-right: var(--spacing-xl);
-            flex-shrink: 0;
+            padding: var(--spacing-xxl);
         }
 
         .songs-container {
-            flex: 1;
-            padding-left: var(--spacing-xxl);
-            padding-right: var(--spacing-xxl);
+            padding: var(--spacing-xxl);
         }
 
         .details-container,
