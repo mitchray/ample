@@ -7,6 +7,7 @@
     export let album;
 
     let albums = Promise.resolve([]);
+    let containerBind;
 
     onMount(() => {
         albums = $API.artistAlbums({ filter: album.artist.id })
@@ -40,7 +41,7 @@
 {#await albums}
 
 {:then albums}
-    <div class="container">
+    <div class="container" bind:this={containerBind} class:not-empty={containerBind?.firstElementChild}>
         {#if [...albums.previous.values()].find(arr => arr.length > 0)}
             <div class="previous">
                 <h3>Previous</h3>
@@ -97,6 +98,10 @@
         flex-direction: column;
         container-type: inline-size;
         gap: var(--spacing-xxl);
+    }
+
+    .container.not-empty {
+        margin-top: var(--spacing-xxl);
     }
 
     @container (min-width: 800px) {

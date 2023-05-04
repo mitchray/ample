@@ -68,63 +68,61 @@
 </svelte:head>
 
 {#if playlist?.id && !loading}
-    <div class="wrapper">
-        <div class="container">
-            <div class="details-container">
-                <div class="details">
-                    <div class="cover-rating">
-                        <div class="art-container">
-                            <PlaylistArt bind:songs fallback="{playlist.art}" />
-                        </div>
+    <div class="page-wrapper">
+        <div class="details-container">
+            <div class="details">
+                <div class="cover-rating">
+                    <div class="art-container">
+                        <PlaylistArt bind:songs fallback="{playlist.art}" />
+                    </div>
 
-                        {#if playlistType === "playlist"}
-                            <div class="rating">
-                                <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
-                            </div>
+                    {#if playlistType === "playlist"}
+                        <div class="rating">
+                            <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
+                        </div>
+                    {/if}
+                </div>
+
+                <div class="info">
+                    <div class="type">
+                        {#if playlistType === "smartlist"}
+                            <SVGSmartlist class="inline" />&nbsp;Smartlist
+                        {:else if playlistType === "mix"}
+                            <SVGRadio class="inline" />&nbsp;Mix
+                        {:else}
+                            <SVGPlaylist class="inline" />&nbsp;Playlist
                         {/if}
                     </div>
 
-                    <div class="info">
-                        <div class="type">
-                            {#if playlistType === "smartlist"}
-                                <SVGSmartlist class="inline" />&nbsp;Smartlist
-                            {:else if playlistType === "mix"}
-                                <SVGRadio class="inline" />&nbsp;Mix
-                            {:else}
-                                <SVGPlaylist class="inline" />&nbsp;Playlist
-                            {/if}
+                    <h1 class="title">
+                        {playlist.name}
+                    </h1>
+
+                    {#if playlistType === "playlist"}
+                        <div class="playlist-actions">
+                            <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
+                            <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
                         </div>
-
-                        <h1 class="title">
-                            {playlist.name}
-                        </h1>
-
-                        {#if playlistType === "playlist"}
-                            <div class="playlist-actions">
-                                <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
-                                <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
-                            </div>
-                        {/if}
-                    </div>
+                    {/if}
                 </div>
             </div>
+        </div>
 
-            <div class="songs-container">
-                <div class="songs page-main">
-                    <Lister2
-                            bind:data={songs}
-                            type="playlist_songs"
-                            showCheckboxes={playlistType === "playlist"}
-                            tableOnly={true}
-                            showIndex={true}
-                            actionData={{
+        <div class="songs-container">
+            <div class="songs page-main">
+                <Lister2
+                    bind:data={songs}
+                    type="playlist_songs"
+                    showCheckboxes={playlistType === "playlist"}
+                    tableOnly={true}
+                    showIndex={true}
+                    actionData={{
                         type: "",
                         mode: "fullButtons",
                         showShuffle: songs.length > 1,
                         data: Object.create({songs: songs})
                     }}
-                    />
-                </div>
+                />
             </div>
         </div>
     </div>
@@ -145,32 +143,9 @@
 {/if}
 
 <style>
-    .wrapper {
-        container-name: playlist-page-wrapper;
-        container-type: size;
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        grid-column: full;
-    }
-
-    .container {
-        container-name: playlist-wrapper;
-        container-type: inline-size;
-        height: 100%;
-        width: 100%;
-        will-change: overflow;
-        overflow: auto;
-    }
-
-    .details-container,
-    .songs-container {
-        height: auto;
-        padding: var(--spacing-xxl) var(--spacing-lg);
+    .page-wrapper {
+        display: grid;
+        gap: var(--spacing-xxl);
     }
 
     .details-container {
@@ -234,22 +209,13 @@
             padding: unset;
         }
 
-        .details,
-        .name {
+        .details {
             background-color: unset;
             box-shadow: unset;
         }
 
-        .name {
-            padding: unset;
-        }
-
         .title {
             justify-content: left;
-        }
-
-        .artist {
-            text-align: left;
         }
 
         .art-container {
@@ -271,34 +237,26 @@
         }
     }
 
-    /* sticky position is treated differently below this for an unknown reason */
-    @container playlist-page-wrapper (max-width: 1400px) {
-        :global(.header-flex.header-flex.header-flex) {
-            top: 0;
-        }
-    }
-
-    @container playlist-page-wrapper (min-width: 1400px) {
-        .wrapper > .container {
-            display: flex;
+    @container site-content-inner (min-width: 1400px) {
+        .page-wrapper {
+            grid-template-columns: 400px 1fr;
+            grid-template-rows: 1fr;
+            min-height: 0;
             overflow: hidden;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0;
+            grid-column: full;
+            gap: 0;
         }
 
         .details-container,
         .songs-container {
+            padding: var(--spacing-xxl);
             overflow: auto;
-        }
-
-        .details-container {
-            width: 400px;
-            padding-right: var(--spacing-xl);
-            flex-shrink: 0;
-        }
-
-        .songs-container {
-            flex: 1;
-            padding-left: var(--spacing-xxl);
-            padding-right: var(--spacing-xxl);
         }
     }
 </style>

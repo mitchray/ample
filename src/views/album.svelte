@@ -187,10 +187,6 @@
         container-type: inline-size;
     }
 
-    .songs-container {
-        padding-bottom: var(--spacing-xxl);
-    }
-
     .details {
         display: grid;
         gap: var(--spacing-xl);
@@ -281,10 +277,6 @@
         font-stretch: 50%;
     }
 
-    .albums-around-time {
-        margin-top: var(--spacing-xxl);
-    }
-
     section:not(:first-of-type) {
         margin-top: var(--spacing-xxxl);
     }
@@ -309,17 +301,6 @@
         }
     }
 
-    /* sticky position is treated differently below this for an unknown reason */
-    @container album-page-wrapper (max-width: 1200px) {
-        :global(.header-flex.header-flex.header-flex) {
-            top: 0;
-        }
-
-        .details-container {
-            padding-bottom: 0;
-        }
-    }
-
     @container site-content-inner (min-width: 1200px) {
         .page-wrapper {
             grid-template-columns: 400px 1fr;
@@ -336,16 +317,9 @@
             gap: 0;
         }
 
-        .details-container {
-            padding: var(--spacing-xxl);
-        }
-
-        .songs-container {
-            padding: var(--spacing-xxl);
-        }
-
         .details-container,
         .songs-container {
+            padding: var(--spacing-xxl);
             overflow: auto;
         }
     }
