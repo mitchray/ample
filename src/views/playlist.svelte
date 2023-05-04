@@ -110,19 +110,21 @@
             </div>
 
             <div class="songs-container">
-                <Lister2
-                    bind:data={songs}
-                    type="playlist_songs"
-                    showCheckboxes={playlistType === "playlist"}
-                    tableOnly={true}
-                    showIndex={true}
-                    actionData={{
+                <div class="songs page-main">
+                    <Lister2
+                            bind:data={songs}
+                            type="playlist_songs"
+                            showCheckboxes={playlistType === "playlist"}
+                            tableOnly={true}
+                            showIndex={true}
+                            actionData={{
                         type: "",
                         mode: "fullButtons",
                         showShuffle: songs.length > 1,
                         data: Object.create({songs: songs})
                     }}
-                />
+                    />
+                </div>
             </div>
         </div>
     </div>
@@ -168,13 +170,12 @@
     .details-container,
     .songs-container {
         height: auto;
-        padding: var(--spacing-xxl);
+        padding: var(--spacing-xxl) var(--spacing-lg);
     }
 
     .details-container {
         container-name: playlist-details-wrapper;
         container-type: inline-size;
-        background-color: var(--color-interface-secondary);
     }
 
     .cover-rating {
@@ -189,7 +190,6 @@
         aspect-ratio: 1 / 1;
         border-radius: 6px;
         overflow: hidden;
-        box-shadow: var(--shadow-lg);
         font-size: 0;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
         margin-bottom: var(--spacing-lg);
@@ -297,6 +297,8 @@
 
         .songs-container {
             flex: 1;
+            padding-left: var(--spacing-xxl);
+            padding-right: var(--spacing-xxl);
         }
     }
 </style>

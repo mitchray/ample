@@ -194,7 +194,7 @@
 
     :global(.site-content-inner) {
         --content-padding: var(--spacing-lg);
-        --content-padding-end: var(--spacing-lg);
+        --content-padding-end: var(--spacing-xxl);
         position: absolute;
         top: 0;
         left: 0;
@@ -215,9 +215,9 @@
         grid-auto-rows: min-content;
     }
 
-    @media (min-width: 679.99px) {
+    @media (max-width: 679.99px) {
         :global(.site-content-inner) {
-            --content-padding-end: var(--spacing-xxl);
+            --content-padding-end: var(--spacing-lg);
         }
     }
 

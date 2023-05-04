@@ -9,4 +9,6 @@
     <title>{title}</title>
 </svelte:head>
 
-<p>Sorry not found</p>
+<div class="page-main">
+    <p>Sorry not found</p>
+</div>
