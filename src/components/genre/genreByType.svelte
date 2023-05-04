@@ -46,8 +46,6 @@
     }
 </script>
 
-<Pagination2 bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />
-
 {#await $API.genre({ filter: id })}
     Loading
 {:then genre}

@@ -53,7 +53,7 @@
 
 <style>
     .container {
-        margin-bottom: var(--spacing-lg);
+        margin-top: var(--spacing-xl);
     }
 
     .limit {
