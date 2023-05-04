@@ -65,7 +65,7 @@
 
 {#key hash || 0}
     {#if album?.id}
-        <div class="wrapper">
+        <div class="page-wrapper">
             <div class="container">
                 <div class="details-container">
                     <div class="details">
@@ -177,7 +177,7 @@
 {/key}
 
 <style>
-    .wrapper {
+    .page-wrapper {
         container-name: album-page-wrapper;
         container-type: size;
         height: 100%;
@@ -200,12 +200,7 @@
     .details-container,
     .songs-container {
         height: auto;
-        padding: var(--spacing-xxl);
-    }
-
-    .container {
-        container-name: album-wrapper;
-        container-type: inline-size;
+        padding: var(--spacing-xxl) var(--spacing-lg);
     }
 
     .details-container {
@@ -339,7 +334,7 @@
     }
 
     @container album-page-wrapper (min-width: 1200px) {
-        .wrapper > .container {
+        .page-wrapper > .container {
             display: flex;
             overflow: hidden;
         }
@@ -352,6 +347,8 @@
 
         .songs-container {
             flex: 1;
+            padding-left: var(--spacing-xxl);
+            padding-right: var(--spacing-xxl);
         }
 
         .details-container,
