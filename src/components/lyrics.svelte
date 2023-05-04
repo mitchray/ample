@@ -3,7 +3,7 @@
 
     import Lyrics from '../logic/lyrics'
 
-    import { MediaPlayer, SiteMainSpace } from "../stores/player";
+    import { MediaPlayer } from "../stores/player";
     import {
         CurrentMedia,
         ShowLyrics
@@ -59,68 +59,54 @@
     }
 </script>
 
-
-{#if $SiteMainSpace.ready}
-    <div class="lyrics-wrapper"
-        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
-    >
+<div
+    class="site-lyrics"
+    class:visible={$ShowLyrics}
+>
+    <div class="container">
+        <div class="header panel-header">
+            <h4 class="title panel-title">Lyrics</h4>
+            <button
+                class="follow button button--regular"
+                on:click={e => follow = true}
+                hidden={!$lyrics.isTimestamped || follow}
+            >
+                Follow
+            </button>
+        </div>
         <div
-            class="site-lyrics"
-            class:visible={$ShowLyrics}
+            class="lyrics-container panel-content"
+            on:wheel={handleScroll}
+            on:touchstart={handleScroll}
+            class:disable-scroll={follow}
         >
-            <div class="container">
-                <div class="header panel-header">
-                    <h4 class="title panel-title">Lyrics</h4>
-                    <button
-                        class="follow button button--regular"
-                        on:click={e => follow = true}
-                        hidden={!$lyrics.isTimestamped || follow}
+            {#if $CurrentMedia}
+                {#if $CurrentMedia.lyrics && !loading}
+                    <div
+                        class="lyrics"
+                        class:hasTimestamps={$lyrics.isTimestamped}
                     >
-                        Follow
-                    </button>
-                </div>
-                <div
-                    class="lyrics-container panel-content"
-                    on:wheel={handleScroll}
-                    on:touchstart={handleScroll}
-                    class:disable-scroll={follow}
-                >
-                    {#if $CurrentMedia}
-                        {#if $CurrentMedia.lyrics && !loading}
+                        {#each $lyrics.lyricsFinal as line, i}
                             <div
-                                class="lyrics"
-                                class:hasTimestamps={$lyrics.isTimestamped}
+                                class="line"
+                                class:current={$lyrics.currentLine === i}
+                                on:click={() => { handleClick(line.startSeconds) }}
                             >
-                                {#each $lyrics.lyricsFinal as line, i}
-                                    <div
-                                        class="line"
-                                        class:current={$lyrics.currentLine === i}
-                                        on:click={() => { handleClick(line.startSeconds) }}
-                                    >
-                                        {@html line.text}
-                                    </div>
-                                {/each}
+                                {@html line.text}
                             </div>
-                        {:else}
-                            No lyrics found
-                        {/if}
-                    {:else}
-                        No song playing
-                    {/if}
-                </div>
-            </div>
+                        {/each}
+                    </div>
+                {:else}
+                    No lyrics found
+                {/if}
+            {:else}
+                No song playing
+            {/if}
         </div>
     </div>
-{/if}
+</div>
 
 <style>
-    .lyrics-wrapper {
-        position: fixed;
-        z-index: 25;
-        pointer-events: none;
-        overflow: hidden;
-    }
-
     .current {
         color: var(--color-highlight);
         transition: color 0.1s ease-in-out;
@@ -156,7 +142,7 @@
     .site-lyrics {
         position: absolute;
         bottom: var(--spacing-lg);
-        right: var(--spacing-lg);
+        right: 0;
         z-index: 10;
         background-color: var(--color-menu-background);
         border: 2px solid var(--color-menu-border);
@@ -165,6 +151,7 @@
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease-in-out;
+        max-width: 100%;
     }
 
     .visible {
@@ -174,6 +161,7 @@
 
     .container {
         width: 350px;
+        max-width: inherit;
     }
 
     .header {
