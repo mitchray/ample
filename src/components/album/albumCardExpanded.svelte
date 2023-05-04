@@ -21,7 +21,6 @@
             </div>
         {/if}
     </Visibility>
-
 </div>
 
 <style>

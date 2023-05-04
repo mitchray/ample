@@ -63,8 +63,8 @@
         padding: 0.4em 0.5em;
     }
 
-    .items {
-        margin-bottom: var(--spacing-xxxl);
+    section:not(:first-of-type) {
+        margin-top: var(--spacing-xxxl);
     }
 
     .album-grid {

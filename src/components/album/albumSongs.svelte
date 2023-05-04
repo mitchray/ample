@@ -41,7 +41,7 @@
         height: 500px;
     }
 
-    section {
-        margin-top: var(--spacing-lg);
+    section:not(:first-of-type) {
+        margin-top: var(--spacing-xxxl);
     }
 </style>

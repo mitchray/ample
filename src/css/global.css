@@ -587,10 +587,6 @@ svg.inline {
     z-index: -1;
 }
 
-section {
-    margin-bottom: var(--spacing-xxl);
-}
-
 .menu-separator {
     display: block;
     border-bottom: 2px solid var(--color-menu-border);

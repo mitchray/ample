@@ -145,15 +145,16 @@
                     <div class="songs page-main">
                         {#each [...album.ampleSongs] as [key, value]}
                             {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
-                            <Lister2
-                                data={value}
-                                type="song"
-                                tableOnly={true}
-                                zone="album-contents"
-                                showArtist={album.artist.name === "Various Artists"}
-                                showArt={false}
-                                discSubtitle={subtitle}
-                                actionData={{
+                            <section>
+                                <Lister2
+                                        data={value}
+                                        type="song"
+                                        tableOnly={true}
+                                        zone="album-contents"
+                                        showArtist={album.artist.name === "Various Artists"}
+                                        showArt={false}
+                                        discSubtitle={subtitle}
+                                        actionData={{
                                     disable: [...album.ampleSongs].length < 2,
                                     type: "album",
                                     id: album.id,
@@ -161,7 +162,8 @@
                                     showShuffle: value.length > 1,
                                     data: Object.create({songs: value})
                                 }}
-                            />
+                                />
+                            </section>
                         {/each}
                     </div>
 
@@ -300,6 +302,10 @@
 
     .albums-around-time {
         margin-top: var(--spacing-xxl);
+    }
+
+    section:not(:first-of-type) {
+        margin-top: var(--spacing-xxxl);
     }
 
     @container album-details-wrapper (min-width: 530px) {
