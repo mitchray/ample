@@ -112,8 +112,6 @@
             <Sidebar3/>
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
-                    <Lyrics/>
-
                     <Route path="test" component={TestPage}/>
 
                     <Route path="search" component={AdvancedSearchPage}/>
@@ -147,14 +145,13 @@
                     <Route path="" component={HomePage}/>
                     <Route path="/" component={HomePage}/>
                     <Route path="*" component={NotFound404Page}/>
-
-                    <!-- put components before routes -->
                 </div>
             </div>
             <Queue/>
         </div>
         <Player/>
         <Fullscreen/>
+        <Lyrics/>
     {/if}
 </Router>
 

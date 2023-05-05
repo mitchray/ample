@@ -1,9 +1,11 @@
 <script>
+    import { onMount, onDestroy } from "svelte";
+    import { computePosition, autoUpdate, offset } from '@floating-ui/dom';
     import { waitForElement } from "../logic/helper";
 
     import Lyrics from '../logic/lyrics'
 
-    import { MediaPlayer } from "../stores/player";
+    import { MediaPlayer, SiteContentBind } from "../stores/player";
     import {
         CurrentMedia,
         ShowLyrics
@@ -12,6 +14,8 @@
     let lyrics = new Lyrics();
     let follow = true;
     let loading = true;
+    let lyricsBind;
+    let autoUpdateCleanup;
 
     $: {
         if (lyrics && $CurrentMedia && $MediaPlayer.wavesurfer) {
@@ -57,11 +61,44 @@
             follow = true;
         }
     }
+
+    function updatePosition() {
+        computePosition($SiteContentBind, lyricsBind, {
+            placement: "bottom-end",
+            middleware: [
+                offset(({rects}) => ({
+                    mainAxis: -rects.floating.height - 15,
+                    alignmentAxis: 15,
+                }))
+            ],
+        }).then(({x, y}) => {
+            Object.assign(lyricsBind.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+        });
+    }
+
+    onMount(() => {
+        updatePosition();
+
+        autoUpdateCleanup = autoUpdate(
+            $SiteContentBind,
+            lyricsBind,
+            updatePosition
+        );
+    });
+
+    onDestroy(() => {
+        // floating-ui
+        autoUpdateCleanup();
+    })
 </script>
 
 <div
     class="site-lyrics"
     class:visible={$ShowLyrics}
+    bind:this={lyricsBind}
 >
     <div class="container">
         <div class="header panel-header">
@@ -141,8 +178,6 @@
 
     .site-lyrics {
         position: absolute;
-        bottom: var(--spacing-lg);
-        right: 0;
         z-index: 10;
         background-color: var(--color-menu-background);
         border: 2px solid var(--color-menu-border);
@@ -151,7 +186,9 @@
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease-in-out;
-        max-width: 100%;
+        max-width: calc(100% - var(--spacing-xxl));
+        left: 0;
+        top: 0;
     }
 
     .visible {
