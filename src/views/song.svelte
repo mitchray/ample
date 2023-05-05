@@ -43,13 +43,13 @@
             <Genres genres="{song.genre}" />
 
             <Actions2
-                    type="song"
-                    mode="fullButtons"
-                    id="{song.id}"
+                type="song"
+                mode="fullButtons"
+                id="{song.id}"
             />
         </div>
 
-        <div class="grid">
+        <div class="grid page-main">
             <span class="field"></span> <span></span>
             {#if song.artists?.length > 1}
                 <span class="field">Song Artists</span> <span><ArtistList artists={song.artists} /></span>

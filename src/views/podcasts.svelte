@@ -20,18 +20,20 @@
     <title>{title}</title>
 </svelte:head>
 
-{#if !loading && podcasts && podcasts.length > 0}
-    <Lister2
-        data={podcasts}
-        type="podcast"
-        initialSort="name"
-        actionData={{
+<div class="page-main">
+    {#if !loading && podcasts && podcasts.length > 0}
+        <Lister2
+                data={podcasts}
+                type="podcast"
+                initialSort="name"
+                actionData={{
             disable: true
         }}
-    />
-{:else}
-    <p>Loading podcasts</p>
-{/if}
+        />
+    {:else}
+        <p>Loading podcasts</p>
+    {/if}
+</div>
 
 <style>
 

@@ -11,21 +11,23 @@
     <title>{title}</title>
 </svelte:head>
 
-{#await $API.smartlists()}
-    <p>Loading smartlists</p>
-{:then smartlists}
-    {#if smartlists.length > 0}
-        <Lister2
-            data={smartlists}
-            type="smartlist"
-            initialSort="name"
-            actionData={{
+<div class="page-main">
+    {#await $API.smartlists()}
+        <p>Loading smartlists</p>
+    {:then smartlists}
+        {#if smartlists.length > 0}
+            <Lister2
+                    data={smartlists}
+                    type="smartlist"
+                    initialSort="name"
+                    actionData={{
                 disable: true
             }}
-        />
-    {:else}
-        <p>Unable to find any smartlists</p>
-    {/if}
-{:catch error}
-    <p>Something went wrong: {error.message}</p>
-{/await}
+            />
+        {:else}
+            <p>Unable to find any smartlists</p>
+        {/if}
+    {:catch error}
+        <p>Something went wrong: {error.message}</p>
+    {/await}
+</div>
