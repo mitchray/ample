@@ -22,8 +22,7 @@
     import SVGClose from '/src/images/close.svg';
     import SVGCurrent from '/src/images/play_circle.svg';
     import SVGMore from '/src/images/more-hori.svg';
-    import SVGLock from "/src/images/lock.svg";
-    import SVGUnlock from "/src/images/lock_open.svg";
+    import SVGBin from "/src/images/delete.svg";
 
     const flipDurationMs = 100;
 
@@ -179,7 +178,7 @@
         <div class="header panel-header">
             <h4 class="panel-title">Queue</h4>
             <button id="queueMoreToggle" class="icon-button" on:click|stopPropagation={handleQueueMoreMenu}><SVGMore /></button>
-            <button class="clear-all icon-button button--danger button--mini" on:click={handleClearQueue} title="Clear all"><SVGClose style="transform: scale(0.75)" /></button>
+            <button class="clear-all icon-button button--danger button--mini" on:click={handleClearQueue} title="Clear all"><SVGBin style="transform: scale(0.75)" /></button>
         </div>
 
         {#if queueMoreMenuIsOpen}

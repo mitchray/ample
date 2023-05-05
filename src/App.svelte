@@ -7,7 +7,7 @@
 
     import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
-    import { MediaPlayer, SiteContentBind } from "./stores/player";
+    import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
     import { PageTitle } from "./stores/status";
 
     import { extendSession, validateSession } from './logic/user';
@@ -106,7 +106,7 @@
     {#if $isLoggedIn}
         <ArtistsSync />
         <Header/>
-        <div class="site-inner">
+        <div class="site-inner" bind:this={$SiteInnerBind}>
             <Sidebar3/>
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">

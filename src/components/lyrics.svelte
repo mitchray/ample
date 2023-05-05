@@ -2,10 +2,10 @@
     import { onMount, onDestroy } from "svelte";
     import { computePosition, autoUpdate, offset } from '@floating-ui/dom';
     import { waitForElement } from "../logic/helper";
-
+    import { QueueIsOpen } from "../stores/status";
     import Lyrics from '../logic/lyrics'
 
-    import { MediaPlayer, SiteContentBind } from "../stores/player";
+    import { MediaPlayer, SiteInnerBind } from "../stores/player";
     import {
         CurrentMedia,
         ShowLyrics
@@ -26,6 +26,9 @@
 
             loading = false;
         }
+
+        // updatePosition whenever QueueIsOpen changes
+        $QueueIsOpen, updatePosition();
     }
 
     function resetEvents() {
@@ -63,12 +66,12 @@
     }
 
     function updatePosition() {
-        computePosition($SiteContentBind, lyricsBind, {
+        computePosition($SiteInnerBind, lyricsBind, {
             placement: "bottom-end",
             middleware: [
                 offset(({rects}) => ({
                     mainAxis: -rects.floating.height - 15,
-                    alignmentAxis: 15,
+                    alignmentAxis: 15 + (($QueueIsOpen) ? 330 : 0),
                 }))
             ],
         }).then(({x, y}) => {
@@ -83,7 +86,7 @@
         updatePosition();
 
         autoUpdateCleanup = autoUpdate(
-            $SiteContentBind,
+            $SiteInnerBind,
             lyricsBind,
             updatePosition
         );
