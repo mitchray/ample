@@ -242,6 +242,7 @@
         flex-direction: column;
         gap: var(--spacing-sm);
         align-items: start;
+        text-wrap: balance;
     }
 
     .title {
