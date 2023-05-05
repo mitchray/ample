@@ -105,8 +105,6 @@
 
     {#if $isLoggedIn}
         <ArtistsSync />
-
-        <Notifications />
         <Header/>
         <div class="site-inner">
             <Sidebar3/>
@@ -152,6 +150,7 @@
         <Player/>
         <Fullscreen/>
         <Lyrics/>
+        <Notifications/>
         <Alerts/>
     {/if}
 </Router>

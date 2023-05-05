@@ -93,7 +93,7 @@
     })
 </script>
 
-<div class="list" bind:this={listBind}>
+<div class="site-alerts" bind:this={listBind}>
     {#each freshAlerts as alert (alert.id)}
         <div class="card-container"
              in:fly="{{ y: -100, duration: 300, easing: quintOut }}"
@@ -109,7 +109,7 @@
 </div>
 
 <style>
-    .list :global(.alert-card) {
+    .site-alerts :global(.alert-card) {
         box-shadow: var(--shadow-xxl), var(--shadow-xxl), var(--shadow-xxl);
         border: 2px solid var(--color-menu-border);
     }
@@ -118,7 +118,7 @@
         pointer-events: initial;
     }
 
-    .list {
+    .site-alerts {
         position: absolute;
         top: 0;
         left: 0;

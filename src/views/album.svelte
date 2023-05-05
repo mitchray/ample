@@ -302,7 +302,7 @@
         }
     }
 
-    @container site-content-inner (min-width: 1200px) {
+    @container site-content-inner (min-width: 1400px) {
         .page-wrapper {
             grid-template-columns: 400px 1fr;
             grid-template-rows: 1fr;

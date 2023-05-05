@@ -1,15 +1,19 @@
 <script>
+    import { onMount, onDestroy } from "svelte";
+    import { computePosition, autoUpdate, offset, size } from '@floating-ui/dom';
     import { quintOut } from 'svelte/easing';
     import { fly, fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
 
-    import { SiteMainSpace } from '../../stores/player';
+    import { SiteContentBind } from '../../stores/player';
     import { NotificationsList } from '../../stores/message';
 
     import NotificationCard from '../../components/notification/notificationCard.svelte';
 
     let timeout;
     let freshNotifications = [];
+    let listBind;
+    let autoUpdateCleanup;
 
     $: {
         if ($NotificationsList) {
@@ -44,38 +48,65 @@
             }
         }, 5000);
     }
-</script>
 
-{#if $SiteMainSpace.ready}
-    <div class="notifications-container"
-        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
-    >
-        <div class="list">
-            {#each freshNotifications as notification (notification.id)}
-                <div class="card-container"
-                    in:fly="{{ y: -200, duration: 300, easing: quintOut }}"
-                    out:fade="{{ duration: 300, easing: quintOut }}"
-                    animate:flip="{{ duration: 300 }}"
-                    on:mouseenter={e => handleEnter(e)}
-                    on:mouseleave={e => handleLeave(e)}
-                    data-id="{notification.id}"
-                >
-                    <NotificationCard item={notification} />
-                </div>
-            {/each}
-        </div>
-    </div>
-{/if}
-
-<style>
-    .notifications-container {
-        position: fixed;
-        z-index: 25;
-        pointer-events: none;
-        overflow: hidden;
+    function updatePosition() {
+        computePosition($SiteContentBind, listBind, {
+            placement: "top-end",
+            middleware: [
+                size({
+                    apply({availableHeight, elements}) {
+                        Object.assign(elements.floating.style, {
+                            // Account for progress bar
+                            height: `${$SiteContentBind.clientHeight - 3}px`,
+                        });
+                    },
+                }),
+                offset(({rects}) => ({
+                    mainAxis: -rects.floating.height,
+                    alignmentAxis: 0,
+                }))
+            ],
+        }).then(({x, y}) => {
+            Object.assign(listBind.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+        });
     }
 
-    .notifications-container :global(.notification-card) {
+    onMount(() => {
+        updatePosition();
+
+        autoUpdateCleanup = autoUpdate(
+            $SiteContentBind,
+            listBind,
+            updatePosition
+        );
+    });
+
+    onDestroy(() => {
+        // floating-ui
+        autoUpdateCleanup();
+    })
+</script>
+
+<div class="site-notifications" bind:this={listBind}>
+    {#each freshNotifications as notification (notification.id)}
+        <div class="card-container"
+             in:fly="{{ y: -200, duration: 300, easing: quintOut }}"
+             out:fade="{{ duration: 300, easing: quintOut }}"
+             animate:flip="{{ duration: 300 }}"
+             on:mouseenter={e => handleEnter(e)}
+             on:mouseleave={e => handleLeave(e)}
+             data-id="{notification.id}"
+        >
+            <NotificationCard item={notification} />
+        </div>
+    {/each}
+</div>
+
+<style>
+    .site-notifications :global(.notification-card) {
         box-shadow: var(--shadow-xxl), var(--shadow-xxl), var(--shadow-xxl);
         border: 2px solid var(--color-menu-border);
     }
@@ -84,15 +115,18 @@
         pointer-events: initial;
     }
 
-    .list {
+    .site-notifications {
         position: absolute;
         top: 0;
-        right: 0;
+        left: 0;
         z-index: 1000;
         width: 300px;
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md);
         padding: var(--spacing-lg);
+        /*outline: 50px solid lime;*/
+        pointer-events: none;
+        overflow: hidden;
     }
 </style>

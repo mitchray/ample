@@ -114,7 +114,7 @@
     }
 
     /* show full lister if not enough room to have name and action columns always present */
-    @container lister-wrapper (min-width: 700px) {
+    @container lister-wrapper (min-width: 600px) {
         .header :global(.name),
         .header :global(.actions) {
             position: sticky;
