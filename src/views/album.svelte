@@ -242,7 +242,6 @@
         flex-direction: column;
         gap: var(--spacing-sm);
         align-items: start;
-        text-wrap: balance;
     }
 
     .title {
@@ -252,6 +251,7 @@
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;
+        text-wrap: balance;
     }
 
     .meta {

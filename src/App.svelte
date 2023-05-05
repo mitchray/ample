@@ -21,7 +21,7 @@
     import SiteLoading from './components/siteLoading.svelte';
     import Header from './components/header.svelte';
     import Sidebar3 from './components/sidebar3.svelte';
-    import Queue from './components/queue.svelte';
+    import Queue from './components/queue2.svelte';
     import Player from './components/player/player.svelte';
     import Fullscreen from './components/fullscreen/fullscreen.svelte';
     import Notifications from './components/notification/notificationsContainer.svelte';
@@ -191,7 +191,6 @@
 
     :global(.site-content-inner) {
         --content-padding: var(--spacing-lg);
-        --content-padding-end: var(--spacing-xxl);
         container-name: site-content-inner;
         container-type: size;
         position: absolute;
@@ -209,27 +208,13 @@
             [content-start]
             1fr
             [content-end]
-            var(--content-padding-end)
+            var(--content-padding)
             [full-end];
         grid-auto-rows: min-content;
     }
 
-    @media (max-width: 679.99px) {
-        :global(.site-content-inner) {
-            --content-padding-end: var(--spacing-lg);
-        }
-    }
-
     :global(.site-content-inner > *) {
         grid-column: content;
-    }
-
-    /* needed as flex doesn't include padding in height calc */
-    :global(.site-content-inner:after) {
-        /*content: '';*/
-        /*padding: inherit;*/
-        /*padding-top: 0;*/
-        /*display: block;*/
     }
 
     :global(.site-player) {

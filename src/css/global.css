@@ -29,7 +29,7 @@
     --size-header-height:    40px;
     --size-sidebar-width:    165px;
     --size-webplayer-height: 100px;
-    --size-queue-width:      320px;
+    --size-queue-width:      330px;
     --size-seekbar-height:   5px;
 
     /* Breakpoints */
@@ -282,7 +282,7 @@ button:focus-visible {
 }
 
 /* --------------------------
-   Buttons / badges
+   Buttons / badges / tooltips
    -------------------------- */
 
 ::-moz-focus-inner {
@@ -508,6 +508,21 @@ button svg {
     line-height: 1;
     border-radius: 0.2em;
     font-size: 0.75em;
+}
+
+.tooltip {
+    display: none;
+    width: max-content;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: var(--color-interface);
+    font-weight: bold;
+    padding: 5px;
+    border-radius: 4px;
+    font-size: 90%;
+    z-index: 100000;
+    box-shadow: var(--shadow-sm);
 }
 
 /* --------------------------
