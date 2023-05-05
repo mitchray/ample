@@ -1,15 +1,19 @@
 <script>
+    import { onMount, onDestroy } from "svelte";
+    import { computePosition, autoUpdate, offset, size } from '@floating-ui/dom';
     import { quintOut } from 'svelte/easing';
     import { fly, fade } from 'svelte/transition';
     import { flip } from 'svelte/animate';
 
-    import { SiteMainSpace } from '../../stores/player';
+    import { SiteContentBind } from '../../stores/player';
     import { AlertsList } from '../../stores/message';
 
     import AlertCard from '../../components/alert/alertCard.svelte';
 
     let timeout;
     let freshAlerts = [];
+    let listBind;
+    let autoUpdateCleanup;
 
     $: {
         if ($AlertsList) {
@@ -46,38 +50,66 @@
             }
         }, 3000);
     }
-</script>
 
-{#if $SiteMainSpace.ready}
-    <div class="alerts-container"
-        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
-    >
-        <div class="list">
-            {#each freshAlerts as alert (alert.id)}
-                <div class="card-container"
-                    in:fly="{{ y: -100, duration: 300, easing: quintOut }}"
-                    out:fade="{{ duration: 300, easing: quintOut }}"
-                    animate:flip="{{ duration: 300 }}"
-                    on:mouseenter={e => handleEnter(e)}
-                    on:mouseleave={e => handleLeave(e)}
-                    data-id="{alert.id}"
-                >
-                    <AlertCard item={alert} />
-                </div>
-            {/each}
-        </div>
-    </div>
-{/if}
-
-<style>
-    .alerts-container {
-        position: fixed;
-        z-index: 25;
-        pointer-events: none;
-        overflow: hidden;
+    function updatePosition() {
+        computePosition($SiteContentBind, listBind, {
+            placement: "bottom",
+            middleware: [
+                size({
+                    apply({availableHeight, elements}) {
+                        Object.assign(elements.floating.style, {
+                            // Minimum acceptable height is 50px.
+                            // `flip` will then take over.
+                            height: `${$SiteContentBind.clientHeight - 15}px`,
+                        });
+                    },
+                }),
+                offset(({rects}) => ({
+                    mainAxis: -rects.floating.height - 15,
+                    alignmentAxis: 15,
+                }))
+            ],
+        }).then(({x, y}) => {
+            Object.assign(listBind.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+        });
     }
 
-    .alerts-container :global(.alert-card) {
+    onMount(() => {
+        updatePosition();
+
+        autoUpdateCleanup = autoUpdate(
+            $SiteContentBind,
+            listBind,
+            updatePosition
+        );
+    });
+
+    onDestroy(() => {
+        // floating-ui
+        autoUpdateCleanup();
+    })
+</script>
+
+<div class="list" bind:this={listBind}>
+    {#each freshAlerts as alert (alert.id)}
+        <div class="card-container"
+             in:fly="{{ y: -100, duration: 300, easing: quintOut }}"
+             out:fade="{{ duration: 300, easing: quintOut }}"
+             animate:flip="{{ duration: 300 }}"
+             on:mouseenter={e => handleEnter(e)}
+             on:mouseleave={e => handleLeave(e)}
+             data-id="{alert.id}"
+        >
+            <AlertCard item={alert} />
+        </div>
+    {/each}
+</div>
+
+<style>
+    .list :global(.alert-card) {
         box-shadow: var(--shadow-xxl), var(--shadow-xxl), var(--shadow-xxl);
         border: 2px solid var(--color-menu-border);
     }
@@ -88,16 +120,18 @@
 
     .list {
         position: absolute;
-        bottom: 0;
-        left: 50%;
-        right: 0;
+        top: 0;
+        left: 0;
         z-index: 1000;
-        max-width: 500px;
-        transform: translateX(-50%);
+        height: 100%;
+        width: 500px;
+        max-width: calc(100% - var(--spacing-xxl));
         display: flex;
         flex-direction: column;
+        justify-content: end;
         gap: var(--spacing-md);
         padding: var(--spacing-lg);
-        /*outline: 3px solid lime;*/
+        pointer-events: none;
+        overflow: hidden;
     }
 </style>
