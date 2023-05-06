@@ -35,7 +35,7 @@
     </div>
 
     <div class="panel-content">
-        <p><em>{playlist.name}</em> will be deleted</p>
+        <span class="name">{playlist.name}</span> will be deleted
     </div>
 
     <div class="new-panel-footer">
@@ -56,7 +56,8 @@
         margin: 0;
     }
 
-    p {
-        margin: 0 var(--spacing-sm);
+    .name {
+        color: var(--color-highlight);
+        font-weight: bold;
     }
 </style>

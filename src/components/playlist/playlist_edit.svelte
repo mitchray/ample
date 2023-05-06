@@ -1,10 +1,14 @@
 <script>
+    import { createEventDispatcher  } from "svelte";
     import { API } from "../../stores/api";
     import { addAlert } from "../../logic/alert";
 
     export let playlist = null;
     export let isNew = false;
-    export let isVisible;
+    export let isVisible; // passed back to parent
+    export let nested = false;
+
+    const dispatch = createEventDispatcher();
 
     let playlistName = playlist?.name || '';
     let playlistType = playlist?.type || 'private';
@@ -31,6 +35,7 @@
                 isVisible = false;
 
                 addAlert({title: 'Playlist created', style: 'success'});
+                dispatch('created');
             } else {
                 if (playlistTest?.id && playlistTest?.id !== playlist.id) {
                     return;
@@ -53,14 +58,17 @@
     }
 
     function handleCancel() {
+        dispatch('cancelled');
         isVisible = false;
     }
 </script>
 
 <div class="container">
-    <div class="new-panel-header">
-        <h4 class="panel-title">{isNew ? 'New' : 'Edit'} Playlist</h4>
-    </div>
+    {#if !nested}
+        <div class="new-panel-header">
+            <h4 class="panel-title">{isNew ? 'New' : 'Edit'} Playlist</h4>
+        </div>
+    {/if}
 
     <input
         placeholder="Name"
