@@ -202,6 +202,11 @@ input[type="checkbox"]:not(.switch):before {
 
 input[type="radio"]:checked {
     background-color: var(--color-highlight);
+    border-color: var(--color-highlight);
+}
+
+input[type="checkbox"]:checked {
+    border-color: var(--color-highlight);
 }
 
 input[type="checkbox"]:checked:before {
