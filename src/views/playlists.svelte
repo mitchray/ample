@@ -57,14 +57,14 @@
     {#if loading}
         <p>Loading playlists</p>
     {:else}
-        {#if playlists && playlists.length > 0}
+        {#if playlists?.length > 0}
             <Lister2
-                    data={playlists}
-                    type="playlist"
-                    initialSort="name"
-                    actionData={{
-                disable: true
-            }}
+                bind:data={playlists}
+                type="playlist"
+                initialSort="name"
+                actionData={{
+                    disable: true
+                }}
             />
         {:else}
             <p>No playlists found</p>
