@@ -6,30 +6,12 @@
     import Menu from '../components/menu.svelte';
     import Lister2 from '../components/lister/lister.svelte';
 
-    let newPlaylist;
     let playlists = [];
     let showPlaylistCreation = false;
     let loading = true;
 
     let title = "Playlists";
     $PageTitle = title;
-
-    $: {
-        if (newPlaylist) {
-            newPlaylist.isNew = true;
-
-            playlists = [
-                newPlaylist,
-                ...playlists
-            ]
-
-            // reset
-            newPlaylist = null;
-            showPlaylistCreation = false;
-        }
-
-        playlists = playlists;
-    }
 
     function handleShowPlaylistCreator() {
         showPlaylistCreation = !showPlaylistCreation;
@@ -49,7 +31,7 @@
 
 {#if showPlaylistCreation}
     <Menu anchor="bottom-center" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
-        <PlaylistEdit isNew={true} bind:playlist={newPlaylist} bind:isVisible={showPlaylistCreation} />
+        <PlaylistEdit isNew={true} bind:isVisible={showPlaylistCreation} />
     </Menu>
 {/if}
 

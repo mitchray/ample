@@ -1,5 +1,6 @@
 <script>
     import { API } from "../../stores/api";
+    import { DispatchListerEvent } from "../../stores/message";
     import { addAlert } from "../../logic/alert";
     import SVGBin from "/src/images/delete.svg";
 
@@ -16,6 +17,10 @@
                     })
 
                     addAlert({title: 'Playlist deleted', style: 'success'});
+                    $DispatchListerEvent = {
+                        event: "deletedPlaylist",
+                        data: playlist,
+                    };
                 } else {
                     addAlert({title: 'Failed to delete playlist', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
                 }

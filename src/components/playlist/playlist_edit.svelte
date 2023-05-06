@@ -1,6 +1,7 @@
 <script>
     import { createEventDispatcher  } from "svelte";
     import { API } from "../../stores/api";
+    import { DispatchListerEvent } from "../../stores/message";
     import { addAlert } from "../../logic/alert";
 
     export let playlist = null;
@@ -35,7 +36,14 @@
                 isVisible = false;
 
                 addAlert({title: 'Playlist created', style: 'success'});
-                dispatch('created');
+
+                $DispatchListerEvent = {
+                    event: "addedPlaylist",
+                    data: playlist,
+                };
+
+                // reset once completed
+                playlist = null;
             } else {
                 if (playlistTest?.id && playlistTest?.id !== playlist.id) {
                     return;
@@ -52,6 +60,20 @@
                     isVisible = false;
 
                     addAlert({title: 'Playlist updated', style: 'success'});
+
+                    $DispatchListerEvent = {
+                        event: "editedPlaylist",
+                        data: playlist,
+                    };
+                } else {
+                    addAlert({title: 'Playlist no longer exists', style: 'warning'});
+
+                    $DispatchListerEvent = {
+                        event: "deletedPlaylist",
+                        data: playlist,
+                    };
+
+                    isVisible = false;
                 }
             }
         }

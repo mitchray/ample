@@ -2,6 +2,7 @@
     import { writable } from 'svelte/store';
     import { onDestroy, onMount, setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
+    import { ListerEvent } from "../../stores/message";
 
     import Actions2 from '../../components/action/actions.svelte';
     import TableView from './lister_tableView.svelte';
@@ -76,6 +77,37 @@
     $: {
         if (actionData.songs) {
             actionData.songs = $dataDisplay;
+        }
+    }
+
+    // handleEvents whenever a new event is dispatched
+    $: $ListerEvent, handleEvents();
+
+    function handleEvents() {
+        if (!$ListerEvent._id) {
+            return;
+        }
+
+        // TODO might be a good idea to have a listerID attached to the event so only the correct one handles it
+
+        switch ($ListerEvent.event) {
+            case "addedPlaylist":
+                data = [
+                    $ListerEvent.data,
+                    ...data
+                ];
+                break;
+            case "editedPlaylist":
+                let oldPlaylist = data.find( obj => obj.id === $ListerEvent.data.id);
+                Object.assign(oldPlaylist, $ListerEvent.data);
+                data = data;
+                break;
+            case "deletedPlaylist":
+                data = data.filter( obj => obj.id !== $ListerEvent.data.id);
+                break;
+            default:
+                // console.debug($ListerEvent, "event not recognised");
+                break;
         }
     }
 

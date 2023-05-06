@@ -6,8 +6,7 @@
 
     export let contextKey;
 
-    const { getData, dataDisplay, columnWidths, listerObject, listerHeader, listerContainer } = getContext(contextKey);
-    let data = getData();
+    const { dataDisplay, columnWidths, listerObject, listerHeader, listerContainer } = getContext(contextKey);
     let bindForName;
     let bindForActions;
     let observerName;
