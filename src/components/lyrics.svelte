@@ -27,8 +27,14 @@
             loading = false;
         }
 
-        // updatePosition whenever QueueIsOpen changes
-        $QueueIsOpen, updatePosition();
+
+    }
+
+    $: {
+        if ($SiteInnerBind) {
+            // updatePosition whenever QueueIsOpen changes
+            $QueueIsOpen, updatePosition();
+        }
     }
 
     function resetEvents() {
