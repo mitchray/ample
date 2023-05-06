@@ -201,7 +201,6 @@
 
     .container {
         width: 350px;
-        max-width: inherit;
     }
 
     .header {

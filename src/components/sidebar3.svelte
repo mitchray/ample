@@ -4,9 +4,7 @@
     import { Link } from "svelte-routing";
     import { clickOutsideDetector } from '../actions/clickOutsideDetector';
     import {
-        SidebarIsMini,
         SidebarIsOpen,
-        SidebarIsPinned,
         customHue,
         IsMobile
     } from '../stores/status';
