@@ -222,7 +222,8 @@
                 data={Object.create({
                     album: item.album ? item.album : null,
                     artists: item.artists?.length > 0 ? item.artists : null,
-                    albumArtist: item.albumartist ? item.albumartist : null
+                    albumArtist: item.albumartist ? item.albumartist : null,
+                    playlist: (getType() === "playlist" ? item : null)
                 })}
             />
         {/if}
