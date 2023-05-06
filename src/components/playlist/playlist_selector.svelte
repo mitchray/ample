@@ -2,36 +2,17 @@
     import { onMount, createEventDispatcher  } from "svelte";
     import { API } from "../../stores/api";
 
-    import PlaylistEdit from '../../components/playlist/playlist_edit.svelte';
-
     export let type;
     export let selectedPlaylist;
+    export let showSelected;
 
     const dispatch = createEventDispatcher();
 
     let search = '';
     let filteredList;
     let playlistItems = [];
-    let showPlaylistCreation = false;
-    let newPlaylist;
 
-    $: {
-        if (newPlaylist) {
-            newPlaylist.isNew = true;
-
-            playlistItems = [
-                newPlaylist,
-                ...playlistItems
-            ]
-
-            // reset
-            newPlaylist = null;
-            showPlaylistCreation = false;
-        }
-
-        playlistItems = playlistItems;
-    }
-
+    $: playlistItems = playlistItems;
     $: filteredList = playlistItems.filter(item => item.name.toLocaleLowerCase().indexOf(search) !== -1);
 
     async function handleSelection(playlist) {
@@ -50,16 +31,6 @@
         dispatch('selected');
     }
 
-    function handleGoToSelected() {
-        document.querySelector(".playlists .selected").scrollIntoView({
-            behavior: "smooth",
-        });
-    }
-
-    function handleNewPlaylist() {
-        showPlaylistCreation = !showPlaylistCreation;
-    }
-
     async function loadData() {
         if (type === 'smartlists') {
             playlistItems = await $API.smartlists();
@@ -74,88 +45,57 @@
 </script>
 
 <div class="container">
-    {#if showPlaylistCreation}
-        <div class="nested">
-            <PlaylistEdit isNew={true} bind:playlist={newPlaylist} bind:isVisible={showPlaylistCreation} />
+    {#if showSelected}
+        <div class="current">
+            {#if selectedPlaylist}
+                <span class="current-selected" title="{selectedPlaylist.name}">{selectedPlaylist.name}</span>
+            {:else}
+                <span class="current-selected">No playlist selected</span>
+            {/if}
         </div>
-    {:else}
-        {#if type === "playlists"}
-            <button id="js-playlistsNewFromAdd" on:click={handleNewPlaylist} class="addNew button button--primary">New playlist</button>
-        {/if}
+    {/if}
 
-        <label class="filter">
-            Filter:
-            <input type="text" class="filter" bind:value={search} />
-        </label>
+    <input type="text" placeholder="Filter" class="filter" bind:value={search} />
 
+    <div class="new-panel-main">
         <ul class="playlists">
             {#if filteredList.length > 0}
                 {#each filteredList as item}
-                    <li class="item" class:highlight={item.isNew} on:click={handleSelection(item)} class:selected={selectedPlaylist && selectedPlaylist.id === item.id}>
-                        <span class="inner" title="{item.name}">{item.name}</span>
+                    <li class="item" on:click={handleSelection(item)} class:selected={selectedPlaylist && selectedPlaylist.id === item.id}>
+                        <span class="item-inner" title="{item.name}">{item.name}</span>
                     </li>
                 {/each}
             {/if}
         </ul>
-
-        <p class="current">
-            Selected:
-            {#if selectedPlaylist}
-                <span class="inner goto badge badge--info" title="{selectedPlaylist.name}" on:click={handleGoToSelected}>{selectedPlaylist.name}</span>
-            {:else}
-                <span class="inner badge">No playlist selected</span>
-            {/if}
-        </p>
-    {/if}
+    </div>
 </div>
 
 <style>
-    .addNew {
-        margin: var(--spacing-lg) 0;
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+        width: 250px;
     }
 
     .selected {
         font-weight: 700;
-    }
-
-    .nested {
-        margin-top: var(--spacing-lg);
-        border: 1px solid var(--color-border);
-        border-radius: 3px;
-    }
-
-    .highlight {
-        font-style: italic;
+        color: var(--color-highlight);
     }
 
     .playlists {
-        margin-top: var(--spacing-md);
         height: 200px;
         overflow-y: auto;
-        border: 2px solid var(--color-border);
-        border-radius: 3px;
-        padding: var(--spacing-sm) 0;
-        margin-bottom: 0;
-    }
-
-    .filter {
         display: flex;
-        align-items: center;
-        width: 100%;
-    }
-
-    .filter input {
-        margin-left: var(--spacing-md);
+        flex-direction: column;
+        gap: 1px;
     }
 
     .item {
         cursor: pointer;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start; /* have children take up content space */
     }
 
-    .item .inner {
+    .item-inner {
         display: block;
         padding: var(--spacing-sm) var(--spacing-md);
         white-space: nowrap;
@@ -170,26 +110,18 @@
         }
     }
 
-    .item + .item {
-        margin-top: 2px;
-    }
-
     .current {
         display: flex;
+        flex-direction: column;
         overflow: hidden;
-        align-items: center;
-        margin-bottom: 0;
+        max-width: 100%;
+        margin-bottom: var(--spacing-md);
     }
 
-    .current .inner {
+    .current-selected {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 100%; /* key to having overflow take effect with the flex-start items */
-        margin-left: 1ch;
-    }
-
-    .goto {
-        cursor: pointer;
+        font-weight: 700;
     }
 </style>

@@ -150,7 +150,7 @@
         contain: layout paint;
         background-color: var(--color-menu-background);
         border: 2px solid var(--color-menu-border);
-        border-radius: 5px;
+        border-radius: 10px;
         box-shadow: var(--shadow-lg);
         opacity: 0;
         cursor: initial;
@@ -159,6 +159,8 @@
         top: min(max(0%, var(--mouse-y)), calc(100vh - var(--height)));
         left: min(max(0%, var(--mouse-x)), calc(100vw - var(--width)));
         z-index: 1000;
+        padding: var(--spacing-lg);
+        max-width: 100%;
     }
 
     .is-open {

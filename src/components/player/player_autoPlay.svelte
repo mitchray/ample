@@ -81,15 +81,19 @@
 
 {#if isVisible}
     <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
-        <div class="header panel-header">
-            <h4 class="title panel-title">Smartlist AutoPlay</h4>
+        <div class="new-panel-container">
+            <div class="new-panel-header">
+                <h4 class="title panel-title">Smartlist AutoPlay</h4>
+                <input type="checkbox" class="switch" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
+            </div>
 
-            <input type="checkbox" class="switch" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
-        </div>
+            <div class="new-panel-secondary">
+                New items will be added from
+            </div>
 
-        <div class="panel-content">
             <PlaylistSelector
                 type="smartlists"
+                showSelected={true}
                 bind:selectedPlaylist
                 on:selected={handleSelected}
                 on:cleared={handleCleared}
@@ -99,5 +103,7 @@
 {/if}
 
 <style>
-    
+    .new-panel-container {
+        width: 250px;
+    }
 </style>

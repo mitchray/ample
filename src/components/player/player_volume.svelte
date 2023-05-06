@@ -141,7 +141,7 @@
 
 {#if menuIsVisible}
     <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible={menuIsVisible} >
-        <div class="header panel-header">
+        <div class="header new-panel-header">
             <h4 class="title panel-title">Volume Settings</h4>
         </div>
 
@@ -155,19 +155,38 @@
                 <div class="info">Keeps volume consistent between different tracks</div>
 
                 {#if $CurrentMedia}
-                    <div class="current">
-                        <div>Current type: {$MediaPlayer.gainType}</div>
+                    <div class="current new-panel-main">
+                        <table>
+                            <tr>
+                                <td class="label">Current</td>
+                                <td>{$MediaPlayer.gainType}</td>
+                            </tr>
 
-                        {#if $MediaPlayer.gainType === 'EBU R128'}
-                            <div>Target volume: {$MediaPlayer.targetVolume}db</div>
-                            <div>Mastered volume: {$MediaPlayer.masteredVolume}db</div>
-                        {/if}
+                            {#if $MediaPlayer.gainType === 'EBU R128'}
+                                <tr>
+                                    <td class="label">Target</td>
+                                    <td>{$MediaPlayer.targetVolume}db</td>
+                                </tr>
 
-                        {#if $MediaPlayer.gainType === 'ReplayGain'}
-                            <div>ReplayGain: {$MediaPlayer.gainTagValue}</div>
-                        {/if}
+                                <tr>
+                                    <td class="label">Mastered</td>
+                                    <td>{$MediaPlayer.masteredVolume}db</td>
+                                </tr>
+                            {/if}
 
-                        <div>Gain: {$MediaPlayer.gainNeeded}db</div>
+                            {#if $MediaPlayer.gainType === 'ReplayGain'}
+                                <tr>
+                                    <td class="label">ReplayGain</td>
+                                    <td>{$MediaPlayer.gainTagValue}</td>
+                                </tr>
+                            {/if}
+
+                            <tr>
+                                <td class="label">Gain</td>
+                                <td>{$MediaPlayer.gainNeeded}db</td>
+                            </tr>
+                        </table>
+
                     </div>
                 {/if}
             </div>
@@ -282,9 +301,13 @@
     }
 
     .current {
-        background-color: var(--color-card-highlight);
         max-width: fit-content;
-        padding: var(--spacing-md);
         margin-top: var(--spacing-md);
+    }
+
+    .label {
+        color: var(--color-text-secondary);
+        padding-right: var(--spacing-md);
+        text-align: right;
     }
 </style>

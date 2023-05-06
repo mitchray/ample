@@ -43,8 +43,6 @@
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md);
-        padding: var(--spacing-md);
-        justify-content: start;
     }
 
     .container :global(svg) {

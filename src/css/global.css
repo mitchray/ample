@@ -650,74 +650,45 @@ svg.inline {
  * Panels & Modals
  */
 
-.panel-header,
-.panel-content,
-.panel-footer {
+.new-panel-container {
+    z-index: 1;
+}
+
+.new-panel-main {
+    background-color: var(--color-interface);
+    box-shadow: var(--shadow-md);
+    padding: var(--spacing-md);
+    border-radius: 7px;
+    z-index: 1;
+}
+
+.new-panel-header {
     display: flex;
-}
-
-.panel-header,
-.panel-footer {
-    min-height: 48px;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-lg);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--color-menu-border);
     align-items: center;
-    padding: var(--spacing-md) var(--spacing-lg);
-    padding-right: var(--spacing-md);
+    height: 36px; /* fixed size so buttons don't affect padding */
 }
 
-.panel-header {
-    border-bottom: 1px solid var(--color-border);
+.new-panel-secondary {
+    color: var(--color-text-secondary);
 }
 
-.panel-footer {
-    border-top: 1px solid var(--color-border);
+.new-panel-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-lg);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--color-menu-border);
+    align-items: center;
+    height: 36px; /* fixed size so buttons don't affect padding */
 }
 
 .panel-content {
     flex-direction: column;
     gap: var(--spacing-md);
-    padding: var(--spacing-lg);
-}
-
-.panel-footer {
-    justify-content: space-between;
-}
-
-.panel-actions {
-    display: flex;
-    position: sticky;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    line-height: 1;
-    background-color: var(--color-interface);
-    border-bottom: 1px solid var(--color-border);
-    z-index: 100;
-}
-
-.panel-action {
-    display: flex;
-    justify-content: center;
-    width: 0;
-    flex: 1;
-    border-radius: 0;
-    border: 0;
-    padding: 2px 0;
-}
-
-@media (hover: hover) {
-    .panel-action:hover {
-        background-color: var(--color-regular-background);
-        color: var(--color-regular-foreground-hover);
-    }
-}
-
-.panel-action svg {
-    height: 1em;
-}
-
-.panel-action + .panel-action {
-    border-left: 1px solid var(--color-border);
 }
 
 .panel-content .group .info {

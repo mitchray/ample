@@ -8,6 +8,7 @@
 
     let selectedPlaylist;
     let ignoreDuplicates = true;
+    let showPlaylistCreation = false;
 
     function handleSelected() {
         songs.forEach(element => {
@@ -24,27 +25,34 @@
     function toggleIgnoreDuplicates() {
         ignoreDuplicates = !ignoreDuplicates;
     }
+
+    function handleNewPlaylist() {
+        showPlaylistCreation = !showPlaylistCreation;
+    }
 </script>
 
-
-<div class="panel-header">
-    <h4 class="panel-title">Add to Playlist</h4>
-</div>
-
-<div class="panel-content">
-    <label class="toggle">
-        <input type="checkbox" on:change={toggleIgnoreDuplicates} bind:checked={ignoreDuplicates} />
-        Skip duplicates
-    </label>
+<div class="new-panel-container">
+    <div class="new-panel-header">
+        <h4 class="panel-title">Add to Playlist</h4>
+        <button id="js-playlistsNewFromAdd" on:click={handleNewPlaylist} class="addNew button button--primary">New</button>
+    </div>
 
     <PlaylistSelector
         type="playlists"
         bind:selectedPlaylist
         on:selected={handleSelected}
     />
+
+    <div class="new-panel-secondary">
+        <label class="toggle">
+            <input type="checkbox" on:change={toggleIgnoreDuplicates} bind:checked={ignoreDuplicates} />
+            Skip duplicates
+        </label>
+    </div>
 </div>
 
-
 <style>
-
+    .new-panel-secondary {
+        margin-top: var(--spacing-lg);
+    }
 </style>

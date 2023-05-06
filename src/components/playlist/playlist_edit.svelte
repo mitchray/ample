@@ -58,28 +58,24 @@
 </script>
 
 <div class="container">
-    <div class="panel-header">
+    <div class="new-panel-header">
         <h4 class="panel-title">{isNew ? 'New' : 'Edit'} Playlist</h4>
     </div>
 
-    <div class="panel-content">
-        <label class="name">
-            Name
-            <input
-                type="text"
-                bind:value={playlistName}
-            />
-        </label>
+    <input
+        placeholder="Name"
+        type="text"
+        bind:value={playlistName}
+    />
 
-        <div class="types">
-            <label>
-                Public
-                <input type="checkbox" class="switch" bind:checked={playlistTypeValue} />
-            </label>
-        </div>
+    <div class="types">
+        <label>
+            Public
+            <input type="checkbox" class="switch type" bind:checked={playlistTypeValue} />
+        </label>
     </div>
 
-    <div class="panel-footer">
+    <div class="new-panel-footer">
         <button class="button button--tertiary" on:click={handleCancel}>Cancel</button>
 
         <button
@@ -99,30 +95,7 @@
         gap: var(--spacing-md);
     }
 
-    .name {
-        display: flex;
-        flex-shrink: 1;
-        align-items: center;
-    }
-
-    .name input {
-        flex-grow: 1;
-    }
-
-    input[type="text"] {
-        margin-left: var(--spacing-md);
-    }
-
-    .types {
-        display: flex;
-        gap: var(--spacing-md);
-    }
-
-    .message {
-        display: none;
-    }
-
-    .message.visible {
-        display: block;
+    .type {
+        margin-left: var(--spacing-sm);
     }
 </style>

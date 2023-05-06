@@ -104,7 +104,7 @@
     bind:this={lyricsBind}
 >
     <div class="container">
-        <div class="header panel-header">
+        <div class="header new-panel-header">
             <h4 class="title panel-title">Lyrics</h4>
             <button
                 class="follow button button--regular"
@@ -115,7 +115,7 @@
             </button>
         </div>
         <div
-            class="lyrics-container panel-content"
+            class="lyrics-container panel-content new-panel-main"
             on:wheel={handleScroll}
             on:touchstart={handleScroll}
             class:disable-scroll={follow}
@@ -201,16 +201,12 @@
 
     .container {
         width: 350px;
-    }
-
-    .header {
-        display: flex;
-        justify-content: space-between;
+        padding: var(--spacing-lg);
     }
 
     .panel-content {
         max-height: 215px;
-        padding: var(--spacing-lg);
         overflow: auto;
+        padding: var(--spacing-lg);
     }
 </style>

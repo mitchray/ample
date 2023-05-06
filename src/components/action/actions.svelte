@@ -163,22 +163,22 @@
         <ActionShuffleLast contextKey={contextKey} />
 
         {#if data.artist?.id}
-            <Link to="artists/{data.artist.id}"><SVGArtist class="inline" /> {data.artist.name}</Link>
+            <Link to="artists/{data.artist.id}"><span><SVGArtist class="inline" />{data.artist.name}</span></Link>
         {/if}
 
         <!-- add album artist if not already in artists -->
         {#if data.albumArtist?.id && (data.artists?.length > 0 && !data.artists.find(artist => artist.id === data.albumArtist.id))}
-            <Link to="artists/{data.albumArtist.id}"><SVGArtist class="inline" /> {data.albumArtist.name}</Link>
+            <Link to="artists/{data.albumArtist.id}"><span><SVGArtist class="inline" />{data.albumArtist.name}</span></Link>
         {/if}
 
         {#if data.artists?.length > 0}
             {#each data.artists as artist}
-                <Link to="artists/{artist.id}"><SVGArtist class="inline" /> {artist.name}</Link>
+                <Link to="artists/{artist.id}"><span><SVGArtist class="inline" />{artist.name}</span></Link>
             {/each}
         {/if}
 
         {#if data.album?.id}
-            <Link to="albums/{data.album.id}"><SVGAlbum class="inline" /> {data.album.name}</Link>
+            <Link to="albums/{data.album.id}"><span><SVGAlbum class="inline" />{data.album.name}</span></Link>
         {/if}
 
         {#if (type === "artist" || type === "album" || type === "song")}
@@ -251,6 +251,8 @@
      */
     .c-actions.menu {
         flex-direction: column;
+        max-width: 180px;
+        width: 100%;
     }
 
     .c-actions.menu :global(svg) {
@@ -267,6 +269,13 @@
         padding: 0.3em 0;
         width: 100%;
         color: var(--color-text-primary);
+    }
+
+    .c-actions.menu :global(button span),
+    .c-actions.menu :global(a span) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .c-actions.menu :global(button) {

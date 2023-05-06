@@ -30,7 +30,7 @@
 </script>
 
 <div class="container">
-    <div class="panel-header">
+    <div class="new-panel-header">
         <h4 class="panel-title">Confirm playlist removal</h4>
     </div>
 
@@ -38,7 +38,7 @@
         <p><em>{playlist.name}</em> will be deleted</p>
     </div>
 
-    <div class="panel-footer">
+    <div class="new-panel-footer">
         <button class="button button--tertiary" on:click={handleCancel}>Cancel</button>
         <button class="button button--danger" on:click={handleDelete}><SVGBin /> Delete</button>
     </div>

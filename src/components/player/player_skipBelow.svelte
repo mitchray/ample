@@ -55,7 +55,7 @@
 
 {#if isVisible}
     <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
-        <div class="header panel-header">
+        <div class="header new-panel-header">
             <h4 class="title panel-title">Skip songs below rating</h4>
 
             <input type="checkbox" class="switch" bind:checked={$SkipBelow} on:change={handleSkipBelow} />

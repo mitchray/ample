@@ -76,7 +76,7 @@
     <Menu anchor="bottom-left" toggleSelector={"#notifications-toggle"} bind:isVisible={menuIsVisible} >
         <div class="container">
             <div class="notifications-view" style="display: {currentTab === 1 ? 'block' : 'none'}">
-                <div class="header panel-header">
+                <div class="header new-panel-header">
                     <h4 class="title panel-title">Notifications</h4>
                     <button class="clear-notifications icon-button" title="Clear all notifications" on:click={handleClearNotifications}><SVGClose /></button>
                     <button class="button button--regular" on:click={e => currentTab = 2}>Settings</button>
@@ -94,7 +94,7 @@
             </div>
 
             <div class="settings-view" style="display: {currentTab === 2 ? 'block' : 'none'}">
-                <div class="header panel-header">
+                <div class="header new-panel-header">
                     <h4 class="title panel-title">Settings</h4>
                     <button class="button button--regular" on:click={e => currentTab = 1}>Back</button>
                 </div>
@@ -158,7 +158,6 @@
     .panel-content {
         overflow: auto;
         max-height: 400px;
-        padding: var(--spacing-md);
     }
 
     .notifications-view .panel-content {
@@ -187,9 +186,5 @@
 
     .group + .group {
         padding-top: var(--spacing-lg);
-    }
-
-    .settings-view .panel-content {
-        padding: var(--spacing-lg);
     }
 </style>
