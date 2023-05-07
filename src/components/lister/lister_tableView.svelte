@@ -20,8 +20,8 @@
 
         await tick();
 
-        let headerName    = $listerContainer.querySelector('.header .name');
-        let headerActions = $listerContainer.querySelector('.header .actions');
+        let headerName    = $listerContainer?.querySelector('.header .name');
+        let headerActions = $listerContainer?.querySelector('.header .actions');
         let marginName    = '0px 0px 0px 0px';
         let marginActions = '0px -1px 0px 0px';
 
