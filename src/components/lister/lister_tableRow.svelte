@@ -250,8 +250,13 @@
         flex-wrap: nowrap;
     }
 
-    .cell[data-type=number],
-    .cell[data-type=time] {
+    :global(.lister-container .header .cell[data-type=number]),
+    :global(.lister-container .header .cell[data-type=time]) {
+        padding-right: 25px;
+    }
+
+    :global(.lister-container .cell[data-type=number]),
+    :global(.lister-container .cell[data-type=time]) {
         justify-content: end;
     }
 

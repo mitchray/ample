@@ -242,7 +242,7 @@
 </script>
 
 {#each $visibleColumns as col (col)}
-    <div class="cell {col.id}" data-sortable="{col.sortable}" >
+    <div class="cell {col.id}" data-sortable="{col.sortable}" data-type={col.type} >
         {#if col.id === "checkbox"}
             <input type="checkbox" on:change={toggleAllChecked} />
         {:else if col.id === "actions"}
