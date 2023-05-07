@@ -669,7 +669,7 @@ svg.inline {
     padding-bottom: var(--spacing-lg);
     border-bottom: 1px solid var(--color-menu-border);
     align-items: center;
-    height: 36px; /* fixed size so buttons don't affect padding */
+    height: 44px; /* fixed size so buttons don't affect padding */
 }
 
 .new-panel-secondary {
