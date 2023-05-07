@@ -37,6 +37,10 @@
 
                 addAlert({title: 'Playlist created', style: 'success'});
 
+                // informs parent component
+                dispatch('created');
+
+                // informs lister
                 $DispatchListerEvent = {
                     event: "addedPlaylist",
                     data: playlist,
