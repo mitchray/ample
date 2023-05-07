@@ -53,6 +53,7 @@
     :global(.current-icon) {
         margin-right: var(--spacing-sm);
         flex-shrink: 0;
+        color: var(--color-highlight);
     }
 
     .queue-header {

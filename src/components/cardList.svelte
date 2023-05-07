@@ -14,6 +14,7 @@
     export let containerType = "grid";
     export let arg = null;
     export let showOnlyThese = false;
+    export let useGenericCard = false;
 
     let data = [];
     let newBatch = [];
@@ -45,35 +46,75 @@
         switch (type) {
             case 'artist':
                 logic = await import("../logic/artist");
-                card = (await import('../components/artist/artistCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "cardlist-grid artist-grid" : "cardlist-scroll artist-scroll";
+
+                if (useGenericCard) {
+                    card = (await import('../components/cardGeneric.svelte')).default;
+                    containerClass = "cardlist-grid generic-grid";
+                    options.type = type;
+                } else {
+                    card = (await import('../components/artist/artistCard.svelte')).default;
+                    containerClass = (containerType === "grid") ? "cardlist-grid artist-grid" : "cardlist-scroll artist-scroll";
+                }
+
                 emptyMessage = "No artists found";
                 break;
             case 'album':
                 logic = await import("../logic/album");
-                card = (await import('../components/album/albumCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "cardlist-grid album-grid" : "cardlist-scroll album-scroll";
+
+                if (useGenericCard) {
+                    card = (await import('../components/cardGeneric.svelte')).default;
+                    containerClass = "cardlist-grid generic-grid";
+                    options.type = type;
+                } else {
+                    card = (await import('../components/album/albumCard.svelte')).default;
+                    containerClass = (containerType === "grid") ? "cardlist-grid album-grid" : "cardlist-scroll album-scroll";
+                }
+
                 emptyMessage = "No albums found";
                 break;
             case 'song':
             case 'recent_songs':
                 logic = await import("../logic/song");
-                card = (await import('../components/song/songCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "cardlist-grid song-grid" : "cardlist-scroll song-scroll";
+
+                if (useGenericCard) {
+                    card = (await import('../components/cardGeneric.svelte')).default;
+                    containerClass = "cardlist-grid generic-grid";
+                    options.type = type;
+                } else {
+                    card = (await import('../components/song/songCard.svelte')).default;
+                    containerClass = (containerType === "grid") ? "cardlist-grid song-grid" : "cardlist-scroll song-scroll";
+                }
+
                 emptyMessage = "No songs found";
                 break;
             case 'playlist':
                 logic = await import("../logic/playlist");
-                card = (await import('../components/playlist/playlistCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
+
+                if (useGenericCard) {
+                    card = (await import('../components/cardGeneric.svelte')).default;
+                    containerClass = "cardlist-grid generic-grid";
+                    options.type = type;
+                } else {
+                    card = (await import('../components/playlist/playlistCard.svelte')).default;
+                    containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
+                }
+
                 emptyMessage = "No playlists found";
                 break;
             case 'smartlist':
                 logic = await import("../logic/playlist");
-                card = (await import('../components/playlist/playlistCard.svelte')).default;
-                containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
+
+                if (useGenericCard) {
+                    card = (await import('../components/cardGeneric.svelte')).default;
+                    containerClass = "cardlist-grid generic-grid";
+                    options.type = type;
+                } else {
+                    card = (await import('../components/playlist/playlistCard.svelte')).default;
+                    containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
+                }
+
                 emptyMessage = "No smartlists found";
-                options = {isSmartlist: true};
+                options.isSmartlist = true;
                 break;
             case 'artist_mix':
                 logic = await import("../logic/playlist");

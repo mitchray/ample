@@ -461,10 +461,6 @@
         overflow: hidden;
     }
 
-    .queue-item .current-icon {
-        color: var(--color-highlight);
-    }
-
     .queue-item .remove,
     .queue-item .more {
         color: var(--color-text-secondary);

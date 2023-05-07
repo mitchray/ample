@@ -120,7 +120,7 @@
                     {item.name}
                 </Link>
             {:else if getType() === "song" || getType() === "playlist_songs"}
-                {#if $CurrentMedia && $CurrentMedia.id === item.id}
+                {#if $CurrentMedia?.id === item.id}
                     <span class="current-icon">
                         <SVGCurrent class="icon" />
                     </span>
@@ -129,8 +129,6 @@
                 <Link to="song/{item.id}">
                     {item.name}
                 </Link>
-            {:else}
-                <span>Uhh missing type</span>
             {/if}
         {/if}
 
