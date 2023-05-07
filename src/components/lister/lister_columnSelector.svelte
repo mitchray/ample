@@ -63,4 +63,10 @@
         position: absolute;
         right: 0;
     }
+
+    .panel-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
 </style>

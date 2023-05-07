@@ -354,6 +354,7 @@
         padding: 0;
         gap: var(--spacing-md);
         border: 0;
+        height: 48px;
     }
 
     .clear-all {
