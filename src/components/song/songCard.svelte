@@ -29,10 +29,10 @@
             </div>
 
             <div class="info">
-                <div class="time">{formatTotalTime(song.time)}</div>
+                <div class="time secondary-info">{formatTotalTime(song.time)}</div>
                 <div class="title" title="{song.name}"><Link to="song/{song.id}">{song.name}</Link></div>
-                <div class="artist"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
-                <div class="album"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
+                <div class="artist secondary-info"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
+                <div class="album secondary-info"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
 
                 <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
             </div>
@@ -141,9 +141,5 @@
 
     .actions {
         margin-top: var(--spacing-md);
-    }
-
-    .time {
-        color: var(--color-text-secondary);
     }
 </style>

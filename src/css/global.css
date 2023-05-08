@@ -556,6 +556,11 @@ svg.inline {
     z-index: 1;
 }
 
+.secondary-info,
+.secondary-info a:not(:hover):not(:active) {
+    color: var(--color-text-secondary);
+}
+
 .card {
     font-stretch: 50%;
 }

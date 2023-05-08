@@ -3,6 +3,7 @@
     import { CurrentMedia, FullScreenEnabled } from "../../stores/status";
 
     import ArtistList from '../../components/artist/artistList.svelte';
+    import SVGAlbum from '../../images/album.svg';
 
     function handleClick(e) {
         // Close fullscreen if we are following a link
@@ -17,17 +18,17 @@
         <div class="title card-title" title="{$CurrentMedia.title}"><Link to="song/{$CurrentMedia.id}">{$CurrentMedia.title}</Link></div>
 
         {#if $CurrentMedia.artists.length > 0}
-            <div class="artist">
+            <div class="artist secondary-info">
                 <ArtistList artists={$CurrentMedia.artists} />
             </div>
         {/if}
 
-        <div class="album">
+        <div class="album secondary-info">
             {#if $CurrentMedia.year > 0}
-                <span class="date"><Link to="albums/year/{$CurrentMedia.year}">({$CurrentMedia.year})</Link></span>
+                <span class="date"><Link to="albums/year/{$CurrentMedia.year}">{$CurrentMedia.year}</Link></span>
             {/if}
             {#if $CurrentMedia.album}
-                <span class="album"><Link to="albums/{$CurrentMedia.album.id}" title="{$CurrentMedia.album.name}">{$CurrentMedia.album.name}</Link></span>
+                <span class="album"><SVGAlbum class="inline"/> <Link to="albums/{$CurrentMedia.album.id}" title="{$CurrentMedia.album.name}">{$CurrentMedia.album.name}</Link></span>
             {/if}
         </div>
     </div>
@@ -38,12 +39,6 @@
         font-stretch: 50%;
         line-height: 1.5;
         overflow: hidden;
-    }
-
-    .date :global(a),
-    .album,
-    .album :global(a) {
-        color: var(--color-text-secondary);
     }
 
     .title {

@@ -37,7 +37,7 @@
 
         <div class="details">
             {#if !isSmartlist}
-                <div class="count">
+                <div class="count secondary-info">
                     {playlist.items} {parseInt(playlist.items) === 1 ? 'song' : 'songs'}
                 </div>
 

@@ -68,7 +68,7 @@
                 </Link>
             </div>
 
-            <div class="secondary">
+            <div class="secondary secondary-info">
                 {#if type === "album" && data.albumartist}
                     <Link to="artists/{data.albumartist.id}">{data.albumartist.name}</Link>
                 {:else if data.artist}
@@ -152,11 +152,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .secondary,
-    .secondary :global(a:not(:hover):not(:active)) {
-        color: var(--color-text-secondary);
     }
 
     .actions {

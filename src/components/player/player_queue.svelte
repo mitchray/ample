@@ -28,7 +28,7 @@
             <div class="title card-title"><span>Next:</span> <Link to="song/{nextSong.id}">{nextSong.title}</Link></div>
 
             {#if nextSong.artists.length > 0}
-                <div class="artist">
+                <div class="artist secondary-info">
                     <ArtistList artists={nextSong.artists} />
                 </div>
             {/if}

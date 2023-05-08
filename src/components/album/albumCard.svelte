@@ -30,12 +30,12 @@
             <div class="top">
                 <div class="details">
                         {#if album.year}
-                            <div class="date">
+                            <div class="date secondary-info">
                                 <Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link>
                             </div>
                         {/if}
                     <div class="title"><Link to="albums/{album.id}" title="{album.name}">{album.name}</Link></div>
-                    <div class="artist"><Link to="artists/{album.artist.id}" title="{album.artist.name}">{album.artist.name}</Link></div>
+                    <div class="artist secondary-info"><Link to="artists/{album.artist.id}" title="{album.artist.name}">{album.artist.name}</Link></div>
                 </div>
             </div>
 
@@ -63,9 +63,9 @@
         <div class="info">
             <div class="top">
                 <div class="details">
-                    <div class="date">0000</div>
+                    <div class="date secondary-info">0000</div>
                     <div class="title">Loading album</div>
-                    <div class="artist">Loading<br></div>
+                    <div class="artist secondary-info">Loading<br></div>
                 </div>
             </div>
 
@@ -135,11 +135,6 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-    }
-
-    .date,
-    .date :global(a) {
-        color: var(--color-text-secondary);
     }
 
     .bottom {
