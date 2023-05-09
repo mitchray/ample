@@ -220,7 +220,8 @@ const columns = [
         type: "string",
         canToggle: true,
         object_types: [
-            { id: "playlist" }
+            { id: "playlist" },
+            { id: "smartlist" }
         ]
     },
     {
@@ -302,6 +303,7 @@ const columns = [
             { id: "album" },
             { id: "artist" },
             { id: "playlist" },
+            { id: "smartlist" },
             { id: "genre" },
             { id: "playlist_songs" },
             { id: "podcast" }

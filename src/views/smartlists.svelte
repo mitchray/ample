@@ -17,12 +17,12 @@
     {:then smartlists}
         {#if smartlists.length > 0}
             <Lister2
-                    data={smartlists}
-                    type="smartlist"
-                    initialSort="name"
-                    actionData={{
-                disable: true
-            }}
+                data={smartlists}
+                type="smartlist"
+                initialSort="name"
+                actionData={{
+                    disable: true
+                }}
             />
         {:else}
             <p>Unable to find any smartlists</p>
