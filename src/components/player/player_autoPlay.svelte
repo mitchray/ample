@@ -22,22 +22,35 @@
 
     let isVisible = false;
     let selectedPlaylist;
+    let timeout;
+    let shouldAdd;
+
+    $: shouldAdd = $NowPlayingQueue.length > 0 && $AutoPlayEnabled && selectedPlaylist && $NowPlayingIndex > $NowPlayingQueue.length - 10;
 
     $: {
-        // load more songs into queue from AutoPlay
-        if ($NowPlayingQueue.length > 0 && $AutoPlayEnabled && selectedPlaylist) {
-            // when we reach less than 10 songs remaining
-            if (!$isFetching && $NowPlayingIndex > $NowPlayingQueue.length - 10) {
+        // load more items into queue from AutoPlay
+        if (shouldAdd) {
+            // when we reach less than 10 items remaining
+            if (!$isFetching) {
                 $isFetching = true;
-                $API.playlistSongs({ filter: selectedPlaylist.id })
-                    .then((result) => {
-                        if (!result.error && result.length > 0) {
-                            result = (Array.isArray(result)) ? result : [result];
-                            $MediaPlayer.playLast(result);
-                            $isFetching = (false);
-                            addAlert({title: `AutoPlay`, message: `Added ${result.length} items to queue from ${selectedPlaylist.name}`, style: 'info'});
-                        }
-                    });
+                clearTimeout(timeout);
+
+                // 10 seconds grace in case more items are manually queued
+                timeout = setTimeout(() => {
+                    if (shouldAdd) {
+                        $API.playlistSongs({ filter: selectedPlaylist.id })
+                            .then((result) => {
+                                if (!result.error && result.length > 0) {
+                                    result = (Array.isArray(result)) ? result : [result];
+                                    $MediaPlayer.playLast(result);
+                                    $isFetching = false;
+                                    addAlert({title: `AutoPlay`, message: `Added ${result.length} items to queue from ${selectedPlaylist.name}`, style: 'info'});
+                                }
+                            });
+                    } else {
+                        $isFetching = false;
+                    }
+                }, 10000);
             }
         }
     }
