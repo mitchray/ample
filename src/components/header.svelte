@@ -4,7 +4,7 @@
     import { SearchQuery, ShowSearch, SidebarIsOpen, PageTitle } from "../stores/status";
     import { SiteContentBind, SiteSidebarBind, SiteQueueBind } from '../stores/player';
 
-    import Search from '../components/search2.svelte';
+    import Search from './search.svelte';
     import UserMenu from '../components/userMenu.svelte';
     import NotificationsMenu from '../components/notification/notificationsMenu.svelte';
 

@@ -4,7 +4,6 @@
     import { getAverageColor, findCustomHue, outputThemeVariables } from "../../logic/color";
 
     import FullScreenNowPlaying from './fullscreen_nowPlaying.svelte';
-    import Queue from '../queue.svelte';
 
     import SVGDown from "/src/images/keyboard_arrow_down.svg";
 

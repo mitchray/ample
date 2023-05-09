@@ -20,8 +20,8 @@
     import ThemeHandler from './components/themeHandler.svelte';
     import SiteLoading from './components/siteLoading.svelte';
     import Header from './components/header.svelte';
-    import Sidebar3 from './components/sidebar3.svelte';
-    import Queue from './components/queue2.svelte';
+    import Sidebar from './components/sidebar.svelte';
+    import Queue from './components/queue.svelte';
     import Player from './components/player/player.svelte';
     import Fullscreen from './components/fullscreen/fullscreen.svelte';
     import Notifications from './components/notification/notificationsContainer.svelte';
@@ -107,7 +107,7 @@
         <ArtistsSync />
         <Header/>
         <div class="site-inner" bind:this={$SiteInnerBind}>
-            <Sidebar3/>
+            <Sidebar/>
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
                     <Route path="test" component={TestPage}/>

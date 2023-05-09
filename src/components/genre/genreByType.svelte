@@ -1,7 +1,7 @@
 <script>
     import { API } from "../../stores/api";
     import Lister2 from '../../components/lister/lister.svelte';
-    import Pagination2 from '../../components/pagination2.svelte';
+    import Pagination from '../../components/Pagination.svelte';
 
     export let id;
     export let type;
@@ -95,4 +95,4 @@
     <p>An error occurred.</p>
 {/await}
 
-<Pagination2 bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />
+<Pagination bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />

@@ -9,7 +9,8 @@
         NowPlayingIndex,
         CurrentMedia,
         QueueIsOpen,
-        QueueIsPinned
+        QueueIsPinned,
+        IsMobile
     } from '../stores/status';
     import { MediaPlayer, SiteQueueBind } from '../stores/player';
     import { serverURL } from "../stores/server";
@@ -19,11 +20,9 @@
     import ArtistList from '../components/artist/artistList.svelte';
 
     import SVGClose from '/src/images/close.svg';
-    import SVGBin from '/src/images/delete.svg';
     import SVGCurrent from '/src/images/play_circle.svg';
     import SVGMore from '/src/images/more-hori.svg';
-    import SVGLock from "/src/images/lock.svg";
-    import SVGUnlock from "/src/images/lock_open.svg";
+    import SVGBin from "/src/images/delete.svg";
 
     const flipDurationMs = 100;
 
@@ -31,11 +30,12 @@
     let staleTime = Date.now();
     let staleThreshold = 1000 * 60 * 60 * 6; // 6 hours
 
-    let queueMoreMenuID;
-    let queueMoreMenuIsOpen = false;
+    let itemMoreMenuID;
+    let itemMoreMenuIsOpen = false;
     let dragDisabled = true;
+    let queueMoreMenuIsOpen = false;
 
-    $: queueMoreMenuID;
+    $: itemMoreMenuID;
     $: nextMedia = $NowPlayingQueue[$NowPlayingIndex + 1];
     $: staleTime = staleTime;
 
@@ -45,7 +45,7 @@
         $MediaPlayer.playSelected(index);
 
         // clickOutsideHandler doesn't respond so manually turn off menus
-        queueMoreMenuIsOpen = false;
+        itemMoreMenuIsOpen = false;
     }
 
     function showCurrentMedia({behavior = 'smooth'}) {
@@ -56,7 +56,7 @@
         });
     }
 
-    function handleRemove(index) {
+    function handleRemoveItem(index) {
         $NowPlayingQueue.splice(index, 1);
 
         // If playing media is removed, load new media
@@ -73,9 +73,13 @@
         $NowPlayingQueue = $NowPlayingQueue;
     }
 
-    function handleMoreMenu(index) {
-        queueMoreMenuID = index;
+    function handleQueueMoreMenu() {
         queueMoreMenuIsOpen = !queueMoreMenuIsOpen;
+    }
+
+    function handleItemMoreMenu(index) {
+        itemMoreMenuID = index;
+        itemMoreMenuIsOpen = !itemMoreMenuIsOpen;
     }
 
     function handleClearPlayed() {
@@ -86,7 +90,7 @@
             foundIndex = $NowPlayingQueue.findIndex((item, index) => index !== $NowPlayingIndex && item.lastPlayed);
 
             if (foundIndex !== -1) {
-                handleRemove(foundIndex);
+                handleRemoveItem(foundIndex);
             }
         }
     }
@@ -124,7 +128,7 @@
     }
 
     function handleClickOutside() {
-        if (!$QueueIsPinned) {
+        if ($SiteQueueBind.classList.contains("is-drawer")) {
             let status = false;
             localStorage.setItem('QueueIsOpen', JSON.stringify(status));
             QueueIsOpen.set(status);
@@ -148,7 +152,7 @@
             indexes.forEach(function(index) {
                 // don't remove an old media being replayed, and preserve the previous 10 media before current media
                 if (index !== $NowPlayingIndex && index < $NowPlayingIndex - 10) {
-                    handleRemove(index);
+                    handleRemoveItem(index);
                 }
             });
         }, 1000 * 60 * 10); // 10 minutes
@@ -162,37 +166,50 @@
 <div
     class="site-queue"
     class:is-open={$QueueIsOpen}
-    class:is-pinned={$QueueIsPinned}
+    class:is-drawer={$IsMobile || !$QueueIsPinned}
     bind:this={$SiteQueueBind}
     use:clickOutsideDetector={{
         toggle: "#queue-button",
-        ignore: '.site-queue'
+        ignore: '.c-menu'
     }}
     on:clickedOutside={handleClickOutside}
 >
     <div class="site-queue-inner">
         <div class="header panel-header">
-            <h4 class="panel-title">Now Playing</h4>
-            <button class="clear-all icon-button button--danger" on:click={handleClearQueue} title="Clear all"><SVGBin /></button>
+            <h4 class="panel-title">Queue</h4>
+            <button id="queueMoreToggle" class="icon-button" on:click|stopPropagation={handleQueueMoreMenu}><SVGMore /></button>
+            <button class="clear-all icon-button button--danger button--mini" on:click={handleClearQueue} title="Clear all"><SVGBin style="transform: scale(0.75)" /></button>
         </div>
 
-        <div class="panel-actions">
-            <button class="panel-action" on:click={togglePinned}>
-                {#if $QueueIsPinned}
-                    <SVGLock style="transform: scale(0.8)" />
-                {:else}
-                    <SVGUnlock style="transform: scale(0.8)" />
-                {/if}
-            </button>
-
-            <button class="panel-action" on:click={showCurrentMedia} title="Show current item">
-                Current
-            </button>
-
-            <button class="panel-action" on:click={handleClearPlayed} title="Clear played items">
-                Clear played
-            </button>
-        </div>
+        {#if queueMoreMenuIsOpen}
+            <Menu anchor="left-center" toggleSelector={'#queueMoreToggle'} bind:isVisible={queueMoreMenuIsOpen}>
+                <div class="panel-content">
+                    <ul class="menu-list">
+                        {#if !$IsMobile}
+                            <li>
+                                <button on:click|stopPropagation={togglePinned}>
+                                    {#if $QueueIsPinned}
+                                        Unpin queue
+                                    {:else}
+                                        Pin queue
+                                    {/if}
+                                </button>
+                            </li>
+                        {/if}
+                        <li>
+                            <button on:click|stopPropagation={showCurrentMedia} title="Show current item">
+                                Show currently playing
+                            </button>
+                        </li>
+                        <li>
+                            <button on:click|stopPropagation={handleClearPlayed} title="Clear played items">
+                                Clear all played
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </Menu>
+        {/if}
 
         <div
             class="queue-list"
@@ -214,7 +231,7 @@
                         class:currentlyPlaying={$NowPlayingIndex === i}
                         animate:flip={{duration:flipDurationMs}}
                     >
-                        <button class="icon-button remove" on:click|stopPropagation={handleRemove(i)}><SVGClose /></button>
+                        <button class="icon-button remove" on:click|stopPropagation={handleRemoveItem(i)}><SVGClose /></button>
 
                         <span
                             class="thumb"
@@ -241,10 +258,10 @@
                             {/if}
                         </span>
 
-                        <button id="queueMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleMoreMenu(i)}><SVGMore /></button>
+                        <button id="itemMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleItemMoreMenu(i)}><SVGMore /></button>
 
-                        {#if queueMoreMenuIsOpen && queueMoreMenuID === i}
-                            <Menu anchor="left-center" toggleSelector={'#queueMoreToggle-' + queueMoreMenuID} bind:isVisible={queueMoreMenuIsOpen}>
+                        {#if itemMoreMenuIsOpen && itemMoreMenuID === i}
+                            <Menu anchor="left-center" toggleSelector={'#itemMoreToggle-' + itemMoreMenuID} bind:isVisible={itemMoreMenuIsOpen}>
                                 <div class="panel-content">
                                     <Actions2
                                         type="song"
@@ -267,35 +284,21 @@
 </div>
 
 <style>
+    /*
+    Base
+    */
     .site-queue {
-        background-color: var(--color-interface);
-        border-left: 1px solid var(--color-border);
-        position: absolute;
+        background-color: var(--color-background);
         width: var(--size-queue-width);
-        z-index: 10;
+        max-width: 100%;
+        z-index: 30;
         display: flex;
+        position: relative;
         right: 0;
         transform: translateX(100%);
-        transition: transform 0.3s ease-out;
         will-change: transform;
-    }
-
-    .site-queue:not(.is-pinned) {
-        top: var(--size-header-height);
-        bottom: var(--size-webplayer-height);
-    }
-
-    .site-queue.is-open {
-        transform: none;
-    }
-
-    .site-queue.is-pinned {
-        position: relative;
-        transition-duration: 0s;
-    }
-
-    .site-queue.is-pinned:not(.is-open) {
-        display: none;
+        padding-left: var(--spacing-lg);
+        padding-right: var(--spacing-lg);
     }
 
     .site-queue-inner {
@@ -312,13 +315,50 @@
         justify-content: space-between;
     }
 
+    .site-queue.is-open {
+        transform: translateX(0%);
+    }
+
+    /*
+    Drawer mode
+    */
+
+    .site-queue.is-drawer {
+        position: absolute;
+        top: var(--size-header-height);
+        bottom: var(--size-webplayer-height);
+        box-shadow: var(--shadow-xxl);
+        transition: transform 0.3s ease-out;
+    }
+
+    .site-queue.is-drawer.is-open {
+        transform: translateX(0%);
+    }
+
+    /*
+    Pinned mode
+    */
+
+    .site-queue:not(.is-open):not(.is-drawer) {
+        display: none;
+    }
+
+    /*
+    Items
+    */
+
     .header {
         display: flex;
         flex-shrink: 0;
         align-items: center;
-        justify-content: space-between;
-        padding: var(--spacing-md);
-        padding-left: var(--spacing-lg);
+        padding: 0;
+        gap: var(--spacing-md);
+        border: 0;
+        height: 48px;
+    }
+
+    .clear-all {
+        margin-left: auto;
     }
 
     button {
@@ -331,15 +371,10 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        padding: var(--spacing-md);
-        padding-bottom: calc(var(--spacing-md) + var(--size-seekbar-height)); /* account for absolute pos seekbar */
-    }
-
-    .queue-list:after {
-        content: '';
-        padding: 1px;
-        padding-top: 0;
-        display: block;
+        background-color: var(--color-interface);
+        box-shadow: var(--shadow-lg);
+        border-radius: 10px;
+        margin-bottom: var(--spacing-lg);
     }
 
     .queue-title {
@@ -357,8 +392,8 @@
     }
 
     .thumb img {
-        height: 45px;
-        width: 45px;
+        height: 36px;
+        width: 36px;
         border-radius: 2px;
     }
 
@@ -370,15 +405,23 @@
         align-items: center;
         user-select: none;
         cursor: pointer !important;
-        border-radius: 4px;
         position: relative;
         font-stretch: 50%;
+        z-index: 1;
     }
 
     @media (hover: hover) {
         .queue-item:hover {
             background-color: var(--color-background);
         }
+    }
+
+    .queue-item button {
+        padding: 0;
+    }
+
+    .queue-item :global(.artists a) {
+        color: var(--color-text-secondary);
     }
 
     :global(.queue-dragging) {
@@ -395,7 +438,19 @@
     }
 
     .currentlyPlaying {
-        box-shadow: inset 0 0 0 1px var(--color-highlight);
+        color: var(--color-highlight);
+    }
+
+    .currentlyPlaying:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        right: 0;
+        background-color: var(--color-highlight);
+        z-index: -1;
+        opacity: 0.12;
     }
 
     .details {
@@ -406,12 +461,24 @@
         overflow: hidden;
     }
 
+    .queue-item .remove,
+    .queue-item .more {
+        color: var(--color-text-secondary);
+    }
+
+    @media (hover: hover) {
+        .queue-item .remove:hover,
+        .queue-item .more:hover {
+            color: var(--color-text-primary);
+        }
+    }
+    
     .remove {
         margin-left: var(--spacing-md);
         margin-right: var(--spacing-md);
     }
 
-    .more {
+    .queue-item .more {
         margin-left: auto;
     }
 </style>

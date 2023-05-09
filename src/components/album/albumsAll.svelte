@@ -2,7 +2,7 @@
     import { getAlbumsStartingWithChar } from "../../logic/album";
 
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
-    import Pagination2 from '../../components/pagination2.svelte';
+    import Pagination from '../../components/Pagination.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
     let filterValue = ''; // bound from AlphanumericFilter
@@ -53,4 +53,4 @@
     />
 {/key}
 
-<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
+<Pagination bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />

@@ -1,7 +1,7 @@
 <script>
     import { API } from "../../stores/api";
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
-    import Pagination2 from '../../components/pagination2.svelte';
+    import Pagination from '../../components/Pagination.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
     export let type = "artist";
@@ -62,4 +62,4 @@
     />
 {/key}
 
-<Pagination2 bind:limit bind:page bind:count type="artist" defaultLimit={defaultLimit} />
+<Pagination bind:limit bind:page bind:count type="artist" defaultLimit={defaultLimit} />

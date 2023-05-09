@@ -2,7 +2,7 @@
     import { getAlbumsByYear } from "../../logic/album";
 
     import YearPagination from '../../components/yearPagination.svelte';
-    import Pagination2 from '../../components/pagination2.svelte';
+    import Pagination from '../../components/Pagination.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
     export let showYear = new Date().getFullYear();
@@ -42,7 +42,7 @@
 
 <YearPagination bind:fromYear bind:toYear showYear={showYear} />
 
-<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
+<Pagination bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
 
 {#if fromYear && toYear}
     {#key fromYear+toYear}
@@ -61,4 +61,4 @@
     {/key}
 {/if}
 
-<Pagination2 bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
+<Pagination bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
