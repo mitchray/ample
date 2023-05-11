@@ -26,6 +26,10 @@
 
                     let images = document.querySelectorAll(`img[data-id=art-${type}-${id}]`);
                     images.forEach(image => {
+                        // reload the original image url (including thumb param) to update the cache
+                        fetch(image.src, { cache: 'reload', mode: 'no-cors' });
+
+                        // replace the visible image with the updated art
                         image.src = result.art;
                     })
                 } else {
