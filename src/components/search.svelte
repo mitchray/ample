@@ -121,7 +121,7 @@
             </div>
 
             <div class="results">
-                <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+                <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="search">
                     {#each tabItems as tab}
                         {#if tab.loaded === true}
                             {#if tab.value === 'all'}

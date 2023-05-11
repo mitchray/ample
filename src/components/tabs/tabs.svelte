@@ -1,25 +1,21 @@
 <script>
     import { onMount, tick } from "svelte";
     import { v4 as uuidv4 } from 'uuid';
+    import { TabHistory } from "../../stores/status";
 
+    export let id = null; // unique ID for remembering last active tab, otherwise no remembering
     export let items = [];
     export let activeTabValue = null;
-    export let enableHash = true;
 
-    let hash;
-    let item;
-    let currentURL;
     let uniqueID = uuidv4();
 
     onMount(() => {
-        hash = window.location.hash.substring(1);
-        item = items.find(obj => obj.value === hash) || items[0];
-        setCurrentURL();
+        let found = items.find(obj => obj.value === $TabHistory[id]) || items[0];
 
-        // set active tab from URL hash if present
-        if (item) {
-            activeTabValue = item.value;
-            item.loaded = true;
+        // set active tab from history if present
+        if (found) {
+            activeTabValue = found.value;
+            found.loaded = true;
         } else {
             // Fallback default tab value
             if (Array.isArray(items) && items.length && items[0].value) {
@@ -31,25 +27,12 @@
         showHide();
     });
 
-    function setHistory() {
-        if (enableHash) {
-            window.history.replaceState({}, '', "#" + activeTabValue);
-        }
-    }
-
-    function setCurrentURL() {
-        if (enableHash) {
-            currentURL = window.location.toString();
-        }
-    }
-
     function handleClick(tab) {
         tab.loaded = true;
         activeTabValue = tab.value;
         items = items;
-        setCurrentURL();
-        setHistory();
         showHide();
+        $TabHistory[id] = activeTabValue;
     }
 
     async function showHide() {

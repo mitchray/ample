@@ -26,7 +26,7 @@
     <title>{title}</title>
 </svelte:head>
 
-<Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+<Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="albums">
     {#each tabItems as tab}
         {#if tab.loaded === true}
             {#if tab.value === 'newest'}

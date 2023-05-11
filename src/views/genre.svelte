@@ -39,7 +39,7 @@
         <SVGGenre class="inline" /> {genre.name}
     </h1>
 
-    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="genre">
         {#each tabItems as tab}
             {#if tab.loaded === true}
                 {#if tab.value === 'artists'}

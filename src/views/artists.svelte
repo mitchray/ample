@@ -55,7 +55,7 @@
 
             <div class="main">
                 <div class="main-inner">
-                    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+                    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="artists">
                         {#each tabItems as tab}
                             {#if tab.loaded === true}
                                 {#if tab.value === 'recentlyUpdated'}

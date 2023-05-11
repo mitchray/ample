@@ -13,8 +13,8 @@ export let SearchQuery = writable('');
 export let ShowSearch  = writable(false);
 export let ShowLyrics    = writable(JSON.parse(localStorage.getItem('ShowLyrics')) || false);
 export let FullScreenEnabled = writable(false);
+export let TabHistory = writable({});
 
-export let SidebarIsMini   = writable(JSON.parse(localStorage.getItem('SidebarIsMini')) || false);
 export let SidebarIsOpen   = writable(JSON.parse(localStorage.getItem('SidebarIsOpen')) || false);
 export let SidebarIsPinned = writable(JSON.parse(localStorage.getItem('SidebarIsPinned')) || false);
 

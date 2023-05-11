@@ -165,7 +165,7 @@
             </div>
         </div>
 
-        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems}>
+        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="artist">
             {#each tabItems as tab}
                 {#if tab.loaded === true}
                     {#if tab.value === 'discography'}

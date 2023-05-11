@@ -48,7 +48,7 @@
 </svelte:head>
 
 <div style="margin: 2rem 0;">
-    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} class="tabs">
+    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} class="tabs" id="test">
         {#each tabItems as tab}
             {#if tab.loaded === true}
                 {#if tab.value === 'general'}

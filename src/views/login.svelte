@@ -71,7 +71,7 @@
             <SVGAmpleLogo />
         </div>
 
-        <Tabs bind:activeTabValue={currentTab} items={tabItems} enableHash={false}>
+        <Tabs bind:activeTabValue={currentTab} items={tabItems}>
             <Tab id={1} bind:activeTabValue={currentTab} class="username login-tab">
                 <form on:submit|preventDefault={handleSubmitUsername}>
                     <p>
