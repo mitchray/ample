@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { flip } from 'svelte/animate';
     import { dndzone } from 'svelte-dnd-action';
-    import { waitForElement } from "../logic/helper";
+    import { cleanArtURL, waitForElement } from "../logic/helper";
     import { clickOutsideDetector } from '../actions/clickOutsideDetector';
     import {
         NowPlayingQueue,
@@ -238,7 +238,7 @@
                             on:mousedown={startDrag}
                             on:touchstart={startDrag}
                         >
-                            <img src="{media.art}&thumb=1"
+                            <img src="{cleanArtURL(media.art)}&thumb=1"
                                 alt=""
                                 loading="lazy"
                                 data-id="art-album-{media.album?.id}"

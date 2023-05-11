@@ -2,7 +2,7 @@
     import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
 
-    import { formatTotalTime, formatSongQuality, formatFilesize } from '../../logic/helper';
+    import { formatTotalTime, formatSongQuality, formatFilesize, cleanArtURL } from '../../logic/helper';
 
     import { CurrentMedia } from '../../stores/status';
     import { serverURL } from "../../stores/server";
@@ -87,7 +87,7 @@
         {#if col.id === "name"}
             {#if item.art && showArt}
                 <img class="image"
-                    src="{item.art}&thumb=1"
+                    src="{cleanArtURL(item.art)}&thumb=1"
                     alt=""
                     height="50"
                     width="50"

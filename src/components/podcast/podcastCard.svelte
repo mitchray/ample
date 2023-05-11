@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
-
+    import { cleanArtURL } from "../../logic/helper";
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
 
@@ -15,7 +15,7 @@
     {#if podcast}
         <div class="image-container">
             <img class="image"
-                src="{podcast.art}&thumb=22"
+                src="{cleanArtURL(podcast.art)}&thumb=22"
                 alt="Image of {podcast.name}"
                 width="200"
                 height="200"

@@ -3,7 +3,7 @@
     import { Link } from 'svelte-routing';
     import { CurrentMedia } from '../stores/status';
     import { serverURL } from "../stores/server";
-
+    import { cleanArtURL } from "../logic/helper";
     import Actions2 from '../components/action/actions.svelte';
     import SVGCurrent from "/src/images/play_circle.svg";
 
@@ -44,7 +44,7 @@
             <div class="image-container">
                 <Link to="{urlPrefix}/{data.id}">
                     <img class="image"
-                         src="{data.art}&thumb=11"
+                         src="{cleanArtURL(data.art)}&thumb=11"
                          alt="Image of {data.name}"
                          width="96"
                          height="96"

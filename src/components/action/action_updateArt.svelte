@@ -5,6 +5,7 @@
     import SVGImage from "/src/images/image.svg";
     import SVGPhoto from "/src/images/portrait.svg";
     import { addAlert } from "../../logic/alert";
+    import { cleanArtURL } from "../../logic/helper";
 
     export let contextKey;
 
@@ -30,7 +31,7 @@
                         fetch(image.src, { cache: 'reload', mode: 'no-cors' });
 
                         // replace the visible image with the updated art
-                        image.src = result.art;
+                        image.src = cleanArtURL(result.art);
                     })
                 } else {
                     addAlert({title: 'Failed to update art', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});

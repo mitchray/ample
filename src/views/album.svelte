@@ -3,7 +3,7 @@
     import { PageTitle, Theme } from '../stores/status';
     import { serverURL } from "../stores/server";
     import { getAlbum } from "../logic/album";
-    import { formatTotalTime } from "../logic/helper";
+    import { cleanArtURL, formatTotalTime } from "../logic/helper";
     import MusicBrainz from "../logic/musicbrainz";
 
     import Rating from '../components/rating.svelte';
@@ -71,7 +71,7 @@
                     <div class="cover-rating">
                         <div class="art-container">
                             <img class="art"
-                                 src="{album.art}&thumb=32"
+                                 src="{cleanArtURL(album.art)}&thumb=32"
                                  alt="Image of {album.name}"
                                  width="384"
                                  height="384"

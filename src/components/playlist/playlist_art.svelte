@@ -3,8 +3,7 @@
     import { fade } from 'svelte/transition';
     import { API } from "../../stores/api";
     import { serverURL } from "../../stores/server";
-
-    import { shuffleArray } from "../../logic/helper";
+    import { cleanArtURL, shuffleArray } from "../../logic/helper";
 
     export let playlist = null;
     export let songs = [];
@@ -63,7 +62,7 @@
     <div class="container {cssClass}">
         {#if chosenSongs.length > 0}
             {#each chosenSongs as song}
-                <img src="{song.art}&thumb={thumbLevel}"
+                <img src="{cleanArtURL(song.art)}&thumb={thumbLevel}"
                     alt=""
                     loading="lazy"
                     in:fade

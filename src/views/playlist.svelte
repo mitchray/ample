@@ -3,14 +3,13 @@
     import { API } from "../stores/api";
     import { getSongsFromPlaylist } from "../logic/song";
     import { PageTitle } from "../stores/status";
-
+    import { cleanArtURL } from "../logic/helper";
     import Rating from '../components/rating.svelte';
     import Lister2 from '../components/lister/lister.svelte';
     import PlaylistArt from '../components/playlist/playlist_art.svelte';
     import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
     import PlaylistDelete from '../components/playlist/playlist_delete.svelte';
     import Menu from '../components/menu.svelte';
-
     import SVGPlaylist from "/src/images/queue_music.svg";
     import SVGSmartlist from "/src/images/smartlist.svg";
     import SVGRadio from "/src/images/radio.svg";
@@ -73,7 +72,7 @@
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">
-                        <PlaylistArt bind:songs fallback="{playlist.art}" />
+                        <PlaylistArt bind:songs fallback="{cleanArtURL(playlist.art)}" />
                     </div>
 
                     {#if playlistType === "playlist"}

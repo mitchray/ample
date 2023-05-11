@@ -1,7 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
-    import { formatTotalTime } from "../../logic/helper";
+    import { cleanArtURL, formatTotalTime } from "../../logic/helper";
 
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
@@ -19,7 +19,7 @@
         <div class="top">
             <div class="image-container">
                 <img class="image"
-                     src="{song.art}&thumb=11"
+                     src="{cleanArtURL(song.art)}&thumb=11"
                      alt="Image of {song.name}"
                      width="96"
                      height="96"

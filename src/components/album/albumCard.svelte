@@ -1,6 +1,7 @@
 <script>
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
+    import { cleanArtURL } from "../../logic/helper";
 
     import Rating from '../../components/rating.svelte';
     import Actions2 from '../../components/action/actions.svelte';
@@ -16,7 +17,7 @@
         <div class="image-container">
             <Link to="albums/{album.id}" title="{album.name}">
                 <img class="image"
-                    src="{album.art}&thumb=22"
+                    src="{cleanArtURL(album.art)}&thumb=22"
                     alt="Image of {album.name}"
                     width="200"
                     height="200"

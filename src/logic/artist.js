@@ -2,6 +2,7 @@ import { get } from "svelte/store";
 import { API } from "../stores/api";
 import { MediaPlayer } from "../stores/player";
 import { getAverageColor, setCustomHue } from "./color";
+import { cleanArtURL } from "./helper";
 
 /**
  * Search artists starting with specified string
@@ -51,7 +52,7 @@ export const getArtist = async ({id = id, artAnalysis = false}) => {
     let artist = await get(API).artist({ filter: id });
 
     if (artAnalysis) {
-        artist.averageColor = await getAverageColor(artist.art + "&thumb=10");
+        artist.averageColor = await getAverageColor(cleanArtURL(artist.art) + "&thumb=10");
 
         if (artist.averageColor) {
             await setCustomHue(artist.averageColor.value);

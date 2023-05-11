@@ -3,7 +3,7 @@
     import { Link } from "svelte-routing";
     import { throttle } from 'throttle-wait';
     import { serverURL } from "../stores/server";
-    import { formatTotalTime } from "../logic/helper";
+    import { cleanArtURL, formatTotalTime } from "../logic/helper";
     import { getSongsFromArtist } from "../logic/song";
     import MusicBrainz from "../logic/musicbrainz";
 
@@ -445,7 +445,7 @@
                                 {#if !item.isRemote}
                                     <Link to="song/{item.id}">
                                         <img class="image"
-                                            src="{item.art}&thumb=1"
+                                            src="{cleanArtURL(item.art)}&thumb=1"
                                             alt=""
                                             height="30"
                                             width="30"
