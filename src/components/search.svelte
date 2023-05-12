@@ -1,8 +1,9 @@
 <script>
-    import { fade } from 'svelte/transition';
+    import { onMount, onDestroy } from "svelte";
+    import { computePosition, autoUpdate, offset, size } from '@floating-ui/dom';
 
-    import { SearchQuery, ShowSearch } from '../stores/status';
-    import { SiteMainSpace } from '../stores/player';
+    import { QueueIsOpen, QueueIsPinned, SearchQuery, ShowSearch, SidebarIsPinned } from '../stores/status';
+    import { SiteInnerBind, SiteContentBind } from '../stores/player';
 
     import { searchArtistsStartingWith, searchArtists, searchArtistsContaining } from '../logic/artist';
     import { searchAlbumsStartingWith, searchAlbums, searchAlbumsContaining } from '../logic/album';
@@ -17,6 +18,8 @@
 
     let initialResults = {};
     let noResults = false;
+    let searchBind;
+    let autoUpdateCleanup;
 
     // List of tab items with labels and values.
     let tabItems = [
@@ -46,6 +49,11 @@
         if ($SearchQuery) {
             resetResults();
             doSearch();
+        }
+
+        if ($SiteInnerBind) {
+            // updatePosition whenever Queue or Sidebar changes status
+            $QueueIsOpen || $SidebarIsPinned || $QueueIsPinned, updatePosition();
         }
     }
 
@@ -106,142 +114,180 @@
             return value.length === 0;
         });
     }
+
+    function updatePosition() {
+        computePosition($SiteContentBind, searchBind, {
+            placement: "top-start",
+            middleware: [
+                offset(({rects}) => ({
+                    mainAxis: -rects.floating.height,
+                    alignmentAxis: 16,
+                })),
+                size({
+                    apply({elements}) {
+                        Object.assign(elements.floating.style, {
+                            height: `${$SiteContentBind.clientHeight}px`,
+                            width: `${$SiteContentBind.clientWidth - 16 - (($QueueIsOpen && !$QueueIsPinned) ? 330 : 0)}px`,
+                        });
+                    },
+                }),
+            ],
+        }).then(({x, y}) => {
+            Object.assign(searchBind.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+        });
+    }
+
+    onMount(() => {
+        updatePosition();
+
+        autoUpdateCleanup = autoUpdate(
+            $SiteContentBind,
+            searchBind,
+            updatePosition
+        );
+    });
+
+    onDestroy(() => {
+        // floating-ui
+        autoUpdateCleanup();
+    })
 </script>
 
-{#if $SiteMainSpace.ready && $ShowSearch && $SearchQuery}
-    <div class="container"
-        on:click={handleClick}
-        transition:fade={{ duration: 300 }}
-        style="width: {$SiteMainSpace.width}px; height: {$SiteMainSpace.height}px; top: {$SiteMainSpace.top}px; left: {$SiteMainSpace.left}px;"
-    >
-        {#key $SearchQuery}
-            <div class="header new-panel-header">
-                <h4 class="panel-title">Search</h4>
-                <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
-            </div>
+<div class="container"
+     on:click={handleClick}
+     class:visible={$ShowSearch && $SearchQuery}
+     bind:this={searchBind}
+>
+    {#key $SearchQuery}
+        <div class="header new-panel-header">
+            <h4 class="panel-title">Search</h4>
+            <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
+        </div>
 
-            <div class="results">
-                <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="search">
-                    {#each tabItems as tab}
-                        {#if tab.loaded === true}
-                            {#if tab.value === 'all'}
-                                <Tab id="all" class="all" bind:activeTabValue={currentTab}>
-                                    {#if noResults}
-                                        <div>No results found</div>
-                                    {/if}
+        <div class="results">
+            <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="search">
+                {#each tabItems as tab}
+                    {#if tab.loaded === true}
+                        {#if tab.value === 'all'}
+                            <Tab id="all" class="all" bind:activeTabValue={currentTab}>
+                                {#if noResults}
+                                    <div>No results found</div>
+                                {/if}
 
-                                    {#if initialResults.songsStartsWith.length > 0}
-                                        <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Starting With" />
-                                    {/if}
+                                {#if initialResults.songsStartsWith?.length > 0}
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Starting With" />
+                                {/if}
 
-                                    {#if initialResults.songsContains.length > 0}
-                                        <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Containing" />
-                                    {/if}
+                                {#if initialResults.songsContains?.length > 0}
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Containing" />
+                                {/if}
 
-                                    {#if initialResults.albumsStartsWith.length > 0}
-                                        <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Starting With" />
-                                    {/if}
+                                {#if initialResults.albumsStartsWith?.length > 0}
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Starting With" />
+                                {/if}
 
-                                    {#if initialResults.albumsContains.length > 0}
-                                        <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Containing" />
-                                    {/if}
+                                {#if initialResults.albumsContains?.length > 0}
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Containing" />
+                                {/if}
 
-                                    {#if initialResults.artistsStartsWith.length > 0}
-                                        <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Starting With" />
-                                    {/if}
+                                {#if initialResults.artistsStartsWith?.length > 0}
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Starting With" />
+                                {/if}
 
-                                    {#if initialResults.artistsContains.length > 0}
-                                        <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Containing" />
-                                    {/if}
+                                {#if initialResults.artistsContains?.length > 0}
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Containing" />
+                                {/if}
 
-                                    {#if initialResults.playlists.length > 0}
-                                        <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="Playlists" />
-                                    {/if}
+                                {#if initialResults.playlists?.length > 0}
+                                    <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="Playlists" />
+                                {/if}
 
-                                    {#if initialResults.smartlists.length > 0}
-                                        <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} heading="Smartlists" />
-                                    {/if}
-                                </Tab>
-                            {/if}
-
-                            {#if tab.value === 'songs'}
-                                <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
-                                    {#if initialResults.songsStartsWith.length > 0}
-                                        <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Starting With" />
-                                    {/if}
-
-                                    {#if initialResults.songsContains.length > 0}
-                                        <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Containing" />
-                                    {/if}
-
-                                    {#if initialResults.songsStartsWith.length === 0 && initialResults.songsContains.length === 0}
-                                        <div>No results found</div>
-                                    {/if}
-                                </Tab>
-                            {/if}
-
-                            {#if tab.value === 'albums'}
-                                <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                                    {#if initialResults.albumsStartsWith.length > 0}
-                                        <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Starting With" />
-                                    {/if}
-
-                                    {#if initialResults.albumsContains.length > 0}
-                                        <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Containing" />
-                                    {/if}
-
-                                    {#if initialResults.albumsStartsWith.length === 0 && initialResults.albumsContains.length === 0}
-                                        <div>No results found</div>
-                                    {/if}
-                                </Tab>
-                            {/if}
-
-                            {#if tab.value === 'artists'}
-                                <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
-                                    {#if initialResults.artistsStartsWith.length > 0}
-                                        <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Starting With" />
-                                    {/if}
-
-                                    {#if initialResults.artistsContains.length > 0}
-                                        <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Containing" />
-                                    {/if}
-
-                                    {#if initialResults.artistsStartsWith.length === 0 && initialResults.artistsContains.length === 0}
-                                        <div>No results found</div>
-                                    {/if}
-                                </Tab>
-                            {/if}
-
-                            {#if tab.value === 'playlists'}
-                                <Tab id="playlists" class="playlists" bind:activeTabValue={currentTab}>
-                                    {#if initialResults.playlists.length > 0}
-                                        <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} />
-                                    {/if}
-
-                                    {#if initialResults.playlists.length === 0}
-                                        <div>No results found</div>
-                                    {/if}
-                                </Tab>
-                            {/if}
-
-                            {#if tab.value === 'smartlists'}
-                                <Tab id="smartlists" class="smartlists" bind:activeTabValue={currentTab}>
-                                    {#if initialResults.smartlists.length > 0}
-                                        <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} />
-                                    {/if}
-
-                                    {#if initialResults.smartlists.length === 0}
-                                        <div>No results found</div>
-                                    {/if}
-                                </Tab>
-                            {/if}
+                                {#if initialResults.smartlists?.length > 0}
+                                    <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} heading="Smartlists" />
+                                {/if}
+                            </Tab>
                         {/if}
-                    {/each}
-                </Tabs>
-            </div>
-        {/key}
-    </div>
-{/if}
+
+                        {#if tab.value === 'songs'}
+                            <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
+                                {#if initialResults.songsStartsWith?.length > 0}
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Starting With" />
+                                {/if}
+
+                                {#if initialResults.songsContains?.length > 0}
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Containing" />
+                                {/if}
+
+                                {#if initialResults.songsStartsWith?.length === 0 && initialResults.songsContains?.length === 0}
+                                    <div>No results found</div>
+                                {/if}
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'albums'}
+                            <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
+                                {#if initialResults.albumsStartsWith?.length > 0}
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Starting With" />
+                                {/if}
+
+                                {#if initialResults.albumsContains?.length > 0}
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Containing" />
+                                {/if}
+
+                                {#if initialResults.albumsStartsWith?.length === 0 && initialResults.albumsContains?.length === 0}
+                                    <div>No results found</div>
+                                {/if}
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'artists'}
+                            <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
+                                {#if initialResults.artistsStartsWith?.length > 0}
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Starting With" />
+                                {/if}
+
+                                {#if initialResults.artistsContains?.length > 0}
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Containing" />
+                                {/if}
+
+                                {#if initialResults.artistsStartsWith?.length === 0 && initialResults.artistsContains?.length === 0}
+                                    <div>No results found</div>
+                                {/if}
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'playlists'}
+                            <Tab id="playlists" class="playlists" bind:activeTabValue={currentTab}>
+                                {#if initialResults.playlists?.length > 0}
+                                    <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} />
+                                {/if}
+
+                                {#if initialResults.playlists?.length === 0}
+                                    <div>No results found</div>
+                                {/if}
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'smartlists'}
+                            <Tab id="smartlists" class="smartlists" bind:activeTabValue={currentTab}>
+                                {#if initialResults.smartlists?.length > 0}
+                                    <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} />
+                                {/if}
+
+                                {#if initialResults.smartlists?.length === 0}
+                                    <div>No results found</div>
+                                {/if}
+                            </Tab>
+                        {/if}
+                    {/if}
+                {/each}
+            </Tabs>
+        </div>
+    {/key}
+</div>
 
 <style>
     .container {
@@ -255,7 +301,14 @@
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        /*outline: 3px solid lime;*/
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    .container.visible {
+        opacity: 1;
+        pointer-events: initial;
     }
 
     .container:after {
@@ -286,12 +339,11 @@
 
     .results {
         padding: 0 var(--spacing-lg) var(--spacing-lg);
-        /*overflow-y: auto;*/
         display: flex;
         flex-direction: column;
         flex: 1;
         margin-bottom: var(--spacing-lg);
-        /*outline: 3px solid red;*/
+        margin-right: var(--spacing-lg);
         position: relative;
     }
 

@@ -76,7 +76,7 @@
             placement: "bottom-end",
             middleware: [
                 offset(({rects}) => ({
-                    mainAxis: -rects.floating.height - 15,
+                    mainAxis: -rects.floating.height - 16,
                     alignmentAxis: 15 + (($QueueIsOpen) ? 330 : 0),
                 }))
             ],
