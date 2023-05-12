@@ -7,13 +7,23 @@
 - Multi-artist support
 - Album page has Previous/Next releases underneath songs
 - Fetch album disk subtitles from MusicBrainz
+- New search results interface
+  - Split into categories (song, album, artist etc)
+  - Smaller items to see more results at once
 
 ### Changed
+- General design overhaul
 - Rebuilt "Recently Played" on main page; handles song updates much better now
+- Simplified Sidebar to only have full/collapsed modes
+- Queue actions moved to a menu
+- Smartlist Autoplay now has a 10 second grace period before adding songs to give user time
 - CSS container queries polyfill removed as browser support is stable now
+- Tabs will remember the last active tab, e.g. being on Similar Artists then going to a new artist will keep you on the Similar Artists tab
 
 ### Fixed
 - Volume gain was ignored if values were "0"
+- Some Listers were breaking out of their containers
+- Lister headers sometimes wouldn't become sticky
 
 ## [1.1.0] - 2023-03-03
 ### Added
