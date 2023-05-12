@@ -28,7 +28,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="left-center" toggleSelector={"#js-action-playlist_edit_" + id} bind:isVisible={menuIsVisible}>
+    <Menu anchor="left" toggleSelector={"#js-action-playlist_edit_" + id} bind:isVisible={menuIsVisible}>
         <PlaylistEdit bind:playlist={data.playlist} bind:isVisible={menuIsVisible} />
     </Menu>
 {/if}

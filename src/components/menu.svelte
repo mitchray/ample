@@ -1,34 +1,17 @@
 <script>
     import { onDestroy, onMount } from "svelte";
     import { fly } from 'svelte/transition';
-
+    import { computePosition, autoUpdate, shift, flip } from '@floating-ui/dom';
+    import Portal from 'svelte-portal';
     import { clickOutsideDetector } from '../actions/clickOutsideDetector';
 
     export let isVisible;
     export let toggleSelector;
     export let anchor;
 
-    let spacing = 10;
     let menu;
-    let menuBounds;
-    let coords = [];
-    let toggleBounds;
     let toggleElement;
-
-    $: {
-        if (toggleSelector && menu) {
-            toggleElement = document.querySelector(toggleSelector);
-            toggleBounds = toggleElement.getBoundingClientRect();
-            menuBounds = menu.getBoundingClientRect();
-
-            getAnchorCoordinates();
-
-            menu.style.setProperty('--mouse-x', coords.left + 'px');
-            menu.style.setProperty('--mouse-y', coords.top + 'px');
-            menu.style.setProperty('--width', menuBounds.width + 'px');
-            menu.style.setProperty('--height', menuBounds.height + 'px');
-        }
-    }
+    let autoUpdateCleanup = () => {};
 
     function handleClickOutside() {
         isVisible = false;
@@ -41,113 +24,58 @@
         }
     }
 
-    onMount(() => {
-        let menuContainer = document.querySelector('#menu-container');
+    function updatePosition() {
+        computePosition(toggleElement, menu, {
+            placement: anchor || "bottom",
+            middleware: [flip(), shift()],
+        }).then(({x, y}) => {
+            Object.assign(menu.style, {
+                left: `${x}px`,
+                top: `${y}px`,
+            });
+        });
+    }
 
-        if (menu) {
-            // move menu to be a direct child of body
-            menuContainer.append(menu);
+    onMount(() => {
+        toggleElement = document.querySelector(toggleSelector);
+
+        if (toggleElement) {
+            updatePosition();
+
+            autoUpdateCleanup = autoUpdate(
+                toggleElement,
+                menu,
+                updatePosition
+            );
         }
     });
 
     onDestroy(() => {
-        if (menu) {
-            menu.remove();
-        }
+        // floating-ui
+        autoUpdateCleanup();
     })
-
-    // in reference to clicked item
-    function getAnchorCoordinates() {
-        if (toggleBounds && menuBounds) {
-            let posLeft           = toggleBounds.left - menuBounds.width - spacing;
-            let posRight          = toggleBounds.right + spacing;
-            let posTop            = toggleBounds.top - menuBounds.height - spacing;
-            let posBottom         = toggleBounds.top + toggleBounds.height + spacing;
-            let alignTop          = toggleBounds.top;
-            let alignMiddleHeight = toggleBounds.top + (toggleBounds.height / 2) - (menuBounds.height / 2);
-            let alignMiddleWidth  = toggleBounds.left + (toggleBounds.width / 2) - (menuBounds.width / 2);
-            let alignBottom       = toggleBounds.bottom - menuBounds.height;
-            let alignLeft         = toggleBounds.left;
-            let alignRight        = toggleBounds.right - menuBounds.width;
-
-            // [relative to toggle]-[alignment with toggle]
-            switch (anchor) {
-                case 'top-left':
-                    coords.top = posTop;
-                    coords.left = alignLeft;
-                    break;
-                case 'bottom-left':
-                    coords.top = posBottom;
-                    coords.left = alignLeft;
-                    break;
-                case 'top-center':
-                    coords.top = posTop;
-                    coords.left = alignMiddleWidth;
-                    break;
-                case 'bottom-center':
-                    coords.top = posBottom;
-                    coords.left = alignMiddleWidth;
-                    break;
-                case 'top-right':
-                    coords.top = posTop;
-                    coords.left = alignRight;
-                    break;
-                case 'bottom-right':
-                    coords.top = posBottom;
-                    coords.left = alignRight;
-                    break;
-                case 'left-center':
-                    coords.top = alignMiddleHeight;
-                    coords.left = posLeft;
-                    break;
-                case 'right-center':
-                    coords.top = alignMiddleHeight;
-                    coords.left = posRight;
-                    break;
-                case 'left-top':
-                    coords.top = alignTop;
-                    coords.left = posLeft;
-                    break;
-                case 'right-top':
-                    coords.top = alignTop;
-                    coords.left = posRight;
-                    break;
-                case 'left-bottom':
-                    coords.top = alignBottom;
-                    coords.left = posLeft;
-                    break;
-                case 'right-bottom':
-                    coords.top = alignBottom;
-                    coords.left = posRight;
-                    break;
-                default:
-                    console.warn(anchor + " as a menu anchor position was not found");
-                    coords.top = posBottom;
-                    coords.left = alignLeft;
-                    break;
-            }
-        }
-    }
 </script>
 
-<div
-    class="c-menu"
-    class:is-open={isVisible}
-    bind:this={menu}
-    transition:fly={{ x: 0, y: 0, duration: 300 }}
-    use:clickOutsideDetector={{
-        toggle: toggleSelector,
-        ignore: '.c-menu'
-    }}
-    on:clickedOutside={handleClickOutside}
-    on:click={handleClickInside}
->
-    <slot></slot>
-</div>
+<Portal target="body">
+    <div
+        class="c-menu"
+        class:is-open={isVisible}
+        bind:this={menu}
+        transition:fly={{ x: 0, y: 0, duration: 300 }}
+        use:clickOutsideDetector={{
+            toggle: toggleSelector,
+            ignore: '.c-menu'
+        }}
+        on:clickedOutside={handleClickOutside}
+        on:click={handleClickInside}
+        >
+        <slot></slot>
+    </div>
+</Portal>
 
 <style>
     .c-menu {
-        contain: layout paint;
+        /*contain: layout paint;*/
         background-color: var(--color-menu-background);
         border: 2px solid var(--color-menu-border);
         border-radius: 10px;
@@ -155,9 +83,9 @@
         opacity: 0;
         cursor: initial;
         pointer-events: none;
-        position: fixed;
-        top: min(max(0%, var(--mouse-y)), calc(100vh - var(--height)));
-        left: min(max(0%, var(--mouse-x)), calc(100vw - var(--width)));
+        position: absolute;
+        top: 0;
+        left: 0;
         z-index: 1000;
         padding: var(--spacing-lg);
         max-width: 100%;

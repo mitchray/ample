@@ -54,7 +54,7 @@
 </button>
 
 {#if isVisible}
-    <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
+    <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
         <div class="header new-panel-header">
             <h4 class="title panel-title">Skip songs below rating</h4>
 

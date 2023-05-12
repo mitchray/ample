@@ -140,7 +140,7 @@
     </button>
 
     {#if isVisible && data}
-        <Menu anchor="bottom-center" toggleSelector={'#thirdParty-data'} bind:isVisible={isVisible}>
+        <Menu anchor="bottom" toggleSelector={'#thirdParty-data'} bind:isVisible={isVisible}>
             <div class="panel-content">
                 <div class="groups">
                     {#each menu as category}

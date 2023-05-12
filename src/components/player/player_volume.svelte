@@ -140,7 +140,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible={menuIsVisible} >
+    <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible={menuIsVisible} >
         <div class="header new-panel-header">
             <h4 class="title panel-title">Volume Settings</h4>
         </div>

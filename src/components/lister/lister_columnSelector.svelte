@@ -42,7 +42,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="bottom-left" toggleSelector={`#listerColumns-${contextKey}`} bind:isVisible={menuIsVisible} >
+    <Menu anchor="bottom" toggleSelector={`#listerColumns-${contextKey}`} bind:isVisible={menuIsVisible} >
         <div class="panel-content">
             {#each $availableColumns as col}
                 {#if col.canToggle}

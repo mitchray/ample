@@ -182,7 +182,7 @@
         </div>
 
         {#if queueMoreMenuIsOpen}
-            <Menu anchor="left-center" toggleSelector={'#queueMoreToggle'} bind:isVisible={queueMoreMenuIsOpen}>
+            <Menu anchor="left" toggleSelector={'#queueMoreToggle'} bind:isVisible={queueMoreMenuIsOpen}>
                 <div class="panel-content">
                     <ul class="menu-list">
                         {#if !$IsMobile}
@@ -261,7 +261,7 @@
                         <button id="itemMoreToggle-{i}" class="icon-button more" on:click|stopPropagation={handleItemMoreMenu(i)}><SVGMore /></button>
 
                         {#if itemMoreMenuIsOpen && itemMoreMenuID === i}
-                            <Menu anchor="left-center" toggleSelector={'#itemMoreToggle-' + itemMoreMenuID} bind:isVisible={itemMoreMenuIsOpen}>
+                            <Menu anchor="left" toggleSelector={'#itemMoreToggle-' + itemMoreMenuID} bind:isVisible={itemMoreMenuIsOpen}>
                                 <div class="panel-content">
                                     <Actions2
                                         type="song"

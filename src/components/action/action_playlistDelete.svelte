@@ -29,7 +29,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="left-center" toggleSelector={"#js-action-playlist_delete_" + id} bind:isVisible={menuIsVisible}>
+    <Menu anchor="left" toggleSelector={"#js-action-playlist_delete_" + id} bind:isVisible={menuIsVisible}>
         <PlaylistDelete bind:playlist={data.playlist} bind:isVisible={menuIsVisible} />
     </Menu>
 {/if}

@@ -30,7 +30,7 @@
 <button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="new-playlist-button button button--primary">New Playlist</button>
 
 {#if showPlaylistCreation}
-    <Menu anchor="bottom-center" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
+    <Menu anchor="bottom" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
         <PlaylistEdit isNew={true} bind:isVisible={showPlaylistCreation} />
     </Menu>
 {/if}

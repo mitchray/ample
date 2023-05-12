@@ -22,7 +22,7 @@
 </button>
 
 {#if menuIsVisible}
-    <Menu anchor="bottom-right" toggleSelector={"#userMenu-toggle"} bind:isVisible={menuIsVisible}>
+    <Menu anchor="bottom" toggleSelector={"#userMenu-toggle"} bind:isVisible={menuIsVisible}>
         <div class="container">
             <button
                 on:click={handleLogOut}

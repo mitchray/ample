@@ -211,7 +211,7 @@
 {/if}
 
 {#if moreMenuVisible}
-    <Menu anchor="bottom-center" toggleSelector={"#js-action-menu_" + type + mode + id} bind:isVisible={moreMenuVisible} >
+    <Menu anchor="bottom" toggleSelector={"#js-action-menu_" + type + mode + id} bind:isVisible={moreMenuVisible} >
         <div class="panel-content">
             <svelte:self
                 {...$$props}

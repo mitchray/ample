@@ -93,7 +93,7 @@
 </button>
 
 {#if isVisible}
-    <Menu anchor="top-center" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
+    <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
         <div class="new-panel-container">
             <div class="new-panel-header">
                 <h4 class="title panel-title">Smartlist AutoPlay</h4>
