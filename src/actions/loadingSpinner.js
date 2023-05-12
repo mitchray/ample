@@ -2,7 +2,7 @@ import { sleep } from "../logic/helper"; // tick doesn't work
 
 export function loadingSpinner(node, loaded) {
     let original = node.innerHTML;
-    let dimensions = node.getBoundingClientRect();
+    let dimensions;
 
     function handleClick(event) {
         // ignore clicks unless its on our target
@@ -14,6 +14,7 @@ export function loadingSpinner(node, loaded) {
     }
 
     function startSpinner() {
+        dimensions = node.getBoundingClientRect();
         node.style.width = dimensions.right - dimensions.left + 'px';
         node.style.height = dimensions.bottom - dimensions.top + 'px';
         node.classList.add('loading');
