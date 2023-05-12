@@ -26,7 +26,6 @@
     .genre-tag :global(a) {
         display: flex;
         background-color: var(--color-genre-background);
-        border: 1px solid var(--color-genre-border);
         color: var(--color-genre-text);
         border-radius: 3px;
         padding: 0.2em 0.5em;

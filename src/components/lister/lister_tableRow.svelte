@@ -4,7 +4,7 @@
 
     import { formatTotalTime, formatSongQuality, formatFilesize, cleanArtURL } from '../../logic/helper';
 
-    import { CurrentMedia } from '../../stores/status';
+    import { CurrentMedia, TabHistory } from '../../stores/status';
     import { serverURL } from "../../stores/server";
 
     import SVGUp from "/src/images/keyboard_arrow_up.svg";
@@ -177,15 +177,15 @@
         {/if}
 
         {#if col.id === "genreArtistsCount"}
-            <Link to="genres/{item.id}#artists"><SVGArtist class="inline" /> {item.artists}</Link>
+            <Link to="genres/{item.id}" on:click={() => {$TabHistory['genre'] = 'artists'}}><SVGArtist class="inline" /> {item.artists}</Link>
         {/if}
 
         {#if col.id === "genreAlbumsCount"}
-            <Link to="genres/{item.id}#albums"><SVGAlbum class="inline" /> {item.albums}</Link>
+            <Link to="genres/{item.id}" on:click={() => {$TabHistory['genre'] = 'albums'}}><SVGAlbum class="inline" /> {item.albums}</Link>
         {/if}
 
         {#if col.id === "genreSongsCount"}
-            <Link to="genres/{item.id}#songs"><SVGSong class="inline" /> {item.songs}</Link>
+            <Link to="genres/{item.id}" on:click={() => {$TabHistory['genre'] = 'songs'}}><SVGSong class="inline" /> {item.songs}</Link>
         {/if}
 
         {#if col.id === "owner"}

@@ -126,7 +126,7 @@ export function outputThemeVariables(hue, selector) {
             --color-mix-background:    rgb(${lchToRgb([ 30, 50, hue])});
             --color-menu-background:   rgb(${lchToRgb([ 97,  1, hue])});
             --color-menu-border:       rgb(${lchToRgb([ 90,  5, hue])});
-            --color-genre-background: rgba(${lchToRgb([ 98,  3, hue])}, 0.75);
+            --color-genre-background: rgba(${lchToRgb([ 90,  8, hue])}, 0.75);
             --color-genre-text:        rgb(${lchToRgb([ 15, 50, hue])});
             --color-genre-border:      rgb(${lchToRgb([ 80, 10, hue])});
             --color-separator:         rgb(${lchToRgb([ 85, 10, hue])});
@@ -183,7 +183,7 @@ export function outputThemeVariables(hue, selector) {
             --color-mix-background:    rgb(${lchToRgb([ 10, 40, hue])});
             --color-menu-background:   rgb(${lchToRgb([  4,  4, hue])});
             --color-menu-border:       rgb(${lchToRgb([ 20, 10, hue])});
-            --color-genre-background: rgba(${lchToRgb([  9,  3, hue])}, 0.75);
+            --color-genre-background: rgba(${lchToRgb([ 12,  8, hue])}, 0.75);
             --color-genre-text:        rgb(${lchToRgb([ 90, 10, hue])});
             --color-genre-border:      rgb(${lchToRgb([ 30, 10, hue])});
             --color-separator:         rgb(${lchToRgb([ 15, 10, hue])});
