@@ -113,6 +113,7 @@
 
 <style>
     .logo {
+        color: var(--color-highlight);
         margin-bottom: var(--spacing-xl);
     }
 
