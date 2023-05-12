@@ -314,6 +314,11 @@
         gap: var(--spacing-md); /* default spacing */
     }
 
+    /* currently only Firefox supports scrollbar-width */
+    :global(.cardlist-scroll::-webkit-scrollbar) {
+        display: none;
+    }
+
     :global(.cardlist-grid:not(:last-child), .cardlist-scroll:not(:last-child)) {
         margin-bottom: var(--spacing-xxl);
     }
