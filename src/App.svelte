@@ -32,32 +32,6 @@
     import LoginPage from './views/login.svelte';
     import NotFound404Page from './views/notFound404.svelte';
     import HomePage from './views/home.svelte';
-    import AlbumArtistsPage from './views/albumArtists.svelte';
-    import ArtistsPage from './views/artists.svelte';
-    import ArtistPage from './views/artist.svelte';
-    import AlbumsPage from './views/albums.svelte';
-    import AlbumsByYearPage from './views/albumsByYear.svelte';
-    import AlbumPage from './views/album.svelte';
-    import SongPage from './views/song.svelte';
-    import PlaylistsPage from './views/playlists.svelte';
-    import PlaylistPage from './views/playlist.svelte';
-    import SmartlistsPage from './views/smartlists.svelte';
-    import GenresPage from './views/genres.svelte';
-    import GenrePage from './views/genre.svelte';
-    import PodcastsPage from './views/podcasts.svelte';
-    import NewestPage from './views/newest.svelte';
-    import RecentPage from './views/recent.svelte';
-    import FavoritesPage from './views/favorites.svelte';
-    import TrendingPage from './views/trending.svelte';
-    import TopRatedPage from './views/topRated.svelte';
-    import ForgottenPage from './views/forgotten.svelte';
-    import RandomPage from './views/random.svelte';
-    import UnratedPage from './views/unrated.svelte';
-    import MultiRaterPage from './views/multiRater.svelte';
-
-    import TestPage from './views/test.svelte';
-    import AdvancedSearchPage from './views/advancedSearch.svelte';
-    import SongVersionsPage from './views/songVersions.svelte';
 
     window.setInterval(function(){
         extendSession();
@@ -111,39 +85,37 @@
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
                     {#key $PageLoadedKey || 0}
-                        <Route path="test" component={TestPage}/>
-
-                        <Route path="search" component={AdvancedSearchPage}/>
-                        <Route path="multi-rater" component={MultiRaterPage}/>
-                        <Route path="versions/:songTitle/:artistName" component={SongVersionsPage}/>
-
-                        <Route path="artists/:id" component={ArtistPage}/>
-                        <Route path="artists" component={ArtistsPage}/>
-                        <Route path="album-artists" component={AlbumArtistsPage}/>
-                        <Route path="albums/:id" component={AlbumPage}/>
-                        <Route path="albums/year/:year" component={AlbumsByYearPage}/>
-                        <Route path="albums/year" component={AlbumsByYearPage}/>
-                        <Route path="albums" component={AlbumsPage}/>
-                        <Route path="song/:id" component={SongPage}/>
-                        <Route path="playlists/:id" component={PlaylistPage}/>
-                        <Route path="playlists" component={PlaylistsPage}/>
-                        <Route path="smartlists/:id" component={PlaylistPage}/>
-                        <Route path="smartlists" component={SmartlistsPage}/>
-                        <Route path="mix/:mixType/:id" component={PlaylistPage}/>
-                        <Route path="genres/:id" component={GenrePage}/>
-                        <Route path="genres" component={GenresPage}/>
-                        <Route path="podcasts" component={PodcastsPage}/>
-                        <Route path="newest" component={NewestPage}/>
-                        <Route path="recent" component={RecentPage}/>
-                        <Route path="favorites" component={FavoritesPage}/>
-                        <Route path="trending" component={TrendingPage}/>
-                        <Route path="top" component={TopRatedPage}/>
-                        <Route path="forgotten" component={ForgottenPage}/>
-                        <Route path="random" component={RandomPage}/>
-                        <Route path="unrated" component={UnratedPage}/>
-                        <Route path="" component={HomePage}/>
-                        <Route path="/" component={HomePage}/>
-                        <Route path="*" component={NotFound404Page}/>
+                        <Route path="test"              component={() => import('./views/test.svelte')}/>
+                        <Route path="search"            component={() => import('./views/advancedSearch.svelte')}/>
+                        <Route path="multi-rater"       component={() => import('./views/multiRater.svelte')}/>
+                        <Route path="versions/:songTitle/:artistName" component={() => import('./views/songVersions.svelte')}/>
+                        <Route path="artists/:id"       component={() => import('./views/artist.svelte')}/>
+                        <Route path="artists"           component={() => import('./views/artists.svelte')}/>
+                        <Route path="album-artists"     component={() => import('./views/albumArtists.svelte')}/>
+                        <Route path="albums/:id"        component={() => import('./views/album.svelte')}/>
+                        <Route path="albums/year/:year" component={() => import('./views/albumsByYear.svelte')}/>
+                        <Route path="albums/year"       component={() => import('./views/albumsByYear.svelte')}/>
+                        <Route path="albums"            component={() => import('./views/albums.svelte')}/>
+                        <Route path="song/:id"          component={() => import('./views/song.svelte')}/>
+                        <Route path="playlists/:id"     component={() => import('./views/playlist.svelte')}/>
+                        <Route path="playlists"         component={() => import('./views/playlists.svelte')}/>
+                        <Route path="smartlists/:id"    component={() => import('./views/playlist.svelte')}/>
+                        <Route path="smartlists"        component={() => import('./views/smartlists.svelte')}/>
+                        <Route path="mix/:mixType/:id"  component={() => import('./views/playlist.svelte')}/>
+                        <Route path="genres/:id"        component={() => import('./views/genre.svelte')}/>
+                        <Route path="genres"            component={() => import('./views/genres.svelte')}/>
+                        <Route path="podcasts"          component={() => import('./views/podcasts.svelte')}/>
+                        <Route path="newest"            component={() => import('./views/newest.svelte')}/>
+                        <Route path="recent"            component={() => import('./views/recent.svelte')}/>
+                        <Route path="favorites"         component={() => import('./views/favorites.svelte')}/>
+                        <Route path="trending"          component={() => import('./views/trending.svelte')}/>
+                        <Route path="top"               component={() => import('./views/topRated.svelte')}/>
+                        <Route path="forgotten"         component={() => import('./views/forgotten.svelte')}/>
+                        <Route path="random"            component={() => import('./views/random.svelte')}/>
+                        <Route path="unrated"           component={() => import('./views/unrated.svelte')}/>
+                        <Route path=""                  component={HomePage}/>
+                        <Route path="/"                 component={HomePage}/>
+                        <Route path="*"                 component={NotFound404Page}/>
                     {/key}
                 </div>
             </div>
