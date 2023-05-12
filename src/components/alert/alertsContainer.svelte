@@ -65,7 +65,7 @@
                     },
                 }),
                 offset(({rects}) => ({
-                    mainAxis: -rects.floating.height - 15,
+                    mainAxis: -rects.floating.height - 3,
                     alignmentAxis: 15,
                 }))
             ],
