@@ -1,7 +1,7 @@
 <script>
     import { onDestroy, onMount } from 'svelte';
 
-    import { SearchQuery, ShowSearch, SidebarIsOpen, PageTitle } from "../stores/status";
+    import { SearchQuery, ShowSearch, SidebarIsOpen, PageTitle, PageLoadedKey } from "../stores/status";
     import { SiteContentBind, SiteSidebarBind, SiteQueueBind } from '../stores/player';
 
     import Search from './search.svelte';
@@ -93,7 +93,7 @@
 <div class="site-header">
     <div class="site-logo-container">
         <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
-        <div class="header-title">
+        <div class="header-title" on:click={() => { $PageLoadedKey = Date.now().toString() }}>
             {$PageTitle}
         </div>
     </div>

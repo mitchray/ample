@@ -4,6 +4,7 @@
     import { loadingSpinner } from "../../actions/loadingSpinner";
     import SVGUpdate from "/src/images/sync.svg";
     import { addAlert } from "../../logic/alert";
+    import { PageLoadedKey } from "../../stores/status";
 
     export let contextKey;
 
@@ -18,15 +19,15 @@
 
         addAlert({title: 'Starting update from tags', style: 'info'});
 
-        let urlBefore = window.location.href.replace(location.hash,"")
+        let urlBefore = window.location.href;
 
         $API.updateFromTags({ type: type, id: id })
             .then(result => {
                 if (result?.success) {
-                    let urlAfter = window.location.href.replace(location.hash,"")
+                    let urlAfter = window.location.href;
 
                     if (urlBefore === urlAfter) {
-                        window.location.hash = Date.now().toString();
+                        $PageLoadedKey = Date.now().toString();
                     }
 
                     addAlert({title: 'Updated from tags', style: 'success'});

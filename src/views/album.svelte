@@ -1,6 +1,6 @@
 <script>
     import { Link } from 'svelte-routing';
-    import { PageTitle, Theme } from '../stores/status';
+    import { PageLoadedKey, PageTitle, Theme } from '../stores/status';
     import { serverURL } from "../stores/server";
     import { getAlbum } from "../logic/album";
     import { cleanArtURL, formatTotalTime } from "../logic/helper";
@@ -16,11 +16,10 @@
     export let id;
 
     let mb = new MusicBrainz;
-    let hash;
     let theme;
 
     $: theme = $Theme;
-    $: if (id) {
+    $: if (id || $PageLoadedKey) {
         loadData();
     }
 
@@ -30,7 +29,6 @@
 
     async function loadData() {
         album = await getAlbum({id: id, withTracks: true, artAnalysis: true});
-        hash = Date.now().toString();
 
         album.discsubtitles = [];
 
@@ -61,9 +59,7 @@
     <title>{`${album?.name} by ${album?.artist?.name}` || 'Loading'} (album)</title>
 </svelte:head>
 
-<svelte:window on:hashchange={loadData}/>
-
-{#key hash || 0}
+{#key $PageLoadedKey || 0}
     {#if album?.id}
         <div class="page-wrapper">
             <div class="details-container">

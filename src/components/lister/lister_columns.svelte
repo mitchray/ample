@@ -32,6 +32,9 @@
     });
 
     export function setStaticWidths() {
+        if (!$listerObject) {
+            return;
+        }
         // convert to static widths if lister has been rendered
         if (window.getComputedStyle($listerObject).gridTemplateColumns.indexOf("repeat") === -1) {
             $columnWidths = window.getComputedStyle($listerObject).gridTemplateColumns;

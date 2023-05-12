@@ -8,7 +8,7 @@
     import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
-    import { PageTitle } from "./stores/status";
+    import { PageTitle, PageLoadedKey } from "./stores/status";
 
     import { extendSession, validateSession } from './logic/user';
     import { getServerVersion } from './logic/server';
@@ -110,39 +110,41 @@
             <Sidebar/>
             <div class="site-content" bind:this={$SiteContentBind}>
                 <div class="site-content-inner">
-                    <Route path="test" component={TestPage}/>
+                    {#key $PageLoadedKey || 0}
+                        <Route path="test" component={TestPage}/>
 
-                    <Route path="search" component={AdvancedSearchPage}/>
-                    <Route path="multi-rater" component={MultiRaterPage}/>
-                    <Route path="versions/:songTitle/:artistName" component={SongVersionsPage}/>
+                        <Route path="search" component={AdvancedSearchPage}/>
+                        <Route path="multi-rater" component={MultiRaterPage}/>
+                        <Route path="versions/:songTitle/:artistName" component={SongVersionsPage}/>
 
-                    <Route path="artists/:id" component={ArtistPage}/>
-                    <Route path="artists" component={ArtistsPage}/>
-                    <Route path="album-artists" component={AlbumArtistsPage}/>
-                    <Route path="albums/:id" component={AlbumPage}/>
-                    <Route path="albums/year/:year" component={AlbumsByYearPage}/>
-                    <Route path="albums/year" component={AlbumsByYearPage}/>
-                    <Route path="albums" component={AlbumsPage}/>
-                    <Route path="song/:id" component={SongPage}/>
-                    <Route path="playlists/:id" component={PlaylistPage}/>
-                    <Route path="playlists" component={PlaylistsPage}/>
-                    <Route path="smartlists/:id" component={PlaylistPage}/>
-                    <Route path="smartlists" component={SmartlistsPage}/>
-                    <Route path="mix/:mixType/:id" component={PlaylistPage}/>
-                    <Route path="genres/:id" component={GenrePage}/>
-                    <Route path="genres" component={GenresPage}/>
-                    <Route path="podcasts" component={PodcastsPage}/>
-                    <Route path="newest" component={NewestPage}/>
-                    <Route path="recent" component={RecentPage}/>
-                    <Route path="favorites" component={FavoritesPage}/>
-                    <Route path="trending" component={TrendingPage}/>
-                    <Route path="top" component={TopRatedPage}/>
-                    <Route path="forgotten" component={ForgottenPage}/>
-                    <Route path="random" component={RandomPage}/>
-                    <Route path="unrated" component={UnratedPage}/>
-                    <Route path="" component={HomePage}/>
-                    <Route path="/" component={HomePage}/>
-                    <Route path="*" component={NotFound404Page}/>
+                        <Route path="artists/:id" component={ArtistPage}/>
+                        <Route path="artists" component={ArtistsPage}/>
+                        <Route path="album-artists" component={AlbumArtistsPage}/>
+                        <Route path="albums/:id" component={AlbumPage}/>
+                        <Route path="albums/year/:year" component={AlbumsByYearPage}/>
+                        <Route path="albums/year" component={AlbumsByYearPage}/>
+                        <Route path="albums" component={AlbumsPage}/>
+                        <Route path="song/:id" component={SongPage}/>
+                        <Route path="playlists/:id" component={PlaylistPage}/>
+                        <Route path="playlists" component={PlaylistsPage}/>
+                        <Route path="smartlists/:id" component={PlaylistPage}/>
+                        <Route path="smartlists" component={SmartlistsPage}/>
+                        <Route path="mix/:mixType/:id" component={PlaylistPage}/>
+                        <Route path="genres/:id" component={GenrePage}/>
+                        <Route path="genres" component={GenresPage}/>
+                        <Route path="podcasts" component={PodcastsPage}/>
+                        <Route path="newest" component={NewestPage}/>
+                        <Route path="recent" component={RecentPage}/>
+                        <Route path="favorites" component={FavoritesPage}/>
+                        <Route path="trending" component={TrendingPage}/>
+                        <Route path="top" component={TopRatedPage}/>
+                        <Route path="forgotten" component={ForgottenPage}/>
+                        <Route path="random" component={RandomPage}/>
+                        <Route path="unrated" component={UnratedPage}/>
+                        <Route path="" component={HomePage}/>
+                        <Route path="/" component={HomePage}/>
+                        <Route path="*" component={NotFound404Page}/>
+                    {/key}
                 </div>
             </div>
             <Queue/>

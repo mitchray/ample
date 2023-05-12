@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
     import { Link } from "svelte-routing";
-    import { PageTitle, ShowExpandedAlbums, Theme } from "../stores/status";
+    import { PageLoadedKey, PageTitle, ShowExpandedAlbums, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
     import { API } from "../stores/api";
 
@@ -28,11 +28,10 @@
     export let id;
 
     let artist;
-    let hash;
     let theme;
     $: theme = $Theme;
 
-    $: if (id)  {
+    $: if (id || $PageLoadedKey)  {
         loadData();
     }
 
@@ -59,7 +58,6 @@
 
     async function loadData() {
         artist = await getArtist({id: id, artAnalysis: true});
-        hash = Date.now().toString();
     }
 </script>
 
@@ -67,9 +65,7 @@
     <title>{`${artist?.name}` || 'Loading'} (artist)</title>
 </svelte:head>
 
-<svelte:window on:hashchange={loadData}/>
-
-{#key hash || 0}
+{#key $PageLoadedKey || 0}
     {#if artist?.id}
         <div class="container" in:fade>
             <div class="header">
