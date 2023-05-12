@@ -1,12 +1,8 @@
 <script>
     import { Link } from "svelte-routing";
-
     import { groupedAlbumArtists } from "../stores/server";
-    import { SiteMainSpace } from "../stores/player";
     import { PageTitle } from "../stores/status";
-
     import { randomAlbumArtists } from "../logic/artist";
-
     import CardList from '../components/cardList.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
@@ -28,53 +24,47 @@
     <title>{title}</title>
 </svelte:head>
 
-{#if $SiteMainSpace.ready}
-    <div class="artists-page-wrapper">
-        <div class="artists-page-container"
-            style="height: {$SiteMainSpace.height}px;"
-        >
-            <div class="sidebar">
-                <div class="sidebar-inner">
-                    {#if $groupedAlbumArtists}
-                        {#each Object.entries($groupedAlbumArtists) as [key, value], i}
-                            <div class="sidebar-index">{key.toUpperCase()}</div>
+<div class="artists-page-container">
+    <div class="sidebar">
+        <div class="sidebar-inner">
+            {#if $groupedAlbumArtists}
+                {#each Object.entries($groupedAlbumArtists) as [key, value], i}
+                    <div class="sidebar-index">{key.toUpperCase()}</div>
 
-                            {#each value as artist}
-                                <div class="sidebar-artist">
-                                    <Link to="artists/{artist.id}" title="{artist.name}">
-                                        {artist.name}
-                                    </Link>
-                                </div>
-                            {/each}
-                        {/each}
-                    {/if}
-                </div>
-            </div>
-
-            <div class="main">
-                <div class="main-inner">
-                    <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="album-artists">
-                        {#each tabItems as tab}
-                            {#if tab.loaded === true}
-                                {#if tab.value === 'random'}
-                                    <Tab id="random" class="random" bind:activeTabValue={currentTab}>
-                                        <CardList type="artist" dataProvider={"randomAlbumArtists"} limit=18 refresh=true />
-                                    </Tab>
-                                {/if}
-
-                                {#if tab.value === 'all'}
-                                    <Tab id="all" class="all" bind:activeTabValue={currentTab}>
-                                        <ArtistsAll type="album_artist" />
-                                    </Tab>
-                                {/if}
-                            {/if}
-                        {/each}
-                    </Tabs>
-                </div>
-            </div>
+                    {#each value as artist}
+                        <div class="sidebar-artist">
+                            <Link to="artists/{artist.id}" title="{artist.name}">
+                                {artist.name}
+                            </Link>
+                        </div>
+                    {/each}
+                {/each}
+            {/if}
         </div>
     </div>
-{/if}
+
+    <div class="main">
+        <div class="main-inner">
+            <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="album-artists">
+                {#each tabItems as tab}
+                    {#if tab.loaded === true}
+                        {#if tab.value === 'random'}
+                            <Tab id="random" class="random" bind:activeTabValue={currentTab}>
+                                <CardList type="artist" dataProvider={"randomAlbumArtists"} limit=18 refresh=true />
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'all'}
+                            <Tab id="all" class="all" bind:activeTabValue={currentTab}>
+                                <ArtistsAll type="album_artist" />
+                            </Tab>
+                        {/if}
+                    {/if}
+                {/each}
+            </Tabs>
+        </div>
+    </div>
+</div>
 
 {@html `<style>
     /* override for this page only */
@@ -84,16 +74,16 @@
 </style>`}
 
 <style>
-    .artists-page-wrapper {
-        container-name: artists-page-wrapper;
-        container-type: inline-size;
-        grid-column: full;
-    }
-
     .artists-page-container {
         display: grid;
         grid-template-columns: 1fr;
         overflow: hidden;
+        grid-column: full;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
     }
 
     .sidebar,
@@ -152,13 +142,7 @@
         overflow: hidden;
     }
 
-    @container artists-page-wrapper (min-width: 400px) {
-        .title {
-            position: relative;
-        }
-    }
-
-    @container artists-page-wrapper (min-width: 900px) {
+    @container site-content-inner (min-width: 900px) {
         .artists-page-container {
             grid-template-columns: 200px 1fr !important;
         }
