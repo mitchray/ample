@@ -7,9 +7,11 @@
 - Multi-artist support
 - Album page has Previous/Next releases underneath songs
 - Fetch album disk subtitles from MusicBrainz
+- Option to view artist releases chronologically
 - New search results interface
   - Split into categories (song, album, artist etc)
   - Smaller items to see more results at once
+- Click header title (where Ample logo used to be) to reload the current page
 
 ### Changed
 - General design overhaul
@@ -19,6 +21,7 @@
 - Smartlist Autoplay now has a 10 second grace period before adding songs to give user time
 - CSS container queries polyfill removed as browser support is stable now
 - Tabs will remember the last active tab, e.g. being on Similar Artists then going to a new artist will keep you on the Similar Artists tab
+- Rebuilt all menus and panels to use 'floating-ui'; they now scroll with the page
 
 ### Fixed
 - Volume gain was ignored if values were "0"
