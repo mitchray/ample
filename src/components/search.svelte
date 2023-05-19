@@ -44,13 +44,15 @@
     function handleClose() {
         ShowSearch.set(false);
     }
-
+    
     $: {
         if ($SearchQuery) {
             resetResults();
             doSearch();
         }
+    }
 
+    $: {
         if ($SiteInnerBind) {
             // updatePosition whenever Queue or Sidebar changes status
             $QueueIsOpen || $SidebarIsPinned || $QueueIsPinned, updatePosition();
