@@ -1,9 +1,10 @@
 <script>
     import { onMount, onDestroy } from 'svelte';
-
+    import { v4 as uuidv4 } from "uuid";
     import SVGAdd from "/src/images/add.svg";
     import SVGRefresh from "/src/images/refresh.svg";
-    import { v4 as uuidv4 } from "uuid";
+    import SVGLeft from "/src/images/arrow_left.svg";
+    import SVGRight from "/src/images/arrow_right.svg";
 
     export let type;
     export let initialData = [];
@@ -229,8 +230,8 @@
 
         {#if isScroll}
             <div class="scroll-buttons">
-                <button class="icon-button circle-button" on:click={() => { scroll("start") }} disabled={containerScrollX < 1}>&lt;</button>
-                <button class="icon-button circle-button" on:click={() => { scroll("end") }} disabled={containerScrollX > containerBind?.scrollWidth - containerBind?.clientWidth - 50}>&gt;</button>
+                <button class="icon-button button--mini circle-button" on:click={() => { scroll("start") }} disabled={containerScrollX < 1}><SVGLeft style="transform: scale(130%)"/></button>
+                <button class="icon-button button--mini circle-button" on:click={() => { scroll("end") }} disabled={containerScrollX > containerBind?.scrollWidth - containerBind?.clientWidth - 50}><SVGRight style="transform: scale(130%)"/></button>
             </div>
         {/if}
     </h2>
