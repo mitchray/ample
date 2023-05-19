@@ -37,6 +37,7 @@ export let ShowNotificationLyricsMissing        = writable(JSON.parse(localStora
 export let ShowNotificationLyricsNotTimestamped = writable(JSON.parse(localStorage.getItem('ShowNotificationLyricsNotTimestamped')) || false);
 
 export let ShowExpandedAlbums = writable(JSON.parse(localStorage.getItem('ShowExpandedAlbums')) || false);
+export let GroupAlbumsByReleaseType = writable(JSON.parse(localStorage.getItem('GroupAlbumsByReleaseType')) || false);
 
 export let SkipBelow       = writable(JSON.parse(localStorage.getItem('SkipBelow')) || false);
 export let SkipBelowRating = writable(JSON.parse(localStorage.getItem('SkipBelowRating')) || 3);

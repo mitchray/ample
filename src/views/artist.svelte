@@ -1,7 +1,7 @@
 <script>
     import { fade } from 'svelte/transition';
     import { Link } from "svelte-routing";
-    import { PageLoadedKey, PageTitle, ShowExpandedAlbums, Theme } from "../stores/status";
+    import { PageLoadedKey, PageTitle, ShowExpandedAlbums, GroupAlbumsByReleaseType, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
     import { API } from "../stores/api";
 
@@ -54,6 +54,12 @@
         let inverted = !$ShowExpandedAlbums;
         localStorage.setItem('ShowExpandedAlbums', JSON.stringify(inverted));
         ShowExpandedAlbums.set(inverted);
+    }
+
+    function toggleGroupByReleaseType() {
+        let inverted = !$GroupAlbumsByReleaseType;
+        localStorage.setItem('GroupAlbumsByReleaseType', JSON.stringify(inverted));
+        GroupAlbumsByReleaseType.set(inverted);
     }
 
     async function loadData() {
@@ -171,6 +177,17 @@
                                 on:click={toggleShowExpanded}
                             >
                                 View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
+                            </button>
+
+                            <button
+                                class="group-releases-toggle button button--regular"
+                                on:click={toggleGroupByReleaseType}
+                            >
+                                {#if $GroupAlbumsByReleaseType}
+                                    Show chronologically
+                                {:else}
+                                    Group by release type
+                                {/if}
                             </button>
 
                             <ArtistReleases artistID={artist.id} />

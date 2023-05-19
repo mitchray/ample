@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
     import { API } from "../../stores/api";
-    import { ShowExpandedAlbums } from "../../stores/status";
+    import { ShowExpandedAlbums, GroupAlbumsByReleaseType } from "../../stores/status";
 
     import { sortAlbumsByDate, groupAlbumsByReleaseType } from "../../logic/album";
 
@@ -26,7 +26,7 @@
 {#if loading}
     <p>Loading releases</p>
 {:else}
-    {#if groupedAlbums}
+    {#if $GroupAlbumsByReleaseType && groupedAlbums}
         {#each [...groupedAlbums] as [key, value], i}
             {#if value.length > 0}
                 <section in:fade={{ duration: i === 0 ? undefined : 0 }}>
@@ -51,6 +51,24 @@
                 </section>
             {/if}
         {/each}
+    {:else if sortedAlbums}
+        <section>
+            <div class="items">
+                {#if $ShowExpandedAlbums}
+                    {#each sortedAlbums as album}
+                        <AlbumCardExpanded data="{album}"/>
+                    {/each}
+                {:else}
+                    <ul class="cardlist-grid album-grid">
+                        {#each sortedAlbums as album}
+                            <li>
+                                <AlbumCard data="{album}"/>
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+            </div>
+        </section>
     {:else}
         <p>Unable to find any albums</p>
     {/if}
