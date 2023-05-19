@@ -461,16 +461,9 @@
         overflow: hidden;
     }
 
-    .queue-item .remove,
-    .queue-item .more {
+    .queue-item .remove:not(:hover),
+    .queue-item .more:not(:hover) {
         color: var(--color-text-secondary);
-    }
-
-    @media (hover: hover) {
-        .queue-item .remove:hover,
-        .queue-item .more:hover {
-            color: var(--color-text-primary);
-        }
     }
     
     .remove {
