@@ -42,8 +42,6 @@
 
 <YearPagination bind:fromYear bind:toYear showYear={showYear} />
 
-<Pagination bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
-
 {#if fromYear && toYear}
     {#key fromYear+toYear}
         {#key loadedTime}
