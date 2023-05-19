@@ -91,7 +91,7 @@
 </script>
 
 <div class="site-header">
-    <div class="site-logo-container">
+    <div class="site-menu-container">
         <button id="sidebar-button" class="icon-button" on:click={handleSidebarToggle}><SVGMenu /></button>
         <div class="header-title" on:click={() => { $PageLoadedKey = Date.now().toString() }}>
             {$PageTitle}
@@ -139,17 +139,21 @@
         color: var(--color-sidebar-primary);
     }
 
-    .site-logo-container {
+    .site-menu-container {
         padding: 0 var(--spacing-md);
     }
 
-    .site-logo-container,
+    .site-menu-container,
     .misc-container {
         display: flex;
         align-items: center;
         gap: var(--spacing-sm);
     }
 
+    .header-title {
+        cursor: pointer;
+    }
+    
     .misc-container {
         justify-content: end;
     }
@@ -203,7 +207,7 @@
     }
 
     @media all and (min-width: 720px) {
-        .site-logo-container {
+        .site-menu-container {
             width: var(--size-sidebar-width);
         }
     }
