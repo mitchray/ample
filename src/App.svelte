@@ -8,7 +8,7 @@
     import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
-    import { PageTitle, PageLoadedKey } from "./stores/status";
+    import { Theme, PageTitle, PageLoadedKey } from "./stores/status";
 
     import { extendSession, validateSession } from './logic/user';
     import { getServerVersion } from './logic/server';
@@ -63,6 +63,10 @@
         serverVersion.set(await getServerVersion());
 
         await validateSession();
+
+        if ($Theme === 'light') {
+            document.body.classList.add('theme-is-light');
+        }
     });
 </script>
 
