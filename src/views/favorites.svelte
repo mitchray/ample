@@ -41,6 +41,7 @@
                             <Lister2
                                 data={artists}
                                 type="artist"
+                                virtualList={true}
                                 actionData={{
                                     type: "artists",
                                     mode: "fullButtons",
@@ -66,6 +67,7 @@
                             <Lister2
                                 data={albums}
                                 type="album"
+                                virtualList={true}
                                 actionData={{
                                     type: "albums",
                                     mode: "fullButtons",
@@ -91,6 +93,7 @@
                             <Lister2
                                 data={songs}
                                 type="song"
+                                virtualList={true}
                                 actionData={{
                                     type: "",
                                     mode: "fullButtons",

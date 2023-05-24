@@ -35,6 +35,7 @@
             data={genres}
             type="genre"
             initialSort="name"
+            virtualList={true}
             actionData={{
                 disable: true
             }}

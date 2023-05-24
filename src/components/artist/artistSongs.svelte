@@ -29,6 +29,7 @@
         bind:data={songs}
         type="song"
         tableOnly={true}
+        virtualList={true}
         actionData={{
             type: "",
             mode: "fullButtons",

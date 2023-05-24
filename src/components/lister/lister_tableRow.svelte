@@ -26,7 +26,7 @@
     import SVGPodcast from "/src/images/podcasts.svg";
     import SVGCurrent from "/src/images/play_circle.svg";
 
-    const { getType, visibleColumns, selectedCount, isEditMode, dataDisplay, showArt } = getContext(contextKey);
+    const { _type, visibleColumns, selectedCount, isEditMode, dataDisplay, _showArt } = getContext(contextKey);
 
     function handleChecked(e) {
         if (e.target.checked) {
@@ -63,7 +63,10 @@
 </script>
 
 {#each $visibleColumns as col }
-    <div class="cell {col.id}" data-type={col.type}>
+    <div class="cell {col.id}"
+         data-type={col.type}
+         style="width: {col.width}"
+    >
 
         {#if col.id === "checkbox"}
             {#if $isEditMode}
@@ -85,41 +88,41 @@
         {/if}
 
         {#if col.id === "name"}
-            {#if item.art && showArt}
+            {#if item.art && $_showArt}
                 <img class="image"
                     src="{cleanArtURL(item.art)}&thumb=1"
                     alt=""
-                    height="50"
-                    width="50"
+                    height="43"
+                    width="43"
                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
                 />
             {/if}
 
-            {#if getType() === "artist"}
+            {#if $_type === "artist"}
                 <Link to="artists/{item.id}">
                     <span>{item.name}</span>
                 </Link>
-            {:else if getType() === "album"}
+            {:else if $_type === "album"}
                 <Link to="albums/{item.id}">
                     <span>{item.name}</span>
                 </Link>
-            {:else if getType() === "genre"}
+            {:else if $_type === "genre"}
                 <Link to="genres/{item.id}">
                     <SVGGenre class="inline" /> {item.name}
                 </Link>
-            {:else if getType() === "podcast"}
+            {:else if $_type === "podcast"}
                 <Link to="podcasts/{item.id}">
                     <SVGPodcast class="inline" /> {item.name}
                 </Link>
-            {:else if getType() === "playlist"}
+            {:else if $_type === "playlist"}
                 <Link to="playlists/{item.id}">
                     {item.name}
                 </Link>
-            {:else if getType() === "smartlist"}
+            {:else if $_type === "smartlist"}
                 <Link to="smartlists/{item.id}">
                     {item.name}
                 </Link>
-            {:else if getType() === "song" || getType() === "playlist_songs"}
+            {:else if $_type === "song" || $_type === "playlist_songs"}
                 {#if $CurrentMedia?.id === item.id}
                     <span class="current-icon">
                         <SVGCurrent class="icon" />
@@ -209,19 +212,19 @@
         {/if}
 
         {#if col.id === "rating"}
-            <Rating type={getType()} id="{item.id}" bind:rating="{item.rating}" flag="{item.flag}" averageRating="{item.averagerating}" />
+            <Rating type={$_type} id="{item.id}" bind:rating="{item.rating}" flag="{item.flag}" averageRating="{item.averagerating}" />
         {/if}
 
         {#if col.id === "actions"}
             <Actions2
-                type="{getType()}"
+                type="{$_type}"
                 mode="miniButtons"
                 id="{item.id}"
                 data={Object.create({
                     album: item.album ? item.album : null,
                     artists: item.artists?.length > 0 ? item.artists : null,
                     albumArtist: item.albumartist ? item.albumartist : null,
-                    playlist: (getType() === "playlist" ? item : null)
+                    playlist: ($_type === "playlist" ? item : null)
                 })}
             />
         {/if}

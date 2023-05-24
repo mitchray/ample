@@ -3,16 +3,11 @@
     import { onDestroy, onMount, setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
     import { ListerEvent } from "../../stores/message";
+    import { SiteContentBind } from "../../stores/player";
 
-    import Actions2 from '../../components/action/actions.svelte';
     import TableView from './lister_tableView.svelte';
     import CardView from './lister_cardView.svelte';
-    import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
-    import PlaylistReorder from '../playlist/playlist_reorder.svelte';
-    import PlaylistRefresh from '../playlist/playlist_refresh.svelte';
-
-    import SVGList from "/src/images/table_rows.svg";
-    import SVGGrid from "/src/images/grid.svg";
+    import ListerActions from './lister_actions.svelte';
 
     export let data;
     export let type;
@@ -27,56 +22,92 @@
     export let initialReverse = null;
     export let displayAsTable = true;
     export let tableOnly      = false;
+    export let virtualList    = false;
 
     const contextKey = uuidv4(); // unique key for each instance of lister
 
-    let listerObserver;
-    let columnWidths     = writable('');   // the individual sizes for each column
+    // underscore prefixed items are accessor aliases of exported params
+    let _data            = writable(data);
+    let _type            = writable(type);
+    let _actionData      = writable(actionData);
+    let _discSubtitle    = writable(discSubtitle);
+    let _zone            = writable(zone);
+    let _showIndex       = writable(showIndex);
+    let _showCheckboxes  = writable(showCheckboxes);
+    let _showArt         = writable(showArt);
+    let _showArtist      = writable(showArtist);
+    let _initialSort     = writable(initialSort);
+    let _initialReverse  = writable(initialReverse);
+    let _displayAsTable  = writable(displayAsTable);
+    let _tableOnly       = writable(tableOnly);
+    let _virtualList     = writable(virtualList);
+
     let listerObject     = writable(null); // the lister itself
+    let listerScroller   = writable(null); // the lister-flex object
     let listerHeader     = writable(null); // the separate header for the lister table
     let listerContainer  = writable(null); // containing element of the lister object
     let listerWrapper    = writable(null); // outer wrapper of lister, currently unused except for CSS
     let dataDisplay      = writable([]);   // editable/sortable/etc. copy of the data
+    let dataFinal        = writable([]);   // final data to render, either full set or virtual subset
     let availableColumns = writable([]);   // available columns
     let visibleColumns   = writable([]);   // columns to show
     let currentSort      = writable(initialSort); // the current sort method
-    let listerColumnsID  = `ListerColumns.${type}.${zone}`;
-    let listerDisplayID  = `ListerDisplay.${type}.${zone}`;
+    let listerColumnsID  = writable(`ListerColumns.${type}.${zone}`);
+    let listerDisplayID  = writable(`ListerDisplay.${type}.${zone}`);
     let isEditMode       = writable(false);
     let selectedCount    = writable(0);
-    let actionsBind;
+    let pseudoHeight     = writable(null);
+    let rowHeight        = writable(60);
+    let offsetY          = writable(0);
+    let listerHeight     = writable(null);
+    let listerObserver;
 
     setContext(contextKey, {
-        getType: () => type,
-        getData: () => data,
-        getZone: () => zone,
-        getInitialReverse: () => initialReverse,
-        listerColumnsID,
-        showIndex,
-        showCheckboxes,
-        showArtist,
-        showArt,
-        discSubtitle,
-        dataDisplay,
-        columnWidths,
+        _data,
+        _type,
+        _actionData,
+        _discSubtitle,
+        _zone,
+        _showIndex,
+        _showCheckboxes,
+        _showArt,
+        _showArtist,
+        _initialSort,
+        _initialReverse,
+        _displayAsTable,
+        _tableOnly,
+        _virtualList,
         listerObject,
+        listerScroller,
         listerHeader,
         listerContainer,
         listerWrapper,
+        dataDisplay,
+        dataFinal,
         availableColumns,
         visibleColumns,
         currentSort,
+        listerColumnsID,
+        listerDisplayID,
         isEditMode,
-        selectedCount
+        selectedCount,
+        pseudoHeight,
+        rowHeight,
+        offsetY,
+        listerHeight,
     });
 
-    $: data         = data; //immutable
-    $: $dataDisplay = data.slice();
+    $: data          = data; //immutable
+    $: $dataDisplay  = data.slice();
+    $: $dataFinal    = (virtualList) ? $dataFinal : $dataDisplay;
+    $: $listerHeight = (virtualList) ? $SiteContentBind.clientHeight - 10 + "px" : 'auto';
+    $: $pseudoHeight = (virtualList) ? $dataDisplay.length * $rowHeight + "px" : 'auto';
+    $: $offsetY      = (virtualList) ? parseInt($offsetY) + "px" : '0px';
 
     // overwrite any actionData.songs with our dataDisplay as it may have updated
     $: {
-        if (actionData.songs) {
-            actionData.songs = $dataDisplay;
+        if ($_actionData.songs) {
+            $_actionData.songs = $dataDisplay;
         }
     }
 
@@ -92,18 +123,18 @@
 
         switch ($ListerEvent.event) {
             case "addedPlaylist":
-                data = [
+                $_data = [
                     $ListerEvent.data,
-                    ...data
+                    ...$_data
                 ];
                 break;
             case "editedPlaylist":
-                let oldPlaylist = data.find( obj => obj.id === $ListerEvent.data.id);
+                let oldPlaylist = $_data.find( obj => obj.id === $ListerEvent.data.id);
                 Object.assign(oldPlaylist, $ListerEvent.data);
-                data = data;
+                $_data = $_data;
                 break;
             case "deletedPlaylist":
-                data = data.filter( obj => obj.id !== $ListerEvent.data.id);
+                $_data = $_data.filter( obj => obj.id !== $ListerEvent.data.id);
                 break;
             default:
                 // console.debug($ListerEvent, "event not recognised");
@@ -112,22 +143,15 @@
     }
 
     onMount(() => {
-        let savedDisplayAsTable = JSON.parse(localStorage.getItem(listerDisplayID));
+        let savedDisplayAsTable = JSON.parse(localStorage.getItem($listerDisplayID));
 
         if (savedDisplayAsTable !== null) {
-            displayAsTable = savedDisplayAsTable;
+            $_displayAsTable = savedDisplayAsTable;
         }
 
-        // use ResizeObserver on ListerContainer to monitor changes in dimension
-        listerObserver = new ResizeObserver(entries => {
-            entries.forEach(entry => {
-                if ($listerHeader) {
-                    $listerHeader.setStaticWidths();
-                }
-            });
-        });
-
-        listerObserver.observe($listerContainer);
+        if ($_displayAsTable && $_virtualList) {
+            $listerContainer.style.maxHeight = $listerHeight;
+        }
     });
 
     onDestroy(() => {
@@ -135,54 +159,17 @@
             listerObserver.disconnect();
         }
     });
-
-    function setTableDisplay(pref) {
-        displayAsTable = pref;
-        localStorage.setItem(listerDisplayID, JSON.stringify(displayAsTable));
-    }
 </script>
 
-
 <div class="lister-wrapper" bind:this={$listerWrapper}>
-    <div class="lister-actions" bind:this={actionsBind} class:not-empty={actionsBind?.firstElementChild}>
-        {#if !actionData.disable}
-            <div class="group">
-                <Actions2 mode="fullButtons" {...actionData} />
-            </div>
-        {/if}
+    <ListerActions contextKey={contextKey} />
 
-        {#if discSubtitle}
-            <div class="disc-subtitle">{discSubtitle}</div>
-        {/if}
-
-        {#if !tableOnly}
-            <div class="group">
-                <button class="button" on:click={() => { setTableDisplay(true) }} class:active={displayAsTable}><SVGList /> List</button>
-                <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!displayAsTable}><SVGGrid /> Grid</button>
-            </div>
-        {/if}
-
-        {#if type === "playlist_songs"}
-            {#if showCheckboxes}
-                <div class="group">
-                    <PlaylistRemoveFrom contextKey={contextKey} />
-                </div>
-
-                <div class="group">
-                    <PlaylistReorder contextKey={contextKey} />
-                </div>
-            {/if}
-
-            {#if !showCheckboxes}
-                <div class="group">
-                    <PlaylistRefresh contextKey={contextKey} />
-                </div>
-            {/if}
-        {/if}
-    </div>
-
-    <div class="lister-container" bind:this={$listerContainer} class:is-table={displayAsTable}>
-        {#if type === "playlist_songs" || displayAsTable}
+    <div class="lister-container"
+         bind:this={$listerContainer}
+         class:is-table={$_displayAsTable}
+         class:is-virtual={$_virtualList}
+    >
+        {#if $_type === "playlist_songs" || $_displayAsTable}
             <TableView contextKey={contextKey} />
         {:else}
             <CardView contextKey={contextKey} />
@@ -190,40 +177,33 @@
     </div>
 </div>
 
-
 <style>
     .lister-wrapper {
         container-name: lister-wrapper;
         container-type: inline-size;
     }
 
-    .lister-actions {
-        display: flex;
-        gap: var(--spacing-lg);
-        z-index: 1;
-        align-items: center;
-    }
-
-    /* collapses space if empty */
-    .lister-actions.not-empty {
-        margin-bottom: var(--spacing-lg);
-    }
-
-    .lister-actions > .group {
-        display: flex;
-        gap: var(--spacing-sm);
-    }
-
     .lister-container {
         width: auto;
         max-width: 100%;
-        display: flex;
-        flex-direction: column;
         contain: content;
+        overflow-y: auto;
+    }
+
+    .lister-container.is-virtual :global(.header-flex)  {
+        top: 0;
+    }
+
+    /* reserve scrollbar space to maintain alignments */
+    .lister-container.is-virtual :global(.header-flex),
+    .lister-container.is-virtual :global(.lister-flex) {
+        scrollbar-gutter: stable;
     }
 
     .lister-container.is-table {
         width: fit-content;
+        display: flex;
+        flex-direction: column;
     }
 
     .lister-container.is-table:global(.scroll-start) :global(.name:before) {
@@ -254,10 +234,5 @@
     .lister-container.is-table:global(.scroll-start) :global(.name:before),
     .lister-container.is-table:global(.scroll-end) :global(.actions:before) {
         opacity: 1;
-    }
-
-    .disc-subtitle {
-        color: var(--color-highlight);
-        font-weight: 700;
     }
 </style>

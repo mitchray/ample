@@ -3,10 +3,11 @@
 
     import Columns from './lister_columns.svelte';
     import TableRow from './lister_tableRow.svelte';
+    import Virtual from './lister_virtual.svelte';
 
     export let contextKey;
 
-    const { dataDisplay, columnWidths, listerObject, listerHeader, listerContainer } = getContext(contextKey);
+    const { dataDisplay, dataFinal, offsetY, listerObject, listerScroller, listerHeader, listerContainer, pseudoHeight } = getContext(contextKey);
     let bindForName;
     let bindForActions;
     let observerName;
@@ -56,16 +57,18 @@
     });
 </script>
 
+<Virtual contextKey={contextKey} />
+
 <div class="header-flex syncscroll" name="listerhack-{contextKey}" bind:this={bindForName} >
-    <div class="header" style="grid-template-columns: {$columnWidths}" bind:this={bindForActions} >
+    <div class="header" bind:this={bindForActions} >
         <Columns bind:this={$listerHeader} contextKey={contextKey} />
     </div>
 </div>
 
-<div class="lister-flex syncscroll" name="listerhack-{contextKey}">
-    <div class="lister" bind:this={$listerObject} style="grid-template-columns: {$columnWidths}">
-        {#each $dataDisplay as row, i (i)}
-            <div class="row" class:stripe={row.sortOrder % 2}>
+<div class="lister-flex syncscroll" name="listerhack-{contextKey}" bind:this={$listerScroller}>
+    <div class="lister" bind:this={$listerObject} style="height: {$pseudoHeight};">
+        {#each $dataFinal as row, i (i)}
+            <div class="row" class:stripe={row.sortOrder % 2} style="transform: translateY({$offsetY})">
                 {#if !row.isDeleted}
                     <TableRow item={row} contextKey={contextKey} />
                 {/if}
@@ -143,13 +146,16 @@
     }
 
     .row {
-        display: contents;
+        display: flex;
     }
 
     .header,
     .lister {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); /* fallback */
+        display: flex;
+    }
+
+    .lister {
+        flex-direction: column;
     }
 
     :global(.lister-container.being-resized) {

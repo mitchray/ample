@@ -10,11 +10,9 @@
 
     let newColumns = JSON.parse(JSON.stringify(columns)); // MAKE AN INDIVIDUAL COPY OF IMPORTED OBJECT
 
-    let { listerColumnsID, currentSort, getInitialReverse, dataDisplay, getType, showIndex, showCheckboxes, showArtist, columnWidths, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader, selectedCount } = getContext(contextKey);
+    let { listerColumnsID, currentSort, _initialReverse, dataDisplay, _type, _showIndex, _showCheckboxes, _showArtist, listerObject, listerContainer, availableColumns, visibleColumns, listerHeader, selectedCount } = getContext(contextKey);
     const min = 100;
-    let thisType = getType();
     let headerBeingResized;
-    let columnWidthArray;
     let updateIndex;
     let horizontalScrollOffset = 0;
 
@@ -25,29 +23,19 @@
 
         calculateWidths();
 
-        applySort($currentSort, getInitialReverse());
+        applySort($currentSort, $_initialReverse);
 
         // set initial sort orders
         updateSortIndexes(true);
     });
 
-    export function setStaticWidths() {
-        if (!$listerObject) {
-            return;
-        }
-        // convert to static widths if lister has been rendered
-        if (window.getComputedStyle($listerObject).gridTemplateColumns.indexOf("repeat") === -1) {
-            $columnWidths = window.getComputedStyle($listerObject).gridTemplateColumns;
-        }
-    }
-
     function setAvailableColumns() {
-        $availableColumns = newColumns.filter((col) => col.object_types.find((type) => type.id === thisType));
+        $availableColumns = newColumns.filter((col) => col.object_types.find((type) => type.id === $_type));
 
         // apply any overrides
         if ($availableColumns) {
             for (let i = 0; i < $availableColumns.length; i++) {
-                let item = $availableColumns[i].object_types.find((type) => type.id === thisType);
+                let item = $availableColumns[i].object_types.find((type) => type.id === $_type);
 
                 // apply any overrides
                 $availableColumns[i].widthPreset = (item.widthPreset) ? item.widthPreset : $availableColumns[i].widthPreset;
@@ -57,17 +45,17 @@
         }
 
         // enable index
-        if (showIndex) {
+        if ($_showIndex) {
             $availableColumns.find(el => el.id === "index").show = true;
         }
 
         // enable checkboxes
-        if (showCheckboxes) {
+        if ($_showCheckboxes) {
             $availableColumns.find(el => el.id === "checkbox").show = true;
         }
 
         // force artist column
-        if (showArtist) {
+        if ($_showArtist) {
             $availableColumns.find(el => el.id === "artist").show = true;
             $availableColumns.find(el => el.id === "artist").canToggle = false;
         }
@@ -103,10 +91,7 @@
     }
 
     function initResize(e) {
-        setStaticWidths();
-
         headerBeingResized = e.target.parentNode;
-        columnWidthArray   = $columnWidths.split(" ");
         updateIndex        = Array.from($listerContainer.querySelectorAll('.header .cell')).findIndex((header) => header === headerBeingResized);
 
         window.addEventListener('mousemove', onMouseMove);
@@ -119,11 +104,7 @@
         horizontalScrollOffset = $listerObject.scrollLeft;
         const width = (horizontalScrollOffset + e.clientX) - headerBeingResized.getBoundingClientRect().left + 5;
 
-        // update specific column
-        columnWidthArray[updateIndex] = Math.max(min, parseInt(width, 10)) + 'px';
-
-        // update all columns
-        $columnWidths = columnWidthArray.join(" ");
+        $visibleColumns[updateIndex].width = Math.max(min, parseInt(width, 10)) + 'px';
     });
 
     const onMouseUp = () => {
@@ -134,42 +115,60 @@
     }
 
     export const calculateWidths = async () => {
-        let newWidths = "";
-
         $visibleColumns.forEach((col) => {
             switch (col.widthPreset) {
                 case "large":
-                    newWidths += `250px `;
+                    col.width = "250px"
                     break;
                 case "medium":
-                    newWidths += `180px `;
+                    col.width = "180px"
                     break;
                 case "small":
-                    newWidths += `120px `;
+                    col.width = "120px"
                     break;
                 case "art":
-                    newWidths += `60px `;
+                    col.width = "60px"
                     break;
                 case "rating":
-                    newWidths += `180px `;
+                    col.width = "180px"
                     break;
                 case "actions":
-                    newWidths += `160px `;
+                    col.width = "160px"
                     break;
                 case "fit":
-                    newWidths += `minmax(50px, max-content) `;
+                    col.width = getMaxWidth(col, 50);
                     break;
                 default:
-                    newWidths += `minmax(${min}px, max-content) `;
+                    col.width = getMaxWidth(col, min);
                     break;
             }
         });
 
-        $columnWidths = newWidths;
+        $visibleColumns = $visibleColumns;
 
         await tick();
+    }
 
-        setStaticWidths();
+    function getMaxWidth(col, minWidth) {
+        if (!$listerContainer) {
+            return;
+        }
+
+        // create the temporary element
+        const temp = document.createElement('div');
+        temp.style.width = 'auto';
+        temp.style.position = 'absolute';
+        temp.style.whiteSpace = 'nowrap';
+        temp.innerHTML = col.label;
+
+        $listerContainer.appendChild(temp);
+
+        let result = Math.max(minWidth, parseInt(temp.clientWidth, 10)) + 'px';
+
+        // clean up
+        $listerContainer.removeChild(temp);
+
+        return result;
     }
 
     function updateSortIndexes(initialOrder) {
@@ -245,7 +244,11 @@
 </script>
 
 {#each $visibleColumns as col (col)}
-    <div class="cell {col.id}" data-sortable="{col.sortable}" data-type={col.type} >
+    <div class="cell {col.id}"
+         data-sortable="{col.sortable}"
+         data-type={col.type}
+         style="width: {col.width}"
+    >
         {#if col.id === "checkbox"}
             <input type="checkbox" on:change={toggleAllChecked} />
         {:else if col.id === "actions"}

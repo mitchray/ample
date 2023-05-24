@@ -44,6 +44,7 @@
                 bind:data={playlists}
                 type="playlist"
                 initialSort="name"
+                virtualList={true}
                 actionData={{
                     disable: true
                 }}

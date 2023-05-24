@@ -20,6 +20,7 @@
                 data={smartlists}
                 type="smartlist"
                 initialSort="name"
+                virtualList={true}
                 actionData={{
                     disable: true
                 }}

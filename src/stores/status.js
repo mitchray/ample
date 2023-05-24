@@ -14,6 +14,7 @@ export let ShowSearch  = writable(false);
 export let ShowLyrics    = writable(JSON.parse(localStorage.getItem('ShowLyrics')) || false);
 export let FullScreenEnabled = writable(false);
 export let TabHistory = writable({});
+export let FilterHistory = writable({});
 export let PageLoadedKey = writable(null);
 
 export let SidebarIsOpen   = writable(JSON.parse(localStorage.getItem('SidebarIsOpen')) || false);

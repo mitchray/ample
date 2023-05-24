@@ -115,6 +115,7 @@
                     showCheckboxes={playlistType === "playlist"}
                     tableOnly={true}
                     showIndex={true}
+                    virtualList={true}
                     actionData={{
                         type: "",
                         mode: "fullButtons",

@@ -48,6 +48,7 @@
             <Lister2
                 bind:data={dataDisplay}
                 type="album"
+                virtualList={true}
                 actionData={{
                     type: "year",
                     mode: "fullButtons",

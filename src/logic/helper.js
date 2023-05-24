@@ -195,11 +195,14 @@ export function lyricsAreTimestamped(lyrics) {
 /**
  Wait for an element to exist before continuing
  */
-export async function waitForElement(selector)  {
-    while ( document.querySelector(selector) === null) {
+export async function waitForElement(selector, useNodeDirectly)  {
+    let item = (useNodeDirectly) ? selector : document.querySelector(selector);
+
+    while (item === null) {
         await new Promise( resolve =>  requestAnimationFrame(resolve) )
     }
-    return document.querySelector(selector);
+
+    return item;
 }
 
 export function setIndexes(items) {

@@ -25,7 +25,7 @@ export const getAlbumsStartingWithChar = ({page = 0, limit = 50, filterChar}) =>
     return get(API).advancedSearch({
         type: "album",
         operator: "and",
-        random: 1,
+        random: 0,
         offset: page * limit,
         limit: limit,
         rules: [

@@ -1,50 +1,33 @@
 <script>
     import { getAlbumsStartingWithChar } from "../../logic/album";
-
+    import { FilterHistory } from "../../stores/status";
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
-    import Pagination from '../../components/Pagination.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
-    let filterValue = ''; // bound from AlphanumericFilter
-    let dataDisplay = [];
-    let defaultLimit = 50;
-    let page = 0;
-    let count = 0;
-    let loadedTime = 0;
-    let limit = 0;
+    export let type = "album";
 
-    $: count = dataDisplay.length || 0;
+    let filterValue = $FilterHistory[type] || ""; // bound from AlphanumericFilter
+    let dataDisplay = [];
+    let loadedTime = 0;
+
     $: dataDisplay = dataDisplay;
 
-    $: {
-        if (limit > 0 && (filterValue || filterValue === '')) {
-            resetPage()
-            getData();
-        }
-    }
-
-    $: {
-        if (limit > 0 || page) {
-            getData();
-        }
-    }
+    $: filterValue, getData();
 
     async function getData() {
-        dataDisplay = await getAlbumsStartingWithChar({limit: limit, page: page, filterChar: filterValue});
+        dataDisplay = await getAlbumsStartingWithChar({limit: 0, filterChar: filterValue});
+        console.debug(dataDisplay)
         loadedTime = new Date();
-    }
-
-    function resetPage() {
-        page = 0;
     }
 </script>
 
-<AlphanumericFilter bind:filterValue />
+<AlphanumericFilter bind:filterValue type={type} />
 
 {#key loadedTime}
     <Lister2
         bind:data={dataDisplay}
         type="album"
+        virtualList={true}
         actionData={{
             type: "albums",
             mode: "fullButtons",
@@ -52,5 +35,3 @@
         }}
     />
 {/key}
-
-<Pagination bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />

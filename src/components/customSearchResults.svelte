@@ -26,6 +26,7 @@
                     bind:data={results}
                     type="{type}"
                     showCheckboxes={showCheckboxes}
+                    virtualList={true}
                     actionData={{
                         type: "",
                         mode: "fullButtons",

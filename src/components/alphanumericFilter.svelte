@@ -1,7 +1,10 @@
 <script>
+    import { onMount } from "svelte";
+    import { FilterHistory } from "../stores/status";
     import SVGClose from "/src/images/close.svg";
 
     export let filterValue;
+    export let type;
 
     let timeout;
     let inputValue;
@@ -9,15 +12,25 @@
     function handleClear() {
         inputValue = "";
         filterValue = "";
+        $FilterHistory[type] = "";
     }
 
     function handleInputChange(e) {
         clearTimeout(timeout);
 
         timeout = setTimeout(function () {
+            $FilterHistory[type] = inputValue;
             filterValue = inputValue;
         }, 600);
     }
+
+    onMount(() => {
+        let previous = $FilterHistory[type];
+
+        if (previous) {
+            filterValue = inputValue = previous;
+        }
+    });
 </script>
 
 <div class="container">
