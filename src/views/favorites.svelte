@@ -34,7 +34,7 @@
         {#if tab.loaded === true}
             {#if tab.value === 'artists'}
                 <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
-                    {#await favoriteArtists({limit: 100})}
+                    {#await favoriteArtists({limit: 5000})}
                         Loading favorite artists
                     {:then artists}
                         {#if artists.length > 0}
@@ -60,7 +60,7 @@
 
             {#if tab.value === 'albums'}
                 <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                    {#await favoriteAlbums({limit: 100})}
+                    {#await favoriteAlbums({limit: 5000})}
                         Loading favorite albums
                     {:then albums}
                         {#if albums.length > 0}
@@ -86,7 +86,7 @@
 
             {#if tab.value === 'songs'}
                 <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
-                    {#await favoriteSongs({limit: 100})}
+                    {#await favoriteSongs({limit: 5000})}
                         Loading favorite songs
                     {:then songs}
                         {#if songs.length > 0}
