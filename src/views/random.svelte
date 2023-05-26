@@ -1,6 +1,9 @@
 <script>
     import { PageTitle } from "../stores/status";
-    import CardList from '../components/cardList.svelte';
+    import { randomArtists } from "../logic/artist";
+    import { randomAlbums } from "../logic/album";
+    import { randomSongs } from "../logic/song";
+    import Lister2 from '../components/lister/lister.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
     
@@ -30,19 +33,79 @@
         {#if tab.loaded === true}
             {#if tab.value === 'artists'}
                 <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
-                    <CardList type="artist" dataProvider={"randomArtists"} limit=18 refresh={true} />
+                    {#await randomArtists({limit: 20})}
+                        Loading random artists
+                    {:then artists}
+                        {#if artists.length > 0}
+                            <Lister2
+                                data={artists}
+                                type="artist"
+                                virtualList={true}
+                                actionData={{
+                                    type: "artists",
+                                    mode: "fullButtons",
+                                    showShuffle: artists.length > 1,
+                                    data: Object.create({artists: artists})
+                                }}
+                            />
+                        {:else}
+                            <p>No artists found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
                 </Tab>
             {/if}
 
             {#if tab.value === 'albums'}
                 <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                    <CardList type="album" dataProvider={"randomAlbums"} limit=18 refresh={true} />
+                    {#await randomAlbums({limit: 20})}
+                        Loading random albums
+                    {:then albums}
+                        {#if albums.length > 0}
+                            <Lister2
+                                data={albums}
+                                type="album"
+                                virtualList={true}
+                                actionData={{
+                                    type: "albums",
+                                    mode: "fullButtons",
+                                    showShuffle: albums.length > 1,
+                                    data: Object.create({albums: albums})
+                                }}
+                            />
+                        {:else}
+                            <p>No albums found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
                 </Tab>
             {/if}
 
             {#if tab.value === 'songs'}
                 <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
-                    <CardList type="song" dataProvider={"randomSongs"} limit=18 refresh={true} />
+                    {#await randomSongs({limit: 20})}
+                        Loading random songs
+                    {:then songs}
+                        {#if songs.length > 0}
+                            <Lister2
+                                data={songs}
+                                type="song"
+                                virtualList={true}
+                                actionData={{
+                                    type: "",
+                                    mode: "fullButtons",
+                                    showShuffle: songs.length > 1,
+                                    data: Object.create({songs: songs})
+                                }}
+                            />
+                        {:else}
+                            <p>No songs found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
                 </Tab>
             {/if}
         {/if}
