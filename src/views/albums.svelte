@@ -1,5 +1,5 @@
 <script>
-    import CardList from '../components/cardList.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
     import AlbumsAll from '../components/album/albumsAll.svelte';
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
@@ -31,13 +31,53 @@
         {#if tab.loaded === true}
             {#if tab.value === 'newest'}
                 <Tab id="newest" class="newest" bind:activeTabValue={currentTab}>
-                    <CardList type="album" dataProvider={"newestAlbums"} limit=18 />
+                    {#await newestAlbums({limit: 50})}
+                        Loading recently added albums
+                    {:then albums}
+                        {#if albums.length > 0}
+                            <Lister2
+                                data={albums}
+                                type="album"
+                                virtualList={true}
+                                actionData={{
+                                    type: "albums",
+                                    mode: "fullButtons",
+                                    showShuffle: albums.length > 1,
+                                    data: Object.create({albums: albums})
+                                }}
+                            />
+                        {:else}
+                            <p>No albums found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
                 </Tab>
             {/if}
 
             {#if tab.value === 'random'}
                 <Tab id="random" class="random" bind:activeTabValue={currentTab}>
-                    <CardList type="album" dataProvider={"randomAlbums"} limit=18 refresh=true />
+                    {#await randomAlbums({limit: 50})}
+                        Loading random albums
+                    {:then albums}
+                        {#if albums.length > 0}
+                            <Lister2
+                                data={albums}
+                                type="album"
+                                virtualList={true}
+                                actionData={{
+                                    type: "albums",
+                                    mode: "fullButtons",
+                                    showShuffle: albums.length > 1,
+                                    data: Object.create({albums: albums})
+                                }}
+                            />
+                        {:else}
+                            <p>No albums found</p>
+                        {/if}
+                    {:catch error}
+                        <p>An error occurred.</p>
+                    {/await}
                 </Tab>
             {/if}
 
