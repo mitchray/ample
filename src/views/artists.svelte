@@ -3,7 +3,7 @@
     import { groupedArtists } from "../stores/server";
     import { PageTitle } from "../stores/status";
     import { newestArtists, randomArtists } from "../logic/artist";
-    import CardList from '../components/cardList.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -51,13 +51,53 @@
                     {#if tab.loaded === true}
                         {#if tab.value === 'recentlyUpdated'}
                             <Tab id="recentlyUpdated" class="recentlyUpdated" bind:activeTabValue={currentTab}>
-                                <CardList type="artist" dataProvider={"newestArtists"} limit=18 />
+                                {#await newestArtists({limit: 50})}
+                                    Loading recently updated artists
+                                {:then artists}
+                                    {#if artists.length > 0}
+                                        <Lister2
+                                            data={artists}
+                                            type="artist"
+                                            virtualList={true}
+                                            actionData={{
+                                                type: "artists",
+                                                mode: "fullButtons",
+                                                showShuffle: artists.length > 1,
+                                                data: Object.create({artists: artists})
+                                            }}
+                                        />
+                                    {:else}
+                                        <p>No artists found</p>
+                                    {/if}
+                                {:catch error}
+                                    <p>An error occurred.</p>
+                                {/await}
                             </Tab>
                         {/if}
 
                         {#if tab.value === 'random'}
                             <Tab id="random" class="random" bind:activeTabValue={currentTab}>
-                                <CardList type="artist" dataProvider={"randomArtists"} limit=18 refresh=true />
+                                {#await randomArtists({limit: 50})}
+                                    Loading random artists
+                                {:then artists}
+                                    {#if artists.length > 0}
+                                        <Lister2
+                                            data={artists}
+                                            type="artist"
+                                            virtualList={true}
+                                            actionData={{
+                                                type: "artists",
+                                                mode: "fullButtons",
+                                                showShuffle: artists.length > 1,
+                                                data: Object.create({artists: artists})
+                                            }}
+                                        />
+                                    {:else}
+                                        <p>No artists found</p>
+                                    {/if}
+                                {:catch error}
+                                    <p>An error occurred.</p>
+                                {/await}
                             </Tab>
                         {/if}
 

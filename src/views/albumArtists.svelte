@@ -3,7 +3,7 @@
     import { groupedAlbumArtists } from "../stores/server";
     import { PageTitle } from "../stores/status";
     import { randomAlbumArtists } from "../logic/artist";
-    import CardList from '../components/cardList.svelte';
+    import Lister2 from '../components/lister/lister.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -50,7 +50,27 @@
                     {#if tab.loaded === true}
                         {#if tab.value === 'random'}
                             <Tab id="random" class="random" bind:activeTabValue={currentTab}>
-                                <CardList type="artist" dataProvider={"randomAlbumArtists"} limit=18 refresh=true />
+                                {#await randomAlbumArtists({limit: 50})}
+                                    Loading random album artists
+                                {:then artists}
+                                    {#if artists.length > 0}
+                                        <Lister2
+                                            data={artists}
+                                            type="artist"
+                                            virtualList={true}
+                                            actionData={{
+                                                type: "artists",
+                                                mode: "fullButtons",
+                                                showShuffle: artists.length > 1,
+                                                data: Object.create({artists: artists})
+                                            }}
+                                        />
+                                    {:else}
+                                        <p>No artists found</p>
+                                    {/if}
+                                {:catch error}
+                                    <p>An error occurred.</p>
+                                {/await}
                             </Tab>
                         {/if}
 
