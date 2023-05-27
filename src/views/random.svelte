@@ -33,7 +33,7 @@
         {#if tab.loaded === true}
             {#if tab.value === 'artists'}
                 <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
-                    {#await randomArtists({limit: 20})}
+                    {#await randomArtists({limit: 50})}
                         Loading random artists
                     {:then artists}
                         {#if artists.length > 0}
@@ -59,7 +59,7 @@
 
             {#if tab.value === 'albums'}
                 <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                    {#await randomAlbums({limit: 20})}
+                    {#await randomAlbums({limit: 50})}
                         Loading random albums
                     {:then albums}
                         {#if albums.length > 0}
@@ -85,7 +85,7 @@
 
             {#if tab.value === 'songs'}
                 <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
-                    {#await randomSongs({limit: 20})}
+                    {#await randomSongs({limit: 50})}
                         Loading random songs
                     {:then songs}
                         {#if songs.length > 0}
