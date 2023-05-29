@@ -94,5 +94,3 @@
 {:catch error}
     <p>An error occurred.</p>
 {/await}
-
-<Pagination bind:limit bind:page bind:count type={type} defaultLimit={defaultLimit} />

@@ -2,7 +2,6 @@
     import { getAlbumsByYear } from "../../logic/album";
 
     import YearPagination from '../../components/yearPagination.svelte';
-    import Pagination from '../../components/Pagination.svelte';
     import Lister2 from '../../components/lister/lister.svelte';
 
     export let showYear = new Date().getFullYear();
@@ -11,13 +10,7 @@
     let fromYear = showYear; // default to current year
     let toYear = showYear; // default to current year
     let loading = true;
-    let defaultLimit = 50;
-    let page = 0;
-    let count = 0;
     let loadedTime = 0;
-    let limit = 0;
-
-    $: count = dataDisplay.length || 0;
 
     $: {
         // YearPagination 'Search' button just passes the final value, so get data if the years change
@@ -26,15 +19,9 @@
         }
     }
 
-    $: {
-        if (limit > 0 || page) {
-            getData();
-        }
-    }
-
     async function getData() {
         loading = true;
-        dataDisplay = await getAlbumsByYear({limit: limit, page: page, from: fromYear, to: toYear});
+        dataDisplay = await getAlbumsByYear({limit: 5000, from: fromYear, to: toYear});
         loadedTime = new Date();
         loading = false;
     }
@@ -59,5 +46,3 @@
         {/key}
     {/key}
 {/if}
-
-<Pagination bind:limit bind:page bind:count type="album" defaultLimit={defaultLimit} />
