@@ -50,7 +50,7 @@
 
                 {#if tab.value === 'albums'}
                     <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                        <GenreByType id={genre.id} type="album"} />
+                        <GenreByType id={genre.id} type="album" />
                     </Tab>
                 {/if}
 
