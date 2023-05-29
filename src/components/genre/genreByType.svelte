@@ -45,7 +45,7 @@
             <Lister2
                 data={data}
                 type="artist"
-                initialSort="title"
+                initialSort="name"
                 virtualList={true}
                 actionData={{
                     type: "artistGenre",
@@ -59,7 +59,7 @@
             <Lister2
                 data={data}
                 type="album"
-                initialSort="title"
+                initialSort="name"
                 virtualList={true}
                 actionData={{
                     type: "albumGenre",
@@ -73,7 +73,7 @@
             <Lister2
                 data={data}
                 type="song"
-                initialSort="title"
+                initialSort="name"
                 virtualList={true}
                 actionData={{
                     type: "songGenre",
