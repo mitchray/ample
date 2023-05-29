@@ -20,6 +20,7 @@
                     $DispatchListerEvent = {
                         event: "deletedPlaylist",
                         data: playlist,
+                        type: "playlist"
                     };
                 } else {
                     addAlert({title: 'Failed to delete playlist', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});

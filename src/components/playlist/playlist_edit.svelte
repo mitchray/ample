@@ -44,6 +44,7 @@
                 $DispatchListerEvent = {
                     event: "addedPlaylist",
                     data: playlist,
+                    type: "playlist"
                 };
 
                 // reset once completed
@@ -68,6 +69,7 @@
                     $DispatchListerEvent = {
                         event: "editedPlaylist",
                         data: playlist,
+                        type: "playlist"
                     };
                 } else {
                     addAlert({title: 'Playlist no longer exists', style: 'warning'});
@@ -75,6 +77,7 @@
                     $DispatchListerEvent = {
                         event: "deletedPlaylist",
                         data: playlist,
+                        type: "playlist"
                     };
 
                     isVisible = false;

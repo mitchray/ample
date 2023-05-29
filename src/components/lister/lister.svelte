@@ -115,7 +115,13 @@
     $: $ListerEvent, handleEvents();
 
     function handleEvents() {
+        // if missing _id, something went wrong...
         if (!$ListerEvent._id) {
+            return;
+        }
+
+        // if types don't match, ignore showing updates
+        if ($ListerEvent.type !== $_type) {
             return;
         }
 
