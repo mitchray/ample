@@ -33,9 +33,10 @@
     {#key fromYear+toYear}
         {#key loadedTime}
             <Lister2
-                bind:data={dataDisplay}
+                data={dataDisplay}
                 type="album"
                 virtualList={true}
+                initialSort="year"
                 actionData={{
                     type: "year",
                     mode: "fullButtons",
