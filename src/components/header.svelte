@@ -174,7 +174,7 @@
         height: 100%;
         border: 0;
         background-color: var(--color-sidebar-background);
-        border-radius: 0;
+        border-radius: 4px;
     }
 
     input.site-search:focus-visible {
