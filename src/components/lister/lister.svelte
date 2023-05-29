@@ -119,22 +119,20 @@
             return;
         }
 
-        // TODO might be a good idea to have a listerID attached to the event so only the correct one handles it
-
         switch ($ListerEvent.event) {
             case "addedPlaylist":
-                $_data = [
+                data = [
                     $ListerEvent.data,
-                    ...$_data
+                    ...data
                 ];
                 break;
             case "editedPlaylist":
-                let oldPlaylist = $_data.find( obj => obj.id === $ListerEvent.data.id);
+                let oldPlaylist = data.find( obj => obj.id === $ListerEvent.data.id);
                 Object.assign(oldPlaylist, $ListerEvent.data);
-                $_data = $_data;
+                data = data;
                 break;
             case "deletedPlaylist":
-                $_data = $_data.filter( obj => obj.id !== $ListerEvent.data.id);
+                data = data.filter( obj => obj.id !== $ListerEvent.data.id);
                 break;
             default:
                 // console.debug($ListerEvent, "event not recognised");
