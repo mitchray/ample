@@ -2,7 +2,7 @@
     import { writable } from 'svelte/store';
     import { onDestroy, onMount, setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
-    import { ListerEvent } from "../../stores/message";
+    import { DispatchListerEvent, ListerEvent } from "../../stores/message";
     import { SiteContentBind } from "../../stores/player";
 
     import TableView from './lister_tableView.svelte';
@@ -117,11 +117,13 @@
     function handleEvents() {
         // if missing _id, something went wrong...
         if (!$ListerEvent._id) {
+            clearEvent();
             return;
         }
 
         // if types don't match, ignore showing updates
         if ($ListerEvent.type !== $_type) {
+            clearEvent();
             return;
         }
 
@@ -144,6 +146,13 @@
                 // console.debug($ListerEvent, "event not recognised");
                 break;
         }
+
+        // clear the event once actioned
+        clearEvent();
+    }
+
+    function clearEvent() {
+        $DispatchListerEvent = {};
     }
 
     onMount(() => {
