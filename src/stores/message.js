@@ -6,6 +6,10 @@ export let AlertsList = writable([]);
 export let DispatchListerEvent = writable({});
 
 export let ListerEvent = derived(DispatchListerEvent, ($DispatchListerEvent) => {
+    if ($DispatchListerEvent === null) {
+        return {};
+    }
+
     if ($DispatchListerEvent.event) {
         $DispatchListerEvent._id = uuidv4();
     }

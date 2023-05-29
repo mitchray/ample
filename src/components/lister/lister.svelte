@@ -152,7 +152,7 @@
     }
 
     function clearEvent() {
-        $DispatchListerEvent = {};
+        $DispatchListerEvent = null;
     }
 
     onMount(() => {
