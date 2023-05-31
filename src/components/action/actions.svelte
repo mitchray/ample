@@ -32,6 +32,7 @@
     import ActionDeletePlaylist from './action_playlistDelete.svelte';
     import ActionUpdateFromTags from './action_updateFromTags.svelte';
     import ActionUpdateArt      from './action_updateArt.svelte';
+    import ActionDownload       from './action_download.svelte';
 
     import SVGMore from "/src/images/more-hori.svg";
     import SVGArtist from "/src/images/artist.svg";
@@ -188,6 +189,10 @@
 
             {#if (type === "artist" || type === "album")}
                 <ActionUpdateArt contextKey={contextKey} />
+            {/if}
+
+            {#if (type === "song")}
+                <ActionDownload contextKey={contextKey} />
             {/if}
         </div>
     </div>
