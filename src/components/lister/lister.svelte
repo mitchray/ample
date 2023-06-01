@@ -101,7 +101,7 @@
     $: $dataDisplay  = data.slice();
     $: $dataFinal    = (virtualList) ? $dataFinal : $dataDisplay;
     $: $listerHeight = (virtualList) ? $SiteContentBind.clientHeight - 10 + "px" : 'auto';
-    $: $pseudoHeight = (virtualList) ? $dataDisplay.length * $rowHeight + "px" : 'auto';
+    $: $pseudoHeight = (virtualList) ? $dataDisplay.filter(e => !e.isDeleted).length * $rowHeight + "px" : 'auto';
     $: $offsetY      = (virtualList) ? parseInt($offsetY) + "px" : '0px';
 
     // overwrite any actionData.songs with our dataDisplay as it may have updated
