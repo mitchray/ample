@@ -71,16 +71,16 @@
                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
                 />
             {/each}
+        {:else}
+            <img class="art"
+                 src="{fallback}&thumb=32"
+                 alt=""
+                 width="384"
+                 height="384"
+                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
+            />
         {/if}
     </div>
-
-    <img class="art"
-        src="{fallback}&thumb=32"
-        alt=""
-        width="384"
-        height="384"
-        on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
-    />
 </div>
 
 <style>
@@ -115,10 +115,6 @@
     }
 
     .art {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
         aspect-ratio: 1 / 1;
     }
 </style>
