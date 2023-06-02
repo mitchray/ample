@@ -209,10 +209,21 @@
         top: 0;
     }
 
+    /* need the scrollbar space but don't want it visible */
+    .lister-container.is-table :global(.header-flex)  {
+        scrollbar-color: var(--color-highlight) transparent;
+    }
+
+    /* Chrome version of above */
+    .lister-container.is-table :global(.header-flex)::-webkit-scrollbar-track {
+        background: unset;
+    }
+
     /* reserve scrollbar space to maintain alignments */
-    .lister-container.is-virtual :global(.header-flex),
-    .lister-container.is-virtual :global(.lister-flex) {
+    .lister-container.is-table :global(.header-flex),
+    .lister-container.is-table :global(.lister-flex) {
         scrollbar-gutter: stable;
+        overflow-y: scroll;
     }
 
     .lister-container.is-table {
