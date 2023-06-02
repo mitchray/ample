@@ -111,6 +111,12 @@
         }
     }
 
+    $: {
+        if ($listerContainer && $_displayAsTable && $_virtualList) {
+            $listerContainer.style.maxHeight = $listerHeight;
+        }
+    }
+
     // handleEvents whenever a new event is dispatched
     $: $ListerEvent, handleEvents();
 
@@ -160,10 +166,6 @@
 
         if (savedDisplayAsTable !== null) {
             $_displayAsTable = savedDisplayAsTable;
-        }
-
-        if ($_displayAsTable && $_virtualList) {
-            $listerContainer.style.maxHeight = $listerHeight;
         }
     });
 
