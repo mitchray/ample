@@ -136,7 +136,7 @@
     }
 
     .site-header :global(*) {
-        color: var(--color-sidebar-primary);
+        color: var(--color-header-primary);
     }
 
     .site-menu-container {
@@ -173,7 +173,7 @@
         width: 100%;
         height: 100%;
         border: 0;
-        background-color: var(--color-sidebar-background);
+        background-color: var(--color-header-search);
         border-radius: 4px;
     }
 
@@ -183,9 +183,9 @@
 
     .search-container :global(.search-icon) {
         position: absolute;
-        left: var(--spacing-md);
+        left: var(--spacing-sm);
         z-index: 10;
-        fill: var(--color-sidebar-secondary);
+        fill: var(--color-icon);
     }
 
     .close {

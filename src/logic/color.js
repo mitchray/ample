@@ -102,13 +102,11 @@ export function outputThemeVariables(hue, selector) {
     if (get(Theme) === 'light') {
         return `<style>
         ${selector} {
-            --color-background:           rgb(${lchToRgb([ 97,  1, hue])});
-            --color-sidebar-background:   rgb(${lchToRgb([ 30, 50, hue])});
-            --color-header:               rgb(${lchToRgb([ 40, 60, hue])});
-            --color-interface:            rgb(${lchToRgb([100,  0, hue])});
-            --color-interface-secondary:  rgb(${lchToRgb([ 94,  3, hue])});
-            --color-sidebar-primary:      rgb(${lchToRgb([100,  0, hue])});
-            --color-sidebar-secondary:    rgb(${lchToRgb([ 90, 30, hue])});
+            --color-background:        rgb(${lchToRgb([ 97,  1, hue])});
+            --color-header-search:     rgb(${lchToRgb([ 30, 50, hue])});
+            --color-header:            rgb(${lchToRgb([ 40, 60, hue])});
+            --color-interface:         rgb(${lchToRgb([100,  0, hue])});
+            --color-header-primary:    rgb(${lchToRgb([100,  0, hue])});
             --color-border:            rgb(${lchToRgb([ 80, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 70, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 90, 15, hue])});
@@ -159,18 +157,16 @@ export function outputThemeVariables(hue, selector) {
     if (get(Theme) === 'dark') {
         return `<style>
         ${selector} {
-            --color-background:           rgb(${lchToRgb([  4,  4, hue])});
-            --color-sidebar-background:   rgb(${lchToRgb([ 10,  4, hue])});
-            --color-header:               rgb(${lchToRgb([ 16,  4, hue])});
-            --color-interface:            rgb(${lchToRgb([  8,  1, hue])});
-            --color-interface-secondary:  rgb(${lchToRgb([  6,  4, hue])});
-            --color-sidebar-primary:      rgb(${lchToRgb([ 80,  4, hue])});
-            --color-sidebar-secondary:    var(--color-text-heading);
+            --color-background:        rgb(${lchToRgb([  4,  4, hue])});
+            --color-header-search:     rgb(${lchToRgb([  8,  4, hue])});
+            --color-header:            rgb(${lchToRgb([ 12,  4, hue])});
+            --color-interface:         rgb(${lchToRgb([  8,  4, hue])});
+            --color-header-primary:    rgb(${lchToRgb([ 80,  4, hue])});
             --color-border:            rgb(${lchToRgb([ 20, 10, hue])});
             --color-input-border:      rgb(${lchToRgb([ 30, 10, hue])});
             --color-active-background: rgb(${lchToRgb([ 25, 15, hue])});
             --color-shadow-val:            ${lchToRgb([  0,  0, hue])};
-            --color-text-primary:      rgb(${lchToRgb([ 90, 10, hue])});
+            --color-text-primary:      rgb(${lchToRgb([ 80, 10, hue])});
             --color-text-secondary:    rgb(${lchToRgb([ 60, 10, hue])});
             --color-text-heading:      rgb(${lchToRgb([ 75, 50, hue])});
             --color-icon:              rgb(${lchToRgb([ 70, 40, hue])});
