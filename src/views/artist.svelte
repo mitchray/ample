@@ -286,40 +286,6 @@
         padding-bottom: var(--spacing-xxl);
     }
     
-    .header:before {
-        content: '';
-        background-color: var(--color-highlight);
-        mask-image: linear-gradient(
-                to bottom,
-                hsl(0, 0%, 0%) 0%,
-                hsla(0, 0%, 0%, 0.738) 19%,
-                hsla(0, 0%, 0%, 0.541) 34%,
-                hsla(0, 0%, 0%, 0.382) 47%,
-                hsla(0, 0%, 0%, 0.278) 56.5%,
-                hsla(0, 0%, 0%, 0.194) 65%,
-                hsla(0, 0%, 0%, 0.126) 73%,
-                hsla(0, 0%, 0%, 0.075) 80.2%,
-                hsla(0, 0%, 0%, 0.042) 86.1%,
-                hsla(0, 0%, 0%, 0.021) 91%,
-                hsla(0, 0%, 0%, 0.008) 95.2%,
-                hsla(0, 0%, 0%, 0.002) 98.2%,
-                hsla(0, 0%, 0%, 0) 100%
-        );
-        position: absolute;
-        height: 400px;
-        top: calc(-1 * var(--spacing-xxl));
-        left: calc(-1 * var(--spacing-xxl));
-        right: calc(-1 * var(--spacing-xxl));
-        pointer-events: none;
-        z-index: -1;
-        opacity: 0.2;
-    }
-
-    /* looks like a weird bruise so don't bother */
-    :global(.theme-is-light) .header:before {
-        display: none;
-    }
-    
     .art-container {
         aspect-ratio: 1 / 1;
         border-radius: 6px;
@@ -429,11 +395,6 @@
             grid-template-rows: auto 1fr auto;
             grid-template-columns: min-content auto;
             column-gap: var(--spacing-xl);
-        }
-
-        .header:before {
-            mask-image: radial-gradient(50% 100% at 50% top, hsl(0, 0%, 0%), hsla(0, 0%, 0%, 0));
-            height: 125%;
         }
 
         .title {
