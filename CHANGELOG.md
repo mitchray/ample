@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.2.0] - 2023-??-??
+## [2.0.0] - 2023-??-??
 ### Requires at least Ampache 6.0.0
 
 ### Added
@@ -12,6 +12,9 @@
   - Split into categories (song, album, artist etc)
   - Smaller items to see more results at once
 - Click header title (where Ample logo used to be) to reload the current page
+- Majority of views now have both list & card options
+- List views will show all results, card views will be paginated (virtual vs traditional for technical reasons)
+- Ability to download individual songs
 
 ### Changed
 - General design overhaul
