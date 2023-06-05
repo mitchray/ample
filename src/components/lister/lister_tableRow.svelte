@@ -23,7 +23,6 @@
     import SVGSong from "/src/images/music_note.svg";
     import SVGYear from "/src/images/year.svg";
     import SVGGenre from "/src/images/label.svg";
-    import SVGPodcast from "/src/images/podcasts.svg";
     import SVGCurrent from "/src/images/play_circle.svg";
 
     const { _type, visibleColumns, selectedCount, isEditMode, dataDisplay, _showArt } = getContext(contextKey);
@@ -109,10 +108,6 @@
             {:else if $_type === "genre"}
                 <Link to="genres/{item.id}">
                     <SVGGenre class="inline" /> {item.name}
-                </Link>
-            {:else if $_type === "podcast"}
-                <Link to="podcasts/{item.id}">
-                    <SVGPodcast class="inline" /> {item.name}
                 </Link>
             {:else if $_type === "playlist"}
                 <Link to="playlists/{item.id}">

@@ -55,7 +55,6 @@ const columns = [
             { id: "playlist" },
             { id: "smartlist" },
             { id: "genre", widthPreset: "medium" },
-            { id: "podcast", widthPreset: "medium" },
             { id: "playlist_songs" }
         ],
     },
@@ -289,7 +288,6 @@ const columns = [
             { id: "artist" },
             { id: "playlist" },
             { id: "playlist_songs" },
-            { id: "podcast" }
         ],
     },
     {
@@ -306,7 +304,6 @@ const columns = [
             { id: "smartlist" },
             { id: "genre" },
             { id: "playlist_songs" },
-            { id: "podcast" }
         ],
     },
 ];

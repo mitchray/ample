@@ -20,9 +20,6 @@
             case "album":
                 urlPrefix = "albums";
                 break;
-            case "podcast":
-                urlPrefix = "podcasts";
-                break;
             case "playlist":
                 urlPrefix = "playlists";
                 break;

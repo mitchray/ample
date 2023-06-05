@@ -108,7 +108,6 @@
                         <Route path="mix/:mixType/:id"  component={() => import('./views/playlist.svelte')}/>
                         <Route path="genres/:id"        component={() => import('./views/genre.svelte')}/>
                         <Route path="genres"            component={() => import('./views/genres.svelte')}/>
-                        <Route path="podcasts"          component={() => import('./views/podcasts.svelte')}/>
                         <Route path="newest"            component={() => import('./views/newest.svelte')}/>
                         <Route path="recent"            component={() => import('./views/recent.svelte')}/>
                         <Route path="favorites"         component={() => import('./views/favorites.svelte')}/>

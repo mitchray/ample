@@ -145,16 +145,6 @@
                     <SVGGenre style="transform: scale(0.9)" /> <span class="label">Genres</span>
                 </Link>
             </li>
-            <!--
-            <li class:current={basePath === 'podcasts'}
-                data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Podcasts', placement: tooltipPlacement}}
-            >
-                <Link to="podcasts" class="site-sidebar__link " data-label="Podcasts">
-                    <SVGPodcast /> <span class="label">Podcasts</span>
-                </Link>
-            </li>
-            -->
         </ul>
 
         <h3 class="panel-title">Insights</h3>

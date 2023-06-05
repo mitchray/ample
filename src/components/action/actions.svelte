@@ -82,9 +82,6 @@
                 }
                 fetchURL = getSomeSongsFromArtistsByGenre(data.name);
                 break;
-            case 'podcast':
-                fetchURL = $API.podcastEpisodes({ filter: id });
-                break;
             case 'album':
                 fetchURL = getSongsFromAlbum({id: id});
                 break;
