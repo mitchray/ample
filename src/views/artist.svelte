@@ -40,7 +40,7 @@
 
     // List of tab items with labels and values.
     let tabItems = [
-        { label: "Discography",         value: "discography", icon: SVGAlbum },
+        { label: "Releases",            value: "releases",    icon: SVGAlbum },
         { label: "Popular Songs",       value: "popular",     icon: SVGPopular },
         { label: "All Songs",           value: "all",         icon: SVGSongs },
         { label: "Similar Artists",     value: "similar",     icon: SVGSimilar },
@@ -170,8 +170,8 @@
         <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="artist">
             {#each tabItems as tab}
                 {#if tab.loaded === true}
-                    {#if tab.value === 'discography'}
-                        <Tab id="discography" class="discography" bind:activeTabValue={currentTab}>
+                    {#if tab.value === 'releases'}
+                        <Tab id="releases" class="releases" bind:activeTabValue={currentTab}>
                             <button
                                 class="album-view-toggle button button--regular"
                                 on:click={toggleShowExpanded}
