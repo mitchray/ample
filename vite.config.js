@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import { svelteSVG } from "rollup-plugin-svelte-svg";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
 import sveltePreprocess from 'svelte-preprocess';
+import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
     base: "/ample/",
@@ -25,7 +26,7 @@ export default defineConfig({
             preprocess: sveltePreprocess({
                 sourceMap: false,
                 postcss: {
-                    plugins: [require('autoprefixer')()]
+                    plugins: [autoprefixer()]
                 }
             }),
         })

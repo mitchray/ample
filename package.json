@@ -1,6 +1,7 @@
 {
   "name": "ample-ampache-client",
-  "version": "1.2.0",
+  "version": "2.0.0",
+  "type": "module",
   "scripts": {
     "build": "vite build && npm run copy",
     "dev": "vite",
@@ -9,7 +10,7 @@
     "copy": "copyfiles .htaccess README.md LICENSE CHANGELOG.md dist"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^1.2.0",
+    "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tsconfig/svelte": "^1.0.13",
     "copyfiles": "^2.4.1",
     "rollup-plugin-svelte-svg": "^1.0.0-beta.6",
@@ -18,7 +19,7 @@
     "svelte-preprocess": "^4.7.3",
     "tslib": "^2.3.0",
     "typescript": "^4.1.2",
-    "vite": "^3.2.7"
+    "vite": "^4.0.0"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.2.7",
