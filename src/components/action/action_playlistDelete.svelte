@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext, tick } from 'svelte';
     import Menu from '../../components/menu.svelte';
     import PlaylistDelete from '../../components/playlist/playlist_delete.svelte';
@@ -23,7 +24,7 @@
     class="danger"
     id="js-action-playlist_delete_{id}"
     on:click={handleAction}
-    title="Delete Playlist"
+    title="{$_('text.playlistDelete')}"
 >
     <SVGDelete />
 </button>

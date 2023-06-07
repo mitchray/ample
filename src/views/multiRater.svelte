@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { PageTitle } from "../stores/status";
     import CustomSearch from '../components/customSearch.svelte';
     import CustomSearchResults from '../components/customSearchResults.svelte';
@@ -16,7 +17,7 @@
         rule_1_input: "1"
     };
 
-    let title = "Multi-rater";
+    let title = $_('title.multiRater');
     $PageTitle = title;
 </script>
 

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { flip } from 'svelte/animate';
     import { dndzone } from 'svelte-dnd-action';
@@ -176,9 +177,9 @@
 >
     <div class="site-queue-inner">
         <div class="header panel-header">
-            <h4 class="panel-title">Queue</h4>
+            <h4 class="panel-title">{$_('text.queue')}</h4>
             <button id="queueMoreToggle" class="icon-button" on:click|stopPropagation={handleQueueMoreMenu}><SVGMore /></button>
-            <button class="clear-all icon-button button--danger button--mini" on:click={handleClearQueue} title="Clear all"><SVGBin style="transform: scale(0.75)" /></button>
+            <button class="clear-all icon-button button--danger button--mini" on:click={handleClearQueue} title="{$_('text.clearAll')}"><SVGBin style="transform: scale(0.75)" /></button>
         </div>
 
         {#if queueMoreMenuIsOpen}
@@ -189,21 +190,21 @@
                             <li>
                                 <button on:click|stopPropagation={togglePinned}>
                                     {#if $QueueIsPinned}
-                                        Unpin queue
+                                        {$_('text.queueUnpin')}
                                     {:else}
-                                        Pin queue
+                                        {$_('text.queuePin')}
                                     {/if}
                                 </button>
                             </li>
                         {/if}
                         <li>
-                            <button on:click|stopPropagation={showCurrentMedia} title="Show current item">
-                                Show currently playing
+                            <button on:click|stopPropagation={showCurrentMedia} title="{$_('text.queueShowCurrent')}">
+                                {$_('text.queueShowCurrent')}
                             </button>
                         </li>
                         <li>
-                            <button on:click|stopPropagation={handleClearPlayed} title="Clear played items">
-                                Clear all played
+                            <button on:click|stopPropagation={handleClearPlayed} title="{$_('text.queueClearPlayed')}">
+                                {$_('text.queueClearPlayed')}
                             </button>
                         </li>
                     </ul>

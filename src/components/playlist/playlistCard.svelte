@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { cleanArtURL } from "../../logic/helper";
     import Actions2 from '../../components/action/actions.svelte';
@@ -27,7 +28,7 @@
 
         <div class="image-container">
             {#if playlist.type === 'private'}
-                <span class="private badge badge--danger">Private</span>
+                <span class="private badge badge--danger">{$_('text.private')}</span>
             {/if}
 
             <Link to="{parentUrl}/{playlist.id}" title="{playlist.name}">
@@ -38,7 +39,7 @@
         <div class="details">
             {#if !isSmartlist}
                 <div class="count secondary-info">
-                    {playlist.items} {parseInt(playlist.items) === 1 ? 'song' : 'songs'}
+                    {$_("text.songsCount", { values: { count: parseInt(playlist.items) } })}
                 </div>
 
                 <div class="rating-container">
@@ -59,7 +60,7 @@
     {:else}
         <div class="top">
             <div class="title">
-                Loading
+                {$_('text.loading')}
             </div>
         </div>
 

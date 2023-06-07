@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { API } from "../../stores/api";
     import { loadingSpinner } from "../../actions/loadingSpinner";
@@ -45,7 +46,7 @@
 <button
     type="button"
     on:click={handleAction}
-    title="Update {type === 'artist' ? 'artist image' : 'album art'}"
+    title="{type === 'artist' ? $_('text.updateArtistImage') : $_('text.updateAlbumArt')}"
     use:loadingSpinner={loaded}
 >
     {#if type === 'artist'}

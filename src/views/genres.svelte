@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
@@ -8,7 +9,7 @@
     let genres = [];
     let loading = false;
 
-    let title = "Genres";
+    let title = $_('title.genres');
     $PageTitle = title;
 
     $: genres = genres;

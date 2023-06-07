@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { groupedArtists } from "../stores/server";
     import { PageTitle } from "../stores/status";
@@ -17,12 +18,12 @@
 
     let currentTab;
 
-    let title = "Artists";
+    let title = $_('title.artists');
     $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>Artists</title>
+    <title>{title}</title>
 </svelte:head>
 
 <div class="artists-page-container">
@@ -52,7 +53,7 @@
                         {#if tab.value === 'recentlyUpdated'}
                             <Tab id="recentlyUpdated" class="recentlyUpdated" bind:activeTabValue={currentTab}>
                                 {#await newestArtists({limit: 50})}
-                                    Loading recently updated artists
+                                    {$_('text.loading')}
                                 {:then artists}
                                     {#if artists.length > 0}
                                         <Lister2
@@ -78,7 +79,7 @@
                         {#if tab.value === 'random'}
                             <Tab id="random" class="random" bind:activeTabValue={currentTab}>
                                 {#await randomArtists({limit: 50})}
-                                    Loading random artists
+                                    {$_('text.loading')}
                                 {:then artists}
                                     {#if artists.length > 0}
                                         <Lister2

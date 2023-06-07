@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { cleanArtURL } from "../../logic/helper";
@@ -65,8 +66,8 @@
             <div class="top">
                 <div class="details">
                     <div class="date secondary-info">0000</div>
-                    <div class="title">Loading album</div>
-                    <div class="artist secondary-info">Loading<br></div>
+                    <div class="title">{$_('text.loading')}</div>
+                    <div class="artist secondary-info">{$_('text.loading')}<br></div>
                 </div>
             </div>
 

@@ -1,6 +1,6 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { ShowLyrics } from "../../stores/status";
-
     import SVGLyrics from "/src/images/lyrics.svg";
 
     function toggleLyrics() {
@@ -13,7 +13,7 @@
 <button
     class="icon-button"
     on:click={toggleLyrics}
-    title="{$ShowLyrics ? 'Hide' : 'Show'} lyrics"
+    title="{$ShowLyrics ? $_('text.lyricsHide') : $_('text.lyricsShow')}"
 >
     <SVGLyrics style="transform: scale(0.75);" />
 </button>

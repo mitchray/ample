@@ -8,10 +8,10 @@
     import { addMessages, register, init, getLocaleFromNavigator } from 'svelte-i18n';
 
     import en from '/languages/en.json';
-    import it from '/languages/it.json';
+    import de from '/languages/de.json';
 
     addMessages('en', en);
-    addMessages('it', it);
+    addMessages('de', de);
 
     init({
         fallbackLocale: 'en',

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
 
     import SVGPlus from "/src/images/plus.svg";
@@ -57,7 +58,7 @@
     <div class="inputs">
         <div class="input-group">
             <label>
-                From
+                {$_('text.from')}
                 <input type="number"
                     bind:value={fromFinal}
                     size="4"
@@ -72,7 +73,7 @@
 
         <div class="input-group">
             <label>
-                To
+                {$_('text.to')}
                 <input type="number"
                     bind:value={toFinal}
                     size="4"
@@ -86,7 +87,7 @@
         </div>
     </div>
 
-    <button class="submit button button--primary" on:click={handleSearch}>Search</button>
+    <button class="submit button button--primary" on:click={handleSearch}>{$_('text.search')}</button>
 </div>
 
 <style>

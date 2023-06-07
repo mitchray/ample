@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { topArtists } from "../logic/artist";
     import { topAlbums } from "../logic/album";
     import { topSongs } from "../logic/song";
@@ -19,7 +20,7 @@
         { label: "Songs",   value: "songs",   icon: SVGSong },
     ];
 
-    let title = "Top Rated";
+    let title = $_('title.top');
     $PageTitle = title;
 </script>
 
@@ -33,7 +34,7 @@
             {#if tab.value === 'artists'}
                 <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
                     {#await topArtists({limit: 5000})}
-                        Loading top rated artists
+                        {$_('text.loading')}
                     {:then artists}
                         {#if artists.length > 0}
                             <Lister2
@@ -61,7 +62,7 @@
             {#if tab.value === 'albums'}
                 <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
                     {#await topAlbums({limit: 5000})}
-                        Loading top rated albums
+                        {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
                             <Lister2
@@ -89,7 +90,7 @@
             {#if tab.value === 'songs'}
                 <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
                     {#await topSongs({limit: 5000})}
-                        Loading top rated songs
+                        {$_('text.loading')}
                     {:then songs}
                         {#if songs.length > 0}
                             <Lister2

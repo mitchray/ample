@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
     import { API } from "../stores/api";
 
@@ -26,12 +27,12 @@
         genre = await $API.genre({ filter: id });
     });
 
-    let title = "Genre";
+    let title = $_('title.genre');
     $PageTitle = title;
 </script>
 
 <svelte:head>
-    <title>{`${genre?.name}` || 'Loading'} (genre)</title>
+    <title>{`${genre?.name}` || $_('text.loading')} (genre)</title>
 </svelte:head>
 
 {#if genre?.id}
@@ -63,5 +64,5 @@
         {/each}
     </Tabs>
 {:else}
-    <p>Loading genre</p>
+    <p>{$_('text.loading')}</p>
 {/if}

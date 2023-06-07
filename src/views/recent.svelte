@@ -1,8 +1,9 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { PageTitle } from "../stores/status";
     import CardList from '../components/cardList.svelte';
 
-    let title = "Recent";
+    let title = $_('title.recent');
     $PageTitle = title;
 </script>
 

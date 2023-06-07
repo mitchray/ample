@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from "svelte";
     import { API } from "../../stores/api";
     import { shuffleArray, setIndexes, getPlaylistIDFromUrl } from "../../logic/helper";
@@ -39,11 +40,11 @@
 </script>
 
 {#if $isEditMode}
-    <button class="button button--primary" type="button" title="Save" on:click={handleSave}>Save order</button>
-    <button class="button button--regular" type="button" title="Random" on:click={handleRandom}>Random</button>
-    <button class="button button--tertiary" type="button" title="Cancel" on:click={handleCancel}>Cancel</button>
+    <button class="button button--primary" type="button" title="{$_('text.saveOrder')}" on:click={handleSave}>{$_('text.saveOrder')}</button>
+    <button class="button button--regular" type="button" title="{$_('text.random')}" on:click={handleRandom}>{$_('text.random')}</button>
+    <button class="button button--tertiary" type="button" title="{$_('text.cancel')}" on:click={handleCancel}>{$_('text.cancel')}</button>
 {:else}
-    <button class="button button--regular" type="button" title="Reorder" on:click={handleStart}>Reorder</button>
+    <button class="button button--regular" type="button" title="{$_('text.reorder')}" on:click={handleStart}>{$_('text.reorder')}</button>
 {/if}
 
 

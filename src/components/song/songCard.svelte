@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { cleanArtURL, formatTotalTime } from "../../logic/helper";
@@ -63,7 +64,7 @@
 
             <div class="info">
                 <div class="time">0:00</div>
-                <div class="title">Loading</div>
+                <div class="title">{$_('text.loading')}</div>
                 <div class="artist"><br></div>
                 <div class="album"><br></div>
                 <Rating />

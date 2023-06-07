@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from 'svelte-routing';
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
@@ -14,7 +15,7 @@
 
     let song;
 
-    let title = "Song";
+    let title = $_('title.song');
     $PageTitle = title;
 
     $: if (id) {
@@ -27,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <title>{`${song?.title} by ${song?.artist?.name}` || 'Loading'} (song)</title>
+    <title>{`${song?.title} by ${song?.artist?.name}` || $_('text.loading')} (song)</title>
 </svelte:head>
 
 {#key id || 0}
@@ -147,7 +148,7 @@
             {/if}
         </div>
     {:else}
-        <p>Loading song</p>
+        <p>{$_('text.loading')}</p>
     {/if}
 {/key}
 

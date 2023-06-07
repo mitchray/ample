@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { setContext } from 'svelte';
     import { Link } from 'svelte-routing';
     import { v4 as uuidv4 } from 'uuid';
@@ -206,7 +207,7 @@
             <ActionPlayLast contextKey={contextKey} />
 
             <div class="action">
-                <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="More"><SVGMore /> </button>
+                <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="{$_('text.more')}"><SVGMore /> </button>
             </div>
         </span>
     </div>

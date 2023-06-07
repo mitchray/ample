@@ -22,6 +22,7 @@
 </script>
 
 <script>
+    import { _ } from 'svelte-i18n';
     import { API } from "../stores/api";
 
     export let id = null;
@@ -110,7 +111,7 @@
     </span>
 
     {#if averageRating && showAverageRatings}
-        <span class="c-rating__average" title="Average from all users">
+        <span class="c-rating__average" title="{$_('text.ratingAverage')}">
             ({averageRating})
         </span>
     {/if}

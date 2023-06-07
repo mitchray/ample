@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import Lister2 from '../components/lister/lister.svelte';
 
     export let loadedTime;
@@ -16,10 +17,10 @@
 </script>
 
 {#if loading}
-    <p>Searching for items</p>
+    <p>{$_('text.searching')}</p>
 {:else}
     {#if results.length > 0}
-        <div class="total">Total: {results.length}</div>
+        <div class="total">{$_('text.total')}: {results.length}</div>
         {#key loadedTime}
             {#if type === "song"}
                 <Lister2
@@ -75,7 +76,7 @@
             {/if}
         {/key}
     {:else}
-        <p>No items found</p>
+        <p>{$_('text.noItemsFound')}</p>
     {/if}
 {/if}
 

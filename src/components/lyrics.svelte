@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, onDestroy } from "svelte";
     import { computePosition, autoUpdate, offset } from '@floating-ui/dom';
     import { waitForElement } from "../logic/helper";
@@ -111,13 +112,13 @@
 >
     <div class="container">
         <div class="header new-panel-header">
-            <h4 class="title panel-title">Lyrics</h4>
+            <h4 class="title panel-title">{$_('text.lyrics')}</h4>
             <button
                 class="follow button button--regular"
                 on:click={e => follow = true}
                 hidden={!$lyrics.isTimestamped || follow}
             >
-                Follow
+                {$_('text.follow')}
             </button>
         </div>
         <div
@@ -143,10 +144,10 @@
                         {/each}
                     </div>
                 {:else}
-                    No lyrics found
+                    {$_('text.lyricsMissing')}
                 {/if}
             {:else}
-                No song playing
+                {$_('text.lyricsNoSong')}
             {/if}
         </div>
     </div>

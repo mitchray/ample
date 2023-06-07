@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { MediaPlayer } from '../../stores/player';
     import { NowPlayingQueue } from "../../stores/status";
 
@@ -9,7 +10,7 @@
     class="icon-button icon-shuffle"
     on:click={$MediaPlayer.shuffle()}
     disabled={$NowPlayingQueue.length === 0}
-    title="Shuffle"
+    title="{$_('text.shuffle')}"
 >
     <SVGShuffle style="transform: scale(0.85);" />
 </button>

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { createEventDispatcher  } from "svelte";
     import { API } from "../../stores/api";
     import { DispatchListerEvent } from "../../stores/message";
@@ -28,14 +29,14 @@
 
             if (isNew) {
                 if (playlistTest.length > 0 && playlistTest[0].id) {
-                    addAlert({title: `Playlist "${playlistName}" already exists`, style: 'warning'});
+                    addAlert({title: $_("text.playlistExists", { values: { name: playlistName } }), style: 'warning'});
                     return;
                 }
 
                 playlist = await $API.playlistCreate({ name: playlistName, type: playlistType });
                 isVisible = false;
 
-                addAlert({title: 'Playlist created', style: 'success'});
+                addAlert({title: $_('text.playlistCreated'), style: 'success'});
 
                 // informs parent component
                 dispatch('created');
@@ -64,7 +65,7 @@
                     playlist = tempPlaylist;
                     isVisible = false;
 
-                    addAlert({title: 'Playlist updated', style: 'success'});
+                    addAlert({title: $_('text.playlistUpdated'), style: 'success'});
 
                     $DispatchListerEvent = {
                         event: "editedPlaylist",
@@ -72,7 +73,7 @@
                         type: "playlist"
                     };
                 } else {
-                    addAlert({title: 'Playlist no longer exists', style: 'warning'});
+                    addAlert({title: $_('text.playlistGone'), style: 'warning'});
 
                     $DispatchListerEvent = {
                         event: "deletedPlaylist",
@@ -95,19 +96,19 @@
 <div class="container">
     {#if !nested}
         <div class="new-panel-header">
-            <h4 class="panel-title">{isNew ? 'New' : 'Edit'} Playlist</h4>
+            <h4 class="panel-title">{isNew ? $_('text.playlistNew') : $_('text.playlistEdit')}</h4>
         </div>
     {/if}
 
     <input
-        placeholder="Name"
+        placeholder="{$_('text.name')}"
         type="text"
         bind:value={playlistName}
     />
 
     <div class="types">
         <label>
-            Public
+            {$_('text.public')}
             <input type="checkbox" class="switch type" bind:checked={playlistTypeValue} />
         </label>
     </div>
@@ -119,7 +120,7 @@
             class="submit button button--primary"
             on:click={savePlaylist}
         >
-            {isNew ? 'Create' : 'Update'}
+            {isNew ? $_('text.create') : $_('text.update')}
         </button>
     </div>
 </div>

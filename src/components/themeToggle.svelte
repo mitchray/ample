@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Theme } from "../stores/status";
     import { MediaPlayer } from "../stores/player";
 
@@ -26,7 +27,7 @@
 <button
     class="icon-button theme-toggle"
     on:click={toggleTheme}
-    title="Toggle theme"
+    title="{$_('text.toggleTheme')}"
 >
     {#if $Theme === 'dark'}
         <SVGLightMode />
@@ -34,7 +35,7 @@
         <SVGDarkMode />
     {/if}
 
-    Toggle theme
+    {$_('text.toggleTheme')}
 </button>
 
 <style>

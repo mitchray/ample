@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, tick } from "svelte";
     import { API } from "../stores/api";
     import { getSongsFromPlaylist } from "../logic/song";
@@ -27,7 +28,7 @@
     $: songs = songs;
     $: playlist = playlist;
 
-    let title = "Playlist";
+    let title = $_('title.playlist');
     $PageTitle = title;
 
     async function handleEditPlaylist() {
@@ -63,7 +64,7 @@
 </script>
 
 <svelte:head>
-    <title>{(loading) ? 'Loading' : `${playlist?.name} (${playlistType})`}</title>
+    <title>{(loading) ? $_('text.loading') : `${playlist?.name} (${playlistType})`}</title>
 </svelte:head>
 
 {#if playlist?.id && !loading}
@@ -99,8 +100,8 @@
 
                     {#if playlistType === "playlist"}
                         <div class="playlist-actions">
-                            <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="Edit">Edit</button>
-                            <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="Delete">Delete</button>
+                            <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="{$_('text.edit')}">{$_('text.edit')}</button>
+                            <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="{$_('text.delete')}">{$_('text.delete')}</button>
                         </div>
                     {/if}
                 </div>

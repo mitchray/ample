@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { NotificationsList } from '../../stores/message';
     import {
         ShowNotificationAlternateVersions,
@@ -77,9 +78,9 @@
         <div class="container">
             <div class="notifications-view" style="display: {currentTab === 1 ? 'block' : 'none'}">
                 <div class="header new-panel-header">
-                    <h4 class="title panel-title">Notifications</h4>
-                    <button class="clear-notifications icon-button" title="Clear all notifications" on:click={handleClearNotifications}><SVGClose /></button>
-                    <button class="button button--regular" on:click={e => currentTab = 2}>Settings</button>
+                    <h4 class="title panel-title">{$_('text.notifications')}</h4>
+                    <button class="clear-notifications icon-button" title="{$_('text.clearAll')}" on:click={handleClearNotifications}><SVGClose /></button>
+                    <button class="button button--regular" on:click={e => currentTab = 2}>{$_('text.settings')}</button>
                 </div>
 
                 <div class="panel-content">
@@ -88,61 +89,61 @@
                     {/each}
 
                     {#if $NotificationsList.length === 0}
-                        No notifications
+                        {$_('text.noItemsFound')}
                     {/if}
                 </div>
             </div>
 
             <div class="settings-view" style="display: {currentTab === 2 ? 'block' : 'none'}">
                 <div class="header new-panel-header">
-                    <h4 class="title panel-title">Settings</h4>
-                    <button class="button button--regular" on:click={e => currentTab = 1}>Back</button>
+                    <h4 class="title panel-title">{$_('text.settings')}</h4>
+                    <button class="button button--regular" on:click={e => currentTab = 1}>{$_('text.back')}</button>
                 </div>
 
                 <div class="panel-content">
                     <div class="group">
                         <label class="toggle">
                             <input type="checkbox" on:change={handleAlternateVersionsToggle} bind:checked={$ShowNotificationAlternateVersions} />
-                            Alternate song versions
+                            {$_('text.alternateSongVersions')}
                         </label>
 
-                        <div class="info">Search for other versions of currently playing song</div>
+                        <div class="info">{$_('text.alternateSongVersionsInfo')}</div>
                     </div>
 
                     <div class="group">
                         <label class="toggle">
                             <input type="checkbox" on:change={handleGainTagsMissingToggle} bind:checked={$ShowNotificationGainTagsMissing} />
-                            Missing volume gain tags
+                            {$_('text.missingVolumeTags')}
                         </label>
 
-                        <div class="info">Notify if currently playing song is missing ReplayGain or EBU R128 tags</div>
+                        <div class="info">{$_('text.missingVolumeTagsInfo')}</div>
                     </div>
 
                     <div class="group">
                         <label class="toggle">
                             <input type="checkbox" on:change={handleRatingMissingToggle} bind:checked={$ShowNotificationRatingMissing} />
-                            Missing song rating
+                            {$_('text.missingSongRating')}
                         </label>
 
-                        <div class="info">Notify if there was no rating set for the song that just played</div>
+                        <div class="info">{$_('text.missingSongRatingInfo')}</div>
                     </div>
 
                     <div class="group">
                         <label class="toggle">
                             <input type="checkbox" on:change={handleLyricsMissingToggle} bind:checked={$ShowNotificationLyricsMissing} />
-                            Missing lyrics
+                            {$_('text.missingLyrics')}
                         </label>
 
-                        <div class="info">Notify if currently playing song is missing lyrics</div>
+                        <div class="info">{$_('text.missingLyricsInfo')}</div>
                     </div>
 
                     <div class="group">
                         <label class="toggle">
                             <input type="checkbox" on:change={handleLyricsNotTimestampedToggle} bind:checked={$ShowNotificationLyricsNotTimestamped} />
-                            Lyrics not timestamped
+                            {$_('text.missingLyricsTimestamp')}
                         </label>
 
-                        <div class="info">Notify if lyrics are not timestamped</div>
+                        <div class="info">{$_('text.missingLyricsTimestampInfo')}</div>
                     </div>
                 </div>
             </div>

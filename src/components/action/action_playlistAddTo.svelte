@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext, tick } from 'svelte';
     import Menu from '../../components/menu.svelte';
     import PlaylistAddTo from '../../components/playlist/playlist_addTo.svelte';
@@ -29,7 +30,7 @@
     type="button"
     id="js-action-playlist_add_{type}{mode}{id}"
     on:click={handleAction}
-    title="Add to Playlist"
+    title="{$_('text.playlistAddTo')}"
 >
     <SVGPlaylist />
 </button>

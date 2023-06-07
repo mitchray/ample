@@ -1,8 +1,8 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { logout } from "../logic/user";
     import ThemeToggle from '../components/themeToggle.svelte';
     import Menu from '../components/menu.svelte';
-
     import SVGLogout from "/src/images/logout.svg";
     import SVGProfile from "/src/images/account_circle.svg";
 
@@ -27,10 +27,10 @@
             <button
                 on:click={handleLogOut}
                 class="visuallyLink logout"
-                title="Log out"
+                title="{$_('text.logOut')}"
             >
                 <SVGLogout />
-                <span class="text">Log out</span>
+                <span class="text">{$_('text.logOut')}</span>
             </button>
 
             <ThemeToggle />

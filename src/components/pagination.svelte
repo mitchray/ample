@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
 
     export let count = 0;
@@ -43,12 +44,12 @@
 
 <div class="container">
     <label>
-        Limit
+        {$_('text.limit')}
         <input type="number" class="limit" bind:value={limit} size="4" maxlength="4" />
     </label>
 
-    <button class="button button--tertiary" on:click={previousPage} disabled={page === 0}>Previous</button>
-    <button class="button button--tertiary" on:click={nextPage} disabled={count < limit}>Next</button>
+    <button class="button button--tertiary" on:click={previousPage} disabled={page === 0}>{$_('text.previous')}</button>
+    <button class="button button--tertiary" on:click={nextPage} disabled={count < limit}>{$_('text.next')}</button>
 </div>
 
 <style>

@@ -1,17 +1,17 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { serverURL } from '../stores/server';
-
+    import MusicBrainz from "../logic/musicbrainz";
     import Menu from '../components/menu.svelte';
 
     export let data;
     export let type;
 
-    const musicbrainzRegex = new RegExp('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}');
-
+    let mb = new MusicBrainz;
     let menu = [];
 
-    let hasMusicbrainz = musicbrainzRegex.test(data.mbid);
+    let hasMusicbrainz = mb.hasMBID(data.mbid);
 
     let isVisible = false;
 
@@ -25,7 +25,7 @@
         menu = [
             {
                 id: 'data',
-                title: 'Data',
+                title: $_('text.thirdpartyData'),
                 items: [
                     {
                         id: 'ampache',
@@ -58,7 +58,7 @@
             },
             {
                 id: 'search',
-                title: 'Search',
+                title: $_('text.thirdpartySearch'),
                 items: [
                     {
                         id: 'duckduckgo',
@@ -85,7 +85,7 @@
             },
             {
                 id: 'services',
-                title: 'Services',
+                title: $_('text.thirdpartyServices'),
                 items: [
                     {
                         id: 'apple',
@@ -134,9 +134,9 @@
         id="thirdParty-data"
         class="button button--tertiary"
         on:click={toggleMenu}
-        title="Data"
+        title="{$_('text.links')}"
     >
-        Links
+        {$_('text.links')}
     </button>
 
     {#if isVisible && data}

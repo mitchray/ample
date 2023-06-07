@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, createEventDispatcher  } from "svelte";
     import { API } from "../../stores/api";
 
@@ -50,12 +51,12 @@
             {#if selectedPlaylist}
                 <span class="current-selected" title="{selectedPlaylist.name}">{selectedPlaylist.name}</span>
             {:else}
-                <span class="current-selected">No playlist selected</span>
+                <span class="current-selected">{$_('text.playlistNoneSelected')}</span>
             {/if}
         </div>
     {/if}
 
-    <input type="text" placeholder="Filter" class="filter" bind:value={search} />
+    <input type="text" placeholder="{$_('text.filter')}" class="filter" bind:value={search} />
 
     <div class="new-panel-main">
         <ul class="playlists">

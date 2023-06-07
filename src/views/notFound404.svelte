@@ -1,7 +1,8 @@
 <script>
-    import {PageTitle} from "../stores/status";
+    import { _ } from 'svelte-i18n';
+    import { PageTitle } from "../stores/status";
 
-    let title = "Not found";
+    let title = $_('title.notFound');
     $PageTitle = title;
 </script>
 

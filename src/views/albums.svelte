@@ -1,10 +1,10 @@
 <script>
+    import {_} from "svelte-i18n";
     import Lister2 from '../components/lister/lister.svelte';
     import AlbumsAll from '../components/album/albumsAll.svelte';
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
-
     import { newestAlbums, randomAlbums } from "../logic/album";
     import { PageTitle } from "../stores/status";
 
@@ -18,7 +18,7 @@
 
     let currentTab;
 
-    let title = "Albums";
+    let title = $_('title.albums');
     $PageTitle = title;
 </script>
 
@@ -32,7 +32,7 @@
             {#if tab.value === 'newest'}
                 <Tab id="newest" class="newest" bind:activeTabValue={currentTab}>
                     {#await newestAlbums({limit: 50})}
-                        Loading recently added albums
+                        {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
                             <Lister2
@@ -58,7 +58,7 @@
             {#if tab.value === 'random'}
                 <Tab id="random" class="random" bind:activeTabValue={currentTab}>
                     {#await randomAlbums({limit: 50})}
-                        Loading random albums
+                        {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
                             <Lister2

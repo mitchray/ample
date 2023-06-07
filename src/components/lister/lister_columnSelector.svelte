@@ -1,11 +1,11 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
-
     import Menu from '../../components/menu.svelte';
-
     import SVGColumns from "/src/images/columns.svg";
 
     export let contextKey;
+
     let { listerColumnsID, availableColumns, visibleColumns, listerHeader } = getContext(contextKey);
 
     let menuIsVisible = false;
@@ -35,7 +35,7 @@
 <button
     id="listerColumns-{contextKey}"
     class="icon-button"
-    title="Select columns"
+    title="{$_('text.selectColumns')}"
     on:click={toggleMenu}
 >
     <SVGColumns />

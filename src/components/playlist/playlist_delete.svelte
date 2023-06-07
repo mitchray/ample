@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { API } from "../../stores/api";
     import { DispatchListerEvent } from "../../stores/message";
     import { addAlert } from "../../logic/alert";
@@ -16,14 +17,14 @@
                         p.style.display = 'none';
                     })
 
-                    addAlert({title: 'Playlist deleted', style: 'success'});
+                    addAlert({title: $_('text.playlistDeleted'), style: 'success'});
                     $DispatchListerEvent = {
                         event: "deletedPlaylist",
                         data: playlist,
                         type: "playlist"
                     };
                 } else {
-                    addAlert({title: 'Failed to delete playlist', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
+                    addAlert({title: $_('text.playlistDeleteFailed'), message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
                 }
             });
 
@@ -37,16 +38,16 @@
 
 <div class="container">
     <div class="new-panel-header">
-        <h4 class="panel-title">Confirm playlist removal</h4>
+        <h4 class="panel-title">{$_('text.playlistConfirmRemoval')}</h4>
     </div>
 
     <div class="panel-content">
-        <span class="name">{playlist.name}</span> will be deleted
+        {$_("text.playlistConfirmRemovalInfo", { values: { name: playlist.name } })}
     </div>
 
     <div class="new-panel-footer">
-        <button class="button button--tertiary" on:click={handleCancel}>Cancel</button>
-        <button class="button button--danger" on:click={handleDelete}><SVGBin /> Delete</button>
+        <button class="button button--tertiary" on:click={handleCancel}>{$_('text.cancel')}</button>
+        <button class="button button--danger" on:click={handleDelete}><SVGBin /> {$_('text.delete')}</button>
     </div>
 </div>
 

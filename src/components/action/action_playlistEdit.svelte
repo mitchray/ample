@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext, tick } from 'svelte';
     import Menu from '../../components/menu.svelte';
     import PlaylistEdit from '../../components/playlist/playlist_edit.svelte';
@@ -22,7 +23,7 @@
     type="button"
     id="js-action-playlist_edit_{id}"
     on:click={handleAction}
-    title="Edit Playlist"
+    title="{$_('text.playlistEdit')}"
 >
     <SVGEdit />
 </button>

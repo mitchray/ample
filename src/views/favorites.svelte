@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { favoriteArtists } from "../logic/artist";
     import { favoriteAlbums } from "../logic/album";
     import { favoriteSongs } from "../logic/song";
@@ -12,7 +13,7 @@
     import SVGAlbum from "/src/images/album.svg";
     import SVGSong from "/src/images/music_note.svg";
 
-    let title = "Favorites";
+    let title = $_('title.favorites');
     $PageTitle = title;
 
     // Current active tab
@@ -35,7 +36,7 @@
             {#if tab.value === 'artists'}
                 <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
                     {#await favoriteArtists({limit: 5000})}
-                        Loading favorite artists
+                        {$_('text.loading')}
                     {:then artists}
                         {#if artists.length > 0}
                             <Lister2
@@ -61,7 +62,7 @@
             {#if tab.value === 'albums'}
                 <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
                     {#await favoriteAlbums({limit: 5000})}
-                        Loading favorite albums
+                        {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
                             <Lister2
@@ -87,7 +88,7 @@
             {#if tab.value === 'songs'}
                 <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
                     {#await favoriteSongs({limit: 5000})}
-                        Loading favorite songs
+                        {$_('text.loading')}
                     {:then songs}
                         {#if songs.length > 0}
                             <Lister2

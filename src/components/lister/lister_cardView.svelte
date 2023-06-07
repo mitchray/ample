@@ -1,14 +1,14 @@
 <script>
-    import { onMount, getContext, onDestroy, tick } from 'svelte';
+    import { _ } from 'svelte-i18n';
+    import { onMount, getContext, tick } from 'svelte';
     import Pagination from '../../components/Pagination.svelte';
 
     export let contextKey;
 
-    const { _type, dataFinal, dataDisplay, listerContainer } = getContext(contextKey);
+    const { _type, dataFinal, dataDisplay } = getContext(contextKey);
 
     let card;
     let containerClass;
-    let emptyMessage;
     let defaultLimit = 50;
     let page = 0;
     let count = 0;
@@ -43,32 +43,26 @@
             case 'artist':
                 card = (await import('../../components/artist/artistCard.svelte')).default;
                 containerClass = "cardlist-grid artist-grid";
-                emptyMessage = "No artists found";
                 break;
             case 'album':
                 card = (await import('../../components/album/albumCard.svelte')).default;
                 containerClass = "cardlist-grid album-grid";
-                emptyMessage = "No albums found";
                 break;
             case 'song':
                 card = (await import('../../components/song/songCard.svelte')).default;
                 containerClass = "cardlist-grid song-grid";
-                emptyMessage = "No songs found";
                 break;
             case 'playlist':
                 card = (await import('../../components/playlist/playlistCard.svelte')).default;
                 containerClass = "cardlist-grid playlist-grid";
-                emptyMessage = "No playlists found";
                 break;
             case 'smartlist':
                 card = (await import('../../components/playlist/playlistCard.svelte')).default;
                 containerClass = "cardlist-grid playlist-grid";
-                emptyMessage = "No smartlists found";
                 break;
             case 'genre':
                 card = (await import('../../components/genre/genreCard.svelte')).default;
                 containerClass = "cardlist-grid genre-grid";
-                emptyMessage = "No genres found";
                 break;
             default:
                 break;
@@ -84,7 +78,7 @@
             <svelte:component this={card} data={row} />
         {/each}
     {:else}
-        <p>{emptyMessage}</p>
+        <p>{$_('text.noItemsFound')}</p>
     {/if}
 </div>
 

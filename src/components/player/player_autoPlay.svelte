@@ -5,6 +5,7 @@
 </script>
 
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { v4 as uuidv4 } from "uuid";
     import { addAlert } from "../../logic/alert";
@@ -86,7 +87,7 @@
 <button
     id="{uniqueMenuID}"
     class="icon-button"
-    title="Smartlist AutoPlay"
+    title="{$_('text.smartlistAutoplay')}"
     on:click={toggleMenu}
 >
     <SVGAutoPlay style="transform: scale(0.75);" />
@@ -101,7 +102,7 @@
             </div>
 
             <div class="new-panel-secondary">
-                New items will be added from
+                {$_('text.smartlistAutoplayInfo')}
             </div>
 
             <PlaylistSelector

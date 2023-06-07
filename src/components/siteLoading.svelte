@@ -1,9 +1,10 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { fade } from "svelte/transition";
 </script>
 
 <div class="site-loading" out:fade>
-    Loading
+    {$_('text.loading')}
 </div>
 
 <style>

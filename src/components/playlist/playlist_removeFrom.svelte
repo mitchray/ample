@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { API } from "../../stores/api";
     import { getContext } from "svelte";
     import { getPlaylistIDFromUrl } from "../../logic/helper";
@@ -35,7 +36,7 @@
     }
 </script>
 
-<button class="button button--danger" type="button" title="Remove selected" disabled={$isEditMode || $selectedCount < 1} on:click={handleRemove}>Remove</button>
+<button class="button button--danger" type="button" title="{$_('text.remove')}" disabled={$isEditMode || $selectedCount < 1} on:click={handleRemove}>{$_('text.remove')}</button>
 
 <style>
 

@@ -1,6 +1,5 @@
 <script>
     import { Link } from 'svelte-routing';
-    import SVGArtist from "/src/images/artist.svg";
 
     export let artists = [];
     export let disabled = false;

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
@@ -31,7 +32,7 @@
         { label: "Actions", value: "actions" },
     ];
 
-    let title = "Test Page";
+    let title = $_('title.test');
     $PageTitle = title;
 
     function toggleMenu() {

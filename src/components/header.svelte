@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onDestroy, onMount } from 'svelte';
 
     import { SearchQuery, ShowSearch, SidebarIsOpen, PageTitle, PageLoadedKey } from "../stores/status";
@@ -102,7 +103,7 @@
         <SVGSearch class="search-icon" />
         <input
             type="text"
-            placeholder="Search"
+            placeholder="{$_('text.search')}"
             class="site-search"
             on:focus={handleFocus}
             on:paste={handleInputChange}

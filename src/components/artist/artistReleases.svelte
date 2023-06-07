@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
     import { API } from "../../stores/api";
@@ -31,7 +32,7 @@
             {#if value.length > 0}
                 <section in:fade={{ duration: i === 0 ? undefined : 0 }}>
                     {#if key !== "ungrouped"}
-                        <div class="release-type release-type-label" title="Release type: {key}">{key}</div>
+                        <div class="release-type release-type-label" title="{$_('text.releaseType')}: {key}">{key}</div>
                     {/if}
                     <div class="items">
                         {#if $ShowExpandedAlbums}
@@ -70,7 +71,7 @@
             </div>
         </section>
     {:else}
-        <p>Unable to find any albums</p>
+        <p>{$_('text.noItemsFound')}</p>
     {/if}
 {/if}
 

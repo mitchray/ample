@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, onDestroy } from "svelte";
     import { computePosition, autoUpdate, offset, size } from '@floating-ui/dom';
 
@@ -165,7 +166,7 @@
 >
     {#key $SearchQuery}
         <div class="header new-panel-header">
-            <h4 class="panel-title">Search</h4>
+            <h4 class="panel-title">{$_('text.search')}</h4>
             <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
         </div>
 
@@ -176,7 +177,7 @@
                         {#if tab.value === 'all'}
                             <Tab id="all" class="all" bind:activeTabValue={currentTab}>
                                 {#if noResults}
-                                    <div>No results found</div>
+                                    <div>{$_('text.noItemsFound')}</div>
                                 {/if}
 
                                 {#if initialResults.songsStartsWith?.length > 0}
@@ -224,7 +225,7 @@
                                 {/if}
 
                                 {#if initialResults.songsStartsWith?.length === 0 && initialResults.songsContains?.length === 0}
-                                    <div>No results found</div>
+                                    <div>{$_('text.noItemsFound')}</div>
                                 {/if}
                             </Tab>
                         {/if}
@@ -240,7 +241,7 @@
                                 {/if}
 
                                 {#if initialResults.albumsStartsWith?.length === 0 && initialResults.albumsContains?.length === 0}
-                                    <div>No results found</div>
+                                    <div>{$_('text.noItemsFound')}</div>
                                 {/if}
                             </Tab>
                         {/if}
@@ -256,7 +257,7 @@
                                 {/if}
 
                                 {#if initialResults.artistsStartsWith?.length === 0 && initialResults.artistsContains?.length === 0}
-                                    <div>No results found</div>
+                                    <div>{$_('text.noItemsFound')}</div>
                                 {/if}
                             </Tab>
                         {/if}
@@ -268,7 +269,7 @@
                                 {/if}
 
                                 {#if initialResults.playlists?.length === 0}
-                                    <div>No results found</div>
+                                    <div>{$_('text.noItemsFound')}</div>
                                 {/if}
                             </Tab>
                         {/if}
@@ -280,7 +281,7 @@
                                 {/if}
 
                                 {#if initialResults.smartlists?.length === 0}
-                                    <div>No results found</div>
+                                    <div>{$_('text.noItemsFound')}</div>
                                 {/if}
                             </Tab>
                         {/if}

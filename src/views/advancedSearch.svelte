@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import CustomSearch from '../components/customSearch.svelte';
     import CustomSearchResults from '../components/customSearchResults.svelte';
     import { PageTitle } from "../stores/status";
@@ -8,7 +9,7 @@
     let results = [];
     let type;
 
-    let title = "Advanced Search";
+    let title = $_('title.advancedSearch');
     $PageTitle = title;
 </script>
 

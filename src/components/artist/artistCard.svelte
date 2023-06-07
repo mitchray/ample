@@ -1,9 +1,10 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
 
     import Rating from '../../components/rating.svelte';
-    import {cleanArtURL} from "../../logic/helper";
+    import { cleanArtURL } from "../../logic/helper";
 
     export let data = null; // needed for cardList dynamic components
 
@@ -39,7 +40,7 @@
                 alt=""
             >
         </div>
-        <div class="title">Loading</div>
+        <div class="title">{$_('text.loading')}</div>
 
         <div class="rating-container">
             <Rating />

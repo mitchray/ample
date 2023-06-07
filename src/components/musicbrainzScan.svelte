@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { fade } from 'svelte/transition';
     import { Link } from "svelte-routing";
     import { throttle } from 'throttle-wait';
@@ -251,23 +252,23 @@
 
             // exact match found
             if (perfectMatch !== -1) {
-                songs[i].message = "Exact match with MusicBrainz recording";
+                songs[i].message = $_('text.mbPerfectMatch');
                 songs[i].status = "exact";
             } else {
                 if (!songs[i].mbid) {
                     // if name match found
                     if (nameMatch !== -1) {
-                        songs[i].message = "No MBID, but title matches a MusicBrainz recording";
+                        songs[i].message = $_('text.mbNameMatch');
                         songs[i].status = "issue";
                     } else {
-                        songs[i].message = "No MBID, and no MusicBrainz recordings match";
+                        songs[i].message = $_('text.mbNoMatch');
                         songs[i].status = "flag";
                     }
                 } else if (mb.regex.test(songs[i].mbid)) {
-                    songs[i].message = "Valid MBID, but missing in this artist collection";
+                    songs[i].message = $_('text.mbValidMBID');
                     songs[i].status = "issue";
                 } else {
-                    songs[i].message = "Invalid MBID";
+                    songs[i].message = $_('text.mbInvalidMBID');
                     songs[i].status = "issue";
                 }
             }
@@ -286,7 +287,7 @@
                 time: allRecordings[i].length / 1000,
                 disambiguation: allRecordings[i].disambiguation,
                 video: allRecordings[i].video,
-                message: "MusicBrainz recording not found in library",
+                message: $_('text.mbNotFound'),
                 status: "missing",
             }
 
@@ -304,10 +305,10 @@
 
             // if name match found
             if (exactNameMatch !== -1) {
-                temp.message = "Missing recording, but an item with the same name was matched with a different MBID";
+                temp.message = $_('text.mbMissingMatchMBID');
                 temp.status = "duplicate";
             } else if (nameMatch !== -1) {
-                temp.message = "Missing recording, but title matches an item in the library";
+                temp.message = $_('text.mbMissingMatchName');
                 temp.status = "issue";
             }
 
@@ -330,84 +331,84 @@
 <div class="container">
     <div class="sidebar">
         <div class="total">
-            <div class="badge badge--info">Showing {filteredRecordings.length} of {combinedSources.length}</div>
+            <div class="badge badge--info">{$_("text.mbShowing", { values: { filteredCount: filteredRecordings.length, totalCount: combinedSources.length } })}</div>
         </div>
 
         <div class="group">
-            <h4 class="panel-title">Hide by status</h4>
+            <h4 class="panel-title">{$_('text.mbHideByStatus')}</h4>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideMatches} />
-                Exact matches ({counts.matches})
+                {$_('text.mbExactMatches')} ({counts.matches})
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideDuplicates} />
-                Duplicates ({counts.duplicates})
+                {$_('text.mbDuplicates')} ({counts.duplicates})
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideIssues} />
-                Issues ({counts.issues})
+                {$_('text.mbIssues')} ({counts.issues})
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideFlagged} />
-                Flagged ({counts.flagged})
+                {$_('text.mbFlagged')} ({counts.flagged})
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideMissing} />
-                Missing ({counts.missing})
+                {$_('text.mbMissing')} ({counts.missing})
             </label>
         </div>
 
         <div class="group">
-            <h4 class="panel-title">Hide by type</h4>
+            <h4 class="panel-title">{$_('text.mbHideByType')}</h4>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideRemixes} />
-                Remixes
+                {$_('text.mbRemixes')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideInstrumentals} />
-                Instrumentals/Acapellas
+                {$_('text.mbInstrumentals')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideRadioEdits} />
-                Radio edits
+                {$_('text.mbRadioEdits')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideLive} />
-                Live recordings
+                {$_('text.mbLive')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideShortSongs} />
-                Under 60 seconds
+                {$_('text.mbShort')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideDemos} />
-                Demos
+                {$_('text.mbDemos')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideInterviews} />
-                Interviews/commentary
+                {$_('text.mbInterviews')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideZeroTimes} />
-                Zero length tracks
+                {$_('text.mbZeroLength')}
             </label>
 
             <label>
                 <input type=checkbox bind:checked={filters.hideVideos} />
-                Videos
+                {$_('text.mbVideos')}
             </label>
         </div>
     </div>
@@ -424,7 +425,7 @@
                 <button on:click={handleGo} class="submit button button--primary">Begin comparison</button>
             {/if}
         {:else}
-            <p>Artist is missing a MusicBrainz Artist ID tag</p>
+            <p>{$_('text.mbArtistMissingMBID')}</p>
         {/if}
 
         {#if loaded & loadCount > 0}
@@ -432,10 +433,10 @@
                 <table in:fade>
                     <thead>
                     <tr>
-                        <th>Title</th>
-                        <th>Length</th>
-                        <th>MBID</th>
-                        <th>Result</th>
+                        <th>{$_('text.title')}</th>
+                        <th>{$_('text.length')}</th>
+                        <th>{$_('text.mbid')}</th>
+                        <th>{$_('text.result')}</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -483,7 +484,7 @@
                     </tbody>
                 </table>
             {:else}
-                <p>No recordings to show</p>
+                <p>{$_('text.mbNoRecordings')}</p>
             {/if}
         {/if}
     </div>

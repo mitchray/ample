@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { groupedAlbumArtists } from "../stores/server";
     import { PageTitle } from "../stores/status";
@@ -16,7 +17,7 @@
 
     let currentTab;
 
-    let title = "Album Artists";
+    let title = $_('title.albumArtists');
     $PageTitle = title;
 </script>
 
@@ -51,7 +52,7 @@
                         {#if tab.value === 'random'}
                             <Tab id="random" class="random" bind:activeTabValue={currentTab}>
                                 {#await randomAlbumArtists({limit: 50})}
-                                    Loading random album artists
+                                    {$_('text.loading')}
                                 {:then artists}
                                     {#if artists.length > 0}
                                         <Lister2

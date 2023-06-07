@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
 
     import { removeNotification } from "../../logic/notification";
@@ -59,7 +60,7 @@
 
         {#if item.type === "alternateVersions"}
             <div class="action-container">
-                <Link to="versions/{item.data.title}/{item.data.artist.name}" title="View all">View all</Link>
+                <Link to="versions/{item.data.title}/{item.data.artist.name}" title="{$_('text.viewAll')}">{$_('text.viewAll')}</Link>
             </div>
         {/if}
 

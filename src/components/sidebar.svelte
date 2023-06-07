@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n'
     import { getContext } from 'svelte';
     import { ROUTER } from 'svelte-routing/src/contexts';
     import { Link } from "svelte-routing";
@@ -75,15 +76,14 @@
         <ul>
             <li class:current={basePath === ''}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Dashboard', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.home'), placement: tooltipPlacement}}
             >
                 <Link to="{import.meta.env.BASE_URL}"
                       class="site-sidebar__link "
-                      data-label="Dashboard"
                 >
                     <SVGGrid />
                     <span class="label">
-                        Dashboard
+                        {$_('title.home')}
                     </span>
                 </Link>
             </li>
@@ -93,56 +93,56 @@
         <ul>
             <li class:current={basePath === 'artists'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Artists', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.artists'), placement: tooltipPlacement}}
             >
-                <Link to="artists" class="site-sidebar__link " data-label="Artists">
+                <Link to="artists" class="site-sidebar__link ">
                     <SVGArtistHollow />
                     <span class="label">
-                        Artists
+                        {$_('title.artists')}
                     </span>
                 </Link>
             </li>
             <li class:current={basePath === 'album-artists'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Album Artists', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.albumArtists'), placement: tooltipPlacement}}
             >
-                <Link to="album-artists" class="site-sidebar__link " data-label="Album Artists">
+                <Link to="album-artists" class="site-sidebar__link ">
                     <SVGArtist />
                     <span class="label">
-                        Album Artists
+                        {$_('title.albumArtists')}
                     </span>
                 </Link>
             </li>
             <li class:current={basePath === 'albums'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Albums', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.albums'), placement: tooltipPlacement}}
             >
-                <Link to="albums" class="site-sidebar__link " data-label="Albums">
-                    <SVGAlbum style="transform: scale(0.9)" /> <span class="label">Albums</span>
+                <Link to="albums" class="site-sidebar__link ">
+                    <SVGAlbum style="transform: scale(0.9)" /> <span class="label">{$_('title.albums')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'playlists'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Playlists', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.playlists'), placement: tooltipPlacement}}
             >
-                <Link to="playlists" class="site-sidebar__link " data-label="Playlists">
-                    <SVGPlaylist /> <span class="label">Playlists</span>
+                <Link to="playlists" class="site-sidebar__link ">
+                    <SVGPlaylist /> <span class="label">{$_('title.playlists')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'smartlists'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Smartlists', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.smartlists'), placement: tooltipPlacement}}
             >
-                <Link to="smartlists" class="site-sidebar__link " data-label="Smartlists">
-                    <SVGSmartlist /> <span class="label">Smartlists</span>
+                <Link to="smartlists" class="site-sidebar__link ">
+                    <SVGSmartlist /> <span class="label">{$_('title.smartlists')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'genres'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Genres', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.genres'), placement: tooltipPlacement}}
             >
-                <Link to="genres" class="site-sidebar__link " data-label="Genres">
-                    <SVGGenre style="transform: scale(0.9)" /> <span class="label">Genres</span>
+                <Link to="genres" class="site-sidebar__link ">
+                    <SVGGenre style="transform: scale(0.9)" /> <span class="label">{$_('title.genres')}</span>
                 </Link>
             </li>
         </ul>
@@ -151,66 +151,66 @@
         <ul>
             <li class:current={basePath === 'recent'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Recent', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.recent'), placement: tooltipPlacement}}
             >
-                <Link to="recent" class="site-sidebar__link " data-label="Recent">
-                    <SVGRecent /> <span class="label">Recent</span>
+                <Link to="recent" class="site-sidebar__link ">
+                    <SVGRecent /> <span class="label">{$_('title.recent')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'newest'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Newest', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.newest'), placement: tooltipPlacement}}
             >
-                <Link to="newest" class="site-sidebar__link " data-label="Newest">
-                    <SVGNew style="transform: scale(0.85)" /> <span class="label">Newest</span>
+                <Link to="newest" class="site-sidebar__link ">
+                    <SVGNew style="transform: scale(0.85)" /> <span class="label">{$_('title.newest')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'favorites'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Favorites', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.favorites'), placement: tooltipPlacement}}
             >
-                <Link to="favorites" class="site-sidebar__link " data-label="Favorites">
-                    <SVGFavoriteFull style="transform: scale(0.85)" /> <span class="label">Favorites</span>
+                <Link to="favorites" class="site-sidebar__link ">
+                    <SVGFavoriteFull style="transform: scale(0.85)" /> <span class="label">{$_('title.favorites')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'trending'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Trending', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.trending'), placement: tooltipPlacement}}
             >
-                <Link to="trending" class="site-sidebar__link " data-label="Trending">
-                    <SVGTrending /> <span class="label">Trending</span>
+                <Link to="trending" class="site-sidebar__link ">
+                    <SVGTrending /> <span class="label">{$_('title.trending')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'top'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Top Rated', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.top'), placement: tooltipPlacement}}
             >
-                <Link to="top" class="site-sidebar__link " data-label="Top Rated">
-                    <SVGStarFull /> <span class="label">Top Rated</span>
+                <Link to="top" class="site-sidebar__link ">
+                    <SVGStarFull /> <span class="label">{$_('title.top')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'forgotten'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Forgotten', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.forgotten'), placement: tooltipPlacement}}
             >
-                <Link to="forgotten" class="site-sidebar__link " data-label="Forgotten">
-                    <SVGForgotten /> <span class="label">Forgotten</span>
+                <Link to="forgotten" class="site-sidebar__link ">
+                    <SVGForgotten /> <span class="label">{$_('title.forgotten')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'random'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Random', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.random'), placement: tooltipPlacement}}
             >
-                <Link to="random" class="site-sidebar__link " data-label="Random">
-                    <SVGRandom /> <span class="label">Random</span>
+                <Link to="random" class="site-sidebar__link ">
+                    <SVGRandom /> <span class="label">{$_('title.random')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'unrated'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Unrated', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.unrated'), placement: tooltipPlacement}}
             >
-                <Link to="unrated" class="site-sidebar__link " data-label="Unrated">
-                    <SVGStarOutline /> <span class="label">Unrated</span>
+                <Link to="unrated" class="site-sidebar__link ">
+                    <SVGStarOutline /> <span class="label">{$_('title.unrated')}</span>
                 </Link>
             </li>
         </ul>
@@ -219,18 +219,18 @@
         <ul>
             <li class:current={basePath === 'search'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Advanced Search', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.advancedSearch'), placement: tooltipPlacement}}
             >
-                <Link to="search" class="site-sidebar__link " data-label="Advanced Search">
-                    <SVGSearch /> <span class="label">Advanced Search</span>
+                <Link to="search" class="site-sidebar__link ">
+                    <SVGSearch /> <span class="label">{$_('title.advancedSearch')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'multi-rater'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: 'Multi-rater', placement: tooltipPlacement}}
+                use:tooltip={{text: $_('title.multiRater'), placement: tooltipPlacement}}
             >
-                <Link to="multi-rater" class="site-sidebar__link " data-label="Multi-rater">
-                    <SVGMultiStar style="transform: scale(0.9)" /> <span class="label">Multi-rater</span>
+                <Link to="multi-rater" class="site-sidebar__link ">
+                    <SVGMultiStar style="transform: scale(0.9)" /> <span class="label">{$_('title.multiRater')}</span>
                 </Link>
             </li>
         </ul>

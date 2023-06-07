@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
 
     import { getSongsFromArtist, sortSongsByName } from "../../logic/song";
@@ -24,7 +25,6 @@
 </script>
 
 {#if !loading && songs && songs.length > 0}
-
     <Lister2
         bind:data={songs}
         type="song"
@@ -38,7 +38,7 @@
         }}
     />
 {:else}
-    <p>Loading songs</p>
+    <p>{$_('text.loading')}</p>
 {/if}
 
 <style>

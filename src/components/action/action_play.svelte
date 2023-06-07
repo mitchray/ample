@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { MediaPlayer } from "../../stores/player";
     import { loadingSpinner } from "../../actions/loadingSpinner";
@@ -22,7 +23,7 @@
     type="button"
     class="play icon-button button--primary"
     on:click={handleAction}
-    title="Play"
+    title="{$_('text.play')}"
     use:loadingSpinner={loaded}
 >
     <SVGPlay />

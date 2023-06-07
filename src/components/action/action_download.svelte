@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { API } from "../../stores/api";
     import { loadingSpinner } from "../../actions/loadingSpinner";
@@ -37,7 +38,7 @@
 <button
     type="button"
     on:click={handleAction}
-    title="Download"
+    title="{$_('text.download')}"
     use:loadingSpinner={loaded}
 >
     <SVGDownload />

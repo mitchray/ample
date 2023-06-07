@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { tick } from 'svelte';
     import { v4 as uuidv4 } from "uuid";
     import { SkipBelow, SkipBelowRating } from "../../stores/status";
@@ -38,7 +39,7 @@
 <button
     id="{uniqueMenuID}"
     class="icon-button"
-    title="Skip songs below rating"
+    title="{$_('text.skipBelow')}"
     on:click={toggleMenu}
 >
     {#if $SkipBelow}
@@ -56,18 +57,18 @@
 {#if isVisible}
     <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
         <div class="header new-panel-header">
-            <h4 class="title panel-title">Skip songs below rating</h4>
+            <h4 class="title panel-title">{$_('text.skipBelow')}</h4>
 
             <input type="checkbox" class="switch" bind:checked={$SkipBelow} on:change={handleSkipBelow} />
         </div>
 
         <div class="panel-content">
             <select bind:value={$SkipBelowRating} on:change={handleSkipBelowRating}>
-                <option value="1" selected={$SkipBelowRating === 1}>1 star</option>
-                <option value="2" selected={$SkipBelowRating === 2}>2 stars</option>
-                <option value="3" selected={$SkipBelowRating === 3}>3 stars</option>
-                <option value="4" selected={$SkipBelowRating === 4}>4 stars</option>
-                <option value="5" selected={$SkipBelowRating === 5}>5 stars</option>
+                <option value="1" selected={$SkipBelowRating === 1}>1 {$_('text.star')}</option>
+                <option value="2" selected={$SkipBelowRating === 2}>2 {$_('text.stars')}</option>
+                <option value="3" selected={$SkipBelowRating === 3}>3 {$_('text.stars')}</option>
+                <option value="4" selected={$SkipBelowRating === 4}>4 {$_('text.stars')}</option>
+                <option value="5" selected={$SkipBelowRating === 5}>5 {$_('text.stars')}</option>
             </select>
         </div>
     </Menu>

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
     import { lchToRgb } from 'color-converters';
@@ -32,7 +33,7 @@
         { label: "API key",  value: 2 }
     ];
 
-    let title = "Login";
+    let title = $_('title.login');
     $PageTitle = title;
 
     // Current active tab

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from 'svelte-routing';
     import { PageLoadedKey, PageTitle, Theme } from '../stores/status';
     import { serverURL } from "../stores/server";
@@ -23,7 +24,7 @@
         loadData();
     }
 
-    $PageTitle = "Album";
+    $PageTitle = $_('title.album');
 
     let album;
 
@@ -56,7 +57,7 @@
 </script>
 
 <svelte:head>
-    <title>{`${album?.name} by ${album?.artist?.name}` || 'Loading'} (album)</title>
+    <title>{`${album?.name} by ${album?.artist?.name}` || $_('text.loading')} (album)</title>
 </svelte:head>
 
 {#key $PageLoadedKey || 0}
@@ -168,7 +169,7 @@
             </div>
         </div>
     {:else}
-        <p>Loading album</p>
+        <p>{$_('text.loading')}</p>
     {/if}
 {/key}
 

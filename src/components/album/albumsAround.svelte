@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
     import { API } from "../../stores/api";
     import { groupAlbumsByReleaseType } from "../../logic/album";
@@ -44,7 +45,7 @@
     <div class="container" bind:this={containerBind} class:not-empty={containerBind?.firstElementChild}>
         {#if [...albums.previous.values()].find(arr => arr.length > 0)}
             <div class="previous">
-                <h3>Previous</h3>
+                <h3>{$_('text.previous')}</h3>
 
                 <div class="list">
                     {#each [...albums.previous] as [key, value], i}
@@ -58,7 +59,7 @@
 
         {#if [...albums.same.values()].find(arr => arr.length > 0)}
             <div class="same">
-                <h3>Same Year</h3>
+                <h3>{$_('text.sameYear')}</h3>
 
                 <div class="list">
                     {#each [...albums.same] as [key, value], i}
@@ -72,7 +73,7 @@
 
         {#if [...albums.next.values()].find(arr => arr.length > 0)}
             <div class="next">
-                <h3>Next</h3>
+                <h3>{$_('text.next')}</h3>
 
                 <div class="list">
                     {#each [...albums.next] as [key, value], i}

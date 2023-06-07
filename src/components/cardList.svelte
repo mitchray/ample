@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, onDestroy } from 'svelte';
     import { v4 as uuidv4 } from "uuid";
     import SVGAdd from "/src/images/add.svg";
@@ -26,7 +27,6 @@
     let card;
     let logic;
     let containerClass;
-    let emptyMessage;
     let options = {};
     let isScroll = false;
     let containerBind;
@@ -56,8 +56,6 @@
                     card = (await import('../components/artist/artistCard.svelte')).default;
                     containerClass = (containerType === "grid") ? "cardlist-grid artist-grid" : "cardlist-scroll artist-scroll";
                 }
-
-                emptyMessage = "No artists found";
                 break;
             case 'album':
                 logic = await import("../logic/album");
@@ -70,8 +68,6 @@
                     card = (await import('../components/album/albumCard.svelte')).default;
                     containerClass = (containerType === "grid") ? "cardlist-grid album-grid" : "cardlist-scroll album-scroll";
                 }
-
-                emptyMessage = "No albums found";
                 break;
             case 'song':
             case 'recent_songs':
@@ -85,8 +81,6 @@
                     card = (await import('../components/song/songCard.svelte')).default;
                     containerClass = (containerType === "grid") ? "cardlist-grid song-grid" : "cardlist-scroll song-scroll";
                 }
-
-                emptyMessage = "No songs found";
                 break;
             case 'playlist':
                 logic = await import("../logic/playlist");
@@ -99,8 +93,6 @@
                     card = (await import('../components/playlist/playlistCard.svelte')).default;
                     containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
                 }
-
-                emptyMessage = "No playlists found";
                 break;
             case 'smartlist':
                 logic = await import("../logic/playlist");
@@ -113,21 +105,17 @@
                     card = (await import('../components/playlist/playlistCard.svelte')).default;
                     containerClass = (containerType === "grid") ? "cardlist-grid playlist-grid" : "cardlist-scroll playlist-scroll";
                 }
-
-                emptyMessage = "No smartlists found";
                 options.isSmartlist = true;
                 break;
             case 'artist_mix':
                 logic = await import("../logic/playlist");
                 card = (await import('../components/playlist/playlistMixCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "cardlist-grid mix-grid" : "cardlist-scroll mix-scroll";
-                emptyMessage = "No mixes available";
                 break;
             case 'genre':
                 logic = await import("../logic/genre");
                 card = (await import('../components/genre/genreCard.svelte')).default;
                 containerClass = (containerType === "grid") ? "cardlist-grid genre-grid" : "cardlist-scroll genre-scroll";
-                emptyMessage = "No genres found";
                 break;
             default:
                 break;
@@ -224,7 +212,7 @@
             {#if heading}
                 <button on:click={refreshItems} class="refresh-button"><SVGRefresh/></button>
             {:else}
-                <button on:click={refreshItems} class="button button--tertiary"><SVGRefresh/> Refresh</button>
+                <button on:click={refreshItems} class="button button--tertiary"><SVGRefresh/> {$_('text.refresh')}</button>
             {/if}
         {/if}
 
@@ -261,7 +249,7 @@
                 {/if}
             {/if}
         {:else}
-            <li><p>{emptyMessage}</p></li>
+            <li><p>{$_('text.noItemsFound')}</p></li>
         {/if}
     {/if}
 </ul>

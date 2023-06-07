@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, tick } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
     import {
@@ -111,7 +112,7 @@
     class="icon-button volume-control"
     on:click={handleMuteToggle}
     disabled={$NowPlayingQueue.length === 0}
-    title="{$IsMuted ? 'Unmute' : 'Mute'}"
+    title="{$IsMuted ? $_('text.volumeUnmute') : $_('text.volumeMute')}"
 >
     {#if $IsMuted}
         <SVGVolumeMuted />
@@ -133,7 +134,7 @@
 <button
     id={uniqueMenuID}
     class="icon-button"
-    title="Volume settings"
+    title="{$_('text.volumeSettings')}"
     on:click={toggleMenu}
 >
     <SVGTune style="padding: 0.15em;" />
@@ -142,34 +143,34 @@
 {#if menuIsVisible}
     <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible={menuIsVisible} >
         <div class="header new-panel-header">
-            <h4 class="title panel-title">Volume Settings</h4>
+            <h4 class="title panel-title">{$_('text.volumeSettings')}</h4>
         </div>
 
         <div class="panel-content">
             <div class="group">
                 <label class="toggle">
                     <input type="checkbox" on:change={handleVolumeNormalize} bind:checked={$VolumeNormalizationEnabled} />
-                    Normalize volume
+                    {$_('text.volumeNormalize')}
                 </label>
 
-                <div class="info">Keeps volume consistent between different tracks</div>
+                <div class="info">{$_('text.volumeNormalizeInfo')}</div>
 
                 {#if $CurrentMedia}
                     <div class="current new-panel-main">
                         <table>
                             <tr>
-                                <td class="label">Current</td>
+                                <td class="label">{$_('text.current')}</td>
                                 <td>{$MediaPlayer.gainType}</td>
                             </tr>
 
                             {#if $MediaPlayer.gainType === 'EBU R128'}
                                 <tr>
-                                    <td class="label">Target</td>
+                                    <td class="label">{$_('text.target')}</td>
                                     <td>{$MediaPlayer.targetVolume}db</td>
                                 </tr>
 
                                 <tr>
-                                    <td class="label">Mastered</td>
+                                    <td class="label">{$_('text.mastered')}</td>
                                     <td>{$MediaPlayer.masteredVolume}db</td>
                                 </tr>
                             {/if}
@@ -182,7 +183,7 @@
                             {/if}
 
                             <tr>
-                                <td class="label">Gain</td>
+                                <td class="label">{$_('text.gain')}</td>
                                 <td>{$MediaPlayer.gainNeeded}db</td>
                             </tr>
                         </table>
@@ -194,10 +195,10 @@
             <div class="group">
                 <label class="toggle">
                     <input type="checkbox" on:change={handleDynamicsCompressor} bind:checked={$DynamicsCompressorEnabled} />
-                    Enable Night Mode
+                    {$_('text.volumeNightMode')}
                 </label>
 
-                <div class="info">Compresses the dynamic range</div>
+                <div class="info">{$_('text.volumeNightModeInfo')}</div>
 
                 {#if $debugMode && $MediaPlayer.filterCompressor}
                     <div class="menu-separator"></div>

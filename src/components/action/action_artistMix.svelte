@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { API } from "../../stores/api";
     import { MediaPlayer } from "../../stores/player";
@@ -56,7 +57,7 @@
         type="button"
         class="icon-button button--secondary"
         on:click={handleAction}
-        title="Start Artist Mix"
+        title="{$_('text.startArtistMix')}"
         use:loadingSpinner={loaded}
     >
         <SVGRadio />

@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { PageTitle } from "../stores/status";
     import { frequentArtists } from "../logic/artist";
     import { frequentAlbums } from "../logic/album";
@@ -19,7 +20,7 @@
 
     let currentTab;
 
-    let title = "Trending";
+    let title = $_('title.trending');
     $PageTitle = title;
 </script>
 
@@ -33,7 +34,7 @@
             {#if tab.value === 'artists'}
                 <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
                     {#await frequentArtists({limit: 50})}
-                        Loading trending artists
+                        {$_('text.loading')}
                     {:then artists}
                         {#if artists.length > 0}
                             <Lister2
@@ -59,7 +60,7 @@
             {#if tab.value === 'albums'}
                 <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
                     {#await frequentAlbums({limit: 50})}
-                        Loading trending albums
+                        {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
                             <Lister2
@@ -85,7 +86,7 @@
             {#if tab.value === 'songs'}
                 <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
                     {#await frequentSongs({limit: 100})}
-                        Loading trending songs
+                        {$_('text.loading')}
                     {:then songs}
                         {#if songs.length > 0}
                             <Lister2

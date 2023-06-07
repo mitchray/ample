@@ -1,10 +1,11 @@
 <script>
+    import {_} from "svelte-i18n";
     import { PageTitle } from "../stores/status";
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
 
     export let year;
 
-    let title = "Albums by Year";
+    let title = $_('title.albumsByYear');
     $PageTitle = title;
 </script>
 

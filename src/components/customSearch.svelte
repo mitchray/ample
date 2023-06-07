@@ -1,7 +1,7 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from 'svelte';
     import { API } from "../stores/api";
-
     import SVGClose from "/src/images/close.svg";
 
     export let loading = false;
@@ -1039,21 +1039,21 @@
     <div class="options">
         <div class="type">
             <label>
-                Search for
+                {$_('text.searchFor')}
                 <select bind:value={settings.type} on:change={clearAll}>
-                    <option value="song">songs</option>
-                    <option value="album">albums</option>
-                    <option value="artist">artists</option>
-                    <option value="playlist">playlists</option>
+                    <option value="song">{$_('text.songs')}</option>
+                    <option value="album">{$_('text.albums')}</option>
+                    <option value="artist">{$_('text.artists')}</option>
+                    <option value="playlist">{$_('text.playlists')}</option>
                 </select>
             </label>
         </div>
 
         <div class="maximum">
             <label>
-                Limit to
+                {$_('text.limitTo')}
                 <select bind:value={settings.limit}>
-                    <option value="0">unlimited</option>
+                    <option value="0">{$_('text.unlimited')}</option>
                     <option value="1">1</option>
                     <option value="5">5</option>
                     <option value="10">10</option>
@@ -1069,18 +1069,18 @@
         <div class="random">
             <label>
                 <input type="checkbox" bind:checked={settings.random} />
-                Randomized
+                {$_('text.randomized')}
             </label>
         </div>
 
         <div class="match">
             <label>
-                Matching
+                {$_('text.matching')}
                 <select bind:value={settings.operator}>
-                    <option value="and">all</option>
-                    <option value="or">any</option>
+                    <option value="and">{$_('text.all')}</option>
+                    <option value="or">{$_('text.any')}</option>
                 </select>
-                {settings.operator === "and" ? 'rules' : 'rule'}
+                {settings.operator === "and" ? $_('text.rules') : $_('text.rule')}
             </label>
         </div>
     </div>
@@ -1108,81 +1108,81 @@
 
                 {#if row.operatorType === "string"}
                     <select bind:value={row.operator}>
-                        <option value="0">contains</option>
-                        <option value="1">does not contain</option>
-                        <option value="2">starts with</option>
-                        <option value="3">ends with</option>
-                        <option value="4">is</option>
-                        <option value="5">is not</option>
-                        <option value="6">sounds like</option>
-                        <option value="7">does not sound like</option>
-                        <option value="8">matches regular expression</option>
-                        <option value="9">does not match regular expression</option>
+                        <option value="0">{$_('text.searchContains')}</option>
+                        <option value="1">{$_('text.searchContainsNot')}</option>
+                        <option value="2">{$_('text.searchStartsWith')}</option>
+                        <option value="3">{$_('text.searchEndsWith')}</option>
+                        <option value="4">{$_('text.searchIs')}</option>
+                        <option value="5">{$_('text.searchIsNot')}</option>
+                        <option value="6">{$_('text.searchSoundsLike')}</option>
+                        <option value="7">{$_('text.searchSoundsLikeNot')}</option>
+                        <option value="8">{$_('text.searchMatchRegex')}</option>
+                        <option value="9">{$_('text.searchMatchRegexNot')}</option>
                     </select>
                 {/if}
 
                 {#if row.operatorType === "number"}
                     <select bind:value={row.operator}>
-                        <option value="0">is greater than or equal to</option>
-                        <option value="1">is less than or equal to</option>
-                        <option value="2">equals</option>
-                        <option value="3">does not equal</option>
-                        <option value="4">is greater than</option>
-                        <option value="5">is less than</option>
+                        <option value="0">{$_('text.searchGreaterThanEqual')}</option>
+                        <option value="1">{$_('text.searchLessThanEqual')}</option>
+                        <option value="2">{$_('text.searchEquals')}</option>
+                        <option value="3">{$_('text.searchEqualsNot')}</option>
+                        <option value="4">{$_('text.searchGreaterThan')}</option>
+                        <option value="5">{$_('text.searchLessThan')}</option>
                     </select>
                 {/if}
 
                 {#if row.operatorType === "relative"}
                     <select bind:value={row.operator}>
-                        <option value="0">before</option>
-                        <option value="1">after</option>
+                        <option value="0">{$_('text.searchBefore')}</option>
+                        <option value="1">{$_('text.searchAfter')}</option>
                     </select>
                 {/if}
 
                 {#if row.operatorType === "relative_x_days"}
                     <select bind:value={row.operator}>
-                        <option value="0">before (x) days ago</option>
-                        <option value="1">after (x) days ago</option>
+                        <option value="0">{$_("text.searchBeforeXDays", { values: { x: "(x)" } })}</option>
+                        <option value="1">{$_("text.searchAfterXDays", { values: { x: "(x)" } })}</option>
                     </select>
                 {/if}
 
                 {#if row.operatorType === "rating_expanded"}
                     <select bind:value={row.operator}>
-                        <option value="0">has loved</option>
-                        <option value="1">has rated 5 stars</option>
-                        <option value="2">has rated 4 stars</option>
-                        <option value="3">has rated 3 stars</option>
-                        <option value="4">has rated 2 stars</option>
-                        <option value="5">has rated 1 stars</option>
-                        <option value="6">has not rated</option>
+                        <option value="0">{$_('text.searchHasLoved')}has loved</option>
+                        <option value="1">{$_('text.searchStars', { values: { count: 5 } })}</option>
+                        <option value="2">{$_('text.searchStars', { values: { count: 4 } })}</option>
+                        <option value="3">{$_('text.searchStars', { values: { count: 3 } })}</option>
+                        <option value="4">{$_('text.searchStars', { values: { count: 2 } })}</option>
+                        <option value="5">{$_('text.searchStars', { values: { count: 1 } })}</option>
+                        <option value="6">{$_('text.searchNotRated')}</option>
                     </select>
                 {/if}
 
                 {#if row.operatorType === "limit"}
                     <label>
                         <input name="banana" type="radio" value="0" checked readonly hidden />
-                        limit
+                        {$_('text.limit')}
                     </label>
                 {/if}
 
                 {#if row.operatorType === "true"}
                     <label>
                         <input name="apple" type="radio" value="0" checked readonly hidden />
-                        is true
+                        {$_('text.searchTrue')}
                     </label>
                 {/if}
 
                 {#if row.operatorType === "boolean_true"}
                     <select bind:value={row.operator}>
-                        <option value="0">is true</option>
-                        <option value="1">is false</option>
+                        <option value="0">{$_('text.searchTrue')}</option>
+                        <option value="1">{$_('text.searchFalse')}</option>
                     </select>
                 {/if}
 
                 {#if row.operatorType === "boolean_is"}
                     <select bind:value={row.operator}>
-                        <option value="0">is</option>
-                        <option value="1">is not</option>
+                        <option value="0">{$_('text.searchIs')}</option>
+                        <option value="1">{$_('text.searchIsNot')}</option>
                     </select>
                 {/if}
 
@@ -1198,12 +1198,12 @@
 
                 {#if row.inputType === "rating"}
                     <select bind:value={row.input}>
-                        <option value="0">0 Stars</option>
-                        <option value="1">1 Star</option>
-                        <option value="2">2 Stars</option>
-                        <option value="3">3 Stars</option>
-                        <option value="4">4 Stars</option>
-                        <option value="5">5 Stars</option>
+                        <option value="0">{$_('text.ratingCount', { values: { count: 0 } })}</option>
+                        <option value="1">{$_('text.ratingCount', { values: { count: 1 } })}</option>
+                        <option value="2">{$_('text.ratingCount', { values: { count: 2 } })}</option>
+                        <option value="3">{$_('text.ratingCount', { values: { count: 3 } })}</option>
+                        <option value="4">{$_('text.ratingCount', { values: { count: 4 } })}</option>
+                        <option value="5">{$_('text.ratingCount', { values: { count: 5 } })}</option>
                     </select>
                 {/if}
 
@@ -1252,8 +1252,8 @@
     </div>
 
     <div class="actions">
-        <button type="button" class="button button--primary" on:click={search}>Search</button>
-        <button type="button" class="button button--secondary" on:click={addNewRow}>Add another rule</button>
+        <button type="button" class="button button--primary" on:click={search}>{$_('text.search')}</button>
+        <button type="button" class="button button--secondary" on:click={addNewRow}>{$_('text.searchAddRule')}</button>
     </div>
 </div>
 

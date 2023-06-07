@@ -1,9 +1,9 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from 'svelte-routing';
     import { NowPlayingQueue, NowPlayingIndex, QueueIsOpen } from '../../stores/status';
     import ArtistList from '../../components/artist/artistList.svelte';
     import SVGPlaylistPlay from "/src/images/playlist_play.svg";
-    import SVGArtist from "/src/images/artist.svg";
 
     let nextSong;
 
@@ -19,13 +19,16 @@
 
 <div class="container" id="c-queue">
     <div class="queueInfo">
-        <h4 class="queue-header panel-title">Queue</h4>
+        <h4 class="queue-header panel-title">{$_('text.queue')}</h4>
         {#if $NowPlayingQueue.length > 0}
-            <span class="queue-details">{$NowPlayingQueue.length === 0 ? 0 : $NowPlayingIndex + 1} of {$NowPlayingQueue.length}</span>
+            <span class="queue-details">{$NowPlayingQueue.length === 0 ? 0 : $NowPlayingIndex + 1} / {$NowPlayingQueue.length}</span>
         {/if}
 
         {#if nextSong}
-            <div class="title card-title"><span>Next:</span> <Link to="song/{nextSong.id}">{nextSong.title}</Link></div>
+            <div class="title card-title">
+                <span>{$_('text.next')}:</span>
+                <Link to="song/{nextSong.id}">{nextSong.title}</Link>
+            </div>
 
             {#if nextSong.artists.length > 0}
                 <div class="artist secondary-info">
@@ -42,7 +45,7 @@
         id="queue-button"
         class="queue-toggle icon-button button--regular"
         on:click={toggleQueue}
-        title="Toggle queue"
+        title="{$_('text.queueToggle')}"
     >
         <SVGPlaylistPlay style="transform: scale(1.3)" />
     </button>

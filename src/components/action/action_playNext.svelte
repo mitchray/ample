@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { MediaPlayer } from "../../stores/player";
     import { loadingSpinner } from "../../actions/loadingSpinner";
@@ -22,7 +23,7 @@
     type="button"
     class="icon-button"
     on:click={handleAction}
-    title="Play Next"
+    title="{$_('text.playNext')}"
     use:loadingSpinner={loaded}
 >
     <SVGPlayNext style="transform: scale(0.85);" />

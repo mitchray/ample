@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { MediaPlayer } from "../../stores/player";
     import { shuffleArray } from "../../logic/helper";
@@ -25,7 +26,7 @@
         type="button"
         class="shuffle icon-button button--secondary"
         on:click={handleAction}
-        title="Shuffle"
+        title="{$_('text.shuffle')}"
         use:loadingSpinner={loaded}
     >
         <SVGShuffle style="transform: scale(0.85);" />

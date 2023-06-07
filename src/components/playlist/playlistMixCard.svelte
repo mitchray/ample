@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { API } from "../../stores/api";
@@ -44,7 +45,7 @@
         <div class="details">
             <div class="similar">
                 {#await similars}
-                    Finding similar artists
+                    {$_('text.loading')}
                     <br>
                 {:then artists}
                     {#if artists.length > 0}
@@ -55,10 +56,10 @@
                         {/each}
 
                         {#if artists.length === 3}
-                            & more
+                            & {$_('text.more').toLowerCase()}
                         {/if}
                     {:else}
-                        Just {playlist.name}
+                        {$_("text.playlistJust", { values: { name: playlist.name } })}
                     {/if}
                 {/await}
             </div>
@@ -73,7 +74,7 @@
         </div>
     {:else}
         <div class="image-container">
-            <div class="image-text">Loading</div>
+            <div class="image-text">{$_('text.loading')}</div>
             <img class="image"
                  height="400"
                  width="400"

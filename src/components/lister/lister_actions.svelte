@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from "svelte";
     import { PageLoadedKey } from "../../stores/status";
     import Actions2 from '../../components/action/actions.svelte';
@@ -34,8 +35,8 @@
 
     {#if !$_tableOnly}
         <div class="group">
-            <button class="button" on:click={() => { setTableDisplay(true) }} class:active={$_displayAsTable}><SVGList /> List</button>
-            <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!$_displayAsTable}><SVGGrid /> Grid</button>
+            <button class="button" on:click={() => { setTableDisplay(true) }} class:active={$_displayAsTable}><SVGList /> {$_('text.list')}</button>
+            <button class="button" on:click={() => { setTableDisplay(false) }} class:active={!$_displayAsTable}><SVGGrid /> {$_('text.grid')}</button>
         </div>
     {/if}
 

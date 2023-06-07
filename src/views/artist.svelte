@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { fade } from 'svelte/transition';
     import { Link } from "svelte-routing";
     import { PageLoadedKey, PageTitle, ShowExpandedAlbums, GroupAlbumsByReleaseType, Theme } from "../stores/status";
@@ -35,7 +36,7 @@
         loadData();
     }
 
-    let title = "Artist";
+    let title = $_('title.artist');
     $PageTitle = title;
 
     // List of tab items with labels and values.
@@ -68,7 +69,7 @@
 </script>
 
 <svelte:head>
-    <title>{`${artist?.name}` || 'Loading'} (artist)</title>
+    <title>{`${artist?.name}` || $_('text.loading')} (artist)</title>
 </svelte:head>
 
 {#key $PageLoadedKey || 0}
@@ -197,7 +198,7 @@
                     {#if tab.value === 'popular'}
                         <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
                             {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
-                                Loading popular songs
+                                {$_('text.loading')}
                             {:then songs}
                                 {#if songs.length > 0}
                                     <Lister2
@@ -224,7 +225,7 @@
                     {#if tab.value === 'similar'}
                         <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
                             {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
-                                Loading similar artists
+                                {$_('text.loading')}
                             {:then artists}
                                 {#if artists.length > 0}
                                     <div class="cardlist-grid artist-grid">
@@ -262,7 +263,7 @@
             {/each}
         </Tabs>
     {:else}
-        <p>Loading artist</p>
+        <p>{$_('text.loading')}</p>
     {/if}
 {/key}
 

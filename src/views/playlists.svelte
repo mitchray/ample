@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
@@ -10,7 +11,7 @@
     let showPlaylistCreation = false;
     let loading = true;
 
-    let title = "Playlists";
+    let title = $_('title.playlists');
     $PageTitle = title;
 
     function handleShowPlaylistCreator() {
@@ -37,7 +38,7 @@
 
 <div class="page-main">
     {#if loading}
-        <p>Loading playlists</p>
+        <p>{$_('text.loading')}</p>
     {:else}
         {#if playlists?.length > 0}
             <Lister2

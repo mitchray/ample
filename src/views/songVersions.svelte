@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import Lister2 from '../components/lister/lister.svelte';
     import { PageTitle } from "../stores/status";
     import { getSongVersions } from "../logic/song";
@@ -9,7 +10,7 @@
     let loading;
     let results = [];
 
-    let title = "Song Versions";
+    let title = $_('title.songVersions');
     $PageTitle = title;
 
     $: songTitle = songTitle;
@@ -17,32 +18,32 @@
 </script>
 
 <svelte:head>
-    <title>Versions of {`${songTitle} - ${artistName}` || 'Loading'}</title>
+    <title>{$_('text.versionsOf', { values: { songTitle: songTitle, artistName: artistName } }) || $_('text.loading')}</title>
 </svelte:head>
 
-<h1 class="page-title">Versions of <em>{songTitle}</em> by <em>{artistName}</em></h1>
+<h1 class="page-title">{@html $_('text.versionsOfHTML', { values: { songTitle: songTitle, artistName: artistName } })}</h1>
 
 <div class="page-main">
     {#key songTitle + artistName}
         {#await getSongVersions(songTitle, artistName)}
-            Searching for alternate versions
+            {$_('text.loading')}
         {:then songs}
             {#if songs.length > 1}
                 <Lister2
-                        data={songs}
-                        type="song"
-                        actionData={{
-                    type: "",
-                    mode: "fullButtons",
-                    showShuffle: songs.length > 1,
-                    data: Object.create({songs: songs})
-                }}
+                    data={songs}
+                    type="song"
+                    actionData={{
+                        type: "",
+                        mode: "fullButtons",
+                        showShuffle: songs.length > 1,
+                        data: Object.create({songs: songs})
+                    }}
                 />
             {:else}
-                <p>No alternate versions found</p>
+                <p>{$_("text.noItemsFound")}</p>
             {/if}
         {:catch error}
-            <p>An error occurred.</p>
+            <p>{$_("text.errorGeneric")}</p>
         {/await}
     {/key}
 </div>

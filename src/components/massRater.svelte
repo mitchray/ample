@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { API } from "../stores/api";
 
     export let items = [];
@@ -26,11 +27,9 @@
 
 
 <div class="container">
-    <button type="button" class="button button--primary" on:click={handleApply}>Apply</button>
+    <button type="button" class="button button--primary" on:click={handleApply}>{$_('text.apply')}</button>
 
     <label>
-        rating of
-
         <select on:change={handleRating}>
             <option value="0" selected={newRating === 0}>0</option>
             <option value="1" selected={newRating === 1}>1</option>
@@ -40,8 +39,6 @@
             <option value="5" selected={newRating === 5}>5</option>
         </select>
     </label>
-
-    <span>to selected items</span>
 </div>
 
 
