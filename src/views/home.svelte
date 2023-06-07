@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n'
     import CardList from '../components/cardList.svelte';
     import { newestAlbums, randomAlbums } from "../logic/album";
     import { PageTitle } from "../stores/status";
@@ -10,6 +11,8 @@
 <svelte:head>
     <title>{title}</title>
 </svelte:head>
+
+<h1>{$_('title.home')}</h1>
 
 <CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest Albums" />
 

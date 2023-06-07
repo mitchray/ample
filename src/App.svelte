@@ -5,6 +5,19 @@
     import { onMount } from 'svelte';
     import { Router, Route } from "svelte-routing";
 
+    import { addMessages, register, init, getLocaleFromNavigator } from 'svelte-i18n';
+
+    import en from '/languages/en.json';
+    import it from '/languages/it.json';
+
+    addMessages('en', en);
+    addMessages('it', it);
+
+    init({
+        fallbackLocale: 'en',
+        initialLocale: getLocaleFromNavigator(),
+    });
+
     import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
