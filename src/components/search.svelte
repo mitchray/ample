@@ -24,12 +24,12 @@
 
     // List of tab items with labels and values.
     let tabItems = [
-        { label: "All",        value: "all" },
-        { label: "Songs",      value: "songs" },
-        { label: "Albums",     value: "albums" },
-        { label: "Artists",    value: "artists" },
-        { label: "Playlists",  value: "playlists" },
-        { label: "Smartlists", value: "smartlists" },
+        { label: $_('text.all'),        value: "all" },
+        { label: $_('text.songs'),      value: "songs" },
+        { label: $_('text.albums'),     value: "albums" },
+        { label: $_('text.artists'),    value: "artists" },
+        { label: $_('text.playlists'),  value: "playlists" },
+        { label: $_('text.smartlists'), value: "smartlists" },
     ];
 
     // Current active tab
@@ -181,35 +181,35 @@
                                 {/if}
 
                                 {#if initialResults.songsStartsWith?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Starting With" />
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.songs')} {$_('text.startingWith')}" />
                                 {/if}
 
                                 {#if initialResults.songsContains?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Songs Containing" />
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.songs')} {$_('text.containing')}" />
                                 {/if}
 
                                 {#if initialResults.albumsStartsWith?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Starting With" />
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.albums')} {$_('text.startingWith')}" />
                                 {/if}
 
                                 {#if initialResults.albumsContains?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Albums Containing" />
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.albums')} {$_('text.containing')}" />
                                 {/if}
 
                                 {#if initialResults.artistsStartsWith?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Starting With" />
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.artists')} {$_('text.startingWith')}" />
                                 {/if}
 
                                 {#if initialResults.artistsContains?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Artists Containing" />
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.artists')} {$_('text.containing')}" />
                                 {/if}
 
                                 {#if initialResults.playlists?.length > 0}
-                                    <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="Playlists" />
+                                    <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.playlists')}" />
                                 {/if}
 
                                 {#if initialResults.smartlists?.length > 0}
-                                    <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} heading="Smartlists" />
+                                    <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} heading="{$_('text.smartlists')}" />
                                 {/if}
                             </Tab>
                         {/if}
@@ -217,11 +217,11 @@
                         {#if tab.value === 'songs'}
                             <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
                                 {#if initialResults.songsStartsWith?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="Starting With" />
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.startingWith')}" />
                                 {/if}
 
                                 {#if initialResults.songsContains?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="Containing" />
+                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.containing')}" />
                                 {/if}
 
                                 {#if initialResults.songsStartsWith?.length === 0 && initialResults.songsContains?.length === 0}
@@ -233,11 +233,11 @@
                         {#if tab.value === 'albums'}
                             <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
                                 {#if initialResults.albumsStartsWith?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Starting With" />
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.startingWith')}" />
                                 {/if}
 
                                 {#if initialResults.albumsContains?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="Containing" />
+                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.containing')}" />
                                 {/if}
 
                                 {#if initialResults.albumsStartsWith?.length === 0 && initialResults.albumsContains?.length === 0}
@@ -249,11 +249,11 @@
                         {#if tab.value === 'artists'}
                             <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
                                 {#if initialResults.artistsStartsWith?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="Starting With" />
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.startingWith')}" />
                                 {/if}
 
                                 {#if initialResults.artistsContains?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="Containing" />
+                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.containing')}" />
                                 {/if}
 
                                 {#if initialResults.artistsStartsWith?.length === 0 && initialResults.artistsContains?.length === 0}

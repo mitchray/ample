@@ -23,7 +23,7 @@
     type="button"
     class="icon-button"
     on:click={handleAction}
-    title="{$_('title.playLast')}"
+    title="{$_('text.playLast')}"
     use:loadingSpinner={loaded}
 >
     <SVGQueue style="transform: scale(0.85);" />

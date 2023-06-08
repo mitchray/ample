@@ -230,7 +230,7 @@
     let fields = [
         {
             id: "anywhere",
-            label: "Any searchable text",
+            label: "text.searchAnyText",
             category: "",
             object_types: [
                 { id: "song"}
@@ -240,67 +240,67 @@
         },
         {
             id: "title",
-            label: "Title",
-            category: "Metadata",
+            label: "text.title",
+            category: "text.metadata",
             object_types: [
-                { id: "song", category: "Song Metadata" },
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata", label: "Name" },
-                { id: "playlist", category: "Playlist Metadata", label: "Name" }
+                { id: "song", category: "text.metadataSong" },
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist", label: "text.name" },
+                { id: "playlist", category: "text.metadataPlaylist", label: "text.name" }
             ],
             operatorType: "string",
             inputType: "text"
         },
         {
             id: "artist",
-            label: "Artist",
-            category: "Metadata",
+            label: "text.artist",
+            category: "text.metadata",
             object_types: [
-                { id: "song", category: "Song Metadata", label: "Song Artist" },
-                { id: "album", category: "Album Metadata", label: "Album Artist" }
+                { id: "song", category: "text.metadataSong", label: "text.songArtist" },
+                { id: "album", category: "text.metadataAlbum", label: "text.albumArtist" }
             ],
             operatorType: "string",
             inputType: "text"
         },
         {
             id: "year",
-            label: "Year",
-            category: "Metadata",
+            label: "text.year",
+            category: "text.metadata",
             object_types: [
-                { id: "song", category: "Song Metadata" },
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata" }
+                { id: "song", category: "text.metadataSong" },
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist" }
             ],
             operatorType: "number",
             inputType: "number"
         },
         {
             id: "genre",
-            label: "Genre",
-            category: "Metadata",
+            label: "text.genre",
+            category: "text.metadata",
             object_types: [
-                { id: "song", category: "Song Metadata" },
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata" }
+                { id: "song", category: "text.metadataSong" },
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist" }
             ],
             operatorType: "string",
             inputType: "text"
         },
         {
             id: "song_genre",
-            label: "Song Genre",
-            category: "Metadata",
+            label: "text.songGenre",
+            category: "text.metadata",
             object_types: [
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata" }
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist" }
             ],
             operatorType: "string",
             inputType: "text"
         },
         {
             id: "album_genre",
-            label: "Album Genre",
-            category: "Song Metadata",
+            label: "text.albumGenre",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -309,20 +309,20 @@
         },
         {
             id: "no_genre",
-            label: "No Genre",
-            category: "Metadata",
+            label: "text.noGenre",
+            category: "text.metadata",
             object_types: [
-                { id: "song", category: "Song Metadata" },
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata" }
+                { id: "song", category: "text.metadataSong" },
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist" }
             ],
             operatorType: "boolean_true",
             inputType: ""
         },
         {
             id: "comment",
-            label: "Comment",
-            category: "Song Metadata",
+            label: "text.comment",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -331,8 +331,8 @@
         },
         {
             id: "lyrics",
-            label: "Lyrics",
-            category: "Song Metadata",
+            label: "text.lyrics",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -341,8 +341,8 @@
         },
         {
             id: "file",
-            label: "Filename",
-            category: "File Data",
+            label: "text.filename",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -354,8 +354,8 @@
         },
         {
             id: "bitrate",
-            label: "Bitrate",
-            category: "File Data",
+            label: "text.bitrate",
+            category: "text.fileData",
             object_types: [
                 { id: "song" }
             ],
@@ -364,8 +364,8 @@
         },
         {
             id: "label",
-            label: "Label",
-            category: "Song Metadata",
+            label: "text.label",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -374,8 +374,8 @@
         },
         {
             id: "track",
-            label: "Track",
-            category: "Song Metadata",
+            label: "text.track",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -384,8 +384,8 @@
         },
         {
             id: "artist_genre",
-            label: "Artist Genre",
-            category: "Song Metadata",
+            label: "text.artistGenre",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -394,8 +394,8 @@
         },
         {
             id: "album",
-            label: "Album",
-            category: "Song Metadata",
+            label: "text.album",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" }
             ],
@@ -404,8 +404,8 @@
         },
         {
             id: "composer",
-            label: "Composer",
-            category: "Song Metadata",
+            label: "text.composer",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" },
             ],
@@ -414,8 +414,8 @@
         },
         {
             id: "album_artist",
-            label: "Album Artist",
-            category: "Song Metadata",
+            label: "text.albumArtist",
+            category: "text.metadataSong",
             object_types: [
                 { id: "song" },
             ],
@@ -424,8 +424,8 @@
         },
         {
             id: "orphaned_album",
-            label: "Orphaned Album",
-            category: "File Data",
+            label: "text.orphanedAlbum",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
             ],
@@ -434,8 +434,8 @@
         },
         {
             id: "song_artist",
-            label: "Song Artist",
-            category: "Album Metadata",
+            label: "text.songArtist",
+            category: "text.metadataAlbum",
             object_types: [
                 { id: "album" },
             ],
@@ -444,19 +444,19 @@
         },
         {
             id: "song_title",
-            label: "Song Title",
-            category: "Metadata",
+            label: "text.songTitle",
+            category: "text.metadata",
             object_types: [
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata" }
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist" }
             ],
             operatorType: "string",
             inputType: "text"
         },
         {
             id: "album_title",
-            label: "Album Title",
-            category: "Artist Metadata",
+            label: "text.albumTitle",
+            category: "text.metadataArtist",
             object_types: [
                 { id: "artist" },
             ],
@@ -465,8 +465,8 @@
         },
         {
             id: "summary",
-            label: "Summary",
-            category: "Artist Metadata",
+            label: "text.summary",
+            category: "text.metadataArtist",
             object_types: [
                 { id: "artist" },
             ],
@@ -475,8 +475,8 @@
         },
         {
             id: "original_year",
-            label: "Original Year",
-            category: "Album Metadata",
+            label: "text.originalYear",
+            category: "text.metadataAlbum",
             object_types: [
                 { id: "album" }
             ],
@@ -485,19 +485,19 @@
         },
         {
             id: "song_count",
-            label: "Song Count",
-            category: "Metadata",
+            label: "text.songCount",
+            category: "text.metadata",
             object_types: [
-                { id: "album", category: "Album Metadata" },
-                { id: "artist", category: "Artist Metadata" }
+                { id: "album", category: "text.metadataAlbum" },
+                { id: "artist", category: "text.metadataArtist" }
             ],
             operatorType: "number",
             inputType: "number"
         },
         {
             id: "album_count",
-            label: "Album Count",
-            category: "Artist Metadata",
+            label: "text.albumCount",
+            category: "text.metadataArtist",
             object_types: [
                 { id: "artist" }
             ],
@@ -506,8 +506,8 @@
         },
         {
             id: "release_type",
-            label: "Release Type",
-            category: "Album Metadata",
+            label: "text.releaseType",
+            category: "text.metadataAlbum",
             object_types: [
                 { id: "album" }
             ],
@@ -516,8 +516,8 @@
         },
         {
             id: "release_status",
-            label: "Release Status",
-            category: "Album Metadata",
+            label: "text.releaseStatus",
+            category: "text.metadataAlbum",
             object_types: [
                 { id: "album" }
             ],
@@ -526,8 +526,8 @@
         },
         {
             id: "yearformed",
-            label: "Year Formed",
-            category: "Artist Metadata",
+            label: "text.yearFormed",
+            category: "text.metadataArtist",
             object_types: [
                 { id: "artist" }
             ],
@@ -536,8 +536,8 @@
         },
         {
             id: "placeformed",
-            label: "Place Formed",
-            category: "Artist Metadata",
+            label: "text.placeFormed",
+            category: "text.metadataArtist",
             object_types: [
                 { id: "artist" }
             ],
@@ -546,8 +546,8 @@
         },
         {
             id: "barcode",
-            label: "Barcode",
-            category: "Album Metadata",
+            label: "text.barcode",
+            category: "text.metadataAlbum",
             object_types: [
                 { id: "album" }
             ],
@@ -556,8 +556,8 @@
         },
         {
             id: "catalog_number",
-            label: "Catalog Number",
-            category: "Album Metadata",
+            label: "text.catalogNumber",
+            category: "text.metadataAlbum",
             object_types: [
                 { id: "album" }
             ],
@@ -566,8 +566,8 @@
         },
         {
             id: "myrating",
-            label: "My Rating",
-            category: "Rating",
+            label: "text.myRating",
+            category: "text.rating",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -578,8 +578,8 @@
         },
         {
             id: "rating",
-            label: "Rating (average)",
-            category: "Rating",
+            label: "text.ratingAverage",
+            category: "text.rating",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -590,8 +590,8 @@
         },
         {
             id: "songrating",
-            label: "My Rating (song)",
-            category: "Rating",
+            label: "text.myRatingSong",
+            category: "text.rating",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -601,8 +601,8 @@
         },
         {
             id: "albumrating",
-            label: "My Rating (album)",
-            category: "Rating",
+            label: "text.myRatingAlbum",
+            category: "text.rating",
             object_types: [
                 { id: "song" },
                 { id: "artist" }
@@ -612,8 +612,8 @@
         },
         {
             id: "artistrating",
-            label: "My Rating (artist)",
-            category: "Rating",
+            label: "text.myRatingArtist",
+            category: "text.rating",
             object_types: [
                 { id: "song" },
                 { id: "album" }
@@ -623,8 +623,8 @@
         },
         {
             id: "favorite",
-            label: "Favorites",
-            category: "Rating",
+            label: "text.favorites",
+            category: "text.rating",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -635,8 +635,8 @@
         },
         {
             id: "favorite_album",
-            label: "Favorites (Album)",
-            category: "Rating",
+            label: "text.favoritesAlbum",
+            category: "text.rating",
             object_types: [
                 { id: "song" }
             ],
@@ -645,8 +645,8 @@
         },
         {
             id: "favorite_artist",
-            label: "Favorites (Artist)",
-            category: "Rating",
+            label: "text.favoritesArtist",
+            category: "text.rating",
             object_types: [
                 { id: "song" }
             ],
@@ -655,8 +655,8 @@
         },
         {
             id: "played_times",
-            label: "# Played",
-            category: "Plays",
+            label: "text.playedTimes",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -667,8 +667,8 @@
         },
         {
             id: "skipped_times",
-            label: "# Skipped",
-            category: "Plays",
+            label: "text.skippedTimes",
+            category: "text.plays",
             object_types: [
                 { id: "song" }
             ],
@@ -677,8 +677,8 @@
         },
         {
             id: "played_or_skipped_times",
-            label: "# Played or Skipped",
-            category: "Plays",
+            label: "text.playedSkippedTimes",
+            category: "text.plays",
             object_types: [
                 { id: "song" }
             ],
@@ -687,8 +687,8 @@
         },
         {
             id: "play_skip_ratio",
-            label: "Played/Skipped ratio",
-            category: "Plays",
+            label: "text.playedSkippedRatio",
+            category: "text.plays",
             object_types: [
                 { id: "song" }
             ],
@@ -697,8 +697,8 @@
         },
         {
             id: "recent_played",
-            label: "Recently played",
-            category: "Plays",
+            label: "text.recentlyPlayed",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -709,8 +709,8 @@
         },
         {
             id: "last_play",
-            label: "My Last Play",
-            category: "Plays",
+            label: "text.myLastPlay",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -721,8 +721,8 @@
         },
         {
             id: "last_skip",
-            label: "My Last Skip",
-            category: "Plays",
+            label: "text.myLastSkip",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -733,8 +733,8 @@
         },
         {
             id: "last_play_or_skip",
-            label: "My Last Play or Skip",
-            category: "Plays",
+            label: "text.myLastPlaySkip",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -745,8 +745,8 @@
         },
         {
             id: "played",
-            label: "Played",
-            category: "Plays",
+            label: "text.played",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -757,8 +757,8 @@
         },
         {
             id: "myplayed",
-            label: "Played by me",
-            category: "Plays",
+            label: "text.playedByMe",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -769,8 +769,8 @@
         },
         {
             id: "myplayedalbum",
-            label: "Played by Me (Album)",
-            category: "Plays",
+            label: "text.playedByMeAlbum",
+            category: "text.plays",
             object_types: [
                 { id: "song" }
             ],
@@ -779,8 +779,8 @@
         },
         {
             id: "myplayedartist",
-            label: "Played by Me (Artist)",
-            category: "Plays",
+            label: "text.playedByMeArtist",
+            category: "text.plays",
             object_types: [
                 { id: "song" },
                 { id: "album" }
@@ -790,8 +790,8 @@
         },
         {
             id: "other_user",
-            label: "Another User",
-            category: "Rating",
+            label: "text.anotherUser",
+            category: "text.rating",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -802,8 +802,8 @@
         },
         {
             id: "catalog",
-            label: "Catalog",
-            category: "File Data",
+            label: "text.catalog",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -814,8 +814,8 @@
         },
         {
             id: "other_user_album",
-            label: "Another User (Album)",
-            category: "Rating",
+            label: "text.anotherUserAlbum",
+            category: "text.rating",
             object_types: [
                 { id: "song" }
             ],
@@ -824,8 +824,8 @@
         },
         {
             id: "other_user_artist",
-            label: "Another User (Artist)",
-            category: "Rating",
+            label: "text.anotherUserArtist",
+            category: "text.rating",
             object_types: [
                 { id: "song" }
             ],
@@ -834,8 +834,8 @@
         },
         {
             id: "playlist",
-            label: "Playlist",
-            category: "Playlist",
+            label: "text.playlist",
+            category: "text.playlist",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -846,8 +846,8 @@
         },
         {
             id: "smartplaylist",
-            label: "Smartlist",
-            category: "Playlist",
+            label: "text.smartlist",
+            category: "text.playlist",
             object_types: [
                 { id: "song" },
                 { id: "album" }
@@ -857,8 +857,8 @@
         },
         {
             id: "playlist_name",
-            label: "Playlist Name",
-            category: "Playlist",
+            label: "text.playlistName",
+            category: "text.playlist",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -869,8 +869,8 @@
         },
         {
             id: "time",
-            label: "Length (in minutes)",
-            category: "File Data",
+            label: "text.lengthInMinutes",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -881,8 +881,8 @@
         },
         {
             id: "added",
-            label: "Added",
-            category: "File Data",
+            label: "text.added",
+            category: "text.fileData",
             object_types: [
                 { id: "song" }
             ],
@@ -891,8 +891,8 @@
         },
         {
             id: "updated",
-            label: "Updated",
-            category: "File Data",
+            label: "text.updated",
+            category: "text.fileData",
             object_types: [
                 { id: "song" }
             ],
@@ -901,8 +901,8 @@
         },
         {
             id: "recent_added",
-            label: "Recently added",
-            category: "File Data",
+            label: "text.recentlyAdded",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "album" }
@@ -912,8 +912,8 @@
         },
         {
             id: "recent_updated",
-            label: "Recently updated",
-            category: "File Data",
+            label: "text.recentlyUpdated",
+            category: "text.fileData",
             object_types: [
                 { id: "song" }
             ],
@@ -922,8 +922,8 @@
         },
         {
             id: "mbid",
-            label: "MusicBrainz ID",
-            category: "MusicBrainz",
+            label: "text.musicbrainzID",
+            category: "text.musicbrainz",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -934,8 +934,8 @@
         },
         {
             id: "mbid_song",
-            label: "MusicBrainz ID (Song)",
-            category: "MusicBrainz",
+            label: "text.musicbrainzIDSong",
+            category: "text.musicbrainz",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -945,8 +945,8 @@
         },
         {
             id: "mbid_album",
-            label: "MusicBrainz ID (Album)",
-            category: "MusicBrainz",
+            label: "text.musicbrainzIDAlbum",
+            category: "text.musicbrainz",
             object_types: [
                 { id: "song" },
                 { id: "artist" }
@@ -956,8 +956,8 @@
         },
         {
             id: "mbid_artist",
-            label: "MusicBrainz ID (Artist)",
-            category: "MusicBrainz",
+            label: "text.musicbrainzIDArtist",
+            category: "text.musicbrainz",
             object_types: [
                 { id: "song" },
                 { id: "album" }
@@ -967,8 +967,8 @@
         },
         {
             id: "possible_duplicate",
-            label: "Possible Duplicate",
-            category: "File Data",
+            label: "text.possibleDuplicate",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "album" },
@@ -979,8 +979,8 @@
         },
         {
             id: "possible_duplicate_album",
-            label: "Possible Duplicate Album",
-            category: "File Data",
+            label: "text.possibleDuplicateAlbum",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "artist" }
@@ -990,8 +990,8 @@
         },
         {
             id: "duplicate_tracks",
-            label: "Duplicate Album Tracks",
-            category: "File Data",
+            label: "text.duplicateAlbumTracks",
+            category: "text.fileData",
             object_types: [
                 { id: "song" },
                 { id: "album" }
@@ -1001,8 +1001,8 @@
         },
         {
             id: "has_image",
-            label: "Local Image",
-            category: "File Data",
+            label: "text.localImage",
+            category: "text.fileData",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -1012,8 +1012,8 @@
         },
         {
             id: "image_width",
-            label: "Image Width",
-            category: "File Data",
+            label: "text.imageWidth",
+            category: "text.fileData",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -1023,8 +1023,8 @@
         },
         {
             id: "image_height",
-            label: "Image Height",
-            category: "File Data",
+            label: "text.imageHeight",
+            category: "text.fileData",
             object_types: [
                 { id: "album" },
                 { id: "artist" }
@@ -1091,14 +1091,14 @@
                 <select bind:value={row.field} on:change={(e) => { row = setField(row, e) }}>
                     {#each [...groupedFieldsToShow] as [key, value], i}
                         {#if key.length > 0}
-                            <optgroup label="{key}">
+                            <optgroup label="{$_(key)}">
                                 {#each value as field}
-                                    <option value="{field.id}">{field.label}</option>
+                                    <option value="{field.id}">{$_(field.label)}</option>
                                 {/each}
                             </optgroup>
                         {:else}
                             {#each value as field}
-                                <option value="{field.id}">{field.label}</option>
+                                <option value="{field.id}">{$_(field.label)}</option>
                             {/each}
                         {/if}
                     {/each}

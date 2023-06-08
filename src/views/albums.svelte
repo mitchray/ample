@@ -10,10 +10,10 @@
 
     // List of tab items with labels and values.
     let tabItems = [
-        { label: "Newest",  value: "newest" },
-        { label: "Random",  value: "random" },
-        { label: "By Year", value: "year" },
-        { label: "All",     value: "all" },
+        { label: $_('text.newest'),  value: "newest" },
+        { label: $_('text.random'),  value: "random" },
+        { label: $_('text.byYear'), value: "year" },
+        { label: $_('text.all'),     value: "all" },
     ];
 
     let currentTab;

@@ -422,7 +422,7 @@
 
         {#if hasMusicbrainz}
             {#if loadCount < 1}
-                <button on:click={handleGo} class="submit button button--primary">Begin comparison</button>
+                <button on:click={handleGo} class="submit button button--primary">{$_('text.beginComparison')}</button>
             {/if}
         {:else}
             <p>{$_('text.mbArtistMissingMBID')}</p>

@@ -42,7 +42,7 @@
             }}
         />
     {:else}
-        <p>Loading genres</p>
+        <p>{$_('text.loading')}</p>
     {/if}
 </div>
 

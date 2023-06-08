@@ -36,7 +36,7 @@
                 </div>
             {/if}
         {:else}
-            <div>No upcoming songs</div>
+            <div>{$_('text.queueNoUpcomingSongs')}</div>
             <br>
         {/if}
     </div>

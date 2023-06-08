@@ -114,7 +114,7 @@
     </div>
 
     <div class="new-panel-footer">
-        <button class="button button--tertiary" on:click={handleCancel}>Cancel</button>
+        <button class="button button--tertiary" on:click={handleCancel}>{$_('text.cancel')}</button>
 
         <button
             class="submit button button--primary"

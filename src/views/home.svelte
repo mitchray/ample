@@ -12,11 +12,11 @@
     <title>{title}</title>
 </svelte:head>
 
-<CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="Newest Albums" />
+<CardList type="album" dataProvider={"newestAlbums"} limit=12 containerType="scroll" heading="{$_('text.newestAlbums')}" />
 
-<CardList type="artist_mix" dataProvider={"artistMixes"} limit=5 refresh=true containerType="scroll" heading="Artist Mixes" />
+<CardList type="artist_mix" dataProvider={"artistMixes"} limit=5 refresh=true containerType="scroll" heading="{$_('text.artistMixes')}" />
 
-<CardList type="recent_songs" dataProvider={"recentSongs"} limit=10 containerType="scroll" heading="Recently Played" />
+<CardList type="recent_songs" dataProvider={"recentSongs"} limit=10 containerType="scroll" heading="{$_('text.recentlyPlayed')}" />
 
-<CardList type="album" dataProvider={"randomAlbums"} limit=12 refresh=true containerType="scroll" heading="Random Albums" />
+<CardList type="album" dataProvider={"randomAlbums"} limit=12 refresh=true containerType="scroll" heading="{$_('text.randomAlbums')}" />
 

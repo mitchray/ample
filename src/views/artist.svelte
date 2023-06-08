@@ -41,11 +41,11 @@
 
     // List of tab items with labels and values.
     let tabItems = [
-        { label: "Releases",            value: "releases",    icon: SVGAlbum },
-        { label: "Popular Songs",       value: "popular",     icon: SVGPopular },
-        { label: "All Songs",           value: "all",         icon: SVGSongs },
-        { label: "Similar Artists",     value: "similar",     icon: SVGSimilar },
-        { label: "MusicBrainz Compare", value: "musicbrainz" },
+        { label: $_('text.releases'),           value: "releases",    icon: SVGAlbum },
+        { label: $_('text.popularSongs'),       value: "popular",     icon: SVGPopular },
+        { label: $_('text.allSongs'),           value: "all",         icon: SVGSongs },
+        { label: $_('text.similarArtists'),     value: "similar",     icon: SVGSimilar },
+        { label: $_('text.musicbrainzCompare'), value: "musicbrainz" },
     ];
 
     // Current active tab
@@ -106,26 +106,26 @@
                         {#if artist.albumcount > 0}
                             <div class="entry">
                                 <span class="value">{artist.albumcount}</span>
-                                <span class="field">{artist.albumcount !== 1 ? 'Releases' : 'Release'}</span>
+                                <span class="field">{$_('text.releasesPlural', { values: { count: parseInt(artist.albumcount) } })}</span>
                             </div>
                         {/if}
 
                         {#if artist.appearanceCount > 0}
                             <div class="entry">
                                 <span class="value">{artist.appearanceCount}</span>
-                                <span class="field">{artist.appearanceCount !== 1 ? 'Appearances' : 'Appearance'}</span>
+                                <span class="field">{$_('text.appearancesPlural', { values: { count: parseInt(artist.appearanceCount) } })}</span>
                             </div>
                         {/if}
 
                         <div class="entry">
                             <span class="value">{artist.songcount}</span>
-                            <span class="field">{artist.songcount !== 1 ? 'Songs' : 'Song'}</span>
+                            <span class="field">{$_('text.songsPlural', { values: { count: parseInt(artist.songcount) } })}</span>
                         </div>
 
                         {#if artist.time > 0}
                             <div class="entry">
                                 <span class="value">{formatTimeToReadable(artist.time)}</span>
-                                <span class="field">Total</span>
+                                <span class="field">{$_('text.total')}</span>
                             </div>
                         {/if}
 
@@ -177,18 +177,14 @@
                                 class="album-view-toggle button button--regular"
                                 on:click={toggleShowExpanded}
                             >
-                                View {$ShowExpandedAlbums ? 'condensed' : 'expanded'}
+                                {$ShowExpandedAlbums ? $_('text.viewCondensed') : $_('text.viewExpanded')}
                             </button>
 
                             <button
                                 class="group-releases-toggle button button--regular"
                                 on:click={toggleGroupByReleaseType}
                             >
-                                {#if $GroupAlbumsByReleaseType}
-                                    Show chronologically
-                                {:else}
-                                    Group by release type
-                                {/if}
+                                {$GroupAlbumsByReleaseType ? $_('text.showChronologically') : $_('text.showGroupedReleaseType')}
                             </button>
 
                             <ArtistReleases artistID={artist.id} />

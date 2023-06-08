@@ -11,8 +11,8 @@
 
     // List of tab items with labels and values.
     let tabItems = [
-        { label: "Random", value: "random" },
-        { label: "All",    value: "all" },
+        { label: $_('text.random'), value: "random" },
+        { label: $_('text.all'),    value: "all" },
     ];
 
     let currentTab;

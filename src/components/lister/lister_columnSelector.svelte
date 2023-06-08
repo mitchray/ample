@@ -49,7 +49,7 @@
                     <div>
                         <label class="toggle">
                             <input type="checkbox" bind:checked={col.show} on:change={toggleSelected} />
-                            {col.label}
+                            {$_(col.label)}
                         </label>
                     </div>
                 {/if}

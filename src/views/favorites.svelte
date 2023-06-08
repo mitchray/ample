@@ -20,9 +20,9 @@
     let currentTab;
 
     let tabItems = [
-        { label: "Artists", value: "artists", icon: SVGArtist },
-        { label: "Albums",  value: "albums",  icon: SVGAlbum },
-        { label: "Songs",   value: "songs",   icon: SVGSong },
+        { label: $_('text.artists'), value: "artists", icon: SVGArtist },
+        { label: $_('text.albums'),  value: "albums",  icon: SVGAlbum },
+        { label: $_('text.songs'),   value: "songs",   icon: SVGSong },
     ];
 </script>
 

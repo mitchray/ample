@@ -89,7 +89,7 @@
             </li>
         </ul>
 
-        <h3 class="panel-title">Library</h3>
+        <h3 class="panel-title">{$_('text.library')}</h3>
         <ul>
             <li class:current={basePath === 'artists'}
                 data-tooltip-disabled={$SidebarIsOpen}
@@ -147,7 +147,7 @@
             </li>
         </ul>
 
-        <h3 class="panel-title">Insights</h3>
+        <h3 class="panel-title">{$_('text.insights')}</h3>
         <ul>
             <li class:current={basePath === 'recent'}
                 data-tooltip-disabled={$SidebarIsOpen}

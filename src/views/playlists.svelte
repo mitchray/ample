@@ -28,7 +28,7 @@
     <title>{title}</title>
 </svelte:head>
 
-<button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="new-playlist-button button button--primary">New Playlist</button>
+<button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="new-playlist-button button button--primary">{$_('text.playlistNew')}</button>
 
 {#if showPlaylistCreation}
     <Menu anchor="bottom" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
@@ -51,7 +51,7 @@
                 }}
             />
         {:else}
-            <p>No playlists found</p>
+            <p>{$_('text.noItemsFound')}</p>
         {/if}
     {/if}
 </div>

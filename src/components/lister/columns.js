@@ -42,7 +42,7 @@ const columns = [
     },
     {
         id: "name",
-        label: "Name",
+        label: "text.more",
         widthPreset: "large",
         sortable: true,
         sortBy: "name",
@@ -60,7 +60,7 @@ const columns = [
     },
     {
         id: "artist",
-        label: "Artist",
+        label: "text.artist",
         widthPreset: "medium",
         sortable: true,
         sortBy: "artist.name",
@@ -74,7 +74,7 @@ const columns = [
     },
     {
         id: "album",
-        label: "Album",
+        label: "text.album",
         widthPreset: "medium",
         sortable: true,
         sortBy: "album.name",
@@ -87,7 +87,7 @@ const columns = [
     },
     {
         id: "date",
-        label: "Date",
+        label: "text.date",
         fixedSize: true,
         sortable: true,
         sortBy: "year",
@@ -101,7 +101,7 @@ const columns = [
     },
     {
         id: "items",
-        label: "Songs",
+        label: "text.songs",
         fixedSize: true,
         sortable: true,
         sortBy: "items",
@@ -113,7 +113,7 @@ const columns = [
     },
     {
         id: "songCount",
-        label: "Songs",
+        label: "text.songs",
         fixedSize: true,
         sortable: true,
         sortBy: "songcount",
@@ -126,7 +126,7 @@ const columns = [
     },
     {
         id: "albumCount",
-        label: "Releases",
+        label: "text.releases",
         fixedSize: true,
         sortable: true,
         sortBy: "albumcount",
@@ -138,7 +138,7 @@ const columns = [
     },
     {
         id: "length",
-        label: "Length",
+        label: "text.length",
         fixedSize: true,
         sortable: true,
         sortBy: "time",
@@ -153,7 +153,7 @@ const columns = [
     },
     {
         id: "type",
-        label: "Type",
+        label: "text.type",
         widthPreset: "small",
         sortable: true,
         sortBy: "type",
@@ -165,7 +165,7 @@ const columns = [
     },
     {
         id: "genreArtistsCount",
-        label: "Artists",
+        label: "text.artists",
         fixedSize: true,
         sortable: true,
         sortBy: "artists",
@@ -177,7 +177,7 @@ const columns = [
     },
     {
         id: "genreAlbumsCount",
-        label: "Albums",
+        label: "text.albums",
         fixedSize: true,
         sortable: true,
         sortBy: "albums",
@@ -189,7 +189,7 @@ const columns = [
     },
     {
         id: "genreSongsCount",
-        label: "Songs",
+        label: "text.songs",
         fixedSize: true,
         sortable: true,
         sortBy: "songs",
@@ -201,7 +201,7 @@ const columns = [
     },
     {
         id: "genres",
-        label: "Genres",
+        label: "text.genres",
         widthPreset: "medium",
         type: "string",
         canToggle: true,
@@ -212,7 +212,7 @@ const columns = [
     },
     {
         id: "owner",
-        label: "Owner",
+        label: "text.owner",
         widthPreset: "small",
         sortable: true,
         sortBy: "owner",
@@ -225,7 +225,7 @@ const columns = [
     },
     {
         id: "privacy",
-        label: "Privacy",
+        label: "text.privacy",
         widthPreset: "small",
         sortable: true,
         sortBy: "privacy",
@@ -238,7 +238,7 @@ const columns = [
     },
     {
         id: "playCount",
-        label: "Plays",
+        label: "text.plays",
         fixedSize: true,
         sortable: true,
         sortBy: "playcount",
@@ -251,7 +251,7 @@ const columns = [
     },
     {
         id: "quality",
-        label: "Quality",
+        label: "text.quality",
         fixedSize: true,
         type: "string",
         canToggle: true,
@@ -262,7 +262,7 @@ const columns = [
     },
     {
         id: "size",
-        label: "Size",
+        label: "text.size",
         fixedSize: true,
         type: "number",
         sortable: true,
@@ -275,7 +275,7 @@ const columns = [
     },
     {
         id: "rating",
-        label: "Rating",
+        label: "text.rating",
         widthPreset: "rating",
         fixedSize: true,
         sortable: true,

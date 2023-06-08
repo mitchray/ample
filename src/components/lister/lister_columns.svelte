@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount, getContext, tick } from 'svelte';
 
     import { columns } from './columns.js';
@@ -261,9 +262,10 @@
                         applySort(col.sortBy);
                     }
                 }}
+                title="{$_(col.label)}"
                 data-reverse={col.reverse}
             >
-                {col.label}
+                {$_(col.label)}
             </span>
         {/if}
 
@@ -305,6 +307,9 @@
         position: relative;
         user-select: none;
         padding-right: 5px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     :global(.lister-container input[type="checkbox"]) {
