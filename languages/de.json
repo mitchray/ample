@@ -321,5 +321,9 @@
   "text.topRated": "Bestbewertet",
   "text.trending": "Im Trend",
   "text.unrated": "Ohne Bewertung",
-  "text.tools": "Werkzeug"
+  "text.tools": "Werkzeug",
+  "text.disk": "Scheibe",
+  "text.language": "Sprache",
+  "text.license": "Lizenz",
+  "text.publisher": "Herausgeber"
 }
