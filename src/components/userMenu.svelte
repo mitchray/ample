@@ -2,6 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { logout } from "../logic/user";
     import ThemeToggle from '../components/themeToggle.svelte';
+    import LanguageSelector from '../components/languageSelector.svelte';
     import Menu from '../components/menu.svelte';
     import SVGLogout from "/src/images/logout.svg";
     import SVGProfile from "/src/images/account_circle.svg";
@@ -34,6 +35,8 @@
             </button>
 
             <ThemeToggle />
+
+            <LanguageSelector />
         </div>
     </Menu>
 {/if}

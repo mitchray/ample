@@ -7,6 +7,6 @@ export function setupI18n() {
 
     init({
         fallbackLocale: 'en',
-        initialLocale: getLocaleFromNavigator(),
+        initialLocale: JSON.parse(localStorage.getItem('AmpleLanguage')) || getLocaleFromNavigator(),
     });
 }
