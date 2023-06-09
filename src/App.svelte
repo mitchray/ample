@@ -5,21 +5,6 @@
     import { onMount } from 'svelte';
     import { Router, Route } from "svelte-routing";
 
-    import { addMessages, register, init, getLocaleFromNavigator } from 'svelte-i18n';
-
-    import en from '/languages/en.json';
-    import enAU from '/languages/en-AU.json';
-    import de from '/languages/de.json';
-
-    addMessages('en', en);
-    addMessages('en-AU', enAU);
-    addMessages('de', de);
-
-    init({
-        fallbackLocale: 'en',
-        initialLocale: getLocaleFromNavigator(),
-    });
-
     import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
@@ -27,6 +12,8 @@
 
     import { extendSession, validateSession } from './logic/user';
     import { getServerVersion } from './logic/server';
+    import { isLoading as i18nIsLoading } from 'svelte-i18n'
+    import { setupI18n } from "./logic/i18n.js";
 
     // Use custom string as dnd-action ID
     import { overrideItemIdKeyNameBeforeInitialisingDndZones } from "svelte-dnd-action";
@@ -47,6 +34,8 @@
     import LoginPage from './views/login.svelte';
     import NotFound404Page from './views/notFound404.svelte';
     import HomePage from './views/home.svelte';
+
+    setupI18n();
 
     window.setInterval(function(){
         extendSession();
@@ -88,62 +77,64 @@
 <ThemeHandler />
 
 <Router basepath="{$serverPathname}/ample">
-    {#if $isLoggedIn === null && $userToken === null}
-        <SiteLoading/>
-    {/if}
+    {#if !$i18nIsLoading}
+        {#if $isLoggedIn === null && $userToken === null}
+            <SiteLoading/>
+        {/if}
 
-    {#if $isLoggedIn === false}
-        <LoginPage/>
-    {/if}
+        {#if $isLoggedIn === false}
+            <LoginPage/>
+        {/if}
 
-    {#if $isLoggedIn}
-        <ArtistsSync />
-        <Header/>
-        <div class="site-inner" bind:this={$SiteInnerBind}>
-            <Sidebar/>
-            <div class="site-content" bind:this={$SiteContentBind}>
-                <div class="site-content-inner">
-                    {#key $PageLoadedKey || 0}
-                        <Route path="test"              component={() => import('./views/test.svelte')}/>
-                        <Route path="search"            component={() => import('./views/advancedSearch.svelte')}/>
-                        <Route path="multi-rater"       component={() => import('./views/multiRater.svelte')}/>
-                        <Route path="versions/:songTitle/:artistName" component={() => import('./views/songVersions.svelte')}/>
-                        <Route path="artists/:id"       component={() => import('./views/artist.svelte')}/>
-                        <Route path="artists"           component={() => import('./views/artists.svelte')}/>
-                        <Route path="album-artists"     component={() => import('./views/albumArtists.svelte')}/>
-                        <Route path="albums/:id"        component={() => import('./views/album.svelte')}/>
-                        <Route path="albums/year/:year" component={() => import('./views/albumsByYear.svelte')}/>
-                        <Route path="albums/year"       component={() => import('./views/albumsByYear.svelte')}/>
-                        <Route path="albums"            component={() => import('./views/albums.svelte')}/>
-                        <Route path="song/:id"          component={() => import('./views/song.svelte')}/>
-                        <Route path="playlists/:id"     component={() => import('./views/playlist.svelte')}/>
-                        <Route path="playlists"         component={() => import('./views/playlists.svelte')}/>
-                        <Route path="smartlists/:id"    component={() => import('./views/playlist.svelte')}/>
-                        <Route path="smartlists"        component={() => import('./views/smartlists.svelte')}/>
-                        <Route path="mix/:mixType/:id"  component={() => import('./views/playlist.svelte')}/>
-                        <Route path="genres/:id"        component={() => import('./views/genre.svelte')}/>
-                        <Route path="genres"            component={() => import('./views/genres.svelte')}/>
-                        <Route path="newest"            component={() => import('./views/newest.svelte')}/>
-                        <Route path="recent"            component={() => import('./views/recent.svelte')}/>
-                        <Route path="favorites"         component={() => import('./views/favorites.svelte')}/>
-                        <Route path="trending"          component={() => import('./views/trending.svelte')}/>
-                        <Route path="top"               component={() => import('./views/topRated.svelte')}/>
-                        <Route path="forgotten"         component={() => import('./views/forgotten.svelte')}/>
-                        <Route path="random"            component={() => import('./views/random.svelte')}/>
-                        <Route path="unrated"           component={() => import('./views/unrated.svelte')}/>
-                        <Route path=""                  component={HomePage}/>
-                        <Route path="/"                 component={HomePage}/>
-                        <Route path="*"                 component={NotFound404Page}/>
-                    {/key}
+        {#if $isLoggedIn}
+            <ArtistsSync />
+            <Header/>
+            <div class="site-inner" bind:this={$SiteInnerBind}>
+                <Sidebar/>
+                <div class="site-content" bind:this={$SiteContentBind}>
+                    <div class="site-content-inner">
+                        {#key $PageLoadedKey || 0}
+                            <Route path="test"              component={() => import('./views/test.svelte')}/>
+                            <Route path="search"            component={() => import('./views/advancedSearch.svelte')}/>
+                            <Route path="multi-rater"       component={() => import('./views/multiRater.svelte')}/>
+                            <Route path="versions/:songTitle/:artistName" component={() => import('./views/songVersions.svelte')}/>
+                            <Route path="artists/:id"       component={() => import('./views/artist.svelte')}/>
+                            <Route path="artists"           component={() => import('./views/artists.svelte')}/>
+                            <Route path="album-artists"     component={() => import('./views/albumArtists.svelte')}/>
+                            <Route path="albums/:id"        component={() => import('./views/album.svelte')}/>
+                            <Route path="albums/year/:year" component={() => import('./views/albumsByYear.svelte')}/>
+                            <Route path="albums/year"       component={() => import('./views/albumsByYear.svelte')}/>
+                            <Route path="albums"            component={() => import('./views/albums.svelte')}/>
+                            <Route path="song/:id"          component={() => import('./views/song.svelte')}/>
+                            <Route path="playlists/:id"     component={() => import('./views/playlist.svelte')}/>
+                            <Route path="playlists"         component={() => import('./views/playlists.svelte')}/>
+                            <Route path="smartlists/:id"    component={() => import('./views/playlist.svelte')}/>
+                            <Route path="smartlists"        component={() => import('./views/smartlists.svelte')}/>
+                            <Route path="mix/:mixType/:id"  component={() => import('./views/playlist.svelte')}/>
+                            <Route path="genres/:id"        component={() => import('./views/genre.svelte')}/>
+                            <Route path="genres"            component={() => import('./views/genres.svelte')}/>
+                            <Route path="newest"            component={() => import('./views/newest.svelte')}/>
+                            <Route path="recent"            component={() => import('./views/recent.svelte')}/>
+                            <Route path="favorites"         component={() => import('./views/favorites.svelte')}/>
+                            <Route path="trending"          component={() => import('./views/trending.svelte')}/>
+                            <Route path="top"               component={() => import('./views/topRated.svelte')}/>
+                            <Route path="forgotten"         component={() => import('./views/forgotten.svelte')}/>
+                            <Route path="random"            component={() => import('./views/random.svelte')}/>
+                            <Route path="unrated"           component={() => import('./views/unrated.svelte')}/>
+                            <Route path=""                  component={HomePage}/>
+                            <Route path="/"                 component={HomePage}/>
+                            <Route path="*"                 component={NotFound404Page}/>
+                        {/key}
+                    </div>
                 </div>
+                <Queue/>
             </div>
-            <Queue/>
-        </div>
-        <Player/>
-        <Fullscreen/>
-        <Lyrics/>
-        <Notifications/>
-        <Alerts/>
+            <Player/>
+            <Fullscreen/>
+            <Lyrics/>
+            <Notifications/>
+            <Alerts/>
+        {/if}
     {/if}
 </Router>
 
