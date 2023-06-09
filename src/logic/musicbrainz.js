@@ -19,7 +19,7 @@ class MusicBrainz {
      * @returns {boolean}
      */
     hasMBID(data) {
-        return this.regex.test(data.mbid) && data.name !== "Various Artists";
+        return data && this.regex.test(data.mbid) && data.name !== "Various Artists";
     }
 }
 
