@@ -115,6 +115,6 @@
     }
 
     .art {
-        aspect-ratio: 1 / 1;
+        grid-column: span 2;
     }
 </style>
