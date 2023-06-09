@@ -5,6 +5,7 @@
 
 ### Added
 - Multi-artist support
+- Translated UI (English-US, English-AU, German available)
 - Album page has Previous/Next releases underneath songs
 - Fetch album disk subtitles from MusicBrainz
 - Option to view artist releases chronologically
@@ -21,7 +22,7 @@
 - Rebuilt "Recently Played" on main page; handles song updates much better now
 - Simplified Sidebar to only have full/collapsed modes
 - Queue actions moved to a menu
-- Smartlist Autoplay now has a 10 second grace period before adding songs to give user time
+- Smartlist Autoplay now has a 10 seconds grace period before adding songs to give user time
 - CSS container queries polyfill removed as browser support is stable now
 - Tabs will remember the last active tab, e.g. being on Similar Artists then going to a new artist will keep you on the Similar Artists tab
 - Rebuilt all menus and panels to use 'floating-ui'; they now scroll with the page
