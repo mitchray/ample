@@ -325,5 +325,20 @@
   "text.disk": "Scheibe",
   "text.language": "Sprache",
   "text.license": "Lizenz",
-  "text.publisher": "Herausgeber"
+  "text.publisher": "Herausgeber",
+  "text.notificationAlternateVersions": "{versionCount} alternative {versionCount, plural, =1 {version} other {versions}} gefunden",
+  "text.artUpdateDone": "Aktualisierte Kunst",
+  "text.artUpdateFail": "Kunst konnte nicht aktualisiert werden",
+  "text.artUpdateStart": "Kunstaktualisierung wird gestartet",
+  "text.autoplay": "Automatisches Abspielen",
+  "text.autoplayAddedItems": "{n} Elemente zur Warteschlange von {playlist} hinzugefügt",
+  "text.mix": "Mischen",
+  "text.notificationGainTagsMissing": "Fehlende Tags zur Lautstärkeverstärkung",
+  "text.notificationRatingMissing": "Fehlende Songbewertung",
+  "text.notificationLyricsMissing": "Fehlende Liedtexte",
+  "text.notificationLyricsNotTimestamped": "Liedtext ohne Zeitstempel",
+  "text.skippedItemsBelow": "{itemCount, plural, =1 {# item} other {# items}} unter {starCount, plural, =1 {# star} other {# stars}} übersprungen",
+  "text.tagUpdateDone": "Von Tags aktualisiert",
+  "text.tagUpdateFail": "Aktualisierung von Tags fehlgeschlagen",
+  "text.tagUpdateStart": "Aktualisierung über Tags starten"
 }
