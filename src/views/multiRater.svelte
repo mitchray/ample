@@ -17,7 +17,7 @@
         rule_1_input: "1"
     };
 
-    let title = $_('title.multiRater');
+    let title = $_('text.multiRater');
     $PageTitle = title;
 </script>
 

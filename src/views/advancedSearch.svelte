@@ -9,7 +9,7 @@
     let results = [];
     let type;
 
-    let title = $_('title.advancedSearch');
+    let title = $_('text.advancedSearch');
     $PageTitle = title;
 </script>
 

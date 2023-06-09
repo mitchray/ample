@@ -97,7 +97,7 @@
     <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible >
         <div class="new-panel-container">
             <div class="new-panel-header">
-                <h4 class="title panel-title">Smartlist AutoPlay</h4>
+                <h4 class="title panel-title">{$_('text.smartlistAutoplay')}</h4>
                 <input type="checkbox" class="switch" on:change={toggleEnabled} bind:checked={$AutoPlayEnabled} />
             </div>
 

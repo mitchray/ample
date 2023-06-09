@@ -5,7 +5,7 @@
 
     export let year;
 
-    let title = $_('title.albumsByYear');
+    let title = $_('text.albumsByYear');
     $PageTitle = title;
 </script>
 

@@ -24,7 +24,7 @@
         loadData();
     }
 
-    $PageTitle = $_('title.album');
+    $PageTitle = $_('text.album');
 
     let album;
 
@@ -112,7 +112,7 @@
                         <div class="meta">
                             <div class="entry">
                                 <span class="value"><Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link></span>
-                                <span class="field">Year</span>
+                                <span class="field">{$_('text.year')}</span>
                             </div>
 
                             {#if album.diskcount > 1}
@@ -129,7 +129,7 @@
 
                             <div class="entry">
                                 <span class="value">{formatTotalTime(album.time)}</span>
-                                <span class="field">Length</span>
+                                <span class="field">{$_('text.length')}</span>
                             </div>
                         </div>
 

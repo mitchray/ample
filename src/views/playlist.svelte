@@ -28,7 +28,7 @@
     $: songs = songs;
     $: playlist = playlist;
 
-    let title = $_('title.playlist');
+    let title = $_('text.playlist');
     $PageTitle = title;
 
     async function handleEditPlaylist() {
@@ -86,11 +86,11 @@
                 <div class="info">
                     <div class="type">
                         {#if playlistType === "smartlist"}
-                            <SVGSmartlist class="inline" />&nbsp;Smartlist
+                            <SVGSmartlist class="inline" />&nbsp;{$_('text.smartlist')}
                         {:else if playlistType === "mix"}
-                            <SVGRadio class="inline" />&nbsp;Mix
+                            <SVGRadio class="inline" />&nbsp;{$_('text.mix')}
                         {:else}
-                            <SVGPlaylist class="inline" />&nbsp;Playlist
+                            <SVGPlaylist class="inline" />&nbsp;{$_('text.playlist')}
                         {/if}
                     </div>
 
@@ -140,7 +140,7 @@
         </Menu>
     {/if}
 {:else}
-    <p>Loading playlist</p>
+    <p>{$_('text.loading')}</p>
 {/if}
 
 <style>

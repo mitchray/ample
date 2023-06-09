@@ -25,7 +25,7 @@
 </script>
 
 {#if loading}
-    <p>Loading releases</p>
+    <p>{$_('text.loading')}</p>
 {:else}
     {#if $GroupAlbumsByReleaseType && groupedAlbums}
         {#each [...groupedAlbums] as [key, value], i}

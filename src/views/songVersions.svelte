@@ -10,7 +10,7 @@
     let loading;
     let results = [];
 
-    let title = $_('title.songVersions');
+    let title = $_('text.songVersions');
     $PageTitle = title;
 
     $: songTitle = songTitle;

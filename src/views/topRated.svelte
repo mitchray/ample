@@ -20,7 +20,7 @@
         { label: $_('text.songs'),   value: "songs",   icon: SVGSong },
     ];
 
-    let title = $_('title.top');
+    let title = $_('text.topRated');
     $PageTitle = title;
 </script>
 
@@ -51,10 +51,10 @@
                                 }}
                             />
                         {:else}
-                            <p>No artists found</p>
+                            <p>{$_('text.noItemsFound')}</p>
                         {/if}
                     {:catch error}
-                        <p>An error occurred.</p>
+                        <p>{$_('text.errorGeneric')}</p>
                     {/await}
                 </Tab>
             {/if}
@@ -79,10 +79,10 @@
                                 }}
                             />
                         {:else}
-                            <p>No albums found</p>
+                            <p>{$_('text.noItemsFound')}</p>
                         {/if}
                     {:catch error}
-                        <p>An error occurred.</p>
+                        <p>{$_('text.errorGeneric')}</p>
                     {/await}
                 </Tab>
             {/if}
@@ -107,10 +107,10 @@
                                 }}
                             />
                         {:else}
-                            <p>No songs found</p>
+                            <p>{$_('text.noItemsFound')}</p>
                         {/if}
                     {:catch error}
-                        <p>An error occurred.</p>
+                        <p>{$_('text.errorGeneric')}</p>
                     {/await}
                 </Tab>
             {/if}

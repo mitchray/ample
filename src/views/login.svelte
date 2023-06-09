@@ -33,7 +33,7 @@
         { label: "API key",  value: 2 }
     ];
 
-    let title = $_('title.login');
+    let title = $_('text.login');
     $PageTitle = title;
 
     // Current active tab
@@ -65,7 +65,7 @@
 
     <div class="form" in:fade out:fade>
         {#if versionCheck && versionCheck < 6}
-            <p class="server-message badge badge--danger" in:fade>This version of Ample only supports Ampache v6 and up. Version {$serverVersion} detected.</p>
+            <p class="server-message badge badge--danger" in:fade>{$_('versionWarning', {values: { serverVersion: $serverVersion }})}</p>
         {/if}
 
         <div class="logo">
@@ -76,28 +76,28 @@
             <Tab id={1} bind:activeTabValue={currentTab} class="username login-tab">
                 <form on:submit|preventDefault={handleSubmitUsername}>
                     <p>
-                        <label>Ampache username
+                        <label>{$_('text.username')}
                             <input type="text" autofocus bind:value={username} />
                         </label>
                     </p>
                     <p>
-                        <label>Ampache password
+                        <label>{$_('text.password')}
                             <input type="password" bind:value={password} />
                         </label>
                     </p>
-                    <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
+                    <button class="button button--primary" type="submit"><SVGLogin /> {$_('text.login')}</button>
                 </form>
             </Tab>
 
             <Tab id={2} bind:activeTabValue={currentTab} class="api login-tab">
                 <form on:submit|preventDefault={handleSubmitAPI}>
                     <p>
-                        <label>API key
+                        <label>{$_('text.apiKey')}
                             <input type="text" bind:value={apiKey} />
                         </label>
                     </p>
 
-                    <button class="button button--primary" type="submit"><SVGLogin /> Login</button>
+                    <button class="button button--primary" type="submit"><SVGLogin /> {$_('text.login')}</button>
                 </form>
             </Tab>
         </Tabs>

@@ -18,7 +18,7 @@
 
     let currentTab;
 
-    let title = $_('title.artists');
+    let title = $_('text.artists');
     $PageTitle = title;
 </script>
 
@@ -68,10 +68,10 @@
                                             }}
                                         />
                                     {:else}
-                                        <p>No artists found</p>
+                                        <p>{$_('text.noItemsFound')}</p>
                                     {/if}
                                 {:catch error}
-                                    <p>An error occurred.</p>
+                                    <p>{$_('text.errorGeneric')}</p>
                                 {/await}
                             </Tab>
                         {/if}
@@ -94,10 +94,10 @@
                                             }}
                                         />
                                     {:else}
-                                        <p>No artists found</p>
+                                        <p>{$_('text.noItemsFound')}</p>
                                     {/if}
                                 {:catch error}
-                                    <p>An error occurred.</p>
+                                    <p>{$_('text.errorGeneric')}</p>
                                 {/await}
                             </Tab>
                         {/if}

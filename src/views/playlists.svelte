@@ -11,7 +11,7 @@
     let showPlaylistCreation = false;
     let loading = true;
 
-    let title = $_('title.playlists');
+    let title = $_('text.playlists');
     $PageTitle = title;
 
     function handleShowPlaylistCreator() {

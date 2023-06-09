@@ -4,7 +4,7 @@
     import { newestAlbums, randomAlbums } from "../logic/album";
     import { PageTitle } from "../stores/status";
 
-    let title = $_('title.home');
+    let title = $_('text.home');
     $PageTitle = title;
 </script>
 

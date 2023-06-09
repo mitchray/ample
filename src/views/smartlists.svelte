@@ -4,7 +4,7 @@
     import { PageTitle } from "../stores/status";
     import Lister2 from '../components/lister/lister.svelte';
 
-    let title = $_('title.smartlists');
+    let title = $_('text.smartlists');
     $PageTitle = title;
 </script>
 
@@ -27,9 +27,9 @@
                 }}
             />
         {:else}
-            <p>Unable to find any smartlists</p>
+            <p>{$_('text.noItemsFound')}</p>
         {/if}
     {:catch error}
-        <p>Something went wrong: {error.message}</p>
+        <p>{$_('text.errorGeneric')}</p>
     {/await}
 </div>

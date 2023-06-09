@@ -177,7 +177,7 @@
 
                             {#if $MediaPlayer.gainType === 'ReplayGain'}
                                 <tr>
-                                    <td class="label">ReplayGain</td>
+                                    <td class="label">{$_('text.replaygain')}</td>
                                     <td>{$MediaPlayer.gainTagValue}</td>
                                 </tr>
                             {/if}

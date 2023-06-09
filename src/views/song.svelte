@@ -15,7 +15,7 @@
 
     let song;
 
-    let title = $_('title.song');
+    let title = $_('text.song');
     $PageTitle = title;
 
     $: if (id) {
@@ -53,81 +53,81 @@
         <div class="grid page-main">
             <span class="field"></span> <span></span>
             {#if song.artists?.length > 1}
-                <span class="field">Song Artists</span> <span><ArtistList artists={song.artists} /></span>
+                <span class="field">{$_('text.songArtists')}</span> <span><ArtistList artists={song.artists} /></span>
             {:else if song.artist.name}
-                <span class="field">Song Artist</span> <span><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
+                <span class="field">{$_('text.songArtist')}</span> <span><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
             {/if}
 
             {#if song.albumartist.name}
-                <span class="field">Album Artist</span> <span><Link to="artists/{song.albumartist.id}">{song.albumartist.name}</Link></span>
+                <span class="field">{$_('text.albumArtist')}</span> <span><Link to="artists/{song.albumartist.id}">{song.albumartist.name}</Link></span>
             {/if}
 
             {#if song.album.name}
-                <span class="field">Album</span> <span><Link to="albums/{song.album.id}">{song.album.name}</Link></span>
+                <span class="field">{$_('text.album')}</span> <span><Link to="albums/{song.album.id}">{song.album.name}</Link></span>
             {/if}
 
             {#if song.track}
-                <span class="field">Track</span> <span>{song.track}</span>
+                <span class="field">{$_('text.track')}</span> <span>{song.track}</span>
             {/if}
 
             {#if song.disk}
-                <span class="field">Disk</span> <span>{song.disk}</span>
+                <span class="field">{$_('text.disk')}</span> <span>{song.disk}</span>
             {/if}
 
             {#if song.year}
-                <span class="field">Year</span> <span>{song.year}</span>
+                <span class="field">{$_('text.year')}</span> <span>{song.year}</span>
             {/if}
 
             {#if song.time}
-                <span class="field">Length</span> <span>{formatTotalTime(song.time)}</span>
+                <span class="field">{$_('text.length')}</span> <span>{formatTotalTime(song.time)}</span>
             {/if}
 
             {#if song.playcount}
-                <span class="field">Play Count</span> <span>{song.playcount}</span>
+                <span class="field">{$_('text.plays')}</span> <span>{song.playcount}</span>
             {/if}
 
             {#if song.filename}
-                <span class="field">Filename</span> <span>{song.filename}</span>
+                <span class="field">{$_('text.filename')}</span> <span>{song.filename}</span>
             {/if}
 
             {#if song.bitrate}
-                <span class="field">Quality</span> <span>{formatSongQuality(song)}</span>
+                <span class="field">{$_('text.quality')}</span> <span>{formatSongQuality(song)}</span>
             {/if}
 
             {#if song.size}
-                <span class="field">Size</span> <span>{formatFilesize(song.size)}</span>
+                <span class="field">{$_('text.size')}</span> <span>{formatFilesize(song.size)}</span>
             {/if}
 
             {#if song.replaygain_album_gain}
-                <span class="field">ReplayGain Album Gain</span> <span>{song.replaygain_album_gain}</span>
+                <span class="field">{$_('text.replaygainAlbumGain')}</span> <span>{song.replaygain_album_gain}</span>
             {/if}
 
             {#if song.replaygain_album_peak}
-                <span class="field">ReplayGain Album Peak</span> <span>{song.replaygain_album_peak}</span>
+                <span class="field">{$_('text.replaygainAlbumPeak')}</span> <span>{song.replaygain_album_peak}</span>
             {/if}
 
             {#if song.replaygain_track_gain}
-                <span class="field">ReplayGain Track Gain</span> <span>{song.replaygain_track_gain}</span>
+                <span class="field">{$_('text.replaygainTrackGain')}</span> <span>{song.replaygain_track_gain}</span>
             {/if}
 
             {#if song.replaygain_track_peak}
-                <span class="field">ReplayGain Track Peak</span> <span>{song.replaygain_track_peak}</span>
+                <span class="field">{$_('text.replaygainTrackPeak')}</span> <span>{song.replaygain_track_peak}</span>
             {/if}
 
             {#if song.r128_album_gain}
-                <span class="field">EBU R128 Album Gain</span> <span>{song.r128_album_gain}</span>
+                <span class="field">{$_('text.r128AlbumGain')}</span> <span>{song.r128_album_gain}</span>
             {/if}
 
             {#if song.r128_track_gain}
-                <span class="field">EBU R128 Track Gain</span> <span>{song.r128_track_gain}</span>
+                <span class="field">{$_('text.r128TrackGain')}</span> <span>{song.r128_track_gain}</span>
             {/if}
 
             {#if song.language}
-                <span class="field">Language</span> <span>{song.language}</span>
+                <span class="field">{$_('text.language')}</span> <span>{song.language}</span>
             {/if}
 
             {#if song.mbid}
-                <span class="field">MusicBrainz ID</span>
+                <span class="field">{$_('text.musicbrainzID')}</span>
                 <span>
                 <a target="_blank" href="https://musicbrainz.org/recording/{song.mbid}">
                     {song.mbid}
@@ -136,15 +136,15 @@
             {/if}
 
             {#if song.license}
-                <span class="field">License</span> <span>{song.license}</span>
+                <span class="field">{$_('text.license')}</span> <span>{song.license}</span>
             {/if}
 
             {#if song.publisher}
-                <span class="field">Publisher</span> <span>{song.publisher}</span>
+                <span class="field">{$_('text.publisher')}</span> <span>{song.publisher}</span>
             {/if}
 
             {#if song.lyrics}
-                <span class="field">Lyrics</span> <span>{@html song.lyrics}</span>
+                <span class="field">{$_('text.lyrics')}</span> <span>{@html song.lyrics}</span>
             {/if}
         </div>
     {:else}

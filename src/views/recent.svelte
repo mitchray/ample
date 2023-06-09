@@ -3,7 +3,7 @@
     import { PageTitle } from "../stores/status";
     import CardList from '../components/cardList.svelte';
 
-    let title = $_('title.recent');
+    let title = $_('text.recent');
     $PageTitle = title;
 </script>
 

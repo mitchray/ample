@@ -9,7 +9,7 @@
     let genres = [];
     let loading = false;
 
-    let title = $_('title.genres');
+    let title = $_('text.genres');
     $PageTitle = title;
 
     $: genres = genres;

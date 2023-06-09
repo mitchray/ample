@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
     import { Link } from 'svelte-routing';
     import { CurrentMedia } from '../stores/status';
@@ -94,8 +95,8 @@
         </div>
 
         <div class="details">
-            <div class="title">Loading item</div>
-            <div class="secondary">Loading</div>
+            <div class="title">{$_('text.loading')}</div>
+            <div class="secondary">{$_('text.loading')}</div>
         </div>
 
         <div class="actions">

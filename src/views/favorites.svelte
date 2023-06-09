@@ -13,7 +13,7 @@
     import SVGAlbum from "/src/images/album.svg";
     import SVGSong from "/src/images/music_note.svg";
 
-    let title = $_('title.favorites');
+    let title = $_('text.favorites');
     $PageTitle = title;
 
     // Current active tab
@@ -51,10 +51,10 @@
                                 }}
                             />
                         {:else}
-                            <p>No artists found</p>
+                            <p>{$_('text.noItemsFound')}</p>
                         {/if}
                     {:catch error}
-                        <p>An error occurred.</p>
+                        <p>{$_('text.errorGeneric')}</p>
                     {/await}
                 </Tab>
             {/if}
@@ -77,10 +77,10 @@
                                 }}
                             />
                         {:else}
-                            <p>No albums found</p>
+                            <p>{$_('text.noItemsFound')}</p>
                         {/if}
                     {:catch error}
-                        <p>An error occurred.</p>
+                        <p>{$_('text.errorGeneric')}</p>
                     {/await}
                 </Tab>
             {/if}
@@ -103,10 +103,10 @@
                                 }}
                             />
                         {:else}
-                            <p>No songs found</p>
+                            <p>{$_('text.noItemsFound')}</p>
                         {/if}
                     {:catch error}
-                        <p>An error occurred.</p>
+                        <p>{$_('text.errorGeneric')}</p>
                     {/await}
                 </Tab>
             {/if}

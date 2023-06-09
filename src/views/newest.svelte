@@ -4,7 +4,7 @@
     import { newestAlbums } from "../logic/album"
     import Lister2 from '../components/lister/lister.svelte';
 
-    let title = $_('title.newest');
+    let title = $_('text.newest');
     $PageTitle = title;
 </script>
 
@@ -29,9 +29,9 @@
                 }}
             />
         {:else}
-            <p>No albums found</p>
+            <p>{$_('text.noItemsFound')}</p>
         {/if}
     {:catch error}
-        <p>An error occurred.</p>
+        <p>{$_('text.errorGeneric')}</p>
     {/await}
 </div>

@@ -36,7 +36,7 @@
         loadData();
     }
 
-    let title = $_('title.artist');
+    let title = $_('text.artist');
     $PageTitle = title;
 
     // List of tab items with labels and values.
@@ -136,14 +136,14 @@
                                         {artist.yearformed}
                                     </Link>
                                 </span>
-                                <span class="field">Year Formed</span>
+                                <span class="field">{$_('text.yearFormed')}</span>
                             </div>
                         {/if}
 
                         {#if artist.placeformed}
                             <div class="entry">
                                 <span class="value">{artist.placeformed}</span>
-                                <span class="field">Place Formed</span>
+                                <span class="field">{$_('text.placeFormed')}</span>
                             </div>
                         {/if}
                     </div>
@@ -210,10 +210,10 @@
                                         }}
                                     />
                                 {:else}
-                                    <p>No songs found</p>
+                                    <p>{$_('text.noItemsFound')}</p>
                                 {/if}
                             {:catch error}
-                                <p>An error occurred.</p>
+                                <p>{$_('text.errorGeneric')}</p>
                             {/await}
                         </Tab>
                     {/if}
@@ -232,10 +232,10 @@
                                         {/each}
                                     </div>
                                 {:else}
-                                    <p>No similar artists</p>
+                                    <p>{$_('text.noItemsFound')}</p>
                                 {/if}
                             {:catch error}
-                                <p>An error occurred.</p>
+                                <p>{$_('text.errorGeneric')}</p>
                             {/await}
                         </Tab>
                     {/if}
@@ -245,7 +245,7 @@
                             {#if artist.songcount > 0}
                                 <ArtistSongs artistID={artist.id} />
                             {:else}
-                                <p>No songs found</p>
+                                <p>{$_('text.noItemsFound')}</p>
                             {/if}
                         </Tab>
                     {/if}

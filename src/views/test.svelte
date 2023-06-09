@@ -32,7 +32,7 @@
         { label: "Actions", value: "actions" },
     ];
 
-    let title = $_('title.test');
+    let title = $_('text.test');
     $PageTitle = title;
 
     function toggleMenu() {

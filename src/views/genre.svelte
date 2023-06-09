@@ -27,7 +27,7 @@
         genre = await $API.genre({ filter: id });
     });
 
-    let title = $_('title.genre');
+    let title = $_('text.genre');
     $PageTitle = title;
 </script>
 

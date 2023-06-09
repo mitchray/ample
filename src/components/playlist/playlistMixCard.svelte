@@ -31,7 +31,7 @@
     {#if playlist?.id}
         <div class="image-container">
             <Link to="mix/{playlist.playlistType}/{playlist.id}" title="{playlist.name}">
-                <div class="image-text">{playlist.name} <span class="mix-text">Mix</span></div>
+                <div class="image-text">{playlist.name} <span class="mix-text">{$_('text.mix')}</span></div>
                 <img class="image"
                      src="{cleanArtURL(playlist.art)}&thumb=22"
                      alt="Image of {playlist.name}"
