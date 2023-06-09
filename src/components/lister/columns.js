@@ -42,7 +42,7 @@ const columns = [
     },
     {
         id: "name",
-        label: "text.more",
+        label: "text.name",
         widthPreset: "large",
         sortable: true,
         sortBy: "name",
