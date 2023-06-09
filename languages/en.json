@@ -125,6 +125,7 @@
   "text.missingSongRatingInfo": "Notify if there was no rating set for the song that just played",
   "text.missingVolumeTags": "Missing volume gain tags",
   "text.missingVolumeTagsInfo": "Notify if currently playing song is missing ReplayGain or EBU R128 tags",
+  "text.mix": "Mix",
   "text.more": "More",
   "text.multiRater": "Multi-rater",
   "text.musicbrainz": "MusicBrainz",
