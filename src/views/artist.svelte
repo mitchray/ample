@@ -30,6 +30,7 @@
 
     let artist;
     let theme;
+    let loading = true;
     $: theme = $Theme;
 
     $: if (id || $PageLoadedKey)  {
@@ -64,7 +65,9 @@
     }
 
     async function loadData() {
+        loading = true;
         artist = await getArtist({id: id, artAnalysis: true});
+        loading = false;
     }
 </script>
 
@@ -73,193 +76,196 @@
 </svelte:head>
 
 {#key $PageLoadedKey || 0}
-    {#if artist?.id}
-        <div class="container" in:fade>
-            <div class="header">
-                <h1 class="title">{artist.name}</h1>
+    {#if loading}
+        <p>{$_('text.loading')}</p>
+    {:else}
+        {#if artist?.id}
+            <div class="container" in:fade>
+                <div class="header">
+                    <h1 class="title">{artist.name}</h1>
+                    <div class="profile">
+                        <div class="art-container">
+                            <img class="art"
+                                 src="{cleanArtURL(artist.art)}&thumb=32"
+                                 alt="Image of {artist.name}"
+                                 width="250"
+                                 height="250"
+                                 data-id="art-artist-{artist.id}"
+                                 on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
+                            />
+                        </div>
 
-                <div class="profile">
-                    <div class="art-container" >
-                        <img class="art"
-                             src="{cleanArtURL(artist.art)}&thumb=32"
-                             alt="Image of {artist.name}"
-                             width="250"
-                             height="250"
-                             data-id="art-artist-{artist.id}"
-                             on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=32' }}
-                        />
+                        <div class="below-image">
+                            <div class="rating">
+                                <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                            </div>
+
+                            <div class="third-party-links">
+                                <ThirdPartyServices data={artist} type="artist" />
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="below-image">
-                        <div class="rating">
-                            <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
-                        </div>
+                    <div class="details">
+                        <div class="meta">
+                            {#if artist.albumcount > 0}
+                                <div class="entry">
+                                    <span class="value">{artist.albumcount}</span>
+                                    <span class="field">{$_('text.releasesPlural', { values: { count: parseInt(artist.albumcount) } })}</span>
+                                </div>
+                            {/if}
 
-                        <div class="third-party-links">
-                            <ThirdPartyServices data={artist} type="artist" />
-                        </div>
-                    </div>
-                </div>
+                            {#if artist.appearanceCount > 0}
+                                <div class="entry">
+                                    <span class="value">{artist.appearanceCount}</span>
+                                    <span class="field">{$_('text.appearancesPlural', { values: { count: parseInt(artist.appearanceCount) } })}</span>
+                                </div>
+                            {/if}
 
-                <div class="details">
-                    <div class="meta">
-                        {#if artist.albumcount > 0}
                             <div class="entry">
-                                <span class="value">{artist.albumcount}</span>
-                                <span class="field">{$_('text.releasesPlural', { values: { count: parseInt(artist.albumcount) } })}</span>
+                                <span class="value">{artist.songcount}</span>
+                                <span class="field">{$_('text.songsPlural', { values: { count: parseInt(artist.songcount) } })}</span>
                             </div>
-                        {/if}
 
-                        {#if artist.appearanceCount > 0}
-                            <div class="entry">
-                                <span class="value">{artist.appearanceCount}</span>
-                                <span class="field">{$_('text.appearancesPlural', { values: { count: parseInt(artist.appearanceCount) } })}</span>
-                            </div>
-                        {/if}
+                            {#if artist.time > 0}
+                                <div class="entry">
+                                    <span class="value">{formatTotalTime(artist.time)}</span>
+                                    <span class="field">{$_('text.total')}</span>
+                                </div>
+                            {/if}
 
-                        <div class="entry">
-                            <span class="value">{artist.songcount}</span>
-                            <span class="field">{$_('text.songsPlural', { values: { count: parseInt(artist.songcount) } })}</span>
-                        </div>
-
-                        {#if artist.time > 0}
-                            <div class="entry">
-                                <span class="value">{formatTotalTime(artist.time)}</span>
-                                <span class="field">{$_('text.total')}</span>
-                            </div>
-                        {/if}
-
-                        {#if artist.yearformed}
-                            <div class="entry">
+                            {#if artist.yearformed}
+                                <div class="entry">
                                 <span class="value">
                                     <Link to="albums/year/{artist.yearformed}" title="{artist.yearformed}">
                                         {artist.yearformed}
                                     </Link>
                                 </span>
-                                <span class="field">{$_('text.yearFormed')}</span>
-                            </div>
-                        {/if}
+                                    <span class="field">{$_('text.yearFormed')}</span>
+                                </div>
+                            {/if}
 
-                        {#if artist.placeformed}
-                            <div class="entry">
-                                <span class="value">{artist.placeformed}</span>
-                                <span class="field">{$_('text.placeFormed')}</span>
-                            </div>
-                        {/if}
+                            {#if artist.placeformed}
+                                <div class="entry">
+                                    <span class="value">{artist.placeformed}</span>
+                                    <span class="field">{$_('text.placeFormed')}</span>
+                                </div>
+                            {/if}
+                        </div>
+
+                        <Genres genres="{artist.genre}" />
+
+                        <div class="actions">
+                            <Actions2
+                                    type="artist"
+                                    mode="fullButtons"
+                                    showShuffle={artist.songcount > 1}
+                                    id="{artist.id}"
+                            />
+                        </div>
                     </div>
 
-                    <Genres genres="{artist.genre}" />
-
-                    <div class="actions">
-                        <Actions2
-                            type="artist"
-                            mode="fullButtons"
-                            showShuffle={artist.songcount > 1}
-                            id="{artist.id}"
-                        />
-                    </div>
-                </div>
-
-                {#if artist.summary?.replace(/\s/g, "").length > 0}
-                    <div class="summary">
-                        <p>{artist.summary}</p>
-                    </div>
-                {/if}
-            </div>
-        </div>
-
-        <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="artist">
-            {#each tabItems as tab}
-                {#if tab.loaded === true}
-                    {#if tab.value === 'releases'}
-                        <Tab id="releases" class="releases" bind:activeTabValue={currentTab}>
-                            <button
-                                class="album-view-toggle button button--regular"
-                                on:click={toggleShowExpanded}
-                            >
-                                {$ShowExpandedAlbums ? $_('text.viewCondensed') : $_('text.viewExpanded')}
-                            </button>
-
-                            <button
-                                class="group-releases-toggle button button--regular"
-                                on:click={toggleGroupByReleaseType}
-                            >
-                                {$GroupAlbumsByReleaseType ? $_('text.showChronologically') : $_('text.showGroupedReleaseType')}
-                            </button>
-
-                            <ArtistReleases artistID={artist.id} />
-                        </Tab>
+                    {#if artist.summary?.replace(/\s/g, "").length > 0}
+                        <div class="summary">
+                            <p>{artist.summary}</p>
+                        </div>
                     {/if}
+                </div>
+            </div>
 
-                    {#if tab.value === 'popular'}
-                        <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
-                            {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
-                                {$_('text.loading')}
-                            {:then songs}
-                                {#if songs.length > 0}
-                                    <Lister2
-                                        data={songs}
-                                        type="song"
-                                        tableOnly={true}
-                                        showIndex={true}
-                                        actionData={{
+            <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="artist">
+                {#each tabItems as tab}
+                    {#if tab.loaded === true}
+                        {#if tab.value === 'releases'}
+                            <Tab id="releases" class="releases" bind:activeTabValue={currentTab}>
+                                <button
+                                        class="album-view-toggle button button--regular"
+                                        on:click={toggleShowExpanded}
+                                >
+                                    {$ShowExpandedAlbums ? $_('text.viewCondensed') : $_('text.viewExpanded')}
+                                </button>
+
+                                <button
+                                        class="group-releases-toggle button button--regular"
+                                        on:click={toggleGroupByReleaseType}
+                                >
+                                    {$GroupAlbumsByReleaseType ? $_('text.showChronologically') : $_('text.showGroupedReleaseType')}
+                                </button>
+
+                                <ArtistReleases artistID={artist.id} />
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'popular'}
+                            <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
+                                {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
+                                    {$_('text.loading')}
+                                {:then songs}
+                                    {#if songs.length > 0}
+                                        <Lister2
+                                                data={songs}
+                                                type="song"
+                                                tableOnly={true}
+                                                showIndex={true}
+                                                actionData={{
                                             type: "",
                                             mode: "fullButtons",
                                             showShuffle: songs.length > 1,
                                             data: Object.create({songs: songs})
                                         }}
-                                    />
+                                        />
+                                    {:else}
+                                        <p>{$_('text.noItemsFound')}</p>
+                                    {/if}
+                                {:catch error}
+                                    <p>{$_('text.errorGeneric')}</p>
+                                {/await}
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'similar'}
+                            <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
+                                {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
+                                    {$_('text.loading')}
+                                {:then artists}
+                                    {#if artists.length > 0}
+                                        <div class="cardlist-grid artist-grid">
+                                            {#each artists as artist}
+                                                {#if artist.name}
+                                                    <ArtistCard data="{artist}" />
+                                                {/if}
+                                            {/each}
+                                        </div>
+                                    {:else}
+                                        <p>{$_('text.noItemsFound')}</p>
+                                    {/if}
+                                {:catch error}
+                                    <p>{$_('text.errorGeneric')}</p>
+                                {/await}
+                            </Tab>
+                        {/if}
+
+                        {#if tab.value === 'all'}
+                            <Tab id="all" class="all" bind:activeTabValue={currentTab}>
+                                {#if artist.songcount > 0}
+                                    <ArtistSongs artistID={artist.id} />
                                 {:else}
                                     <p>{$_('text.noItemsFound')}</p>
                                 {/if}
-                            {:catch error}
-                                <p>{$_('text.errorGeneric')}</p>
-                            {/await}
-                        </Tab>
-                    {/if}
+                            </Tab>
+                        {/if}
 
-                    {#if tab.value === 'similar'}
-                        <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
-                            {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
-                                {$_('text.loading')}
-                            {:then artists}
-                                {#if artists.length > 0}
-                                    <div class="cardlist-grid artist-grid">
-                                        {#each artists as artist}
-                                            {#if artist.name}
-                                                <ArtistCard data="{artist}" />
-                                            {/if}
-                                        {/each}
-                                    </div>
-                                {:else}
-                                    <p>{$_('text.noItemsFound')}</p>
-                                {/if}
-                            {:catch error}
-                                <p>{$_('text.errorGeneric')}</p>
-                            {/await}
-                        </Tab>
+                        {#if tab.value === 'musicbrainz'}
+                            <Tab id="musicbrainz" class="musicbrainz" bind:activeTabValue={currentTab}>
+                                <MusicbrainzScan data={artist} />
+                            </Tab>
+                        {/if}
                     {/if}
-
-                    {#if tab.value === 'all'}
-                        <Tab id="all" class="all" bind:activeTabValue={currentTab}>
-                            {#if artist.songcount > 0}
-                                <ArtistSongs artistID={artist.id} />
-                            {:else}
-                                <p>{$_('text.noItemsFound')}</p>
-                            {/if}
-                        </Tab>
-                    {/if}
-
-                    {#if tab.value === 'musicbrainz'}
-                        <Tab id="musicbrainz" class="musicbrainz" bind:activeTabValue={currentTab}>
-                            <MusicbrainzScan data={artist} />
-                        </Tab>
-                    {/if}
-                {/if}
-            {/each}
-        </Tabs>
-    {:else}
-        <p>{$_('text.loading')}</p>
+                {/each}
+            </Tabs>
+        {:else}
+            <p>{$_('text.noItemsFound')}</p>
+        {/if}
     {/if}
 {/key}
 
