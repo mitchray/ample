@@ -77,7 +77,7 @@
                 break;
             case 'artistGenre':
             case 'genre':
-                if (data.name === null) {
+                if (data.name == null) {
                     let genre = await $API.genre({ filter: id });
                     data.name = genre.name;
                 }
