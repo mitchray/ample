@@ -83,6 +83,10 @@
         pointer-events: initial;
     }
 
+    .notification-card + :global(.notification-card) {
+        margin-top: var(--spacing-md);
+    }
+
     .notification-card.success {
         border-color: var(--color-primary-background);
     }
