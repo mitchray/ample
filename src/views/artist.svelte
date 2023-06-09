@@ -7,7 +7,7 @@
     import { API } from "../stores/api";
 
     import { getArtist } from "../logic/artist";
-    import { cleanArtURL, formatTimeToReadable } from "../logic/helper";
+    import { cleanArtURL, formatTotalTime } from "../logic/helper";
 
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -124,7 +124,7 @@
 
                         {#if artist.time > 0}
                             <div class="entry">
-                                <span class="value">{formatTimeToReadable(artist.time)}</span>
+                                <span class="value">{formatTotalTime(artist.time)}</span>
                                 <span class="field">{$_('text.total')}</span>
                             </div>
                         {/if}
