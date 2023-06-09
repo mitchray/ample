@@ -1,3 +1,4 @@
+import { _ } from 'svelte-i18n';
 import { get } from "svelte/store";
 import { addAlert } from "./alert";
 import { debugMode, serverURL } from '../stores/server';
@@ -234,7 +235,7 @@ export function filterBelow(arr) {
     let filteredCount = originalCount - arr.length;
 
     if (filteredCount > 0) {
-        addAlert({title: `Skipped ${filteredCount} items below ${get(SkipBelowRating)} stars`, style: 'info'});
+        addAlert({title: get(_)('text.skippedItemsBelow', {values: { itemCount: filteredCount, starCount: get(SkipBelowRating) }}), style: 'info'});
     }
 
     return arr;

@@ -18,7 +18,7 @@
     async function handleAction() {
         loaded = false;
 
-        addAlert({title: 'Starting update from tags', style: 'info'});
+        addAlert({title: $_('text.tagUpdateStart'), style: 'info'});
 
         let urlBefore = window.location.href;
 
@@ -31,9 +31,9 @@
                         $PageLoadedKey = Date.now().toString();
                     }
 
-                    addAlert({title: 'Updated from tags', style: 'success'});
+                    addAlert({title: $_('text.tagUpdateDone'), style: 'success'});
                 } else {
-                    addAlert({title: 'Failed to update from tags', message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
+                    addAlert({title: $_('text.tagUpdateFail'), message: `${result.error?.errorCode}: ${result.error?.errorMessage}`, style: 'warning'});
                 }
 
                 loaded = true;

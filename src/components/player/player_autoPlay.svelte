@@ -45,7 +45,7 @@
                                     result = (Array.isArray(result)) ? result : [result];
                                     $MediaPlayer.playLast(result);
                                     $isFetching = false;
-                                    addAlert({title: `AutoPlay`, message: `Added ${result.length} items to queue from ${selectedPlaylist.name}`, style: 'info'});
+                                    addAlert({title: $_('text.autoplay'), message: $_('text.autoplayAddedItems', { values: { n: result.length, playlist: selectedPlaylist.name } }), style: 'info'});
                                 }
                             });
                     } else {
