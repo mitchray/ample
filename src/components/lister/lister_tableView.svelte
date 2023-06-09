@@ -107,7 +107,8 @@
 
     .row > :global(div) {
         background-color: var(--color-interface);
-        border-bottom: 1px solid var(--color-border);
+        border-bottom: 1.4px solid var(--color-border); /* thicker line to alleviate transform rounding */
+        will-change: transform;
     }
 
     .stripe > :global(div) {
