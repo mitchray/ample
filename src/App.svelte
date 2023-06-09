@@ -8,9 +8,11 @@
     import { addMessages, register, init, getLocaleFromNavigator } from 'svelte-i18n';
 
     import en from '/languages/en.json';
+    import enAU from '/languages/en-AU.json';
     import de from '/languages/de.json';
 
     addMessages('en', en);
+    addMessages('en-AU', enAU);
     addMessages('de', de);
 
     init({

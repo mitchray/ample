@@ -183,10 +183,10 @@
             </li>
             <li class:current={basePath === 'top'}
                 data-tooltip-disabled={$SidebarIsOpen}
-                use:tooltip={{text: $_('text.top'), placement: tooltipPlacement}}
+                use:tooltip={{text: $_('text.topRated'), placement: tooltipPlacement}}
             >
                 <Link to="top" class="site-sidebar__link ">
-                    <SVGStarFull /> <span class="label">{$_('text.top')}</span>
+                    <SVGStarFull /> <span class="label">{$_('text.topRated')}</span>
                 </Link>
             </li>
             <li class:current={basePath === 'forgotten'}
