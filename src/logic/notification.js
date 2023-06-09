@@ -1,3 +1,4 @@
+import { _ } from 'svelte-i18n';
 import { get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import { API } from "../stores/api";
@@ -46,7 +47,7 @@ export const addGainTagsMissingNotification = (data) => {
     }
 
     let settings = {
-        title: "Missing volume gain tags",
+        title: get(_)("text.notificationGainTagsMissing"),
         type: "gainTagsMissing",
         style: "warning",
         data: data
@@ -61,7 +62,7 @@ export const addRatingMissingNotification = (data) => {
     }
 
     let settings = {
-        title: "Missing song rating",
+        title: get(_)("text.notificationRatingMissing"),
         type: "ratingMissing",
         style: "warning",
         data: data
@@ -80,11 +81,8 @@ export const addAlternateVersionsNotification = (data) => {
         return;
     }
 
-    let versionText = data.versionsCount !== 1 ? 'versions' : 'version';
-    let title = `${data.versionsCount} alternate ${versionText} found`;
-
     let settings = {
-        title: title,
+        title: get(_)("text.notificationAlternateVersions", { values: { versionCount: data.versionsCount } }),
         type: "alternateVersions",
         style: "info",
         data: data
@@ -99,7 +97,7 @@ export const addLyricsMissingNotification = (data) => {
     }
 
     let settings = {
-        title: "Missing lyrics",
+        title: get(_)("text.notificationLyricsMissing"),
         type: "lyricsMissing",
         style: "warning",
         data: data
@@ -114,7 +112,7 @@ export const addLyricsNotTimestampedNotification = (data) => {
     }
 
     let settings = {
-        title: "Lyrics not timestamped",
+        title: get(_)("text.notificationLyricsNotTimestamped"),
         type: "lyricsMissingTimestamps",
         style: "warning",
         data: data
