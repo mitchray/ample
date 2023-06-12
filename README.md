@@ -3,6 +3,13 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 
 <img src="https://user-images.githubusercontent.com/5735900/210019624-4e60d4b4-624c-42bb-ab45-1c3d244e66a6.jpg" width=800 alt="Ample screenshot" />
 
+## Setting expectations
+- Ample is made for my own requirements, but have shared it publicly in case others also find it useful. That means:
+  - I'm the sole user of my Ampache server, so it's largely untested with multiple users
+  - Transcoding is untested as I don't use it
+  - It is designed to be a zero-config drop-in companion to Ampache, not a complete replacement
+- It is feature complete as of v2; energy will be focused on expanding the Ampache API for future clients
+
 ## Demo
 [View demo](https://demo.ampache.dev/ample/) (might not be the latest version)
 - User ```demo``` 
@@ -26,7 +33,7 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - 'Unrated' dashboard + Multi-rater
 
 ## Requirements
-- Ampache 5+
+- [Ampache](https://ampache.org/) 6+
 - A modern web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
 - Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
