@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { logout } from "../logic/user";
+    import { isLoggedIn } from "../stores/user.js";
     import ThemeToggle from '../components/themeToggle.svelte';
     import LanguageSelector from '../components/languageSelector.svelte';
     import Menu from '../components/menu.svelte';
@@ -25,14 +26,16 @@
 {#if menuIsVisible}
     <Menu anchor="bottom" toggleSelector={"#userMenu-toggle"} bind:isVisible={menuIsVisible}>
         <div class="container">
-            <button
-                on:click={handleLogOut}
-                class="visuallyLink logout"
-                title="{$_('text.logOut')}"
-            >
-                <SVGLogout />
-                <span class="text">{$_('text.logOut')}</span>
-            </button>
+            {#if $isLoggedIn}
+                <button
+                        on:click={handleLogOut}
+                        class="visuallyLink logout"
+                        title="{$_('text.logOut')}"
+                >
+                    <SVGLogout />
+                    <span class="text">{$_('text.logOut')}</span>
+                </button>
+            {/if}
 
             <ThemeToggle />
 

@@ -14,7 +14,7 @@
 
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
-    import ThemeToggle from '../components/themeToggle.svelte';
+    import UserMenu from '../components/userMenu.svelte';
 
     import SVGAmpleLogo from "/src/images/ample_logo.svg";
     import SVGLogin from "/src/images/login.svg";
@@ -61,7 +61,7 @@
 </svelte:head>
 
 <div class="container">
-    <ThemeToggle />
+    <UserMenu />
 
     <div class="form" in:fade out:fade>
         {#if versionCheck && versionCheck < 6}
@@ -124,7 +124,7 @@
         z-index: 10;
     }
 
-    .container :global(.theme-toggle) {
+    .container :global(.userMenu-toggle) {
         position: absolute;
         top: var(--spacing-md);
         right: var(--spacing-md);
