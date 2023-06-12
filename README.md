@@ -1,7 +1,7 @@
 ## *Ample*: A simple music client for [Ampache](https://ampache.org/) 
 Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js)
 
-<img src="https://user-images.githubusercontent.com/5735900/210019624-4e60d4b4-624c-42bb-ab45-1c3d244e66a6.jpg" width=800 alt="Ample screenshot" />
+<img src="https://github.com/mitchray/ample/assets/5735900/e2564e30-d7af-4fc8-b2e1-bbff93a3356e" width=800 alt="Ample screenshot" />
 
 ## Setting expectations
 - Ample is made for my own requirements, but have shared it publicly in case others also find it useful. That means:
