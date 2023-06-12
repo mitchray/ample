@@ -1,7 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { onMount, getContext, tick } from 'svelte';
-    import Pagination from '../../components/Pagination.svelte';
+    import Pagination from '../../components/pagination.svelte';
 
     export let contextKey;
 

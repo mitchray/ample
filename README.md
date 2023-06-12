@@ -24,7 +24,6 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - Compare an artist's collection with MusicBrainz recordings (if the artist has an MBID associated with it)
 - Skip songs below a specified rating when adding to queue
 - 'Unrated' dashboard + Multi-rater
-- Search albums by date range
 
 ## Requirements
 - Ampache 5+

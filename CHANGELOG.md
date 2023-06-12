@@ -43,7 +43,7 @@
 - Backend now uses the 'javascript-ampache' library for API calls
 
 ### Fixed
-- AutoPlay would add process twice
+- AutoPlay would run twice
 
 ## [1.0.0] - 2022-12-30
 ### Changed

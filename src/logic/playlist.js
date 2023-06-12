@@ -1,6 +1,5 @@
 import { get } from "svelte/store";
-import samplesize from "lodash/sampleSize";
-import uniqby from "lodash/uniqby";
+import { sampleSize, uniqBy } from "lodash";
 import { API } from "../stores/api";
 import { frequentArtists, topArtists } from "./artist";
 
@@ -52,7 +51,7 @@ export const artistMixes = async () => {
     let mixedArtists = [...top,...trending];
 
     // filter out duplicates
-    let uniqueArtists = uniqby(mixedArtists, (item) => {
+    let uniqueArtists = uniqBy(mixedArtists, (item) => {
        return item.id;
     });
 
@@ -60,7 +59,7 @@ export const artistMixes = async () => {
     uniqueArtists = uniqueArtists.filter(item => item.name !== "Various Artists");
 
     // select 5 randomly
-    let finalArtists = samplesize(uniqueArtists, 5);
+    let finalArtists = sampleSize(uniqueArtists, 5);
 
     finalArtists = finalArtists.map((item, index) => ({ ...item, playlistType: "artist"}));
 

@@ -254,7 +254,7 @@
                         <span class="details">
                             <div class="queue-title card-title" title="{media.name}">{media.name}</div>
 
-                            {#if media.artists.length > 0}
+                            {#if media.artists?.length > 0}
                                 <ArtistList artists={media.artists} disabled={true} />
                             {/if}
                         </span>

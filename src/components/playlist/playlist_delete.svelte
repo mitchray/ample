@@ -62,9 +62,4 @@
     h4 {
         margin: 0;
     }
-
-    .name {
-        color: var(--color-highlight);
-        font-weight: bold;
-    }
 </style>

@@ -103,6 +103,7 @@
                 fetchURL = getSomeSongsByGenre(data.name);
                 break;
             case 'playlist':
+            case 'smartlist':
                 fetchURL = $API.playlistSongs({ filter: id });
                 break;
             case 'playlists':

@@ -4,7 +4,7 @@
     import { serverURL } from "../../stores/server";
     import { API } from "../../stores/api";
     import Actions2 from '../../components/action/actions.svelte';
-    import samplesize from "lodash/sampleSize";
+    import sampleSize from "lodash";
     import { cleanArtURL } from "../../logic/helper";
 
     export let data = null; // needed for cardList dynamic components
@@ -22,7 +22,7 @@
     function getSimilar() {
         similars = $API.getSimilar({ type: "artist", filter: playlist?.id, limit: 15 })
             .then((results) => {
-                return samplesize(results, 3);
+                return sampleSize(results, 3);
             });
     }
 </script>

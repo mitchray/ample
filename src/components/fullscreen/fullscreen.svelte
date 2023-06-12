@@ -27,11 +27,6 @@
 
 {#if $FullScreenEnabled}
     <div class="fullscreen" transition:fade>
-<!--        <div class="tabs">-->
-<!--            <button on:click={() => currentTab = 'nowPlaying'}>Now Playing</button>-->
-<!--            <button on:click={() => currentTab = 'queue'}>Queue</button>-->
-<!--        </div>-->
-
         <div class="inner">
             <div class="nowPlaying" style="display: {currentTab === 'nowPlaying' ? 'block' : 'none'}">
                 <FullScreenNowPlaying/>
