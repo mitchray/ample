@@ -32,6 +32,9 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - Skip songs below a specified rating when adding to queue
 - 'Unrated' dashboard + Multi-rater
 
+## Translations
+Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitchray/ample)
+
 ## Requirements
 - [Ampache](https://ampache.org/) 6+
 - A modern web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
