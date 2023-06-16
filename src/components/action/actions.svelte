@@ -5,6 +5,7 @@
     import { v4 as uuidv4 } from 'uuid';
     import { API } from "../../stores/api";
     import { sampleSize } from "lodash";
+    import { addAlert } from "../../logic/alert";
     import {
         getSomeSongsByGenre,
         getSomeSongsFromAlbumsByGenre,
@@ -49,6 +50,7 @@
     const contextKey = uuidv4(); // unique key for each instance of lister
 
     let moreMenuVisible    = false;
+    let playLimit = 500;
 
     setContext(contextKey, {
         getType:        () => type,
@@ -105,7 +107,14 @@
                 break;
             case 'playlist':
             case 'smartlist':
-                fetchURL = $API.playlistSongs({ filter: id });
+                let playlistInfo = await $API.playlist({ filter: id });
+                let playlistLimit = (playlistInfo?.items > playLimit) ? playLimit : 0;
+
+                if (playlistLimit > 0) {
+                    addAlert({ title: $_("text.limitedItems", { values: { n: playlistLimit } }), style: "info" });
+                }
+
+                fetchURL = $API.playlistSongs({ filter: id, limit: playlistLimit });
                 break;
             case 'playlists':
                 fetchURL = getSongsFromPlaylists(data.playlists);
@@ -128,7 +137,14 @@
      * @returns array
      */
     async function doFetch() {
-        let result = data.songs ? data.songs : await determineFetchURL();
+        let songSubset = data.songs;
+
+        if (songSubset?.length > playLimit) {
+            addAlert({ title: $_("text.limitedItems", { values: { n: playLimit } }), style: "info" });
+            songSubset = sampleSize(data.songs, playLimit);
+        }
+
+        let result = data.songs ? songSubset : await determineFetchURL();
 
         // make sure results are an array
         result = (Array.isArray(result)) ? result : [result];

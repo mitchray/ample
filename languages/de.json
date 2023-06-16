@@ -340,5 +340,6 @@
   "text.skippedItemsBelow": "{itemCount, plural, =1 {# item} other {# items}} unter {starCount, plural, =1 {# star} other {# stars}} übersprungen",
   "text.tagUpdateDone": "Von Tags aktualisiert",
   "text.tagUpdateFail": "Aktualisierung von Tags fehlgeschlagen",
-  "text.tagUpdateStart": "Aktualisierung über Tags starten"
+  "text.tagUpdateStart": "Aktualisierung über Tags starten",
+  "text.limitedItems": "{n} gegenstände spielen"
 }

@@ -77,6 +77,7 @@
   "text.limit": "Limit",
   "text.links": "Links",
   "text.limitTo": "Limit to",
+  "text.limitedItems": "Playing {n} items",
   "text.list": "List",
   "text.loading": "Loading",
   "text.localImage": "Local Image",
