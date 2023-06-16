@@ -4,6 +4,7 @@
     import { Link } from 'svelte-routing';
     import { v4 as uuidv4 } from 'uuid';
     import { API } from "../../stores/api";
+    import { sampleSize } from "lodash";
     import {
         getSomeSongsByGenre,
         getSomeSongsFromAlbumsByGenre,
@@ -70,7 +71,7 @@
                 fetchURL = getSongsFromArtist(id);
                 break;
             case 'artists':
-                fetchURL = getSongsFromArtists(data.artists);
+                fetchURL = getSongsFromArtists(sampleSize(data.artists, 100));
                 break;
             case 'artistAlpha':
                 fetchURL = getSongsFromArtistsStartingWith(data.char);
@@ -87,7 +88,7 @@
                 fetchURL = getSongsFromAlbum({id: id});
                 break;
             case 'albums':
-                fetchURL = getSongsFromAlbums(data.albums);
+                fetchURL = getSongsFromAlbums(sampleSize(data.albums, 100));
                 break;
             case 'albumGenre':
                 fetchURL = getSomeSongsFromAlbumsByGenre(data.name);
