@@ -295,19 +295,19 @@
         z-index: 30;
         display: flex;
         position: relative;
-        right: 0;
+        inset-inline-end: 0;
         transform: translateX(100%);
         will-change: transform;
-        padding-left: var(--spacing-lg);
-        padding-right: var(--spacing-lg);
+        padding-inline-start: var(--spacing-lg);
+        padding-inline-end: var(--spacing-lg);
     }
 
     .site-queue-inner {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
         overflow-x: hidden;
         overflow-y: auto;
         padding: inherit;
@@ -326,8 +326,8 @@
 
     .site-queue.is-drawer {
         position: absolute;
-        top: var(--size-header-height);
-        bottom: var(--size-webplayer-height);
+        inset-block-start: var(--size-header-height);
+        inset-block-end:  var(--size-webplayer-height);
         box-shadow: var(--shadow-xxl);
         transition: transform 0.3s ease-out;
     }
@@ -359,7 +359,7 @@
     }
 
     .clear-all {
-        margin-left: auto;
+        margin-inline-start: auto;
     }
 
     button {
@@ -375,7 +375,7 @@
         background-color: var(--color-interface);
         box-shadow: var(--shadow-lg);
         border-radius: 10px;
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
     }
 
     .queue-title {
@@ -386,7 +386,7 @@
 
     .thumb {
         flex-shrink: 0;
-        margin-right: var(--spacing-md);
+        margin-inline-end: var(--spacing-md);
         border: 1px solid hsla(0, 0%, 50%, 0.2);
         line-height: 0;
         cursor: grab;
@@ -401,7 +401,7 @@
     .queue-item {
         display: flex;
         padding: var(--spacing-sm) var(--spacing-md);
-        padding-left: 0;
+        padding-inline-start: 0;
         line-height: 1;
         align-items: center;
         user-select: none;
@@ -435,7 +435,7 @@
     }
 
     .queue-item + .queue-item {
-        margin-top: 2px;
+        margin-block-start: 2px;
     }
 
     .currentlyPlaying {
@@ -445,10 +445,10 @@
     .currentlyPlaying:before {
         content: '';
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        right: 0;
+        inset-inline-start: 0;
+        inset-block-start: 0;
+        inset-block-end: 0;
+        inset-inline-end: 0;
         background-color: var(--color-highlight);
         z-index: -1;
         opacity: 0.12;
@@ -468,11 +468,11 @@
     }
     
     .remove {
-        margin-left: var(--spacing-md);
-        margin-right: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
+        margin-inline-end: var(--spacing-md);
     }
 
     .queue-item .more {
-        margin-left: auto;
+        margin-inline-start: auto;
     }
 </style>

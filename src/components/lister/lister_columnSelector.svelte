@@ -61,7 +61,7 @@
 <style>
     button {
         position: absolute;
-        right: 0;
+        inset-inline-end: 0;
     }
 
     .panel-content {

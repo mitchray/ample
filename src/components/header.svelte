@@ -167,8 +167,8 @@
     }
 
     input.site-search {
-        padding-left: var(--spacing-xxl);
-        padding-right: var(--spacing-xxl);
+        padding-inline-start: var(--spacing-xxl);
+        padding-inline-end: var(--spacing-xxl);
         position: relative;
         display: block;
         width: 100%;
@@ -184,7 +184,7 @@
 
     .search-container :global(.search-icon) {
         position: absolute;
-        left: var(--spacing-sm);
+        inset-inline-start:  var(--spacing-sm);
         z-index: 10;
         fill: var(--color-icon);
     }
@@ -194,7 +194,7 @@
         display: flex;
         align-items: center;
         position: absolute;
-        right: var(--spacing-md);
+        inset-inline-end: var(--spacing-md);
         background: unset;
         border: unset;
         box-shadow: unset;

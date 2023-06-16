@@ -54,16 +54,16 @@
 
 <style>
     .container {
-        margin-top: var(--spacing-xl);
+        margin-block-start: var(--spacing-xl);
     }
 
     .limit {
         box-sizing: content-box;
         width: 8ch;
-        margin-left: var(--spacing-sm);
+        margin-inline-start: var(--spacing-sm);
     }
 
     .button {
-        margin-left: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
     }
 </style>

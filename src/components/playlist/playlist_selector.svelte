@@ -116,7 +116,7 @@
         flex-direction: column;
         overflow: hidden;
         max-width: 100%;
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 
     .current-selected {

@@ -134,6 +134,6 @@
     }
 
     .type {
-        margin-left: var(--spacing-sm);
+        margin-inline-start: var(--spacing-sm);
     }
 </style>

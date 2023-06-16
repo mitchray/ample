@@ -1262,7 +1262,7 @@
     .container {
         container-name: custom-search-wrapper;
         container-type: inline-size;
-        margin-bottom: var(--spacing-xxl);
+        margin-block-end: var(--spacing-xxl);
     }
 
     .rules {
@@ -1286,7 +1286,7 @@
     }
 
     .options {
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
         display: flex;
         gap: var(--spacing-md) var(--spacing-xl);
         align-items: center;
@@ -1295,7 +1295,7 @@
     }
 
     button {
-        margin-right: 0;
+        margin-inline-end: 0;
     }
 
     @container custom-search-wrapper (min-width: 700px) {

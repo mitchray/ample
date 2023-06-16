@@ -137,7 +137,7 @@
             ],
         }).then(({x, y}) => {
             Object.assign(searchBind.style, {
-                left: `${x}px`,
+                left:  `${x}px`,
                 top: `${y}px`,
             });
         });
@@ -296,8 +296,8 @@
     .container {
         background-color: var(--color-background);
         position: absolute;
-        left: 0;
-        top: 0;
+        inset-inline-start: 0;
+        inset-block-start: 0;
         width: 100%;
         height: 100%;
         z-index: 20;
@@ -317,10 +317,10 @@
     .container:after {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
         width: 100%;
         height: 100%;
         pointer-events: none;
@@ -332,12 +332,12 @@
         align-items: center;
         justify-content: space-between;
         padding: var(--spacing-md);
-        padding-left: var(--spacing-lg);
+        padding-inline-start: var(--spacing-lg);
     }
 
     .header h4 {
         margin: 0;
-        margin-right: auto;
+        margin-inline-end: auto;
     }
 
     .results {
@@ -345,17 +345,17 @@
         display: flex;
         flex-direction: column;
         flex: 1;
-        margin-bottom: var(--spacing-lg);
-        margin-right: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
+        margin-inline-end: var(--spacing-lg);
         position: relative;
     }
 
     .results :global(.tab-content) {
         overflow-y: auto;
         position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: var(--spacing-xxxl);
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
+        inset-block-start: var(--spacing-xxxl);
     }
 </style>

@@ -84,7 +84,7 @@
      */
     .site-player {
         background-color: var(--color-interface);
-        border-top: 1px solid var(--color-border);
+        border-block-start: 1px solid var(--color-border);
         height: var(--size-webplayer-height);
         display: grid;
         align-items: center;
@@ -105,13 +105,13 @@
 
     .site-player__seekBar :global(.seekBar) {
         position: absolute;
-        top: calc(-1 * var(--size-seekbar-height));
-        left: 0;
-        right: 0;
+        inset-block-start: calc(-1 * var(--size-seekbar-height));
+        inset-inline-start: 0;
+        inset-inline-end: 0;
     }
 
     .site-player__times :global(.current) {
-        text-align: right;
+        text-align: end;
     }
 
     .site-player__controls {
@@ -135,10 +135,10 @@
 
     #waveform {
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset-block-start: 0;
+        inset-block-end: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
     }
 
     #waveform > :global(wave) {
@@ -155,7 +155,7 @@
     .site-player__now-playing :global(.nowPlayingArtwork) {
         height: 85%;
         border-radius: 3px;
-        margin-right: var(--spacing-md);
+        margin-inline-end: var(--spacing-md);
         outline: 1px solid hsla(0, 0%, 50%, 0.2);
         outline-offset: -1px;
     }
@@ -228,8 +228,8 @@
         min-width: 12px;
         background-color: var(--color-text-primary);
         position: absolute;
-        top: 50%;
-        right: 0;
+        inset-block-start: 50%;
+        inset-inline-end: 0;
         transform: translateY(-50%) translateX(50%);
         border-radius: 99px;
     }
@@ -342,24 +342,24 @@
             grid-column-end: times;
             display: block;
             position: absolute;
-            top: 12px;
-            bottom: 12px;
-            left: 0;
-            right: 0;
+            inset-block-start: 12px;
+            inset-block-end: 12px;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
             z-index: -1;
         }
 
         .site-player__times {
-            padding-top: var(--spacing-lg);
+            padding-block-start: var(--spacing-lg);
         }
 
         .site-player__rating {
-            padding-bottom: var(--spacing-lg);
+            padding-block-end: var(--spacing-lg);
         }
 
         .site-player__times,
         .site-player__rating {
-            padding-right: var(--spacing-md);
+            padding-inline-end: var(--spacing-md);
         }
 
         #waveform {
@@ -378,11 +378,11 @@
         }
 
         .site-player__secondary-controls {
-            margin-top: var(--spacing-sm);
+            margin-block-start: var(--spacing-sm);
         }
 
         .site-player__volume {
-            margin-bottom: var(--spacing-sm);
+            margin-block-end: var(--spacing-sm);
         }
     }
 </style>

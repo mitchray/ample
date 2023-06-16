@@ -115,7 +115,7 @@
 <style>
     .logo {
         color: var(--color-highlight);
-        margin-bottom: var(--spacing-xl);
+        margin-block-end: var(--spacing-xl);
     }
 
     .container {
@@ -126,16 +126,16 @@
 
     .container :global(.userMenu-toggle) {
         position: absolute;
-        top: var(--spacing-md);
-        right: var(--spacing-md);
+        inset-block-start: var(--spacing-md);
+        inset-inline-end: var(--spacing-md);
         margin: 0;
     }
 
     .form {
         background-color: var(--color-background); /* cover version details when the mobile keyboard appears */
         position: absolute;
-        left: 50%;
-        top: 50%;
+        inset-inline-start: 50%;
+        inset-block-start: 50%;
         transform: translateY(-50%) translateX(-50%);
         width: 100%;
         max-width: 400px;
@@ -144,7 +144,7 @@
     }
 
     label > * {
-        margin-top: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
     }
 
     label input {
@@ -153,26 +153,26 @@
     }
 
     button {
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
     }
 
     .server-message {
         position: absolute;
-        bottom: 100%;
-        left: 0;
+        inset-block-end: 100%;
+        inset-inline-start: 0;
         width: 100%;
     }
 
     .login-message {
         position: absolute;
-        left: var(--spacing-xxl);
-        right: var(--spacing-xxl);
+        inset-inline-start:  var(--spacing-xxl);
+        inset-inline-end: var(--spacing-xxl);
     }
 
     .meta {
         position: absolute;
-        bottom: var(--spacing-lg);
-        right: var(--spacing-lg);
+        inset-block-end:  var(--spacing-lg);
+        inset-inline-end: var(--spacing-lg);
         opacity: 0.4;
     }
 

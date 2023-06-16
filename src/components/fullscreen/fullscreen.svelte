@@ -63,8 +63,8 @@
         grid-template-rows: min-content 1fr min-content;
         gap: var(--spacing-lg);
         position: absolute;
-        top: 0;
-        left: 0;
+        inset-block-start: 0;
+        inset-inline-start: 0;
         height: 100%;
         width: 100%;
         z-index: 1000;
@@ -86,6 +86,6 @@
         grid-area: close;
         display: flex;
         justify-self: center;
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 </style>

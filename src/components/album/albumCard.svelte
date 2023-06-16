@@ -114,7 +114,7 @@
         z-index: 1;
         justify-content: center;
         display: flex;
-        margin-bottom: var(--spacing-sm);
+        margin-block-end: var(--spacing-sm);
         border-radius: 5px;
         overflow: hidden;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
@@ -129,7 +129,7 @@
     }
 
     .top {
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 
     .title,
@@ -140,12 +140,12 @@
     }
 
     .bottom {
-        padding-top: 0;
+        padding-block-start: 0;
     }
 
     .rating-container {
         display: flex;
         flex-direction: column;
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 </style>

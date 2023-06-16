@@ -286,7 +286,7 @@
         ;
         grid-template-rows: auto auto auto auto;
         gap: var(--spacing-xl);
-        padding-bottom: var(--spacing-xxl);
+        padding-block-end: var(--spacing-xxl);
     }
     
     .art-container {
@@ -321,7 +321,7 @@
         align-items: start;
         width: 100%;
         flex-wrap: wrap;
-        padding-top: var(--spacing-md);
+        padding-block-start: var(--spacing-md);
     }
 
     .title {
@@ -332,7 +332,7 @@
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;
-        margin-bottom: 0;
+        margin-block-end: 0;
     }
 
     .details {
@@ -376,7 +376,7 @@
         width: 140px;
         text-align: center;
         display: inline-block;
-        margin-bottom: var(--spacing-xl);
+        margin-block-end: var(--spacing-xl);
     }
 
     .summary {
@@ -385,7 +385,7 @@
     }
 
     .summary :global(p:first-of-type) {
-        margin-top: 0;
+        margin-block-start: 0;
     }
 
     @container artist-info-wrapper (min-width: 530px) {

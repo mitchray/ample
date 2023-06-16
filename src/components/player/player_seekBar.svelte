@@ -82,7 +82,7 @@
         position: relative;
         cursor: pointer;
         background-color: var(--color-border);
-        border-top: 1px solid var(--color-background);
+        border-block-start: 1px solid var(--color-background);
         z-index: 100; /* make sure it is above waveform else it interferes with mouse */
         will-change: z-index;
     }
@@ -95,7 +95,7 @@
         width: 100%;
         display: block;
         position: absolute;
-        top: 50%;
+        inset-block-start: 50%;
         transform: translateY(-50%);
         z-index: 100;
     }
@@ -103,9 +103,9 @@
     .progress {
         background-color: var(--color-highlight);
         position: absolute;
-        right: 100%;
-        bottom: 0;
-        top: 0;
+        inset-inline-end: 100%;
+        inset-block-end: 0;
+        inset-block-start: 0;
         transition: transform linear 200ms;
         width: 100%;
     }
@@ -113,7 +113,7 @@
     /* seekbar time indicator popup */
     .progress:before {
         opacity: 0;
-        top: calc(50% - 20px);
+        inset-block-start: calc(50% - 20px);
     }
 
     /* seekbar time ball */

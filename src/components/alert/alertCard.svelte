@@ -43,7 +43,7 @@
         background-color: var(--color-interface);
         /*padding: var(--spacing-lg);*/
         border-radius: 4px;
-        border-left: 4px solid var(--color-regular-background);
+        border-inline-start: 4px solid var(--color-regular-background);
         display: flex;
         align-items: stretch;
         gap: var(--spacing-lg);
@@ -95,7 +95,7 @@
     }
 
     .message {
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
     }
 
     .content {
@@ -105,12 +105,12 @@
     }
 
     .actions {
-        /*margin-left: var(--spacing-md);*/
+        /*margin-inline-start: var(--spacing-md);*/
         /*position: absolute;*/
-        /*top: var(--spacing-sm);*/
-        /*right: var(--spacing-sm);*/
+        /*inset-block-start: var(--spacing-sm);*/
+        /*inset-inline-end: var(--spacing-sm);*/
         align-self: start;
-        margin-top: var(--spacing-sm);
-        margin-right: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
+        margin-inline-end: var(--spacing-sm);
     }
 </style>

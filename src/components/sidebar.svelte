@@ -250,7 +250,7 @@
         flex-direction: column;
         position: relative;
         transform: none;
-        left: 0;
+        inset-inline-start: 0;
         transition: transform 0.3s ease-out;
         z-index: 30;
         will-change: transform;
@@ -258,15 +258,15 @@
 
     .site-sidebar-inner {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
         overflow-x: hidden;
         overflow-y: auto;
         scrollbar-width: none;
         padding: var(--sidebar-padding) 0;
-        padding-right: var(--spacing-sm);
+        padding-inline-end: var(--spacing-sm);
     }
 
     :global(.site-sidebar__link) {
@@ -302,7 +302,7 @@
     }
 
     .label {
-        margin-left: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
         flex: 1;
         max-width: calc(100% - var(--sidebar-padding));
         overflow: hidden;
@@ -312,7 +312,7 @@
 
     .site-sidebar.is-list :global(svg) {
         position: relative;
-        bottom: 0.06em;
+        inset-block-end: 0.06em;
     }
 
     /*
@@ -332,8 +332,8 @@
     */
     .site-sidebar.is-drawer {
         position: absolute;
-        top: var(--size-header-height);
-        bottom: var(--size-webplayer-height);
+        inset-block-start: var(--size-header-height);
+        inset-block-end:  var(--size-webplayer-height);
         box-shadow: var(--shadow-xxl);
     }
 
@@ -343,7 +343,7 @@
         width: 100vw;
         display: block;
         background-color: rgba(0, 0, 0, 0.5);
-        left: 100%;
+        inset-inline-start: 100%;
         position: absolute;
         pointer-events: none;
         opacity: 0;

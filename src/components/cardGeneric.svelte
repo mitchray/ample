@@ -135,7 +135,7 @@
         height: 1em;
         width: 1em;
         position: relative;
-        top: -2px;
+        inset-block-start: -2px;
     }
 
     .title,
@@ -153,7 +153,7 @@
     }
 
     .actions {
-        margin-top: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
     }
 
     .image-container {

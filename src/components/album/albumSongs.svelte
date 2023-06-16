@@ -43,6 +43,6 @@
     }
 
     section:not(:first-of-type) {
-        margin-top: var(--spacing-xxxl);
+        margin-block-start: var(--spacing-xxxl);
     }
 </style>

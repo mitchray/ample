@@ -77,16 +77,16 @@
 
 <style>
     .release-type {
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
         font-size: unset;
         padding: 0.4em 0.5em;
     }
 
     section:not(:first-of-type) {
-        margin-top: var(--spacing-xxxl);
+        margin-block-start: var(--spacing-xxxl);
     }
 
     .album-grid {
-        margin-top: 0;
+        margin-block-start: 0;
     }
 </style>

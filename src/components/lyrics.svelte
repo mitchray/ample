@@ -172,7 +172,7 @@
     }
 
     .line {
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
     
     .hasTimestamps {
@@ -197,8 +197,8 @@
         pointer-events: none;
         transition: opacity 0.3s ease-in-out;
         max-width: calc(100% - var(--spacing-xxl));
-        left: 0;
-        top: 0;
+        inset-inline-start: 0;
+        inset-block-start: 0;
     }
 
     .visible {

@@ -19,8 +19,8 @@
         display: flex;
         gap: var(--spacing-md);
         flex-wrap: wrap;
-        margin-top: 0;
-        margin-bottom: 0;
+        margin-block-start: 0;
+        margin-block-end: 0;
     }
 
     .genre-tag :global(a) {
@@ -38,6 +38,6 @@
         opacity: 0.5;
         height: 1em;
         width: auto;
-        margin-right: var(--spacing-sm);
+        margin-inline-end: var(--spacing-sm);
     }
 </style>

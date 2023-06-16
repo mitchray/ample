@@ -73,7 +73,7 @@
     .art-container {
         border-radius: 5px;
         overflow: hidden;
-        padding-bottom: 100%;
+        padding-block-end: 100%;
         width: 100%;
         position: relative;
         border: 1px solid hsla(0, 0%, 50%, 0.2);
@@ -86,10 +86,10 @@
         width: 100%;
         object-fit: cover;
         position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset-block-start: 0;
+        inset-block-end: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
     }
 
     .title {

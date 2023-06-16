@@ -69,7 +69,7 @@
 
     /* collapses space if empty */
     .lister-actions.not-empty {
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
     }
 
     .lister-actions > .group {

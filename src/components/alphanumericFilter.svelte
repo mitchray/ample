@@ -56,7 +56,7 @@
         align-items: center;
 
         z-index: 1;
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
     }
 
     label {
@@ -64,8 +64,8 @@
     }
 
     .container .filter {
-        padding-right: var(--spacing-xxl);
-        margin-left: var(--spacing-sm);
+        padding-inline-end: var(--spacing-xxl);
+        margin-inline-start: var(--spacing-sm);
     }
 
     .close {
@@ -73,8 +73,8 @@
         display: flex;
         align-items: center;
         position: absolute;
-        top: 0;
-        right: var(--spacing-sm);
+        inset-block-start: 0;
+        inset-inline-end: var(--spacing-sm);
         background: unset;
         border: unset;
         box-shadow: unset;

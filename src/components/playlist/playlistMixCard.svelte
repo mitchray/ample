@@ -150,9 +150,9 @@
     .image-text {
         z-index: 100;
         position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
+        inset-block-end: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
         padding: var(--spacing-md);
         font-size: 18px;
         font-weight: 700;
@@ -166,9 +166,9 @@
         height: calc(100% + var(--spacing-xxl));
         width: 100%;
         position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
         background-image: linear-gradient(
                 to bottom,
                 transparent,
@@ -179,7 +179,7 @@
 
     .details {
         padding: var(--spacing-md);
-        padding-bottom: 0;
+        padding-block-end: 0;
         text-align: center;
     }
 
@@ -188,7 +188,7 @@
         -webkit-box-orient: vertical;
         -webkit-line-clamp: 2;
         overflow: hidden;
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 
     .actions {

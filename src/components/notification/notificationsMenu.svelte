@@ -166,10 +166,10 @@
     }
 
     .notifications-toggle:global(.notification-badge:after) {
-        top: 0;
-        right: calc(100% - 12px);
-        bottom: unset;
-        left: unset;
+        inset-block-start: 0;
+        inset-inline-end: calc(100% - 12px);
+        inset-block-end:  unset;
+        inset-inline-start:  unset;
     }
 
     .header {
@@ -178,14 +178,14 @@
     }
 
     .title {
-        margin-right: var(--spacing-md);
+        margin-inline-end: var(--spacing-md);
     }
 
     .clear-notifications {
-        margin-right: auto;
+        margin-inline-end: auto;
     }
 
     .group + .group {
-        padding-top: var(--spacing-lg);
+        padding-block-start: var(--spacing-lg);
     }
 </style>

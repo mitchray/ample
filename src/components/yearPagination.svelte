@@ -97,7 +97,7 @@
         align-items: center;
         background-color: var(--color-card-primary);
         border-radius: 10px;
-        margin-bottom: var(--spacing-xxl);
+        margin-block-end: var(--spacing-xxl);
         overflow: hidden;
         box-shadow: var(--shadow-md);
         padding: var(--spacing-lg);
@@ -126,7 +126,7 @@
     .input-group {
         display: flex;
         align-items: center;
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
     }
 
     .input-group button {

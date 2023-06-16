@@ -84,8 +84,8 @@
         cursor: initial;
         pointer-events: none;
         position: absolute;
-        top: 0;
-        left: 0;
+        inset-block-start: 0;
+        inset-inline-start: 0;
         z-index: 1000;
         padding: var(--spacing-lg);
         max-width: 100%;
@@ -107,18 +107,18 @@
     .c-menu :global(.menu-list a) {
         display: flex;
         width: 100%;
-        text-align: left;
+        text-align: start;
         align-items: center;
         gap: var(--spacing-sm);
     }
 
     .c-menu :global(.menu-list li + li) {
-        margin-top: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
     }
 
     .c-menu :global(.title) {
         display: inline-block;
-        margin-right: var(--spacing-md);
+        margin-inline-end: var(--spacing-md);
     }
 
     .c-menu :global(label) {

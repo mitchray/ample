@@ -82,6 +82,6 @@
 
 <style>
     .total {
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
     }
 </style>

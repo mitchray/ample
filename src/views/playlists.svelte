@@ -58,7 +58,7 @@
 
 <style>
     .new-playlist-button {
-        margin-bottom: var(--spacing-xxl);
+        margin-block-end: var(--spacing-xxl);
     }
 </style>
 

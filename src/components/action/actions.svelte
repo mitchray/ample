@@ -271,7 +271,7 @@
         display: inline-block;
         vertical-align: middle;
         position: relative;
-        top: -2px;
+        inset-block-start: -2px;
     }
 
     /* resets so buttons and links appear identical */
@@ -304,7 +304,7 @@
     .c-actions.menu :global(svg),
     .c-actions.fullButtons :global(.button--primary svg),
     .c-actions.fullButtons :global(.button--secondary svg) {
-        margin-right: var(--spacing-sm);
+        margin-inline-end: var(--spacing-sm);
     }
 
     /*
@@ -319,8 +319,8 @@
      */
     .c-actions.fullButtons :global(.button--primary),
     .c-actions.fullButtons :global(.button--secondary) {
-        padding-left: 1em;
-        padding-right: 1em;
+        padding-inline-start: 1em;
+        padding-inline-end: 1em;
     }
 
     .group {

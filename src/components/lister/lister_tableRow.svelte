@@ -229,8 +229,8 @@
 
 <style>
     .image {
-        margin-right: var(--spacing-md);
-        margin-left: calc(var(--spacing-md) * -1);
+        margin-inline-end: var(--spacing-md);
+        margin-inline-start: calc(var(--spacing-md) * -1);
         border-radius: 3px;
     }
 
@@ -248,7 +248,7 @@
 
     :global(.lister-container .header .cell[data-type=number]),
     :global(.lister-container .header .cell[data-type=time]) {
-        padding-right: 25px;
+        padding-inline-end: 25px;
     }
 
     :global(.lister-container .cell[data-type=number]),

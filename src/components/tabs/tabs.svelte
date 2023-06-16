@@ -87,7 +87,7 @@
         display: flex;
         flex-wrap: wrap;
         margin: 0;
-        margin-bottom: var(--spacing-xxl); /* big spacing to account for lister actions overflow trick */
+        margin-block-end: var(--spacing-xxl); /* big spacing to account for lister actions overflow trick */
         column-gap: var(--spacing-xl);
         row-gap: var(--spacing-md);
         font-weight: 700;
@@ -97,7 +97,7 @@
         display: block;
         padding: 0.3em 0;
         cursor: pointer;
-        border-bottom: 3px solid transparent;
+        border-block-end: 3px solid transparent;
     }
 
     @media (hover: hover) {

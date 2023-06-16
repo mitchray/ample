@@ -186,8 +186,8 @@
     }
 
     .button {
-        margin-right: 0;
-        padding-right: 10px;
+        margin-inline-end: 0;
+        padding-inline-end: 10px;
     }
 
     button:after {
@@ -198,14 +198,14 @@
         mask-position: center;
         width: 25px;
         position: absolute;
-        left: calc(100% - 15px);
-        bottom: 0;
-        top: 0;
+        inset-inline-start:  calc(100% - 15px);
+        inset-block-end: 0;
+        inset-block-start: 0;
         transform: rotate(270deg);
         display: inline-block;
     }
 
     h4 {
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 </style>

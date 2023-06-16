@@ -72,6 +72,6 @@
 
 <style>
     .new-panel-secondary {
-        margin-top: var(--spacing-lg);
+        margin-block-start: var(--spacing-lg);
     }
 </style>

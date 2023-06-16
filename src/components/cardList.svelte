@@ -262,7 +262,7 @@
     }
 
     .refresh-button {
-        margin-left: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
     }
 
     .load-more-button:not([hidden]) {
@@ -285,7 +285,7 @@
     }
 
     .scroll-buttons {
-        margin-left: auto;
+        margin-inline-start: auto;
     }
 
     :global(.cardlist-grid) {
@@ -295,8 +295,8 @@
     }
 
     :global(.cardlist-scroll) {
-        padding-left: var(--content-padding);
-        padding-right: var(--content-padding);
+        padding-inline-start: var(--content-padding);
+        padding-inline-end: var(--content-padding);
         overflow-x: scroll;
         scrollbar-width: none;
         display: flex;
@@ -309,7 +309,7 @@
     }
 
     :global(.cardlist-grid:not(:last-child), .cardlist-scroll:not(:last-child)) {
-        margin-bottom: var(--spacing-xxl);
+        margin-block-end: var(--spacing-xxl);
     }
 
     /* override specificity */

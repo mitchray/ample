@@ -282,9 +282,9 @@
 
     .resize-handle {
         position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
+        inset-block-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
         background: var(--color-text-primary);
         opacity: 0;
         width: 5px;
@@ -306,7 +306,7 @@
     .label {
         position: relative;
         user-select: none;
-        padding-right: 5px;
+        padding-inline-end: 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
@@ -330,10 +330,10 @@
         mask-position: center;
         width: 25px;
         position: absolute;
-        left: calc(100% - 5px);
+        inset-inline-start:  calc(100% - 5px);
         opacity: 0.3;
-        bottom: 0;
-        top: 0;
+        inset-block-end: 0;
+        inset-block-start: 0;
     }
 
     [data-sortable] .label:before {

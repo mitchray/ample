@@ -83,7 +83,7 @@
         flex-shrink: 0;
         flex-grow: 0;
         position: sticky;
-        top: calc(var(--spacing-xxl) * -1);
+        inset-block-start: calc(var(--spacing-xxl) * -1);
         z-index: 5;
         overflow: hidden auto;
     }
@@ -95,19 +95,19 @@
     }
 
     .header :global(.actions) {
-        right: 0;
+        inset-inline-end: 0;
     }
 
     .header > :global(div) {
-        text-align: left;
+        text-align: start;
         background-color: var(--color-interface);
-        border-bottom: 3px solid var(--color-border);
+        border-block-end: 3px solid var(--color-border);
         position: relative;
     }
 
     .row > :global(div) {
         background-color: var(--color-interface);
-        border-bottom: 1.4px solid var(--color-border); /* thicker line to alleviate transform rounding */
+        border-block-end: 1.4px solid var(--color-border); /* thicker line to alleviate transform rounding */
         will-change: transform;
     }
 
@@ -121,7 +121,7 @@
         .header :global(.name),
         .header :global(.actions) {
             position: sticky;
-            top: 0;
+            inset-block-start: 0;
             z-index: 3;
         }
 
@@ -133,12 +133,12 @@
 
         .header :global(.name),
         .lister :global(.name) {
-            left: -1px;
+            inset-inline-start:  -1px;
         }
     }
 
     .lister :global(.actions) {
-        right: 0;
+        inset-inline-end: 0;
     }
 
     .header :global(> div),

@@ -32,7 +32,7 @@ export function tooltip(node, options) {
             middleware: [flip()],
         }).then(({x, y}) => {
             Object.assign(tt.style, {
-                left: `${x}px`,
+                left:  `${x}px`,
                 top: `${y}px`,
             });
         });

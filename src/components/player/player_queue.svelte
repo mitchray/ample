@@ -54,19 +54,19 @@
 
 <style>
     :global(.current-icon) {
-        margin-right: var(--spacing-sm);
+        margin-inline-end: var(--spacing-sm);
         flex-shrink: 0;
         color: var(--color-highlight);
     }
 
     .queue-header {
         display: inline-block;
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
         color: var(--color-highlight);
     }
 
     .queue-toggle :global(svg) {
-        left: 2px;
+        inset-inline-start: 2px;
         position: relative;
     }
 

@@ -42,7 +42,7 @@
     }
 
     .title {
-        margin-bottom: var(--spacing-sm);
+        margin-block-end: var(--spacing-sm);
     }
 
     .title,

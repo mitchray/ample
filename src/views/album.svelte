@@ -223,7 +223,7 @@
         align-items: start;
         width: 100%;
         flex-wrap: wrap;
-        padding-top: var(--spacing-md);
+        padding-block-start: var(--spacing-md);
     }
 
     .art-container {
@@ -251,7 +251,7 @@
     .title {
         --roboto-opsz: 50;
         line-height: 1.1;
-        margin-bottom: 0;
+        margin-block-end: 0;
         letter-spacing: 0.02em;
         font-weight: 300;
         font-stretch: 80%;
@@ -283,7 +283,7 @@
     }
 
     section:not(:first-of-type) {
-        margin-top: var(--spacing-xxxl);
+        margin-block-start: var(--spacing-xxxl);
     }
 
     @container album-details-wrapper (min-width: 530px) {
@@ -313,10 +313,10 @@
             min-height: 0;
             overflow: hidden;
             position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
+            inset-block-start: 0;
+            inset-block-end: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
             padding: 0;
             grid-column: full;
             gap: 0;

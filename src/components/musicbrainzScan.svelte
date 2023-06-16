@@ -498,7 +498,7 @@
 
     .sidebar {
         display: flex;
-        top: 0;
+        inset-block-start: 0;
         align-self: flex-start; /* needed for sticky to activate */
         background-color: var(--color-card-primary);
         padding: var(--spacing-lg);
@@ -510,11 +510,11 @@
     }
 
     h4 {
-        margin-bottom: var(--spacing-md);
+        margin-block-end: var(--spacing-md);
     }
 
     .submit {
-        margin-bottom: var(--spacing-lg);
+        margin-block-end: var(--spacing-lg);
     }
 
     .total {
@@ -523,11 +523,11 @@
     }
 
     label {
-        margin-bottom: var(--spacing-sm);
+        margin-block-end: var(--spacing-sm);
     }
 
     .time {
-        text-align: right;
+        text-align: end;
     }
 
     .progress-bar {
@@ -543,17 +543,17 @@
         height: 100%;
         background-color: var(--color-waveform-progress);
         position: absolute;
-        left: 0;
-        top: 0;
-        bottom: 0;
+        inset-inline-start: 0;
+        inset-block-start: 0;
+        inset-block-end: 0;
     }
 
     .results :global(th) {
-        text-align: left;
+        text-align: start;
     }
 
     tr {
-        border-bottom: 1px solid var(--color-border);
+        border-block-end: 1px solid var(--color-border);
     }
 
     .image {
@@ -601,7 +601,7 @@
         }
 
         .time {
-            text-align: left;
+            text-align: start;
         }
 
         .mbid {

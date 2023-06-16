@@ -238,17 +238,17 @@
 
 <style>
     .overrides :global(label) {
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
         display: block;
     }
 
     .overrides label > input {
-        margin-top: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
         display: block;
     }
 
     .group + .group {
-        padding-top: var(--spacing-lg);
+        padding-block-start: var(--spacing-lg);
     }
 
     .site-player__volume-slider {
@@ -273,17 +273,17 @@
         display: block;
         position: absolute;
         opacity: 0;
-        top: 50%;
-        left: 50%;
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
         transform: translateY(-50%) translateX(-50%);
     }
 
     .site-player__volume-value {
         background-color: var(--color-highlight);
         position: absolute;
-        left: 0;
-        bottom: 0;
-        top: 0;
+        inset-inline-start: 0;
+        inset-block-end: 0;
+        inset-block-start: 0;
         transition: width linear 200ms;
         border-radius: 100vh;
     }
@@ -291,7 +291,7 @@
     /* volume value indicator popup */
     .site-player__volume-value:before {
         opacity: 0;
-        top: calc(50% - 20px);
+        inset-block-start: calc(50% - 20px);
     }
 
     /* while dragging increase the active area, especially so it don't conflict with seekbar  */
@@ -303,12 +303,12 @@
 
     .current {
         max-width: fit-content;
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
     }
 
     .label {
         color: var(--color-text-secondary);
-        padding-right: var(--spacing-md);
-        text-align: right;
+        padding-inline-end: var(--spacing-md);
+        text-align: end;
     }
 </style>

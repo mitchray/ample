@@ -154,7 +154,7 @@
 
 <style>
     .title {
-        margin-bottom: 0;
+        margin-block-end: 0;
     }
 
     .info {
@@ -170,8 +170,8 @@
     }
 
     .grid {
-        margin-top: var(--spacing-xxl);
-        margin-bottom: var(--spacing-md);
+        margin-block-start: var(--spacing-xxl);
+        margin-block-end: var(--spacing-md);
         display: grid;
         grid-template-columns: minmax(80px, 130px) auto;
         gap: var(--spacing-lg);
@@ -180,6 +180,6 @@
 
     .field {
         opacity: 0.6;
-        text-align: right;
+        text-align: end;
     }
 </style>

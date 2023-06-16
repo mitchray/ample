@@ -25,7 +25,7 @@
 
 <style>
     :global(.album-card-expanded + .album-card-expanded) {
-        margin-top: calc(var(--spacing-xxxl) + var(--spacing-xxxl));
+        margin-block-start: calc(var(--spacing-xxxl) + var(--spacing-xxxl));
     }
 
     .album-card-expanded {
@@ -34,7 +34,7 @@
     }
 
     .info {
-        margin-bottom: var(--spacing-xxl);
+        margin-block-end: var(--spacing-xxl);
     }
 
     @container album-card-expanded (min-width: 320px) {

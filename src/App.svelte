@@ -177,13 +177,13 @@
         container-name: site-content-inner;
         container-type: size;
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
         overflow-y: auto;
-        padding-top: var(--spacing-xxl);
-        padding-bottom: var(--spacing-xxl);
+        padding-block-start: var(--spacing-xxl);
+        padding-block-end: var(--spacing-xxl);
         display: grid;
         grid-template-columns:
             [full-start]

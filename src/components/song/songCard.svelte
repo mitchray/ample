@@ -121,7 +121,7 @@
     }
 
     .info {
-        margin-left: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -137,10 +137,10 @@
     }
 
     .album {
-        margin-bottom: var(--spacing-sm);
+        margin-block-end: var(--spacing-sm);
     }
 
     .actions {
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
     }
 </style>

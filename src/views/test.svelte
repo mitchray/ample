@@ -270,6 +270,6 @@
     }
 
     :global(.tab-general .forms) > * {
-        margin-right: 1em;
+        margin-inline-end: 1em;
     }
 </style>

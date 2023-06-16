@@ -162,13 +162,13 @@
 
     .c-rating__flag {
         padding: 0;
-        padding-left: var(--spacing-sm);
+        padding-inline-start: var(--spacing-sm);
         opacity: 0.6;
     }
 
     .c-rating__average {
         cursor: default;
-        padding-left: var(--spacing-sm);
+        padding-inline-start: var(--spacing-sm);
     }
     
     .current,

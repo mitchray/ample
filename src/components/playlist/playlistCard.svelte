@@ -112,7 +112,7 @@
 
     .details {
         padding: var(--spacing-md);
-        padding-bottom: 0;
+        padding-block-end: 0;
         text-align: center;
     }
 
@@ -130,15 +130,15 @@
     }
 
     .count {
-        margin-top: var(--spacing-sm);
-        margin-bottom: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
+        margin-block-end: var(--spacing-sm);
     }
 
     .private {
         z-index: 20;
         position: absolute;
-        bottom: 5px;
-        right: 5px;
+        inset-block-end: 5px;
+        inset-inline-end: 5px;
         text-transform: uppercase;
         letter-spacing: 0.03em;
         font-weight: 700;

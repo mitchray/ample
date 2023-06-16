@@ -69,7 +69,7 @@
     }
 
     .info {
-        margin-left: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
         display: flex;
         flex-direction: column;
         flex: 1;
@@ -103,7 +103,7 @@
     }
 
     .actions {
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
     }
 
     /*  COLORS  */
@@ -111,10 +111,10 @@
         content: '';
         background-color: hsla(0,0%,50%,0.3);
         position: absolute;
-        left: 0;
-        right: 0;
-        top: 0;
-        bottom: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-start: 0;
+        inset-block-end: 0;
         z-index: -1;
         mask-image: linear-gradient(var(--angle), transparent 30%, hsla(0,0%,0%, 1.0) 30.5%, hsla(0,0%,0%, 0.7) 50%, hsla(0,0%,0%, 0.3) 80%, hsla(0,0%,0%, 0) 100%);
         opacity: 0.2;

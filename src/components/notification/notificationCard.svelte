@@ -77,14 +77,14 @@
         background-color: var(--color-interface);
         padding: var(--spacing-md);
         border-radius: 4px;
-        border-left: 4px solid var(--color-regular-background);
+        border-inline-start: 4px solid var(--color-regular-background);
         display: flex;
         flex-direction: row;
         pointer-events: initial;
     }
 
     .notification-card + :global(.notification-card) {
-        margin-top: var(--spacing-md);
+        margin-block-start: var(--spacing-md);
     }
 
     .notification-card.success {
@@ -137,7 +137,7 @@
 
     .time {
         opacity: 0.6;
-        margin-top: var(--spacing-sm);
+        margin-block-start: var(--spacing-sm);
         text-transform: uppercase;
     }
 
@@ -154,9 +154,9 @@
     }
 
     .actions {
-        margin-left: var(--spacing-md);
+        margin-inline-start: var(--spacing-md);
         position: relative;
-        top: calc(-1 * var(--spacing-sm));
-        right: calc(-1 * var(--spacing-sm));
+        inset-block-start: calc(-1 * var(--spacing-sm));
+        inset-inline-end: calc(-1 * var(--spacing-sm));
     }
 </style>
