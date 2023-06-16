@@ -14,6 +14,7 @@ import { debugHelper, shuffleArray, sleep, lyricsAreTimestamped, cleanArtURL } f
 import {
     NowPlayingQueue,
     NowPlayingIndex,
+    QueueIsUpdating,
     IsPlaying,
     IsMuted,
     CurrentMedia,
@@ -181,18 +182,20 @@ class Player {
         this.stopQueued = true;
         this.stop();
         CurrentMedia.set(null);
-        this.setQueueItems([])
-        NowPlayingIndex.set(0);
-        IsPlaying.set(false);
+        this.setQueueItems([]).then(() => {
+            NowPlayingIndex.set(0);
+            IsPlaying.set(false);
+        })
     }
 
     /**
      * Clear all tracks EXCEPT currently playing
      */
     clearAllExceptCurrent() {
-        let current = this.nowPlayingQueue.filter(a => this.nowPlayingQueue.indexOf(a) === this.nowPlayingIndex);
-        this.setQueueItems(current);
-        NowPlayingIndex.set(0);
+        let current = [this.nowPlayingQueue[this.nowPlayingIndex]];
+        this.setQueueItems(current).then(() => {
+            NowPlayingIndex.set(0);
+        });
     }
 
     /**
@@ -357,11 +360,15 @@ class Player {
         }
     }
 
-    setQueueItems(arr) {
+    async setQueueItems(arr) {
+        QueueIsUpdating.set(true);
+        await tick();
+
         // each media item needs a unique _id
         arr = arr.map((item, index) => ({ ...item, _id: uuidv4()}));
 
         NowPlayingQueue.set(arr);
+        QueueIsUpdating.set(false);
     }
 
     recordLastPlayed() {
@@ -472,9 +479,10 @@ class Player {
 
         tempArray = shuffleArray(tempArray);
 
-        this.setQueueItems(tempArray);
-        NowPlayingIndex.set(0);
-        this.start();
+        this.setQueueItems(tempArray).then(() => {
+            NowPlayingIndex.set(0);
+            this.start();
+        });
     }
 
     /**
@@ -493,19 +501,20 @@ class Player {
      */
     playNow(songs) {
         this.clearAll();
-        this.setQueueItems(songs);
-        this.start();
+        this.setQueueItems(songs).then(() => {
+            this.start();
+        });
     }
 
     /**
      * Insert songs after currently playing song
      * @param {object} songs
      */
-    playNext(songs) {
+    async playNext(songs) {
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
         tempArray.splice(this.nowPlayingIndex + 1, 0, ...songs);
-        this.setQueueItems(tempArray);
+        await this.setQueueItems(tempArray);
 
         // Start playing if queue was empty
         if (queueLength === 0) {
@@ -517,11 +526,11 @@ class Player {
      * Add songs to the end of the queue
      * @param {object} songs
      */
-    playLast(songs) {
+    async playLast(songs) {
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
         tempArray.push(...songs);
-        this.setQueueItems(tempArray);
+        await this.setQueueItems(tempArray);
 
         // Start playing if queue was empty
         if (queueLength === 0) {

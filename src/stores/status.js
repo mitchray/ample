@@ -22,6 +22,7 @@ export let SidebarIsPinned = writable(JSON.parse(localStorage.getItem('SidebarIs
 
 export let QueueIsOpen   = writable(JSON.parse(localStorage.getItem('QueueIsOpen')) || false);
 export let QueueIsPinned = writable(JSON.parse(localStorage.getItem('QueueIsPinned')) || false);
+export let QueueIsUpdating = writable(false);
 
 export let PlayerVolume               = writable(JSON.parse(localStorage.getItem('PlayerVolume')) || 50);
 export let RepeatEnabled              = writable(JSON.parse(localStorage.getItem('RepeatEnabled')) || false);

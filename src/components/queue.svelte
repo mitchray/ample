@@ -8,6 +8,7 @@
     import {
         NowPlayingQueue,
         NowPlayingIndex,
+        QueueIsUpdating,
         CurrentMedia,
         QueueIsOpen,
         QueueIsPinned,
@@ -223,6 +224,7 @@
             }}
             on:consider={handleSort}
             on:finalize={handleSort}
+            style="display: {$QueueIsUpdating ? 'none' : 'initial'}"
         >
             {#if $NowPlayingQueue && $NowPlayingQueue.length > 0}
                 {#each $NowPlayingQueue as media, i (media._id)}
