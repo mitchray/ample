@@ -106,8 +106,8 @@
 
     // overwrite any actionData.songs with our dataDisplay as it may have updated
     $: {
-        if ($_actionData.songs) {
-            $_actionData.songs = $dataDisplay;
+        if ($_actionData.data?.songs) {
+            $_actionData.data.songs = $dataDisplay;
         }
     }
 
