@@ -2,7 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { getContext } from "svelte";
     import { PageLoadedKey } from "../../stores/status";
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
     import PlaylistRemoveFrom from '../playlist/playlist_removeFrom.svelte';
     import PlaylistReorder from '../playlist/playlist_reorder.svelte';
     import PlaylistRefresh from '../playlist/playlist_refresh.svelte';
@@ -25,7 +25,7 @@
 <div class="lister-actions" bind:this={actionsBind} class:not-empty={actionsBind?.firstElementChild}>
     {#if !$_actionData.disable}
         <div class="group">
-            <Actions2 mode="fullButtons" {...$_actionData} />
+            <Actions mode="fullButtons" {...$_actionData} />
         </div>
     {/if}
 

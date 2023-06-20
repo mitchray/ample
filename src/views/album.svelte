@@ -9,9 +9,9 @@
 
     import Rating from '../components/rating.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
-    import Actions2 from '../components/action/actions.svelte';
+    import Actions from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import AlbumsAround from '../components/album/albumsAround.svelte';
 
     export let id;
@@ -107,7 +107,7 @@
                                 </div>
                             </div>
 
-                            <Actions2
+                            <Actions
                                     type="album"
                                     mode="fullButtons"
                                     id="{album.id}"
@@ -148,22 +148,22 @@
                         {#each [...album.ampleSongs] as [key, value]}
                             {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
                             <section>
-                                <Lister2
-                                        data={value}
-                                        type="song"
-                                        tableOnly={true}
-                                        zone="album-contents"
-                                        showArtist={album.artist.name === "Various Artists"}
-                                        showArt={false}
-                                        discSubtitle={subtitle}
-                                        actionData={{
-                                    disable: [...album.ampleSongs].length < 2,
-                                    type: "album",
-                                    id: album.id,
-                                    mode: "miniButtons",
-                                    showShuffle: value.length > 1,
-                                    data: Object.create({songs: value})
-                                }}
+                                <Lister
+                                    data={value}
+                                    type="song"
+                                    tableOnly={true}
+                                    zone="album-contents"
+                                    showArtist={album.artist.name === "Various Artists"}
+                                    showArt={false}
+                                    discSubtitle={subtitle}
+                                    actionData={{
+                                        disable: [...album.ampleSongs].length < 2,
+                                        type: "album",
+                                        id: album.id,
+                                        mode: "miniButtons",
+                                        showShuffle: value.length > 1,
+                                        data: Object.create({songs: value})
+                                    }}
                                 />
                             </section>
                         {/each}

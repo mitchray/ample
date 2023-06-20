@@ -2,7 +2,7 @@
     import { API } from "../../stores/api";
     import { FilterHistory } from "../../stores/status";
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
-    import Lister2 from '../../components/lister/lister.svelte';
+    import Lister from '../../components/lister/lister.svelte';
 
     export let type = "artist";
 
@@ -30,7 +30,7 @@
 <AlphanumericFilter bind:filterValue type={type} />
 
 {#key loadedTime}
-    <Lister2
+    <Lister
         bind:data={dataDisplay}
         type="artist"
         virtualList={true}

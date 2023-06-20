@@ -4,7 +4,7 @@
     import { randomArtists } from "../logic/artist";
     import { randomAlbums } from "../logic/album";
     import { randomSongs } from "../logic/song";
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
     
@@ -38,7 +38,7 @@
                         {$_('text.loading')}
                     {:then artists}
                         {#if artists.length > 0}
-                            <Lister2
+                            <Lister
                                 data={artists}
                                 type="artist"
                                 virtualList={true}
@@ -64,7 +64,7 @@
                         {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
-                            <Lister2
+                            <Lister
                                 data={albums}
                                 type="album"
                                 virtualList={true}
@@ -90,7 +90,7 @@
                         {$_('text.loading')}
                     {:then songs}
                         {#if songs.length > 0}
-                            <Lister2
+                            <Lister
                                 data={songs}
                                 type="song"
                                 virtualList={true}

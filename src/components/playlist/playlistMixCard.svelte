@@ -3,7 +3,7 @@
     import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { API } from "../../stores/api";
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
     import { sampleSize } from "lodash";
     import { cleanArtURL } from "../../logic/helper";
 
@@ -65,7 +65,7 @@
             </div>
 
             <div class="actions">
-                <Actions2
+                <Actions
                     type="artistMix"
                     mode="miniButtons"
                     id="{playlist.id}"
@@ -88,7 +88,7 @@
                 <br><br>
             </div>
             <div class="actions">
-                <Actions2 type="playlist" mode="miniButtons"/>
+                <Actions type="playlist" mode="miniButtons"/>
             </div>
         </div>
     {/if}

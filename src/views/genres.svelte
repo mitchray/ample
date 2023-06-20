@@ -4,7 +4,7 @@
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
     import { sortGenresByName } from "../logic/genre";
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
 
     let genres = [];
     let loading = false;
@@ -32,7 +32,7 @@
 
 <div class="page-main">
     {#if !loading && genres && genres.length > 0}
-        <Lister2
+        <Lister
             data={genres}
             type="genre"
             initialSort="name"

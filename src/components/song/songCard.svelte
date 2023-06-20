@@ -5,7 +5,7 @@
     import { cleanArtURL, formatTotalTime } from "../../logic/helper";
 
     import Rating from '../../components/rating.svelte';
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
 
     import SVGAlbum from "/src/images/album.svg";
 
@@ -40,7 +40,7 @@
         </div>
 
         <div class="actions">
-            <Actions2
+            <Actions
                 type="song"
                 mode="miniButtons"
                 id="{song.id}"
@@ -72,7 +72,7 @@
         </div>
 
         <div class="actions">
-            <Actions2 type="song" mode="miniButtons" />
+            <Actions type="song" mode="miniButtons" />
         </div>
     {/if}
 </div>

@@ -5,7 +5,7 @@
     import { PageTitle } from "../stores/status";
     import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
     import Menu from '../components/menu.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
 
     let playlists = [];
     let showPlaylistCreation = false;
@@ -41,7 +41,7 @@
         <p>{$_('text.loading')}</p>
     {:else}
         {#if playlists?.length > 0}
-            <Lister2
+            <Lister
                 bind:data={playlists}
                 type="playlist"
                 initialSort="name"

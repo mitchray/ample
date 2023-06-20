@@ -2,7 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { Link } from "svelte-routing";
     import { cleanArtURL } from "../../logic/helper";
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
     import Rating from '../../components/rating.svelte';
     import PlaylistArt from '../../components/playlist/playlist_art.svelte';
 
@@ -48,7 +48,7 @@
             {/if}
 
             <div class="actions">
-                <Actions2
+                <Actions
                     type="playlist"
                     mode="miniButtons"
                     showShuffle={playlist.items > 1}
@@ -71,7 +71,7 @@
 
         <div class="details">
             <div class="actions">
-                <Actions2 type="playlist" mode="miniButtons" />
+                <Actions type="playlist" mode="miniButtons" />
             </div>
         </div>
     {/if}

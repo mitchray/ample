@@ -15,7 +15,7 @@
     export let item;
 
     import Rating from '../../components/rating.svelte';
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
     import Genres from '../../components/genre/genres.svelte';
     import ArtistList from '../../components/artist/artistList.svelte';
 
@@ -210,7 +210,7 @@
         {/if}
 
         {#if col.id === "actions"}
-            <Actions2
+            <Actions
                 type="{$_type}"
                 mode="miniButtons"
                 id="{item.id}"

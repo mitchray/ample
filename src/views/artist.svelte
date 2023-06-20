@@ -15,10 +15,10 @@
     import ArtistReleases from '../components/artist/artistReleases.svelte';
     import ArtistSongs from '../components/artist/artistSongs.svelte';
     import Rating from '../components/rating.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import MusicbrainzScan from '../components/musicbrainzScan.svelte';
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
-    import Actions2 from '../components/action/actions.svelte';
+    import Actions from '../components/action/actions.svelte';
     import Genres from '../components/genre/genres.svelte';
 
     import SVGAlbum from "/src/images/album.svg";
@@ -156,7 +156,7 @@
                         <Genres genres="{artist.genre}" />
 
                         <div class="actions">
-                            <Actions2
+                            <Actions
                                     type="artist"
                                     mode="fullButtons"
                                     showShuffle={artist.songcount > 1}
@@ -202,7 +202,7 @@
                                     {$_('text.loading')}
                                 {:then songs}
                                     {#if songs.length > 0}
-                                        <Lister2
+                                        <Lister
                                                 data={songs}
                                                 type="song"
                                                 tableOnly={true}

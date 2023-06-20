@@ -6,7 +6,7 @@
     import { PageTitle } from "../stores/status";
     import { cleanArtURL } from "../logic/helper";
     import Rating from '../components/rating.svelte';
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import PlaylistArt from '../components/playlist/playlist_art.svelte';
     import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
     import PlaylistDelete from '../components/playlist/playlist_delete.svelte';
@@ -110,7 +110,7 @@
 
         <div class="songs-container">
             <div class="songs page-main">
-                <Lister2
+                <Lister
                     bind:data={songs}
                     type="playlist_songs"
                     showCheckboxes={playlistType === "playlist"}

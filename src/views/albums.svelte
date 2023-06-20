@@ -1,6 +1,6 @@
 <script>
     import {_} from "svelte-i18n";
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import AlbumsAll from '../components/album/albumsAll.svelte';
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
@@ -35,7 +35,7 @@
                         {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
-                            <Lister2
+                            <Lister
                                 data={albums}
                                 type="album"
                                 virtualList={true}
@@ -61,7 +61,7 @@
                         {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
-                            <Lister2
+                            <Lister
                                 data={albums}
                                 type="album"
                                 virtualList={true}

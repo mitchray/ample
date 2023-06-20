@@ -1,6 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
 
     export let loadedTime;
     export let loading;
@@ -23,7 +23,7 @@
         <div class="total">{$_('text.total')}: {results.length}</div>
         {#key loadedTime}
             {#if type === "song"}
-                <Lister2
+                <Lister
                     bind:data={results}
                     type="{type}"
                     showCheckboxes={showCheckboxes}
@@ -37,7 +37,7 @@
             {/if}
 
             {#if type === "album"}
-                <Lister2
+                <Lister
                     bind:data={results}
                     type="{type}"
                     showCheckboxes={showCheckboxes}
@@ -50,7 +50,7 @@
             {/if}
 
             {#if type === "artist"}
-                <Lister2
+                <Lister
                     bind:data={results}
                     type="{type}"
                     showCheckboxes={showCheckboxes}
@@ -63,7 +63,7 @@
             {/if}
 
             {#if type === "playlist"}
-                <Lister2
+                <Lister
                     bind:data={results}
                     type="{type}"
                     showCheckboxes={showCheckboxes}

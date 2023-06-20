@@ -6,7 +6,7 @@
     import Menu from '../components/menu.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
-    import Actions2 from "../components/action/actions.svelte";
+    import Actions from "../components/action/actions.svelte";
 
     import SVGPlay from "/src/images/play.svg";
     import SVGQueue from "/src/images/playlist_add.svg";
@@ -204,17 +204,17 @@
                         <h2>Actions</h2>
 
                         <h4>Full</h4>
-                        <Actions2 mode="fullButtons" type="album" id={4399} />
+                        <Actions mode="fullButtons" type="album" id={4399} />
 
                         <hr>
 
                         <h4>Mini</h4>
-                        <Actions2 mode="miniButtons" type="album" id={4399} />
+                        <Actions mode="miniButtons" type="album" id={4399} />
 
                         <hr>
 
                         <h4>Menu</h4>
-                        <Actions2 mode="menu" type="album" id={4399} />
+                        <Actions mode="menu" type="album" id={4399} />
                     </Tab>
                 {/if}
 

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { API } from "../../stores/api";
-    import Lister2 from '../../components/lister/lister.svelte';
+    import Lister from '../../components/lister/lister.svelte';
 
     export let id;
     export let type;
@@ -42,7 +42,7 @@
 {#key loadedTime}
     {#if genre?.name && data}
         {#if type === 'artist'}
-            <Lister2
+            <Lister
                 data={data}
                 type="artist"
                 initialSort="name"
@@ -56,7 +56,7 @@
         {/if}
 
         {#if type === 'album'}
-            <Lister2
+            <Lister
                 data={data}
                 type="album"
                 initialSort="name"
@@ -70,7 +70,7 @@
         {/if}
 
         {#if type === 'song'}
-            <Lister2
+            <Lister
                 data={data}
                 type="song"
                 initialSort="name"

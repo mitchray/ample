@@ -5,7 +5,7 @@
     import { CurrentMedia } from '../stores/status';
     import { serverURL } from "../stores/server";
     import { cleanArtURL } from "../logic/helper";
-    import Actions2 from '../components/action/actions.svelte';
+    import Actions from '../components/action/actions.svelte';
     import SVGCurrent from "/src/images/play_circle.svg";
 
     export let data = null;
@@ -75,7 +75,7 @@
             </div>
 
             <div class="actions">
-                <Actions2
+                <Actions
                         type="{type}"
                         mode="miniButtons"
                         id="{data.id}"
@@ -100,7 +100,7 @@
         </div>
 
         <div class="actions">
-            <Actions2 type="{type}" mode="miniButtons" />
+            <Actions type="{type}" mode="miniButtons" />
         </div>
     {/if}
 </div>

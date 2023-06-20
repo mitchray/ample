@@ -4,7 +4,7 @@
     import { topAlbums } from "../logic/album";
     import { topSongs } from "../logic/song";
     import { PageTitle } from "../stores/status";
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
 
@@ -37,7 +37,7 @@
                         {$_('text.loading')}
                     {:then artists}
                         {#if artists.length > 0}
-                            <Lister2
+                            <Lister
                                 data={artists}
                                 type="artist"
                                 initialSort="rating"
@@ -65,7 +65,7 @@
                         {$_('text.loading')}
                     {:then albums}
                         {#if albums.length > 0}
-                            <Lister2
+                            <Lister
                                 data={albums}
                                 type="album"
                                 initialSort="rating"
@@ -93,7 +93,7 @@
                         {$_('text.loading')}
                     {:then songs}
                         {#if songs.length > 0}
-                            <Lister2
+                            <Lister
                                 data={songs}
                                 type="song"
                                 initialSort="rating"

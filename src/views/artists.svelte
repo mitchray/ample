@@ -4,7 +4,7 @@
     import { groupedArtists } from "../stores/server";
     import { PageTitle } from "../stores/status";
     import { newestArtists, randomArtists } from "../logic/artist";
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import ArtistsAll from '../components/artist/artistsAll.svelte';
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -56,7 +56,7 @@
                                     {$_('text.loading')}
                                 {:then artists}
                                     {#if artists.length > 0}
-                                        <Lister2
+                                        <Lister
                                             data={artists}
                                             type="artist"
                                             virtualList={true}
@@ -82,7 +82,7 @@
                                     {$_('text.loading')}
                                 {:then artists}
                                     {#if artists.length > 0}
-                                        <Lister2
+                                        <Lister
                                             data={artists}
                                             type="artist"
                                             virtualList={true}

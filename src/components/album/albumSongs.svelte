@@ -2,7 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { fade } from 'svelte/transition';
     import { getSongsFromAlbum } from '../../logic/song';
-    import Lister2 from '../../components/lister/lister.svelte';
+    import Lister from '../../components/lister/lister.svelte';
 
     export let id;
 </script>
@@ -13,7 +13,7 @@
     {#if discs.size > 0}
         {#each [...discs] as [key, value], i}
             <section in:fade>
-                <Lister2
+                <Lister
                     data={value}
                     type="song"
                     showArt={false}

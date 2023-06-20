@@ -5,7 +5,7 @@
     import { cleanArtURL } from "../../logic/helper";
 
     import Rating from '../../components/rating.svelte';
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
 
     export let data = null; // needed for cardList dynamic components
 
@@ -47,7 +47,7 @@
                 </div>
 
                 <div class="actions">
-                    <Actions2
+                    <Actions
                         type="album"
                         mode="miniButtons"
                         id="{album.id}"
@@ -77,7 +77,7 @@
                 </div>
 
                 <div class="actions">
-                    <Actions2 type="album" mode="miniButtons" />
+                    <Actions type="album" mode="miniButtons" />
                 </div>
             </div>
         </div>

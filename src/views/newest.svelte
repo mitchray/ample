@@ -2,7 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { PageTitle } from "../stores/status";
     import { newestAlbums } from "../logic/album"
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
 
     let title = $_('text.newest');
     $PageTitle = title;
@@ -17,7 +17,7 @@
         {$_('text.loading')}
     {:then albums}
         {#if albums.length > 0}
-            <Lister2
+            <Lister
                 data={albums}
                 type="album"
                 virtualList={true}

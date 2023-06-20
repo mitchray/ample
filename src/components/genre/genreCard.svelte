@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import { Link } from "svelte-routing";
     import { TabHistory } from "../../stores/status";
-    import Actions2 from '../../components/action/actions.svelte';
+    import Actions from '../../components/action/actions.svelte';
 
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
@@ -35,7 +35,7 @@
 
         <div class="bottom">
             <div class="actions">
-                <Actions2
+                <Actions
                     type="artistGenre"
                     mode="miniButtons"
                     data={Object.create({name: genre.name})}

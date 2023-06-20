@@ -1,6 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
     import { PageTitle } from "../stores/status";
     import { getSongVersions } from "../logic/song";
 
@@ -29,7 +29,7 @@
             {$_('text.loading')}
         {:then songs}
             {#if songs.length > 1}
-                <Lister2
+                <Lister
                     data={songs}
                     type="song"
                     actionData={{

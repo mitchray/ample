@@ -18,7 +18,7 @@
     import { serverURL } from "../stores/server";
 
     import Menu from '../components/menu.svelte';
-    import Actions2 from '../components/action/actions.svelte';
+    import Actions from '../components/action/actions.svelte';
     import ArtistList from '../components/artist/artistList.svelte';
 
     import SVGClose from '/src/images/close.svg';
@@ -266,7 +266,7 @@
                         {#if itemMoreMenuIsOpen && itemMoreMenuID === i}
                             <Menu anchor="left" toggleSelector={'#itemMoreToggle-' + itemMoreMenuID} bind:isVisible={itemMoreMenuIsOpen}>
                                 <div class="panel-content">
-                                    <Actions2
+                                    <Actions
                                         type="song"
                                         mode="subMenu"
                                         id="{media.id}"

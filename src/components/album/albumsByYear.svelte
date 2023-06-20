@@ -2,7 +2,7 @@
     import { getAlbumsByYear } from "../../logic/album";
 
     import YearPagination from '../../components/yearPagination.svelte';
-    import Lister2 from '../../components/lister/lister.svelte';
+    import Lister from '../../components/lister/lister.svelte';
 
     export let showYear = new Date().getFullYear();
 
@@ -32,7 +32,7 @@
 {#if fromYear && toYear}
     {#key fromYear+toYear}
         {#key loadedTime}
-            <Lister2
+            <Lister
                 data={dataDisplay}
                 type="album"
                 virtualList={true}

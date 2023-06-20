@@ -2,7 +2,7 @@
     import { getAlbumsStartingWithChar } from "../../logic/album";
     import { FilterHistory } from "../../stores/status";
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
-    import Lister2 from '../../components/lister/lister.svelte';
+    import Lister from '../../components/lister/lister.svelte';
 
     export let type = "album";
 
@@ -24,7 +24,7 @@
 <AlphanumericFilter bind:filterValue type={type} />
 
 {#key loadedTime}
-    <Lister2
+    <Lister
         bind:data={dataDisplay}
         type="album"
         virtualList={true}

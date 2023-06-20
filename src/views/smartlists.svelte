@@ -2,7 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
-    import Lister2 from '../components/lister/lister.svelte';
+    import Lister from '../components/lister/lister.svelte';
 
     let title = $_('text.smartlists');
     $PageTitle = title;
@@ -17,7 +17,7 @@
         <p>{$_('text.loading')}</p>
     {:then smartlists}
         {#if smartlists.length > 0}
-            <Lister2
+            <Lister
                 data={smartlists}
                 type="smartlist"
                 initialSort="name"
