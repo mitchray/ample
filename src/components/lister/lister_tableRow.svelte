@@ -1,4 +1,5 @@
 <script>
+    import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
     import { Link } from 'svelte-routing';
 
@@ -21,8 +22,6 @@
     import SVGArtist from "/src/images/artist.svg";
     import SVGAlbum from "/src/images/album.svg";
     import SVGSong from "/src/images/music_note.svg";
-    import SVGYear from "/src/images/year.svg";
-    import SVGGenre from "/src/images/label.svg";
     import SVGCurrent from "/src/images/play_circle.svg";
 
     const { _type, visibleColumns, selectedCount, isEditMode, dataDisplay, _showArt } = getContext(contextKey);
@@ -107,7 +106,7 @@
                 </Link>
             {:else if $_type === "genre"}
                 <Link to="genres/{item.id}">
-                    <SVGGenre class="inline" /> {item.name}
+                    {item.name}
                 </Link>
             {:else if $_type === "playlist"}
                 <Link to="playlists/{item.id}">
@@ -136,12 +135,12 @@
 
         {#if col.id === "album"}
             <Link to="albums/{item.album.id}">
-                <SVGAlbum class="inline"/> {item.album.name}
+                {item.album.name}
             </Link>
         {/if}
 
         {#if col.id === "date"}
-            <Link to="albums/year/{item.year}"><SVGYear class="inline"/> {item.year || 'None'}</Link>
+            <Link to="albums/year/{item.year}">{item.year || $_('text.none')}</Link>
         {/if}
 
         {#if col.id === "length"}
