@@ -1,6 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
+    import { fade } from 'svelte/transition';
     import { API } from "../../stores/api";
     import { groupAlbumsByReleaseType } from "../../logic/album";
     import AlbumCardMini from '../album/albumCardMini.svelte';
@@ -42,7 +43,11 @@
 {#await albums}
 
 {:then albums}
-    <div class="container" bind:this={containerBind} class:not-empty={containerBind?.firstElementChild}>
+    <div class="container"
+         bind:this={containerBind}
+         class:not-empty={containerBind?.firstElementChild}
+         in:fade
+    >
         {#if [...albums.previous.values()].find(arr => arr.length > 0)}
             <div class="previous">
                 <h3>{$_('text.previous')}</h3>
