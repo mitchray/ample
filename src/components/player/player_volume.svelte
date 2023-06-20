@@ -273,6 +273,7 @@
         inset-block-start: 50%;
         inset-inline-start: 50%;
         transform: translateY(-50%) translateX(-50%);
+        z-index: 100;
     }
 
     .site-player__volume-value {
@@ -289,13 +290,6 @@
     .site-player__volume-value:before {
         opacity: 0;
         inset-block-start: calc(50% - 20px);
-    }
-
-    /* while dragging increase the active area, especially so it don't conflict with seekbar  */
-    :global(.dragging.site-player__volume-slider:after) {
-        height: 200px !important;
-        padding: 0 200px;
-        z-index: 100;
     }
 
     .current {
