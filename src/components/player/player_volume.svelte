@@ -1,6 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { onMount, tick } from 'svelte';
+    import { tick } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
     import {
         CurrentMedia,
@@ -102,10 +102,6 @@
     function handleCompressorRelease() {
         $MediaPlayer.filterCompressor.release.value = this.value;
     }
-
-    onMount(() => {
-        volumeSlider = document.querySelector(".site-player__volume-slider");
-    });
 </script>
 
 <button
@@ -126,6 +122,7 @@
     on:click={handleVolumeSlider}
     on:mousedown={handleVolumeMouseDown}
     on:mousemove={handleVolumeDrag}
+    bind:this={volumeSlider}
 >
     <span class="site-player__volume-value" data-value="{Math.floor(volumeWidth)}" style="width: {volumeWidth}%">
     </span>
