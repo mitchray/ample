@@ -1,18 +1,17 @@
 # Changelog
 
-## [2.0.0] - 2023-??-??
+## [2.0.0] - 2023-06-23
 ### Requires at least Ampache 6.0.0
 
 ### Added
 - Multi-artist support
 - Translated UI (English-US, English-AU, German available)
-- Album page has Previous/Next releases underneath songs
+- Show Previous/Next/Adjacent releases on album page
 - Fetch album disk subtitles from MusicBrainz
 - Option to view artist releases chronologically
 - New search results interface
   - Split into categories (song, album, artist etc)
   - Smaller items to see more results at once
-- Click header title (where Ample logo used to be) to reload the current page
 - Majority of views now have both list & card options
 - List views will show all results, card views will be paginated (virtual vs traditional for technical reasons)
 - Ability to download individual songs
