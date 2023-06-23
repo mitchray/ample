@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import FastAverageColor from "fast-average-color";
+import { FastAverageColor } from "fast-average-color";
 import { rgbToLch, lchToRgb } from "color-converters";
 import { customHue, Theme } from "../stores/status";
 import { debugHelper } from "./helper";
