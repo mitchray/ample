@@ -247,7 +247,7 @@
 
     :global(.lister-container .header .cell[data-type=number]),
     :global(.lister-container .header .cell[data-type=time]) {
-        padding-inline-end: 25px;
+        justify-content: end;
     }
 
     :global(.lister-container .cell[data-type=number]),
@@ -261,9 +261,7 @@
     }
 
     .reorder button {
-        /*border: 1px solid lime;*/
         height: unset;
         padding: 0;
-        /*display: block;*/
     }
 </style>

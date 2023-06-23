@@ -306,7 +306,6 @@
     .label {
         position: relative;
         user-select: none;
-        padding-inline-end: 5px;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
