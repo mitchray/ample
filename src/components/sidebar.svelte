@@ -38,6 +38,8 @@
         if ($activeRoute !== null) {
             basePath = $activeRoute.route._path.split(/\//)[0];
 
+            closeSidebar();
+
             // reset customHue if not on our special pages
             // their onMount events will add it back in
             switch ($activeRoute.route._path) {
@@ -52,6 +54,10 @@
     }
 
     function handleClickOutside() {
+        closeSidebar();
+    }
+
+    function closeSidebar() {
         if ($IsMobile) {
             let status = false;
             localStorage.setItem('SidebarIsOpen', JSON.stringify(status));
@@ -67,8 +73,7 @@
     class:is-drawer={$IsMobile}
     bind:this={$SiteSidebarBind}
     use:clickOutsideDetector={{
-        toggle: "#sidebar-button",
-        ignore: '.site-sidebar'
+        toggle: "#sidebar-button"
     }}
     on:clickedOutside={handleClickOutside}
 >
@@ -345,13 +350,14 @@
         background-color: hsla(0, 0%, 30%, 0.5);
         inset-inline-start: 100%;
         position: absolute;
-        pointer-events: none;
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
+        pointer-events: none;
     }
 
     .site-sidebar.is-drawer.is-open:after {
         opacity: 1;
+        pointer-events: auto;
     }
 
     .site-sidebar.is-drawer:not(.is-open) {
