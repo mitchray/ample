@@ -2,6 +2,7 @@
     import { writable } from 'svelte/store';
 
     let isFetching = writable(false);
+    let selectedPlaylist = writable(null);
 </script>
 
 <script>
@@ -13,20 +14,16 @@
     import { MediaPlayer } from "../../stores/player";
     import { NowPlayingIndex, NowPlayingQueue } from "../../stores/status";
     import { AutoPlayEnabled, AutoPlayPlaylist } from "../../stores/status";
-
     import PlaylistSelector from '../../components/playlist/playlist_selector.svelte';
     import Menu from '../../components/menu.svelte';
-
     import SVGAutoPlay from "/src/images/queue.svg";
 
     const uniqueMenuID = "autoPlayMenu_" + uuidv4();
-
     let isVisible = false;
-    let selectedPlaylist;
     let timeout;
     let shouldAdd;
 
-    $: shouldAdd = $NowPlayingQueue.length > 0 && $AutoPlayEnabled && selectedPlaylist && $NowPlayingIndex > $NowPlayingQueue.length - 10;
+    $: shouldAdd = $NowPlayingQueue.length > 0 && $AutoPlayEnabled && $selectedPlaylist && $NowPlayingIndex > $NowPlayingQueue.length - 10;
 
     $: {
         // load more items into queue from AutoPlay
@@ -39,13 +36,13 @@
                 // 10 seconds grace in case more items are manually queued
                 timeout = setTimeout(() => {
                     if (shouldAdd) {
-                        $API.playlistSongs({ filter: selectedPlaylist.id })
+                        $API.playlistSongs({ filter: $selectedPlaylist.id, limit: 500 })
                             .then((result) => {
                                 if (!result.error && result.length > 0) {
                                     result = (Array.isArray(result)) ? result : [result];
                                     $MediaPlayer.playLast(result);
                                     $isFetching = false;
-                                    addAlert({title: $_('text.autoplay'), message: $_('text.autoplayAddedItems', { values: { n: result.length, playlist: selectedPlaylist.name } }), style: 'info'});
+                                    addAlert({title: $_('text.autoplay'), message: $_('text.autoplayAddedItems', { values: { n: result.length, playlist: $selectedPlaylist.name } }), style: 'info'});
                                 }
                             });
                     } else {
@@ -57,8 +54,8 @@
     }
 
     function handleSelected() {
-        localStorage.setItem('AutoPlayPlaylist', JSON.stringify(selectedPlaylist.id));
-        AutoPlayPlaylist.set(selectedPlaylist.id);
+        localStorage.setItem('AutoPlayPlaylist', JSON.stringify($selectedPlaylist.id));
+        AutoPlayPlaylist.set($selectedPlaylist.id);
     }
 
     function handleCleared() {
@@ -79,7 +76,7 @@
     onMount(async () => {
         // load from localstorage
         if ($AutoPlayPlaylist) {
-            selectedPlaylist = await $API.playlist({ filter: $AutoPlayPlaylist });
+            $selectedPlaylist = await $API.playlist({ filter: $AutoPlayPlaylist });
         }
     });
 </script>
@@ -108,7 +105,7 @@
             <PlaylistSelector
                 type="smartlists"
                 showSelected={true}
-                bind:selectedPlaylist
+                bind:selectedPlaylist={$selectedPlaylist}
                 on:selected={handleSelected}
                 on:cleared={handleCleared}
             />
