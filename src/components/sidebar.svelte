@@ -342,13 +342,12 @@
         height: 100%;
         width: 100vw;
         display: block;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: hsla(0, 0%, 30%, 0.5);
         inset-inline-start: 100%;
         position: absolute;
         pointer-events: none;
         opacity: 0;
         transition: opacity 0.3s ease-in-out;
-        backdrop-filter: blur(1px);
     }
 
     .site-sidebar.is-drawer.is-open:after {
