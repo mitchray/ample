@@ -341,5 +341,8 @@
   "text.tagUpdateDone": "Von Tags aktualisiert",
   "text.tagUpdateFail": "Aktualisierung von Tags fehlgeschlagen",
   "text.tagUpdateStart": "Aktualisierung über Tags starten",
-  "text.limitedItems": "{n} gegenstände spielen"
+  "text.limitedItems": "{n} gegenstände spielen",
+  "text.serverURL": "Server-URL",
+  "text.none": "Keiner",
+  "text.errorFatal": "Schwerwiegender Fehler: Überprüfen Sie Ihre Browserkonsole auf Meldungen"
 }
