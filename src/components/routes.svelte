@@ -1,39 +1,113 @@
 <script>
-    import { PageLoadedKey } from "../stores/status";
-    import { Route } from "svelte-routing";
+    import { customHue, PageLoadedKey } from "../stores/status";
+    import Router from 'svelte-spa-router';
+    import { wrap } from 'svelte-spa-router/wrap';
+    import { closeSidebar } from "../logic/ui.js";
     import NotFound404Page from '../views/notFound404.svelte';
     import HomePage from '../views/home.svelte';
+
+    const routes = {
+        '/test': wrap({
+            asyncComponent: () => import('../views/test.svelte')
+        }),
+        '/search': wrap({
+            asyncComponent: () => import('../views/advancedSearch.svelte')
+        }),
+        '/multi-rater': wrap({
+            asyncComponent: () => import('../views/multiRater.svelte')
+        }),
+        '/versions/:songTitle/:artistName': wrap({
+            asyncComponent: () => import('../views/songVersions.svelte')
+        }),
+        '/artists/:id': wrap({
+            asyncComponent: () => import('../views/artist.svelte')
+        }),
+        '/artists': wrap({
+            asyncComponent: () => import('../views/artists.svelte')
+        }),
+        '/album-artists': wrap({
+            asyncComponent: () => import('../views/albumArtists.svelte')
+        }),
+        '/albums/:id': wrap({
+            asyncComponent: () => import('../views/album.svelte')
+        }),
+        '/albums/year/:year': wrap({
+            asyncComponent: () => import('../views/albumsByYear.svelte')
+        }),
+        '/albums/year': wrap({
+            asyncComponent: () => import('../views/albumsByYear.svelte')
+        }),
+        '/albums': wrap({
+            asyncComponent: () => import('../views/albums.svelte')
+        }),
+        '/song/:id': wrap({
+            asyncComponent: () => import('../views/song.svelte')
+        }),
+        '/playlists/:id': wrap({
+            asyncComponent: () => import('../views/playlist.svelte')
+        }),
+        '/playlists': wrap({
+            asyncComponent: () => import('../views/playlists.svelte')
+        }),
+        '/smartlists/:id': wrap({
+            asyncComponent: () => import('../views/playlist.svelte')
+        }),
+        '/smartlists': wrap({
+            asyncComponent: () => import('../views/smartlists.svelte')
+        }),
+        '/mix/:mixType/:id': wrap({
+            asyncComponent: () => import('../views/playlist.svelte')
+        }),
+        '/genres/:id': wrap({
+            asyncComponent: () => import('../views/genre.svelte')
+        }),
+        '/genres': wrap({
+            asyncComponent: () => import('../views/genres.svelte')
+        }),
+        '/newest': wrap({
+            asyncComponent: () => import('../views/newest.svelte')
+        }),
+        '/recent': wrap({
+            asyncComponent: () => import('../views/recent.svelte')
+        }),
+        '/favorites': wrap({
+            asyncComponent: () => import('../views/favorites.svelte')
+        }),
+        '/trending': wrap({
+            asyncComponent: () => import('../views/trending.svelte')
+        }),
+        '/top': wrap({
+            asyncComponent: () => import('../views/topRated.svelte')
+        }),
+        '/forgotten': wrap({
+            asyncComponent: () => import('../views/forgotten.svelte')
+        }),
+        '/random': wrap({
+            asyncComponent: () => import('../views/random.svelte')
+        }),
+        '/unrated': wrap({
+            asyncComponent: () => import('../views/unrated.svelte')
+        }),
+        '/': HomePage,
+        '*': NotFound404Page,
+    }
+
+    function routeLoading(event) {
+        closeSidebar();
+
+        // reset customHue if not on our special pages to avoid flash;
+        // their onMount events will add it back in
+        switch (event.detail.route) {
+            case '/albums/:id':
+            case '/artists/:id':
+                break;
+            default:
+                customHue.set(null);
+                break;
+        }
+    }
 </script>
 
 {#key $PageLoadedKey || 0}
-    <Route path="test"              component={() => import('../views/test.svelte')}/>
-    <Route path="search"            component={() => import('../views/advancedSearch.svelte')}/>
-    <Route path="multi-rater"       component={() => import('../views/multiRater.svelte')}/>
-    <Route path="versions/:songTitle/:artistName" component={() => import('../views/songVersions.svelte')}/>
-    <Route path="artists/:id"       component={() => import('../views/artist.svelte')}/>
-    <Route path="artists"           component={() => import('../views/artists.svelte')}/>
-    <Route path="album-artists"     component={() => import('../views/albumArtists.svelte')}/>
-    <Route path="albums/:id"        component={() => import('../views/album.svelte')}/>
-    <Route path="albums/year/:year" component={() => import('../views/albumsByYear.svelte')}/>
-    <Route path="albums/year"       component={() => import('../views/albumsByYear.svelte')}/>
-    <Route path="albums"            component={() => import('../views/albums.svelte')}/>
-    <Route path="song/:id"          component={() => import('../views/song.svelte')}/>
-    <Route path="playlists/:id"     component={() => import('../views/playlist.svelte')}/>
-    <Route path="playlists"         component={() => import('../views/playlists.svelte')}/>
-    <Route path="smartlists/:id"    component={() => import('../views/playlist.svelte')}/>
-    <Route path="smartlists"        component={() => import('../views/smartlists.svelte')}/>
-    <Route path="mix/:mixType/:id"  component={() => import('../views/playlist.svelte')}/>
-    <Route path="genres/:id"        component={() => import('../views/genre.svelte')}/>
-    <Route path="genres"            component={() => import('../views/genres.svelte')}/>
-    <Route path="newest"            component={() => import('../views/newest.svelte')}/>
-    <Route path="recent"            component={() => import('../views/recent.svelte')}/>
-    <Route path="favorites"         component={() => import('../views/favorites.svelte')}/>
-    <Route path="trending"          component={() => import('../views/trending.svelte')}/>
-    <Route path="top"               component={() => import('../views/topRated.svelte')}/>
-    <Route path="forgotten"         component={() => import('../views/forgotten.svelte')}/>
-    <Route path="random"            component={() => import('../views/random.svelte')}/>
-    <Route path="unrated"           component={() => import('../views/unrated.svelte')}/>
-    <Route path=""                  component={HomePage}/>
-    <Route path="/"                 component={HomePage}/>
-    <Route path="*"                 component={NotFound404Page}/>
+    <Router {routes} on:routeLoading={routeLoading}/>
 {/key}

@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { cleanArtURL } from "../../logic/helper";
 
@@ -16,7 +15,7 @@
 <div class="album-card card">
     {#if album}
         <div class="image-container">
-            <Link to="albums/{album.id}" title="{album.name}">
+            <a href="#/albums/{album.id}" title="{album.name}">
                 <img class="image"
                     src="{cleanArtURL(album.art)}&thumb=22"
                     alt="Image of {album.name}"
@@ -25,7 +24,7 @@
                     data-id="art-album-{album.id}"
                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=22' }}
                 />
-            </Link>
+            </a>
         </div>
 
         <div class="info">
@@ -33,11 +32,11 @@
                 <div class="details">
                         {#if album.year}
                             <div class="date secondary-info">
-                                <Link to="albums/year/{album.year}" title="{album.year}">{album.year}</Link>
+                                <a href="#/albums/year/{album.year}" title="{album.year}">{album.year}</a>
                             </div>
                         {/if}
-                    <div class="title"><Link to="albums/{album.id}" title="{album.name}">{album.name}</Link></div>
-                    <div class="artist secondary-info"><Link to="artists/{album.artist.id}" title="{album.artist.name}">{album.artist.name}</Link></div>
+                    <div class="title"><a href="#/albums/{album.id}" title="{album.name}">{album.name}</a></div>
+                    <div class="artist secondary-info"><a href="#/artists/{album.artist.id}" title="{album.artist.name}">{album.artist.name}</a></div>
                 </div>
             </div>
 

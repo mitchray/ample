@@ -1,12 +1,9 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { cleanArtURL, formatTotalTime } from "../../logic/helper";
-
     import Rating from '../../components/rating.svelte';
     import Actions from '../../components/action/actions.svelte';
-
     import SVGAlbum from "/src/images/album.svg";
 
     export let data = null; // needed for cardList dynamic components
@@ -31,9 +28,9 @@
 
             <div class="info">
                 <div class="time secondary-info">{formatTotalTime(song.time)}</div>
-                <div class="title" title="{song.name}"><Link to="song/{song.id}">{song.name}</Link></div>
-                <div class="artist secondary-info"><Link to="artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</Link></div>
-                <div class="album secondary-info"><Link to="albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</Link></div>
+                <div class="title" title="{song.name}"><a href="#/song/{song.id}">{song.name}</a></div>
+                <div class="artist secondary-info"><a href="#/artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</a></div>
+                <div class="album secondary-info"><a href="#/albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</a></div>
 
                 <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
             </div>

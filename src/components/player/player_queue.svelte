@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from 'svelte-routing';
     import { NowPlayingQueue, NowPlayingIndex, QueueIsOpen } from '../../stores/status';
     import ArtistList from '../../components/artist/artistList.svelte';
     import SVGPlaylistPlay from "/src/images/playlist_play.svg";
@@ -27,7 +26,7 @@
         {#if nextSong}
             <div class="title card-title">
                 <span>{$_('text.next')}:</span>
-                <Link to="song/{nextSong.id}">{nextSong.title}</Link>
+                <a href="#/song/{nextSong.id}">{nextSong.title}</a>
             </div>
 
             {#if nextSong.artists.length > 0}

@@ -3,15 +3,12 @@
     import '/src/css/global.css';
 
     import { onMount } from 'svelte';
-    import { Router } from "svelte-routing";
 
-    import { serverVersion, serverPathname } from "./stores/server";
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
     import { Theme, PageTitle } from "./stores/status";
 
     import { extendSession, validateSession } from './logic/user';
-    import { getServerVersion } from './logic/server';
     import { isLoading as i18nIsLoading } from 'svelte-i18n'
     import { setupI18n } from "./logic/i18n.js";
 
@@ -61,9 +58,6 @@
     };
 
     onMount(async () => {
-        // get Ampache server version
-        serverVersion.set(await getServerVersion());
-
         await validateSession();
 
         if ($Theme === 'light') {
@@ -74,36 +68,34 @@
 
 <ThemeHandler />
 
-<Router basepath="{$serverPathname}/ample">
-    {#if !$i18nIsLoading}
-        {#if $isLoggedIn === null && $userToken === null}
-            <SiteLoading/>
-        {/if}
-
-        {#if $isLoggedIn === false}
-            <LoginPage/>
-        {/if}
-
-        {#if $isLoggedIn}
-            <ArtistsSync />
-            <Header/>
-            <div class="site-inner" bind:this={$SiteInnerBind}>
-                <Sidebar/>
-                <div class="site-content" bind:this={$SiteContentBind}>
-                    <div class="site-content-inner">
-                        <Routes />
-                    </div>
-                </div>
-                <Queue/>
-            </div>
-            <Player/>
-            <Fullscreen/>
-            <Lyrics/>
-            <Notifications/>
-            <Alerts/>
-        {/if}
+{#if !$i18nIsLoading}
+    {#if $isLoggedIn === null && $userToken === null}
+        <SiteLoading/>
     {/if}
-</Router>
+
+    {#if $isLoggedIn === false}
+        <LoginPage/>
+    {/if}
+
+    {#if $isLoggedIn}
+        <ArtistsSync />
+        <Header/>
+        <div class="site-inner" bind:this={$SiteInnerBind}>
+            <Sidebar/>
+            <div class="site-content" bind:this={$SiteContentBind}>
+                <div class="site-content-inner">
+                    <Routes />
+                </div>
+            </div>
+            <Queue/>
+        </div>
+        <Player/>
+        <Fullscreen/>
+        <Lyrics/>
+        <Notifications/>
+        <Alerts/>
+    {/if}
+{/if}
 
 <style>
     :global(body) {

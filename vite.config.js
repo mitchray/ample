@@ -5,7 +5,7 @@ import sveltePreprocess from 'svelte-preprocess';
 import autoprefixer from 'autoprefixer';
 
 export default defineConfig({
-    base: "/ample/",
+    base: "", // relative paths
 
     // TODO temporary while javascript-ampache is still local
     server: {

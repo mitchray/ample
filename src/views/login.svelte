@@ -3,14 +3,16 @@
     import { onMount } from 'svelte';
     import { fade } from 'svelte/transition';
     import { lchToRgb } from 'color-converters';
-
-    import { serverVersion } from "../stores/server";
+    import AmpacheAPI from 'javascript-ampache';
+    import { API } from "../stores/api.js";
+    import { serverVersion, serverURL } from "../stores/server";
     import { PageTitle, Theme } from "../stores/status";
     import { ampleVersion } from "../stores/player";
 
     import { loginNew } from '../logic/user';
     import { getRandomInt } from '../logic/helper';
     import { setCustomHue } from '../logic/color';
+    import { getServerVersion } from '../logic/server.js';
 
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -33,6 +35,8 @@
         { label: "API key",  value: 2 }
     ];
 
+    let fatalError = false;
+
     let title = $_('text.login');
     $PageTitle = title;
 
@@ -43,12 +47,33 @@
 
     $: versionCheck = $serverVersion.charAt(0);
 
+    // save server URL in localstorage
+    $: $serverURL, localStorage.setItem('AmpleServerURL', JSON.stringify($serverURL));
+
     const handleSubmitUsername = async (e) => {
-        result = await loginNew({ passphrase: password, username: username });
+        setServerDetails();
+
+        try {
+            result = await loginNew({ passphrase: password, username: username });
+        } catch (e) {
+            fatalError = true;
+        }
     }
 
     const handleSubmitAPI = async (e) => {
-        result = await loginNew({ passphrase: apiKey });
+        setServerDetails();
+
+        try {
+            result = await loginNew({ passphrase: apiKey });
+        } catch (e) {
+            fatalError = true;
+        }
+    }
+
+    function setServerDetails() {
+        fatalError = false;
+        $API = new AmpacheAPI({ url: $serverURL, debug: false })
+        getServerVersion();
     }
 
     onMount(async () => {
@@ -76,6 +101,11 @@
             <Tab id={1} bind:activeTabValue={currentTab} class="username login-tab">
                 <form on:submit|preventDefault={handleSubmitUsername}>
                     <p>
+                        <label>{$_('text.serverURL')}
+                            <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
+                        </label>
+                    </p>
+                    <p>
                         <label>{$_('text.username')}
                             <input type="text" autofocus bind:value={username} />
                         </label>
@@ -85,25 +115,44 @@
                             <input type="password" bind:value={password} />
                         </label>
                     </p>
-                    <button class="button button--primary" type="submit"><SVGLogin /> {$_('text.login')}</button>
+                    <button class="button button--primary"
+                            type="submit"
+                            disabled="{!$serverURL || !username || !password}"
+                    >
+                        <SVGLogin /> {$_('text.login')}
+                    </button>
                 </form>
             </Tab>
 
             <Tab id={2} bind:activeTabValue={currentTab} class="api login-tab">
                 <form on:submit|preventDefault={handleSubmitAPI}>
                     <p>
+                        <label>{$_('text.serverURL')}
+                            <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
+                        </label>
+                    </p>
+                    <p>
                         <label>{$_('text.apiKey')}
                             <input type="text" bind:value={apiKey} />
                         </label>
                     </p>
 
-                    <button class="button button--primary" type="submit"><SVGLogin /> {$_('text.login')}</button>
+                    <button class="button button--primary"
+                            type="submit"
+                            disabled="{!$serverURL || !apiKey}"
+                    >
+                        <SVGLogin /> {$_('text.login')}
+                    </button>
                 </form>
             </Tab>
         </Tabs>
 
-        {#if result && result.error && result.error.errorMessage}
+        {#if result?.error?.errorMessage}
             <p class="login-message badge badge--warning" in:fade>{result.error.errorMessage}</p>
+        {/if}
+
+        {#if fatalError}
+            <p class="login-message badge badge--warning" in:fade>{$_('text.errorFatal')}</p>
         {/if}
     </div>
 

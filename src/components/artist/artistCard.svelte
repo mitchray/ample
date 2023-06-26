@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
 
     import Rating from '../../components/rating.svelte';
@@ -15,7 +14,7 @@
 <div class="artist-card card">
     {#if artist}
         <div class="art-container">
-            <Link to="artists/{artist.id}" title="{artist.name}">
+            <a href="#/artists/{artist.id}" title="{artist.name}">
                 <img class="image"
                     src="{cleanArtURL(artist.art)}&thumb=22"
                     alt="Image of {artist.name}"
@@ -24,9 +23,9 @@
                     data-id="art-artist-{artist.id}"
                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
                 />
-            </Link>
+            </a>
         </div>
-        <div class="title"><Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link></div>
+        <div class="title"><a href="#/artists/{artist.id}" title="{artist.name}">{artist.name}</a></div>
 
         <div class="rating-container">
             <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />

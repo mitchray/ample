@@ -15,8 +15,7 @@
     import SVGSmartlist from "/src/images/smartlist.svg";
     import SVGRadio from "/src/images/radio.svg";
 
-    export let id;
-    export let mixType = null; // for future expansion
+    export let params = {}
 
     let playlist;
     let songs = [];
@@ -44,10 +43,10 @@
     }
 
     onMount(async () => {
-        playlist = await $API.playlist({ filter: id });
+        playlist = await $API.playlist({ filter: params.id });
 
         if (playlist?.id) {
-            songs = await getSongsFromPlaylist({ id: id, type: "playlist" });
+            songs = await getSongsFromPlaylist({ id: params.id, type: "playlist" });
 
             if (playlist.id.match(/^smart_/)) {
                 playlistType = "smartlist";
@@ -55,8 +54,8 @@
         } else {
             // artist mix
             playlistType = "mix";
-            playlist = await $API.artist({filter: id});
-            songs = await getSongsFromPlaylist({ id: id, type: "artist_mix" });
+            playlist = await $API.artist({filter: params.id});
+            songs = await getSongsFromPlaylist({ id: params.id, type: "artist_mix" });
         }
 
         loading = false;
@@ -100,8 +99,8 @@
 
                     {#if playlistType === "playlist"}
                         <div class="playlist-actions">
-                            <button class="button button--regular" type="button" id="js-action-playlist_edit_{id}" on:click={handleEditPlaylist} title="{$_('text.edit')}">{$_('text.edit')}</button>
-                            <button class="button button--danger" type="button" id="js-action-playlist_delete_{id}" on:click={handleDeletePlaylist} title="{$_('text.delete')}">{$_('text.delete')}</button>
+                            <button class="button button--regular" type="button" id="js-action-playlist_edit_{params.id}" on:click={handleEditPlaylist} title="{$_('text.edit')}">{$_('text.edit')}</button>
+                            <button class="button button--danger" type="button" id="js-action-playlist_delete_{params.id}" on:click={handleDeletePlaylist} title="{$_('text.delete')}">{$_('text.delete')}</button>
                         </div>
                     {/if}
                 </div>
@@ -129,13 +128,13 @@
     </div>
 
     {#if playlistEditIsVisible}
-        <Menu anchor="left" toggleSelector={"#js-action-playlist_edit_" + id} bind:isVisible={playlistEditIsVisible}>
+        <Menu anchor="left" toggleSelector={"#js-action-playlist_edit_" + params.id} bind:isVisible={playlistEditIsVisible}>
             <PlaylistEdit bind:playlist={playlist} bind:isVisible={playlistEditIsVisible} />
         </Menu>
     {/if}
 
     {#if playlistDeleteIsVisible}
-        <Menu anchor="left" toggleSelector={"#js-action-playlist_delete_" + id} bind:isVisible={playlistDeleteIsVisible}>
+        <Menu anchor="left" toggleSelector={"#js-action-playlist_delete_" + params.id} bind:isVisible={playlistDeleteIsVisible}>
             <PlaylistDelete bind:playlist={playlist} bind:isVisible={playlistDeleteIsVisible} />
         </Menu>
     {/if}

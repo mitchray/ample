@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { onMount } from "svelte";
-    import { Link } from 'svelte-routing';
     import { CurrentMedia } from '../stores/status';
     import { serverURL } from "../stores/server";
     import { cleanArtURL } from "../logic/helper";
@@ -40,7 +39,7 @@
     {#if data}
         {#if data.art}
             <div class="image-container">
-                <Link to="{urlPrefix}/{data.id}">
+                <a href="#/{urlPrefix}/{data.id}">
                     <img class="image"
                          src="{cleanArtURL(data.art)}&thumb=11"
                          alt="Image of {data.name}"
@@ -49,13 +48,13 @@
                          data-id="art-{type}-{data.id}"
                          on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=song&thumb=22' }}
                     />
-                </Link>
+                </a>
             </div>
         {/if}
 
         <div class="details">
             <div class="title">
-                <Link to="{urlPrefix}/{data.id}">
+                <a href="#/{urlPrefix}/{data.id}">
                     {#if type === "song"}
                         {#if $CurrentMedia?.id === data.id}
                 <span class="current-icon">
@@ -63,14 +62,14 @@
                 </span>
                         {/if}
                     {/if}{data.name}
-                </Link>
+                </a>
             </div>
 
             <div class="secondary secondary-info">
                 {#if type === "album" && data.albumartist}
-                    <Link to="artists/{data.albumartist.id}">{data.albumartist.name}</Link>
+                    <a href="#/artists/{data.albumartist.id}">{data.albumartist.name}</a>
                 {:else if data.artist}
-                    <Link to="artists/{data.artist.id}">{data.artist.name}</Link>
+                    <a href="#/artists/{data.artist.id}">{data.artist.name}</a>
                 {/if}
             </div>
 

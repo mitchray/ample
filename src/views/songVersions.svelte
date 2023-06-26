@@ -4,8 +4,7 @@
     import { PageTitle } from "../stores/status";
     import { getSongVersions } from "../logic/song";
 
-    export let songTitle;
-    export let artistName;
+    export let params = {}
 
     let loading;
     let results = [];
@@ -13,19 +12,19 @@
     let title = $_('text.songVersions');
     $PageTitle = title;
 
-    $: songTitle = songTitle;
-    $: artistName = artistName;
+    $: params.songTitle = params.songTitle;
+    $: params.artistName = params.artistName;
 </script>
 
 <svelte:head>
-    <title>{$_('text.versionsOf', { values: { songTitle: songTitle, artistName: artistName } }) || $_('text.loading')}</title>
+    <title>{$_('text.versionsOf', { values: { songTitle: params.songTitle, artistName: params.artistName } }) || $_('text.loading')}</title>
 </svelte:head>
 
-<h1 class="page-title">{@html $_('text.versionsOfHTML', { values: { songTitle: songTitle, artistName: artistName } })}</h1>
+<h1 class="page-title">{@html $_('text.versionsOfHTML', { values: { songTitle: params.songTitle, artistName: params.artistName } })}</h1>
 
 <div class="page-main">
-    {#key songTitle + artistName}
-        {#await getSongVersions(songTitle, artistName)}
+    {#key params.songTitle + params.artistName}
+        {#await getSongVersions(params.songTitle, params.artistName)}
             {$_('text.loading')}
         {:then songs}
             {#if songs.length > 1}

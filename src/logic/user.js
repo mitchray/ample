@@ -1,8 +1,9 @@
 import { get } from 'svelte/store';
-import { APIVersion } from '../stores/server';
+import { APIVersion, serverURL } from '../stores/server';
 import { userName, isLoggedIn, userToken } from '../stores/user';
 import { MediaPlayer } from "../stores/player";
 import { API } from "../stores/api";
+import AmpacheAPI from 'javascript-ampache';
 
 export const login = async ({ auth, username = null }) => {
     userToken.set(auth);
@@ -40,11 +41,26 @@ export const logout = () => {
 
 export const validateSession = async () => {
     let cachedSession = JSON.parse(localStorage.getItem('AmpleAuth'));
-    let result = await get(API).ping({ auth: cachedSession?.userToken });
+    let cachedServerURL = JSON.parse(localStorage.getItem('AmpleServerURL') || null);
 
-    if (result.auth) {
-        await login({ auth: result.auth, username: cachedSession.username });
-    } else {
+    if (!cachedServerURL) {
+        logout();
+        return;
+    }
+
+    serverURL.set(cachedServerURL);
+
+    try {
+        API.set(new AmpacheAPI({ url: cachedServerURL, debug: false }));
+
+        let result = await get(API).ping({ auth: cachedSession?.userToken });
+
+        if (result.auth) {
+            await login({ auth: result.auth, username: cachedSession.username });
+        } else {
+            logout();
+        }
+    } catch (e) {
         logout();
     }
 }

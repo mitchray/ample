@@ -1,5 +1,3 @@
-import { writable, get } from 'svelte/store';
-import AmpacheAPI from 'javascript-ampache';
-import { serverURL } from "./server";
+import { writable } from 'svelte/store';
 
-export let API = writable(new AmpacheAPI({ url: get(serverURL), debug: false }));
+export let API = writable(null);

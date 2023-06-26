@@ -1,5 +1,4 @@
 <script>
-    import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { cleanArtURL } from "../../logic/helper";
 
@@ -7,7 +6,7 @@
 </script>
 
 {#if album.id}
-    <Link to="albums/{album.id}" title="{album.name}" class="album-card-mini card">
+    <a href="#/albums/{album.id}" title="{album.name}" class="album-card-mini card">
         <div class="image-container">
             <img class="image"
                  src="{cleanArtURL(album.art)}&thumb=11"
@@ -34,7 +33,7 @@
                 <div class="title">{album.name}</div>
             </div>
         </div>
-    </Link>
+    </a>
 {/if}
 
 <style>

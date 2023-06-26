@@ -1,15 +1,13 @@
 <script>
-    import { Link } from 'svelte-routing';
-
     export let artists = [];
     export let disabled = false;
 </script>
 
 <div class="artists" class:disabled>
     {#each artists as artist, i}
-        <Link to="artists/{artist.id}" title="{artist.name}">
+        <a href="#/artists/{artist.id}" title="{artist.name}">
             {artist.name}{#if i < artists.length - 1},&nbsp;{/if}
-        </Link>
+        </a>
     {/each}
 </div>
 

@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from "svelte-routing";
     import { groupedAlbumArtists } from "../stores/server";
     import { PageTitle } from "../stores/status";
     import { randomAlbumArtists } from "../logic/artist";
@@ -34,9 +33,9 @@
 
                     {#each value as artist}
                         <div class="sidebar-artist">
-                            <Link to="artists/{artist.id}" title="{artist.name}">
+                            <a href="#/artists/{artist.id}" title="{artist.name}">
                                 {artist.name}
-                            </Link>
+                            </a>
                         </div>
                     {/each}
                 {/each}

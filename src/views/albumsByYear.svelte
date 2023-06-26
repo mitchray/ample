@@ -3,7 +3,7 @@
     import { PageTitle } from "../stores/status";
     import AlbumsByYear from '../components/album/albumsByYear.svelte';
 
-    export let year;
+    export let params = {}
 
     let title = $_('text.albumsByYear');
     $PageTitle = title;
@@ -14,7 +14,7 @@
 </svelte:head>
 
 <div class="page-main">
-    {#key year || 0}
-        <AlbumsByYear showYear={year} />
+    {#key params.year || 0}
+        <AlbumsByYear showYear={params.year} />
     {/key}
 </div>

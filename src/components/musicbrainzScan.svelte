@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { fade } from 'svelte/transition';
-    import { Link } from "svelte-routing";
     import { throttle } from 'throttle-wait';
     import { serverURL } from "../stores/server";
     import { cleanArtURL, formatTotalTime } from "../logic/helper";
@@ -444,7 +443,7 @@
                         <tr class:is-remote={item.isRemote}>
                             <td class="title">
                                 {#if !item.isRemote}
-                                    <Link to="song/{item.id}">
+                                    <a href="#/song/{item.id}">
                                         <img class="image"
                                             src="{cleanArtURL(item.art)}&thumb=1"
                                             alt=""
@@ -453,7 +452,7 @@
                                             on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
                                         />
                                         {item.title}
-                                    </Link>
+                                    </a>
                                 {:else}
                                     {item.title}
                                 {/if}

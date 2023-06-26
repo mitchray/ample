@@ -1,6 +1,4 @@
 <script>
-    import { Link } from 'svelte-routing';
-
     import SVGGenre from "/src/images/label.svg";
 
     export let genres;
@@ -9,7 +7,7 @@
 {#if genres.length > 0}
     <ul class="genres">
         {#each genres as genre}
-            <li class="genre-tag"><Link to="genres/{genre.id}"><SVGGenre /> {genre.name}</Link></li>
+            <li class="genre-tag"><a href="#/genres/{genre.id}"><SVGGenre /> {genre.name}</a></li>
         {/each}
     </ul>
 {/if}

@@ -1,7 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from "svelte-routing";
-
     import { removeNotification } from "../../logic/notification";
 
     import Rating from '../../components/rating.svelte';
@@ -44,10 +42,10 @@
                     {item.data.title}
                 </div>
                 <div class="artist">
-                    <Link to="artists/{item.data.artist.id}" title="{item.data.artist.name}">{item.data.artist.name}</Link>
+                    <a href="#/artists/{item.data.artist.id}" title="{item.data.artist.name}">{item.data.artist.name}</a>
                 </div>
                 <div class="album">
-                    <Link to="albums/{item.data.album.id}" title="{item.data.album.name}"><SVGAlbum class="inline"/> {item.data.album.name}</Link>
+                    <a href="#/albums/{item.data.album.id}" title="{item.data.album.name}"><SVGAlbum class="inline"/> {item.data.album.name}</a>
                 </div>
             </div>
         {/if}
@@ -60,7 +58,7 @@
 
         {#if item.type === "alternateVersions"}
             <div class="action-container">
-                <Link to="versions/{item.data.title}/{item.data.artist.name}" title="{$_('text.viewAll')}">{$_('text.viewAll')}</Link>
+                <a href="#/versions/{item.data.title}/{item.data.artist.name}" title="{$_('text.viewAll')}">{$_('text.viewAll')}</a>
             </div>
         {/if}
 

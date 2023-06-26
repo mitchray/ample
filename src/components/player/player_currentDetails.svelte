@@ -1,7 +1,5 @@
 <script>
-    import { Link } from 'svelte-routing';
     import { CurrentMedia, FullScreenEnabled } from "../../stores/status";
-
     import ArtistList from '../../components/artist/artistList.svelte';
     import SVGAlbum from '../../images/album.svg';
 
@@ -15,7 +13,7 @@
 
 {#if $CurrentMedia}
     <div class="details" on:click={handleClick}>
-        <div class="title card-title" title="{$CurrentMedia.title}"><Link to="song/{$CurrentMedia.id}">{$CurrentMedia.title}</Link></div>
+        <div class="title card-title" title="{$CurrentMedia.title}"><a href="#/song/{$CurrentMedia.id}">{$CurrentMedia.title}</a></div>
 
         {#if $CurrentMedia.artists.length > 0}
             <div class="artist secondary-info">
@@ -25,10 +23,10 @@
 
         <div class="album secondary-info">
             {#if $CurrentMedia.year > 0}
-                <span class="date"><Link to="albums/year/{$CurrentMedia.year}">{$CurrentMedia.year}</Link></span>
+                <span class="date"><a href="#/albums/year/{$CurrentMedia.year}">{$CurrentMedia.year}</a></span>
             {/if}
             {#if $CurrentMedia.album}
-                <span class="album"><SVGAlbum class="inline"/> <Link to="albums/{$CurrentMedia.album.id}" title="{$CurrentMedia.album.name}">{$CurrentMedia.album.name}</Link></span>
+                <span class="album"><SVGAlbum class="inline"/> <a href="#/albums/{$CurrentMedia.album.id}" title="{$CurrentMedia.album.name}">{$CurrentMedia.album.name}</a></span>
             {/if}
         </div>
     </div>

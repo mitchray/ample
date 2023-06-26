@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from "svelte-routing";
     import { serverURL } from "../../stores/server";
     import { API } from "../../stores/api";
     import Actions from '../../components/action/actions.svelte';
@@ -30,7 +29,7 @@
 <div class="mix-card card">
     {#if playlist?.id}
         <div class="image-container">
-            <Link to="mix/{playlist.playlistType}/{playlist.id}" title="{playlist.name}">
+            <a href="#/mix/{playlist.playlistType}/{playlist.id}" title="{playlist.name}">
                 <div class="image-text">{playlist.name}</div>
                 <img class="image"
                      src="{cleanArtURL(playlist.art)}&thumb=22"
@@ -39,7 +38,7 @@
                      height="400"
                      on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=artist&thumb=22' }}
                 />
-            </Link>
+            </a>
         </div>
 
         <div class="details">
@@ -51,7 +50,7 @@
                     {#if artists.length > 0}
                         {#each artists as artist, i}
                             <span>
-                                <Link to="artists/{artist.id}" title="{artist.name}">{artist.name}</Link>{#if i + 1 < artists.length},&nbsp;{/if}
+                                <a href="#/artists/{artist.id}" title="{artist.name}">{artist.name}</a>{#if i + 1 < artists.length},&nbsp;{/if}
                             </span>
                         {/each}
 

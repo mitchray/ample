@@ -17,6 +17,7 @@
 - Ability to download individual songs
 
 ### Changed
+- Removed Apache/NGINX/other server requirement; will now run from any directory
 - General design overhaul
 - Rebuilt "Recently Played" on main page; handles song updates much better now
 - Simplified Sidebar to only have full/collapsed modes

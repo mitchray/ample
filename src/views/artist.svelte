@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { fade } from 'svelte/transition';
-    import { Link } from "svelte-routing";
     import { PageLoadedKey, PageTitle, ShowExpandedAlbums, GroupAlbumsByReleaseType, Theme } from "../stores/status";
     import { serverURL } from "../stores/server";
     import { API } from "../stores/api";
@@ -26,14 +25,14 @@
     import SVGSongs from "/src/images/songs.svg";
     import SVGSimilar from "/src/images/people.svg";
 
-    export let id;
+    export let params = {}
 
     let artist;
     let theme;
     let loading = true;
     $: theme = $Theme;
 
-    $: if (id || $PageLoadedKey)  {
+    $: if (params.id || $PageLoadedKey)  {
         loadData();
     }
 
@@ -66,7 +65,7 @@
 
     async function loadData() {
         loading = true;
-        artist = await getArtist({id: id, artAnalysis: true});
+        artist = await getArtist({id: params.id, artAnalysis: true});
         loading = false;
     }
 </script>
@@ -137,9 +136,9 @@
                             {#if artist.yearformed}
                                 <div class="entry">
                                 <span class="value">
-                                    <Link to="albums/year/{artist.yearformed}" title="{artist.yearformed}">
+                                    <a href="#/albums/year/{artist.yearformed}" title="{artist.yearformed}">
                                         {artist.yearformed}
-                                    </Link>
+                                    </a>
                                 </span>
                                     <span class="field">{$_('text.yearFormed')}</span>
                                 </div>
@@ -198,7 +197,7 @@
 
                         {#if tab.value === 'popular'}
                             <Tab id="popular" class="popular" bind:activeTabValue={currentTab}>
-                                {#await $API.artistSongs({ filter: id, top50: 1, limit: 20 })}
+                                {#await $API.artistSongs({ filter: params.id, top50: 1, limit: 20 })}
                                     {$_('text.loading')}
                                 {:then songs}
                                     {#if songs.length > 0}
@@ -225,7 +224,7 @@
 
                         {#if tab.value === 'similar'}
                             <Tab id="similar" class="similar" bind:activeTabValue={currentTab}>
-                                {#await $API.getSimilar({ type: "artist", filter: id, limit: 15 })}
+                                {#await $API.getSimilar({ type: "artist", filter: params.id, limit: 15 })}
                                     {$_('text.loading')}
                                 {:then artists}
                                     {#if artists.length > 0}

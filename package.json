@@ -7,14 +7,14 @@
     "dev": "vite",
     "start": "vite preview",
     "validate": "svelte-check",
-    "copy": "copyfiles .htaccess README.md LICENSE CHANGELOG.md dist"
+    "copy": "copyfiles README.md LICENSE CHANGELOG.md dist"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tsconfig/svelte": "^4.0.1",
     "copyfiles": "^2.4.1",
     "rollup-plugin-svelte-svg": "^1.0.0-beta.6",
-    "svelte": "^4.0.0",
+    "svelte": "^3.59.2",
     "svelte-check": "^3.4.4",
     "svelte-i18n": "^3.6.0",
     "svelte-preprocess": "^5.0.4",
@@ -33,7 +33,7 @@
     "postcss": "^8.3.6",
     "svelte-dnd-action": "^0.9.8",
     "svelte-portal": "^2.2.0",
-    "svelte-routing": "^1.8.8",
+    "svelte-spa-router": "^3.3.0",
     "throttle-wait": "0.0.5",
     "uuid": "^9.0.0",
     "wavesurfer.js": "^5.1.0"

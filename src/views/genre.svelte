@@ -13,7 +13,7 @@
     import SVGSong from "/src/images/music_note.svg";
     import { PageTitle } from "../stores/status";
 
-    export let id;
+    export let params = {}
     let genre;
     let currentTab;
 
@@ -24,7 +24,7 @@
     ];
 
     onMount(async () => {
-        genre = await $API.genre({ filter: id });
+        genre = await $API.genre({ filter: params.id });
     });
 
     let title = $_('text.genre');

@@ -7,7 +7,7 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - Ample is made for my own requirements in my spare time, but have shared it publicly in case others also find it useful. That means:
   - I'm the sole user of my Ampache server, so it's largely untested with multiple users
   - Transcoding is untested as I don't use it
-  - It is designed to be a zero-config drop-in companion to an existing Ampache server, not a complete replacement
+  - It is designed to be a drop-in companion to an existing Ampache server, not a complete replacement
 
 ## Demo
 [View demo](https://demo.ampache.dev/ample/) (might not be the latest version)
@@ -37,22 +37,21 @@ Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitc
 ## Requirements
 - [Ampache](https://ampache.org/) 6+
 - A modern web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
-- Apache for a small .htaccess URL rewrite, or [NGINX](https://github.com/mitchray/ample/wiki/NGINX-rewrite)
 
 ## Installing
-- Either grab a prebuilt [release](https://github.com/mitchray/ample/releases)
-  - Copy the ```ample``` folder into your Ampache ```public``` folder (or just the Ampache directory if using the 'squashed' version)
-  - Done!
-- or build from Git repository (see Developing)
-
-## Accessing
-- Add ```/ample``` to your Ampache server address. e.g ```yourampache.com/ample``` or ```localhost/ampache/ample```
+- Easy mode (recommended)
+  - Grab a prebuilt [release](https://github.com/mitchray/ample/releases)
+  - Copy the ```ample``` folder into your Ampache server ```public``` folder
+  - Access by adding ```/ample``` to your Ampache server address e.g. ```yourampache.com/ample``` or ```localhost/ampache/ample```
+- Hard mode
+  - Grab a prebuilt [release](https://github.com/mitchray/ample/releases) or build yourself from Git repository (see Developing)
+  - Put it anywhere you like, but you will have to deal with [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin) if it is on a different domain/subdomain from the Ampache server you are connecting to.
+- Enter the URL of the Ampache server you wish to connect to on the login screen
 
 ## Developing
 - Clone the Ample repository and from the ample directory ```cd ample```
 - Install packages ```npm install```
-- Change the ```DEV detectedURL``` in ```src/stores/server.js``` to your desired Ampache server
 - For development and hot reloading ```npm run dev```
-- For building ```npm run build```
+- For building ```npm run build```, and see the contents of ```dist```
 
 Additional console logging can be enabled by setting ```debugMode true``` in ```src/stores/server.js```

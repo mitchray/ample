@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { Link } from 'svelte-routing';
     import { API } from "../stores/api";
     import { PageTitle } from "../stores/status";
     import { formatTotalTime, formatSongQuality, formatFilesize } from '../logic/helper';
@@ -55,15 +54,15 @@
             {#if song.artists?.length > 1}
                 <span class="field">{$_('text.songArtists')}</span> <span><ArtistList artists={song.artists} /></span>
             {:else if song.artist.name}
-                <span class="field">{$_('text.songArtist')}</span> <span><Link to="artists/{song.artist.id}">{song.artist.name}</Link></span>
+                <span class="field">{$_('text.songArtist')}</span> <span><a href="#/artists/{song.artist.id}">{song.artist.name}</a></span>
             {/if}
 
             {#if song.albumartist.name}
-                <span class="field">{$_('text.albumArtist')}</span> <span><Link to="artists/{song.albumartist.id}">{song.albumartist.name}</Link></span>
+                <span class="field">{$_('text.albumArtist')}</span> <span><a href="#/artists/{song.albumartist.id}">{song.albumartist.name}</a></span>
             {/if}
 
             {#if song.album.name}
-                <span class="field">{$_('text.album')}</span> <span><Link to="albums/{song.album.id}">{song.album.name}</Link></span>
+                <span class="field">{$_('text.album')}</span> <span><a href="#/albums/{song.album.id}">{song.album.name}</a></span>
             {/if}
 
             {#if song.track}

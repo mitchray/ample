@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { setContext } from 'svelte';
-    import { Link } from 'svelte-routing';
     import { v4 as uuidv4 } from 'uuid';
     import { API } from "../../stores/api";
     import { sampleSize } from "lodash";
@@ -181,22 +180,22 @@
             <ActionShuffleLast contextKey={contextKey} />
 
             {#if data.artist?.id}
-                <Link to="artists/{data.artist.id}"><SVGArtist class="inline" />{data.artist.name}</Link>
+                <a href="#/artists/{data.artist.id}"><SVGArtist class="inline" />{data.artist.name}</a>
             {/if}
 
             <!-- add album artist if not already in artists -->
             {#if data.albumArtist?.id && (data.artists?.length > 0 && !data.artists.find(artist => artist.id === data.albumArtist.id))}
-                <Link to="artists/{data.albumArtist.id}"><SVGArtist class="inline" />{data.albumArtist.name}</Link>
+                <a href="#/artists/{data.albumArtist.id}"><SVGArtist class="inline" />{data.albumArtist.name}</a>
             {/if}
 
             {#if data.artists?.length > 0}
                 {#each data.artists as artist}
-                    <Link to="artists/{artist.id}"><SVGArtist class="inline" />{artist.name}</Link>
+                    <a href="#/artists/{artist.id}"><SVGArtist class="inline" />{artist.name}</a>
                 {/each}
             {/if}
 
             {#if data.album?.id}
-                <Link to="albums/{data.album.id}"><SVGAlbum class="inline" />{data.album.name}</Link>
+                <a href="#/albums/{data.album.id}"><SVGAlbum class="inline" />{data.album.name}</a>
             {/if}
 
             {#if (type === "artist" || type === "album" || type === "song")}
