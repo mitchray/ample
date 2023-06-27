@@ -7,6 +7,7 @@
     import { isLoggedIn, userToken } from './stores/user';
     import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
     import { Theme, PageTitle } from "./stores/status";
+    import { serverURL, serverIsHardcoded } from "./stores/server.js";
 
     import { extendSession, validateSession } from './logic/user';
     import { isLoading as i18nIsLoading } from 'svelte-i18n'
@@ -57,7 +58,24 @@
         setTimeout(() => $MediaPlayer.setWaveColors(), 0);
     };
 
+    async function getServerURL() {
+        // load from config file if present & set
+        let hardcodedServerURL = await fetch(`${import.meta.env.BASE_URL}/ample.json`)
+            .then(response => response.json())
+            .then(data => {
+                return data.ampacheURL;
+            });
+
+        if (hardcodedServerURL) {
+            $serverURL = hardcodedServerURL;
+            $serverIsHardcoded = true;
+        } else {
+            $serverURL = JSON.parse(localStorage.getItem('AmpleServerURL')) || '';
+        }
+    }
+
     onMount(async () => {
+        await getServerURL();
         await validateSession();
 
         if ($Theme === 'light') {

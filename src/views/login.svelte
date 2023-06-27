@@ -5,7 +5,7 @@
     import { lchToRgb } from 'color-converters';
     import AmpacheAPI from 'javascript-ampache';
     import { API } from "../stores/api.js";
-    import { serverVersion, serverURL } from "../stores/server";
+    import { serverVersion, serverURL, serverIsHardcoded } from "../stores/server";
     import { PageTitle, Theme } from "../stores/status";
     import { ampleVersion } from "../stores/player";
 
@@ -100,11 +100,14 @@
         <Tabs bind:activeTabValue={currentTab} items={tabItems}>
             <Tab id={1} bind:activeTabValue={currentTab} class="username login-tab">
                 <form on:submit|preventDefault={handleSubmitUsername}>
-                    <p>
-                        <label>{$_('text.serverURL')}
-                            <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
-                        </label>
-                    </p>
+                    {#if !$serverIsHardcoded}
+                        <p>
+                            <label>{$_('text.serverURL')}
+                                <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
+                            </label>
+                        </p>
+                    {/if}
+
                     <p>
                         <label>{$_('text.username')}
                             <input type="text" autofocus bind:value={username} />
@@ -126,11 +129,13 @@
 
             <Tab id={2} bind:activeTabValue={currentTab} class="api login-tab">
                 <form on:submit|preventDefault={handleSubmitAPI}>
-                    <p>
-                        <label>{$_('text.serverURL')}
-                            <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
-                        </label>
-                    </p>
+                    {#if !$serverIsHardcoded}
+                        <p>
+                            <label>{$_('text.serverURL')}
+                                <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
+                            </label>
+                        </p>
+                    {/if}
                     <p>
                         <label>{$_('text.apiKey')}
                             <input type="text" bind:value={apiKey} />

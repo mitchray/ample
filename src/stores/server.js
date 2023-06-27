@@ -4,7 +4,8 @@ import { writable } from 'svelte/store';
 export let debugMode = writable(false);
 
 export let APIVersion = writable("6.0.0");
-export const serverURL = writable(JSON.parse(localStorage.getItem('AmpleServerURL')) || '');
+export let serverURL = writable('');
+export let serverIsHardcoded = writable(false);
 
 export let serverVersion = writable('');
 

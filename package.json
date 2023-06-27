@@ -7,7 +7,7 @@
     "dev": "vite",
     "start": "vite preview",
     "validate": "svelte-check",
-    "copy": "copyfiles README.md LICENSE CHANGELOG.md dist"
+    "copy": "copyfiles README.md LICENSE CHANGELOG.md ample.json.dist dist"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.0",

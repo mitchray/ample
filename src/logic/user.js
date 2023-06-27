@@ -41,17 +41,14 @@ export const logout = () => {
 
 export const validateSession = async () => {
     let cachedSession = JSON.parse(localStorage.getItem('AmpleAuth'));
-    let cachedServerURL = JSON.parse(localStorage.getItem('AmpleServerURL') || null);
 
-    if (!cachedServerURL) {
+    if (!get(serverURL)) {
         logout();
         return;
     }
 
-    serverURL.set(cachedServerURL);
-
     try {
-        API.set(new AmpacheAPI({ url: cachedServerURL, debug: false }));
+        API.set(new AmpacheAPI({ url: get(serverURL), debug: false }));
 
         let result = await get(API).ping({ auth: cachedSession?.userToken });
 
