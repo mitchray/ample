@@ -59,12 +59,17 @@
     };
 
     async function getServerURL() {
+        let hardcodedServerURL;
+
         // load from config file if present & set
-        let hardcodedServerURL = await fetch(`${import.meta.env.BASE_URL}/ample.json`)
-            .then(response => response.json())
-            .then(data => {
-                return data.ampacheURL;
-            });
+        try {
+            hardcodedServerURL = await fetch(`${import.meta.env.BASE_URL}/ample.json`)
+                .then(response => response.json())
+                .then(data => {
+                    return data.ampacheURL;
+                });
+        } catch (e) {
+        }
 
         if (hardcodedServerURL) {
             $serverURL = hardcodedServerURL;

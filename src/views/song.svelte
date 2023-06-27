@@ -10,19 +10,19 @@
     import ThirdPartyServices from '../components/thirdPartyServices.svelte';
     import ArtistList from '../components/artist/artistList.svelte';
 
-    export let id;
+    export let params;
 
     let song;
 
     let title = $_('text.song');
     $PageTitle = title;
 
-    $: if (id) {
+    $: if (params.id) {
         loadData();
     }
 
     async function loadData() {
-        song = await $API.song({ filter: id });
+        song = await $API.song({ filter: params.id });
     }
 </script>
 
@@ -30,7 +30,7 @@
     <title>{`${song?.title} by ${song?.artist?.name}` || $_('text.loading')} (song)</title>
 </svelte:head>
 
-{#key id || 0}
+{#key params.id || 0}
     {#if song?.id}
         <div class="info">
             <h1 class="title">{song.title}</h1>
