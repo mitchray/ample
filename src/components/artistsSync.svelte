@@ -13,7 +13,7 @@
         allAlbumArtists.set(e.data.allAlbumArtists);
         groupedAlbumArtists.set(e.data.groupedAlbumArtists);
 
-        console.log('Web Worker: Updated artists');
+        //console.log('Web Worker: Updated artists');
     };
 
     $: {
