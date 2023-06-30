@@ -4,13 +4,13 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 <img src="https://github.com/mitchray/ample/assets/5735900/e2564e30-d7af-4fc8-b2e1-bbff93a3356e" width=800 alt="Ample screenshot" />
 
 ## Setting expectations
-- Ample is made for my own requirements in my spare time, but have shared it publicly in case others also find it useful. That means:
-  - I'm the sole user of my Ampache server, so it's largely untested with multiple users
-  - Transcoding is untested as I don't use it
-  - It is designed to be a drop-in companion to an existing Ampache server, not a complete replacement
+- No more features are being added, in order to focus on the next generation of Ampache 💪
+- Largely untested with multiple users
+- Transcoding is untested as I don't use it
+- It is designed to be a front-end companion to an existing Ampache server, not a complete replacement
 
 ## Demo
-[View demo](https://demo.ampache.dev/ample/) (might not be the latest version)
+[View demo](https://demo.ampache.dev/ample/)
 - User ```demo``` 
 - Password ```demodemo```
 
@@ -22,7 +22,7 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - Volume normalization (ReplayGain & EBU R128)
 - Night/headphone mode to boost quieter parts of songs
 - Toggleable notifications for
-  - Alternate song versions (acoustic, live, demo etc)
+  - Alternate song versions (radio edit, acoustic, live, demo etc)
   - Missing volume gain tags
   - Missing song rating
   - Missing/untimestamped song lyrics

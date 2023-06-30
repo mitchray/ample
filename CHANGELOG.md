@@ -1,6 +1,6 @@
 # Changelog
 
-## [2.0.0] - 2023-XX-XX
+## [2.0.0] - 2023-06-30
 ### Requires at least Ampache 6.0.0
 
 ### Added
