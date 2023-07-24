@@ -10,7 +10,7 @@
 
     function toggleQueue() {
         let inverted = !$QueueIsOpen;
-        localStorage.setItem('QueueIsOpen', JSON.stringify(inverted));
+        localStorage.setItem('AmpleQueueIsOpen', JSON.stringify(inverted));
         QueueIsOpen.set(inverted);
     }
 </script>

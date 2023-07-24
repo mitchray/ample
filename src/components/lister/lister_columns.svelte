@@ -65,7 +65,7 @@
     }
 
     function loadSavedColumns() {
-        let savedColumns = JSON.parse(localStorage.getItem(listerColumnsID));
+        let savedColumns = JSON.parse(localStorage.getItem(`Ample${listerColumnsID}`));
 
         if (savedColumns !== null) {
             for (let i = 0; i < $availableColumns.length; i++) {

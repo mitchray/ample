@@ -7,7 +7,7 @@ import { get} from "svelte/store";
 export const closeSidebar = async () => {
     if (get(IsMobile)) {
         let status = false;
-        localStorage.setItem('SidebarIsOpen', JSON.stringify(status));
+        localStorage.setItem('AmpleSidebarIsOpen', JSON.stringify(status));
         SidebarIsOpen.set(status);
     }
 }

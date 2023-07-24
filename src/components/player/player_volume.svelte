@@ -40,14 +40,14 @@
 
     function handleVolumeNormalize() {
         let inverted = !$VolumeNormalizationEnabled;
-        localStorage.setItem('VolumeNormalizationEnabled', JSON.stringify(inverted));
+        localStorage.setItem('AmpleVolumeNormalizationEnabled', JSON.stringify(inverted));
         VolumeNormalizationEnabled.set(inverted);
         $MediaPlayer.updateFilters();
     }
 
     function handleDynamicsCompressor() {
         let inverted = !$DynamicsCompressorEnabled;
-        localStorage.setItem('DynamicsCompressorEnabled', JSON.stringify(inverted));
+        localStorage.setItem('AmpleDynamicsCompressorEnabled', JSON.stringify(inverted));
         DynamicsCompressorEnabled.set(inverted);
         $MediaPlayer.updateFilters();
     }

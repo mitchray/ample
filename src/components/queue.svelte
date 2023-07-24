@@ -125,14 +125,14 @@
 
     function togglePinned() {
         let inverted = !$QueueIsPinned;
-        localStorage.setItem('QueueIsPinned', JSON.stringify(inverted));
+        localStorage.setItem('AmpleQueueIsPinned', JSON.stringify(inverted));
         QueueIsPinned.set(inverted);
     }
 
     function handleClickOutside() {
         if ($SiteQueueBind.classList.contains("is-drawer")) {
             let status = false;
-            localStorage.setItem('QueueIsOpen', JSON.stringify(status));
+            localStorage.setItem('AmpleQueueIsOpen', JSON.stringify(status));
             QueueIsOpen.set(status);
         }
     }

@@ -36,31 +36,31 @@
 
     function handleAlternateVersionsToggle() {
         let inverted = !$ShowNotificationAlternateVersions;
-        localStorage.setItem('ShowNotificationAlternateVersions', JSON.stringify(inverted));
+        localStorage.setItem('AmpleShowNotificationAlternateVersions', JSON.stringify(inverted));
         ShowNotificationAlternateVersions.set(inverted);
     }
 
     function handleGainTagsMissingToggle() {
         let inverted = !$ShowNotificationGainTagsMissing;
-        localStorage.setItem('ShowNotificationGainTagsMissing', JSON.stringify(inverted));
+        localStorage.setItem('AmpleShowNotificationGainTagsMissing', JSON.stringify(inverted));
         ShowNotificationGainTagsMissing.set(inverted);
     }
 
     function handleRatingMissingToggle() {
         let inverted = !$ShowNotificationRatingMissing;
-        localStorage.setItem('ShowNotificationRatingMissing', JSON.stringify(inverted));
+        localStorage.setItem('AmpleShowNotificationRatingMissing', JSON.stringify(inverted));
         ShowNotificationRatingMissing.set(inverted);
     }
 
     function handleLyricsMissingToggle() {
         let inverted = !$ShowNotificationLyricsMissing;
-        localStorage.setItem('ShowNotificationLyricsMissing', JSON.stringify(inverted));
+        localStorage.setItem('AmpleShowNotificationLyricsMissing', JSON.stringify(inverted));
         ShowNotificationLyricsMissing.set(inverted);
     }
 
     function handleLyricsNotTimestampedToggle() {
         let inverted = !$ShowNotificationLyricsNotTimestamped;
-        localStorage.setItem('ShowNotificationLyricsNotTimestamped', JSON.stringify(inverted));
+        localStorage.setItem('AmpleShowNotificationLyricsNotTimestamped', JSON.stringify(inverted));
         ShowNotificationLyricsNotTimestamped.set(inverted);
     }
 </script>

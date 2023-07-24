@@ -19,7 +19,7 @@
 
     async function handleSkipBelow() {
         await tick();
-        localStorage.setItem('SkipBelow', JSON.stringify($SkipBelow));
+        localStorage.setItem('AmpleSkipBelow', JSON.stringify($SkipBelow));
         SkipBelow.set($SkipBelow);
     }
 
@@ -27,7 +27,7 @@
         isVisible = false;
         await tick();
         let newValue = $SkipBelowRating;
-        localStorage.setItem('SkipBelowRating', JSON.stringify(newValue));
+        localStorage.setItem('AmpleSkipBelowRating', JSON.stringify(newValue));
         SkipBelowRating.set(newValue);
     }
 

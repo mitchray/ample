@@ -33,11 +33,11 @@
     }
 
     function saveLimit() {
-        localStorage.setItem(paginationLimitID, JSON.stringify(limit));
+        localStorage.setItem(`Ample${paginationLimitID}`, JSON.stringify(limit));
     }
 
     onMount(() => {
-        limit = JSON.parse(localStorage.getItem(paginationLimitID)) || defaultLimit;
+        limit = JSON.parse(localStorage.getItem(`Ample${paginationLimitID}`)) || defaultLimit;
         loaded = true;
     });
 </script>

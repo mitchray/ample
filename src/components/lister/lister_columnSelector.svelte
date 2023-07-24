@@ -28,7 +28,7 @@
             }
         }
 
-        localStorage.setItem(listerColumnsID, JSON.stringify(visibleColumnIds));
+        localStorage.setItem(`Ample${listerColumnsID}`, JSON.stringify(visibleColumnIds));
     }
 </script>
 

@@ -17,7 +17,7 @@
 
     function setTableDisplay(pref) {
         $_displayAsTable = pref;
-        localStorage.setItem($listerDisplayID, JSON.stringify(pref));
+        localStorage.setItem(`Ample${$listerDisplayID}`, JSON.stringify(pref));
         $PageLoadedKey = Date.now().toString(); // reload the entire page to rerender the lister
     }
 </script>
