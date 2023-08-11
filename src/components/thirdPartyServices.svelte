@@ -11,7 +11,7 @@
     let mb = new MusicBrainz;
     let menu = [];
 
-    let hasMusicbrainz = mb.hasMBID(data.mbid);
+    let hasMusicbrainz = mb.hasMBID(data);
 
     let isVisible = false;
 
