@@ -12,7 +12,6 @@
     export let immediateSearch = false;
 
     let loaded = false;
-    let fromParams = false;
     let rows = [];
     let fieldsToShow;
     let groupedFieldsToShow;
@@ -21,6 +20,7 @@
     let allCatalogs = [];
     let allPlaylists = [];
     let allSmartlists = [];
+    let containerBind;
 
     // set defaults
     let settings = {
@@ -59,8 +59,6 @@
             let foundRules = joined.match(/rule_\d+(?=,)/gi);
 
             if (foundRules) {
-                fromParams = true;
-
                 foundRules.forEach((element) => {
                     // test to see if all items are present
                     if (settings[`${element}_operator`] !== undefined && settings[`${element}_input`] !== undefined) {
@@ -160,6 +158,11 @@
     }
 
     async function search() {
+        // check for invalid inputs
+        if (containerBind?.querySelectorAll('*:invalid').length > 0) {
+            return;
+        }
+
         results = [];
         loading = true;
         loadedTime = null;
@@ -887,7 +890,7 @@
                 { id: "song" }
             ],
             operatorType: "relative",
-            inputType: "number"
+            inputType: "date"
         },
         {
             id: "updated",
@@ -897,7 +900,7 @@
                 { id: "song" }
             ],
             operatorType: "relative",
-            inputType: "number"
+            inputType: "date"
         },
         {
             id: "recent_added",
@@ -1035,7 +1038,7 @@
     ];
 </script>
 
-<div class="container">
+<div class="container" bind:this={containerBind}>
     <div class="options">
         <div class="type">
             <label>
@@ -1148,7 +1151,7 @@
 
                 {#if row.operatorType === "rating_expanded"}
                     <select bind:value={row.operator}>
-                        <option value="0">{$_('text.searchHasLoved')}has loved</option>
+                        <option value="0">{$_('text.searchHasLoved')}</option>
                         <option value="1">{$_('text.searchStars', { values: { count: 5 } })}</option>
                         <option value="2">{$_('text.searchStars', { values: { count: 4 } })}</option>
                         <option value="3">{$_('text.searchStars', { values: { count: 3 } })}</option>
@@ -1189,15 +1192,19 @@
                 <!-- inputs -->
 
                 {#if row.inputType === "text"}
-                    <input type="text" bind:value={row.input} />
+                    <input type="text" bind:value={row.input} required />
                 {/if}
 
                 {#if row.inputType === "number"}
-                    <input type="number" bind:value={row.input} />
+                    <input type="number" bind:value={row.input} required />
+                {/if}
+
+                {#if row.inputType === "date"}
+                    <input type="datetime-local" bind:value={row.input} required />
                 {/if}
 
                 {#if row.inputType === "rating"}
-                    <select bind:value={row.input}>
+                    <select bind:value={row.input} required>
                         <option value="0">{$_('text.ratingCount', { values: { count: 0 } })}</option>
                         <option value="1">{$_('text.ratingCount', { values: { count: 1 } })}</option>
                         <option value="2">{$_('text.ratingCount', { values: { count: 2 } })}</option>
@@ -1208,7 +1215,7 @@
                 {/if}
 
                 {#if row.inputType === "user"}
-                    <select bind:value={row.input}>
+                    <select bind:value={row.input} required>
                         {#each allUsers as user}
                             <option value={user.id}>{user.username}</option>
                         {/each}
@@ -1216,7 +1223,7 @@
                 {/if}
 
                 {#if row.inputType === "catalog"}
-                    <select bind:value={row.input}>
+                    <select bind:value={row.input} required>
                         {#each allCatalogs as catalog}
                             <option value={catalog.id}>{catalog.name}</option>
                         {/each}
@@ -1224,7 +1231,7 @@
                 {/if}
 
                 {#if row.inputType === "playlist"}
-                    <select bind:value={row.input}>
+                    <select bind:value={row.input} required>
                         {#each allPlaylists as playlist}
                             <option value={playlist.id}>{playlist.name}</option>
                         {/each}
@@ -1232,7 +1239,7 @@
                 {/if}
 
                 {#if row.inputType === "smartlist"}
-                    <select bind:value={row.input}>
+                    <select bind:value={row.input} required>
                         {#each allSmartlists as smartlist}
                             <option value={smartlist.id}>{smartlist.name}</option>
                         {/each}
@@ -1309,5 +1316,9 @@
         .row {
             display: contents;
         }
+    }
+
+    .container :global(*:invalid) {
+        outline: 2px solid var(--color-danger-foreground);
     }
 </style>

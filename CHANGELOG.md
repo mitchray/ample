@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1] - 2023-08-18
+### Fixed
+- Advanced search inputs for Added/Update use date inputs
+
+### Changed
+- Prefix all localstorage values with 'Ample', you will lose your settings sorry :(
+
 ## [2.0.0] - 2023-06-30
 ### Requires at least Ampache 6.0.0
 
