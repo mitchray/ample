@@ -144,7 +144,7 @@
                 <div class="songs-container">
                     <div class="songs page-main">
                         {#each [...album.ampleSongs] as [key, value]}
-                            {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key).title : null}
+                            {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key)?.title : null}
                             <section>
                                 <Lister
                                     data={value}
