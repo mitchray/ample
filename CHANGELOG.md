@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.0.2] - 2023-08-28
+### Fixed
+- Album Artists -> All was showing all artists
+
 ## [2.0.1] - 2023-08-18
 ### Fixed
 - Advanced search inputs for Added/Update use date inputs
