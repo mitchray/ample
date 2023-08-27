@@ -103,7 +103,7 @@
 
                         {#if tab.value === 'all'}
                             <Tab id="all" class="all" bind:activeTabValue={currentTab}>
-                                <ArtistsAll />
+                                <ArtistsAll type="artist" />
                             </Tab>
                         {/if}
                     {/if}

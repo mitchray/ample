@@ -4,7 +4,8 @@
     import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
     import Lister from '../../components/lister/lister.svelte';
 
-    export let type = "artist";
+    /** @type {'artist'|'album_artist'} */
+    export let type;
 
     let filterValue = $FilterHistory[type] || ""; // bound from AlphanumericFilter
     let dataDisplay = [];
@@ -16,7 +17,7 @@
 
     async function getData() {
         dataDisplay = await $API.advancedSearch({
-            type: "artist",
+            type: type,
             operator: "and",
             limit: 0,
             rules: [

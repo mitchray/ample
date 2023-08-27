@@ -27,7 +27,7 @@
     "autoprefixer": "^10.3.1",
     "color-converters": "^0.1.1",
     "fast-average-color": "^9.3.0",
-    "javascript-ampache": "^1.0.1",
+    "javascript-ampache": "^1.0.3",
     "jssha": "^3.2.0",
     "lodash": "^4.17.21",
     "postcss": "^8.3.6",
