@@ -1,5 +1,5 @@
 import { get } from "svelte/store";
-import { sampleSize, uniqBy } from "lodash";
+import { sampleSize, uniqBy } from "lodash-es";
 import { API } from "../stores/api";
 import { frequentArtists, topArtists } from "./artist";
 

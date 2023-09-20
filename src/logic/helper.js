@@ -23,23 +23,6 @@ export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-/**
- * Copy of lodash "get", for accessing object properties by dot notation
- * https://gist.github.com/harish2704/d0ee530e6ee75bad6fd30c98e5ad9dab
- * @param object
- * @param keys
- * @param defaultVal
- * @returns {null|*}
- */
-export function getProp( object, keys, defaultVal = null ){
-    keys = Array.isArray( keys )? keys : keys.split('.');
-    object = object[keys[0]];
-    if( object && keys.length>1 ){
-        return getProp( object, keys.slice(1) );
-    }
-    return object === undefined? defaultVal : object;
-}
-
 export const shuffleArray = (arr) => {
     for (let i = 0; i < arr.length; i++) {
         const j = Math.floor(Math.random() * i);

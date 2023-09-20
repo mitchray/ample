@@ -3,7 +3,7 @@
     import { setContext } from 'svelte';
     import { v4 as uuidv4 } from 'uuid';
     import { API } from "../../stores/api";
-    import { sampleSize } from "lodash";
+    import { sampleSize } from "lodash-es";
     import { addAlert } from "../../logic/alert";
     import {
         getSomeSongsByGenre,

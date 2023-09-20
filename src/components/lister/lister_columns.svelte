@@ -1,11 +1,9 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { onMount, getContext, tick } from 'svelte';
-
+    import { get } from 'lodash-es';
     import { columns } from './columns.js';
     import ColumnSelector from './lister_columnSelector.svelte';
-
-    import { getProp } from '../../logic/helper';
 
     export let contextKey;
 
@@ -202,8 +200,8 @@
         // sort the dataDisplay
         $dataDisplay = $dataDisplay.sort(function(obj1, obj2) {
             // handle null
-            if (!getProp(obj1, sortBy)) return -1;
-            if (!getProp(obj2, sortBy)) return +1;
+            if (!get(obj1, sortBy)) return -1;
+            if (!get(obj2, sortBy)) return +1;
 
             if (col.type === "number" || col.type === "rating") {
                 return obj1[sortBy] > obj2[sortBy];
@@ -213,7 +211,7 @@
                 return obj1[sortBy].toString().localeCompare(obj2[sortBy].toString(), undefined, {numeric: true});
             }
 
-            return getProp(obj1, sortBy).localeCompare(getProp(obj2, sortBy));
+            return get(obj1, sortBy).localeCompare(get(obj2, sortBy));
         });
 
         if (startReverse || isReversed) {

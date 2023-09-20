@@ -3,7 +3,7 @@
     import { serverURL } from "../../stores/server";
     import { API } from "../../stores/api";
     import Actions from '../../components/action/actions.svelte';
-    import { sampleSize } from "lodash";
+    import { sampleSize } from "lodash-es";
     import { cleanArtURL } from "../../logic/helper";
 
     export let data = null; // needed for cardList dynamic components
