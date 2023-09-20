@@ -4,7 +4,6 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 <img src="https://github.com/mitchray/ample/assets/5735900/e2564e30-d7af-4fc8-b2e1-bbff93a3356e" width=800 alt="Ample screenshot" />
 
 ## Setting expectations
-- No more features are being added, in order to focus on the next generation of Ampache 💪
 - Largely untested with multiple users
 - Transcoding is untested as I don't use it
 - It is designed to be a front-end companion to an existing Ampache server, not a complete replacement
