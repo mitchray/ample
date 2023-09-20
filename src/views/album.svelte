@@ -83,7 +83,7 @@
 
                             <div class="below-image">
                                 <div class="rating">
-                                    <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}" />
+                                    <Rating type="album" data={album} />
                                 </div>
 
                                 <div class="third-party-links">

@@ -42,7 +42,7 @@
                 </div>
 
                 <div class="rating-container">
-                    <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
+                    <Rating type="playlist" data={playlist} />
                 </div>
             {/if}
 

@@ -77,7 +77,7 @@
 
                     {#if playlistType === "playlist"}
                         <div class="rating">
-                            <Rating type="playlist" id="{playlist.id}" rating="{playlist.rating}" flag="{playlist.flag}" averageRating="{playlist.averagerating}" />
+                            <Rating type="playlist" data={playlist}  />
                         </div>
                     {/if}
                 </div>

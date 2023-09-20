@@ -32,7 +32,7 @@
                 <div class="artist secondary-info"><a href="#/artists/{song.artist.id}" title="{song.artist.name}">{song.artist.name}</a></div>
                 <div class="album secondary-info"><a href="#/albums/{song.album.id}" title="{song.album.name}"><SVGAlbum class="inline"/> {song.album.name}</a></div>
 
-                <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
+                <Rating type="song" data={song} />
             </div>
         </div>
 

@@ -17,7 +17,7 @@
 
     <div class="fullscreen__rating">
         {#if $CurrentMedia}
-            <Rating type="song" id="{$CurrentMedia.id}" flag="{$CurrentMedia.flag}" rating="{$CurrentMedia.rating}" averageRating="{$CurrentMedia.averageRating}" />
+            <Rating type="song" data={$CurrentMedia} />
         {:else}
             <Rating />
         {/if}

@@ -25,17 +25,16 @@
     import { _ } from 'svelte-i18n';
     import { API } from "../stores/api";
 
-    export let id = null;
     export let type = null;
-    export let rating = null;
-    export let flag = null;
-    export let averageRating = null;
+    export let data = {};
 
     let showAverageRatings = true;
     let pendingRating = null;
     let loading = false;
 
     const values = [1, 2, 3, 4, 5];
+
+    $: ({ id, rating, flag, averagerating } = data);
 
     $: {
         if ($recentRating.type === type && $recentRating.id === id && $recentRating.rating !== rating) {
@@ -110,9 +109,9 @@
         {/if}
     </span>
 
-    {#if averageRating && showAverageRatings}
+    {#if averagerating && showAverageRatings}
         <span class="c-rating__average" title="{$_('text.ratingAverage')}">
-            ({averageRating})
+            ({averagerating})
         </span>
     {/if}
 </div>

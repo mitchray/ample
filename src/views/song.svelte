@@ -36,7 +36,7 @@
             <h1 class="title">{song.title}</h1>
 
             <div class="meta">
-                <Rating type="song" id="{song.id}" rating="{song.rating}" flag="{song.flag}" averageRating="{song.averagerating}" />
+                <Rating type="song" data={song} />
                 <ThirdPartyServices data={song} type="song" />
             </div>
 

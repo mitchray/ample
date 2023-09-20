@@ -28,7 +28,7 @@
         <div class="title"><a href="#/artists/{artist.id}" title="{artist.name}">{artist.name}</a></div>
 
         <div class="rating-container">
-            <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+            <Rating type="artist" data={artist} />
         </div>
     {:else}
         <div class="art-container">

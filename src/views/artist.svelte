@@ -96,7 +96,7 @@
 
                         <div class="below-image">
                             <div class="rating">
-                                <Rating type="artist" id="{artist.id}" rating="{artist.rating}" flag="{artist.flag}" averageRating="{artist.averagerating}" />
+                                <Rating type="artist" data={artist} />
                             </div>
 
                             <div class="third-party-links">

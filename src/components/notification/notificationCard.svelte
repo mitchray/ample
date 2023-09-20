@@ -52,7 +52,7 @@
 
         {#if item.type === "ratingMissing"}
             <div class="rating-container">
-                <Rating type="song" id="{item.data.id}" rating="{item.data.rating}" flag="{item.data.flag}" averageRating="{item.data.averagerating}" />
+                <Rating type="song" data={item.data} />
             </div>
         {/if}
 

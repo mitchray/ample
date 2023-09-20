@@ -205,7 +205,7 @@
         {/if}
 
         {#if col.id === "rating"}
-            <Rating type={$_type} id="{item.id}" bind:rating="{item.rating}" flag="{item.flag}" averageRating="{item.averagerating}" />
+            <Rating type={$_type} data={item} />
         {/if}
 
         {#if col.id === "actions"}

@@ -42,7 +42,7 @@
 
             <div class="bottom">
                 <div class="rating-container">
-                    <Rating type="album" id="{album.id}" rating="{album.rating}" flag="{album.flag}" averageRating="{album.averagerating}"/>
+                    <Rating type="album" data={album} />
                 </div>
 
                 <div class="actions">

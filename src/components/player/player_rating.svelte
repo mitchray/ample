@@ -5,7 +5,7 @@
 </script>
 
 {#if $CurrentMedia}
-    <Rating type="song" id="{$CurrentMedia.id}" rating="{$CurrentMedia.rating}" flag="{$CurrentMedia.flag}" averageRating="{$CurrentMedia.averagerating}" />
+    <Rating type="song" data={$CurrentMedia} />
 {:else}
     <Rating type="song" />
 {/if}
