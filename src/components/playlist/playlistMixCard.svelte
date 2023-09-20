@@ -4,7 +4,6 @@
     import { API } from "../../stores/api";
     import Actions from '../../components/action/actions.svelte';
     import { sampleSize } from "lodash-es";
-    import { cleanArtURL } from "../../logic/helper";
 
     export let data = null; // needed for cardList dynamic components
 
@@ -32,7 +31,7 @@
             <a href="#/mix/{playlist.playlistType}/{playlist.id}" title="{playlist.name}">
                 <div class="image-text">{playlist.name}</div>
                 <img class="image"
-                     src="{cleanArtURL(playlist.art)}&thumb=22"
+                     src="{playlist.art}&thumb=22"
                      alt="Image of {playlist.name}"
                      width="400"
                      height="400"

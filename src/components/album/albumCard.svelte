@@ -1,7 +1,6 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { serverURL } from "../../stores/server";
-    import { cleanArtURL } from "../../logic/helper";
 
     import Rating from '../../components/rating.svelte';
     import Actions from '../../components/action/actions.svelte';
@@ -17,7 +16,7 @@
         <div class="image-container">
             <a href="#/albums/{album.id}" title="{album.name}">
                 <img class="image"
-                    src="{cleanArtURL(album.art)}&thumb=22"
+                    src="{album.art}&thumb=22"
                     alt="Image of {album.name}"
                     width="200"
                     height="200"

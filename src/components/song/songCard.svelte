@@ -1,7 +1,7 @@
 <script>
     import { _ } from 'svelte-i18n';
     import { serverURL } from "../../stores/server";
-    import { cleanArtURL, formatTotalTime } from "../../logic/helper";
+    import { formatTotalTime } from "../../logic/helper";
     import Rating from '../../components/rating.svelte';
     import Actions from '../../components/action/actions.svelte';
     import SVGAlbum from "/src/images/album.svg";
@@ -17,7 +17,7 @@
         <div class="top">
             <div class="image-container">
                 <img class="image"
-                     src="{cleanArtURL(song.art)}&thumb=11"
+                     src="{song.art}&thumb=11"
                      alt="Image of {song.name}"
                      width="96"
                      height="96"

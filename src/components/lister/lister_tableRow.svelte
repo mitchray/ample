@@ -2,7 +2,7 @@
     import { _ } from 'svelte-i18n';
     import { getContext } from 'svelte';
 
-    import { formatTotalTime, formatSongQuality, formatFilesize, cleanArtURL } from '../../logic/helper';
+    import { formatTotalTime, formatSongQuality, formatFilesize } from '../../logic/helper';
 
     import { CurrentMedia, TabHistory } from '../../stores/status';
     import { serverURL } from "../../stores/server";
@@ -87,7 +87,7 @@
         {#if col.id === "name"}
             {#if item.art && $_showArt}
                 <img class="image"
-                    src="{cleanArtURL(item.art)}&thumb=1"
+                    src="{item.art}&thumb=1"
                     alt=""
                     height="43"
                     width="43"

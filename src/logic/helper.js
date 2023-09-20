@@ -223,16 +223,3 @@ export function filterBelow(arr) {
 
     return arr;
 }
-
-/**
- * Strips the 'auth' param from art URL for more reliable caching
- * @param url
- * @returns {string|null}
- */
-export function cleanArtURL(url) {
-    if (!url) return null;
-
-    const urlObj = new URL(url);
-    urlObj.searchParams.delete("auth");
-    return urlObj.toString();
-}

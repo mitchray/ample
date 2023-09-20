@@ -3,7 +3,6 @@
     import { serverURL } from "../../stores/server";
 
     import Rating from '../../components/rating.svelte';
-    import { cleanArtURL } from "../../logic/helper";
 
     export let data = null; // needed for cardList dynamic components
 
@@ -16,7 +15,7 @@
         <div class="art-container">
             <a href="#/artists/{artist.id}" title="{artist.name}">
                 <img class="image"
-                    src="{cleanArtURL(artist.art)}&thumb=22"
+                    src="{artist.art}&thumb=22"
                     alt="Image of {artist.name}"
                     width="400"
                     height="400"

@@ -3,7 +3,7 @@
     import { fade } from 'svelte/transition';
     import { throttle } from 'throttle-wait';
     import { serverURL } from "../stores/server";
-    import { cleanArtURL, formatTotalTime } from "../logic/helper";
+    import { formatTotalTime } from "../logic/helper";
     import { getSongsFromArtist } from "../logic/song";
     import MusicBrainz from "../logic/musicbrainz";
 
@@ -445,7 +445,7 @@
                                 {#if !item.isRemote}
                                     <a href="#/song/{item.id}">
                                         <img class="image"
-                                            src="{cleanArtURL(item.art)}&thumb=1"
+                                            src="{item.art}&thumb=1"
                                             alt=""
                                             height="30"
                                             width="30"

@@ -1,6 +1,5 @@
 <script>
     import { _ } from 'svelte-i18n';
-    import { cleanArtURL } from "../../logic/helper";
     import Actions from '../../components/action/actions.svelte';
     import Rating from '../../components/rating.svelte';
     import PlaylistArt from '../../components/playlist/playlist_art.svelte';
@@ -31,7 +30,7 @@
             {/if}
 
             <a href="#/{parentUrl}/{playlist.id}" title="{playlist.name}">
-                <PlaylistArt bind:playlist={playlist} fallback="{cleanArtURL(playlist.art)}" />
+                <PlaylistArt bind:playlist={playlist} fallback="{playlist.art}" />
             </a>
         </div>
 
@@ -64,7 +63,7 @@
         </div>
 
         <div class="image-container">
-            <PlaylistArt fallback="{cleanArtURL(playlist.art)}" />
+            <PlaylistArt fallback="{playlist.art}" />
         </div>
 
 

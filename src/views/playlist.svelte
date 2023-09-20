@@ -4,7 +4,6 @@
     import { API } from "../stores/api";
     import { getSongsFromPlaylist } from "../logic/song";
     import { PageTitle } from "../stores/status";
-    import { cleanArtURL } from "../logic/helper";
     import Rating from '../components/rating.svelte';
     import Lister from '../components/lister/lister.svelte';
     import PlaylistArt from '../components/playlist/playlist_art.svelte';
@@ -72,7 +71,7 @@
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">
-                        <PlaylistArt bind:songs fallback="{cleanArtURL(playlist.art)}" />
+                        <PlaylistArt bind:songs fallback="{playlist.art}" />
                     </div>
 
                     {#if playlistType === "playlist"}

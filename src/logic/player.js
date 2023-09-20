@@ -10,7 +10,7 @@ import {
     addLyricsMissingNotification,
     addLyricsNotTimestampedNotification,
 } from "./notification";
-import { debugHelper, shuffleArray, sleep, lyricsAreTimestamped, cleanArtURL } from './helper';
+import { debugHelper, shuffleArray, sleep, lyricsAreTimestamped } from './helper';
 import {
     NowPlayingQueue,
     NowPlayingIndex,
@@ -263,7 +263,7 @@ class Player {
                     artist: (song.artist) ? song.artist.name : '',
                     album: (song.album) ? song.album.name : '',
                     artwork: [
-                        { src: `${cleanArtURL(song.art)}&thumb=22` },
+                        { src: `${song.art}&thumb=22` },
                     ]
                 });
 

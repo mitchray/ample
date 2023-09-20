@@ -1,6 +1,5 @@
 <script>
     import { serverURL } from "../../stores/server";
-    import { cleanArtURL } from "../../logic/helper";
 
     export let album;
 </script>
@@ -9,7 +8,7 @@
     <a href="#/albums/{album.id}" title="{album.name}" class="album-card-mini card">
         <div class="image-container">
             <img class="image"
-                 src="{cleanArtURL(album.art)}&thumb=11"
+                 src="{album.art}&thumb=11"
                  alt="Image of {album.name}"
                  width="40"
                  height="40"

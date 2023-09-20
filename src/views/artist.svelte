@@ -6,7 +6,7 @@
     import { API } from "../stores/api";
 
     import { getArtist } from "../logic/artist";
-    import { cleanArtURL, formatTotalTime } from "../logic/helper";
+    import { formatTotalTime } from "../logic/helper";
 
     import Tabs from "../components/tabs/tabs.svelte";
     import Tab from "../components/tabs/tab.svelte";
@@ -85,7 +85,7 @@
                     <div class="profile">
                         <div class="art-container">
                             <img class="art"
-                                 src="{cleanArtURL(artist.art)}&thumb=32"
+                                 src="{artist.art}&thumb=32"
                                  alt="Image of {artist.name}"
                                  width="250"
                                  height="250"

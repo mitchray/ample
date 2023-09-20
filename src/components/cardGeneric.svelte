@@ -3,7 +3,6 @@
     import { onMount } from "svelte";
     import { CurrentMedia } from '../stores/status';
     import { serverURL } from "../stores/server";
-    import { cleanArtURL } from "../logic/helper";
     import Actions from '../components/action/actions.svelte';
     import SVGCurrent from "/src/images/play_circle.svg";
 
@@ -41,7 +40,7 @@
             <div class="image-container">
                 <a href="#/{urlPrefix}/{data.id}">
                     <img class="image"
-                         src="{cleanArtURL(data.art)}&thumb=11"
+                         src="{data.art}&thumb=11"
                          alt="Image of {data.name}"
                          width="96"
                          height="96"
