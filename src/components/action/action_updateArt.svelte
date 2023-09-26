@@ -18,13 +18,9 @@
     async function handleAction() {
         loaded = false;
 
-        addAlert({title: $_('text.artUpdateStart'), style: 'info'});
-
         $API.updateArt({ type: type, id: id })
             .then(result => {
                 if (result?.success) {
-                    addAlert({title: $_('text.artUpdateDone'), style: 'success'});
-
                     let images = document.querySelectorAll(`img[data-id=art-${type}-${id}]`);
                     images.forEach(image => {
                         // reload the original image url (including thumb param) to update the cache
