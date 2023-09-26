@@ -28,7 +28,8 @@
                     let urlAfter = window.location.href;
 
                     if (urlBefore === urlAfter) {
-                        $PageLoadedKey = Date.now().toString();
+                        // TODO: not compatible with the hash navigation
+                        // $PageLoadedKey = Date.now().toString();
                     }
 
                     addAlert({title: $_('text.tagUpdateDone'), style: 'success'});
