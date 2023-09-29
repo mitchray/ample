@@ -56,6 +56,7 @@
         margin-inline-end: var(--spacing-sm);
         flex-shrink: 0;
         color: var(--color-highlight);
+        line-height: 1;
     }
 
     .queue-header {
