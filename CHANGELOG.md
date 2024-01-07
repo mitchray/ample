@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.3] - 2024-01-08
+### Requires at least Ampache 6.0.1
+
+### Fixed
+- Preferences are now objects
+
 ## [2.0.2] - 2023-08-28
 ### Fixed
 - Album Artists -> All was showing all artists
