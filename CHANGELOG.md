@@ -1,10 +1,10 @@
 # Changelog
 
-## [2.0.3] - 2024-01-08
+## [2.1.0] - 2023-XX-XX
 ### Requires at least Ampache 6.0.1
 
-### Fixed
-- Preferences are now objects
+### Added
+- More third party links, now with logos
 
 ## [2.0.2] - 2023-08-28
 ### Fixed
@@ -217,7 +217,7 @@
 
 ## [0.38.0] - 2022-05-22
 ### Added
-- Save Lister limits for each type (Artist/Album/Song etc)
+- Save Lister limits for each type (Artist/Album/Song etc.)
 - Find alternate versions of currently playing song (instead of exact title matching)
 
 ### Changed

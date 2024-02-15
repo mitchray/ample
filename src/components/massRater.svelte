@@ -1,53 +1,64 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { API } from "../stores/api";
+    import { _ } from "svelte-i18n";
+    import { getContext } from "svelte";
+    import { API } from "~/stores/state";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let items = [];
-    export let type;
-    export let loadedTime;
+    export let contextKey;
 
-    let newRating = 3;
+    const { _type, selectedCount, dataDisplay } = getContext(contextKey);
 
-    function handleApply() {
-        items.forEach((item, index) => {
-            if (item.selected === true) {
-                $API.rate({ type: type, id: item.id, rating: newRating });
-                items[index].rating = newRating;
+    function handleApply(e) {
+        let newRating = parseInt(e.detail.item.value);
+
+        let selected = $dataDisplay.filter((item) => item.selected);
+
+        selected.forEach((item) => {
+            let result = $API.rate({
+                type: $_type,
+                id: item.id,
+                rating: newRating,
+            });
+
+            if (result.error) {
+                console.error("Ample error while rating:", result.error);
             }
+
+            let index = $dataDisplay.findIndex((el) => el.id === item.id);
+
+            if (index !== -1) $dataDisplay[index].rating = newRating;
         });
 
-        items = items;
-        loadedTime = new Date();
-    }
-
-    function handleRating(e) {
-        newRating = parseInt(e.target.value);
+        $dataDisplay = $dataDisplay;
     }
 </script>
 
+{#if $selectedCount > 0}
+    <sl-dropdown>
+        <sl-button slot="trigger" variant="primary" caret>
+            <MaterialSymbol name="star" slot="prefix" />
+            {$_("text.rate")}
+        </sl-button>
 
-<div class="container">
-    <button type="button" class="button button--primary" on:click={handleApply}>{$_('text.apply')}</button>
-
-    <label>
-        <select on:change={handleRating}>
-            <option value="0" selected={newRating === 0}>0</option>
-            <option value="1" selected={newRating === 1}>1</option>
-            <option value="2" selected={newRating === 2}>2</option>
-            <option value="3" selected={newRating === 3}>3</option>
-            <option value="4" selected={newRating === 4}>4</option>
-            <option value="5" selected={newRating === 5}>5</option>
-        </select>
-    </label>
-</div>
-
-
-<style>
-    .container {
-        background-color: var(--color-interface);
-        padding: var(--spacing-lg);
-        display: inline-block;
-        border-radius: 10px;
-        margin-block-end: var(--spacing-lg);
-    }
-</style>
+        <sl-menu on:sl-select={handleApply}>
+            <sl-menu-item value="5">
+                {$_("text.ratingCount", { values: { count: 5 } })}
+            </sl-menu-item>
+            <sl-menu-item value="4">
+                {$_("text.ratingCount", { values: { count: 4 } })}
+            </sl-menu-item>
+            <sl-menu-item value="3">
+                {$_("text.ratingCount", { values: { count: 3 } })}
+            </sl-menu-item>
+            <sl-menu-item value="2">
+                {$_("text.ratingCount", { values: { count: 2 } })}
+            </sl-menu-item>
+            <sl-menu-item value="1">
+                {$_("text.ratingCount", { values: { count: 1 } })}
+            </sl-menu-item>
+            <sl-menu-item value="0">
+                {$_("text.ratingCount", { values: { count: 0 } })}
+            </sl-menu-item>
+        </sl-menu>
+    </sl-dropdown>
+{/if}

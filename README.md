@@ -1,57 +1,41 @@
-## *Ample*: A simple music client for [Ampache](https://ampache.org/) 
-Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/katspaugh/wavesurfer.js)
+## _Ample_: A web browser client for [Ampache](https://ampache.org/) v6+
 
 <img src="https://github.com/mitchray/ample/assets/5735900/e2564e30-d7af-4fc8-b2e1-bbff93a3356e" width=800 alt="Ample screenshot" />
 
-## Setting expectations
-- Largely untested with multiple users
-- Transcoding is untested as I don't use it
-- It is designed to be a front-end companion to an existing Ampache server, not a complete replacement
-
 ## Demo
-[View demo](https://ample-player.vercel.app/)
-- User ```demo``` 
-- Password ```demodemo```
 
-## Features
-- Smartlist autoplay when nearing end of the queue
-- Dark & light mode with adaptive interface colors
-- Fade out/in on pause/resume/next/previous
-- Media keys support
-- Volume normalization (ReplayGain & EBU R128)
-- Night/headphone mode to boost quieter parts of songs
-- Toggleable notifications for
-  - Alternate song versions (radio edit, acoustic, live, demo etc)
-  - Missing volume gain tags
-  - Missing song rating
-  - Missing/untimestamped song lyrics
-- Same powerful Advanced Search as Ampache
-- Compare an artist's collection with MusicBrainz recordings (if the artist has an MBID associated with it)
-- Skip songs below a specified rating when adding to queue
-- 'Unrated' dashboard + Multi-rater
+[View demo](https://ample-player.vercel.app)
+-   User `demo`
+-   Password `demodemo`
 
 ## Translations
+
 Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitchray/ample)
 
-## Requirements
-- [Ampache](https://ampache.org/) 6+
-- A modern web browser (Chrome/Edge 88+, Firefox 78+, Safari 14+)
-
 ## Installing
-- Easy mode (recommended)
-  - Grab a prebuilt [release](https://github.com/mitchray/ample/releases)
-  - Copy the ```ample``` folder into your Ampache server ```public``` folder
-  - Access by adding ```/ample``` to your Ampache server address e.g. ```yourampache.com/ample``` or ```localhost/ampache/ample```
-- Hard mode
-  - Grab a prebuilt [release](https://github.com/mitchray/ample/releases) or build yourself from Git repository (see Developing)
-  - Put it anywhere you like, but you will have to deal with [CORS](https://enable-cors.org/server.html) if it is on a different domain/subdomain from the Ampache server you are connecting to.
-- Enter the URL of the Ampache server you wish to connect to on the login screen 
-  - Alternatively add the URL to ```ample.json``` to hardcode it (rename ```ample.json.dist``` & use the full URL with no trailing slash i.e. ```https://yourampache.com```)
+
+1. Download Ample
+   - Either from a prebuilt [release](https://github.com/mitchray/ample/releases)
+   - or compile yourself from Git repository (see [Developing](#developing))
+2. Place it anywhere on your server
+   - If you want to keep it close to your Ampache install, copy the `ample` folder into your Ampache `public` folder, then you can access by adding `/ample` to your Ampache server address e.g. `yourampache.com/ample`
+   - Otherwise, you can put it anywhere you like (even on a different server from Ampache, just be mindful that the Ampache server will need [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin))
+3. At the login screen, enter the full URL of the Ampache server you wish to connect to
+   - Alternatively you can hardcode an instance of Ample to a specific Ampache server, see [Config file](#config-file)
 
 ## Developing
-- Clone the Ample repository and from the ample directory ```cd ample```
-- Install packages ```npm install```
-- For development and hot reloading ```npm run dev```
-- For building ```npm run build```, and see the contents of ```dist```
 
-Additional console logging can be enabled by setting ```debugMode true``` in ```src/stores/server.js```
+- Clone the Ample repository and from the ample directory `cd ample`
+- Install packages `npm install`
+- For development and hot reloading `npm run dev`
+- For building `npm run build`, and see the contents of `dist`
+
+Additional console logging can be enabled by setting `debugMode true` in `src/stores/state.js`
+
+## Config file
+```
+{
+  // your Ampache server URL without trailing slash
+  "ampacheURL": "https://example.com", 
+}
+```

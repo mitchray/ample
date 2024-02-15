@@ -3,8 +3,10 @@
  * @param {array} genres
  * @returns {*}
  */
-export const sortGenresByName = (genres) => {
-    return genres.sort(function(obj1, obj2) { return obj1.name.localeCompare(obj2.name) })
+export function sortGenresByName(genres) {
+    return genres.sort(function (obj1, obj2) {
+        return obj1.name.localeCompare(obj2.name);
+    });
 }
 
 /**
@@ -12,8 +14,10 @@ export const sortGenresByName = (genres) => {
  * @param {array} genres
  * @returns {*}
  */
-export const sortGenresByArtists = (genres) => {
-    return genres.sort(function(obj1, obj2) { return obj1.artists < obj2.artists })
+export function sortGenresByArtists(genres) {
+    return genres.sort(function (obj1, obj2) {
+        return obj1.artists < obj2.artists;
+    });
 }
 
 /**
@@ -21,8 +25,10 @@ export const sortGenresByArtists = (genres) => {
  * @param {array} genres
  * @returns {*}
  */
-export const sortGenresByAlbums = (genres) => {
-    return genres.sort(function(obj1, obj2) { return obj1.albums < obj2.albums })
+export function sortGenresByAlbums(genres) {
+    return genres.sort(function (obj1, obj2) {
+        return obj1.albums < obj2.albums;
+    });
 }
 
 /**
@@ -30,6 +36,8 @@ export const sortGenresByAlbums = (genres) => {
  * @param {array} genres
  * @returns {*}
  */
-export const sortGenresBySongs = (genres) => {
-    return genres.sort(function(obj1, obj2) { return obj1.songs < obj2.songs })
+export function sortGenresBySongs(genres) {
+    return genres.sort(function (obj1, obj2) {
+        return obj1.songs < obj2.songs;
+    });
 }

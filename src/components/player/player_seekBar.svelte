@@ -1,48 +1,57 @@
 <script>
-    import { onMount } from 'svelte';
-
-    import { MediaPlayer } from "../../stores/player";
-
-    import { formatSongLength } from "../../logic/helper";
+    import { onMount } from "svelte";
+    import { CurrentMedia } from "~/stores/state.js";
+    import { MediaPlayer } from "~/stores/elements.js";
+    import { formatSongLength } from "~/logic/formatters.js";
 
     let seekWidth;
     let currentTime;
     let isPressed = false;
     let progressSlider;
+    let endTime;
+
+    // restart for each new media item
+    $: $CurrentMedia, requestAnimationFrame(updateProgress);
 
     function updateProgress() {
-        seekWidth = ($MediaPlayer.wavesurfer) ? ($MediaPlayer.wavesurfer.getCurrentTime()/$MediaPlayer.wavesurfer.getDuration())*100 : 0;
-        currentTime = ($MediaPlayer.wavesurfer) ? $MediaPlayer.wavesurfer.getCurrentTime() : 0;
+        if ($CurrentMedia?.object_type === "live_stream") {
+            return;
+        }
+
+        endTime = $MediaPlayer.getDuration();
+        currentTime = $MediaPlayer.getCurrentTime();
+        let ratio = (currentTime / endTime) * 100;
+        seekWidth = Number.isFinite(ratio) ? ratio : 0;
 
         requestAnimationFrame(updateProgress);
     }
 
-    function handleSeekMouseDown(event) {
+    function handleSeekMouseDown() {
         isPressed = true;
-        document.addEventListener('mouseup', handleSeekMouseUp);
+        document.addEventListener("mouseup", handleSeekMouseUp);
     }
 
-    function handleSeekTouchDown(event) {
+    function handleSeekTouchDown() {
         isPressed = true;
-        document.addEventListener('touchend', handleSeekTouchUp);
+        document.addEventListener("touchend", handleSeekTouchUp);
     }
 
-    function handleSeekMouseUp(event) {
+    function handleSeekMouseUp() {
         isPressed = false;
-        document.removeEventListener('mouseup', handleSeekMouseUp);
+        document.removeEventListener("mouseup", handleSeekMouseUp);
         progressSlider.classList.remove("dragging");
     }
 
-    function handleSeekTouchUp(event) {
+    function handleSeekTouchUp() {
         isPressed = false;
-        document.removeEventListener('touchend', handleSeekTouchUp);
+        document.removeEventListener("touchend", handleSeekTouchUp);
         progressSlider.classList.remove("dragging");
     }
 
     function handleSeekDrag(event) {
         if (isPressed) {
             progressSlider.classList.add("dragging");
-            requestAnimationFrame(function() {
+            requestAnimationFrame(function () {
                 handleSeek(event);
             });
         }
@@ -50,13 +59,13 @@
 
     function handleSeek(event) {
         let seekElementWidth = event.target.offsetWidth;
-        let seekClickLocation = (event.clientX || event.targetTouches[0].screenX) - event.target.getBoundingClientRect().left;
+        let seekClickLocation =
+            (event.clientX || event.targetTouches[0].screenX) -
+            event.target.getBoundingClientRect().left;
 
-        if ($MediaPlayer.wavesurfer) {
-            let seekFraction = seekClickLocation / seekElementWidth;
+        let seekFraction = seekClickLocation / seekElementWidth;
 
-            $MediaPlayer.wavesurfer.seekTo(seekFraction);
-        }
+        $MediaPlayer.seekTo(seekFraction);
     }
 
     onMount(() => {
@@ -64,32 +73,39 @@
     });
 </script>
 
-<div class="seekBar"
-    bind:this={progressSlider}
-    on:click={handleSeek}
-    on:mousedown={handleSeekMouseDown}
-    on:touchstart={handleSeekTouchDown}
-    on:mousemove={handleSeekDrag}
-    on:touchmove={handleSeekDrag}
->
-    <span class="progress" data-value="{formatSongLength(currentTime)}" style="transform: translateX({seekWidth}%)"></span>
-</div>
+{#if $CurrentMedia?.object_type === "live_stream"}
+    <div class="seekBar streaming"></div>
+{:else}
+    <div
+        class="seekBar"
+        bind:this={progressSlider}
+        on:click={handleSeek}
+        on:mousedown={handleSeekMouseDown}
+        on:touchstart={handleSeekTouchDown}
+        on:mousemove={handleSeekDrag}
+        on:touchmove|passive={handleSeekDrag}
+    >
+        <span
+            class="progress"
+            data-value={formatSongLength(currentTime)}
+            style="transform: translateX({seekWidth}%)"
+        ></span>
+    </div>
+{/if}
 
 <style>
     .seekBar {
         display: block;
         height: var(--size-seekbar-height);
         position: relative;
-        cursor: pointer;
-        background-color: var(--color-border);
-        border-block-start: 1px solid var(--color-background);
+        background-color: var(--color-outline-variant);
         z-index: 100; /* make sure it is above waveform else it interferes with mouse */
         will-change: z-index;
     }
 
     /* increase clickable area of seekbar */
     .seekBar:after {
-        content: '';
+        content: "";
         height: 30px;
         background-color: transparent;
         width: 100%;
@@ -100,25 +116,48 @@
         z-index: 100;
     }
 
+    .seekBar:not(.streaming) {
+        cursor: pointer;
+    }
+
+    .seekBar.streaming {
+        background-image: repeating-linear-gradient(
+            -45deg,
+            transparent,
+            transparent 1rem,
+            var(--color-inverse-primary) 1rem,
+            var(--color-inverse-primary) 2rem
+        );
+        background-size: 200% 200%;
+        animation: barberpole 120s linear infinite;
+    }
+
+    @keyframes barberpole {
+        100% {
+            background-position: 100% 100%;
+        }
+    }
+
     .progress {
-        background-color: var(--color-highlight);
+        background-color: var(--color-waveform);
         position: absolute;
         inset-inline-end: 100%;
         inset-block-end: 0;
         inset-block-start: 0;
-        transition: transform linear 200ms;
         width: 100%;
     }
 
+    /* TODO not appearing */
     /* seekbar time indicator popup */
     .progress:before {
         opacity: 0;
         inset-block-start: calc(50% - 20px);
     }
 
+    /* TODO remove */
     /* seekbar time ball */
     .progress:after {
-        content: '';
+        content: "";
         width: 12px;
     }
 

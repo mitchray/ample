@@ -1,52 +1,83 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import Lister from '../components/lister/lister.svelte';
-    import { PageTitle } from "../stores/status";
-    import { getSongVersions } from "../logic/song";
+    import { _ } from "svelte-i18n";
+    import Lister from "~/components/lister/lister.svelte";
+    import { getSongVersions } from "~/logic/song";
+    import { songsPreset } from "~/components/lister/columns.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { User, PageTitle } from "~/stores/state.js";
 
-    export let params = {}
+    export let params = {};
 
-    let loading;
-    let results = [];
-
-    let title = $_('text.songVersions');
+    let title = $_("text.songVersions");
     $PageTitle = title;
 
-    $: params.songTitle = params.songTitle;
-    $: params.artistName = params.artistName;
+    $: query = createQuery({
+        queryKey: ["songVersions", params.songTitle + params.artistName],
+        queryFn: async () => {
+            let result = await getSongVersions(
+                params.songTitle,
+                params.artistName,
+            );
+
+            if (result.error) {
+                console.error(
+                    "Ample error getting song versions",
+                    result.error,
+                );
+                return [];
+            }
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    });
+
+    // alias of returned data
+    $: songs = $query.data || {};
 </script>
 
 <svelte:head>
-    <title>{$_('text.versionsOf', { values: { songTitle: params.songTitle, artistName: params.artistName } }) || $_('text.loading')}</title>
+    <title>
+        {$_("text.versionsOf", {
+            values: {
+                songTitle: params.songTitle,
+                artistName: params.artistName,
+            },
+        }) || $_("text.loading")}
+    </title>
 </svelte:head>
 
-<h1 class="page-title">{@html $_('text.versionsOfHTML', { values: { songTitle: params.songTitle, artistName: params.artistName } })}</h1>
-
-<div class="page-main">
-    {#key params.songTitle + params.artistName}
-        {#await getSongVersions(params.songTitle, params.artistName)}
-            {$_('text.loading')}
-        {:then songs}
-            {#if songs.length > 1}
-                <Lister
-                    data={songs}
-                    type="song"
-                    actionData={{
-                        type: "",
-                        mode: "fullButtons",
-                        showShuffle: songs.length > 1,
-                        data: Object.create({songs: songs})
-                    }}
-                />
-            {:else}
-                <p>{$_("text.noItemsFound")}</p>
-            {/if}
-        {:catch error}
-            <p>{$_("text.errorGeneric")}</p>
-        {/await}
-    {/key}
+<div class="page-header">
+    <h1 class="page-title">
+        {@html $_("text.versionsOfHTML", {
+            values: {
+                songTitle: params.songTitle,
+                artistName: params.artistName,
+            },
+        })}
+    </h1>
 </div>
 
-<style>
-
-</style>
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    {#if songs.length === 0}
+        <p>{$_("text.noItemsFound")}</p>
+    {:else}
+        <Lister
+            id="Songs"
+            data={songs}
+            columns={songsPreset}
+            type="song"
+            options={{ canSort: true }}
+            actionData={{
+                type: "songs",
+                displayMode: "fullButtons",
+                showShuffle: songs.length > 1,
+                data: Object.create({ songs: songs }),
+            }}
+        />
+    {/if}
+{/if}

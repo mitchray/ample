@@ -1,5 +1,5 @@
 <script>
-    import SVGGenre from "/src/images/label.svg";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let genres;
 </script>
@@ -7,7 +7,12 @@
 {#if genres.length > 0}
     <ul class="genres">
         {#each genres as genre}
-            <li class="genre-tag"><a href="#/genres/{genre.id}"><SVGGenre /> {genre.name}</a></li>
+            <li class="genre-tag">
+                <a href="#/genres/{genre.id}">
+                    <MaterialSymbol name="label" />
+                    {genre.name}
+                </a>
+            </li>
         {/each}
     </ul>
 {/if}
@@ -23,12 +28,12 @@
 
     .genre-tag :global(a) {
         display: flex;
-        background-color: var(--color-genre-background);
-        color: var(--color-genre-text);
+        background-color: var(--color-secondary-container);
+        color: var(--color-on-secondary-container);
         border-radius: 3px;
         padding: 0.2em 0.5em;
-        font-stretch: 25%;
         align-items: center;
+        gap: var(--spacing-sm);
     }
 
     .genre-tag :global(svg) {

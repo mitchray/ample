@@ -1,8 +1,12 @@
 <script>
-    import { _ } from 'svelte-i18n';
+    import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
-    import { API } from "../../stores/api";
-    import { shuffleArray, setIndexes, getPlaylistIDFromUrl } from "../../logic/helper";
+    import { API } from "~/stores/state.js";
+    import {
+        shuffleArray,
+        setIndexes,
+        getPlaylistIDFromUrl,
+    } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -20,12 +24,21 @@
 
     async function handleSave() {
         // filter out any 'removed' items
-        let actual = $dataDisplay.filter(el => el.isDeleted !== true);
+        let actual = $dataDisplay.filter((el) => el.isDeleted !== true);
 
         let ids = actual.map((obj) => obj.id);
-        let newOrders = Array.from(actual.keys(), n => n + 1);
+        let newOrders = Array.from(actual.keys(), (n) => n + 1);
 
-        let result = await $API.playlistEdit({ filter: playlistID, items: ids.join(","), tracks: newOrders.join(",")} );
+        let result = await $API.playlistEdit({
+            filter: playlistID,
+            items: ids.join(","),
+            tracks: newOrders.join(","),
+        });
+
+        if (result.error) {
+            console.error("Ample error editing playlist:", result.error);
+            return;
+        }
 
         if (result.success) {
             $dataDisplay = setIndexes(actual);
@@ -40,11 +53,25 @@
 </script>
 
 {#if $isEditMode}
-    <button class="button button--primary" type="button" title="{$_('text.saveOrder')}" on:click={handleSave}>{$_('text.saveOrder')}</button>
-    <button class="button button--regular" type="button" title="{$_('text.random')}" on:click={handleRandom}>{$_('text.random')}</button>
-    <button class="button button--tertiary" type="button" title="{$_('text.cancel')}" on:click={handleCancel}>{$_('text.cancel')}</button>
+    <sl-button
+        variant="primary"
+        title={$_("text.saveOrder")}
+        on:click={handleSave}
+    >
+        {$_("text.saveOrder")}
+    </sl-button>
+    <sl-button title={$_("text.random")} on:click={handleRandom}>
+        {$_("text.random")}
+    </sl-button>
+    <sl-button title={$_("text.cancel")} variant="text" on:click={handleCancel}>
+        {$_("text.cancel")}
+    </sl-button>
 {:else}
-    <button class="button button--regular" type="button" title="{$_('text.reorder')}" on:click={handleStart}>{$_('text.reorder')}</button>
+    <sl-button
+        class="button button--regular"
+        title={$_("text.reorder")}
+        on:click={handleStart}
+    >
+        {$_("text.reorder")}
+    </sl-button>
 {/if}
-
-

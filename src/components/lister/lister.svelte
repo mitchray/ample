@@ -1,108 +1,106 @@
-<script>
-    import { writable } from 'svelte/store';
-    import { onDestroy, onMount, setContext } from 'svelte';
-    import { v4 as uuidv4 } from 'uuid';
-    import { DispatchListerEvent, ListerEvent } from "../../stores/message";
-    import { SiteContentBind } from "../../stores/player";
+<script context="module">
+    import { writable } from "svelte/store";
 
-    import TableView from './lister_tableView.svelte';
-    import CardView from './lister_cardView.svelte';
-    import ListerActions from './lister_actions.svelte';
+    let sharedState = writable({
+        id: null,
+        state: {},
+    });
+</script>
+
+<script>
+    import { readable } from "svelte/store";
+    import { setContext } from "svelte";
+    import { v4 as uuidv4 } from "uuid";
+    import { DispatchListerEvent, ListerEvent } from "~/stores/message.js";
+    import { SiteContentBind } from "~/stores/elements.js";
+    import { Saved } from "~/stores/settings.js";
+    import ListerDebug from "./lister_debug.svelte";
+    import TableView from "./lister_tableView.svelte";
+    import ListerActions from "./lister_actions.svelte";
+
+    import { TableDefault } from "./columns.js";
+    import ListerOptions from "./lister_options.svelte";
+    import MassRater from "~/components/massRater.svelte";
+
+    export let id; // How to identify this table across instances and localstorage
+    export let columns = [];
+    export let options = {};
 
     export let data;
     export let type;
-    export let actionData;    // additional data object for Actions
-    export let discSubtitle   = null;
-    export let zone           = "generic";
-    export let showIndex      = false;
-    export let showCheckboxes = false;
-    export let showArt        = true;
-    export let showArtist     = false;
-    export let initialSort    = null;
-    export let initialReverse = null;
-    export let displayAsTable = true;
-    export let tableOnly      = false;
-    export let virtualList    = false;
+    export let actionData; // additional data object for Actions
+    export let virtualList = false;
 
     const contextKey = uuidv4(); // unique key for each instance of lister
 
     // underscore prefixed items are accessor aliases of exported params
-    let _data            = writable(data);
-    let _type            = writable(type);
-    let _actionData      = writable(actionData);
-    let _discSubtitle    = writable(discSubtitle);
-    let _zone            = writable(zone);
-    let _showIndex       = writable(showIndex);
-    let _showCheckboxes  = writable(showCheckboxes);
-    let _showArt         = writable(showArt);
-    let _showArtist      = writable(showArtist);
-    let _initialSort     = writable(initialSort);
-    let _initialReverse  = writable(initialReverse);
-    let _displayAsTable  = writable(displayAsTable);
-    let _tableOnly       = writable(tableOnly);
-    let _virtualList     = writable(virtualList);
+    let _type = writable(type);
+    let _actionData = writable(actionData);
+    let _virtualList = writable(virtualList);
 
-    let listerObject     = writable(null); // the lister itself
-    let listerScroller   = writable(null); // the lister-flex object
-    let listerHeader     = writable(null); // the separate header for the lister table
-    let listerContainer  = writable(null); // containing element of the lister object
-    let listerWrapper    = writable(null); // outer wrapper of lister, currently unused except for CSS
-    let dataDisplay      = writable([]);   // editable/sortable/etc. copy of the data
-    let dataFinal        = writable([]);   // final data to render, either full set or virtual subset
-    let availableColumns = writable([]);   // available columns
-    let visibleColumns   = writable([]);   // columns to show
-    let currentSort      = writable(initialSort); // the current sort method
-    let listerColumnsID  = writable(`ListerColumns.${type}.${zone}`);
-    let listerDisplayID  = writable(`ListerDisplay.${type}.${zone}`);
-    let isEditMode       = writable(false);
-    let selectedCount    = writable(0);
-    let pseudoHeight     = writable(null);
-    let rowHeight        = writable(60);
-    let offsetY          = writable(0);
-    let listerHeight     = writable(null);
-    let listerObserver;
+    const tableID = `AmpleLister${id}`;
+    let _columns = readable(columns);
+    let _options = readable(options);
+    let loadedOptions = writable($Saved.getItem(tableID) || {}); // load saved settings from localstorage
+    let state = writable(
+        Object.assign({}, TableDefault, $loadedOptions, options),
+    ); // merge table defaults, localstorage, passed component props
+
+    $: $state, $Saved.setItem(tableID, $state); // write to localstorage whenever state changes
+    $: $state, ($sharedState = { id: tableID, state: $state }); // when local state changes, update the shared state
+    $: $sharedState.state, updateThisFromShared(); // sync shared state back to local if it matches the ID
+
+    let listerObject = writable(null); // the lister itself
+    let listerScroller = writable(null); // the lister-flex object
+    let listerHeader = writable(null); // the separate header for the lister table
+    let listerContainer = writable(null); // containing element of the lister object
+    let dataDisplay = writable([]); // editable/sortable/etc. copy of the data
+    let dataFinal = writable([]); // final data to render, either full set or virtual subset
+    let availableColumns = writable([]); // available columns
+    let visibleColumns = writable([]); // columns to show
+    let selectedCount = writable(0);
+    let pseudoHeight = writable(null);
+    let rowHeight = writable(60);
+    let offsetY = writable(0);
+    let listerHeight = writable(null);
+    let actionsBind;
 
     setContext(contextKey, {
-        _data,
         _type,
         _actionData,
-        _discSubtitle,
-        _zone,
-        _showIndex,
-        _showCheckboxes,
-        _showArt,
-        _showArtist,
-        _initialSort,
-        _initialReverse,
-        _displayAsTable,
-        _tableOnly,
         _virtualList,
         listerObject,
         listerScroller,
         listerHeader,
         listerContainer,
-        listerWrapper,
         dataDisplay,
         dataFinal,
         availableColumns,
         visibleColumns,
-        currentSort,
-        listerColumnsID,
-        listerDisplayID,
-        isEditMode,
         selectedCount,
         pseudoHeight,
         rowHeight,
         offsetY,
         listerHeight,
+
+        loadedOptions,
+        state,
+        _columns,
+        _options,
     });
 
-    $: data          = data; //immutable
-    $: $dataDisplay  = data.slice();
-    $: $dataFinal    = (virtualList) ? $dataFinal : $dataDisplay;
-    $: $listerHeight = (virtualList) ? $SiteContentBind.clientHeight - 10 + "px" : 'auto';
-    $: $pseudoHeight = (virtualList) ? $dataDisplay.filter(e => !e.isDeleted).length * $rowHeight + "px" : 'auto';
-    $: $offsetY      = (virtualList) ? parseInt($offsetY) + "px" : '0px';
+    $: data = data; //immutable
+    $: $dataDisplay = Array.isArray(data) ? data.slice() : [];
+    $: $dataFinal = virtualList ? $dataFinal : $dataDisplay;
+    $: $listerHeight = virtualList
+        ? $SiteContentBind.clientHeight - 10 + "px"
+        : "auto";
+    $: $pseudoHeight = virtualList
+        ? $dataDisplay.filter((e) => !e.isDeleted).length * $rowHeight + "px"
+        : "auto";
+    $: $offsetY = virtualList ? parseInt($offsetY) + "px" : "0px";
+    $: $visibleColumns = $availableColumns;
+    $: $rowHeight = $state.rowSizing === "standard" ? "60" : "36";
 
     // overwrite any actionData.songs with our dataDisplay as it may have updated
     $: {
@@ -112,7 +110,7 @@
     }
 
     $: {
-        if ($listerContainer && $_displayAsTable && $_virtualList) {
+        if ($listerContainer && $_virtualList) {
             $listerContainer.style.maxHeight = $listerHeight;
         }
     }
@@ -135,18 +133,17 @@
 
         switch ($ListerEvent.event) {
             case "addedPlaylist":
-                data = [
-                    $ListerEvent.data,
-                    ...data
-                ];
+                data = [$ListerEvent.data, ...data];
                 break;
             case "editedPlaylist":
-                let oldPlaylist = data.find( obj => obj.id === $ListerEvent.data.id);
+                let oldPlaylist = data.find(
+                    (obj) => obj.id === $ListerEvent.data.id,
+                );
                 Object.assign(oldPlaylist, $ListerEvent.data);
                 data = data;
                 break;
             case "deletedPlaylist":
-                data = data.filter( obj => obj.id !== $ListerEvent.data.id);
+                data = data.filter((obj) => obj.id !== $ListerEvent.data.id);
                 break;
             default:
                 // console.debug($ListerEvent, "event not recognised");
@@ -161,34 +158,34 @@
         $DispatchListerEvent = null;
     }
 
-    onMount(() => {
-        let savedDisplayAsTable = JSON.parse(localStorage.getItem(`Ample${$listerDisplayID}`));
-
-        if (savedDisplayAsTable !== null) {
-            $_displayAsTable = savedDisplayAsTable;
+    function updateThisFromShared() {
+        if ($sharedState.id === tableID) {
+            $state = $sharedState.state;
+            $state = $state;
         }
-    });
-
-    onDestroy(() => {
-        if (listerObserver) {
-            listerObserver.disconnect();
-        }
-    });
+    }
 </script>
 
-<div class="lister-wrapper" bind:this={$listerWrapper}>
-    <ListerActions contextKey={contextKey} />
+<ListerDebug {contextKey} />
 
-    <div class="lister-container"
-         bind:this={$listerContainer}
-         class:is-table={$_displayAsTable}
-         class:is-virtual={$_virtualList}
+<div
+    class="lister-actions"
+    bind:this={actionsBind}
+    class:not-empty={actionsBind?.firstElementChild}
+>
+    <ListerActions {contextKey} />
+    <ListerOptions {contextKey} />
+    <MassRater {contextKey} />
+</div>
+
+<div class="lister-wrapper">
+    <div
+        class="lister-container is-table"
+        bind:this={$listerContainer}
+        class:is-virtual={$_virtualList}
+        style:--rowHeight={$rowHeight + "px"}
     >
-        {#if $_type === "playlist_songs" || $_displayAsTable}
-            <TableView contextKey={contextKey} />
-        {:else}
-            <CardView contextKey={contextKey} />
-        {/if}
+        <TableView {contextKey} />
     </div>
 </div>
 
@@ -196,22 +193,23 @@
     .lister-wrapper {
         container-name: lister-wrapper;
         container-type: inline-size;
+        position: relative; /* for table options which are absolute pos */
     }
 
     .lister-container {
         width: auto;
         max-width: 100%;
-        contain: content;
+        /*contain: content;*/ /* disabling to let sl-dropdown not be cut off */
         overflow-y: auto;
     }
 
-    .lister-container.is-virtual :global(.header-flex)  {
+    .lister-container.is-virtual :global(.header-flex) {
         inset-block-start: 0;
     }
 
     /* need the scrollbar space but don't want it visible */
-    .lister-container.is-table :global(.header-flex)  {
-        scrollbar-color: var(--color-highlight) transparent;
+    .lister-container.is-table :global(.header-flex) {
+        scrollbar-color: transparent transparent;
     }
 
     /* Chrome version of above */
@@ -232,20 +230,10 @@
         flex-direction: column;
     }
 
-    .lister-container.is-table:global(.scroll-start) :global(.name:before) {
-        box-shadow: 2px 0 6px rgba(var(--color-shadow-val),0.2);
-        clip-path: inset(0px -10px 0px 0px);
-    }
-
-    .lister-container.is-table:global(.scroll-end) :global(.actions:before) {
-        box-shadow: -2px 0 6px rgba(var(--color-shadow-val),0.2);
-        clip-path: inset(0px 0px 0px -10px);
-    }
-
     .lister-container.is-table :global(.name:before),
     .lister-container.is-table :global(.actions:before) {
-        content: '';
-        background-color: var(--color-column-sticky);
+        content: "";
+        background-color: var(--color-surface-container-low);
         position: absolute;
         inset-block-start: 0;
         inset-inline-end: 0;
@@ -260,5 +248,14 @@
     .lister-container.is-table:global(.scroll-start) :global(.name:before),
     .lister-container.is-table:global(.scroll-end) :global(.actions:before) {
         opacity: 1;
+    }
+
+    .lister-actions {
+        display: flex;
+        gap: var(--spacing-md);
+    }
+
+    .lister-actions.not-empty {
+        margin-block-end: var(--spacing-lg);
     }
 </style>

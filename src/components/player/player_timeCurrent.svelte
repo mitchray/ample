@@ -1,9 +1,8 @@
 <script>
     import { onMount } from "svelte";
-    import { CurrentMedia, TimeToggled } from "../../stores/status";
-
-    import { formatSongLength } from "../../logic/helper";
-    import { MediaPlayer } from "../../stores/player";
+    import { CurrentMedia, TimeToggled } from "~/stores/state";
+    import { formatSongLength } from "~/logic/formatters.js";
+    import { MediaPlayer } from "~/stores/elements.js";
 
     let duration;
     let currentTime;
@@ -13,8 +12,8 @@
     }
 
     function updateProgress() {
-        duration = ($MediaPlayer.wavesurfer) ? parseInt($MediaPlayer.wavesurfer.getDuration()) || 0 : 0;
-        currentTime = ($MediaPlayer.wavesurfer) ? parseInt($MediaPlayer.wavesurfer.getCurrentTime()) || 0 : 0;
+        duration = $MediaPlayer.getDuration();
+        currentTime = $MediaPlayer.getCurrentTime();
 
         requestAnimationFrame(updateProgress);
     }
@@ -24,7 +23,7 @@
     });
 </script>
 
-{#if $CurrentMedia}
+{#if $CurrentMedia?.object_type !== "live_stream"}
     <span class="current" on:click={handleTimeToggle}>
         {#if $TimeToggled}
             -{formatSongLength(duration - currentTime)}

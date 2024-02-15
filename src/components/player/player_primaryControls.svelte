@@ -1,42 +1,35 @@
 <script>
-    import { MediaPlayer } from '../../stores/player';
-
-    import { NowPlayingQueue, IsPlaying } from "../../stores/status";
-
-    import SVGPlay from "/src/images/play.svg";
-    import SVGPause from "/src/images/pause.svg";
-    import SVGNext from "/src/images/skip_next.svg";
-    import SVGPrevious from "/src/images/skip_previous.svg";
+    import { MediaPlayer } from "~/stores/elements.js";
+    import { NowPlayingQueue, IsPlaying } from "~/stores/state.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 </script>
 
 <div class="primary-controls">
-    <button
-        class="icon-button"
-        on:click={(e) => { $MediaPlayer.previous(e) }}
+    <sl-button
+        on:click={(e) => {
+            $MediaPlayer.previous(e);
+        }}
         disabled={$NowPlayingQueue.length === 0}
     >
-        <SVGPrevious />
-    </button>
+        <MaterialSymbol name="skip_previous" />
+    </sl-button>
 
-    <button
-        class="icon-button button--regular play"
+    <sl-button
+        class="play"
         on:click={$MediaPlayer.playPause()}
         disabled={$NowPlayingQueue.length === 0}
     >
-        {#if $IsPlaying}
-            <SVGPause style="transform: scale(1.3);" />
-        {:else}
-            <SVGPlay style="transform: scale(1.3);" />
-        {/if}
-    </button>
+        <MaterialSymbol name={$IsPlaying ? "pause" : "play_arrow"} />
+    </sl-button>
 
-    <button
-        class="icon-button"
-        on:click={(e) => { $MediaPlayer.next(e) }}
+    <sl-button
+        on:click={(e) => {
+            $MediaPlayer.next(e);
+        }}
         disabled={$NowPlayingQueue.length === 0}
     >
-        <SVGNext />
-    </button>
+        <MaterialSymbol name="skip_next" />
+    </sl-button>
 </div>
 
 <style>

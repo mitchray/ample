@@ -1,37 +1,64 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { PageTitle } from "../stores/status";
-    import { newestAlbums } from "../logic/album"
-    import Lister from '../components/lister/lister.svelte';
+    import { _ } from "svelte-i18n";
+    import { newestAlbums } from "~/logic/album";
+    import Lister from "~/components/lister/lister.svelte";
+    import { albumsPreset } from "~/components/lister/columns.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { User, PageTitle } from "~/stores/state.js";
 
-    let title = $_('text.newest');
+    let title = $_("text.newest");
     $PageTitle = title;
+
+    $: query = createQuery({
+        queryKey: ["newestAlbums"],
+        queryFn: async () => {
+            let result = await newestAlbums({ limit: 100 });
+
+            if (result.error) {
+                console.error(
+                    "Ample error getting newest albums:",
+                    result.error,
+                );
+                return [];
+            }
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    });
+
+    // alias of returned data
+    $: albums = $query.data || {};
 </script>
 
 <svelte:head>
     <title>{title}</title>
 </svelte:head>
 
-<div class="page-main">
-    {#await newestAlbums({limit: 100})}
-        {$_('text.loading')}
-    {:then albums}
-        {#if albums.length > 0}
-            <Lister
-                data={albums}
-                type="album"
-                virtualList={true}
-                actionData={{
-                    type: "albums",
-                    mode: "fullButtons",
-                    showShuffle: albums.length > 1,
-                    data: Object.create({albums: albums})
-                }}
-            />
-        {:else}
-            <p>{$_('text.noItemsFound')}</p>
-        {/if}
-    {:catch error}
-        <p>{$_('text.errorGeneric')}</p>
-    {/await}
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
 </div>
+
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    {#if albums.length === 0}
+        <p>{$_("text.noItemsFound")}</p>
+    {:else}
+        <Lister
+            id="Albums"
+            data={albums}
+            columns={albumsPreset}
+            type="album"
+            virtualList={true}
+            actionData={{
+                type: "albums",
+                displayMode: "fullButtons",
+                showShuffle: albums.length > 1,
+                data: Object.create({ albums: albums }),
+            }}
+        />
+    {/if}
+{/if}

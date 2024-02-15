@@ -1,14 +1,18 @@
-import { get } from 'svelte/store';
-import { ampleVersion } from "../stores/player";
+import { get } from "svelte/store";
+import { ampleVersion } from "~/stores/state.js";
 
 class MusicBrainz {
     constructor() {
-        this.regex = new RegExp('[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}');
+        this.regex = new RegExp(
+            "[a-z0-9]{8}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{12}",
+        );
 
         this.headers = new Headers({
-            "Accept"       : "application/json",
-            "Content-Type" : "application/json",
-            "User-Agent"   : `Ample - Ampache client/${get(ampleVersion)} ( github.com/mitchray/ample )`
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            "User-Agent": `Ample - Ampache client/${get(
+                ampleVersion,
+            )} ( github.com/mitchray/ample )`,
         });
     }
 
@@ -19,7 +23,11 @@ class MusicBrainz {
      * @returns {boolean}
      */
     hasMBID(data) {
-        return data && this.regex.test(data.mbid) && data.name !== "Various Artists";
+        return (
+            data &&
+            this.regex.test(data.mbid) &&
+            data.name !== "Various Artists"
+        );
     }
 }
 

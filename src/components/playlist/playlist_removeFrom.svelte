@@ -1,8 +1,8 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { API } from "../../stores/api";
+    import { _ } from "svelte-i18n";
+    import { API } from "~/stores/state.js";
     import { getContext } from "svelte";
-    import { getPlaylistIDFromUrl } from "../../logic/helper";
+    import { getPlaylistIDFromUrl } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -15,8 +15,16 @@
             if (item.selected === true && !item.isDeleted) {
                 $API.playlistRemoveSong({
                     filter: playlistID,
-                    song: item.id
+                    song: item.id,
                 }).then((result) => {
+                    if (result.error) {
+                        console.error(
+                            "Ample error removing playlist song:",
+                            result.error,
+                        );
+                        return;
+                    }
+
                     if (result.success) {
                         item.selected === false;
                         $selectedCount--;
@@ -24,20 +32,28 @@
                         $dataDisplay[index] = item;
 
                         // get all proceeding items
-                        let proceedingItems = $dataDisplay.filter(e => e.initialOrder > item.initialOrder);
+                        let proceedingItems = $dataDisplay.filter(
+                            (e) => e.initialOrder > item.initialOrder,
+                        );
 
-                        proceedingItems.forEach((p, index) => {
+                        proceedingItems.forEach((p) => {
                             p.initialOrder--;
-                        })
+                        });
                     }
-                })
+                });
             }
         });
     }
 </script>
 
-<button class="button button--danger" type="button" title="{$_('text.remove')}" disabled={$isEditMode || $selectedCount < 1} on:click={handleRemove}>{$_('text.remove')}</button>
+<sl-button
+    title={$_("text.remove")}
+    disabled={$isEditMode || $selectedCount < 1}
+    on:click={handleRemove}
+    variant="danger"
+>
+    {$_("text.remove")}
+</sl-button>
 
 <style>
-
 </style>

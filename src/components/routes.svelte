@@ -1,113 +1,123 @@
 <script>
-    import { customHue, PageLoadedKey } from "../stores/status";
-    import Router from 'svelte-spa-router';
-    import { wrap } from 'svelte-spa-router/wrap';
-    import { closeSidebar } from "../logic/ui.js";
-    import NotFound404Page from '../views/notFound404.svelte';
-    import HomePage from '../views/home.svelte';
+    import { PageLoadedKey } from "~/stores/state.js";
+    import { SiteContentBind } from "~/stores/elements.js";
+    import Router from "svelte-spa-router";
+    import { wrap } from "svelte-spa-router/wrap";
+    import { closeSidebar } from "~/logic/ui.js";
+    import NotFound404Page from "~/views/notFound404.svelte";
+    import HomePage from "~/views/home.svelte";
 
     const routes = {
-        '/test': wrap({
-            asyncComponent: () => import('../views/test.svelte')
+        "/search": wrap({
+            asyncComponent: () => import("~/views/advancedSearch.svelte"),
         }),
-        '/search': wrap({
-            asyncComponent: () => import('../views/advancedSearch.svelte')
+        "/versions/:songTitle/:artistName": wrap({
+            asyncComponent: () => import("~/views/songVersions.svelte"),
         }),
-        '/multi-rater': wrap({
-            asyncComponent: () => import('../views/multiRater.svelte')
+        "/artist/:id/:section?": wrap({
+            asyncComponent: () => import("~/views/artist/index.svelte"),
         }),
-        '/versions/:songTitle/:artistName': wrap({
-            asyncComponent: () => import('../views/songVersions.svelte')
+        "/artists/:section?": wrap({
+            asyncComponent: () => import("~/views/artists/index.svelte"),
         }),
-        '/artists/:id': wrap({
-            asyncComponent: () => import('../views/artist.svelte')
+        "/album-artists/:section?": wrap({
+            asyncComponent: () => import("~/views/album-artists/index.svelte"),
         }),
-        '/artists': wrap({
-            asyncComponent: () => import('../views/artists.svelte')
+        // "/albums/year/:year": wrap({
+        //     asyncComponent: () => import("~/views/albumsByYear.svelte"),
+        // }),
+        // "/albums/year": wrap({
+        //     asyncComponent: () => import("~/views/albumsByYear.svelte"),
+        // }),
+        "/albums/:section?": wrap({
+            asyncComponent: () => import("~/views/albums/index.svelte"),
         }),
-        '/album-artists': wrap({
-            asyncComponent: () => import('../views/albumArtists.svelte')
+        "/album/:id": wrap({
+            asyncComponent: () => import("~/views/album.svelte"),
         }),
-        '/albums/:id': wrap({
-            asyncComponent: () => import('../views/album.svelte')
+        "/song/:id": wrap({
+            asyncComponent: () => import("~/views/song.svelte"),
         }),
-        '/albums/year/:year': wrap({
-            asyncComponent: () => import('../views/albumsByYear.svelte')
+        "/playlist/:id": wrap({
+            asyncComponent: () => import("~/views/playlist.svelte"),
         }),
-        '/albums/year': wrap({
-            asyncComponent: () => import('../views/albumsByYear.svelte')
+        "/playlists": wrap({
+            asyncComponent: () => import("~/views/playlists.svelte"),
         }),
-        '/albums': wrap({
-            asyncComponent: () => import('../views/albums.svelte')
+        "/smartlist/:id": wrap({
+            asyncComponent: () => import("~/views/playlist.svelte"),
         }),
-        '/song/:id': wrap({
-            asyncComponent: () => import('../views/song.svelte')
+        "/smartlists": wrap({
+            asyncComponent: () => import("~/views/smartlists.svelte"),
         }),
-        '/playlists/:id': wrap({
-            asyncComponent: () => import('../views/playlist.svelte')
+        "/mix/:mixType/:id": wrap({
+            asyncComponent: () => import("~/views/playlist.svelte"),
         }),
-        '/playlists': wrap({
-            asyncComponent: () => import('../views/playlists.svelte')
+        "/genre/:id/:section?": wrap({
+            asyncComponent: () => import("~/views/genre/index.svelte"),
         }),
-        '/smartlists/:id': wrap({
-            asyncComponent: () => import('../views/playlist.svelte')
+        "/genres": wrap({
+            asyncComponent: () => import("~/views/genres.svelte"),
         }),
-        '/smartlists': wrap({
-            asyncComponent: () => import('../views/smartlists.svelte')
+        "/podcasts": wrap({
+            asyncComponent: () => import("~/views/podcasts.svelte"),
         }),
-        '/mix/:mixType/:id': wrap({
-            asyncComponent: () => import('../views/playlist.svelte')
+        "/podcast/:id": wrap({
+            asyncComponent: () => import("~/views/podcast.svelte"),
         }),
-        '/genres/:id': wrap({
-            asyncComponent: () => import('../views/genre.svelte')
+        "/podcast-episode/:id": wrap({
+            asyncComponent: () => import("~/views/podcastEpisode.svelte"),
         }),
-        '/genres': wrap({
-            asyncComponent: () => import('../views/genres.svelte')
+        "/radio": wrap({
+            asyncComponent: () => import("~/views/liveStreams.svelte"),
         }),
-        '/newest': wrap({
-            asyncComponent: () => import('../views/newest.svelte')
+        "/radio-station/:id": wrap({
+            asyncComponent: () => import("~/views/liveStream.svelte"),
         }),
-        '/recent': wrap({
-            asyncComponent: () => import('../views/recent.svelte')
+        "/newest": wrap({
+            asyncComponent: () => import("~/views/newest.svelte"),
         }),
-        '/favorites': wrap({
-            asyncComponent: () => import('../views/favorites.svelte')
+        "/recent": wrap({
+            asyncComponent: () => import("~/views/recent.svelte"),
         }),
-        '/trending': wrap({
-            asyncComponent: () => import('../views/trending.svelte')
+        "/favorites/:section?": wrap({
+            asyncComponent: () => import("~/views/favorites/index.svelte"),
         }),
-        '/top': wrap({
-            asyncComponent: () => import('../views/topRated.svelte')
+        "/trending/:section?": wrap({
+            asyncComponent: () => import("~/views/trending/index.svelte"),
         }),
-        '/forgotten': wrap({
-            asyncComponent: () => import('../views/forgotten.svelte')
+        "/top-rated/:section?": wrap({
+            asyncComponent: () => import("~/views/top-rated/index.svelte"),
         }),
-        '/random': wrap({
-            asyncComponent: () => import('../views/random.svelte')
+        "/forgotten/:section?": wrap({
+            asyncComponent: () => import("~/views/forgotten/index.svelte"),
         }),
-        '/unrated': wrap({
-            asyncComponent: () => import('../views/unrated.svelte')
+        "/random/:section?": wrap({
+            asyncComponent: () => import("~/views/random/index.svelte"),
         }),
-        '/': HomePage,
-        '*': NotFound404Page,
-    }
+        "/unrated/:section?": wrap({
+            asyncComponent: () => import("~/views/unrated/index.svelte"),
+        }),
+        "/test/:section?": wrap({
+            asyncComponent: () => import("~/views/test/index.svelte"),
+        }),
+        "/": HomePage,
+        "*": NotFound404Page,
+    };
 
     function routeLoading(event) {
         closeSidebar();
-
-        // reset customHue if not on our special pages to avoid flash;
-        // their onMount events will add it back in
-        switch (event.detail.route) {
-            case '/albums/:id':
-            case '/artists/:id':
-                break;
-            default:
-                customHue.set(null);
-                break;
-        }
     }
 </script>
 
-{#key $PageLoadedKey || 0}
-    <Router {routes} on:routeLoading={routeLoading}/>
-{/key}
+<div class="site-content" bind:this={$SiteContentBind}>
+    <div class="site-content-inner">
+        {#key $PageLoadedKey || 0}
+            <Router
+                {routes}
+                on:routeLoading={routeLoading}
+                restoreScrollState={true}
+            />
+        {/key}
+    </div>
+</div>

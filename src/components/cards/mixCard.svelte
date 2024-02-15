@@ -1,0 +1,198 @@
+<script>
+    import { _ } from "svelte-i18n";
+    import { API, User } from "~/stores/state.js";
+    import Actions from "~/components/action/actions.svelte";
+    import { sampleSize } from "lodash-es";
+    import Art from "~/components/art.svelte";
+    import ArtistList from "~/components/artist/artistList.svelte";
+    import { createQuery } from "@tanstack/svelte-query";
+
+    export let data = null; // needed for cardList dynamic components
+    export let type = undefined; // ignored; workaround for card list component when type is 'generic'
+
+    let playlist;
+
+    $: playlist = data;
+
+    $: query = createQuery({
+        queryKey: ["playlistMix", playlist?.id],
+        staleTime: 60 * 30000, // 30 minutes
+        queryFn: async () => {
+            let result = await $API.getSimilar({
+                type: "artist",
+                filter: playlist.id,
+                limit: 15,
+            });
+
+            if (result.error) {
+                console.error(
+                    "Ample error getting similar artists for playlist mix:",
+                    result.error,
+                );
+                return [];
+            }
+
+            return sampleSize(result, 3);
+        },
+        enabled: $User.isLoggedIn,
+    });
+
+    // alias of returned data
+    $: artists = $query.data || {};
+</script>
+
+<div class="mix-card card">
+    {#if playlist}
+        <div class="image-container">
+            <a
+                href="#/mix/{playlist.playlistType}/{playlist.id}"
+                title={playlist.name}
+            >
+                <div class="image-text">{playlist.name}</div>
+                <Art size="large" data={playlist} type="mix" />
+            </a>
+        </div>
+
+        <div class="details">
+            <div class="similar">
+                {#if $query.isLoading}
+                    <p>{$_("text.loading")}</p>
+                    <br />
+                {:else if $query.isError}
+                    <p>Error: {$query.error.message}</p>
+                {:else if $query.isSuccess}
+                    {#if artists.length > 0}
+                        <ArtistList
+                            data={Object.create({ artists: artists })}
+                            truncate={false}
+                        />
+                    {:else}
+                        {$_("text.playlistJust", {
+                            values: { name: playlist.name },
+                        })}
+                    {/if}
+                {/if}
+            </div>
+
+            <div class="actions">
+                <Actions
+                    type="artistMix"
+                    displayMode="miniButtons"
+                    item={playlist}
+                />
+            </div>
+        </div>
+    {:else}
+        <div
+            style="display: flex; flex-direction: column; gap: var(--spacing-lg);"
+        >
+            <sl-skeleton
+                style="--border-radius: 5px; aspect-ratio: 1/1; width: 100%;"
+            ></sl-skeleton>
+
+            <sl-skeleton style="width: 80%;"></sl-skeleton>
+            <sl-skeleton style="width: 50%;"></sl-skeleton>
+        </div>
+    {/if}
+</div>
+
+<style>
+    /* Playlist grids should have this on the containing element */
+    :global(.mix-grid) {
+        column-gap: var(--spacing-lg);
+        row-gap: var(--spacing-xl);
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    }
+
+    :global(.mix-scroll) .mix-card {
+        width: 220px;
+    }
+
+    :global(.mix-card) {
+        height: 100%; /* equal height with siblings */
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        overflow: hidden;
+    }
+
+    :global(.highlight .mix-card) {
+        border: 2px solid var(--color-primary);
+    }
+
+    .mix-card :global(img) {
+        filter: saturate(0%) brightness(100%) contrast(70%);
+        mix-blend-mode: luminosity;
+        position: relative;
+        opacity: 0.5;
+    }
+
+    .image-container {
+        position: relative;
+        z-index: 1;
+        justify-content: center;
+        display: flex;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        background-color: var(--color-background);
+    }
+
+    .image-container :global(img) {
+        color: transparent;
+        height: 100%;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .image-container :global(a) {
+        display: flex; /* white space removal */
+    }
+
+    .image-text {
+        z-index: 100;
+        position: absolute;
+        inset-block-end: 0;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        padding: var(--spacing-md);
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 1.2;
+        color: var(--color-secondary);
+    }
+
+    .image-text::before {
+        content: "";
+        pointer-events: none;
+        height: calc(100% + var(--spacing-xxl));
+        width: 100%;
+        position: absolute;
+        inset-inline-start: 0;
+        inset-inline-end: 0;
+        inset-block-end: 0;
+        background-image: linear-gradient(
+            to bottom,
+            transparent,
+            var(--color-surface-container-low)
+        );
+        z-index: -1;
+    }
+
+    .details {
+        padding-block-start: var(--spacing-md);
+        padding-inline-end: var(--spacing-md);
+    }
+
+    .similar {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        margin-block-end: var(--spacing-md);
+    }
+
+    .actions {
+        display: flex;
+    }
+</style>

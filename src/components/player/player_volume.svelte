@@ -1,27 +1,22 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { tick } from 'svelte';
-    import { v4 as uuidv4 } from 'uuid';
+    import { _ } from "svelte-i18n";
     import {
-        CurrentMedia,
-        IsMuted,
-        NowPlayingQueue,
+        Saved,
         PlayerVolume,
         VolumeNormalizationEnabled,
-        DynamicsCompressorEnabled
-    } from "../../stores/status";
-    import { MediaPlayer } from "../../stores/player";
-    import { debugMode } from "../../stores/server";
+        DynamicsCompressorEnabled,
+    } from "~/stores/settings.js";
+    import { MediaPlayer } from "~/stores/elements.js";
+    import {
+        debugMode,
+        CurrentMedia,
+        NowPlayingQueue,
+        IsMuted,
+    } from "~/stores/state.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { onMount } from "svelte";
 
-    import Menu from '../../components/menu.svelte';
-
-    import SVGVolumeUp from "/src/images/volume_up.svg";
-    import SVGVolumeMuted from "/src/images/volume_off.svg";
-    import SVGTune from "/src/images/tune.svg";
-
-    const uniqueMenuID = "volumeMenu_" + uuidv4();
-
-    let volumeWidth = $PlayerVolume; // volume in this file is treated as a linear 0-100 value
+    let volumeWidth; // volume in this file is treated as a linear 0-100 value
     let mouseDown = false;
     let volumeSlider;
     let menuIsVisible = false;
@@ -31,53 +26,53 @@
     }
 
     async function handleMuteToggle() {
-        if ($MediaPlayer.wavesurfer) {
-            IsMuted.set(!$IsMuted);
-            await tick();
-            $MediaPlayer.wavesurfer.setMute($MediaPlayer.isMuted);
-        }
+        let inverted = !$IsMuted;
+        IsMuted.set(inverted);
+        $MediaPlayer.setMuted(inverted);
     }
 
-    function handleVolumeNormalize() {
-        let inverted = !$VolumeNormalizationEnabled;
-        localStorage.setItem('AmpleVolumeNormalizationEnabled', JSON.stringify(inverted));
-        VolumeNormalizationEnabled.set(inverted);
+    function handleVolumeNormalize(e) {
+        let setting = e.target.checked;
+        $Saved.setItem("VolumeNormalizationEnabled", setting);
+        VolumeNormalizationEnabled.set(setting);
         $MediaPlayer.updateFilters();
     }
 
-    function handleDynamicsCompressor() {
-        let inverted = !$DynamicsCompressorEnabled;
-        localStorage.setItem('AmpleDynamicsCompressorEnabled', JSON.stringify(inverted));
-        DynamicsCompressorEnabled.set(inverted);
+    function handleDynamicsCompressor(e) {
+        let setting = e.target.checked;
+        $Saved.setItem("DynamicsCompressorEnabled", setting);
+        DynamicsCompressorEnabled.set(setting);
         $MediaPlayer.updateFilters();
     }
 
     function handleVolumeSlider(event) {
         let volumeElementWidth = event.target.offsetWidth;
-        let volumeClickLocation = event.clientX - event.target.getBoundingClientRect().left;
+        let volumeClickLocation =
+            event.clientX - event.target.getBoundingClientRect().left;
         let volumeFraction = volumeClickLocation / volumeElementWidth;
-        volumeWidth = (volumeFraction * 100);
-        volumeWidth = (volumeWidth > 100) ? 100 : volumeWidth;
-        volumeWidth = (volumeWidth < 0) ? 0 : volumeWidth;
+        volumeWidth = volumeFraction * 100;
+        volumeWidth = volumeWidth > 100 ? 100 : volumeWidth;
+        volumeWidth = volumeWidth < 0 ? 0 : volumeWidth;
 
         PlayerVolume.set(volumeWidth);
+        $Saved.setItem("PlayerVolume", volumeWidth);
     }
 
-    function handleVolumeMouseDown(event) {
+    function handleVolumeMouseDown() {
         mouseDown = true;
-        document.addEventListener('mouseup', handleVolumeMouseUp);
+        document.addEventListener("mouseup", handleVolumeMouseUp);
         volumeSlider?.classList.add("dragging");
     }
 
-    function handleVolumeMouseUp(event) {
+    function handleVolumeMouseUp() {
         mouseDown = false;
-        document.removeEventListener('mouseup', handleVolumeMouseUp);
+        document.removeEventListener("mouseup", handleVolumeMouseUp);
         volumeSlider?.classList.remove("dragging");
     }
 
     function handleVolumeDrag(event) {
         if (mouseDown) {
-            requestAnimationFrame(function() {
+            requestAnimationFrame(function () {
                 handleVolumeSlider(event);
             });
         }
@@ -102,20 +97,21 @@
     function handleCompressorRelease() {
         $MediaPlayer.filterCompressor.release.value = this.value;
     }
+
+    onMount(async () => {
+        volumeWidth = (await $Saved.getItem("PlayerVolume")) || 50;
+    });
 </script>
 
-<button
-    class="icon-button volume-control"
+<sl-button
+    class="volume-control"
     on:click={handleMuteToggle}
     disabled={$NowPlayingQueue.length === 0}
-    title="{$IsMuted ? $_('text.volumeUnmute') : $_('text.volumeMute')}"
+    title={$IsMuted ? $_("text.volumeUnmute") : $_("text.volumeMute")}
+    variant="text"
 >
-    {#if $IsMuted}
-        <SVGVolumeMuted />
-    {:else}
-        <SVGVolumeUp />
-    {/if}
-</button>
+    <MaterialSymbol name={$IsMuted ? "volume_off" : "volume_up"} />
+</sl-button>
 
 <div
     class="site-player__volume-slider volume-control"
@@ -124,114 +120,163 @@
     on:mousemove={handleVolumeDrag}
     bind:this={volumeSlider}
 >
-    <span class="site-player__volume-value" data-value="{Math.floor(volumeWidth)}" style="width: {volumeWidth}%">
-    </span>
+    <span
+        class="site-player__volume-value"
+        data-value={Math.floor(volumeWidth)}
+        style="width: {volumeWidth}%"
+    ></span>
 </div>
 
-<button
-    id={uniqueMenuID}
-    class="icon-button"
-    title="{$_('text.volumeSettings')}"
-    on:click={toggleMenu}
->
-    <SVGTune style="padding: 0.15em;" />
-</button>
+<sl-dropdown>
+    <sl-button
+        slot="trigger"
+        title={$_("text.volumeSettings")}
+        on:click={toggleMenu}
+        variant="text"
+    >
+        <MaterialSymbol name="tune" />
+    </sl-button>
 
-{#if menuIsVisible}
-    <Menu anchor="top" toggleSelector={`#${uniqueMenuID}`} bind:isVisible={menuIsVisible} >
-        <div class="header new-panel-header">
-            <h4 class="title panel-title">{$_('text.volumeSettings')}</h4>
+    <sl-card>
+        <div slot="header">
+            {$_("text.volumeSettings")}
         </div>
 
-        <div class="panel-content">
-            <div class="group">
-                <label class="toggle">
-                    <input type="checkbox" on:change={handleVolumeNormalize} bind:checked={$VolumeNormalizationEnabled} />
-                    {$_('text.volumeNormalize')}
-                </label>
+        <sl-checkbox
+            on:sl-change={handleVolumeNormalize}
+            checked={$VolumeNormalizationEnabled}
+        >
+            {$_("text.volumeNormalize")}
+        </sl-checkbox>
 
-                <div class="info">{$_('text.volumeNormalizeInfo')}</div>
-
-                {#if $CurrentMedia}
-                    <div class="current new-panel-main">
-                        <table>
-                            <tr>
-                                <td class="label">{$_('text.current')}</td>
-                                <td>{$MediaPlayer.gainType}</td>
-                            </tr>
-
-                            {#if $MediaPlayer.gainType === 'EBU R128'}
-                                <tr>
-                                    <td class="label">{$_('text.target')}</td>
-                                    <td>{$MediaPlayer.targetVolume}db</td>
-                                </tr>
-
-                                <tr>
-                                    <td class="label">{$_('text.mastered')}</td>
-                                    <td>{$MediaPlayer.masteredVolume}db</td>
-                                </tr>
-                            {/if}
-
-                            {#if $MediaPlayer.gainType === 'ReplayGain'}
-                                <tr>
-                                    <td class="label">{$_('text.replaygain')}</td>
-                                    <td>{$MediaPlayer.gainTagValue}</td>
-                                </tr>
-                            {/if}
-
-                            <tr>
-                                <td class="label">{$_('text.gain')}</td>
-                                <td>{$MediaPlayer.gainNeeded}db</td>
-                            </tr>
-                        </table>
-
-                    </div>
-                {/if}
-            </div>
-
-            <div class="group">
-                <label class="toggle">
-                    <input type="checkbox" on:change={handleDynamicsCompressor} bind:checked={$DynamicsCompressorEnabled} />
-                    {$_('text.volumeNightMode')}
-                </label>
-
-                <div class="info">{$_('text.volumeNightModeInfo')}</div>
-
-                {#if $debugMode && $MediaPlayer.filterCompressor}
-                    <div class="menu-separator"></div>
-
-                    <div class="overrides">
-                        <label>
-                            Threshold <span id="compressor_threshold_value">{$MediaPlayer.filterCompressor.threshold.value}</span>
-                            <input type="range" min="-100" max="0" value={$MediaPlayer.filterCompressor.threshold.value} on:input={handleCompressorThreshold}>
-                        </label>
-
-                        <label>
-                            Ratio <span id="compressor_ratio_value">{$MediaPlayer.filterCompressor.ratio.value}</span>
-                            <input type="range" min="1" max="20" value={$MediaPlayer.filterCompressor.ratio.value} on:input={handleCompressorRatio}>
-                        </label>
-
-                        <label>
-                            Knee <span id="compressor_knee_value">{$MediaPlayer.filterCompressor.knee.value}</span>
-                            <input type="range" min="0" max="40" value={$MediaPlayer.filterCompressor.knee.value} on:input={handleCompressorKnee}>
-                        </label>
-
-                        <label>
-                            Attack <span id="compressor_attack_value">{$MediaPlayer.filterCompressor.attack.value}</span>
-                            <input type="range" min="0" max="1" value={$MediaPlayer.filterCompressor.attack.value} step="0.001" on:input={handleCompressorAttack}>
-                        </label>
-
-                        <label>
-                            Release <span id="compressor_release_value">{$MediaPlayer.filterCompressor.release.value}</span>
-                            <input type="range" min="0" max="1" value={$MediaPlayer.filterCompressor.release.value} step="0.001" on:input={handleCompressorRelease}>
-                        </label>
-                    </div>
-
-                {/if}
-            </div>
+        <div class="secondary-info help-text">
+            {$_("text.volumeNormalizeInfo")}
         </div>
-    </Menu>
-{/if}
+
+        {#if $CurrentMedia}
+            <div class="current">
+                <table>
+                    <tr>
+                        <td class="label">{$_("text.current")}</td>
+                        <td>{$MediaPlayer.gainType}</td>
+                    </tr>
+
+                    {#if $MediaPlayer.gainType === "EBU R128"}
+                        <tr>
+                            <td class="label">{$_("text.target")}</td>
+                            <td>{$MediaPlayer.targetVolume}db</td>
+                        </tr>
+
+                        <tr>
+                            <td class="label">{$_("text.mastered")}</td>
+                            <td>{$MediaPlayer.masteredVolume}db</td>
+                        </tr>
+                    {/if}
+
+                    {#if $MediaPlayer.gainType === "ReplayGain"}
+                        <tr>
+                            <td class="label">
+                                {$_("text.replaygain")}
+                            </td>
+                            <td>{$MediaPlayer.gainTagValue}</td>
+                        </tr>
+                    {/if}
+
+                    <tr>
+                        <td class="label">{$_("text.gain")}</td>
+                        <td>{$MediaPlayer.gainNeeded}db</td>
+                    </tr>
+                </table>
+            </div>
+        {/if}
+
+        <sl-divider></sl-divider>
+
+        <sl-checkbox
+            on:sl-change={handleDynamicsCompressor}
+            checked={$DynamicsCompressorEnabled}
+        >
+            {$_("text.volumeNightMode")}
+        </sl-checkbox>
+
+        <div class="secondary-info help-text">
+            {$_("text.volumeNightModeInfo")}
+        </div>
+
+        {#if $debugMode && $MediaPlayer?.filterCompressor}
+            <sl-divider></sl-divider>
+
+            <div class="overrides">
+                <label>
+                    Threshold <span id="compressor_threshold_value">
+                        {$MediaPlayer.filterCompressor.threshold.value}
+                    </span>
+                    <input
+                        type="range"
+                        min="-100"
+                        max="0"
+                        value={$MediaPlayer.filterCompressor.threshold.value}
+                        on:input={handleCompressorThreshold}
+                    />
+                </label>
+
+                <label>
+                    Ratio <span id="compressor_ratio_value">
+                        {$MediaPlayer.filterCompressor.ratio.value}
+                    </span>
+                    <input
+                        type="range"
+                        min="1"
+                        max="20"
+                        value={$MediaPlayer.filterCompressor.ratio.value}
+                        on:input={handleCompressorRatio}
+                    />
+                </label>
+
+                <label>
+                    Knee <span id="compressor_knee_value">
+                        {$MediaPlayer.filterCompressor.knee.value}
+                    </span>
+                    <input
+                        type="range"
+                        min="0"
+                        max="40"
+                        value={$MediaPlayer.filterCompressor.knee.value}
+                        on:input={handleCompressorKnee}
+                    />
+                </label>
+
+                <label>
+                    Attack <span id="compressor_attack_value">
+                        {$MediaPlayer.filterCompressor.attack.value}
+                    </span>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        value={$MediaPlayer.filterCompressor.attack.value}
+                        step="0.001"
+                        on:input={handleCompressorAttack}
+                    />
+                </label>
+
+                <label>
+                    Release <span id="compressor_release_value">
+                        {$MediaPlayer.filterCompressor.release.value}
+                    </span>
+                    <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        value={$MediaPlayer.filterCompressor.release.value}
+                        step="0.001"
+                        on:input={handleCompressorRelease}
+                    />
+                </label>
+            </div>
+        {/if}
+    </sl-card>
+</sl-dropdown>
 
 <style>
     .overrides :global(label) {
@@ -244,16 +289,12 @@
         display: block;
     }
 
-    .group + .group {
-        padding-block-start: var(--spacing-lg);
-    }
-
     .site-player__volume-slider {
-        background-color: var(--color-border);
+        background-color: var(--color-outline-variant);
         display: flex;
         height: 4px;
         width: 100%;
-        min-width: 100px;
+        min-width: 50px;
         cursor: pointer;
         position: relative;
         border-radius: 100vh;
@@ -263,7 +304,7 @@
 
     /* increase clickable area of volume */
     .site-player__volume-slider:after {
-        content: '';
+        content: "";
         height: 30px;
         background-color: transparent;
         width: calc(100% + 30px);
@@ -277,7 +318,7 @@
     }
 
     .site-player__volume-value {
-        background-color: var(--color-highlight);
+        background-color: var(--color-primary);
         position: absolute;
         inset-inline-start: 0;
         inset-block-end: 0;
@@ -294,11 +335,14 @@
 
     .current {
         max-width: fit-content;
-        margin-block-start: var(--spacing-md);
+        margin-block: var(--spacing-md);
+        border: 1px solid var(--color-outline-variant);
+        padding: var(--spacing-md);
+        border-radius: 7px;
     }
 
     .label {
-        color: var(--color-text-secondary);
+        color: var(--color-primary);
         padding-inline-end: var(--spacing-md);
         text-align: end;
     }

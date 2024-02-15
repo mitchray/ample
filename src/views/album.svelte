@@ -1,201 +1,198 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { PageLoadedKey, PageTitle, Theme } from '../stores/status';
-    import { serverURL } from "../stores/server";
-    import { getAlbum } from "../logic/album";
-    import { formatTotalTime } from "../logic/helper";
-    import MusicBrainz from "../logic/musicbrainz";
-    import Rating from '../components/rating.svelte';
-    import ThirdPartyServices from '../components/thirdPartyServices.svelte';
-    import Actions from '../components/action/actions.svelte';
-    import Genres from '../components/genre/genres.svelte';
-    import Lister from '../components/lister/lister.svelte';
-    import AlbumsAround from '../components/album/albumsAround.svelte';
+    import { _ } from "svelte-i18n";
+    import { getAlbumDisks } from "~/logic/album";
+    import { formatTotalTime } from "~/logic/formatters.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { API, User } from "~/stores/state.js";
+    import { checkbox, albumPreset } from "~/components/lister/columns.js";
+    import Rating from "~/components/rating.svelte";
+    import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import Genres from "~/components/genre/genres.svelte";
+    import Lister from "~/components/lister/lister.svelte";
+    import AlbumsAround from "~/components/album/albumsAround.svelte";
+    import Art from "~/components/art.svelte";
+    import ReleaseType from "~/components/releaseType.svelte";
 
-    export let params = {}
+    export let params = {};
 
-    let mb = new MusicBrainz;
-    let theme;
-    let loading = true;
+    let disks = [];
 
-    $: theme = $Theme;
-    $: if (params.id || $PageLoadedKey) {
-        loadData();
-    }
+    $: query = createQuery({
+        queryKey: ["album", params.id],
+        queryFn: async () => {
+            let result = await $API.album({ filter: params.id });
 
-    $PageTitle = $_('text.album');
+            if (result.error) {
+                console.error("Ample error getting album:", result.error);
+                return [];
+            }
 
-    let album;
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    });
 
-    async function loadData() {
-        loading = true;
-        album = await getAlbum({id: params.id, withTracks: true, artAnalysis: true});
-        album.discsubtitles = [];
+    // alias of returned data
+    $: album = $query.data || {};
 
-        if (mb.hasMBID(album)) {
-            album.discsubtitles = await loadMBData(album.mbid);
-        }
+    // grab discs once we load the album
+    $: $query.data, processData();
 
-        loading = false;
-    }
+    async function processData() {
+        if (!$query.data?.id) return;
 
-    async function loadMBData(mbid) {
-        let queryURL = `https://musicbrainz.org/ws/2/release/${mbid}?inc=discids&fmt=json`;
-
-        return await fetch(queryURL, {
-            method  : 'GET',
-            headers : mb.headers
-        })
-            .then(response => response.json())
-            .then(data => {
-                return data.media;
-            })
-            .catch(err => {
-                console.log("Error Reading data " + err);
-                return err;
-            });
+        disks = [];
+        disks = await getAlbumDisks(params.id);
     }
 </script>
 
-<svelte:head>
-    <title>{`${album?.name} by ${album?.artist?.name}` || $_('text.loading')} (album)</title>
-</svelte:head>
-
-{#key $PageLoadedKey || 0}
-    {#if loading}
-        <p>{$_('text.loading')}</p>
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    {#if !$query.data.id}
+        <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#if album?.id}
-            <div class="page-wrapper">
-                <div class="details-container">
-                    <div class="details">
-                        <div class="cover-rating">
-                            <div class="art-container">
-                                <img class="art"
-                                     src="{album.art}&thumb=32"
-                                     alt="Image of {album.name}"
-                                     width="384"
-                                     height="384"
-                                     data-id="art-album-{album.id}"
-                                     on:error={e => { e.onerror=null; e.target.src=$serverURL + '/image.php?object_id=0&object_type=album&thumb=32' }}
-                                />
-                            </div>
+        {#key $query.data.id}
+            <div class="details">
+                <div class="cover-rating">
+                    <div class="art-container">
+                        <Art size="large" data={album} type="album" />
+                    </div>
 
-                            <div class="below-image">
-                                <div class="rating">
-                                    <Rating type="album" data={album} />
-                                </div>
-
-                                <div class="third-party-links">
-                                    <ThirdPartyServices data={album} type="album" />
-                                </div>
-                            </div>
+                    <div class="below-image">
+                        <div class="rating">
+                            <Rating type="album" data={album} />
                         </div>
 
-                        <div class="info">
-                            <div class="name">
-                                {#if album.type}
-                                    <div class="release-type-label">
-                                        {album.type}
-                                    </div>
-                                {/if}
-                                <h1 class="title">{album.name}</h1>
-                                <div class="artist">
-                                    <a href="#/artists/{album.artist.id}">{album.artist.name}</a>
-                                </div>
-                            </div>
-
-                            <Actions
-                                    type="album"
-                                    mode="fullButtons"
-                                    id="{album.id}"
-                                    showShuffle={album.songcount > 1}
-                                    data={Object.create({artist: album.artist})}
-                            />
-
-                            <div class="meta">
-                                <div class="entry">
-                                    <span class="value"><a href="#/albums/year/{album.year}" title="{album.year}">{album.year}</a></span>
-                                    <span class="field">{$_('text.year')}</span>
-                                </div>
-
-                                {#if album.diskcount > 1}
-                                    <div class="entry">
-                                        <span class="value">{album.diskcount}</span>
-                                        <span class="field">{album.diskcount !== 1 ? 'Discs' : 'Disc'}</span>
-                                    </div>
-                                {/if}
-
-                                <div class="entry">
-                                    <span class="value">{album.songcount}</span>
-                                    <span class="field">{album.songcount !== 1 ? 'Songs' : 'Song'}</span>
-                                </div>
-
-                                <div class="entry">
-                                    <span class="value">{formatTotalTime(album.time)}</span>
-                                    <span class="field">{$_('text.length')}</span>
-                                </div>
-                            </div>
-
-                            <Genres genres="{album.genre}" />
+                        <div class="third-party-links">
+                            <ThirdPartyServices data={album} type="album" />
                         </div>
                     </div>
                 </div>
-                <div class="songs-container">
-                    <div class="songs page-main">
-                        {#each [...album.ampleSongs] as [key, value]}
-                            {@const subtitle = (album.discsubtitles.length > 0) ? album.discsubtitles.find((disc) => disc.position === key)?.title : null}
-                            <section>
-                                <Lister
-                                    data={value}
-                                    type="song"
-                                    tableOnly={true}
-                                    zone="album-contents"
-                                    showArtist={album.artist.name === "Various Artists"}
-                                    showArt={false}
-                                    discSubtitle={subtitle}
-                                    actionData={{
-                                        disable: [...album.ampleSongs].length < 2,
-                                        type: "album",
-                                        id: album.id,
-                                        mode: "miniButtons",
-                                        showShuffle: value.length > 1,
-                                        data: Object.create({songs: value})
-                                    }}
-                                />
-                            </section>
-                        {/each}
+
+                <div class="info">
+                    <div class="name">
+                        {#if album.type}
+                            <ReleaseType type={album.type} />
+                        {/if}
+                        <h1 class="title">{album.name}</h1>
+                        <div class="artist">
+                            <a href="#/artist/{album.artist.id}">
+                                {album.artist.name}
+                            </a>
+                        </div>
                     </div>
 
-                    <div class="albums-around-time">
-                        <AlbumsAround album={album} />
+                    <div class="meta">
+                        <div class="entry">
+                            <span class="field">{$_("text.year")}</span>
+                            <span class="value">
+                                <a
+                                    href="#/album/year/{album.year}"
+                                    title={album.year}
+                                >
+                                    {album.year}
+                                </a>
+                            </span>
+                        </div>
+
+                        {#if album.diskcount > 1}
+                            <div class="entry">
+                                <span class="field">
+                                    {$_("text.disks", {
+                                        values: { count: album.diskcount },
+                                    })}
+                                </span>
+                                <span class="value">
+                                    {album.diskcount}
+                                </span>
+                            </div>
+                        {/if}
+
+                        <div class="entry">
+                            <span class="field">
+                                {$_("text.songs")}
+                            </span>
+                            <span class="value">
+                                {album.songcount}
+                            </span>
+                        </div>
+
+                        <div class="entry">
+                            <span class="field">
+                                {$_("text.length")}
+                            </span>
+                            <span class="value">
+                                {formatTotalTime(album.time)}
+                            </span>
+                        </div>
+                    </div>
+
+                    <Genres genres={album.genre} />
+
+                    <div class="actions">
+                        <Actions
+                            type="album"
+                            displayMode="fullButtons"
+                            item={album}
+                            showShuffle={album.songcount > 1}
+                            data={Object.create({
+                                artist: album.artist,
+                            })}
+                        />
                     </div>
                 </div>
             </div>
-        {:else}
-            <p>{$_('text.noItemsFound')}</p>
-        {/if}
+            <div class="songs">
+                {#if disks.length > 0}
+                    {#each disks as [disk, tracks]}
+                        <section>
+                            {#if disks.length > 1}
+                                <h3 class="disk-title">Disc {disk}</h3>
+                            {/if}
+
+                            <Lister
+                                id="Album"
+                                data={tracks}
+                                columns={[checkbox, ...albumPreset]}
+                                type="song"
+                                actionData={{
+                                    disable: disks.length < 2,
+                                    type: "album",
+                                    id: album.id,
+                                    displayMode: "fullButtons",
+                                    showShuffle: tracks.length > 1,
+                                    data: Object.create({
+                                        songs: tracks,
+                                    }),
+                                }}
+                                options={{
+                                    showArt: false,
+                                }}
+                            />
+                        </section>
+                    {/each}
+                {/if}
+            </div>
+
+            <div class="albums-around-time">
+                <AlbumsAround {album} />
+            </div>
+        {/key}
     {/if}
-{/key}
+{/if}
 
 <style>
-    .page-wrapper {
-        display: grid;
-        gap: var(--spacing-xxl);
-    }
-
-    .details-container {
-        container-name: album-details-wrapper;
-        container-type: inline-size;
-    }
-
     .details {
         display: grid;
         gap: var(--spacing-xl);
         grid-template-areas:
             "image"
-            "info"
-        ;
+            "info";
+        margin-block-end: var(--spacing-xxl);
     }
 
     .info {
@@ -229,14 +226,12 @@
         border-radius: 6px;
         overflow: hidden;
         font-size: 0;
-        border: 1px solid hsla(0, 0%, 50%, 0.2);
     }
 
-    .art {
-        object-fit: cover;
-        width: 100%;
-        height: 100%;
-        position: relative;
+    .actions {
+        display: flex;
+        flex-direction: column-reverse;
+        gap: var(--spacing-lg);
     }
 
     .name {
@@ -250,9 +245,7 @@
         --roboto-opsz: 50;
         line-height: 1.1;
         margin-block-end: 0;
-        letter-spacing: 0.02em;
         font-weight: 300;
-        font-stretch: 80%;
         text-wrap: balance;
     }
 
@@ -270,30 +263,31 @@
     }
 
     .meta .field {
-        color: var(--color-text-secondary);
+        color: var(--color-on-surface-variant);
         flex-shrink: 0;
     }
 
     .meta .value {
         font-size: 1.2em;
         font-weight: 500;
-        font-stretch: 50%;
     }
 
     section:not(:first-of-type) {
         margin-block-start: var(--spacing-xxxl);
     }
 
-    @container album-details-wrapper (min-width: 530px) {
+    .disk-title {
+        margin-block-end: var(--spacing-md);
+    }
+
+    @container (min-width: 530px) {
         .details {
-            grid-template-areas:
-                "image info"
-            ;
+            grid-template-areas: "image info";
             grid-template-columns: min-content 1fr;
         }
     }
 
-    @container album-details-wrapper (min-width: 800px) {
+    @container (min-width: 800px) {
         .title {
             font-size: 40px;
             font-weight: 200;
@@ -301,29 +295,6 @@
 
         .cover-rating {
             width: 250px;
-        }
-    }
-
-    @container site-content-inner (min-width: 1400px) {
-        .page-wrapper {
-            grid-template-columns: 400px 1fr;
-            grid-template-rows: 1fr;
-            min-height: 0;
-            overflow: hidden;
-            position: absolute;
-            inset-block-start: 0;
-            inset-block-end: 0;
-            inset-inline-start: 0;
-            inset-inline-end: 0;
-            padding: 0;
-            grid-column: full;
-            gap: 0;
-        }
-
-        .details-container,
-        .songs-container {
-            padding: var(--spacing-xxl);
-            overflow: auto;
         }
     }
 </style>

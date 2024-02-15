@@ -1,7 +1,12 @@
 <script>
     import { onMount } from "svelte";
-    import { API } from "../../stores/api";
-    import Lister from '../../components/lister/lister.svelte';
+    import { API } from "~/stores/state.js";
+    import Lister from "~/components/lister/lister.svelte";
+    import {
+        albumsPreset,
+        artistsPreset,
+        songsPreset,
+    } from "~/components/lister/columns.js";
 
     export let id;
     export let type;
@@ -15,7 +20,12 @@
     async function getData() {
         genre = await $API.genre({ filter: id });
 
-        if (id && genre.id) {
+        if (genre.error) {
+            console.error("Ample error getting genre:", genre.error);
+            return;
+        }
+
+        if (genre.id) {
             switch (type) {
                 case "artist":
                     data = await $API.genreArtists({ filter: id, limit: 100 });
@@ -41,44 +51,47 @@
 
 {#key loadedTime}
     {#if genre?.name && data}
-        {#if type === 'artist'}
+        {#if type === "artist"}
             <Lister
-                data={data}
+                id="Artists"
+                {data}
+                columns={artistsPreset}
                 type="artist"
-                initialSort="name"
                 virtualList={true}
                 actionData={{
                     type: "artistGenre",
-                    mode: "fullButtons",
-                    data: Object.create({name: genre.name})
+                    displayMode: "fullButtons",
+                    data: Object.create({ name: genre.name }),
                 }}
             />
         {/if}
 
-        {#if type === 'album'}
+        {#if type === "album"}
             <Lister
-                data={data}
+                id="Albums"
+                {data}
+                columns={albumsPreset}
                 type="album"
-                initialSort="name"
                 virtualList={true}
                 actionData={{
                     type: "albumGenre",
-                    mode: "fullButtons",
-                    data: Object.create({name: genre.name})
+                    displayMode: "fullButtons",
+                    data: Object.create({ name: genre.name }),
                 }}
             />
         {/if}
 
-        {#if type === 'song'}
+        {#if type === "song"}
             <Lister
-                data={data}
+                id="Songs"
+                {data}
+                columns={songsPreset}
                 type="song"
-                initialSort="name"
                 virtualList={true}
                 actionData={{
                     type: "songGenre",
-                    mode: "fullButtons",
-                    data: Object.create({name: genre.name})
+                    displayMode: "fullButtons",
+                    data: Object.create({ name: genre.name }),
                 }}
             />
         {/if}

@@ -1,19 +1,17 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { ShowLyrics } from "../../stores/status";
-    import SVGLyrics from "/src/images/lyrics.svg";
+    import { _ } from "svelte-i18n";
+    import { ShowLyrics } from "~/stores/state.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function toggleLyrics() {
         let inverted = !$ShowLyrics;
-        localStorage.setItem('AmpleShowLyrics', JSON.stringify(inverted));
         ShowLyrics.set(inverted);
     }
 </script>
 
-<button
-    class="icon-button"
+<sl-button
     on:click={toggleLyrics}
-    title="{$ShowLyrics ? $_('text.lyricsHide') : $_('text.lyricsShow')}"
+    title={$ShowLyrics ? $_("text.lyricsHide") : $_("text.lyricsShow")}
 >
-    <SVGLyrics style="transform: scale(0.75);" />
-</button>
+    <MaterialSymbol name="lyrics" />
+</sl-button>

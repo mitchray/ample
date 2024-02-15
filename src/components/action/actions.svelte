@@ -1,63 +1,68 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { setContext } from 'svelte';
-    import { v4 as uuidv4 } from 'uuid';
-    import { API } from "../../stores/api";
+    import { _ } from "svelte-i18n";
+    import { setContext } from "svelte";
+    import { v4 as uuidv4 } from "uuid";
+    import { API, ArtistToFilter } from "~/stores/state.js";
     import { sampleSize } from "lodash-es";
-    import { addAlert } from "../../logic/alert";
+    import { addAlert } from "~/logic/alert.js";
     import {
         getSomeSongsByGenre,
         getSomeSongsFromAlbumsByGenre,
         getSomeSongsFromArtistsByGenre,
         getSongsByYear,
-        getSongsFromAlbum,
         getSongsFromAlbums,
         getSongsFromAlbumsStartingWith,
         getSongsFromArtist,
         getSongsFromArtists,
         getSongsFromArtistsStartingWith,
         getSongsFromPlaylist,
-        getSongsFromPlaylists
-    } from "../../logic/song";
-    import { filterBelow } from "../../logic/helper";
+        getSongsFromPlaylists,
+    } from "~/logic/song.js";
+    import { filterBelow } from "~/logic/helper.js";
+    import { writable } from "svelte/store";
+    import ActionPlay from "./items/actionPlay.svelte";
+    import ActionPlayNext from "./items/actionPlayNext.svelte";
+    import ActionPlayLast from "./items/actionPlayLast.svelte";
+    import ActionShuffle from "./items/actionShuffle.svelte";
+    import ActionShuffleNext from "./items/actionShuffleNext.svelte";
+    import ActionShuffleLast from "./items/actionShuffleLast.svelte";
+    import ActionArtistMix from "./items/actionArtistMix.svelte";
+    import ActionAddToPlaylist from "./items/actionPlaylistAddTo.svelte";
+    import ActionEditPlaylist from "./items/actionPlaylistEdit.svelte";
+    import ActionDeletePlaylist from "./items/actionPlaylistDelete.svelte";
+    import ActionUpdateFromTags from "./items/actionUpdateFromTags.svelte";
+    import ActionUpdateArt from "./items/actionUpdateArt.svelte";
+    import ActionDownload from "./items/actionDownload.svelte";
+    import ActionFindDuplicates from "./items/actionFindDuplicates.svelte";
+    import ActionShare from "./items/actionShare.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    import Menu                 from '../../components/menu.svelte';
-    import ActionPlay           from './action_play.svelte';
-    import ActionPlayNext       from './action_playNext.svelte';
-    import ActionPlayLast       from './action_playLast.svelte';
-    import ActionShuffle        from './action_shuffle.svelte';
-    import ActionShuffleNext    from './action_shuffleNext.svelte';
-    import ActionShuffleLast    from './action_shuffleLast.svelte';
-    import ActionArtistMix      from './action_artistMix.svelte';
-    import ActionAddToPlaylist  from './action_playlistAddTo.svelte';
-    import ActionEditPlaylist   from './action_playlistEdit.svelte';
-    import ActionDeletePlaylist from './action_playlistDelete.svelte';
-    import ActionUpdateFromTags from './action_updateFromTags.svelte';
-    import ActionUpdateArt      from './action_updateArt.svelte';
-    import ActionDownload       from './action_download.svelte';
-
-    import SVGMore from "/src/images/more-hori.svg";
-    import SVGArtist from "/src/images/artist.svg";
-    import SVGAlbum from "/src/images/album.svg";
-
-    export let type;               // artist, album, playlist, song etc
-    export let mode;               // menu, miniButtons or fullButtons
-    export let id          = null; // id of the item passed specified by type
+    export let item = null;
+    export let type; // artist, album, playlist, song etc
+    export let displayMode; // menu, miniButtons or fullButtons; the UI elements to be rendered
     export let showShuffle = false;
-    export let data        = {};   // any extra data needed, passed as an object key e.g. data.playlist
+    export let showLinks = false;
+    export let hidden = false;
+    export let data = {}; // any extra data needed, passed as an object key e.g. data.playlists
 
-    const contextKey = uuidv4(); // unique key for each instance of lister
+    const contextKey = uuidv4(); // unique key for each instance of actions
 
-    let moreMenuVisible    = false;
     let playLimit = 500;
 
+    // underscore prefixed items are accessor aliases of exported params
+    let _item = writable(item);
+    let _type = writable(type);
+    let _displayMode = writable(displayMode);
+    let _showShuffle = writable(showShuffle);
+    let _data = writable(data);
+
     setContext(contextKey, {
-        getType:        () => type,
-        getMode:        () => mode,
-        getID:          () => id,
-        getData:        () => data,
-        getShowShuffle: () => showShuffle,
-        getSongs:       () => doFetch(),
+        _item,
+        _type,
+        _displayMode,
+        _data,
+        _showShuffle,
+        getSongs: () => doFetch(),
     });
 
     /**
@@ -68,61 +73,90 @@
         let fetchURL = null;
 
         switch (type) {
-            case 'artist':
-                fetchURL = getSongsFromArtist(id);
+            case "artist":
+                fetchURL = getSongsFromArtist(item?.id);
                 break;
-            case 'artists':
+            case "artists":
                 fetchURL = getSongsFromArtists(sampleSize(data.artists, 100));
                 break;
-            case 'artistAlpha':
+            case "artistAlpha":
                 fetchURL = getSongsFromArtistsStartingWith(data.char);
                 break;
-            case 'artistGenre':
-            case 'genre':
+            case "artistGenre":
+            case "genre":
                 if (data.name == null) {
-                    let genre = await $API.genre({ filter: id });
-                    data.name = genre.name;
+                    let genre = await $API.genre({ filter: item?.id });
+
+                    if (genre.error) {
+                        console.error(
+                            "Ample error getting genre:",
+                            genre.error,
+                        );
+                    } else {
+                        data.name = genre.name;
+                    }
                 }
                 fetchURL = getSomeSongsFromArtistsByGenre(data.name);
                 break;
-            case 'album':
-                fetchURL = getSongsFromAlbum({id: id});
+            case "album":
+                fetchURL = $API.albumSongs({ filter: item?.id });
                 break;
-            case 'albums':
+            case "albums":
                 fetchURL = getSongsFromAlbums(sampleSize(data.albums, 100));
                 break;
-            case 'albumGenre':
+            case "albumGenre":
                 fetchURL = getSomeSongsFromAlbumsByGenre(data.name);
                 break;
-            case 'albumAlpha':
+            case "albumAlpha":
                 fetchURL = getSongsFromAlbumsStartingWith(data.char);
                 break;
-            case 'song':
-            case 'playlist_songs':
-                fetchURL = $API.song({ filter: id });
+            case "song":
+            case "playlist_songs":
+                fetchURL = $API.song({ filter: item?.id });
                 break;
-            case 'songGenre':
+            case "songGenre":
                 fetchURL = getSomeSongsByGenre(data.name);
                 break;
-            case 'playlist':
-            case 'smartlist':
-                let playlistInfo = await $API.playlist({ filter: id });
-                let playlistLimit = (playlistInfo?.items > playLimit) ? playLimit : 0;
+            case "playlist":
+            case "smartlist":
+                let playlistInfo = await $API.playlist({ filter: item?.id });
+                let playlistLimit =
+                    playlistInfo?.items > playLimit ? playLimit : 0;
 
                 if (playlistLimit > 0) {
-                    addAlert({ title: $_("text.limitedItems", { values: { n: playlistLimit } }), style: "info" });
+                    addAlert({
+                        title: $_("text.limitedItems", {
+                            values: { n: playlistLimit },
+                        }),
+                        style: "info",
+                    });
                 }
 
-                fetchURL = $API.playlistSongs({ filter: id, limit: playlistLimit });
+                fetchURL = $API.playlistSongs({
+                    filter: item?.id,
+                    limit: playlistLimit,
+                });
                 break;
-            case 'playlists':
+            case "playlists":
                 fetchURL = getSongsFromPlaylists(data.playlists);
                 break;
-            case 'year':
+            case "year":
                 fetchURL = getSongsByYear(data.from, data.to);
                 break;
-            case 'artistMix':
-                fetchURL = getSongsFromPlaylist({ id: id, type: "artist_mix" });
+            case "artistMix":
+                fetchURL = getSongsFromPlaylist({
+                    id: item?.id,
+                    type: "artist_mix",
+                });
+                break;
+            case "live_stream":
+                fetchURL = $API.liveStream({ filter: item?.id });
+                break;
+            case "podcast":
+                fetchURL = $API.podcastEpisodes({ filter: item?.id });
+                break;
+            case "podcast_episode":
+                fetchURL = $API.podcastEpisode({ filter: item?.id });
                 break;
             default:
                 break;
@@ -133,213 +167,243 @@
 
     /**
      * Gets the songs based on action type
-     * @returns array
+     * @returns Promise<array>
      */
     async function doFetch() {
         let songSubset = data.songs;
 
         if (songSubset?.length > playLimit) {
-            addAlert({ title: $_("text.limitedItems", { values: { n: playLimit } }), style: "info" });
+            addAlert({
+                title: $_("text.limitedItems", { values: { n: playLimit } }),
+                style: "info",
+            });
             songSubset = sampleSize(data.songs, playLimit);
         }
 
         let result = data.songs ? songSubset : await determineFetchURL();
 
+        if (result.error) {
+            console.error(
+                "Ample error in determining fetch URL:",
+                result.error,
+            );
+            return [];
+        }
+
         // make sure results are an array
-        result = (Array.isArray(result)) ? result : [result];
+        result = Array.isArray(result) ? result : [result];
+
+        // filter out pending podcast episodes...
+        result = result.filter(
+            (item) => !item.state || item.state === "completed",
+        );
 
         // filter out songs below desired rating
-        return filterBelow(result);
-    }
+        result = filterBelow(result);
 
-    function handleMore() {
-        moreMenuVisible = !moreMenuVisible;
+        // filter out songs not by artist if that is set, but allow a single item through with the assumption its the only one we want to play
+        if (result.length > 1 && $ArtistToFilter) {
+            result = result.filter((item) =>
+                item.artists.find((artist) => artist.id === $ArtistToFilter),
+            );
+        }
+
+        // assign object_type and _id
+        for (let i = 0; i < result.length; i++) {
+            let objectType = "song";
+
+            if (result[i].podcast?.id) {
+                objectType = "podcast_episode";
+            }
+
+            if (result[i].site_url) {
+                objectType = "live_stream";
+            }
+
+            result[i].object_type = objectType;
+
+            result[i]._id = uuidv4();
+        }
+
+        return result;
     }
 </script>
 
 <!-- Dynamic context menu -->
-{#if mode === 'menu' || mode === 'subMenu'}
-    <div class="c-actions menu">
-        <div class="overflow-container">
-            {#if mode !== 'subMenu'}
-                <ActionPlay contextKey={contextKey} />
-                <ActionShuffle contextKey={contextKey} />
-                <ActionPlayNext contextKey={contextKey} />
-                <ActionPlayLast contextKey={contextKey} />
-            {/if}
+{#if displayMode === "menu"}
+    <sl-menu>
+        {#if showLinks && item}
+            <sl-menu-item>
+                {$_("text.goTo")}
+                <sl-menu slot="submenu">
+                    {#if type === "live_stream"}
+                        <a href="#/radio-station/{item.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol name="radio" slot="prefix" />
+                                {item.name}
+                            </sl-menu-item>
+                        </a>
+                    {:else if type === "podcast_episode"}
+                        <a href="#/podcast-episode/{item.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol name="podcast" slot="prefix" />
+                                {item.name}
+                            </sl-menu-item>
+                        </a>
+                    {:else if type === "song"}
+                        <a href="#/song/{item.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol
+                                    name="music_note"
+                                    slot="prefix"
+                                />
+                                {item.name}
+                            </sl-menu-item>
+                        </a>
+                    {:else if type === "album"}
+                        <a href="#/album/{item.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol name="album" slot="prefix" />
+                                {item.name}
+                            </sl-menu-item>
+                        </a>
+                    {:else if type === "playlist"}
+                        <a href="#/playlist/{item.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol
+                                    name="queue_music"
+                                    slot="prefix"
+                                />
+                                {item.name}
+                            </sl-menu-item>
+                        </a>
+                    {:else if type === "artistMix"}
+                        <a href="#/mix/artist/{item.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol
+                                    name="queue_music"
+                                    slot="prefix"
+                                />
+                                {item.name}
+                            </sl-menu-item>
+                        </a>
+                    {/if}
 
-            {#if type === 'playlist'}
-                <ActionEditPlaylist contextKey={contextKey} />
-                <ActionDeletePlaylist contextKey={contextKey} />
-                <div class="menu-separator"></div>
-            {/if}
+                    <!-- PARENT ITEMS -->
 
-            <ActionAddToPlaylist contextKey={contextKey} />
-            <ActionArtistMix contextKey={contextKey} />
-            <ActionShuffleNext contextKey={contextKey} />
-            <ActionShuffleLast contextKey={contextKey} />
+                    {#if item.album?.id}
+                        <a href="#/album/{item.album.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol name="album" slot="prefix" />
+                                {item.album.name}
+                            </sl-menu-item>
+                        </a>
+                    {/if}
 
-            {#if data.artist?.id}
-                <a href="#/artists/{data.artist.id}"><SVGArtist class="inline" />{data.artist.name}</a>
-            {/if}
+                    {#if item.podcast?.id}
+                        <a href="#/podcast/{item.podcast.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol
+                                    name="swap_calls"
+                                    slot="prefix"
+                                />
+                                {item.podcast.name}
+                            </sl-menu-item>
+                        </a>
+                    {/if}
 
-            <!-- add album artist if not already in artists -->
-            {#if data.albumArtist?.id && (data.artists?.length > 0 && !data.artists.find(artist => artist.id === data.albumArtist.id))}
-                <a href="#/artists/{data.albumArtist.id}"><SVGArtist class="inline" />{data.albumArtist.name}</a>
-            {/if}
+                    {#if item.artists?.length > 0}
+                        {#each item.artists as artist}
+                            <a href="#/artist/{artist.id}">
+                                <sl-menu-item>
+                                    <MaterialSymbol
+                                        name="person"
+                                        slot="prefix"
+                                    />
+                                    {artist.name}
+                                </sl-menu-item>
+                            </a>
+                        {/each}
+                    {/if}
 
-            {#if data.artists?.length > 0}
-                {#each data.artists as artist}
-                    <a href="#/artists/{artist.id}"><SVGArtist class="inline" />{artist.name}</a>
-                {/each}
-            {/if}
+                    <!-- add album artist if not already in artists -->
+                    {#if item.albumArtist?.id && item.artists?.length > 0 && !item.artists.find((artist) => artist.id === item.albumArtist.id)}
+                        <a href="#/artist/{item.albumArtist.id}">
+                            <sl-menu-item>
+                                <MaterialSymbol name="person" slot="prefix" />
+                                {item.albumArtist.name}
+                            </sl-menu-item>
+                        </a>
+                    {/if}
+                </sl-menu>
+            </sl-menu-item>
+        {/if}
 
-            {#if data.album?.id}
-                <a href="#/albums/{data.album.id}"><SVGAlbum class="inline" />{data.album.name}</a>
-            {/if}
+        {#if type === "playlist"}
+            <ActionEditPlaylist {contextKey} />
+            <ActionDeletePlaylist {contextKey} />
+        {/if}
 
-            {#if (type === "artist" || type === "album" || type === "song")}
-                <ActionUpdateFromTags contextKey={contextKey} />
-            {/if}
+        {#if type === "song"}
+            <ActionArtistMix {contextKey} />
+        {/if}
 
-            {#if (type === "artist" || type === "album")}
-                <ActionUpdateArt contextKey={contextKey} />
-            {/if}
+        {#if type === "song"}
+            <ActionShare {contextKey} />
+        {/if}
 
-            {#if (type === "song")}
-                <ActionDownload contextKey={contextKey} />
-            {/if}
-        </div>
-    </div>
+        <ActionAddToPlaylist {contextKey} />
+        <ActionShuffleNext {contextKey} />
+        <ActionShuffleLast {contextKey} />
+
+        {#if type === "artist" || type === "album" || type === "song"}
+            <ActionUpdateFromTags {contextKey} />
+        {/if}
+
+        {#if type === "artist" || type === "album"}
+            <ActionUpdateArt {contextKey} />
+        {/if}
+
+        {#if type === "song"}
+            <ActionDownload {contextKey} />
+        {/if}
+
+        {#if type === "song"}
+            <ActionFindDuplicates {item} />
+        {/if}
+    </sl-menu>
 {/if}
 
 <!-- Card/lister actions which are always the same -->
-{#if mode === 'miniButtons' || mode === 'fullButtons'}
-    <div class="c-actions {mode}">
-        <ActionPlay contextKey={contextKey} />
-        <ActionShuffle contextKey={contextKey} />
+{#if displayMode === "miniButtons" || displayMode === "fullButtons"}
+    <div class="c-actions {displayMode}">
+        <sl-button-group>
+            {#if !hidden}<ActionPlay {contextKey} />{/if}
+            {#if !hidden}<ActionShuffle {contextKey} />{/if}
+            {#if !hidden}<ActionPlayNext {contextKey} />{/if}
+            {#if !hidden}<ActionPlayLast {contextKey} />{/if}
 
-        <span class="group">
-            <ActionPlayNext contextKey={contextKey} />
-            <ActionPlayLast contextKey={contextKey} />
+            <sl-dropdown hoist>
+                <sl-button
+                    slot="trigger"
+                    size={displayMode === "miniButtons" ? "small" : "medium"}
+                >
+                    <MaterialSymbol name="more_horiz" />
+                </sl-button>
 
-            <div class="action">
-                <button id="js-action-menu_{type}{mode}{id}" type="button" class="icon-button" on:click={handleMore} title="{$_('text.more')}"><SVGMore /> </button>
-            </div>
-        </span>
+                <svelte:self {...$$props} displayMode="menu" />
+            </sl-dropdown>
+        </sl-button-group>
     </div>
 {/if}
 
-{#if moreMenuVisible}
-    <Menu anchor="bottom" toggleSelector={"#js-action-menu_" + type + mode + id} bind:isVisible={moreMenuVisible} >
-        <div class="panel-content">
-            <svelte:self
-                {...$$props}
-                mode="subMenu"
-            />
-        </div>
-    </Menu>
-{/if}
-
-
 <style>
-    .c-actions,
-    .c-actions > .group {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-
-    .c-actions {
-        gap: var(--spacing-sm);
-    }
-
-    .c-actions :global(button),
-    .c-actions :global(a) {
-        display: inline-flex;
-        align-items: center;
-    }
-
-    .c-actions :global(button) {
-        margin: 0;
-    }
-
-    .c-actions :global(button.loading):after {
+    /* Hide the label when miniButtons */
+    .c-actions.miniButtons :global(.label) {
         display: none;
     }
 
-    /*
-     * MENU SPECIFIC
-     */
-    .c-actions.menu {
-        display: block;
-        overflow: hidden;
-        max-width: 180px;
-        width: 100%;
-    }
-
-    .c-actions.menu :global(svg) {
-        height: 0.5em; /* half the height so it doesn't affect line height */
-        transform: scale(200%); /* double it again to restore original size */
-        width: 1em;
-        color: var(--color-highlight);
-        display: inline-block;
-        vertical-align: middle;
-        position: relative;
-        inset-block-start: -2px;
-    }
-
-    /* resets so buttons and links appear identical */
-    .c-actions.menu :global(button),
-    .c-actions.menu :global(a) {
-        display: inline-block;
-        vertical-align: middle;
-        line-height: 0;
-        border: 0;
-        padding: 0.7em 0;
-        width: 100%;
-        color: var(--color-text-primary);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
-
-    .c-actions.menu :global(button) {
-        background-color: unset;
-        border-radius: 0;
-        box-shadow: none;
-    }
-
-    .c-actions.menu :global(button):after,
-    .c-actions.fullButtons :global(.button--primary):after,
-    .c-actions.fullButtons :global(.button--secondary):after {
-        content: attr(title);
-    }
-
-    .c-actions.menu :global(svg),
-    .c-actions.fullButtons :global(.button--primary svg),
-    .c-actions.fullButtons :global(.button--secondary svg) {
-        margin-inline-end: var(--spacing-sm);
-    }
-
-    /*
-     * MINI BUTTONS SPECIFIC
-     */
-    .c-actions.miniButtons :global(button) {
-        padding: 0;
-    }
-
-    /*
-     * FULL BUTTONS SPECIFIC
-     */
-    .c-actions.fullButtons :global(.button--primary),
-    .c-actions.fullButtons :global(.button--secondary) {
-        padding-inline-start: 1em;
-        padding-inline-end: 1em;
-    }
-
-    .group {
-        display: inline-flex;
-        flex-wrap: nowrap;
+    sl-button-group::part(base) {
+        flex-wrap: wrap;
     }
 </style>

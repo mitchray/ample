@@ -1,160 +1,121 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { removeNotification } from "../../logic/notification";
-
-    import Rating from '../../components/rating.svelte';
-
-    import SVGClose from '/src/images/close.svg';
-    import SVGInfo from "/src/images/info.svg";
-    import SVGSuccess from "/src/images/check.svg";
-    import SVGWarning from "/src/images/warning.svg";
-    import SVGError from "/src/images/error.svg";
-    import SVGAlbum from "/src/images/album.svg";
+    import { removeNotification } from "~/logic/notification.js";
+    import Rating from "~/components/rating.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let item;
 </script>
 
 <div class="notification-card card {item.style}">
     <div class="style-icon">
-        {#if item.style === "info"}
-            <SVGInfo />
-        {:else if item.style === "success"}
-            <SVGSuccess />
-        {:else if item.style === "warning"}
-            <SVGWarning />
-        {:else if item.style === "error"}
-            <SVGError />
-        {/if}
+        <sl-tooltip content={item.title}>
+            {#if item.style === "info"}
+                <MaterialSymbol name="info" />
+            {:else if item.style === "success"}
+                <MaterialSymbol name="check" />
+            {:else if item.style === "warning"}
+                <MaterialSymbol name="warning" />
+            {:else if item.style === "error"}
+                <MaterialSymbol name="error" />
+            {/if}
+        </sl-tooltip>
     </div>
 
-    <div class="content">
-        {#if item.title}
-            <div class="title">{item.title}</div>
-        {/if}
-
-        {#if item.message}
-            <div class="message">{item.message}</div>
-        {/if}
-
-        {#if item.data}
-            <div class="message">
-                <div class="title">
-                    {item.data.title}
-                </div>
-                <div class="artist">
-                    <a href="#/artists/{item.data.artist.id}" title="{item.data.artist.name}">{item.data.artist.name}</a>
-                </div>
-                <div class="album">
-                    <a href="#/albums/{item.data.album.id}" title="{item.data.album.name}"><SVGAlbum class="inline"/> {item.data.album.name}</a>
-                </div>
-            </div>
-        {/if}
-
-        {#if item.type === "ratingMissing"}
-            <div class="rating-container">
+    <div class="content truncate">
+        <div class="action-title">
+            {#if item.type === "ratingMissing"}
                 <Rating type="song" data={item.data} />
-            </div>
-        {/if}
+            {:else if item.type === "alternateVersions"}
+                <a
+                    href="#/versions/{item.data.title}/{item.data.artist.name}"
+                    title={item.title}
+                >
+                    {item.title}
+                </a>
+            {:else if item.title}
+                <div>{item.title}</div>
+            {/if}
+        </div>
 
-        {#if item.type === "alternateVersions"}
-            <div class="action-container">
-                <a href="#/versions/{item.data.title}/{item.data.artist.name}" title="{$_('text.viewAll')}">{$_('text.viewAll')}</a>
-            </div>
-        {/if}
-
-        <div class="time">{item.time}</div>
+        <div class="link truncate">
+            <a href="#/song/{item.data.id}" title={item.data.name}>
+                {item.data.name}
+            </a>
+        </div>
     </div>
 
     <div class="actions">
-        <button class="icon-button remove" on:click={e => { removeNotification(item.id) }}><SVGClose /></button>
+        <sl-button
+            class="remove"
+            variant="text"
+            on:click={() => {
+                removeNotification(item.id);
+            }}
+        >
+            <MaterialSymbol name="close" />
+        </sl-button>
     </div>
 </div>
 
 <style>
     .notification-card {
-        background-color: var(--color-interface);
-        padding: var(--spacing-md);
         border-radius: 4px;
-        border-inline-start: 4px solid var(--color-regular-background);
+        /*border-inline-start: 4px solid red;*/
         display: flex;
         flex-direction: row;
-        pointer-events: initial;
-    }
-
-    .notification-card + :global(.notification-card) {
-        margin-block-start: var(--spacing-md);
+        align-items: center;
+        gap: var(--spacing-md);
+        font-size: 0.9em;
+        line-height: 1.3;
+        padding: var(--spacing-md);
+        padding-inline-end: 0;
     }
 
     .notification-card.success {
-        border-color: var(--color-primary-background);
+        border-color: var(--swatch-green-500);
     }
 
     .notification-card.info {
-        border-color: var(--color-secondary-background);
+        border-color: var(--swatch-blue-500);
     }
 
     .notification-card.warning {
-        border-color: var(--color-warning-background);
+        border-color: var(--swatch-yellow-500);
     }
 
     .notification-card.error {
-        border-color: var(--color-danger-background);
+        border-color: var(--swatch-red-500);
     }
 
     .style-icon {
-        width: 32px;
+        font-size: 20px;
     }
 
     .success .style-icon {
-        color: var(--color-primary-foreground);
+        color: var(--swatch-green-500);
     }
 
     .info .style-icon {
-        color: var(--color-secondary-foreground);
+        color: var(--swatch-blue-500);
     }
 
     .warning .style-icon {
-        color: var(--color-warning-foreground);
+        color: var(--swatch-yellow-500);
     }
 
     .error .style-icon {
-        color: var(--color-danger-foreground);
-    }
-
-    .message {
-        margin: var(--spacing-md) 0;
-    }
-
-    .message .title,
-    .message .artist,
-    .message .album {
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-    }
-
-    .time {
-        opacity: 0.6;
-        margin-block-start: var(--spacing-sm);
-        text-transform: uppercase;
-    }
-
-    .action-container,
-    .rating-container {
-        display: flex;
-        margin: var(--spacing-md) 0;
-        align-items: center;
+        color: var(--swatch-red-500);
     }
 
     .content {
         flex: 1;
-        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        gap: 1px;
     }
 
-    .actions {
-        margin-inline-start: var(--spacing-md);
-        position: relative;
-        inset-block-start: calc(-1 * var(--spacing-sm));
-        inset-inline-end: calc(-1 * var(--spacing-sm));
+    .action-title {
+        display: flex;
+        gap: var(--spacing-sm);
     }
 </style>

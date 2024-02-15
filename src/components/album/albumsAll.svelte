@@ -1,37 +1,38 @@
 <script>
-    import { getAlbumsStartingWithChar } from "../../logic/album";
-    import { FilterHistory } from "../../stores/status";
-    import AlphanumericFilter from '../../components/alphanumericFilter.svelte';
-    import Lister from '../../components/lister/lister.svelte';
+    import { User } from "~/stores/state";
+    import { Saved } from "~/stores/settings.js";
+    import Lister from "~/components/lister/lister.svelte";
+    import { albumsPreset } from "~/components/lister/columns.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { _ } from "svelte-i18n";
 
-    export let type = "album";
+    $: query = createQuery({
+        queryKey: ["allAlbums"],
+        queryFn: async () => {
+            return $Saved.getItem("allAlbums");
+        },
+        enabled: $User.isLoggedIn,
+    });
 
-    let filterValue = $FilterHistory[type] || ""; // bound from AlphanumericFilter
-    let dataDisplay = [];
-    let loadedTime = 0;
-
-    $: dataDisplay = dataDisplay;
-
-    $: filterValue, getData();
-
-    async function getData() {
-        dataDisplay = await getAlbumsStartingWithChar({limit: 0, filterChar: filterValue});
-        console.debug(dataDisplay)
-        loadedTime = new Date();
-    }
+    // alias of returned data
+    $: albums = $query.data || [];
 </script>
 
-<AlphanumericFilter bind:filterValue type={type} />
-
-{#key loadedTime}
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
     <Lister
-        bind:data={dataDisplay}
+        id="Artists"
+        data={albums}
+        columns={albumsPreset}
         type="album"
         virtualList={true}
         actionData={{
             type: "albums",
-            mode: "fullButtons",
-            data: Object.create({albums: dataDisplay})
+            displayMode: "fullButtons",
+            data: Object.create({ albums: albums }),
         }}
     />
-{/key}
+{/if}

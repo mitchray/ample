@@ -1,59 +1,76 @@
-import { get } from 'svelte/store';
-import { APIVersion, serverURL } from '../stores/server';
-import { userName, isLoggedIn, userToken } from '../stores/user';
-import { MediaPlayer } from "../stores/player";
-import { API } from "../stores/api";
-import AmpacheAPI from 'javascript-ampache';
+import { get } from "svelte/store";
+import AmpacheAPI from "javascript-ampache";
+import localforage from "localforage";
+import { MediaPlayer } from "~/stores/elements.js";
+import {
+    API,
+    User,
+    APIVersion,
+    Server,
+    debugMode,
+    SystemPreferences,
+    UserPreferences,
+} from "~/stores/state.js";
+import { Saved, loadSettings } from "~/stores/settings.js";
+import { locale } from "svelte-i18n";
 
-export const login = async ({ auth, username = null }) => {
-    userToken.set(auth);
-
+export async function login({ auth }) {
     get(API).setSessionKey(auth);
 
-    let userInfo = {
-        userName: null,
-        userToken: auth
-    }
+    let currentUser = await get(API).user();
 
-    if (username) {
-        userName.set(username);
-        userInfo.userName = username;
-    }
+    Saved.set(
+        localforage.createInstance({
+            name: `AmpleUser${currentUser.id}`,
+        }),
+    );
 
-    localStorage.setItem('AmpleAuth', JSON.stringify(userInfo));
-    isLoggedIn.set(true);
+    User.set({
+        ...get(User),
+        ...currentUser,
+        token: auth,
+        isLoggedIn: true,
+    });
+
+    await localforage.setItem("AmpleLastSession", {
+        token: auth,
+        time: Date.now(),
+        rememberMe: false,
+    });
+
+    await loadSettings();
 }
 
-export const logout = () => {
-    localStorage.setItem('AmpleAuth', null);
-    localStorage.setItem('AmpleAPIKey', null);
-    userName.set(null);
-    isLoggedIn.set(false);
+export async function logout() {
+    await localforage.removeItem("AmpleLastSession");
+
+    User.set({ ...get(User), isLoggedIn: false });
 
     // stop playing
-    let mp = get(MediaPlayer);
+    get(MediaPlayer)?.clearAll();
 
-    if (mp) {
-        mp.clearAll();
-        mp.next();
-    }
+    // TODO stop the web worker
 }
 
-export const validateSession = async () => {
-    let cachedSession = JSON.parse(localStorage.getItem('AmpleAuth'));
+export async function validateSession() {
+    let newCachedSession = await localforage.getItem("AmpleLastSession");
 
-    if (!get(serverURL)) {
+    if (!get(Server).url) {
         logout();
         return;
     }
 
     try {
-        API.set(new AmpacheAPI({ url: get(serverURL), debug: false }));
+        API.set(
+            new AmpacheAPI({ url: get(Server).url, debug: get(debugMode) }),
+        );
 
-        let result = await get(API).ping({ auth: cachedSession?.userToken });
+        let result = await get(API).ping({ auth: newCachedSession?.token });
 
         if (result.auth) {
-            await login({ auth: result.auth, username: cachedSession.username });
+            await login({
+                auth: result.auth,
+            });
         } else {
             logout();
         }
@@ -62,23 +79,34 @@ export const validateSession = async () => {
     }
 }
 
-export const loginNew = async ({passphrase = null, username = null }) => {
+export async function loginNew({ passphrase = null, username = null }) {
     let result;
 
     // if username, attempt login with username/password
     if (username) {
         let time = Math.floor(new Date().getTime() / 1000);
-        let encryptedPassword = get(API).encryptPassword({ password: passphrase, time: time });
+        let encryptedPassword = get(API).encryptPassword({
+            password: passphrase,
+            time: time,
+        });
 
-        result = await get(API).handshake({ auth: encryptedPassword, user: username, timestamp: time, version: get(APIVersion) });
+        result = await get(API).handshake({
+            auth: encryptedPassword,
+            user: username,
+            timestamp: time,
+            version: get(APIVersion),
+        });
     } else {
-        result = await get(API).handshake({ auth: passphrase, version: get(APIVersion) });
+        result = await get(API).handshake({
+            auth: passphrase,
+            version: get(APIVersion),
+        });
     }
 
     if (result.auth) {
-        await login({ auth: result.auth, username: username })
+        await login({ auth: result.auth, username: username });
     } else {
-        logout();
+        await logout();
     }
 
     return result;
@@ -88,5 +116,5 @@ export const loginNew = async ({passphrase = null, username = null }) => {
  * Extend an existing session by pinging the server with auth
  */
 export let extendSession = () => {
-    get(API).ping({ auth: get(userToken) });
-}
+    get(API).ping({ auth: get(User).token });
+};

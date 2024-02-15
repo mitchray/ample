@@ -9,7 +9,11 @@ export function clickOutsideDetector(node, options) {
         }
 
         // ignore clicks on the toggle
-        if (toggleElement && toggleElement.contains && toggleElement.contains(e.target)) {
+        if (
+            toggleElement &&
+            toggleElement.contains &&
+            toggleElement.contains(e.target)
+        ) {
             return;
         }
 
@@ -18,14 +22,14 @@ export function clickOutsideDetector(node, options) {
             return;
         }
 
-        node.dispatchEvent(new CustomEvent('clickedOutside'));
+        node.dispatchEvent(new CustomEvent("clickedOutside"));
     }
 
-    window.addEventListener('mousedown', handleEvent);
+    window.addEventListener("mousedown", handleEvent);
 
     return {
         destroy() {
-            window.removeEventListener('mousedown', handleEvent);
-        }
+            window.removeEventListener("mousedown", handleEvent);
+        },
     };
 }

@@ -1,15 +1,15 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import CustomSearch from '../components/customSearch.svelte';
-    import CustomSearchResults from '../components/customSearchResults.svelte';
-    import { PageTitle } from "../stores/status";
+    import { _ } from "svelte-i18n";
+    import CustomSearch from "~/components/customSearch.svelte";
+    import CustomSearchResults from "~/components/customSearchResults.svelte";
+    import { PageTitle } from "~/stores/state.js";
 
     let loadedTime;
     let loading;
     let results = [];
     let type;
 
-    let title = $_('text.advancedSearch');
+    let title = $_("text.advancedSearch");
     $PageTitle = title;
 </script>
 
@@ -17,8 +17,15 @@
     <title>{title}</title>
 </svelte:head>
 
-<CustomSearch bind:results bind:loadedTime bind:loading bind:selectedObjectType={type} />
-
-<div class="page-main">
-    <CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
 </div>
+
+<CustomSearch
+    bind:results
+    bind:loadedTime
+    bind:loading
+    bind:selectedObjectType={type}
+/>
+
+<CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />

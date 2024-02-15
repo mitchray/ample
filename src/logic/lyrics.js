@@ -1,18 +1,18 @@
 import { writable } from "svelte/store";
 import { lyricsAreTimestamped } from "./helper";
 
-import { CurrentMedia } from "../stores/status";
+import { CurrentMedia } from "~/stores/state";
 
 class Lyrics {
     constructor() {
-        this.currentLine     = 0;
-        this.lyricsRaw       = "";
+        this.currentLine = 0;
+        this.lyricsRaw = "";
         this.lyricsProcessed = "";
-        this.lyricsByLine    = [];
-        this.lyricsFinal     = [];
+        this.lyricsByLine = [];
+        this.lyricsFinal = [];
         this.isTimestamped = false;
 
-        CurrentMedia.subscribe(value => {
+        CurrentMedia.subscribe((value) => {
             this.currentMedia = value;
 
             this.setLyrics();
@@ -38,28 +38,37 @@ class Lyrics {
     }
 
     parseLyrics() {
-        let tagRegex       = /\[([a-z]+):(.*)].*/;
-        let lrcAllRegex    = /(\[[0-9.:\[\]]*])+(.*)/;
-        let timeRegex      = /(?:\[(?:[0-9]+):(?:[0-9.]+)])/;
-        let textRegex      = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
+        let tagRegex = /\[([a-z]+):(.*)].*/;
+        let lrcAllRegex = /(\[[0-9.:\[\]]*])+(.*)/;
+        let timeRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])/;
+        let textRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
 
         this.isTimestamped = lyricsAreTimestamped(this.lyricsRaw);
 
         // always need to format the line breaks properly
-        this.lyricsProcessed = this.lyricsRaw.replace(/(<br\s*\/?>\s*)+/gim, "<br>\r\n");
+        this.lyricsProcessed = this.lyricsRaw.replace(
+            /(<br\s*\/?>\s*)+/gim,
+            "<br>\r\n",
+        );
 
         // strip any blank lines, including 'empty' timestamps
-        this.lyricsProcessed = this.lyricsProcessed.replace(/^\[.*\]\s*<br\s?\/?\>\s*$/gim, "");
+        this.lyricsProcessed = this.lyricsProcessed.replace(
+            /^\[.*\]\s*<br\s?\/?\>\s*$/gim,
+            "",
+        );
 
         this.lyricsByLine = this.lyricsProcessed.split(/\r\n/);
 
         for (let i = this.lyricsByLine.length - 1; i >= 0; i--) {
             let thisLine = {
-                current: false
-            }
+                current: false,
+            };
 
             // remove non-timestamped lines
-            if (this.isTimestamped && !this.lyricsByLine[i].match(lrcAllRegex)) {
+            if (
+                this.isTimestamped &&
+                !this.lyricsByLine[i].match(lrcAllRegex)
+            ) {
                 this.lyricsByLine.splice(i, 1);
                 continue;
             }
@@ -69,8 +78,12 @@ class Lyrics {
 
             // get time
             if (timeRegex.test(this.lyricsByLine[i])) {
-                thisLine.timestamp = this.lyricsByLine[i].match(timeRegex)[0].replace(/[\[\]]/g, "");
-                thisLine.startSeconds = this.timestampToSeconds(thisLine.timestamp);
+                thisLine.timestamp = this.lyricsByLine[i]
+                    .match(timeRegex)[0]
+                    .replace(/[\[\]]/g, "");
+                thisLine.startSeconds = this.timestampToSeconds(
+                    thisLine.timestamp,
+                );
             }
 
             // finally, push to the final lyrics object
@@ -90,11 +103,11 @@ class Lyrics {
 
     secondsToTimestamp(seconds) {
         let milliseconds = seconds * 1000;
-        let timestamp = new Date(Date.UTC(0,0,0,0,0,0,milliseconds));
+        let timestamp = new Date(Date.UTC(0, 0, 0, 0, 0, 0, milliseconds));
         let parts = {
-            m: timestamp.getUTCMinutes().toString().padStart(2, '0'),
-            s: timestamp.getUTCSeconds().toString().padStart(2, '0'),
-            ms: timestamp.getUTCMilliseconds().toString().padStart(3, '0'),
+            m: timestamp.getUTCMinutes().toString().padStart(2, "0"),
+            s: timestamp.getUTCSeconds().toString().padStart(2, "0"),
+            ms: timestamp.getUTCMilliseconds().toString().padStart(3, "0"),
         };
 
         return `[${parts.m}:${parts.s}.${parts.ms}]`;
@@ -105,7 +118,10 @@ class Lyrics {
             for (let i = 0; i < this.lyricsFinal.length; i++) {
                 if (time >= this.lyricsFinal[i].startSeconds) {
                     // if last item, or less than next item
-                    if (i + 1 === this.lyricsFinal.length || time < this.lyricsFinal[i + 1].startSeconds) {
+                    if (
+                        i + 1 === this.lyricsFinal.length ||
+                        time < this.lyricsFinal[i + 1].startSeconds
+                    ) {
                         this.currentLine = i;
                         this._store.set(this);
                         return;

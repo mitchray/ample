@@ -1,8 +1,7 @@
 import { tick } from "svelte";
-import { get } from 'svelte/store';
-import WaveSurfer from 'wavesurfer.js';
-import { v4 as uuidv4 } from "uuid";
-import { getSongVersions } from "./song";
+import { get } from "svelte/store";
+import WaveSurfer from "wavesurfer.js";
+import { getSongVersions } from "~/logic/song";
 import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,
@@ -10,20 +9,23 @@ import {
     addLyricsMissingNotification,
     addLyricsNotTimestampedNotification,
 } from "./notification";
-import { debugHelper, shuffleArray, sleep, lyricsAreTimestamped } from './helper';
+import { debugHelper, shuffleArray, lyricsAreTimestamped } from "./helper";
 import {
-    NowPlayingQueue,
-    NowPlayingIndex,
-    QueueIsUpdating,
-    IsPlaying,
-    IsMuted,
-    CurrentMedia,
+    Saved,
     PlayerVolume,
     RepeatEnabled,
     VolumeNormalizationEnabled,
     DynamicsCompressorEnabled,
-    IsMobile
-} from '../stores/status';
+} from "~/stores/settings";
+import {
+    IsPlaying,
+    IsMobile,
+    CurrentMedia,
+    NowPlayingQueue,
+    NowPlayingIndex,
+    PlaybackSpeed,
+    QueueIsUpdating,
+} from "~/stores/state.js";
 
 /**
  * Interface with wavesurfer.js
@@ -33,9 +35,12 @@ class Player {
      * Initialize data
      */
     constructor() {
-        this.wavesurfer = null;
-        this.id = null;
-        this.stopQueued = false;
+        // wavesurfer doesn't support streaming directly, but it can use an <Audio> element which does
+        this.audioElement = new Audio();
+        this.audioElement.crossOrigin = "anonymous";
+        this.audioElement.preload = "auto";
+        this.audioContext = new AudioContext();
+        this.mediaNode = null;
 
         // volume normalization
         this.targetVolume = parseInt(-14);
@@ -45,345 +50,192 @@ class Player {
         this.gainTagValue = null;
 
         // filter nodes
-        this.activeFilters = [];
-        this.filterFade = null;
+        this.filters = [];
         this.filterGain = null;
         this.filterCompressor = null;
         this.filterBiquad = null; //(for testing only)
 
-        // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
-        PlayerVolume.subscribe(value => {
-            this.globalVolume = this.logVolume(value);
+        // initial AbortController
+        this.abortController = new AbortController();
 
-            if (this.wavesurfer) {
-                this.wavesurfer.setVolume(this.globalVolume);
-            }
-
-            localStorage.setItem('AmplePlayerVolume', JSON.stringify(value));
+        this.wavesurfer = new WaveSurfer({
+            autoplay: true,
+            backend: "MediaElement",
+            barAlign: "bottom",
+            barGap: 1,
+            barWidth: 2,
+            container: "#waveform",
+            cursorWidth: 0,
+            fillParent: true,
+            height: "auto",
+            hideScrollbar: true,
+            media: this.audioElement,
+            normalize: true,
         });
 
-        NowPlayingQueue.subscribe(value => {
+        // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
+        PlayerVolume.subscribe((value) => {
+            this.globalVolume = this.#logVolume(value);
+            this.wavesurfer.setVolume(this.globalVolume);
+        });
+
+        NowPlayingQueue.subscribe((value) => {
             this.nowPlayingQueue = value;
         });
 
         // Set current wavesurfer volume to max if mobile
-        IsMobile.subscribe(value => {
-            this.globalVolume = (value) ? 1.0 : this.logVolume(get(PlayerVolume));
-
-            if (this.wavesurfer) {
-                this.wavesurfer.setVolume(this.globalVolume);
-            }
+        IsMobile.subscribe((value) => {
+            this.globalVolume = value
+                ? 1.0
+                : this.#logVolume(get(PlayerVolume));
+            this.wavesurfer.setVolume(this.globalVolume);
         });
 
-        NowPlayingIndex.subscribe(value => {
+        NowPlayingIndex.subscribe((value) => {
             this.nowPlayingIndex = value;
         });
 
-        IsPlaying.subscribe(value => {
+        PlaybackSpeed.subscribe((value) => {
+            this.setPlaybackRate(value);
+        });
+
+        IsPlaying.subscribe((value) => {
             this.isPlaying = value;
         });
 
-        IsMuted.subscribe(value => {
-            this.isMuted = value;
-        });
-
-        VolumeNormalizationEnabled.subscribe(value => {
+        VolumeNormalizationEnabled.subscribe((value) => {
             this.volumeNormalizationEnabled = value;
         });
 
-        DynamicsCompressorEnabled.subscribe(value => {
+        DynamicsCompressorEnabled.subscribe((value) => {
             this.dynamicsCompressorEnabled = value;
         });
 
-        CurrentMedia.subscribe(value => {
+        CurrentMedia.subscribe((value) => {
             this.currentMedia = value;
         });
 
-        RepeatEnabled.subscribe(value => {
+        RepeatEnabled.subscribe((value) => {
             this.repeatEnabled = value;
         });
+
+        this.#init();
     }
 
-    async setWaveColors() {
-        if (this.wavesurfer) {
-            await tick();
-            this.wavesurfer.setProgressColor(getComputedStyle(document.body).getPropertyValue('--color-waveform-progress'));
-            this.wavesurfer.setWaveColor(getComputedStyle(document.body).getPropertyValue('--color-waveform-wave'));
-        }
-    }
-
-    initFilters() {
-        if (this.wavesurfer) {
-            this.filterFade = this.wavesurfer.backend.ac.createGain();
-            this.filterGain = this.wavesurfer.backend.ac.createGain();
-
-            this.filterCompressor = this.wavesurfer.backend.ac.createDynamicsCompressor();
-            this.filterCompressor.threshold.value = -50;
-            this.filterCompressor.knee.value = 30.0;
-            this.filterCompressor.ratio.value = 5.0;
-            this.filterCompressor.attack.value = 0.020; // 20ms
-            this.filterCompressor.release.value = 0.050; // 50ms
-
-            this.filterBiquad = this.wavesurfer.backend.ac.createBiquadFilter();
-        }
-    }
-
-    async updateFilters() {
-        if (this.wavesurfer) {
-            await tick();
-            this.activeFilters = [];
-
-            // 1. gain
-            if (this.volumeNormalizationEnabled && this.gainType !== "None") {
-                this.activeFilters.push(this.filterGain);
-            }
-
-            // 2. dynamics compressor
-            if (this.dynamicsCompressorEnabled) {
-                this.activeFilters.push(this.filterCompressor);
-            }
-
-            // 3. fade
-            this.activeFilters.push(this.filterFade);
-
-            // last. biquad (for testing only)
-            // this.activeFilters.push(this.filterBiquad);
-
-            debugHelper(this.activeFilters, 'Active filters');
-
-            // finally, apply any filters
-            this.wavesurfer.backend.setFilters(this.activeFilters);
-
-            // redraw waveform regardless
-            this.wavesurfer.drawBuffer();
-        }
-    }
-
-    logVolume(val) {
-        return Math.pow(val / 100, 2);
-    }
+    /*
+     PUBLIC METHODS
+     */
 
     /**
-     * Clear the queue
+     * Begin playing
      */
-    clearQueue() {
-        // clear all tracks EXCEPT currently playing, unless it is the only item in queue
-        if (this.nowPlayingQueue.length > 1) {
-            this.clearAllExceptCurrent();
-        } else {
-            this.clearAll();
-        }
-    }
+    start() {
+        // Abort the previous loading request
+        this.abortController.abort();
 
-    /**
-     * Clear all items in queue
-     */
-    clearAll() {
-        this.stopQueued = true;
-        this.stop();
-        CurrentMedia.set(null);
-        this.setQueueItems([]).then(() => {
-            NowPlayingIndex.set(0);
-            IsPlaying.set(false);
-        })
-    }
+        // Create a new AbortController for the current request
+        this.abortController = new AbortController();
+        const abortSignal = this.abortController.signal;
 
-    /**
-     * Clear all tracks EXCEPT currently playing
-     */
-    clearAllExceptCurrent() {
-        let current = [this.nowPlayingQueue[this.nowPlayingIndex]];
-        this.setQueueItems(current).then(() => {
-            NowPlayingIndex.set(0);
-        });
-    }
-
-    /**
-     * Restart the queue
-     */
-    restartQueue() {
-        if (this.repeatEnabled) {
-            debugHelper('queue restarted');
-            NowPlayingIndex.set(0);
-            this.start(this.nowPlayingQueue[0]);
-        } else {
-            this.stop();
-        }
-    }
-
-    /**
-     * Create wavesurfer and begin playing
-     */
-    async start(song) {
         let self = this;
 
-        debugHelper('start!');
+        debugHelper("start!");
 
-        // Load from queue if no song is directly passed
-        if (!song) {
-            song = this.nowPlayingQueue[this.nowPlayingIndex];
-        }
+        let item = this.#getCurrentQueueItem();
 
-        if (song) {
-            CurrentMedia.set(song);
-
-            // notify if missing gain tags
-            if (song.r128_track_gain === null && song.replaygain_track_gain === null) {
-                addGainTagsMissingNotification(song);
-            }
-
-            if (!song.lyrics) {
-                addLyricsMissingNotification(song);
-            }
-
-            if (song.lyrics && !lyricsAreTimestamped(song.lyrics)) {
-                addLyricsNotTimestampedNotification(song);
-            }
+        if (item) {
+            CurrentMedia.set(item);
         } else {
-            debugHelper('No song IDs could be found');
-            this.clearAll();
-            return false;
+            debugHelper("No items could be found");
+            this.#restartQueue();
+            return;
         }
 
         try {
-            this.wavesurfer = WaveSurfer.create({
-                backend: 'MediaElementWebAudio',
-                container: '#waveform',
-                height: document.querySelector(".site-player__waveform").offsetHeight,
-                barMinHeight: 1,
-                cursorWidth: 0,
-                normalize: true,
-                responsive: true,
-                hideScrollbar: true,
-            });
+            // Load new item into media session
+            if ("mediaSession" in navigator) {
+                let details = {};
 
-            if ('mediaSession' in navigator) {
-                navigator.mediaSession.metadata = new MediaMetadata({
-                    title: song.title || '',
-                    artist: (song.artist) ? song.artist.name : '',
-                    album: (song.album) ? song.album.name : '',
-                    artwork: [
-                        { src: `${song.art}&thumb=22` },
-                    ]
-                });
-
-                navigator.mediaSession.setActionHandler('play', function () {
-                    self.playPause();
-                });
-                navigator.mediaSession.setActionHandler('pause', function () {
-                    self.playPause();
-                });
-                navigator.mediaSession.setActionHandler('stop', function () {
-                    self.stop();
-                });
-                navigator.mediaSession.setActionHandler('nexttrack', function () {
-                    self.next();
-                });
-                navigator.mediaSession.setActionHandler('previoustrack', function () {
-                    self.previous();
-                });
-            }
-
-            this.initFilters();
-            this.filterGain.gain.value = this.calculateGain();
-            this.wavesurfer.setVolume(this.globalVolume);
-
-            // create custom audio object in order to set crossOrigin
-            let ourMedia = new Audio(this.currentMedia.url);
-            ourMedia.crossOrigin = 'anonymous';
-            this.wavesurfer.load(ourMedia);
-
-            await this.updateFilters();
-
-            let playPromise = this.wavesurfer.play();
-
-            if (playPromise !== undefined) {
-                playPromise.then(_ => {
-                })
-                .catch(error => {
-                    console.warn('Failed to start playing', error);
-                });
-            }
-
-            this.wavesurfer.on('play', function () {
-                debugHelper('Wavesurfer playing');
-                IsPlaying.set(true);
-                self.recordLastPlayed();
-            });
-
-            this.wavesurfer.on('pause', function () {
-                debugHelper('Wavesurfer paused');
-                IsPlaying.set(false);
-            });
-
-            this.wavesurfer.on('finish', function () {
-                debugHelper('Wavesurfer finished');
-                self.next();
-            });
-
-            this.wavesurfer.on('ready', function () {
-                debugHelper('Wavesurfer ready');
-
-                self.setWaveColors();
-
-                if (self.stopQueued) {
-                    self.stop();
+                if (item.object_type === "song") {
+                    details.artist = item.artist?.name;
+                    details.album = item.album?.name;
                 }
-            });
 
-            this.wavesurfer.on('volume', function (e) {
-                debugHelper('Wavesurfer volume updated');
-                self.globalVolume = e;
-            });
+                if (item.object_type === "podcast_episode") {
+                    details.artist = item.podcast?.name;
+                }
 
-            this.wavesurfer.on('error', function (e) {
-                debugHelper('Wavesurfer play error', e);
-
-                IsPlaying.set(false);
-
-                self.next();
-            });
-
-            // Search for song versions if artist is present (i.e. songs)
-            if (song.artist) {
-                getSongVersions(song.title, song.artist.name)
-                    .then((result) => {
-                        if (!result.error && result.length > 1) {
-                            song.versionsCount = result.length - 1;
-                            addAlternateVersionsNotification(song);
-                        }
-                    });
+                navigator.mediaSession.metadata = new MediaMetadata({
+                    title: item.name,
+                    artwork: [{ src: `${item.art}&thumb=22` }],
+                    ...details,
+                });
             }
+
+            // pass media url to audio element
+            this.audioElement.src = this.currentMedia.url;
+
+            // special handling for live_stream which has to go through <audio> element
+            if (item.object_type === "live_stream") {
+                // pass media url to audio element
+                this.audioElement.src = this.currentMedia.url;
+
+                // pass audio element to wavesurfer
+                this.wavesurfer.setMediaElement(this.audioElement);
+            } else {
+                this.wavesurfer.load(item.url);
+            }
+
+            // set gain of this item
+            this.filterGain.gain.value = this.#calculateGain();
+            this.updateFilters();
+
+            let wrappedPromise = new Promise((resolve, reject) => {
+                abortSignal.addEventListener("abort", () => {
+                    let customError = new Error("Promise aborted");
+                    customError.name = "AbortError";
+                    reject(customError);
+                });
+
+                this.wavesurfer
+                    .play()
+                    .then((result) => {
+                        resolve(result);
+                    })
+                    .catch((error) => {
+                        reject(error);
+                    });
+            });
+
+            // attempt to play the media
+            wrappedPromise
+                .then(async () => {
+                    // (re)set the playback speed
+                    this.setPlaybackRate(get(PlaybackSpeed));
+
+                    // remove any possible error indications
+                    this.#getCurrentQueueItem().errored = undefined;
+                    await self.#setQueueItems(this.nowPlayingQueue);
+
+                    this.#runChecks(item);
+                })
+                .catch(async (error) => {
+                    // AbortError is ok, it means we cancelled loading a previously pending item
+                    if (error.name !== "AbortError") {
+                        debugHelper(error, "Failed to start playing");
+
+                        IsPlaying.set(false);
+
+                        // mark there being an error
+                        this.#getCurrentQueueItem().errored = true;
+                        await self.#setQueueItems(this.nowPlayingQueue);
+
+                        self.next();
+                    }
+                });
         } catch (e) {
-            console.warn('Something went wrong during start', e);
+            console.warn("Something went wrong during start", e);
             self.next();
-        }
-    }
-
-    async setQueueItems(arr) {
-        QueueIsUpdating.set(true);
-        await tick();
-
-        // each media item needs a unique _id
-        arr = arr.map((item, index) => ({ ...item, _id: uuidv4()}));
-
-        NowPlayingQueue.set(arr);
-        QueueIsUpdating.set(false);
-    }
-
-    recordLastPlayed() {
-        let self = this;
-
-        if (this.wavesurfer && this.wavesurfer.getCurrentTime() > 3) {
-            // add/update lastPlayed property
-            this.nowPlayingQueue[this.nowPlayingIndex].lastPlayed = Date.now();
-
-            // update the store with our modified object
-            this.setQueueItems(this.nowPlayingQueue);
-        } else {
-            window.setTimeout(function() {
-                self.recordLastPlayed();
-            }, 500);
         }
     }
 
@@ -391,95 +243,76 @@ class Player {
      * Stop playback and destroy wavesurfer
      */
     stop() {
-        if (this.wavesurfer) {
-            IsPlaying.set(false);
-            this.wavesurfer.cancelAjax();
-            delete this.wavesurfer.backend.buffer;
-            this.wavesurfer.destroy();
-            this.wavesurfer = null;
-        }
-
-        this.stopQueued = false;
+        this.wavesurfer.pause();
+        IsPlaying.set(false);
+        this.wavesurfer.empty();
     }
 
     /**
      * Play/pause
      */
-    async playPause() {
-        debugHelper('play/pause!');
+    playPause() {
+        debugHelper("play/pause!");
 
-        if (this.wavesurfer) {
-            if (this.wavesurfer.isPlaying()) {
-                await this.fadeOut();
-                this.wavesurfer.pause();
-            } else {
-                this.wavesurfer.play();
-                await this.fadeIn();
-            }
+        // no media is actually loaded yet...
+        if (this.nowPlayingQueue.length > 0 && !this.currentMedia) {
+            this.start();
+            return;
+        }
+
+        if (this.wavesurfer.isPlaying()) {
+            this.wavesurfer.pause();
         } else {
-            await this.start();
+            this.wavesurfer.play();
         }
     }
 
     /**
-     * Play previous song
+     * Play previous item
      */
-    async previous(event) {
-        debugHelper('previous!');
+    previous() {
+        debugHelper("previous!");
 
-        if (this.nowPlayingIndex > -1) {
-
-            // If playback has passed a certain point, restart song instead
-            if (this.wavesurfer.getCurrentTime() < 3) {
-                NowPlayingIndex.update(n => n - 1);
-            }
-        }
-
-        // if manually called, fade out
-        if (event && event.target) {
-            await this.fadeOut();
+        // Only play the previous item if playback has reached a certain point
+        // otherwise the current item will restart
+        if (this.wavesurfer.getCurrentTime() < 3) {
+            this.#decrementIndex();
         }
 
         this.stop();
-        this.start(this.nowPlayingQueue[this.nowPlayingIndex]);
+        this.start();
     }
 
     /**
-     * Play next song
+     * Play next item
      */
-    async next(event) {
-        debugHelper('next!');
-
-        // if manually called, fade out
-        if (event && event.target) {
-            await this.fadeOut();
-        }
+    next() {
+        debugHelper("next!");
 
         this.stop();
 
-        // if song has no rating by the end of play, notify
+        // if item has no rating by the end of play, notify
         addRatingMissingNotification(this.currentMedia);
 
-        // Increment index and play next
-        if (this.nowPlayingIndex + 1 < this.nowPlayingQueue.length) {
-            NowPlayingIndex.update(n => n + 1);
-            this.start(this.nowPlayingQueue[this.nowPlayingIndex]);
-        } else {
-            this.restartQueue();
+        // only increment if we have something to increment from,
+        // otherwise first queue item would be skipped
+        if (this.currentMedia) {
+            // Increment index and play next
+            this.#incrementIndex();
         }
+
+        this.start();
     }
 
     /**
-     * Shuffle all existing songs in queue
+     * Shuffle all existing items in queue
      */
     shuffle() {
-        let tempArray = get(NowPlayingQueue);
-
         this.clearAll();
 
+        let tempArray = get(NowPlayingQueue);
         tempArray = shuffleArray(tempArray);
-
-        this.setQueueItems(tempArray).then(() => {
+        this.#setQueueItems(tempArray).then(() => {
             NowPlayingIndex.set(0);
             this.start();
         });
@@ -490,84 +323,374 @@ class Player {
      */
     repeat() {
         let inverted = !this.repeatEnabled;
-        localStorage.setItem('AmpleRepeatEnabled', JSON.stringify(inverted));
+        get(Saved).setItem("RepeatEnabled", inverted);
         RepeatEnabled.set(inverted);
-        debugHelper('repeat: ' + this.repeatEnabled);
+        debugHelper("repeat: " + this.repeatEnabled);
     }
 
     /**
-     * Replace queue with selected songs
-     * @param {object} songs
+     * Replace queue with selected items
+     * @param {object} items
      */
-    playNow(songs) {
+    playNow(items) {
         this.clearAll();
-        this.setQueueItems(songs).then(() => {
+        this.#setQueueItems(items).then(() => {
             this.start();
         });
     }
 
     /**
-     * Insert songs after currently playing song
-     * @param {object} songs
+     * Insert items after currently playing item
+     * @param {object} items
      */
-    async playNext(songs) {
+    playNext(items) {
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
-        tempArray.splice(this.nowPlayingIndex + 1, 0, ...songs);
-        await this.setQueueItems(tempArray);
-
-        // Start playing if queue was empty
-        if (queueLength === 0) {
-            this.start();
-        }
+        tempArray.splice(this.nowPlayingIndex + 1, 0, ...items);
+        this.#setQueueItems(tempArray).then(() => {
+            // Start playing if queue was empty
+            if (queueLength === 0) {
+                this.start();
+            }
+        });
     }
 
     /**
-     * Add songs to the end of the queue
-     * @param {object} songs
+     * Add items to the end of the queue
+     * @param {object} items
      */
-    async playLast(songs) {
+    playLast(items) {
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
-        tempArray.push(...songs);
-        await this.setQueueItems(tempArray);
-
-        // Start playing if queue was empty
-        if (queueLength === 0) {
-            this.start();
-        }
+        tempArray.push(...items);
+        this.#setQueueItems(tempArray).then(() => {
+            // Start playing if queue was empty
+            if (queueLength === 0) {
+                this.start();
+            }
+        });
     }
 
     /**
-     * Play song at this index
+     * Play item at this index
      * @param {number} index
      */
     playSelected(index) {
-        if (this.wavesurfer) {
-            this.wavesurfer.destroy();
-        }
+        this.stop();
 
         NowPlayingIndex.set(index);
 
         this.start();
     }
 
-    async fadeIn() {
-        this.filterFade.gain.setValueAtTime(0.01, this.filterFade.context.currentTime);
-        this.filterFade.gain.exponentialRampToValueAtTime(1, this.filterFade.context.currentTime + 0.5);
+    getDuration() {
+        let result = this.wavesurfer?.getDuration();
+        return Number.isFinite(result) ? result : 0;
     }
 
-    async fadeOut() {
-        this.filterFade.gain.setValueAtTime(1, this.filterFade.context.currentTime);
-        this.filterFade.gain.exponentialRampToValueAtTime(0.01, this.filterFade.context.currentTime + 0.3);
-        await sleep(300); // wait for fade to end before continuing
+    getCurrentTime() {
+        let result = this.wavesurfer?.getCurrentTime();
+        return Number.isFinite(result) ? result : 0;
+    }
+
+    goForward(seconds) {
+        this.wavesurfer?.skip(seconds);
+    }
+
+    goBackward(seconds) {
+        this.wavesurfer?.skip(-seconds);
+    }
+
+    seekTo(seconds) {
+        this.wavesurfer.seekTo(seconds);
+    }
+
+    setMuted(bool) {
+        this.wavesurfer?.setMuted(bool);
+    }
+
+    /**
+     * Clear the queue
+     */
+    clearQueue() {
+        // clear all tracks EXCEPT currently playing, unless it is the only item in queue
+        if (this.nowPlayingQueue.length > 1) {
+            this.#clearAllExceptCurrent();
+        } else {
+            this.clearAll();
+        }
+    }
+
+    setWaveColors() {
+        tick().then(() => {
+            this.wavesurfer.setOptions({
+                waveColor: getComputedStyle(document.body).getPropertyValue(
+                    "--color-outline-variant",
+                ),
+                progressColor: getComputedStyle(document.body).getPropertyValue(
+                    "--color-waveform",
+                ),
+            });
+        });
+    }
+
+    /**
+     * Clear all items in queue
+     */
+    clearAll() {
+        this.stop();
+        CurrentMedia.set(null);
+        this.#setQueueItems([]).then(() => {
+            NowPlayingIndex.set(0);
+            IsPlaying.set(false);
+        });
+    }
+
+    updateFilters() {
+        // reset active filters list
+        this.filters = [];
+
+        // 1. gain
+        if (this.volumeNormalizationEnabled && this.gainType !== "None") {
+            this.filters.push(this.filterGain);
+        }
+
+        // 2. dynamics compressor
+        if (this.dynamicsCompressorEnabled) {
+            this.filters.push(this.filterCompressor);
+        }
+
+        // last. biquad (for testing only)
+        // this.filters.push(this.filterBiquad);
+
+        debugHelper(this.filters, "Active filters");
+
+        this.#setFilters();
+        this.audioContext.resume(); // Chrome isn't happy without this
+    }
+
+    setPlaybackRate(val) {
+        this.wavesurfer.setPlaybackRate(val);
+    }
+
+    /*
+     #PRIVATE METHODS
+     */
+
+    #disconnectFilters() {
+        if (this.filters) {
+            this.filters.forEach((filter) => {
+                filter && filter.disconnect();
+            });
+            this.filters = null;
+
+            // Critical, otherwise filters don't reconnect in series
+            this.mediaNode.disconnect();
+
+            // Reconnect direct path
+            this.mediaNode.connect(this.audioContext.destination);
+        }
+    }
+
+    #setFilters() {
+        let filters = this.filters;
+        // Remove existing filters
+        this.#disconnectFilters();
+
+        // Insert filters if filter array not empty
+        if (filters && filters.length) {
+            this.filters = filters;
+
+            // Disconnect direct path before inserting filters
+            this.mediaNode.disconnect();
+
+            // Connect each filter in turn
+            filters
+                .reduce((prev, curr) => {
+                    prev.connect(curr);
+                    return curr;
+                }, this.mediaNode)
+                .connect(this.audioContext.destination);
+        }
+    }
+
+    /**
+     * More setup which doesn't belong in constructor
+     */
+    #init() {
+        this.wavesurfer.setVolume(this.globalVolume);
+
+        // initialise filters
+        this.#initFilters();
+
+        // respond to wavesurfer emitted events
+        this.#initWavesurferEvents();
+
+        // set up keyboard media buttons
+        this.#initKeyboardMediaKeys();
+    }
+
+    #initFilters() {
+        this.filterGain = this.audioContext.createGain();
+        this.filterCompressor = this.audioContext.createDynamicsCompressor();
+        this.filterCompressor.threshold.value = -30;
+        this.filterCompressor.knee.value = 10.0;
+        this.filterCompressor.ratio.value = 2.0;
+        this.filterCompressor.attack.value = 0.1; // 100ms
+        this.filterCompressor.release.value = 0.3; // 300ms
+        this.filterBiquad = this.audioContext.createBiquadFilter();
+
+        // create a starting node with our current media
+        this.mediaNode = this.audioContext.createMediaElementSource(
+            this.wavesurfer.getMediaElement(),
+        );
+
+        this.updateFilters();
+    }
+
+    #initWavesurferEvents() {
+        let self = this;
+
+        this.wavesurfer.on("play", function () {
+            debugHelper("Wavesurfer playing");
+            IsPlaying.set(true);
+        });
+
+        this.wavesurfer.on("pause", function () {
+            debugHelper("Wavesurfer paused");
+            IsPlaying.set(false);
+        });
+
+        this.wavesurfer.on("finish", function () {
+            debugHelper("Wavesurfer finished");
+            self.next();
+        });
+
+        this.wavesurfer.on("ready", function () {
+            debugHelper("Wavesurfer ready");
+
+            self.setWaveColors();
+        });
+
+        // debug events
+        // ["ready", "interaction", "redraw", "redrawcomplete"].forEach((e) =>
+        //     this.wavesurfer.on(e, () => console.log(Date.now(), e)),
+        // );
+    }
+
+    #initKeyboardMediaKeys() {
+        let self = this;
+
+        if ("mediaSession" in navigator) {
+            navigator.mediaSession.setActionHandler("play", function () {
+                self.playPause();
+            });
+            navigator.mediaSession.setActionHandler("pause", function () {
+                self.playPause();
+            });
+            navigator.mediaSession.setActionHandler("stop", function () {
+                self.stop();
+            });
+            navigator.mediaSession.setActionHandler("nexttrack", function () {
+                self.next();
+            });
+            navigator.mediaSession.setActionHandler(
+                "previoustrack",
+                function () {
+                    self.previous();
+                },
+            );
+        }
+    }
+
+    #logVolume(val) {
+        return Math.pow(val / 100, 2);
+    }
+
+    /**
+     * Clear all tracks EXCEPT currently playing
+     */
+    #clearAllExceptCurrent() {
+        this.#setQueueItems([this.#getCurrentQueueItem()]).then(() => {
+            NowPlayingIndex.set(0);
+        });
+    }
+
+    #incrementIndex() {
+        NowPlayingIndex.update((n) => n + 1);
+    }
+
+    #decrementIndex() {
+        NowPlayingIndex.update((n) => n - 1);
+    }
+
+    #getCurrentQueueItem() {
+        return this.nowPlayingQueue[this.nowPlayingIndex] || null;
+    }
+
+    /**
+     * Restart the queue
+     */
+    #restartQueue() {
+        NowPlayingIndex.set(0);
+
+        // unload any currently loaded items
+        this.audioElement.src = null;
+        CurrentMedia.set(null);
+
+        if (this.repeatEnabled) {
+            debugHelper("queue restarted");
+            this.start();
+        } else {
+            debugHelper("repeat not enabled, stopping");
+            this.stop();
+        }
+    }
+
+    // keep this as purely a setting method
+    async #setQueueItems(arr) {
+        QueueIsUpdating.set(true);
+        await tick();
+        NowPlayingQueue.set(arr);
+        QueueIsUpdating.set(false);
+    }
+
+    #runChecks(item) {
+        // notify if missing gain tags
+        if (
+            item.object_type === "song" &&
+            item.r128_track_gain === null &&
+            item.replaygain_track_gain === null
+        ) {
+            addGainTagsMissingNotification(item);
+        }
+
+        // notify if missing lyrics
+        if (item.object_type === "song" && !item.lyrics) {
+            addLyricsMissingNotification(item);
+        }
+
+        // notify if lyrics are not timestamped
+        if (item.lyrics && !lyricsAreTimestamped(item.lyrics)) {
+            addLyricsNotTimestampedNotification(item);
+        }
+
+        // Search for song versions if artist is present
+        if (item.object_type === "song" && item.artist?.id) {
+            getSongVersions(item.title, item.artist.name).then((result) => {
+                if (!result.error && result.length > 1) {
+                    item.versionsCount = result.length - 1;
+                    addAlternateVersionsNotification(item);
+                }
+            });
+        }
     }
 
     /**
      * Calculate gain (R128 & ReplayGain)
      * @returns {number} gainLevel
      */
-    calculateGain() {
+    #calculateGain() {
         // defaults
         let gainLevel = 0;
         let replayGain = 0;
@@ -575,11 +698,20 @@ class Player {
         this.masteredVolume = 0;
         this.gainNeeded = 0;
 
-        let r128_track_gain = (this.currentMedia.r128_track_gain !== null) ? this.currentMedia.r128_track_gain.toString() : null;
-        let rg_track_gain = (this.currentMedia.replaygain_track_gain !== null) ? this.currentMedia.replaygain_track_gain.toString() : null;
+        let r128_track_gain =
+            this.currentMedia.r128_track_gain !== undefined &&
+            this.currentMedia.r128_track_gain !== null
+                ? this.currentMedia.r128_track_gain.toString()
+                : null;
+        let rg_track_gain =
+            this.currentMedia.replaygain_track_gain !== undefined &&
+            this.currentMedia.replaygain_track_gain !== null
+                ? this.currentMedia.replaygain_track_gain.toString()
+                : null;
 
-        if (r128_track_gain !== null) { // R128 PREFERRED
-            this.gainType = 'EBU R128';
+        if (r128_track_gain !== null) {
+            // R128 PREFERRED
+            this.gainType = "EBU R128";
 
             replayGain = parseInt(r128_track_gain / 256); // LU/dB away from baseline of -23 LUFS/dB, stored as Q7.8 (2 ^ 8) https://datatracker.ietf.org/doc/html/rfc7845.html#section-5.2.1
             const referenceLevel = parseInt(-23); // LUFS https://en.wikipedia.org/wiki/EBU_R_128#Specification
@@ -591,9 +723,10 @@ class Player {
             this.masteredVolume = masteredVolume;
             this.gainNeeded = gainLevel.toFixed(2);
 
-            gainLevel = Math.pow(10, (gainLevel / 20));
-        } else if (rg_track_gain !== null) { // Replay Gain fallback
-            this.gainType = 'ReplayGain';
+            gainLevel = Math.pow(10, gainLevel / 20);
+        } else if (rg_track_gain !== null) {
+            // Replay Gain fallback
+            this.gainType = "ReplayGain";
 
             replayGain = parseFloat(rg_track_gain);
             this.gainTagValue = replayGain;
@@ -602,9 +735,9 @@ class Player {
 
             this.gainNeeded = gainLevel.toFixed(2);
 
-            gainLevel = Math.pow(10, (gainLevel / 20));
+            gainLevel = Math.pow(10, gainLevel / 20);
         } else {
-            this.gainType = 'None';
+            this.gainType = "None";
         }
 
         return gainLevel;

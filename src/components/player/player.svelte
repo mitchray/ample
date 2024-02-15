@@ -1,33 +1,29 @@
 <script>
-    import PlayerSeekBar from './player_seekBar.svelte';
-    import PlayerTimeCurrent from './player_timeCurrent.svelte';
-    import PlayerTimeEnd from './player_timeEnd.svelte';
-    import PlayerPrimaryControls from './player_primaryControls.svelte';
-    import PlayerArtwork from './player_artwork.svelte';
-    import PlayerCurrentDetails from './player_currentDetails.svelte';
-    import PlayerQueue from './player_queue.svelte';
-    import PlayerVolume from '../player/player_volume.svelte';
-    import PlayerRepeat from '../player/player_repeat.svelte';
-    import PlayerShuffle from '../player/player_shuffle.svelte';
-    import PlayerRating from '../player/player_rating.svelte';
-    import PlayerFullscreen from '../player/player_fullscreen.svelte';
-    import PlayerAutoPlay from '../player/player_autoPlay.svelte';
-    import PlayerLyrics from '../player/player_lyrics.svelte';
-    import PlayerSkipBelow from '../player/player_skipBelow.svelte';
+    import PlayerSeekBar from "~/components/player/player_seekBar.svelte";
+    import PlayerTimeCurrent from "~/components/player/player_timeCurrent.svelte";
+    import PlayerTimeEnd from "~/components/player/player_timeEnd.svelte";
+    import PlayerPrimaryControls from "~/components/player/player_primaryControls.svelte";
+    import PlayerCurrentDetails from "~/components/player/player_currentDetails.svelte";
+    import PlayerVolume from "~/components/player/player_volume.svelte";
+    import PlayerRepeat from "~/components/player/player_repeat.svelte";
+    import PlayerShuffle from "~/components/player/player_shuffle.svelte";
+    import PlayerRating from "~/components/player/player_rating.svelte";
+    import PlayerAutoPlay from "~/components/player/player_autoPlay.svelte";
+    import PlayerLyrics from "~/components/player/player_lyrics.svelte";
+    import PlayerSkipBelow from "~/components/player/player_skipBelow.svelte";
 </script>
 
 <div class="site-player">
     <div class="site-player__seekBar">
-        <PlayerSeekBar/>
+        <PlayerSeekBar />
     </div>
 
     <div class="site-player__controls">
-        <PlayerPrimaryControls/>
+        <PlayerPrimaryControls />
     </div>
 
     <div class="site-player__now-playing">
-        <PlayerArtwork/>
-        <PlayerCurrentDetails/>
+        <PlayerCurrentDetails />
     </div>
 
     <div class="site-player__waveform">
@@ -39,11 +35,11 @@
     </div>
 
     <div class="site-player__times">
-        <PlayerTimeCurrent/> / <PlayerTimeEnd/>
+        <PlayerTimeCurrent /> / <PlayerTimeEnd />
     </div>
 
     <div class="site-player__volume">
-       <PlayerVolume />
+        <PlayerVolume />
     </div>
 
     <!-- feature-specific player controls -->
@@ -69,13 +65,7 @@
         <PlayerShuffle />
     </div>
 
-    <div class="site-player__fullscreen">
-        <PlayerFullscreen />
-    </div>
-
-    <div class="site-player__queue">
-        <PlayerQueue />
-    </div>
+    <div class="site-player__queue"></div>
 </div>
 
 <style>
@@ -83,8 +73,7 @@
      * Common
      */
     .site-player {
-        background-color: var(--color-interface);
-        border-block-start: 1px solid var(--color-border);
+        border-block-start: 1px solid var(--color-outline-variant);
         height: var(--size-webplayer-height);
         display: grid;
         align-items: center;
@@ -98,8 +87,7 @@
     .site-player__volume,
     .site-player__feature-controls,
     .site-player__playback-controls,
-    .site-player__secondary-controls,
-    .site-player__fullscreen {
+    .site-player__secondary-controls {
         display: none;
     }
 
@@ -156,7 +144,6 @@
         height: 85%;
         border-radius: 3px;
         margin-inline-end: var(--spacing-md);
-        outline: 1px solid hsla(0, 0%, 50%, 0.2);
         outline-offset: -1px;
     }
 
@@ -192,11 +179,6 @@
         z-index: 200;
     }
 
-    .site-player__fullscreen {
-        grid-area: fullscreen;
-        justify-content: center;
-    }
-
     .site-player__queue {
         grid-area: queue;
         justify-content: center;
@@ -223,10 +205,10 @@
     :global(.site-player__volume-value:after),
     :global(.progress:after),
     :global(.progress:before) {
-        content: '';
+        content: "";
         height: 12px;
         min-width: 12px;
-        background-color: var(--color-text-primary);
+        /*background-color: var(--color-text-primary);*/
         position: absolute;
         inset-block-start: 50%;
         inset-inline-end: 0;
@@ -243,7 +225,7 @@
         font-weight: 700;
         text-align: center;
         line-height: 12px;
-        color: var(--color-background);
+        /*color: var(--color-background);*/
     }
 
     /* mobile only tweaks */
@@ -251,9 +233,10 @@
         .site-player {
             grid-template-areas:
                 "SPACER1 times             SPACER2 main-controls SPACER3 fullscreen       queue            SPACER4"
-                "SPACER1 playback-controls SPACER2 rating        SPACER3 feature-controls feature-controls SPACER4"
-            ;
-            grid-template-columns: 1fr auto var(--spacing-sm) auto var(--spacing-sm) auto auto 1fr;
+                "SPACER1 playback-controls SPACER2 rating        SPACER3 feature-controls feature-controls SPACER4";
+            grid-template-columns:
+                1fr auto var(--spacing-sm) auto var(--spacing-sm)
+                auto auto 1fr;
             grid-template-rows: 1fr 1fr;
             padding: var(--spacing-md) 0;
         }
@@ -270,10 +253,6 @@
         .site-player__playback-controls {
             display: flex;
         }
-
-        .site-player__fullscreen {
-            display: flex;
-        }
     }
 
     @media all and (min-width: 680px) {
@@ -281,9 +260,10 @@
             grid-template-areas:
                 "main-controls now-playing SPACER1 times    SPACER2  secondary-controls SPACER4 queue"
                 "main-controls now-playing SPACER1 waveform waveform waveform           SPACER4 queue"
-                "main-controls now-playing SPACER1 rating   SPACER3  volume             SPACER4 queue"
-            ;
-            grid-template-columns: auto 2fr var(--spacing-lg) auto var(--spacing-lg) auto var(--spacing-lg) auto;
+                "main-controls now-playing SPACER1 rating   SPACER3  volume             SPACER4 queue";
+            grid-template-columns:
+                auto 2fr var(--spacing-lg) auto var(--spacing-lg)
+                auto var(--spacing-lg) auto;
             grid-template-rows: 1fr 1fr 1fr;
         }
 
@@ -320,24 +300,31 @@
 
     @media all and (min-width: 1000px) {
         .site-player {
-            grid-template-columns: auto 2fr var(--spacing-lg) auto var(--spacing-lg) auto var(--spacing-lg) 250px;
+            grid-template-columns:
+                auto 2fr var(--spacing-lg) auto var(--spacing-lg)
+                auto var(--spacing-lg) 250px;
         }
     }
 
     @media all and (min-width: 1300px) {
         .site-player {
             grid-template-areas:
-            "main-controls now-playing SPACER1 times  SPACER2 waveform SPACER3 secondary-controls SPACER4 queue"
-            "main-controls now-playing SPACER1 rating SPACER2 waveform SPACER3 volume             SPACER4 queue";
-            grid-template-columns: var(--size-sidebar-width) 320px var(--spacing-xl) min-content var(--spacing-xl) 1fr var(--spacing-xl) min-content var(--spacing-xl) 250px;
+                "main-controls now-playing SPACER1 times  SPACER2 waveform SPACER3 secondary-controls SPACER4 queue"
+                "main-controls now-playing SPACER1 rating SPACER2 waveform SPACER3 volume             SPACER4 queue";
+            grid-template-columns:
+                var(--size-sidebar-width) 320px var(--spacing-xl)
+                min-content var(--spacing-xl) 1fr var(--spacing-xl) min-content var(
+                    --spacing-xl
+                )
+                250px;
             grid-template-rows: 1fr 1fr;
         }
 
         .site-player:before {
-            background-color: var(--color-card-primary);
+            /*background-color: var(--color-card-primary);*/
             box-shadow: var(--shadow-sm);
             border-radius: 5px;
-            content: '';
+            content: "";
             grid-column-start: now-playing;
             grid-column-end: times;
             display: block;

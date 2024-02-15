@@ -1,76 +1,70 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { logout } from "../logic/user";
-    import { isLoggedIn } from "../stores/user.js";
-    import ThemeToggle from '../components/themeToggle.svelte';
-    import LanguageSelector from '../components/languageSelector.svelte';
-    import Menu from '../components/menu.svelte';
-    import SVGLogout from "/src/images/logout.svg";
-    import SVGProfile from "/src/images/account_circle.svg";
-
-    let menuIsVisible = false;
-
-    function toggleMenu() {
-        menuIsVisible = !menuIsVisible;
-    }
-
-    function handleLogOut() {
-        logout();
-    }
+    import { _ } from "svelte-i18n";
+    import { logout } from "~/logic/user";
+    import { User, ShowPreferences } from "~/stores/state.js";
+    import ThemeToggle from "~/components/theme/themeToggle.svelte";
+    import LanguageSelector from "~/components/languageSelector.svelte";
+    import MaterialSymbol from "~/components//materialSymbol.svelte";
 </script>
 
-<button id="userMenu-toggle" class="icon-button userMenu-toggle" on:click={toggleMenu}>
-    <SVGProfile />
-</button>
+<sl-dropdown>
+    <sl-button slot="trigger" class="userMenu-toggle">
+        <MaterialSymbol name="account_circle" />
+    </sl-button>
 
-{#if menuIsVisible}
-    <Menu anchor="bottom" toggleSelector={"#userMenu-toggle"} bind:isVisible={menuIsVisible}>
-        <div class="container">
-            {#if $isLoggedIn}
-                <button
-                        on:click={handleLogOut}
-                        class="visuallyLink logout"
-                        title="{$_('text.logOut')}"
-                >
-                    <SVGLogout />
-                    <span class="text">{$_('text.logOut')}</span>
-                </button>
-            {/if}
+    <sl-card style="max-width: 250px">
+        {#if $User.isLoggedIn}
+            <div class="user-details">
+                <sl-avatar image={$User.has_art ? $User.art : null}></sl-avatar>
 
-            <ThemeToggle />
+                <span class="truncate">
+                    {$User.username}
+                </span>
+            </div>
 
-            <LanguageSelector />
-        </div>
-    </Menu>
-{/if}
+            <sl-divider></sl-divider>
+
+            <sl-button
+                variant="warning"
+                on:click={() => {
+                    logout();
+                }}
+                class="logout"
+                title={$_("text.logOut")}
+            >
+                <MaterialSymbol name="logout" slot="prefix" />
+                {$_("text.logOut")}
+            </sl-button>
+
+            <sl-button
+                on:click={() => {
+                    $ShowPreferences = true;
+                }}
+            >
+                {$_("text.preferences")}
+            </sl-button>
+        {/if}
+
+        <ThemeToggle />
+
+        <LanguageSelector />
+    </sl-card>
+</sl-dropdown>
 
 <style>
-    .container {
+    sl-card::part(body) {
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md);
     }
 
-    .container :global(svg) {
-        height: 1.5em;
-        width: auto;
-        color: var(--color-highlight);
-    }
-
-    .container :global(button),
-    .container :global(a) {
-        display: flex;
-        gap: var(--spacing-sm);
-    }
-
-    .container :global(.theme-toggle) {
-        background-color: transparent;
-        padding: 0;
-        font-weight: normal;
-        color: inherit;
-    }
-
     .userMenu-toggle {
         margin-inline-end: var(--spacing-sm);
+    }
+
+    .user-details {
+        display: flex;
+        gap: var(--spacing-md);
+        align-items: center;
     }
 </style>

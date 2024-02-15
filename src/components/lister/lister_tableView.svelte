@@ -1,48 +1,51 @@
 <script>
-    import { onMount, getContext, onDestroy, tick } from 'svelte';
+    import { onMount, getContext, onDestroy, tick } from "svelte";
 
-    import Columns from './lister_columns.svelte';
-    import TableRow from './lister_tableRow.svelte';
-    import Virtual from './lister_virtual.svelte';
+    import Columns from "./lister_columns.svelte";
+    import TableRow from "./lister_tableRow.svelte";
+    import Virtual from "./lister_virtual.svelte";
+    import { ShowSongsByOtherArtists } from "~/stores/settings.js";
 
     export let contextKey;
 
-    const { dataDisplay, dataFinal, offsetY, listerObject, listerScroller, listerHeader, listerContainer, pseudoHeight } = getContext(contextKey);
+    const {
+        dataDisplay,
+        dataFinal,
+        offsetY,
+        listerObject,
+        listerScroller,
+        listerHeader,
+        listerContainer,
+        pseudoHeight,
+    } = getContext(contextKey);
     let bindForName;
-    let bindForActions;
     let observerName;
-    let observerActions;
 
     onMount(async () => {
         // initialise syncscroll
         syncscroll.reset();
 
-        const container   = $listerContainer;
+        const container = $listerContainer;
 
         await tick();
 
-        let headerName    = $listerContainer?.querySelector('.header .name');
-        let headerActions = $listerContainer?.querySelector('.header .actions');
-        let marginName    = '0px 0px 0px 0px';
-        let marginActions = '0px -1px 0px 0px';
+        let headerName = $listerContainer?.querySelector(".header .name");
+        let marginName = "0px 0px 0px 0px";
 
         // needs separate IntersectionObservers otherwise only one works at a time
 
         // apply shadow when .name becomes sticky
         observerName = new IntersectionObserver(
-            ([e]) => container.classList.toggle("scroll-start", e.intersectionRatio < 1),
-            { root: bindForName, rootMargin: marginName, threshold: 1 }
+            ([e]) =>
+                container.classList.toggle(
+                    "scroll-start",
+                    e.intersectionRatio < 1,
+                ),
+            { root: bindForName, rootMargin: marginName, threshold: 1 },
         );
 
-        // apply shadow when .actions becomes sticky
-        observerActions = new IntersectionObserver(
-            ([e]) => container.classList.toggle("scroll-end", e.intersectionRatio === 1),
-            { root: bindForActions, rootMargin: marginActions, threshold: 1 }
-        );
-
-        if (headerName && headerActions) {
+        if (headerName) {
             observerName.observe(headerName);
-            observerActions.observe(headerActions);
         }
     });
 
@@ -50,27 +53,41 @@
         if (observerName) {
             observerName.disconnect();
         }
-
-        if (observerActions) {
-            observerActions.disconnect();
-        }
     });
 </script>
 
-<Virtual contextKey={contextKey} />
+<Virtual {contextKey} />
 
-<div class="header-flex syncscroll" name="listerhack-{contextKey}" bind:this={bindForName} >
-    <div class="header" bind:this={bindForActions} >
-        <Columns bind:this={$listerHeader} contextKey={contextKey} />
+<div
+    class="header-flex syncscroll"
+    name="listerhack-{contextKey}"
+    bind:this={bindForName}
+>
+    <div class="header">
+        <Columns bind:this={$listerHeader} {contextKey} />
     </div>
 </div>
 
-<div class="lister-flex syncscroll" name="listerhack-{contextKey}" bind:this={$listerScroller}>
-    <div class="lister" bind:this={$listerObject} style="height: {$pseudoHeight};">
-        {#each $dataFinal as row, i (i)}
-            <div class="row" class:stripe={row.sortOrder % 2} style="transform: translateY({$offsetY})">
+<div
+    class="lister-flex syncscroll"
+    name="listerhack-{contextKey}"
+    bind:this={$listerScroller}
+>
+    <div
+        class="lister"
+        bind:this={$listerObject}
+        style="height: {$pseudoHeight};"
+    >
+        {#each $dataFinal as row, i (row)}
+            <div
+                class="row"
+                style="top: {$offsetY}"
+                class:not-by-artist={row.notByArtist}
+                class:hide={$ShowSongsByOtherArtists === "hide"}
+                class:highlight={$ShowSongsByOtherArtists === "highlight"}
+            >
                 {#if !row.isDeleted}
-                    <TableRow item={row} contextKey={contextKey} />
+                    <TableRow item={row} {contextKey} />
                 {/if}
             </div>
         {/each}
@@ -100,32 +117,24 @@
 
     .header > :global(div) {
         text-align: start;
-        background-color: var(--color-interface);
-        border-block-end: 3px solid var(--color-border);
+        background-color: var(--color-background);
+        border-block-end: 2px solid var(--color-outline-variant);
         position: relative;
     }
 
     .row > :global(div) {
-        background-color: var(--color-interface);
-        border-block-end: 1.4px solid var(--color-border); /* thicker line to alleviate transform rounding */
-        will-change: transform;
-    }
-
-    .stripe > :global(div) {
-        /* testing if I miss the stripes */
-        /*background-color: var(--color-row-stripe);*/
+        background-color: var(--color-background);
+        border-block-end: 1.4px solid var(--color-outline-variant); /* thicker line to alleviate transform rounding */
     }
 
     /* show full lister if not enough room to have name and action columns always present */
     @container lister-wrapper (min-width: 600px) {
-        .header :global(.name),
-        .header :global(.actions) {
+        .header :global(.name) {
             position: sticky;
             inset-block-start: 0;
             z-index: 3;
         }
 
-        .lister :global(.actions),
         .lister :global(.name) {
             position: sticky;
             z-index: 1;
@@ -133,12 +142,8 @@
 
         .header :global(.name),
         .lister :global(.name) {
-            inset-inline-start:  -1px;
+            inset-inline-start: -1px;
         }
-    }
-
-    .lister :global(.actions) {
-        inset-inline-end: 0;
     }
 
     .header :global(> div),
@@ -146,8 +151,10 @@
         padding: var(--spacing-md) var(--spacing-lg);
     }
 
+    /* can't use transform/translate anymore otherwise dropdowns are cut off */
     .row {
         display: flex;
+        position: relative; /* needed for top: offsetY */
     }
 
     .header,
@@ -169,11 +176,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    /* stand out more in lister */
-    :global(.lister-container input[type="checkbox"]) {
-        border-color: var(--color-text-secondary);
     }
 
     .header :global(.cell),

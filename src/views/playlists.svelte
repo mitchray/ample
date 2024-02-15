@@ -1,64 +1,86 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount } from "svelte";
-    import { API } from "../stores/api";
-    import { PageTitle } from "../stores/status";
-    import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
-    import Menu from '../components/menu.svelte';
-    import Lister from '../components/lister/lister.svelte';
+    import { _ } from "svelte-i18n";
+    import Portal from "~/components/portal.svelte";
+    import { API, User, PageTitle } from "~/stores/state.js";
+    import { Saved } from "~/stores/settings.js";
+    import Lister from "~/components/lister/lister.svelte";
+    import { playlistsPreset } from "~/components/lister/columns.js";
+    import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
+    import { createQuery } from "@tanstack/svelte-query";
 
-    let playlists = [];
-    let showPlaylistCreation = false;
-    let loading = true;
+    let drawerEdit;
 
-    let title = $_('text.playlists');
+    let title = $_("text.playlists");
     $PageTitle = title;
 
-    function handleShowPlaylistCreator() {
-        showPlaylistCreation = !showPlaylistCreation;
-    }
+    $: query = createQuery({
+        queryKey: ["playlists"],
+        initialData: async () => {
+            await $Saved.getItem("playlists");
+        },
+        queryFn: async () => {
+            let result = await $API.playlists({ hide_search: 1 });
 
-    onMount(async () => {
-        playlists = await $API.playlists({ hide_search: 1 });
-        loading = false;
+            if (result.error) {
+                console.error("Ample error getting playlists:", result.error);
+                return [];
+            }
+
+            await $Saved.setItem("playlists", result);
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
     });
+
+    // alias of returned data
+    $: playlists = $query.data || {};
 </script>
 
 <svelte:head>
     <title>{title}</title>
 </svelte:head>
 
-<button id="js-playlistsNew" on:click={handleShowPlaylistCreator} class="new-playlist-button button button--primary">{$_('text.playlistNew')}</button>
-
-{#if showPlaylistCreation}
-    <Menu anchor="bottom" toggleSelector={"#js-playlistsNew"} bind:isVisible={showPlaylistCreation} >
-        <PlaylistEdit isNew={true} bind:isVisible={showPlaylistCreation} />
-    </Menu>
-{/if}
-
-<div class="page-main">
-    {#if loading}
-        <p>{$_('text.loading')}</p>
-    {:else}
-        {#if playlists?.length > 0}
-            <Lister
-                bind:data={playlists}
-                type="playlist"
-                initialSort="name"
-                virtualList={true}
-                actionData={{
-                    disable: true
-                }}
-            />
-        {:else}
-            <p>{$_('text.noItemsFound')}</p>
-        {/if}
-    {/if}
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
 </div>
+
+<sl-button
+    variant="primary"
+    on:click={() => drawerEdit.show()}
+    class="new-playlist-button"
+>
+    {$_("text.playlistNew")}
+</sl-button>
+
+<Portal>
+    <DrawerEdit bind:this={drawerEdit} isNew={true} />
+</Portal>
+
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    {#if playlists?.length === 0}
+        <p>{$_("text.noItemsFound")}</p>
+    {:else}
+        <Lister
+            id="Playlists"
+            bind:data={playlists}
+            type="playlist"
+            columns={playlistsPreset}
+            virtualList={true}
+            actionData={{
+                disable: true,
+            }}
+        />
+    {/if}
+{/if}
 
 <style>
     .new-playlist-button {
         margin-block-end: var(--spacing-xxl);
+        justify-self: start;
     }
 </style>
-

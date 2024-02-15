@@ -1,32 +1,14 @@
 import { get } from "svelte/store";
-import { API } from "../stores/api";
-import { debugHelper } from './helper';
+import { API } from "~/stores/state";
+import { debugHelper } from "./helper";
 import { getArtist } from "./artist";
-
-/**
- * Get songs from album ID
- * @param {number} id
- * @param {boolean} groupByDisc
- * @returns {Promise<*>}
- */
-export const getSongsFromAlbum = async ({id, groupByDisc = false}) => {
-    let songs = await get(API).albumSongs({ filter: id });
-
-    if (groupByDisc) {
-        songs = groupSongsByDisc(songs);
-    }
-
-    debugHelper(songs, "getSongsFromAlbum");
-
-    return songs;
-}
 
 /**
  * Get songs from artist ID
  * @param {number} id
  * @returns {Promise<*>}
  */
-export const getSongsFromArtist = async (id) => {
+export async function getSongsFromArtist(id) {
     let songs = await get(API).artistSongs({ filter: id });
     songs = sortSongsByYear(songs);
 
@@ -38,17 +20,21 @@ export const getSongsFromArtist = async (id) => {
  * @param {string} id
  * @param {('playlist'|'smartlist'|'artist_mix')} type
  */
-export const getSongsFromPlaylist = async ({id, type}) => {
+export async function getSongsFromPlaylist({ id, type }) {
     let results = [];
 
     switch (type) {
-        case 'playlist':
-        case 'smartlist':
+        case "playlist":
+        case "smartlist":
             results = await get(API).playlistSongs({ filter: id });
             break;
-        case 'artist_mix':
-            let artists = await get(API).getSimilar({ type: "artist", filter: id, limit: 20 });
-            let baseArtist   = await getArtist({ id: id });
+        case "artist_mix":
+            let artists = await get(API).getSimilar({
+                type: "artist",
+                filter: id,
+                limit: 20,
+            });
+            let baseArtist = await getArtist(id);
 
             if (baseArtist) {
                 artists.push(baseArtist);
@@ -68,7 +54,7 @@ export const getSongsFromPlaylist = async ({id, type}) => {
  * @param {array} playlists
  * @returns {Promise<*>}
  */
-export const getSongsFromPlaylists = async (playlists) => {
+export async function getSongsFromPlaylists(playlists) {
     let allResults = [];
     let promises = [];
 
@@ -82,41 +68,20 @@ export const getSongsFromPlaylists = async (playlists) => {
 }
 
 /**
- * Search songs starting with specified string
+ * Search songs containing specified string
  * @param page
  * @param limit
  * @param {string} query
  * @returns {Promise<*>}
  */
-export const searchSongsStartingWith = ({page = 0, limit = 50, query}) => {
+export function searchSongs({ page = 0, limit = 50, query }) {
     return get(API).advancedSearch({
         type: "song",
         operator: "and",
         limit: limit,
         offset: page * limit,
-        rules: [
-            ["title", 2, query]
-        ]
-    })
-}
-
-/**
- * Search songs containing (but not starting with) specified string
- * @param page
- * @param limit
- * @param {string} query
- * @returns {Promise<*>}
- */
-export const searchSongsContaining = ({page = 0, limit = 50, query}) => {
-    return get(API).advancedSearch({
-        type: "song",
-        operator: "and",
-        limit: limit,
-        offset: page * limit,
-        rules: [
-            ["title", 8, "^(?!" + query + ").*" + query]
-        ]
-    })
+        rules: [["title", 0, query]],
+    });
 }
 
 /**
@@ -125,7 +90,7 @@ export const searchSongsContaining = ({page = 0, limit = 50, query}) => {
  * @param artistName
  * @returns {Promise<*>}
  */
-export const getSongVersions = async (songTitle, artistName) => {
+export async function getSongVersions(songTitle, artistName) {
     let cleanedTitle = parseTitle(songTitle);
 
     let songs = await get(API).advancedSearch({
@@ -135,12 +100,16 @@ export const getSongVersions = async (songTitle, artistName) => {
         rules: [
             ["title", 2, cleanedTitle],
             ["artist", 4, artistName],
-        ]
-    })
+        ],
+    });
+
+    if (songs.error) {
+        return false;
+    }
 
     let theRegex = "^" + cleanedTitle + "$";
-    let re = new RegExp(theRegex,"gi");
-    let filtered = songs.filter(e => parseTitle(e.title).match(re));
+    let re = new RegExp(theRegex, "gi");
+    let filtered = songs.filter((e) => parseTitle(e.title).match(re));
 
     debugHelper(filtered, "getSongVersions after filtering");
     return filtered;
@@ -151,12 +120,12 @@ export const getSongVersions = async (songTitle, artistName) => {
  * @param {array} albums
  * @returns {Promise<*>}
  */
-export const getSongsFromAlbums = async (albums) => {
+export async function getSongsFromAlbums(albums) {
     let allResults = [];
     let promises = [];
 
     for (let i = 0; i < albums.length; i++) {
-        promises[i] = get(API).albumSongs({ filter: albums[i].id })
+        promises[i] = get(API).albumSongs({ filter: albums[i].id });
     }
 
     allResults = await Promise.all([...promises]);
@@ -169,16 +138,14 @@ export const getSongsFromAlbums = async (albums) => {
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getSongsFromAlbumsStartingWith = (filterChar) => {
+export function getSongsFromAlbumsStartingWith(filterChar) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [
-            ["album", 8, encodeURI('^(?!the\\s)') + filterChar]
-        ]
-    })
+        rules: [["album", 8, encodeURI("^(?!the\\s)") + filterChar]],
+    });
 }
 
 /**
@@ -186,7 +153,7 @@ export const getSongsFromAlbumsStartingWith = (filterChar) => {
  * @param {array} artists
  * @returns {Promise<*>}
  */
-export const getSongsFromArtists = (artists) => {
+export function getSongsFromArtists(artists) {
     let artistsFormatted = artists.map((artist) => artist.name).join("|");
 
     return get(API).advancedSearch({
@@ -194,10 +161,8 @@ export const getSongsFromArtists = (artists) => {
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [
-            ["artist", 8, "^(" + artistsFormatted + ")$"]
-        ]
-    })
+        rules: [["artist", 8, "^(" + artistsFormatted + ")$"]],
+    });
 }
 
 /**
@@ -205,16 +170,14 @@ export const getSongsFromArtists = (artists) => {
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getSongsFromArtistsStartingWith = (filterChar) => {
+export function getSongsFromArtistsStartingWith(filterChar) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [
-            ["artist", 8, encodeURI('^(?!the\\s)') + filterChar]
-        ]
-    })
+        rules: [["artist", 8, encodeURI("^(?!the\\s)") + filterChar]],
+    });
 }
 
 /**
@@ -223,7 +186,7 @@ export const getSongsFromArtistsStartingWith = (filterChar) => {
  * @param {number} to
  * @returns {Promise<*>}
  */
-export const getSongsByYear = async (from, to) => {
+export async function getSongsByYear(from, to) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
@@ -232,129 +195,115 @@ export const getSongsByYear = async (from, to) => {
         offset: page * limit,
         rules: [
             ["year", 0, from],
-            ["year", 1, to]
-        ]
-    })
+            ["year", 1, to],
+        ],
+    });
 }
 
 /**
  * Get songs that have no rating
  * @returns {Promise<*>}
  */
-export const unratedSongs = ({query = "", page = 0, limit = 50}) => {
+export function unratedSongs({ page = 0, limit = 50 }) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: limit,
         offset: page * limit,
-        rules: [
-            ["myrating", 2, 0]
-        ]
-    })
-}
-
-/**
- * Returns songs for search
- * @param query
- * @param page
- * @param limit
- * @param exact
- * @returns {Promise<*>}
- */
-export const searchSongs = ({query = "", page = 0, limit = 50, exact = false}) => {
-    return get(API).songs({
-        exact: (exact) ? 1 : 0,
-        filter: query,
-        offset: page * limit,
-        limit: limit,
-    })
+        rules: [["myrating", 2, 0]],
+    });
 }
 
 /**
  * Get newest songs
  * @returns {Promise<*>}
  */
-export const newestSongs = ({page = 0, limit = 50}) => {
+export function newestSongs({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "song",
         filter: "newest",
         limit: limit,
         offset: page * limit,
-    })
+    });
 }
 
 /**
  * Get recently played songs
  * @returns {Promise<*>}
  */
-export const recentSongs = ({page = 0, limit = 50, offset = null}) => {
+export function recentSongs({ page = 0, limit = 50, offset = null }) {
     return get(API).stats({
         type: "song",
         filter: "recent",
         limit: limit,
         offset: offset || page * limit,
-    })
+    });
 }
 
 /**
  * Get favorite songs
  * @returns {Promise<*>}
  */
-export const favoriteSongs = ({page = 0, limit = 50}) => {
+export function favoriteSongs({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "song",
         filter: "flagged",
         limit: limit,
         offset: page * limit,
-    })
+    });
 }
 
 /**
  * Get frequent songs
  * @returns {Promise<*>}
  */
-export const frequentSongs = ({page = 0, limit = 50}) => {
+export function frequentSongs({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "song",
         filter: "frequent",
         limit: limit,
         offset: page * limit,
-    })
+    });
 }
 
 /**
  * Get top-rated songs
  * @returns {Promise<*>}
  */
-export const topSongs = ({page = 0, limit = 50}) => {
+export function topSongs({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "song",
         filter: "highest",
         limit: limit,
         offset: page * limit,
-    })
+    });
 }
 
 /**
  * Get forgotten songs
  * @returns {Promise<*>}
  */
-export const forgottenSongs = ({page = 0, limit = 50}) => {
+export function forgottenSongs({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "song",
         filter: "forgotten",
         limit: limit,
         offset: page * limit,
-    })
+    });
 }
 
 /**
  * Get random songs
  * @returns {Promise<*>}
  */
-export const randomSongs = ({page = 0, limit = 50}) => {
-    return get(API).stats({ type: "song", limit: limit, offset: page * limit, filter: "random" })
+export function randomSongs({ page = 0, limit = 50 }) {
+    return get(API).stats({
+        type: "song",
+        limit: limit,
+        offset: page * limit,
+        filter: "random",
+    });
 }
 
 /**
@@ -362,16 +311,14 @@ export const randomSongs = ({page = 0, limit = 50}) => {
  * @param {string} genre
  * @returns {Promise<*>}
  */
-export const getSomeSongsByGenre = (genre) => {
+export function getSomeSongsByGenre(genre) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [
-            ["genre", 4, genre]
-        ]
-    })
+        rules: [["genre", 4, genre]],
+    });
 }
 
 /**
@@ -379,16 +326,14 @@ export const getSomeSongsByGenre = (genre) => {
  * @param {string} genre
  * @returns {Promise<*>}
  */
-export const getSomeSongsFromAlbumsByGenre = (genre) => {
+export function getSomeSongsFromAlbumsByGenre(genre) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [
-            ["album_genre", 4, genre]
-        ]
-    })
+        rules: [["album_genre", 4, genre]],
+    });
 }
 
 /**
@@ -396,16 +341,14 @@ export const getSomeSongsFromAlbumsByGenre = (genre) => {
  * @param {string} genre
  * @returns {Promise<*>}
  */
-export const getSomeSongsFromArtistsByGenre = (genre) => {
+export function getSomeSongsFromArtistsByGenre(genre) {
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [
-            ["artist_genre", 4, genre]
-        ]
-    })
+        rules: [["artist_genre", 4, genre]],
+    });
 }
 
 /**
@@ -413,7 +356,7 @@ export const getSomeSongsFromArtistsByGenre = (genre) => {
  * @param {array} songs
  * @returns {Map<any, any>}
  */
-export const groupSongsByDisc = (songs) => {
+export function groupSongsByDisc(songs) {
     let discs = new Map();
 
     for (let i = 0; i < songs.length; i++) {
@@ -433,8 +376,10 @@ export const groupSongsByDisc = (songs) => {
  * @param {array} songs
  * @returns {*}
  */
-export const sortSongsByName = (songs) => {
-    return songs.sort(function(obj1, obj2) { return obj1.name.localeCompare(obj2.name) })
+export function sortSongsByName(songs) {
+    return songs.sort(function (obj1, obj2) {
+        return obj1.name.localeCompare(obj2.name);
+    });
 }
 
 /**
@@ -442,8 +387,8 @@ export const sortSongsByName = (songs) => {
  * @param {array} songs
  * @returns {*}
  */
-export const sortSongsByYear = (songs) => {
-    songs = songs.sort(function(obj1, obj2) {
+export function sortSongsByYear(songs) {
+    songs = songs.sort(function (obj1, obj2) {
         // Sort by year
         if (obj1.year > obj2.year) return 1;
         if (obj1.year < obj2.year) return -1;
@@ -462,5 +407,5 @@ export const sortSongsByYear = (songs) => {
  * @returns {*}
  */
 function parseTitle(str) {
-    return str.replace(/\s*[\(\[].*[\)\]]/gi, '');
+    return str.replace(/\s*[\(\[].*[\)\]]/gi, "");
 }

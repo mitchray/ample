@@ -1,25 +1,18 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount, onDestroy } from "svelte";
-    import { computePosition, autoUpdate, offset } from '@floating-ui/dom';
-    import { waitForElement } from "../logic/helper";
-    import { QueueIsOpen } from "../stores/status";
-    import Lyrics from '../logic/lyrics'
-
-    import { MediaPlayer, SiteInnerBind } from "../stores/player";
-    import {
-        CurrentMedia,
-        ShowLyrics
-    } from "../stores/status";
+    import { _ } from "svelte-i18n";
+    import { waitForElement } from "~/logic/helper";
+    import Lyrics from "~/logic/lyrics";
+    import Portal from "~/components/portal.svelte";
+    import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
+    import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
 
     let lyrics = new Lyrics();
     let follow = true;
     let loading = true;
-    let lyricsBind;
-    let autoUpdateCleanup;
+    let drawer;
 
     $: {
-        if (lyrics && $CurrentMedia && $MediaPlayer.wavesurfer) {
+        if (lyrics && $CurrentMedia) {
             loading = true;
 
             // reset any previous instance
@@ -27,22 +20,24 @@
 
             loading = false;
         }
-
-
     }
 
     $: {
-        if ($SiteInnerBind) {
-            // updatePosition whenever QueueIsOpen changes
-            $QueueIsOpen, updatePosition();
+        $ShowLyrics ? drawer?.show() : drawer?.hide();
+    }
+
+    function handleClose(event) {
+        // ignore bubbled sl-hide events from other components
+        if (event.target === drawer) {
+            ShowLyrics.set(false);
         }
     }
 
     function resetEvents() {
-        $MediaPlayer.wavesurfer.un('audioprocess', changeLine);
-        $MediaPlayer.wavesurfer.on('audioprocess', changeLine);
+        $MediaPlayer.wavesurfer.un("timeupdate", changeLine);
+        $MediaPlayer.wavesurfer.on("timeupdate", changeLine);
 
-        waitForElement('.lyrics-container').then((selector) => {
+        waitForElement(".lyrics-container").then((selector) => {
             selector.scrollTop = 0;
             follow = $lyrics.isTimestamped;
         });
@@ -53,10 +48,10 @@
     }
 
     function changeLine() {
-        $lyrics.move($MediaPlayer.wavesurfer.getCurrentTime());
+        $lyrics.move($MediaPlayer.getCurrentTime());
 
         if (follow) {
-            waitForElement('.site-lyrics .current').then((selector) => {
+            waitForElement(".lyrics-container .current").then((selector) => {
                 selector.scrollIntoView({
                     block: "center",
                     behavior: "auto",
@@ -67,95 +62,80 @@
 
     function handleClick(time) {
         if (time > 0) {
-            $MediaPlayer.wavesurfer.seekTo(time / $CurrentMedia.time);
+            $MediaPlayer.seekTo(time / $CurrentMedia.time);
             follow = true;
         }
     }
-
-    function updatePosition() {
-        computePosition($SiteInnerBind, lyricsBind, {
-            placement: "bottom-end",
-            middleware: [
-                offset(({rects}) => ({
-                    mainAxis: -rects.floating.height - 16,
-                    alignmentAxis: 15 + (($QueueIsOpen) ? 330 : 0),
-                }))
-            ],
-        }).then(({x, y}) => {
-            Object.assign(lyricsBind.style, {
-                left: `${x}px`,
-                top: `${y}px`,
-            });
-        });
-    }
-
-    onMount(() => {
-        updatePosition();
-
-        autoUpdateCleanup = autoUpdate(
-            $SiteInnerBind,
-            lyricsBind,
-            updatePosition
-        );
-    });
-
-    onDestroy(() => {
-        // floating-ui
-        autoUpdateCleanup();
-    })
 </script>
 
-<div
-    class="site-lyrics"
-    class:visible={$ShowLyrics}
-    bind:this={lyricsBind}
->
-    <div class="container">
-        <div class="header new-panel-header">
-            <h4 class="title panel-title">{$_('text.lyrics')}</h4>
-            <button
-                class="follow button button--regular"
-                on:click={e => follow = true}
+<Portal target={$SiteContentBind}>
+    <sl-drawer
+        placement="bottom"
+        bind:this={drawer}
+        on:sl-hide={handleClose}
+        contained
+    >
+        <div slot="label">
+            {$_("text.lyrics")}
+        </div>
+
+        <div slot="header-actions">
+            <sl-button
+                class="follow"
+                on:click={() => (follow = true)}
                 hidden={!$lyrics.isTimestamped || follow}
             >
-                {$_('text.follow')}
-            </button>
+                {$_("text.follow")}
+            </sl-button>
         </div>
+
         <div
-            class="lyrics-container panel-content new-panel-main"
+            class="lyrics-container"
             on:wheel={handleScroll}
             on:touchstart={handleScroll}
             class:disable-scroll={follow}
+            class:hasTimestamps={$lyrics.isTimestamped}
         >
             {#if $CurrentMedia}
                 {#if $CurrentMedia.lyrics && !loading}
-                    <div
-                        class="lyrics"
-                        class:hasTimestamps={$lyrics.isTimestamped}
-                    >
-                        {#each $lyrics.lyricsFinal as line, i}
-                            <div
-                                class="line"
-                                class:current={$lyrics.currentLine === i}
-                                on:click={() => { handleClick(line.startSeconds) }}
-                            >
-                                {@html line.text}
-                            </div>
-                        {/each}
-                    </div>
+                    {#each $lyrics.lyricsFinal as line, i}
+                        <div
+                            class="line"
+                            class:current={$lyrics.currentLine === i}
+                            on:click={() => {
+                                handleClick(line.startSeconds);
+                            }}
+                        >
+                            {@html line.text}
+                        </div>
+                    {/each}
                 {:else}
-                    {$_('text.lyricsMissing')}
+                    {$_("text.lyricsMissing")}
                 {/if}
             {:else}
-                {$_('text.lyricsNoSong')}
+                {$_("text.lyricsNoSong")}
             {/if}
         </div>
-    </div>
-</div>
+    </sl-drawer>
+</Portal>
 
 <style>
+    sl-drawer::part(panel) {
+        min-height: 100%;
+    }
+
+    /* always show the footer, though empty */
+    sl-drawer::part(footer) {
+        display: block;
+    }
+
+    sl-drawer::part(header-actions) {
+        align-content: center;
+        gap: var(--spacing-lg);
+    }
+
     .current {
-        color: var(--color-highlight);
+        color: var(--color-primary);
         transition: color 0.1s ease-in-out;
     }
 
@@ -163,57 +143,25 @@
         overflow: hidden !important;
     }
 
-    .lyrics {
-        line-height: 1.6;
-    }
-
     .lyrics-container {
+        font-size: 2rem;
+        line-height: 1.2;
         overscroll-behavior: contain;
+        overflow: auto; /* key to keeping position after scrolling */
     }
 
     .line {
-        margin-block-end: var(--spacing-md);
+        margin-block-end: var(--spacing-lg);
     }
-    
+
     .hasTimestamps {
-        color: var(--color-text-secondary);
+        color: var(--color-outline-variant);
     }
 
     @media (hover: hover) {
         .hasTimestamps .line:hover {
             cursor: pointer;
-            color: var(--color-text-primary);
+            color: var(--color-secondary);
         }
-    }
-
-    .site-lyrics {
-        position: absolute;
-        z-index: 10;
-        background-color: var(--color-menu-background);
-        border: 2px solid var(--color-menu-border);
-        border-radius: 5px;
-        box-shadow: var(--shadow-lg);
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease-in-out;
-        max-width: calc(100% - var(--spacing-xxl));
-        inset-inline-start: 0;
-        inset-block-start: 0;
-    }
-
-    .visible {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .container {
-        width: 350px;
-        padding: var(--spacing-lg);
-    }
-
-    .panel-content {
-        max-height: 215px;
-        overflow: auto;
-        padding: var(--spacing-lg);
     }
 </style>

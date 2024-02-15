@@ -1,16 +1,15 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { MediaPlayer } from '../../stores/player';
-    import { NowPlayingQueue } from "../../stores/status";
-
-    import SVGShuffle from "/src/images/shuffle.svg";
+    import { _ } from "svelte-i18n";
+    import { MediaPlayer } from "~/stores/elements.js";
+    import { NowPlayingQueue } from "~/stores/state.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 </script>
 
-<button
-    class="icon-button icon-shuffle"
+<sl-button
     on:click={$MediaPlayer.shuffle()}
     disabled={$NowPlayingQueue.length === 0}
-    title="{$_('text.shuffle')}"
+    title={$_("text.shuffle")}
+    variant="text"
 >
-    <SVGShuffle style="transform: scale(0.85);" />
-</button>
+    <MaterialSymbol name="shuffle" />
+</sl-button>

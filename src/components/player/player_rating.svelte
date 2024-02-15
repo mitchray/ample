@@ -1,11 +1,14 @@
 <script>
-    import { CurrentMedia } from "../../stores/status";
-
-    import Rating from '../rating.svelte';
+    import { CurrentMedia } from "~/stores/state.js";
+    import Rating from "~/components/rating.svelte";
 </script>
 
-{#if $CurrentMedia}
-    <Rating type="song" data={$CurrentMedia} />
-{:else}
-    <Rating type="song" />
-{/if}
+{#key $CurrentMedia || 0}
+    {#if $CurrentMedia}
+        {#if $CurrentMedia.object_type !== "live_stream"}
+            <Rating type="song" data={$CurrentMedia} />
+        {/if}
+    {:else}
+        <Rating type="song" />
+    {/if}
+{/key}

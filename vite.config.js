@@ -1,34 +1,48 @@
 import { defineConfig } from "vite";
-import { svelteSVG } from "rollup-plugin-svelte-svg";
 import { svelte } from "@sveltejs/vite-plugin-svelte";
-import sveltePreprocess from 'svelte-preprocess';
-import autoprefixer from 'autoprefixer';
+import sveltePreprocess from "svelte-preprocess";
+import autoprefixer from "autoprefixer";
+import path from "path";
 
 export default defineConfig({
     base: "", // relative paths
 
-    // TODO temporary while javascript-ampache is still local
+    // allow using javascript-ampache locally for testing
     server: {
         fs: {
-            allow: ['..']
-        }
+            allow: [".."],
+        },
+    },
+
+    resolve: {
+        alias: {
+            "~": path.resolve("./src"),
+        },
     },
 
     plugins: [
-        svelteSVG({
-            enforce: "pre",
-        }),
-
         svelte({
             hot: {
-                preserveLocalState: true
+                preserveLocalState: true,
             },
             preprocess: sveltePreprocess({
                 sourceMap: false,
                 postcss: {
-                    plugins: [autoprefixer()]
-                }
+                    plugins: [autoprefixer()],
+                },
             }),
-        })
-    ]
+            onwarn: (warning, handler) => {
+                // handled within shoelace components
+                if (warning.code === "a11y-no-static-element-interactions")
+                    return;
+
+                // handled within shoelace components
+                if (warning.code === "a11y-click-events-have-key-events")
+                    return;
+
+                // proceed with other warnings normally
+                handler(warning);
+            },
+        }),
+    ],
 });

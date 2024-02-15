@@ -1,29 +1,25 @@
 <script context="module">
-    import { writable } from 'svelte/store';
-
-    import SVGStarFull from "/src/images/star_full.svg";
-    import SVGStarOutline from "/src/images/star_outline.svg";
-    import SVGFavoriteFull from "/src/images/favorite_full.svg";
-    import SVGFavoriteOutline from "/src/images/favorite_outline.svg";
+    import { writable } from "svelte/store";
 
     // shared across component instances
     let recentRating = writable({
         type: null,
         id: null,
-        rating: null
+        rating: null,
     });
 
     // shared across component instances
     let recentFlag = writable({
         type: null,
         id: null,
-        flag: null
+        flag: null,
     });
 </script>
 
 <script>
-    import { _ } from 'svelte-i18n';
-    import { API } from "../stores/api";
+    import { _ } from "svelte-i18n";
+    import { API, NowPlayingQueue } from "~/stores/state";
+    import MaterialSymbol from "./materialSymbol.svelte";
 
     export let type = null;
     export let data = {};
@@ -37,14 +33,25 @@
     $: ({ id, rating, flag, averagerating } = data);
 
     $: {
-        if ($recentRating.type === type && $recentRating.id === id && $recentRating.rating !== rating) {
+        if (
+            $recentRating.type === type &&
+            $recentRating.id === id &&
+            $recentRating.rating !== rating
+        ) {
             rating = $recentRating.rating;
         }
 
-        if ($recentFlag.type === type && $recentFlag.id === id && $recentFlag.flag !== flag) {
+        if (
+            $recentFlag.type === type &&
+            $recentFlag.id === id &&
+            $recentFlag.flag !== flag
+        ) {
             flag = $recentFlag.flag;
         }
     }
+
+    // override for playlist_songs
+    $: type = type === "playlist_songs" ? "song" : type;
 
     function handleRating() {
         loading = true;
@@ -52,127 +59,137 @@
         let parsedRating = parseInt(this.dataset.rating);
 
         // clear rating if it matches existing
-        let newRating = (parsedRating === rating) ? 0 : parsedRating;
+        let newRating = parsedRating === rating ? 0 : parsedRating;
 
         pendingRating = newRating;
 
-        $API.rate({ type: type, id: id, rating: newRating })
-            .then((result) => {
-                if (!result.error) {
-                    rating = newRating;
-                    recentRating.set({
-                        type: type,
-                        id: id,
-                        rating: newRating
-                    });
+        $API.rate({ type: type, id: id, rating: newRating }).then((result) => {
+            if (result.error) {
+                console.error("Ample error while rating:", result.error);
+            }
 
-                    loading = false;
-                }
-            });
+            if (!result.error) {
+                rating = newRating;
+                recentRating.set({
+                    type: type,
+                    id: id,
+                    rating: newRating,
+                });
+
+                loading = false;
+
+                // now update any items in the queue with the new rating
+                let foundItems = $NowPlayingQueue.filter(
+                    (item) => item.id === id && item.object_type === type,
+                );
+
+                foundItems.forEach((item) => {
+                    item.rating = newRating;
+                });
+
+                $NowPlayingQueue = $NowPlayingQueue;
+            }
+        });
     }
 
     function handleFlag() {
-        let newFlag = (flag ? 0 : 1);
+        let newFlag = flag ? 0 : 1;
 
-        $API.flag({ type: type, id: id, flag: newFlag })
-            .then((result) => {
-                if (!result.error) {
-                    flag = newFlag;
-                    recentFlag.set({
-                        type: type,
-                        id: id,
-                        flag: newFlag
-                    });
-                }
-            });
+        $API.flag({ type: type, id: id, flag: newFlag }).then((result) => {
+            if (result.error) {
+                console.error("Ample error while flagging:", result.error);
+                return;
+            }
+
+            if (!result.error) {
+                flag = newFlag;
+                recentFlag.set({
+                    type: type,
+                    id: id,
+                    flag: newFlag,
+                });
+            }
+        });
     }
 </script>
 
 <div class="c-rating" class:disabled={!id}>
-    <ul class="c-rating__stars">
+    <div class="stars">
         {#each values as ratingValue, i}
-            <li on:click={handleRating} data-rating="{ratingValue}" class="c-rating__star" class:current={rating === ratingValue} class:new={loading && pendingRating === ratingValue}>
-                {#if rating > i}
-                    <SVGStarFull />
-                {:else}
-                    <SVGStarOutline />
-                {/if}
-            </li>
+            <span
+                on:click={handleRating}
+                data-rating={ratingValue}
+                class="star"
+                class:new={loading && pendingRating === ratingValue}
+                class:filled={ratingValue <= rating}
+            >
+                <MaterialSymbol name="star" fill={rating > i} />
+            </span>
         {/each}
-    </ul>
+    </div>
 
-    <span on:click={handleFlag} class="c-rating__flag" class:flagged={flag}>
-        {#if flag}
-            <SVGFavoriteFull />
-        {:else}
-            <SVGFavoriteOutline />
-        {/if}
+    <span on:click={handleFlag} class="flag" class:flagged={flag}>
+        <MaterialSymbol name="favorite" fill={flag || false} />
     </span>
 
     {#if averagerating && showAverageRatings}
-        <span class="c-rating__average" title="{$_('text.ratingAverage')}">
+        <span class="average" title={$_("text.ratingAverage")}>
             ({averagerating})
         </span>
     {/if}
 </div>
 
-
 <style>
-    .c-rating__star,
-    .c-rating__flag {
-        transition: all 50ms linear;
-    }
-
-    @media (hover: hover) {
-        .c-rating__star:hover,
-        .c-rating__flag:hover {
-            transform: scale(1.2);
-        }
-    }
-
-    ul {
-        margin: 0;
-    }
-
-    li {
-        cursor: pointer;
-        display: inline-block;
-        opacity: 0.6;
-    }
-
-    span {
-        cursor: pointer;
-    }
-    
     .c-rating {
         display: inline-flex;
         align-items: center;
         line-height: 0;
+        user-select: none;
     }
 
     .c-rating.disabled {
         pointer-events: none;
-        opacity: 0.7;
-    }
-
-    .c-rating__stars {
-        display: flex;
-    }
-
-    .c-rating__flag {
-        padding: 0;
-        padding-inline-start: var(--spacing-sm);
         opacity: 0.6;
     }
 
-    .c-rating__average {
+    .star,
+    .flag {
+        transition: all 50ms linear;
+    }
+
+    .star.filled {
+        color: var(--color-rating);
+    }
+
+    .star:not(.filled) {
+        opacity: 0.5;
+    }
+
+    @media (hover: hover) {
+        .star:hover,
+        .flag:hover {
+            transform: scale(1.2);
+        }
+    }
+
+    span:not(.average) {
+        cursor: pointer;
+    }
+
+    .stars {
+        display: flex;
+        margin: 0;
+    }
+
+    .flag {
+        padding: 0;
+        padding-inline-start: var(--spacing-sm);
+        color: var(--color-favorite);
+    }
+
+    .average {
         cursor: default;
         padding-inline-start: var(--spacing-sm);
-    }
-    
-    .current,
-    .flagged {
-        opacity: 1;
     }
 
     .new {
@@ -190,15 +207,4 @@
             transform: rotate(360deg);
         }
     }
-
-    @media (hover: hover) {
-        .c-rating:hover .c-rating__stars {
-            color: var(--color-rating);
-        }
-
-        .c-rating:hover .c-rating__flag {
-            color: var(--color-favorite);
-        }
-    }
 </style>
-

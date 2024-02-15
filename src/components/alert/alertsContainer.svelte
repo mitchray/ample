@@ -1,14 +1,17 @@
 <script>
     import { onMount, onDestroy } from "svelte";
-    import { computePosition, autoUpdate, offset, size } from '@floating-ui/dom';
-    import { quintOut } from 'svelte/easing';
-    import { fly, fade } from 'svelte/transition';
-    import { flip } from 'svelte/animate';
-
-    import { SiteContentBind } from '../../stores/player';
-    import { AlertsList } from '../../stores/message';
-
-    import AlertCard from '../../components/alert/alertCard.svelte';
+    import {
+        computePosition,
+        autoUpdate,
+        offset,
+        size,
+    } from "@floating-ui/dom";
+    import { quintOut } from "svelte/easing";
+    import { fly, fade } from "svelte/transition";
+    import { flip } from "svelte/animate";
+    import { SiteContentBind } from "~/stores/elements.js";
+    import { AlertsList } from "~/stores/message.js";
+    import AlertCard from "~/components/alert/alertCard.svelte";
 
     let timeout;
     let freshAlerts = [];
@@ -17,7 +20,7 @@
 
     $: {
         if ($AlertsList) {
-            freshAlerts = $AlertsList.filter(e => e.fresh === true);
+            freshAlerts = $AlertsList.filter((e) => e.fresh === true);
         }
 
         if (freshAlerts.length > 0) {
@@ -56,7 +59,7 @@
             placement: "bottom",
             middleware: [
                 size({
-                    apply({availableHeight, elements}) {
+                    apply({ availableHeight, elements }) {
                         Object.assign(elements.floating.style, {
                             // Minimum acceptable height is 50px.
                             // `flip` will then take over.
@@ -64,14 +67,14 @@
                         });
                     },
                 }),
-                offset(({rects}) => ({
+                offset(({ rects }) => ({
                     mainAxis: -rects.floating.height - 3,
                     alignmentAxis: 15,
-                }))
+                })),
             ],
-        }).then(({x, y}) => {
+        }).then(({ x, y }) => {
             Object.assign(listBind.style, {
-                left:  `${x}px`,
+                left: `${x}px`,
                 top: `${y}px`,
             });
         });
@@ -83,25 +86,26 @@
         autoUpdateCleanup = autoUpdate(
             $SiteContentBind,
             listBind,
-            updatePosition
+            updatePosition,
         );
     });
 
     onDestroy(() => {
         // floating-ui
         autoUpdateCleanup();
-    })
+    });
 </script>
 
 <div class="site-alerts" bind:this={listBind}>
     {#each freshAlerts as alert (alert.id)}
-        <div class="card-container"
-             in:fly="{{ y: -100, duration: 300, easing: quintOut }}"
-             out:fade="{{ duration: 300, easing: quintOut }}"
-             animate:flip="{{ duration: 300 }}"
-             on:mouseenter={e => handleEnter(e)}
-             on:mouseleave={e => handleLeave(e)}
-             data-id="{alert.id}"
+        <div
+            class="card-container"
+            in:fly={{ y: -100, duration: 300, easing: quintOut }}
+            out:fade={{ duration: 300, easing: quintOut }}
+            animate:flip={{ duration: 300 }}
+            on:mouseenter={(e) => handleEnter(e)}
+            on:mouseleave={(e) => handleLeave(e)}
+            data-id={alert.id}
         >
             <AlertCard item={alert} />
         </div>
@@ -111,7 +115,8 @@
 <style>
     .site-alerts :global(.alert-card) {
         box-shadow: var(--shadow-xxl), var(--shadow-xxl), var(--shadow-xxl);
-        border: 2px solid var(--color-menu-border);
+        border-width: 2px;
+        border-style: solid;
     }
 
     .card-container {

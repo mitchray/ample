@@ -1,0 +1,271 @@
+<script>
+    import { _ } from "svelte-i18n";
+    import { writable } from "svelte/store";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { groupBy, sortBy, partition } from "lodash-es";
+    import { API, User } from "~/stores/state";
+    import { Saved } from "~/stores/settings.js";
+    import { formatReleaseType } from "~/logic/formatters.js";
+    import { userPreference } from "~/logic/preferences.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import RenderReleases from "./_renderReleases.svelte";
+    import FeaturedOptions from "./_featuredOptions.svelte";
+
+    export let artistID;
+
+    let appearances = [];
+    let releases = [];
+
+    $: query = createQuery({
+        queryKey: ["artistAlbums", artistID],
+        queryFn: async () => {
+            let result = await $API.artistAlbums({ filter: artistID });
+
+            if (result.error) {
+                console.error(
+                    "Ample error getting artist albums:",
+                    result.error,
+                );
+                return [];
+            }
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+        select: (data) => {
+            let divide = partition(
+                data,
+                (item) => item.artist?.id === artistID,
+            );
+            let byArtist = divide[0];
+            appearances = divide[1];
+            return byArtist;
+        },
+    });
+
+    let defaultOptions = {
+        view: "expanded_columns",
+        sort: "year",
+        group: "release_type",
+        sortReversed: false,
+    };
+
+    let loadedOptions = writable($Saved.getItem("ArtistReleases") || {}); // load saved settings from localstorage
+
+    let state = writable(Object.assign({}, defaultOptions, $loadedOptions)); // merge table defaults, localstorage, passed component props
+
+    // run processData whenever $query.data or displayOptions change
+    $: $query.data, processData();
+    $: $state, processData();
+
+    $: $state, $Saved.setItem("ArtistReleases", $state); // write to localstorage whenever state changes
+
+    async function processData() {
+        // sort entire array together
+        let sorted = sortBy($query.data, [$state.sort]);
+
+        if ($state.sortReversed) {
+            sorted.reverse();
+        }
+
+        let groupMethod;
+
+        switch ($state.group) {
+            case "name":
+                groupMethod = (item) => item.name.charAt(0);
+                break;
+            case "year":
+                groupMethod = (item) => item.year || "";
+                break;
+            case "decade":
+                groupMethod = (item) => Math.floor(item.year / 10) * 10 || "";
+                break;
+            case "release_type":
+                groupMethod = (item) => item.type || "";
+                break;
+            case "none":
+            default:
+                groupMethod = false;
+                break;
+        }
+
+        // group into sections if requested
+        let grouped = groupBy(sorted, groupMethod);
+
+        // convert to array
+        grouped = Object.entries(grouped).map(([key, value]) => {
+            return [key, value];
+        });
+
+        // reorder the groups to match the order set in preference
+        if ($state.group === "release_type") {
+            let releaseTypesOrder =
+                userPreference("album_release_type_sort") || "";
+
+            let arr = releaseTypesOrder.split(",");
+
+            grouped.sort(function (a, b) {
+                // ensures the order matches preference, with new items appended
+                return (
+                    (arr.indexOf(a[0].toLowerCase()) + 1 || Number.MAX_VALUE) -
+                    (arr.indexOf(b[0].toLowerCase()) + 1 || Number.MAX_VALUE)
+                );
+            });
+
+            // formatting
+            grouped.forEach((type) => (type[0] = formatReleaseType(type[0])));
+        }
+
+        releases = grouped;
+    }
+</script>
+
+<sl-dropdown style="position: relative; z-index: 3000; ">
+    <sl-button slot="trigger" caret>{$_("text.options")}</sl-button>
+
+    <sl-card style="width: 300px;">
+        <div class="display-options">
+            <sl-select
+                label="Display"
+                value={$state.view}
+                on:sl-change={(e) => ($state.view = e.target.value)}
+            >
+                <MaterialSymbol name="visibility" slot="prefix" />
+                <sl-option value="table">Table</sl-option>
+                <sl-option value="card-small">Cards (small)</sl-option>
+                <sl-option value="card">Cards (large)</sl-option>
+                <sl-option value="expanded_columns">Tracks (columns)</sl-option>
+                <sl-option value="expanded_table">Tracks (table)</sl-option>
+            </sl-select>
+
+            <div class="sort-options">
+                <sl-select
+                    label="Sort"
+                    clearable
+                    placeholder="None"
+                    value={$state.sort}
+                    on:sl-change={(e) => ($state.sort = e.target.value)}
+                >
+                    <MaterialSymbol name="sort" slot="prefix" />
+                    <sl-option value="name">Name</sl-option>
+                    <sl-option value="artist.name">Artist</sl-option>
+                    <sl-option value="rating">Rating</sl-option>
+                    <sl-option value="year">Year</sl-option>
+                </sl-select>
+
+                <sl-tooltip content="Direction">
+                    <sl-button
+                        on:click={() =>
+                            ($state.sortReversed = !$state.sortReversed)}
+                    >
+                        {#if $state.sortReversed}
+                            <MaterialSymbol name="arrow_downward" />
+                        {:else}
+                            <MaterialSymbol name="arrow_upward" />
+                        {/if}
+                    </sl-button>
+                </sl-tooltip>
+            </div>
+
+            <sl-select
+                label="Grouping"
+                clearable
+                placeholder="None"
+                value={$state.group}
+                on:sl-change={(e) => ($state.group = e.target.value)}
+            >
+                <MaterialSymbol name="category" slot="prefix" />
+                <sl-option value="name">Name</sl-option>
+                <sl-option value="release_type">Release Type</sl-option>
+                <sl-option value="year">Year</sl-option>
+                <sl-option value="decade">Decade (Year)</sl-option>
+            </sl-select>
+        </div>
+    </sl-card>
+</sl-dropdown>
+
+<div class="releases">
+    {#if $query.isLoading}
+        <p>Loading...</p>
+    {:else if $query.isError}
+        <p>Error: {$query.error.message}</p>
+    {:else if $query.isSuccess}
+        {#if releases.length > 0}
+            {#each releases as [group, items]}
+                <div class="release-group">
+                    {#if releases.length > 0 && group !== "undefined"}
+                        <h3 class="group-title">{group}</h3>
+                    {/if}
+
+                    <RenderReleases view={$state.view} {items} />
+                </div>
+            {/each}
+        {/if}
+
+        {#if appearances.length > 0}
+            <div class="release-group">
+                <h3 class="group-title appearances">
+                    <span class="appearances-text">Appears On</span>
+
+                    <FeaturedOptions />
+                </h3>
+
+                <RenderReleases
+                    view={$state.view}
+                    items={appearances}
+                    filterToArtist={artistID}
+                />
+            </div>
+        {/if}
+
+        {#if !releases && !appearances}
+            <p>No items found</p>
+        {/if}
+    {/if}
+</div>
+
+<style>
+    .releases {
+        margin-block-start: var(--spacing-lg);
+        justify-self: unset; /* let children be full width */
+        overflow: hidden; /* tables won't overflow otherwise */
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-xxxl);
+    }
+
+    .release-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .group-title {
+        margin-block-end: var(--spacing-lg);
+        padding-block-end: var(--spacing-md);
+        border-block-end: 1px solid var(--color-outline-variant);
+    }
+
+    .group-title.appearances {
+        display: flex;
+        gap: var(--spacing-md);
+        flex-shrink: 0;
+        align-items: center;
+    }
+
+    .display-options {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-lg);
+        max-width: 280px;
+    }
+
+    .sort-options {
+        display: flex;
+        gap: var(--spacing-lg);
+        align-items: end;
+    }
+
+    .appearances-text {
+        flex-shrink: 0;
+    }
+</style>

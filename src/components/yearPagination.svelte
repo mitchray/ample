@@ -1,9 +1,7 @@
 <script>
-    import { _ } from 'svelte-i18n';
+    import { _ } from "svelte-i18n";
     import { onMount } from "svelte";
-
-    import SVGPlus from "/src/images/plus.svg";
-    import SVGMinus from "/src/images/minus.svg";
+    import MaterialSymbol from "./materialSymbol.svelte";
 
     const currentYear = new Date().getFullYear();
 
@@ -18,35 +16,35 @@
 
     // Cap values at currentYear
     function maxValueCheck(val) {
-        return (val > currentYear) ? currentYear : val;
+        return val > currentYear ? currentYear : val;
     }
 
-    const handleValues = (e) => {
+    const handleValues = () => {
         // Ensure values are never higher than current year
         toFinal = maxValueCheck(toFinal);
         fromFinal = maxValueCheck(fromFinal);
-    }
+    };
 
-    const handleTo = (e) => {
+    const handleTo = () => {
         if (toFinal < fromFinal) {
             fromFinal = toFinal;
         }
 
         handleValues();
-    }
+    };
 
-    const handleFrom = (e) => {
+    const handleFrom = () => {
         if (fromFinal > toFinal) {
             toFinal = fromFinal;
         }
 
         handleValues();
-    }
+    };
 
-    const handleSearch = (e) => {
+    const handleSearch = () => {
         fromYear = fromFinal;
         toYear = toFinal;
-    }
+    };
 
     onMount(() => {
         handleSearch();
@@ -57,37 +55,70 @@
 <div class="container">
     <div class="inputs">
         <div class="input-group">
-            <label>
-                {$_('text.from')}
-                <input type="number"
-                    bind:value={fromFinal}
-                    size="4"
-                    maxlength="4"
-                    on:change={handleFrom}
-                >
-            </label>
+            <sl-input
+                value={fromFinal}
+                type="number"
+                label={$_("text.from")}
+                maxlength="4"
+                no-spin-buttons
+                on:sl-change={handleFrom}
+            ></sl-input>
 
-            <button class="minus button" on:click={() => {--fromFinal; handleFrom()}}><SVGMinus /></button>
-            <button class="plus button" on:click={() => {++fromFinal; handleFrom()}}><SVGPlus /></button>
+            <sl-button
+                class="minus button"
+                on:click={() => {
+                    --fromFinal;
+                    handleFrom();
+                }}
+            >
+                <MaterialSymbol name="remove" />
+            </sl-button>
+            <sl-button
+                class="plus button"
+                on:click={() => {
+                    ++fromFinal;
+                    handleFrom();
+                }}
+            >
+                <MaterialSymbol name="add" />
+            </sl-button>
         </div>
 
         <div class="input-group">
-            <label>
-                {$_('text.to')}
-                <input type="number"
-                    bind:value={toFinal}
-                    size="4"
-                    maxlength="4"
-                    on:change={handleTo}
-                >
-            </label>
+            <sl-input
+                value={toFinal}
+                type="number"
+                label={$_("text.to")}
+                maxlength="4"
+                no-spin-buttons
+                on:sl-change={handleTo}
+            ></sl-input>
 
-            <button class="minus button" on:click={() => {--toFinal; handleTo()}}><SVGMinus /></button>
-            <button class="plus button" on:click={() => {++toFinal; handleTo()}}><SVGPlus /></button>
+            <sl-button
+                class="minus button"
+                on:click={() => {
+                    --toFinal;
+                    handleTo();
+                }}
+            >
+                <MaterialSymbol name="remove" />
+            </sl-button>
+
+            <sl-button
+                class="plus button"
+                on:click={() => {
+                    ++toFinal;
+                    handleTo();
+                }}
+            >
+                <MaterialSymbol name="add" />
+            </sl-button>
         </div>
     </div>
 
-    <button class="submit button button--primary" on:click={handleSearch}>{$_('text.search')}</button>
+    <sl-button variant="primary" class="submit" on:click={handleSearch}>
+        {$_("text.search")}
+    </sl-button>
 </div>
 
 <style>
@@ -95,11 +126,10 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        background-color: var(--color-card-primary);
+        background-color: var(--color-surface-container);
         border-radius: 10px;
         margin-block-end: var(--spacing-xxl);
         overflow: hidden;
-        box-shadow: var(--shadow-md);
         padding: var(--spacing-lg);
         max-width: min-content;
     }
@@ -112,7 +142,7 @@
     }
 
     /* hide number spinners */
-    input[type=number] {
+    input[type="number"] {
         -moz-appearance: textfield;
     }
 
@@ -129,15 +159,11 @@
         margin-block-end: var(--spacing-lg);
     }
 
-    .input-group button {
+    .input-group sl-button {
         padding: 0;
         margin: 0;
         position: relative;
-        transform: translateY(33%);
-    }
-
-    .input-group button :global(svg) {
-        margin: unset;
+        transform: translateY(25%);
     }
 
     .minus {
@@ -151,7 +177,6 @@
 
     .inputs label {
         margin: 0 var(--spacing-md);
-        color: var(--color-text-heading);
     }
 
     .inputs input {

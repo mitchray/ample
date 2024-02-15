@@ -1,51 +1,46 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount, tick } from "svelte";
-    import { API } from "../stores/api";
-    import { getSongsFromPlaylist } from "../logic/song";
-    import { PageTitle } from "../stores/status";
-    import Rating from '../components/rating.svelte';
-    import Lister from '../components/lister/lister.svelte';
-    import PlaylistArt from '../components/playlist/playlist_art.svelte';
-    import PlaylistEdit from '../components/playlist/playlist_edit.svelte';
-    import PlaylistDelete from '../components/playlist/playlist_delete.svelte';
-    import Menu from '../components/menu.svelte';
-    import SVGPlaylist from "/src/images/queue_music.svg";
-    import SVGSmartlist from "/src/images/smartlist.svg";
-    import SVGRadio from "/src/images/radio.svg";
+    import { _ } from "svelte-i18n";
+    import { onMount } from "svelte";
+    import { replace } from "svelte-spa-router";
+    import { API, PageTitle } from "~/stores/state";
+    import { getSongsFromPlaylist } from "~/logic/song";
+    import { songsPreset } from "~/components/lister/columns.js";
+    import Rating from "~/components/rating.svelte";
+    import Lister from "~/components/lister/lister.svelte";
+    import Art from "~/components/art.svelte";
+    import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
+    import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
+    import Portal from "~/components/portal.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let params = {}
+    export let params = {};
 
     let playlist;
     let songs = [];
     let loading = true;
     let playlistType = "playlist";
-    let playlistEditIsVisible = false;
-    let playlistDeleteIsVisible = false;
+    let drawerEdit, drawerDelete;
 
     $: songs = songs;
     $: playlist = playlist;
 
-    let title = $_('text.playlist');
+    let title = $_("text.playlist");
     $PageTitle = title;
 
-    async function handleEditPlaylist() {
-        playlistEditIsVisible = !playlistEditIsVisible;
-
-        await tick();
-    }
-
-    async function handleDeletePlaylist() {
-        playlistDeleteIsVisible = !playlistDeleteIsVisible;
-
-        await tick();
+    function handleDelete(e) {
+        if (playlist?.id === e.detail.id) {
+            replace("#/playlists");
+        }
     }
 
     onMount(async () => {
         playlist = await $API.playlist({ filter: params.id });
 
         if (playlist?.id) {
-            songs = await getSongsFromPlaylist({ id: params.id, type: "playlist" });
+            songs = await getSongsFromPlaylist({
+                id: params.id,
+                type: "playlist",
+            });
 
             if (playlist.id.match(/^smart_/)) {
                 playlistType = "smartlist";
@@ -53,8 +48,30 @@
         } else {
             // artist mix
             playlistType = "mix";
-            playlist = await $API.artist({filter: params.id});
-            songs = await getSongsFromPlaylist({ id: params.id, type: "artist_mix" });
+            playlist = await $API.artist({ filter: params.id });
+
+            if (playlist.error) {
+                console.error(
+                    "Ample error getting artist for playlist mix:",
+                    playlist.error,
+                );
+                loading = false;
+                return;
+            }
+
+            songs = await getSongsFromPlaylist({
+                id: params.id,
+                type: "artist_mix",
+            });
+
+            if (songs.error) {
+                console.error(
+                    "Ample error getting songs from playlist:",
+                    songs.error,
+                );
+                loading = false;
+                return;
+            }
         }
 
         loading = false;
@@ -62,7 +79,9 @@
 </script>
 
 <svelte:head>
-    <title>{(loading) ? $_('text.loading') : `${playlist?.name} (${playlistType})`}</title>
+    <title>
+        {loading ? $_("text.loading") : `${playlist?.name} (${playlistType})`}
+    </title>
 </svelte:head>
 
 {#if playlist?.id && !loading}
@@ -71,12 +90,12 @@
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">
-                        <PlaylistArt bind:songs fallback="{playlist.art}" />
+                        <Art size="large" data={playlist} type="playlist" />
                     </div>
 
                     {#if playlistType === "playlist"}
                         <div class="rating">
-                            <Rating type="playlist" data={playlist}  />
+                            <Rating type="playlist" data={playlist} />
                         </div>
                     {/if}
                 </div>
@@ -84,11 +103,14 @@
                 <div class="info">
                     <div class="type">
                         {#if playlistType === "smartlist"}
-                            <SVGSmartlist class="inline" />&nbsp;{$_('text.smartlist')}
+                            <MaterialSymbol name="electric_bolt" />
+                            &nbsp;{$_("text.smartlist")}
                         {:else if playlistType === "mix"}
-                            <SVGRadio class="inline" />&nbsp;{$_('text.mix')}
+                            <MaterialSymbol name="radio" />
+                            &nbsp;{$_("text.mix")}
                         {:else}
-                            <SVGPlaylist class="inline" />&nbsp;{$_('text.playlist')}
+                            <MaterialSymbol name="queue_music" />
+                            &nbsp;{$_("text.playlist")}
                         {/if}
                     </div>
 
@@ -98,8 +120,21 @@
 
                     {#if playlistType === "playlist"}
                         <div class="playlist-actions">
-                            <button class="button button--regular" type="button" id="js-action-playlist_edit_{params.id}" on:click={handleEditPlaylist} title="{$_('text.edit')}">{$_('text.edit')}</button>
-                            <button class="button button--danger" type="button" id="js-action-playlist_delete_{params.id}" on:click={handleDeletePlaylist} title="{$_('text.delete')}">{$_('text.delete')}</button>
+                            <sl-button
+                                variant="primary"
+                                on:click={() => drawerEdit.show()}
+                                title={$_("text.edit")}
+                            >
+                                {$_("text.edit")}
+                            </sl-button>
+
+                            <sl-button
+                                variant="danger"
+                                on:click={() => drawerDelete.show()}
+                                title={$_("text.delete")}
+                            >
+                                {$_("text.delete")}
+                            </sl-button>
                         </div>
                     {/if}
                 </div>
@@ -107,38 +142,37 @@
         </div>
 
         <div class="songs-container">
-            <div class="songs page-main">
+            <div class="songs">
                 <Lister
+                    id="Playlist"
                     bind:data={songs}
+                    columns={songsPreset}
                     type="playlist_songs"
-                    showCheckboxes={playlistType === "playlist"}
-                    tableOnly={true}
-                    showIndex={true}
                     virtualList={true}
                     actionData={{
-                        type: "",
-                        mode: "fullButtons",
+                        type: "songs",
+                        displayMode: "fullButtons",
                         showShuffle: songs.length > 1,
-                        data: Object.create({songs: songs})
+                        data: Object.create({ songs: songs }),
                     }}
                 />
             </div>
         </div>
     </div>
 
-    {#if playlistEditIsVisible}
-        <Menu anchor="left" toggleSelector={"#js-action-playlist_edit_" + params.id} bind:isVisible={playlistEditIsVisible}>
-            <PlaylistEdit bind:playlist={playlist} bind:isVisible={playlistEditIsVisible} />
-        </Menu>
-    {/if}
+    <Portal>
+        <DrawerEdit bind:this={drawerEdit} bind:playlist />
+    </Portal>
 
-    {#if playlistDeleteIsVisible}
-        <Menu anchor="left" toggleSelector={"#js-action-playlist_delete_" + params.id} bind:isVisible={playlistDeleteIsVisible}>
-            <PlaylistDelete bind:playlist={playlist} bind:isVisible={playlistDeleteIsVisible} />
-        </Menu>
-    {/if}
+    <Portal>
+        <DrawerDelete
+            bind:this={drawerDelete}
+            bind:playlist
+            on:playlistDeleted={handleDelete}
+        />
+    </Portal>
 {:else}
-    <p>{$_('text.loading')}</p>
+    <p>{$_("text.loading")}</p>
 {/if}
 
 <style>
@@ -165,7 +199,6 @@
         border-radius: 6px;
         overflow: hidden;
         font-size: 0;
-        border: 1px solid hsla(0, 0%, 50%, 0.2);
         margin-block-end: var(--spacing-lg);
     }
 
@@ -178,9 +211,7 @@
     .title {
         --roboto-opsz: 50;
         line-height: 1.1;
-        letter-spacing: 0.02em;
         font-weight: 300;
-        font-stretch: 80%;
         display: flex;
         margin-block-end: var(--spacing-lg);
     }
@@ -188,6 +219,7 @@
     .playlist-actions {
         display: flex;
         flex-direction: row;
+        gap: var(--spacing-sm);
     }
 
     .type {
@@ -196,7 +228,6 @@
         font-size: 14px;
         font-weight: 300;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
         align-items: center;
     }
 
@@ -233,29 +264,6 @@
 
         .art-container {
             max-width: 240px;
-        }
-    }
-
-    @container site-content-inner (min-width: 1400px) {
-        .page-wrapper {
-            grid-template-columns: 400px 1fr;
-            grid-template-rows: 1fr;
-            min-height: 0;
-            overflow: hidden;
-            position: absolute;
-            inset-block-start: 0;
-            inset-block-end: 0;
-            inset-inline-start: 0;
-            inset-inline-end: 0;
-            padding: 0;
-            grid-column: full;
-            gap: 0;
-        }
-
-        .details-container,
-        .songs-container {
-            padding: var(--spacing-xxl);
-            overflow: auto;
         }
     }
 </style>

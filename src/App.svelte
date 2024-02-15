@@ -1,132 +1,135 @@
 <script>
-    import '/src/css/normalize.css';
-    import '/src/css/global.css';
-
-    import { onMount } from 'svelte';
-
-    import { isLoggedIn, userToken } from './stores/user';
-    import { MediaPlayer, SiteContentBind, SiteInnerBind } from "./stores/player";
-    import { Theme, PageTitle } from "./stores/status";
-    import { serverURL, serverIsHardcoded } from "./stores/server.js";
-
-    import { extendSession, validateSession } from './logic/user';
-    import { isLoading as i18nIsLoading } from 'svelte-i18n'
-    import { setupI18n } from "./logic/i18n.js";
+    import "@shoelace-style/shoelace/dist/themes/light.css";
+    import "@shoelace-style/shoelace/dist/themes/dark.css";
+    import "/src/css/normalize.css";
+    import "/src/css/global.css";
+    import "@shoelace-style/shoelace/dist/shoelace.js";
+    import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
+    import { onMount } from "svelte";
+    import { User, Server, PageTitle, ShowSearch } from "~/stores/state.js";
+    import { Theme } from "~/stores/settings";
+    import { extendSession, validateSession } from "~/logic/user";
+    import { isLoading as i18nIsLoading } from "svelte-i18n";
+    import { setupI18n } from "~/logic/i18n.js";
 
     // Use custom string as dnd-action ID
     import { overrideItemIdKeyNameBeforeInitialisingDndZones } from "svelte-dnd-action";
     overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
 
-    import ThemeHandler from './components/themeHandler.svelte';
-    import SiteLoading from './components/siteLoading.svelte';
-    import Header from './components/header.svelte';
-    import Sidebar from './components/sidebar.svelte';
-    import Queue from './components/queue.svelte';
-    import Player from './components/player/player.svelte';
-    import Fullscreen from './components/fullscreen/fullscreen.svelte';
-    import Notifications from './components/notification/notificationsContainer.svelte';
-    import Alerts from './components/alert/alertsContainer.svelte';
-    import Lyrics from './components/lyrics.svelte';
-    import ArtistsSync from './components/artistsSync.svelte';
-    import Routes from './components/routes.svelte';
-    import LoginPage from './views/login.svelte';
+    import ThemeHandler from "~/components/theme/themeHandler.svelte";
+    import Header from "~/components/header.svelte";
+    import Sidebar from "~/components/sidebar/sidebar.svelte";
+    import Queue from "~/components/queue/queue.svelte";
+    import Player from "~/components/player/player2.svelte";
+    import Alerts from "~/components/alert/alertsContainer.svelte";
+    import Lyrics from "~/components/lyrics.svelte";
+    import Preferences from "~/views/preferences/preferences.svelte";
+    import ItemSync from "~/components/itemSync.svelte";
+    import Routes from "~/components/routes.svelte";
+    import NotificationToasts from "~/components/notification/notificationToasts.svelte";
+    import LoginPage from "~/views/login.svelte";
+    import { hideLoadingOverlay } from "~/logic/ui.js";
+    import localforage from "localforage";
 
     setupI18n();
 
-    window.setInterval(function(){
-        extendSession();
-    }, 1000*60*15);
-
-    // hook into page navigation
-    history.pushState = new Proxy(history.pushState, {
-        apply (target, thisArg, argumentsList) {
-            $MediaPlayer.setWaveColors();
-
-            // reset scroll position after each 'page' load
-            document.querySelector('.site-content-inner').scrollTop = 0;
-
-            Reflect.apply(target, thisArg, argumentsList);
-
-            // reset page title
-            $PageTitle = "";
-        }
-    })
+    window.setInterval(
+        function () {
+            extendSession();
+        },
+        1000 * 60 * 15,
+    );
 
     // hook into back/forward events
     window.onpopstate = () => {
-        // Needs to be in a zero-length timeout
-        setTimeout(() => $MediaPlayer.setWaveColors(), 0);
+        // close search after navigating
+        $ShowSearch = false;
+
+        // reset page title
+        $PageTitle = "";
     };
 
-    async function getServerURL() {
-        let hardcodedServerURL;
+    async function loadFromConfig() {
+        let configFile = {};
 
-        // load from config file if present & set
+        // just `config/ample.json` when developing locally,
         try {
-            hardcodedServerURL = await fetch(`${import.meta.env.BASE_URL}/ample.json`)
-                .then(response => response.json())
-                .then(data => {
-                    return data.ampacheURL;
+            configFile = await fetch(
+                `${import.meta.env.BASE_URL}/config/ample.json`,
+            )
+                .then((response) => response.json())
+                .then((data) => {
+                    return data;
                 });
-        } catch (e) {
-        }
+        } catch (e) {}
 
-        if (hardcodedServerURL) {
-            $serverURL = hardcodedServerURL;
-            $serverIsHardcoded = true;
-        } else {
-            $serverURL = JSON.parse(localStorage.getItem('AmpleServerURL')) || '';
-        }
+        let newObject = {
+            ...configFile,
+            url:
+                configFile?.ampacheURL ||
+                (await localforage.getItem("AmpleServerURL")) ||
+                "",
+            isHardcodedURL: configFile?.ampacheURL?.length > 1,
+        };
+
+        // we don't need this anymore as it becomes the url property
+        delete newObject.ampacheURL;
+
+        $Server = { ...$Server, ...newObject };
     }
 
+    const queryClient = new QueryClient();
+
     onMount(async () => {
-        await getServerURL();
+        await loadFromConfig();
         await validateSession();
 
-        if ($Theme === 'light') {
-            document.body.classList.add('theme-is-light');
+        // remove the starting sl-theme-dark
+        document.documentElement.classList.remove("sl-theme-dark");
+
+        if ($Theme.mode === "light") {
+            document.documentElement.classList.add("sl-theme-light");
+        } else {
+            document.documentElement.classList.add("sl-theme-dark");
         }
+
+        hideLoadingOverlay();
     });
 </script>
 
 <ThemeHandler />
+<ItemSync />
 
 {#if !$i18nIsLoading}
-    {#if $isLoggedIn === null && $userToken === null}
-        <SiteLoading/>
-    {/if}
+    {#if !$User.isLoggedIn}
+        <LoginPage />
+    {:else}
+        <QueryClientProvider client={queryClient}>
+            <Header />
+            <div class="site-inner">
+                <Sidebar />
 
-    {#if $isLoggedIn === false}
-        <LoginPage/>
-    {/if}
+                <Routes />
 
-    {#if $isLoggedIn}
-        <ArtistsSync />
-        <Header/>
-        <div class="site-inner" bind:this={$SiteInnerBind}>
-            <Sidebar/>
-            <div class="site-content" bind:this={$SiteContentBind}>
-                <div class="site-content-inner">
-                    <Routes />
-                </div>
+                <Queue />
             </div>
-            <Queue/>
-        </div>
-        <Player/>
-        <Fullscreen/>
-        <Lyrics/>
-        <Notifications/>
-        <Alerts/>
+            <Player />
+            <Lyrics />
+            <Preferences />
+            <NotificationToasts />
+            <Alerts />
+        </QueryClientProvider>
     {/if}
 {/if}
 
 <style>
-    :global(body) {
+    :global(body),
+    :global(#app) {
+        background-color: var(--color-surface-container);
+        color: var(--color-on-surface);
         display: flex;
         flex-direction: column;
         height: 100vh;
-        background-color: var(--color-background);
-        color: var(--color-text-primary);
     }
 
     :global(.site-header) {
@@ -149,13 +152,18 @@
     }
 
     :global(.site-content) {
+        background-color: var(--color-background);
+        border: 1px solid var(--color-background);
         position: relative;
         flex: 1;
         z-index: -10;
+        border-radius: 15px;
+        overflow: hidden;
+        margin-block-end: var(--spacing-lg);
     }
 
     :global(.site-content-inner) {
-        --content-padding: var(--spacing-lg);
+        --content-padding: var(--spacing-xxl);
         container-name: site-content-inner;
         container-type: size;
         position: absolute;
@@ -164,8 +172,8 @@
         inset-inline-end: 0;
         inset-block-end: 0;
         overflow-y: auto;
-        padding-block-start: var(--spacing-xxl);
-        padding-block-end: var(--spacing-xxl);
+        padding-block-start: var(--spacing-xl);
+        padding-block-end: var(--spacing-xl);
         display: grid;
         grid-template-columns:
             [full-start]
@@ -186,6 +194,3 @@
         flex-shrink: 0;
     }
 </style>
-
-
-

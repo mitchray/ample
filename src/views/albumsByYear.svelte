@@ -1,11 +1,11 @@
 <script>
-    import {_} from "svelte-i18n";
-    import { PageTitle } from "../stores/status";
-    import AlbumsByYear from '../components/album/albumsByYear.svelte';
+    import { _ } from "svelte-i18n";
+    import { PageTitle } from "~/stores/state.js";
+    import AlbumsByYear from "~/components/album/albumsByYear.svelte";
 
-    export let params = {}
+    export let params = {};
 
-    let title = $_('text.albumsByYear');
+    let title = $_("text.albumsByYear");
     $PageTitle = title;
 </script>
 
@@ -13,8 +13,10 @@
     <title>{title}</title>
 </svelte:head>
 
-<div class="page-main">
-    {#key params.year || 0}
-        <AlbumsByYear showYear={params.year} />
-    {/key}
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
 </div>
+
+{#key params.year || 0}
+    <AlbumsByYear showYear={params.year} />
+{/key}

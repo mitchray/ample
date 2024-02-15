@@ -1,84 +1,87 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount } from 'svelte';
-    import { fade } from 'svelte/transition';
-    import { lchToRgb } from 'color-converters';
-    import AmpacheAPI from 'javascript-ampache';
-    import { API } from "../stores/api.js";
-    import { serverVersion, serverURL, serverIsHardcoded } from "../stores/server";
-    import { PageTitle, Theme } from "../stores/status";
-    import { ampleVersion } from "../stores/player";
+    import { _ } from "svelte-i18n";
+    import { fade } from "svelte/transition";
+    import AmpacheAPI from "javascript-ampache";
+    import {
+        API,
+        ampleVersion,
+        Server,
+        debugMode,
+        PageTitle,
+    } from "~/stores/state.js";
+    import { loginNew } from "~/logic/user";
+    import UserMenu from "~/components/userMenu.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import localforage from "localforage";
 
-    import { loginNew } from '../logic/user';
-    import { getRandomInt } from '../logic/helper';
-    import { setCustomHue } from '../logic/color';
-    import { getServerVersion } from '../logic/server.js';
-
-    import Tabs from "../components/tabs/tabs.svelte";
-    import Tab from "../components/tabs/tab.svelte";
-    import UserMenu from '../components/userMenu.svelte';
-
-    import SVGAmpleLogo from "/src/images/ample_logo.svg";
-    import SVGLogin from "/src/images/login.svg";
-
-    let theme;
+    $: username = "";
+    $: password = "";
     let versionCheck;
-    let username = "";
-    let password = "";
     let apiKey = "";
-    let randomColor = lchToRgb([50, 50, getRandomInt(360)]);
     let result;
 
     // List of tab items with labels and values.
-    let tabItems = [
-        { label: "Username", value: 1 },
-        { label: "API key",  value: 2 }
+    let tabs = [
+        { id: "username", label: "Username" },
+        { id: "apikey", label: "API key" },
     ];
 
     let fatalError = false;
 
-    let title = $_('text.login');
+    let title = $_("text.login");
     $PageTitle = title;
 
     // Current active tab
-    let currentTab;
+    let currentTab = "username";
 
-    $: theme = $Theme;
+    $: versionCheck = $Server.version?.charAt(0);
 
-    $: versionCheck = $serverVersion.charAt(0);
+    function changeTab(e) {
+        currentTab = e.detail.name;
+    }
 
-    // save server URL in localstorage
-    $: $serverURL, localStorage.setItem('AmpleServerURL', JSON.stringify($serverURL));
-
-    const handleSubmitUsername = async (e) => {
+    const handleSubmit = async () => {
         setServerDetails();
 
         try {
-            result = await loginNew({ passphrase: password, username: username });
+            if (currentTab === "apikey") {
+                result = await loginNew({ passphrase: apiKey });
+            } else {
+                result = await loginNew({
+                    passphrase: password,
+                    username: username,
+                });
+            }
         } catch (e) {
             fatalError = true;
         }
-    }
-
-    const handleSubmitAPI = async (e) => {
-        setServerDetails();
-
-        try {
-            result = await loginNew({ passphrase: apiKey });
-        } catch (e) {
-            fatalError = true;
-        }
-    }
+    };
 
     function setServerDetails() {
         fatalError = false;
-        $API = new AmpacheAPI({ url: $serverURL, debug: false })
-        getServerVersion();
+        $API = new AmpacheAPI({ url: $Server.url, debug: $debugMode });
+        localforage.setItem("AmpleServerURL", $Server.url);
+
+        $API.ping().then((result) => {
+            $Server = { ...$Server, version: result.version };
+        });
     }
 
-    onMount(async () => {
-        await setCustomHue(randomColor);
-    });
+    function handleServer(e) {
+        $Server.url = e.target.value || "";
+    }
+
+    function handleUsername(e) {
+        username = e.target.value || "";
+    }
+
+    function handlePassword(e) {
+        password = e.target.value || "";
+    }
+
+    function handleAPIkey(e) {
+        apiKey = e.target.value;
+    }
 </script>
 
 <svelte:head>
@@ -90,89 +93,154 @@
 
     <div class="form" in:fade out:fade>
         {#if versionCheck && versionCheck < 6}
-            <p class="server-message badge badge--danger" in:fade>{$_('versionWarning', {values: { serverVersion: $serverVersion }})}</p>
+            <sl-badge class="server-message" variant="danger" in:fade>
+                {$_("versionWarning", {
+                    values: { serverVersion: $Server.version },
+                })}
+            </sl-badge>
         {/if}
 
-        <div class="logo">
-            <SVGAmpleLogo />
-        </div>
+        {#if $Server.loginMessage}
+            <sl-alert open>
+                {@html $Server.loginMessage}
+            </sl-alert>
+            <sl-divider></sl-divider>
+        {/if}
 
-        <Tabs bind:activeTabValue={currentTab} items={tabItems}>
-            <Tab id={1} bind:activeTabValue={currentTab} class="username login-tab">
-                <form on:submit|preventDefault={handleSubmitUsername}>
-                    {#if !$serverIsHardcoded}
+        <sl-tab-group on:sl-tab-show={changeTab}>
+            {#each tabs as tab}
+                <sl-tab
+                    slot="nav"
+                    panel={tab.id}
+                    active={tab.id === currentTab}
+                >
+                    {tab.label}
+                </sl-tab>
+            {/each}
+
+            <sl-tab-panel name="username">
+                <form on:submit|preventDefault={handleSubmit}>
+                    {#if !$Server.isHardcodedURL}
                         <p>
-                            <label>{$_('text.serverURL')}
-                                <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
-                            </label>
+                            <sl-input
+                                type="text"
+                                label={$_("text.serverURL")}
+                                placeholder="e.g. https://ampache-server"
+                                value={$Server.url}
+                                on:sl-change={handleServer}
+                                on:sl-input={handleServer}
+                                on:paste={handleServer}
+                            ></sl-input>
                         </p>
                     {/if}
 
                     <p>
-                        <label>{$_('text.username')}
-                            <input type="text" autofocus bind:value={username} />
-                        </label>
+                        <sl-input
+                            type="text"
+                            label={$_("text.username")}
+                            value={username}
+                            on:sl-change={handleUsername}
+                            on:sl-input={handleUsername}
+                            on:paste={handleUsername}
+                        ></sl-input>
+                        <input
+                            type="text"
+                            autocomplete="username"
+                            bind:value={username}
+                            hidden
+                        />
                     </p>
-                    <p>
-                        <label>{$_('text.password')}
-                            <input type="password" bind:value={password} />
-                        </label>
-                    </p>
-                    <button class="button button--primary"
-                            type="submit"
-                            disabled="{!$serverURL || !username || !password}"
-                    >
-                        <SVGLogin /> {$_('text.login')}
-                    </button>
-                </form>
-            </Tab>
 
-            <Tab id={2} bind:activeTabValue={currentTab} class="api login-tab">
-                <form on:submit|preventDefault={handleSubmitAPI}>
-                    {#if !$serverIsHardcoded}
+                    <p>
+                        <sl-input
+                            type="password"
+                            label={$_("text.password")}
+                            value={password}
+                            on:sl-change={handlePassword}
+                            on:sl-input={handlePassword}
+                            on:paste={handlePassword}
+                        ></sl-input>
+                        <input
+                            type="password"
+                            autocomplete="current-password"
+                            bind:value={password}
+                            hidden
+                        />
+                    </p>
+                    <input type="submit" hidden />
+
+                    <sl-button
+                        variant="primary"
+                        disabled={!$Server.url || !username || !password}
+                        type="submit"
+                    >
+                        <MaterialSymbol name="login" slot="prefix" />
+                        {$_("text.login")}
+                    </sl-button>
+                </form>
+            </sl-tab-panel>
+
+            <sl-tab-panel name="apikey">
+                <form on:submit|preventDefault={handleSubmit}>
+                    {#if !$Server.isHardcodedURL}
                         <p>
-                            <label>{$_('text.serverURL')}
-                                <input type="text" placeholder="https://ampache-server" bind:value={$serverURL} />
-                            </label>
+                            <sl-input
+                                type="text"
+                                label={$_("text.serverURL")}
+                                placeholder="e.g. https://ampache-server"
+                                value={$Server.url}
+                                on:sl-change={handleServer}
+                                on:sl-input={handleServer}
+                                on:paste={handleServer}
+                            ></sl-input>
                         </p>
                     {/if}
                     <p>
-                        <label>{$_('text.apiKey')}
-                            <input type="text" bind:value={apiKey} />
-                        </label>
+                        <sl-input
+                            type="text"
+                            label={$_("text.apiKey")}
+                            value={apiKey}
+                            on:sl-change={handleAPIkey}
+                            on:sl-input={handleAPIkey}
+                            on:paste={handleAPIkey}
+                        ></sl-input>
                     </p>
 
-                    <button class="button button--primary"
-                            type="submit"
-                            disabled="{!$serverURL || !apiKey}"
+                    <input type="submit" hidden />
+                    <sl-button
+                        variant="primary"
+                        disabled={!$Server.url || !apiKey}
+                        type="submit"
                     >
-                        <SVGLogin /> {$_('text.login')}
-                    </button>
+                        <MaterialSymbol name="login" slot="prefix" />
+                        {$_("text.login")}
+                    </sl-button>
                 </form>
-            </Tab>
-        </Tabs>
+            </sl-tab-panel>
+        </sl-tab-group>
 
         {#if result?.error?.errorMessage}
-            <p class="login-message badge badge--warning" in:fade>{result.error.errorMessage}</p>
+            <sl-badge class="login-message" variant="warning" in:fade>
+                {result.error.errorMessage}
+            </sl-badge>
         {/if}
 
         {#if fatalError}
-            <p class="login-message badge badge--warning" in:fade>{$_('text.errorFatal')}</p>
+            <sl-badge class="login-message" variant="danger" in:fade>
+                {$_("text.errorFatal")}
+            </sl-badge>
         {/if}
     </div>
 
     <div class="meta">
-        <span>Ample v{$ampleVersion}</span> {#if $serverVersion}- <span>Ampache v{$serverVersion}</span>{/if}
+        <span>Ample v{$ampleVersion}</span>
+        {#if $Server.version}- <span>Ampache v{$Server.version}</span>{/if}
     </div>
 </div>
 
 <style>
-    .logo {
-        color: var(--color-highlight);
-        margin-block-end: var(--spacing-xl);
-    }
-
     .container {
+        background-color: var(--color-surface-container-lowest);
         width: 100vw;
         height: 100vh;
         z-index: 10;
@@ -186,28 +254,17 @@
     }
 
     .form {
-        background-color: var(--color-background); /* cover version details when the mobile keyboard appears */
+        /* cover version details when the mobile keyboard appears */
+        background-color: var(--color-surface-container);
         position: absolute;
         inset-inline-start: 50%;
         inset-block-start: 50%;
         transform: translateY(-50%) translateX(-50%);
         width: 100%;
         max-width: 400px;
-        padding: var(--spacing-xxl);
+        padding: var(--spacing-xl);
         z-index: 10;
-    }
-
-    label > * {
-        margin-block-start: var(--spacing-sm);
-    }
-
-    label input {
-        display: table;
-        width: 100%;
-    }
-
-    button {
-        margin-block-start: var(--spacing-md);
+        border-radius: 10px;
     }
 
     .server-message {
@@ -217,21 +274,14 @@
         width: 100%;
     }
 
-    .login-message {
-        position: absolute;
-        inset-inline-start:  var(--spacing-xxl);
-        inset-inline-end: var(--spacing-xxl);
-    }
-
     .meta {
         position: absolute;
-        inset-block-end:  var(--spacing-lg);
+        inset-block-end: var(--spacing-lg);
         inset-inline-end: var(--spacing-lg);
         opacity: 0.4;
     }
 
-    /* don't shift layout when tabs change */
-    .form :global(.login-tab) {
-        min-height: 190px;
+    sl-badge::part(base) {
+        white-space: normal;
     }
 </style>

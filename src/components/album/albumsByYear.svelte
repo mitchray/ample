@@ -1,8 +1,8 @@
 <script>
-    import { getAlbumsByYear } from "../../logic/album";
-
-    import YearPagination from '../../components/yearPagination.svelte';
-    import Lister from '../../components/lister/lister.svelte';
+    import { getAlbumsByYear } from "~/logic/album.js";
+    import YearPagination from "~/components/yearPagination.svelte";
+    import Lister from "~/components/lister/lister.svelte";
+    import { albumsPreset } from "~/components/lister/columns.js";
 
     export let showYear = new Date().getFullYear();
 
@@ -21,27 +21,32 @@
 
     async function getData() {
         loading = true;
-        dataDisplay = await getAlbumsByYear({limit: 5000, from: fromYear, to: toYear});
+        dataDisplay = await getAlbumsByYear({
+            limit: 5000,
+            from: fromYear,
+            to: toYear,
+        });
         loadedTime = new Date();
         loading = false;
     }
 </script>
 
-<YearPagination bind:fromYear bind:toYear showYear={showYear} />
+<YearPagination bind:fromYear bind:toYear {showYear} />
 
 {#if fromYear && toYear}
-    {#key fromYear+toYear}
+    {#key fromYear + toYear}
         {#key loadedTime}
             <Lister
+                id="Albums"
                 data={dataDisplay}
+                columns={albumsPreset}
                 type="album"
                 virtualList={true}
-                initialSort="year"
                 actionData={{
                     type: "year",
-                    mode: "fullButtons",
+                    displayMode: "fullButtons",
                     showShuffle: true,
-                    data: Object.create({from: fromYear, to: toYear})
+                    data: Object.create({ from: fromYear, to: toYear }),
                 }}
             />
         {/key}

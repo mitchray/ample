@@ -1,17 +1,17 @@
 import { get } from "svelte/store";
-import { API } from "../stores/api";
-import { MediaPlayer } from '../stores/player';
-import { debugHelper } from "./helper";
-import { setCustomHue, getAverageColor } from "./color";
-import { getSongsFromAlbum } from './song';
+import { API } from "~/stores/state";
+import { groupBy } from "lodash-es";
+import { userPreference } from "~/logic/preferences.js";
 
 /**
  * Sort albums from earliest to most recent date
  * @param {array} albums
  * @returns {*}
  */
-export const sortAlbumsByDate = async (albums) => {
-    return albums.sort(function(obj1, obj2) { return obj1.year - obj2.year; })
+export async function sortAlbumsByDate(albums) {
+    return albums.sort(function (obj1, obj2) {
+        return obj1.year - obj2.year;
+    });
 }
 
 /**
@@ -21,86 +21,37 @@ export const sortAlbumsByDate = async (albums) => {
  * @param {string} filterChar
  * @returns {Promise<*>}
  */
-export const getAlbumsStartingWithChar = ({page = 0, limit = 50, filterChar}) => {
+export function getAlbumsStartingWithChar({
+    page = 0,
+    limit = 50,
+    filterChar,
+}) {
     return get(API).advancedSearch({
         type: "album",
         operator: "and",
         random: 0,
         offset: page * limit,
         limit: limit,
-        rules: [
-            ['title', 8, '^' + filterChar]
-        ]
+        rules: [["title", 8, "^" + filterChar]],
     });
 }
 
 /**
- * Search albums starting with specified string
+ * Search albums containing specified string
  * @param page
  * @param limit
  * @param {string} query
  * @returns {Promise<*>}
  */
-export const searchAlbumsStartingWith = ({page = 0, limit = 50, query}) => {
+export function searchAlbums({ page = 0, limit = 50, query }) {
     return get(API).advancedSearch({
         type: "album",
         operator: "and",
         random: 1,
         offset: page * limit,
         limit: limit,
-        rules: [
-            ['title', 2, query]
-        ]
+        rules: [["title", 0, query]],
     });
-}
-
-/**
- * Search albums containing (but not starting with) specified string
- * @param page
- * @param limit
- * @param {string} query
- * @returns {Promise<*>}
- */
-export const searchAlbumsContaining = ({page = 0, limit = 50, query}) => {
-    return get(API).advancedSearch({
-        type: "album",
-        operator: "and",
-        random: 1,
-        offset: page * limit,
-        limit: limit,
-        rules: [
-            ['title', 8, "^(?!" + query + ").*" + query]
-        ]
-    });
-}
-
-/**
- * Get album by ID
- * @param {number} id
- * @param {boolean} withTracks
- * @param {boolean} artAnalysis
- * @returns {Promise<*>}
- */
-export const getAlbum = async ({id, withTracks = false, artAnalysis = false}) => {
-    let album = await get(API).album({ filter: id });
-
-    if (withTracks) {
-        album.ampleSongs = await getSongsFromAlbum({id: id, groupByDisc: true});
-        debugHelper(album.ampleSongs, "getAlbum - getSongsFromAlbum");
-    }
-
-    if (artAnalysis) {
-        album.averageColor = await getAverageColor(album.art + "&thumb=10");
-
-        if (album.averageColor) {
-            await setCustomHue(album.averageColor.value);
-
-            let mp = get(MediaPlayer);
-            await mp.setWaveColors();
-        }
-    }
-
-    return album;
 }
 
 /**
@@ -111,16 +62,16 @@ export const getAlbum = async ({id, withTracks = false, artAnalysis = false}) =>
  * @param {number} to
  * @returns {Promise<*>}
  */
-export const getAlbumsByYear = ({page = 0, limit = 50, from, to}) => {
+export function getAlbumsByYear({ page = 0, limit = 50, from, to }) {
     return get(API).advancedSearch({
         type: "album",
         operator: "and",
         offset: page * limit,
         limit: limit,
         rules: [
-            ['year', 0, from],
-            ['year', 1, to]
-        ]
+            ["year", 0, from],
+            ["year", 1, to],
+        ],
     });
 }
 
@@ -128,33 +79,14 @@ export const getAlbumsByYear = ({page = 0, limit = 50, from, to}) => {
  * Get albums that have no rating
  * @returns {Promise<*>}
  */
-export const unratedAlbums = ({query = "", page = 0, limit = 50}) => {
+export function unratedAlbums({ page = 0, limit = 50 }) {
     return get(API).advancedSearch({
         type: "album",
         operator: "and",
         random: 1,
         offset: page * limit,
         limit: limit,
-        rules: [
-            ['myrating', 2, 0]
-        ]
-    });
-}
-
-/**
- * Returns albums for search
- * @param query
- * @param page
- * @param limit
- * @param exact
- * @returns {Promise<*>}
- */
-export const searchAlbums = ({query = "", page = 0, limit = 50, exact = false}) => {
-    return get(API).albums({
-        filter: query,
-        exact: (exact) ? 1 : 0,
-        offset: page * limit,
-        limit: limit,
+        rules: [["myrating", 2, 0]],
     });
 }
 
@@ -162,91 +94,91 @@ export const searchAlbums = ({query = "", page = 0, limit = 50, exact = false}) 
  * Get newly added albums
  * @returns {Promise<*>}
  */
-export const newestAlbums = ({page = 0, limit = 50}) => {
+export function newestAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "newest",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
  * Get recently played albums
  * @returns {Promise<*>}
  */
-export const recentAlbums = ({page = 0, limit = 50}) => {
+export function recentAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "recent",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
  * Get favorite albums
  * @returns {Promise<*>}
  */
-export const favoriteAlbums = ({page = 0, limit = 50}) => {
+export function favoriteAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "flagged",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
  * Get frequent albums
  * @returns {Promise<*>}
  */
-export const frequentAlbums = ({page = 0, limit = 50}) => {
+export function frequentAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "frequent",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
  * Get top-rated albums
  * @returns {Promise<*>}
  */
-export const topAlbums = ({page = 0, limit = 50}) => {
+export function topAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "highest",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
  * Get forgotten albums
  * @returns {Promise<*>}
  */
-export const forgottenAlbums = ({page = 0, limit = 50}) => {
+export function forgottenAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "forgotten",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
  * Get random albums
  * @returns {Promise<*>}
  */
-export const randomAlbums = ({page = 0, limit = 50}) => {
+export function randomAlbums({ page = 0, limit = 50 }) {
     return get(API).stats({
         type: "album",
         filter: "random",
         offset: page * limit,
-        limit: limit
-    })
+        limit: limit,
+    });
 }
 
 /**
@@ -255,14 +187,15 @@ export const randomAlbums = ({page = 0, limit = 50}) => {
  * @param artistID
  * @returns {Map<any, any>}
  */
-export const groupAlbumsByReleaseType = async (albums, artistID) => {
+export async function groupAlbumsByReleaseType(albums, artistID) {
     let releaseTypes = new Map();
-    let preferenceAlbumReleaseType = await get(API).userPreference({ filter: 'album_release_type'} );
-    let preferenceAlbumReleaseTypeSort = await get(API).userPreference({ filter: 'album_release_type_sort'} );
-    let preferenceReleaseTypes = preferenceAlbumReleaseTypeSort.value.split(',');
-    let appearanceText = " (appearance)";
+    let preferenceAlbumReleaseType = userPreference("album_release_type");
+    let preferenceAlbumReleaseTypeSort = userPreference(
+        "album_release_type_sort",
+    );
+    let preferenceReleaseTypes = preferenceAlbumReleaseTypeSort.split(",");
 
-    if (preferenceAlbumReleaseType.value === '1') {
+    if (preferenceAlbumReleaseType === "1") {
         // Create base types in specified order from server setting
         for (let i = 0; i < preferenceReleaseTypes.length; i++) {
             let typeText = preferenceReleaseTypes[i].toLowerCase();
@@ -270,11 +203,6 @@ export const groupAlbumsByReleaseType = async (albums, artistID) => {
             // for releases by artist
             if (!releaseTypes.get(typeText)) {
                 releaseTypes.set(typeText, []);
-            }
-
-            // for appearances on releases from other artists
-            if (!releaseTypes.get(typeText + appearanceText)) {
-                releaseTypes.set(typeText + appearanceText, []);
             }
         }
 
@@ -295,28 +223,42 @@ export const groupAlbumsByReleaseType = async (albums, artistID) => {
                 releaseTypes.set(type, []);
             }
 
-            // create new appearance type if needed
-            if (!releaseTypes.get(type + appearanceText)) {
-                releaseTypes.set(type + appearanceText, []);
-            }
-
             switch (type) {
                 case null:
                     releaseTypes.get("missing release type").push(albums[i]);
                     break;
                 default:
-                    if (albums[i].artist.id === artistID) {
-                        releaseTypes.get(type).push(albums[i]);
-                    } else {
-                        releaseTypes.get(type + appearanceText).push(albums[i]);
-                    }
+                    releaseTypes.get(type).push(albums[i]);
                     break;
             }
         }
     } else {
         // just return the albums
-        releaseTypes.set('ungrouped', albums);
+        releaseTypes.set("ungrouped", albums);
     }
 
     return releaseTypes;
+}
+
+/**
+ * Get all the tracks from an album, grouped by their disks
+ * @param {number} albumID
+ */
+export async function getAlbumDisks(albumID) {
+    let tracks = await get(API).albumSongs({ filter: albumID });
+
+    // group into disks
+    let grouped = groupBy(tracks, "disk");
+
+    // convert to array and append disksubtitle from first track if present
+    return Object.entries(grouped).map(([key, value]) => {
+        let diskTitle = key;
+        let diskSubtitle = value[0]?.disksubtitle?.trim();
+
+        if (diskSubtitle?.length) {
+            diskTitle += `: ${diskSubtitle}`;
+        }
+
+        return [diskTitle, value];
+    });
 }

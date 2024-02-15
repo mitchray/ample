@@ -1,15 +1,19 @@
+@import 'material-symbols/outlined.css';
+
 /* font paths are relative to build directory */
 
 /* roboto-flex-variable */
 @font-face {
-    font-family: 'Roboto Flex';
+    font-family: "Roboto Flex";
     font-style: normal;
     font-weight: 100 1000;
     font-stretch: 25% 151%;
     font-display: swap;
-    src: local(''),
-    url('/fonts/RobotoFlex-VariableFont.woff2') format('woff2'), /* Chrome 26+, Opera 23+, Firefox 39+ */
-    url('/fonts/RobotoFlex-VariableFont.woff') format('woff'); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
+    src:
+        local(""),
+        url("/fonts/RobotoFlex-VariableFont.woff2") format("woff2"),
+        /* Chrome 26+, Opera 23+, Firefox 39+ */
+            url("/fonts/RobotoFlex-VariableFont.woff") format("woff"); /* Chrome 6+, Firefox 3.6+, IE 9+, Safari 5.1+ */
 }
 
 /* --------------------------
@@ -18,19 +22,18 @@
 
 :root {
     /* Spacing */
-    --spacing-sm:   4px;
-    --spacing-md:   8px;
-    --spacing-lg:   16px;
-    --spacing-xl:   24px;
+    --spacing-sm: 4px;
+    --spacing-md: 8px;
+    --spacing-lg: 16px;
+    --spacing-xl: 24px;
     --spacing-xxl: 32px;
     --spacing-xxxl: 48px;
 
     /* Sizes */
-    --size-header-height:    40px;
-    --size-sidebar-width:    165px;
-    --size-webplayer-height: 100px;
-    --size-queue-width:      330px;
-    --size-seekbar-height:   5px;
+    --size-header-height: 40px;
+    --size-sidebar-width: 165px;
+    --size-queue-width: 330px;
+    --size-seekbar-height: 5px;
 
     /* Breakpoints */
     --breakpoint-mi: 480px;
@@ -41,18 +44,371 @@
     --breakpoint-xxl: 1536px;
 
     /* Fonts */
-    --font-body: 'Roboto Flex', system-ui, Helvetica, Arial, sans-serif;
-    --font-heading: 'Roboto Flex', system-ui, Helvetica, Arial, sans-serif;
+    --font-body: "Roboto Flex", system-ui, Helvetica, Arial, sans-serif;
+    --font-heading: "Roboto Flex", system-ui, Helvetica, Arial, sans-serif;
     --roboto-grad: 0;
     --roboto-opsz: 13;
 
+    /* Base Colors - based on the Harmony color palette https://evilmartians.com/opensource/harmony */
+    /*--hue-primary:   290;*/
+    /*--hue-secondary: 220;*/
+    --hue-green:     140;
+    --hue-red:       20;
+    --hue-blue:      240;
+    --hue-yellow:    66;
+    --hue-black:     275;
+
+    --lightness-50:  98.83%;
+    --lightness-100: 96.68%;
+    --lightness-200: 92.19%;
+    --lightness-300: 86.13%;
+    --lightness-400: 80.08%;
+    --lightness-500: 74.22%;
+    --lightness-600: 62.70%;
+    --lightness-700: 53.52%;
+    --lightness-800: 41.99%;
+    --lightness-900: 30.66%;
+    --lightness-950: 19.34%;
+
+    --chroma-50:  0.005;
+    --chroma-100: 0.017;
+    --chroma-200: 0.042;
+    --chroma-300: 0.078;
+    --chroma-400: 0.114;
+    --chroma-500: 0.152;
+    --chroma-600: 0.136;
+    --chroma-700: 0.116;
+    --chroma-800: 0.091;
+    --chroma-900: 0.066;
+    --chroma-950: 0.041;
+
+    /* User accent 1 */
+    --swatch-primary-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-primary));
+    --swatch-primary-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-primary));
+    --swatch-primary-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-primary));
+    --swatch-primary-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-primary));
+    --swatch-primary-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-primary));
+    --swatch-primary-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-primary));
+    --swatch-primary-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-primary));
+    --swatch-primary-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-primary));
+    --swatch-primary-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-primary));
+    --swatch-primary-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-primary));
+    --swatch-primary-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-primary));
+
+    /* User background */
+    --swatch-secondary-50:  oklch(var(--lightness-50)  var(--chroma-override, var(--chroma-50))  var(--hue-secondary));
+    --swatch-secondary-100: oklch(var(--lightness-100) var(--chroma-override, var(--chroma-100)) var(--hue-secondary));
+    --swatch-secondary-200: oklch(var(--lightness-200) var(--chroma-override, var(--chroma-200)) var(--hue-secondary));
+    --swatch-secondary-300: oklch(var(--lightness-300) var(--chroma-override, var(--chroma-300)) var(--hue-secondary));
+    --swatch-secondary-400: oklch(var(--lightness-400) var(--chroma-override, var(--chroma-400)) var(--hue-secondary));
+    --swatch-secondary-500: oklch(var(--lightness-500) var(--chroma-override, var(--chroma-500)) var(--hue-secondary));
+    --swatch-secondary-600: oklch(var(--lightness-600) var(--chroma-override, var(--chroma-600)) var(--hue-secondary));
+    --swatch-secondary-700: oklch(var(--lightness-700) var(--chroma-override, var(--chroma-700)) var(--hue-secondary));
+    --swatch-secondary-800: oklch(var(--lightness-800) var(--chroma-override, var(--chroma-800)) var(--hue-secondary));
+    --swatch-secondary-900: oklch(var(--lightness-900) var(--chroma-override, var(--chroma-900)) var(--hue-secondary));
+    --swatch-secondary-950: oklch(var(--lightness-950) var(--chroma-override, var(--chroma-950)) var(--hue-secondary));
+
+    /* User background */
+    --swatch-background-50:  oklch(var(--lightness-50)  var(--chroma-override, var(--chroma-50))  var(--user-hue-background));
+    --swatch-background-100: oklch(var(--lightness-100) var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
+    --swatch-background-200: oklch(var(--lightness-200) var(--chroma-override, var(--chroma-200)) var(--user-hue-background));
+    --swatch-background-300: oklch(var(--lightness-300) var(--chroma-override, var(--chroma-300)) var(--user-hue-background));
+    --swatch-background-400: oklch(var(--lightness-400) var(--chroma-override, var(--chroma-400)) var(--user-hue-background));
+    --swatch-background-500: oklch(var(--lightness-500) var(--chroma-override, var(--chroma-500)) var(--user-hue-background));
+    --swatch-background-600: oklch(var(--lightness-600) var(--chroma-override, var(--chroma-600)) var(--user-hue-background));
+    --swatch-background-700: oklch(var(--lightness-700) var(--chroma-override, var(--chroma-700)) var(--user-hue-background));
+    --swatch-background-800: oklch(var(--lightness-800) var(--chroma-override, var(--chroma-800)) var(--user-hue-background));
+    --swatch-background-900: oklch(var(--lightness-900) var(--chroma-override, var(--chroma-900)) var(--user-hue-background));
+    --swatch-background-950: oklch(var(--lightness-950) var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+
+    /* User accent 2 */
+    --swatch-tertiary-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-tertiary));
+    --swatch-tertiary-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-tertiary));
+    --swatch-tertiary-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-tertiary));
+    --swatch-tertiary-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-tertiary));
+    --swatch-tertiary-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-tertiary));
+    --swatch-tertiary-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-tertiary));
+    --swatch-tertiary-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-tertiary));
+    --swatch-tertiary-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-tertiary));
+    --swatch-tertiary-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-tertiary));
+    --swatch-tertiary-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-tertiary));
+    --swatch-tertiary-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-tertiary));
+
+    /* max chroma 200 */
+    --swatch-neutral-50:  oklch(var(--lightness-50)  var(--chroma-50) var(--hue-secondary));
+    --swatch-neutral-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-secondary));
+    --swatch-neutral-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-300: oklch(var(--lightness-300) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-400: oklch(var(--lightness-400) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-500: oklch(var(--lightness-500) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-600: oklch(var(--lightness-600) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-700: oklch(var(--lightness-700) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-800: oklch(var(--lightness-800) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-900: oklch(var(--lightness-900) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-950: oklch(var(--lightness-950) var(--chroma-200) var(--hue-secondary));
+
+    --swatch-green-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-green));
+    --swatch-green-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-green));
+    --swatch-green-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-green));
+    --swatch-green-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-green));
+    --swatch-green-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-green));
+    --swatch-green-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-green));
+    --swatch-green-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-green));
+    --swatch-green-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-green));
+    --swatch-green-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-green));
+    --swatch-green-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-green));
+    --swatch-green-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-green));
+
+    --swatch-red-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-red));
+    --swatch-red-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-red));
+    --swatch-red-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-red));
+    --swatch-red-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-red));
+    --swatch-red-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-red));
+    --swatch-red-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-red));
+    --swatch-red-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-red));
+    --swatch-red-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-red));
+    --swatch-red-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-red));
+    --swatch-red-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-red));
+    --swatch-red-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-red));
+
+    --swatch-blue-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-blue));
+    --swatch-blue-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-blue));
+    --swatch-blue-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-blue));
+    --swatch-blue-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-blue));
+    --swatch-blue-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-blue));
+    --swatch-blue-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-blue));
+    --swatch-blue-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-blue));
+    --swatch-blue-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-blue));
+    --swatch-blue-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-blue));
+    --swatch-blue-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-blue));
+    --swatch-blue-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-blue));
+
+    --swatch-yellow-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-yellow));
+    --swatch-yellow-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-yellow));
+    --swatch-yellow-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-yellow));
+    --swatch-yellow-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-yellow));
+    --swatch-yellow-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-yellow));
+    --swatch-yellow-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-yellow));
+    --swatch-yellow-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-yellow));
+    --swatch-yellow-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-yellow));
+    --swatch-yellow-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-yellow));
+    --swatch-yellow-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-yellow));
+    --swatch-yellow-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-yellow));
+
+    --swatch-black-50:  oklch(var(--lightness-50)  0.005 var(--hue-black));
+    --swatch-black-100: oklch(var(--lightness-100) 0.018 var(--hue-black));
+    --swatch-black-200: oklch(var(--lightness-200) 0.024 var(--hue-black));
+    --swatch-black-300: oklch(var(--lightness-300) 0.024 var(--hue-black));
+    --swatch-black-400: oklch(var(--lightness-400) 0.024 var(--hue-black));
+    --swatch-black-500: oklch(var(--lightness-500) 0.024 var(--hue-black));
+    --swatch-black-600: oklch(var(--lightness-600) 0.024 var(--hue-black));
+    --swatch-black-700: oklch(var(--lightness-700) 0.024 var(--hue-black));
+    --swatch-black-800: oklch(var(--lightness-800) 0.024 var(--hue-black));
+    --swatch-black-900: oklch(var(--lightness-900) 0.024 var(--hue-black));
+    --swatch-black-950: oklch(var(--lightness-950) 0.024 var(--hue-black));
+
+    /* New colors */
+    /*--user-hue-background: 290; !* user defined *!*/
+    /*--user-hue-accent-1: 140; !* user defined *!*/
+    /*--user-hue-accent-2: 340; !* user defined *!*/
+    /*--user-color-waveform: seagreen; !* user defined *!*/
+    --hue-primary: var(--user-hue-accent-1, var(--user-hue-background)); /* fallback to background */
+    --hue-secondary: var(--user-hue-background); /* based on hue-background */
+    --hue-tertiary: var(--user-hue-accent-2, var(--user-hue-background)); /* fallback to hue-background */
+
     /* Shadows */
-    --shadow-inner: rgba(var(--color-shadow-val), 0.12) 0px 2px 4px 0px inset;
-    --shadow-sm:  rgba(var(--color-shadow-val), 0.2) 0px 1px 3px 0px,    rgba(var(--color-shadow-val), 0.12) 0px 1px 2px 0px;
-    --shadow-md:  rgba(var(--color-shadow-val), 0.2) 0px 4px 6px -1px,   rgba(var(--color-shadow-val), 0.12) 0px 2px 4px -1px;
-    --shadow-lg:  rgba(var(--color-shadow-val), 0.2) 0px 10px 15px -3px, rgba(var(--color-shadow-val), 0.10) 0px 4px 6px -2px;
-    --shadow-xl:  rgba(var(--color-shadow-val), 0.2) 0px 20px 25px -5px, rgba(var(--color-shadow-val), 0.08) 0px 10px 10px -5px;
-    --shadow-xxl: rgba(var(--color-shadow-val), 0.2) 0px 20px 25px -5px, rgba(var(--color-shadow-val), 0.08) 0px 10px 10px -5px;
+    --shadow-inner: oklch(var(--color-shadow-val) / 0.12) 0px 2px 4px 0px inset;
+    --shadow-sm: oklch(var(--color-shadow-val) / 0.2) 0px 1px 3px 0px,
+        oklch(var(--color-shadow-val) / 0.12) 0px 1px 2px 0px;
+    --shadow-md: oklch(var(--color-shadow-val) / 0.2) 0px 4px 6px -1px,
+        oklch(var(--color-shadow-val) / 0.12) 0px 2px 4px -1px;
+    --shadow-lg: oklch(var(--color-shadow-val) / 0.2) 0px 10px 15px -3px,
+        oklch(var(--color-shadow-val) / 0.1) 0px 4px 6px -2px;
+    --shadow-xl: oklch(var(--color-shadow-val) / 0.2) 0px 20px 25px -5px,
+        oklch(var(--color-shadow-val) / 0.08) 0px 10px 10px -5px;
+    --shadow-xxl: oklch(var(--color-shadow-val) / 0.2) 0px 20px 25px -5px,
+        oklch(var(--color-shadow-val) / 0.08) 0px 10px 10px -5px;
+}
+
+.sl-theme-dark {
+    --color-primary: var(--swatch-primary-400);
+    --color-on-primary: var(--swatch-primary-900);
+    --color-primary-container: var(--swatch-primary-800);
+    --color-on-primary-container: var(--swatch-primary-200);
+    --color-secondary: var(--swatch-secondary-400);
+    --color-on-secondary: var(--swatch-secondary-900);
+    --color-secondary-container: var(--swatch-secondary-800);
+    --color-on-secondary-container: var(--swatch-secondary-200);
+    --color-on-secondary-container-variant: var(--swatch-secondary-400);
+    --color-tertiary: var(--swatch-tertiary-400);
+    --color-on-tertiary: var(--swatch-tertiary-900);
+    --color-tertiary-container: var(--swatch-tertiary-800);
+    --color-on-tertiary-container: var(--swatch-tertiary-200);
+    --color-on-tertiary-container-variant: var(--swatch-tertiary-400);
+    --color-background: var(--swatch-background-950);
+    --color-on-background: var(--swatch-background-200);
+    --color-surface: oklch(18.7% var(--chroma-override, var(--chroma-900)) var(--user-hue-background));
+    --color-on-surface: var(--swatch-background-200);
+    --color-surface-variant: oklch(39.8% var(--chroma-override, 0.017) var(--user-hue-background));
+    --color-on-surface-variant: var(--swatch-background-400);
+    --color-outline: oklch(65.7% var(--chroma-override, 0.05) var(--user-hue-background));
+    --color-outline-variant: oklch(39.8% var(--chroma-override, 0.05) var(--user-hue-background));
+    --color-shadow: oklch(0% 0 var(--user-hue-background));
+    --color-scrim: oklch(0% 0 var(--user-hue-background));
+    --color-inverse-surface: var(--swatch-background-200);
+    --color-inverse-on-surface: var(--swatch-background-900);
+    --color-inverse-primary: var(--swatch-primary-700);
+    --color-surface-container-lowest: oklch(16.418% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+    --color-surface-container-low: oklch(23.7% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+    --color-surface-container: oklch(25.5% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+    --color-surface-container-high: oklch(28.6% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+
+    --color-waveform: var(--user-color-waveform);
+    --color-shadow-val:         var(--lightness-950) var(--chroma-950) var(--hue-primary);
+    --color-rating:             var(--swatch-yellow-500);
+    --color-favorite:           var(--swatch-red-600);
+
+    --color-btn-default-text: var(--swatch-primary-400);
+    --color-btn-default-text-hover: var(--swatch-primary-100);
+    --color-btn-default-bg: transparent;
+    --color-btn-default-bg-hover: var(--swatch-primary-800);
+    --color-btn-default-border: var(--swatch-primary-700);
+    --color-btn-default-border-hover: var(--swatch-primary-600);
+
+    --color-btn-neutral-text: var(--swatch-neutral-400);
+    --color-btn-neutral-text-hover: var(--swatch-neutral-100);
+    --color-btn-neutral-bg: var(--color-surface);
+    --color-btn-neutral-bg-hover: var(--swatch-neutral-800);
+    --color-btn-neutral-border: var(--swatch-neutral-700);
+    --color-btn-neutral-border-hover: var(--swatch-neutral-600);
+
+    --color-btn-primary-text: var(--swatch-primary-300);
+    --color-btn-primary-text-hover: var(--swatch-primary-50);
+    --color-btn-primary-bg: var(--swatch-primary-800);
+    --color-btn-primary-bg-hover: var(--swatch-primary-700);
+    --color-btn-primary-border: var(--swatch-primary-600);
+    --color-btn-primary-border-hover: var(--swatch-primary-500);
+
+    --color-btn-primary-alt-text: var(--swatch-primary-300);
+    --color-btn-primary-alt-text-hover: var(--swatch-primary-50);
+    --color-btn-primary-alt-bg: var(--swatch-primary-900);
+    --color-btn-primary-alt-bg-hover: var(--swatch-primary-700);
+    --color-btn-primary-alt-border: var(--swatch-primary-700);
+    --color-btn-primary-alt-border-hover: var(--swatch-primary-500);
+
+    --color-btn-success-text: var(--swatch-green-300);
+    --color-btn-success-text-hover: var(--swatch-green-50);
+    --color-btn-success-bg: var(--swatch-green-800);
+    --color-btn-success-bg-hover: var(--swatch-green-700);
+    --color-btn-success-border: var(--swatch-green-600);
+    --color-btn-success-border-hover: var(--swatch-green-500);
+
+    --color-btn-warning-text: var(--swatch-yellow-300);
+    --color-btn-warning-text-hover: var(--swatch-yellow-50);
+    --color-btn-warning-bg: var(--swatch-yellow-800);
+    --color-btn-warning-bg-hover: var(--swatch-yellow-700);
+    --color-btn-warning-border: var(--swatch-yellow-600);
+    --color-btn-warning-border-hover: var(--swatch-yellow-500);
+
+    --color-btn-danger-text: var(--swatch-red-300);
+    --color-btn-danger-text-hover: var(--swatch-red-50);
+    --color-btn-danger-bg: var(--swatch-red-800);
+    --color-btn-danger-bg-hover: var(--swatch-red-700);
+    --color-btn-danger-border: var(--swatch-red-600);
+    --color-btn-danger-border-hover: var(--swatch-red-500);
+}
+
+.sl-theme-light {
+    --color-primary: var(--swatch-primary-700);
+    --color-on-primary: var(--swatch-primary-50);
+    --color-primary-container: var(--swatch-primary-200);
+    --color-on-primary-container: var(--swatch-primary-900);
+    --color-secondary: var(--swatch-secondary-700);
+    --color-on-secondary: var(--swatch-secondary-50);
+    --color-secondary-container: var(--swatch-secondary-200);
+    --color-on-secondary-container: var(--swatch-secondary-900);
+    --color-on-secondary-container-variant: var(--swatch-secondary-800);
+    --color-tertiary: var(--swatch-tertiary-700);
+    --color-on-tertiary: var(--swatch-tertiary-50);
+    --color-tertiary-container: var(--swatch-tertiary-200);
+    --color-on-tertiary-container: var(--swatch-tertiary-900);
+    --color-on-tertiary-container-variant: var(--swatch-tertiary-800);
+    --color-background: oklch(98.4% var(--chroma-override, 0.013) var(--user-hue-background));
+    --color-on-background: oklch(22.7% var(--chroma-override, 0.01) var(--user-hue-background));
+    --color-surface: oklch(98.4% var(--chrome-override, 0.013) var(--user-hue-background));
+    --color-on-surface: oklch(22.7% var(--chroma-override, 0.01) var(--user-hue-background));
+    --color-surface-variant: oklch(91.6% var(--chroma-override, 0.018) var(--user-hue-background));
+    --color-on-surface-variant: oklch(39.8% var(--chroma-override, 0.017) var(--user-hue-background));
+    --color-outline: oklch(56.7% var(--chroma-override, 0.016) var(--user-hue-background));
+    --color-outline-variant: oklch(82.9% var(--chroma-override, 0.018) var(--user-hue-background));
+    --color-shadow: oklch(0% 0 var(--user-hue-background));
+    --color-scrim: oklch(0% 0 var(--user-hue-background));
+    --color-inverse-surface: oklch(31.1% var(--chroma-override, 0.011) var(--user-hue-background));
+    --color-inverse-on-surface: oklch(95.9% var(--chroma-override, 0.012) var(--user-hue-background));
+    --color-inverse-primary: oklch(83.5% var(--chroma-override, 0.095) var(--hue-primary));
+    --color-surface-container-lowest: oklch(100% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
+    --color-surface-container-low: oklch(96.7% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
+    --color-surface-container: oklch(95.4% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
+    --color-surface-container-high: oklch(93.3% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
+
+    --color-waveform: var(--user-color-waveform);
+    --color-shadow-val:         var(--lightness-500) var(--chroma-500) var(--hue-primary);
+    --color-rating:             var(--swatch-yellow-600);
+    --color-favorite:           var(--swatch-red-600);
+
+    --color-btn-default-text: var(--swatch-primary-700);
+    --color-btn-default-text-hover: var(--swatch-primary-900);
+    --color-btn-default-bg: transparent;
+    --color-btn-default-bg-hover: var(--swatch-primary-200);
+    --color-btn-default-border: var(--swatch-primary-500);
+    --color-btn-default-border-hover: var(--swatch-primary-600);
+
+    --color-btn-neutral-text: var(--swatch-neutral-700);
+    --color-btn-neutral-text-hover: var(--swatch-neutral-900);
+    --color-btn-neutral-bg: var(--color-surface);
+    --color-btn-neutral-bg-hover: var(--swatch-neutral-200);
+    --color-btn-neutral-border: var(--swatch-neutral-500);
+    --color-btn-neutral-border-hover: var(--swatch-neutral-600);
+
+    --color-btn-primary-text: var(--swatch-primary-800);
+    --color-btn-primary-text-hover: var(--swatch-primary-50);
+    --color-btn-primary-bg: var(--swatch-primary-200);
+    --color-btn-primary-bg-hover: var(--swatch-primary-500);
+    --color-btn-primary-border: var(--swatch-primary-500);
+    --color-btn-primary-border-hover: var(--swatch-primary-500);
+
+    --color-btn-primary-alt-text: var(--swatch-primary-800);
+    --color-btn-primary-alt-text-hover: var(--swatch-primary-50);
+    --color-btn-primary-alt-bg: var(--swatch-primary-300);
+    --color-btn-primary-alt-bg-hover: var(--swatch-primary-500);
+    --color-btn-primary-alt-border: var(--swatch-primary-500);
+    --color-btn-primary-alt-border-hover: var(--swatch-primary-500);
+
+    --color-btn-success-text: var(--swatch-green-800);
+    --color-btn-success-text-hover: var(--swatch-green-50);
+    --color-btn-success-bg: var(--swatch-green-200);
+    --color-btn-success-bg-hover: var(--swatch-green-500);
+    --color-btn-success-border: var(--swatch-green-500);
+    --color-btn-success-border-hover: var(--swatch-green-500);
+
+    --color-btn-warning-text: var(--swatch-yellow-800);
+    --color-btn-warning-text-hover: var(--swatch-yellow-50);
+    --color-btn-warning-bg: var(--swatch-yellow-200);
+    --color-btn-warning-bg-hover: var(--swatch-yellow-500);
+    --color-btn-warning-border: var(--swatch-yellow-500);
+    --color-btn-warning-border-hover: var(--swatch-yellow-500);
+
+    --color-btn-danger-text: var(--swatch-red-800);
+    --color-btn-danger-text-hover: var(--swatch-red-50);
+    --color-btn-danger-bg: var(--swatch-red-200);
+    --color-btn-danger-bg-hover: var(--swatch-red-600);
+    --color-btn-danger-border: var(--swatch-red-500);
+    --color-btn-danger-border-hover: var(--swatch-red-600);
+}
+
+:root body {
+    /* shoelace color overrides */
+    /*--sl-panel-background-color:  var(--color-interface);*/
 }
 
 /* --------------------------
@@ -61,11 +417,14 @@
 
 * {
     box-sizing: border-box;
-    font-variation-settings: "GRAD" var(--roboto-grad), "opsz" var(--roboto-opsz);
+    font-variation-settings:
+        "GRAD" var(--roboto-grad),
+        "opsz" var(--roboto-opsz);
 }
 
 html,
-body {
+body,
+#app {
     position: relative;
     overflow: hidden;
 }
@@ -75,7 +434,6 @@ html {
     font-size: 13px;
     line-height: 1.4;
     height: 100%;
-    background-color: var(--color-background);
 }
 
 img {
@@ -93,21 +451,26 @@ a {
 
 a:link,
 a:visited {
-    color: var(--color-text-primary);
+    color: inherit;
     text-decoration: none;
 }
 
 @media (hover: hover) {
     a:hover {
-        color: var(--color-link-hover);
+        color: var(--color-primary);
     }
 }
 
-h1, h2, h3, h4, h5, h6 {
-    margin-block-start: 0;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin-block: 0;
     font-family: var(--font-heading);
     font-weight: unset;
-    color: var(--color-text-heading);
+    color: var(--color-tertiary);
 }
 
 ul {
@@ -119,7 +482,7 @@ ul {
 /* W3C spec */
 * {
     scrollbar-width: thin;
-    scrollbar-color: var(--color-highlight) var(--color-border);
+    scrollbar-color: var(--color-outline) var(--color-outline-variant);
 }
 
 /* Chrome, Edge, and Safari */
@@ -129,161 +492,52 @@ ul {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--color-border);
+    background: var(--color-outline-variant);
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: var(--color-highlight);
+    background-color: var(--color-outline);
 }
 
 ::selection {
-    background: var(--color-text-primary);
+    background: var(--color-primary);
     color: var(--color-background);
+}
+
+/*
+ * Loading overlay
+ */
+#loading-overlay {
+    background-color: var(--color-background);
+    position: fixed;
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    z-index: 10000;
+    transition: opacity 0.3s ease-out;
+    justify-content: center;
+    align-items: center;
+}
+
+#loading-overlay.hiding {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#loading-overlay.hidden {
+    display: none;
+    pointer-events: none;
 }
 
 /* --------------------------
    Form / inputs
    -------------------------- */
 
-::placeholder {
-    color: inherit;
-    opacity: 0.7;
-}
-
-input,
-select {
-    outline: none;
-    background-color: unset;
-    color: var(--color-text-primary);
-    border: 1.5px solid var(--color-input-border);
-}
-
-input {
-    appearance: none;
-    margin: 0;
-    max-width: 100%;
-}
-
-input[type='checkbox'],
-input[type='radio'] {
-    width: 20px;
-    height: 20px;
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    color: var(--color-highlight);
-    cursor: pointer;
-    border: 1.5px solid var(--color-input-border);
-}
-
-input:not([type="radio"]),
-select {
-    border-radius: 5px;
-}
-
-/* menu background */
-select:focus {
-    background-color: var(--color-background);
-}
-
-input:not([type="radio"]):not([type="checkbox"]),
-select {
-    padding: 0.5em;
-}
-
-input[type="checkbox"]:not(.switch):before {
-    content: "✔";
-    position: absolute;
-    font-size: 1.5em;
-    inset-inline-end: 0;
-    inset-block-start: -0.2em;
-    visibility: hidden;
-}
-
-input[type="radio"]:checked {
-    background-color: var(--color-highlight);
-    border-color: var(--color-highlight);
-}
-
-input[type="checkbox"]:checked {
-    border-color: var(--color-highlight);
-}
-
-input[type="checkbox"]:checked:before {
-    visibility: visible;
-}
-
-input[type="checkbox"].switch {
-    position: relative;
-    border-radius: 99px;
-    width: 36px;
-    transition: all 0.2s linear;
-}
-
-input[type="checkbox"].switch:after {
-    content: '';
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background-color: var(--color-input-border);
-    position: absolute;
-    inset-inline-start: 1px;
-    inset-block-start: 1px;
-    transition: inherit;
-}
-
-input[type="checkbox"].switch:checked {
-    background-color: var(--color-highlight);
-}
-
-input[type="checkbox"].switch:checked:after {
-    background-color: var(--color-background);
-    transform: translateX(100%);
-}
-
-input[type="radio"] {
-    border-radius: 50%;
-}
-
-input[type="radio"]:before {
-    display: block;
-    content: "";
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background-color: var(--color-background);
-    font-size: 1.2em;
-    inset-block-start: calc(50% - 4px);
-    inset-inline-start:  calc(50% - 4px);
-    position: relative;
-    visibility: hidden;
-}
-
-input[type="radio"]:checked::before {
-    visibility: visible;
-}
-
-input:disabled,
-select:disabled,
-textarea:disabled,
-button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-input:focus,
-select:focus,
-textarea:focus,
-button:focus {
-    outline: 0;
-}
-
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible,
-button:focus-visible {
-    box-shadow: 0 0 0 2px var(--color-highlight);
-    border-color: var(--color-background);
+sl-select small {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    font-size: 90%;
 }
 
 /* --------------------------
@@ -294,184 +548,142 @@ button:focus-visible {
     outline: 0;
 }
 
-/* base button */
-button {
-    background: unset;
-    border: 2px solid transparent;
-    color: inherit;
-    cursor: pointer;
-    display: inline-flex;
-    padding: unset;
+/*
+Variants
+*/
+sl-button::part(base) {
+    background-color: var(--color-btn-default-bg);
+    border-color: var(--color-btn-default-border);
+    color: var(--color-btn-default-text);
     position: relative;
-    border-radius: 100vh;
-    align-items: center;
-    outline: 0;
-    text-align: start;
-    font-weight: inherit;
-    justify-self: start;
+    overflow: hidden;
 }
 
-button svg {
-    max-height: 100%;
-    width: 24px;
-    height: 24px;
-}
-
-/* plain buttons */
-.button {
-    color: var(--color-regular-foreground);
-    padding: 0.5em 1em;
-    margin-inline-end: var(--spacing-sm);
-}
-
-@media (hover: hover) {
-    .button:not(:disabled):hover,
-    .icon-button:not(:disabled):hover {
-        background-color: var(--color-regular-background);
-        color: var(--color-regular-foreground-hover);
+@supports (mix-blend-mode: multiply) {
+    sl-button:not([variant="text"])::part(base)::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: linear-gradient(to bottom, transparent 30%, currentColor 100%);
+        z-index: 1;
+        pointer-events: none;
+        mix-blend-mode: multiply;
+        opacity: 0.1;
     }
 }
 
-.button--regular {
-    border-color: var(--color-regular-background);
+sl-button::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-default-bg-hover);
+    border-color: var(--color-btn-default-border-hover);
+    color: var(--color-btn-default-text-hover);
 }
 
-.button--danger {
-    color: var(--color-danger-foreground);
-    border-color: var(--color-danger-background);
-}
-
-@media (hover: hover) {
-    .button--danger:not(:disabled):hover {
-        background-color: var(--color-danger-background);
-        color: var(--color-danger-foreground-hover);
-    }
-}
-
-.button--warning {
-    color: var(--color-warning-foreground);
-    border-color: var(--color-warning-background);
-}
-
-@media (hover: hover) {
-    .button--warning:not(:disabled):hover {
-        background-color: var(--color-warning-background);
-        color: var(--color-warning-foreground-hover);
-    }
-}
-
-.button--primary {
-    color: var(--color-primary-foreground);
-    border-color: var(--color-primary-background);
-}
-
-@media (hover: hover) {
-    .button--primary:not(:disabled):hover {
-        background-color: var(--color-primary-background);
-        color: var(--color-primary-foreground-hover);
-    }
-}
-
-.button--secondary {
-    color: var(--color-secondary-foreground);
-    border-color: var(--color-secondary-background);
-}
-
-@media (hover: hover) {
-    .button--secondary:not(:disabled):hover {
-        background-color: var(--color-secondary-background);
-        color: var(--color-secondary-foreground-hover);
-    }
-}
-
-.button--tertiary {
-    padding: 0;
-}
-
-@media (hover: hover) {
-    .button--tertiary:not(:disabled):hover {
-        background-color: transparent;
-        color: inherit;
-    }
-}
-
-/* buttons with leading icon */
-.button svg {
-    margin-inline-start: -0.25em;
-    margin-inline-end: var(--spacing-sm);
-    margin-block-start: -1em;
-    margin-block-end: -1em;
-}
-
-/* icon-only buttons */
-.icon-button {
-    border-width: 2px;
-    border-style: solid;
-    padding: var(--spacing-sm);
-}
-
-.circle-button {
-    aspect-ratio: 1 / 1;
-}
-
-/* mini buttons */
-.button--mini {
-    padding: 0;
-}
-
-button.loading {
-    pointer-events: none;
-}
-
-button.loading:before {
-    content: "";
-    position: absolute;
-    width: 16px;
-    height: 16px;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    inset-block-end: 0;
-    margin: auto;
-    border: 3px solid transparent;
-    border-block-start-color: currentColor;
-    border-radius: 50%;
-    animation: button-loading-spinner 1s ease infinite;
-}
-
-@keyframes button-loading-spinner {
-    from {
-        transform: rotate(0turn);
-    }
-
-    to {
-        transform: rotate(1turn);
-    }
-}
-
-button.active {
-    background-color: var(--color-active-background);
-}
-
-/* display button as a plain text link */
-button.visuallyLink {
+sl-button[variant="text"]::part(base) {
     background-color: transparent;
-    padding: 0;
-    font-weight: normal;
+    border-color: transparent;
 }
 
-button.visuallyLink:active {
+sl-button[variant="text"]::part(base):not(:disabled):hover {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+sl-button[variant="neutral"]::part(base) {
+    background-color: var(--color-btn-neutral-bg);
+    border-color: var(--color-btn-neutral-border);
+    color: var(--color-btn-neutral-text);
+}
+
+sl-card sl-button[variant="neutral"]::part(base) {
     background-color: transparent;
 }
 
-@media (hover: hover) {
-    button.visuallyLink:hover {
-        background-color: transparent;
-    }
+sl-button[variant="neutral"]::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-neutral-bg-hover);
+    border-color: var(--color-btn-neutral-border-hover);
+    color: var(--color-btn-neutral-text-hover);
 }
 
-button svg {
-    pointer-events: none;
+sl-button[variant="primary"]::part(base) {
+    background-color: var(--color-btn-primary-bg);
+    border-color: var(--color-btn-primary-border);
+    color: var(--color-btn-primary-text);
+}
+
+sl-button[variant="primary"]::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-primary-bg-hover);
+    border-color: var(--color-btn-primary-border-hover);
+    color: var(--color-btn-primary-text-hover);
+}
+
+sl-button[variant="primary-alt"]::part(base) {
+    background-color: var(--color-btn-primary-alt-bg);
+    border-color: var(--color-btn-primary-alt-border);
+    color: var(--color-btn-primary-alt-text);
+}
+
+sl-button[variant="primary-alt"]::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-primary-alt-bg-hover);
+    border-color: var(--color-btn-primary-alt-border-hover);
+    color: var(--color-btn-primary-alt-text-hover);
+}
+
+sl-button[variant="success"]::part(base) {
+    background-color: var(--color-btn-success-bg);
+    border-color: var(--color-btn-success-border);
+    color: var(--color-btn-success-text);
+}
+
+sl-button[variant="success"]::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-success-bg-hover);
+    border-color: var(--color-btn-success-border-hover);
+    color: var(--color-btn-success-text-hover);
+}
+
+sl-button[variant="warning"]::part(base) {
+    background-color: var(--color-btn-warning-bg);
+    border-color: var(--color-btn-warning-border);
+    color: var(--color-btn-warning-text);
+}
+
+sl-button[variant="warning"]::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-warning-bg-hover);
+    border-color: var(--color-btn-warning-border-hover);
+    color: var(--color-btn-warning-text-hover);
+}
+
+sl-button[variant="danger"]::part(base) {
+    background-color: var(--color-btn-danger-bg);
+    border-color: var(--color-btn-danger-border);
+    color: var(--color-btn-danger-text);
+}
+
+sl-button[variant="danger"]::part(base):not(:disabled):hover {
+    background-color: var(--color-btn-danger-bg-hover);
+    border-color: var(--color-btn-danger-border-hover);
+    color: var(--color-btn-danger-text-hover);
+}
+
+sl-button::part(base):not(:disabled):active {
+    opacity: 0.8;
+}
+
+/*
+Sizes
+*/
+sl-button::part(base) {
+    font-size: 13px;
+}
+
+sl-button[size="small"]::part(base) {
+    font-size: 11px;
+}
+
+sl-button[size="large"]::part(base) {
+    font-size: 14px;
 }
 
 /* badges */
@@ -482,119 +694,68 @@ button svg {
 }
 
 .badge--success {
-    background-color: var(--color-primary-background);
-    color: var(--color-primary-foreground-hover);
+    background-color: var(--swatch-green-500);
+    color: var(--swatch-green-100);
 }
 
 .badge--info {
-    background-color: var(--color-secondary-background);
-    color: var(--color-secondary-foreground-hover);
+    background-color: var(--swatch-blue-55);
+    color: var(--swatch-blue-100);
 }
 
 .badge--warning {
-    background-color: var(--color-warning-background);
-    color: var(--color-warning-foreground-hover);
+    background-color: var(--swatch-yellow-500);
+    color: var(--swatch-yellow-100);
 }
 
 .badge--danger {
-    background-color: var(--color-danger-background);
-    color: var(--color-danger-foreground-hover);
-}
-
-.release-type-label {
-    background-color: var(--color-text-secondary);
-    display: inline-block;
-    color: var(--color-background);
-    padding: 0.2em 0.3em;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    font-stretch: 50%;
-    text-transform: uppercase;
-    line-height: 1;
-    border-radius: 0.2em;
-    font-size: 0.75em;
-}
-
-.tooltip {
-    display: none;
-    width: max-content;
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-start: 0;
-    background: var(--color-interface);
-    font-weight: bold;
-    padding: 5px;
-    border-radius: 4px;
-    font-size: 90%;
-    z-index: 100000;
-    box-shadow: var(--shadow-sm);
+    background-color: var(--swatch-red-500);
+    color: var(--swatch-red-100);
 }
 
 /* --------------------------
    SVG
    -------------------------- */
 
-svg.inline {
-    height: 1em;
-    width: auto;
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    inset-block-end: 0.12em;
-    color: var(--color-icon);
-}
-
 /* --------------------------
    Shared
    -------------------------- */
 
-.page-main {
-    background-color: var(--color-interface);
-    box-shadow: var(--shadow-lg);
-    padding: var(--spacing-xl);
-    border-radius: 10px;
-    z-index: 1;
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
-.secondary-info,
-.secondary-info a:not(:hover):not(:active) {
-    color: var(--color-text-secondary);
+.secondary-info {
+    color: var(--color-on-surface-variant);
 }
 
-.card {
-    font-stretch: 50%;
+.page-header {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+    margin-block-end: var(--spacing-xl);
 }
 
-.card .title,
-.card-title {
+.title {
     --roboto-grad: 150;
     --roboto-opsz: 12;
     font-weight: 500;
-    font-stretch: 25%;
-    line-height: 1.2;
-    letter-spacing: 0.01em;
 }
 
 .page-title {
     --roboto-opsz: 25;
     font-weight: 300;
-    letter-spacing: 0.03em;
     font-size: 20px;
-    margin-block-end: var(--spacing-xxl);
 }
 
-.page-title:after {
-    content: '';
-    display: block;
-    border-block-end: 2px solid var(--color-separator);
-    padding-block-start: var(--spacing-sm);
+strong {
+    font-weight: 700;
 }
 
-.panel-title {
-    --roboto-opsz: 30;
-    letter-spacing: 0.03em;
-    font-size: 14px;
-    margin-block-end: 0;
+.help-text {
+    margin-block-start: var(--spacing-sm);
 }
 
 .art-background {
@@ -606,97 +767,33 @@ svg.inline {
     inset-inline-end: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.20;
+    opacity: 0.2;
     object-fit: cover;
     pointer-events: none;
     z-index: -1;
 }
 
-.menu-separator {
-    display: block;
-    border-block-end: 2px solid var(--color-menu-border);
-    margin: var(--spacing-md) 0;
-    width: 100%;
+/*
+ * Drawers
+ */
+
+sl-drawer::part(panel) {
+    background-color: var(--color-surface-container);
 }
 
-.notification-dot:after {
-    content: '';
-    position: absolute;
-    inset-block-start: 0;
-    inset-inline-end: 0;
-    width: 7px;
-    height: 7px;
-    background-color: var(--color-highlight);
-    z-index: 5;
-    border-radius: 99px;
-}
-
-.notification-badge {
-    position: relative;
-}
-
-.notification-badge:after {
-    content: attr(data-badge);
-    position: absolute;
-    inset-block-end:  calc(100% - 8px);
-    inset-inline-start:  calc(100% - 8px);
-    background-color: var(--color-text-primary);
-    z-index: 5;
-    border-radius: 99px;
-    font-size: 0.8em;
-    font-weight: 700;
-    padding: 1px 4px 2px;
-    line-height: 1;
-    color: var(--color-background);
-    pointer-events: none;
+sl-drawer::part(body) {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+    background-color: var(--color-background);
+    border-radius: 15px;
+    margin-inline: 10px;
 }
 
 /*
- * Panels & Modals
+ * Tabs
  */
 
-.new-panel-container {
-    z-index: 1;
-}
-
-.new-panel-main {
-    background-color: var(--color-interface);
-    box-shadow: var(--shadow-md);
-    padding: var(--spacing-md);
-    border-radius: 7px;
-    z-index: 1;
-}
-
-.new-panel-header {
-    display: flex;
-    justify-content: space-between;
-    margin-block-end: var(--spacing-lg);
-    padding-block-end: var(--spacing-lg);
-    border-block-end: 1px solid var(--color-menu-border);
-    align-items: center;
-    height: 44px; /* fixed size so buttons don't affect padding */
-}
-
-.new-panel-secondary {
-    color: var(--color-text-secondary);
-}
-
-.new-panel-footer {
-    display: flex;
-    justify-content: space-between;
-    margin-block-start: var(--spacing-lg);
-    padding-block-start: var(--spacing-lg);
-    border-block-start: 1px solid var(--color-menu-border);
-    align-items: center;
-    height: 36px; /* fixed size so buttons don't affect padding */
-}
-
-.panel-content {
-    flex-direction: column;
-    gap: var(--spacing-md);
-}
-
-.panel-content .group .info {
-    margin-block-start: var(--spacing-sm);
-    color: var(--color-text-secondary);
+sl-tab::part(base) {
+    font-size: inherit;
 }

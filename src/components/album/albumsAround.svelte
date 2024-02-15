@@ -1,96 +1,123 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount } from "svelte";
-    import { fade } from 'svelte/transition';
-    import { API } from "../../stores/api";
-    import { groupAlbumsByReleaseType } from "../../logic/album";
-    import AlbumCardMini from '../album/albumCardMini.svelte';
+    import { _ } from "svelte-i18n";
+    import { fade } from "svelte/transition";
+    import { API, User } from "~/stores/state.js";
+    import { groupAlbumsByReleaseType } from "~/logic/album.js";
+    import AlbumCardMini from "~/components/cards/albumCardMini.svelte";
+    import { createQuery } from "@tanstack/svelte-query";
 
     export let album;
 
-    let albums = Promise.resolve([]);
     let containerBind;
 
-    onMount(() => {
-        albums = $API.artistAlbums({ filter: album.artist.id })
-            .then(async (results) => {
-                let final = {};
+    $: query = createQuery({
+        queryKey: ["albumsAround", album.id],
+        queryFn: async () => {
+            let result = await $API.artistAlbums({ filter: album.artist.id });
 
-                // filter out albums that aren't explicity by artist
-                results = results.filter(a => a.artist.id === album.artist.id);
+            if (result.error) {
+                console.error(
+                    "Ample error getting albums around",
+                    result.error,
+                );
+                return [];
+            }
 
-                // filter out the album being compared
-                results = results.filter(a => a.id !== album.id);
+            let final = {};
 
-                final.same = results.filter(a => a.year === album.year);
-                final.same = await groupAlbumsByReleaseType(final.same, album.artist.id);
+            // filter out albums that aren't explicitly by artist
+            result = result.filter((a) => a.artist.id === album.artist.id);
 
-                final.previous = results.filter(a => a.year < album.year);
-                let closestPrevious = final.previous[final.previous.length - 1];
-                final.previous = final.previous.filter(a => a.year === closestPrevious.year);
-                final.previous = await groupAlbumsByReleaseType(final.previous, album.artist.id);
+            // filter out the album being compared
+            result = result.filter((a) => a.id !== album.id);
 
-                final.next = results.filter(a => a.year > album.year);
-                let closestNext = final.next[0];
-                final.next = final.next.filter(a => a.year === closestNext.year);
-                final.next = await groupAlbumsByReleaseType(final.next, album.artist.id);
+            final.same = result.filter((a) => a.year === album.year);
+            final.same = await groupAlbumsByReleaseType(
+                final.same,
+                album.artist.id,
+            );
 
-                return final;
-            });
+            final.previous = result.filter((a) => a.year < album.year);
+            let closestPrevious = final.previous[final.previous.length - 1];
+            final.previous = final.previous.filter(
+                (a) => a.year === closestPrevious.year,
+            );
+            final.previous = await groupAlbumsByReleaseType(
+                final.previous,
+                album.artist.id,
+            );
+
+            final.next = result.filter((a) => a.year > album.year);
+            let closestNext = final.next[0];
+            final.next = final.next.filter((a) => a.year === closestNext.year);
+            final.next = await groupAlbumsByReleaseType(
+                final.next,
+                album.artist.id,
+            );
+
+            return final;
+        },
+        enabled: $User.isLoggedIn,
     });
+
+    // alias of returned data
+    $: albums = $query.data || {};
 </script>
 
-{#await albums}
-
-{:then albums}
-    <div class="container"
-         bind:this={containerBind}
-         class:not-empty={containerBind?.firstElementChild}
-         in:fade
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    <div
+        class="container"
+        bind:this={containerBind}
+        class:not-empty={containerBind?.firstElementChild}
+        in:fade
     >
-        {#if [...albums.previous.values()].find(arr => arr.length > 0)}
+        {#if [...albums.previous.values()].find((arr) => arr.length > 0)}
             <div class="previous">
-                <h3>{$_('text.previous')}</h3>
+                <h3>{$_("text.previous")}</h3>
 
                 <div class="list">
                     {#each [...albums.previous] as [key, value], i}
                         {#each value as album}
-                            <AlbumCardMini album={album} />
+                            <AlbumCardMini data={album} />
                         {/each}
                     {/each}
                 </div>
             </div>
         {/if}
 
-        {#if [...albums.same.values()].find(arr => arr.length > 0)}
+        {#if [...albums.same.values()].find((arr) => arr.length > 0)}
             <div class="same">
-                <h3>{$_('text.sameYear')}</h3>
+                <h3>{$_("text.sameYear")}</h3>
 
                 <div class="list">
                     {#each [...albums.same] as [key, value], i}
                         {#each value as album}
-                            <AlbumCardMini album={album} />
+                            <AlbumCardMini data={album} />
                         {/each}
                     {/each}
                 </div>
             </div>
         {/if}
 
-        {#if [...albums.next.values()].find(arr => arr.length > 0)}
+        {#if [...albums.next.values()].find((arr) => arr.length > 0)}
             <div class="next">
-                <h3>{$_('text.next')}</h3>
+                <h3>{$_("text.next")}</h3>
 
                 <div class="list">
                     {#each [...albums.next] as [key, value], i}
                         {#each value as album}
-                            <AlbumCardMini album={album} />
+                            <AlbumCardMini data={album} />
                         {/each}
                     {/each}
                 </div>
             </div>
         {/if}
     </div>
-{/await}
+{/if}
 
 <style>
     .list {

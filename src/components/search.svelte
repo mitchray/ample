@@ -1,361 +1,356 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount, onDestroy } from "svelte";
-    import { computePosition, autoUpdate, offset, size } from '@floating-ui/dom';
+    import { _ } from "svelte-i18n";
+    import Fuse from "fuse.js";
+    import { ShowSearch, SearchQuery } from "~/stores/state.js";
+    import Portal from "./portal.svelte";
+    import { SiteContentBind } from "~/stores/elements.js";
+    import { searchArtists } from "~/logic/artist";
+    import { searchAlbums } from "~/logic/album";
+    import { searchSongs } from "~/logic/song";
+    import { searchPlaylists, searchSmartlists } from "~/logic/playlist";
+    import CardList from "~/components/cards/cardList.svelte";
+    import GenericCard from "~/components/cards/genericCard.svelte";
 
-    import { QueueIsOpen, QueueIsPinned, SearchQuery, ShowSearch, SidebarIsPinned } from '../stores/status';
-    import { SiteInnerBind, SiteContentBind } from '../stores/player';
-
-    import { searchArtistsStartingWith, searchArtists, searchArtistsContaining } from '../logic/artist';
-    import { searchAlbumsStartingWith, searchAlbums, searchAlbumsContaining } from '../logic/album';
-    import { searchSongsStartingWith, searchSongs, searchSongsContaining } from '../logic/song';
-    import { searchPlaylists, searchSmartlists  } from '../logic/playlist';
-
-    import Tabs from "../components/tabs/tabs.svelte";
-    import Tab from "../components/tabs/tab.svelte";
-    import CardList from '../components/cardList.svelte';
-
-    import SVGClose from "/src/images/close.svg";
-
-    let initialResults = {};
-    let noResults = false;
-    let searchBind;
-    let autoUpdateCleanup;
+    let drawer;
+    let results = {};
+    let searching = false;
+    let minimumChars = 3;
 
     // List of tab items with labels and values.
-    let tabItems = [
-        { label: $_('text.all'),        value: "all" },
-        { label: $_('text.songs'),      value: "songs" },
-        { label: $_('text.albums'),     value: "albums" },
-        { label: $_('text.artists'),    value: "artists" },
-        { label: $_('text.playlists'),  value: "playlists" },
-        { label: $_('text.smartlists'), value: "smartlists" },
+    let tabs = [
+        { id: "all", label: $_("text.all") },
+        { id: "artists", label: $_("text.artists") },
+        { id: "albums", label: $_("text.albums") },
+        { id: "songs", label: $_("text.songs") },
+        { id: "playlists", label: $_("text.playlists") },
+        { id: "smartlists", label: $_("text.smartlists") },
     ];
 
     // Current active tab
-    let currentTab;
+    let currentTab = "all";
 
-    function handleClick(event) {
-        // Close search if we are following a link
-        if (event.target.href !== undefined || event.target.parentNode.href !== undefined) {
+    function handleClose(event) {
+        // ignore bubbled sl-hide events from other components
+        if (event.target === drawer) {
             ShowSearch.set(false);
         }
     }
 
-    function handleClose() {
-        ShowSearch.set(false);
-    }
-    
-    $: {
-        if ($SearchQuery) {
-            resetResults();
-            doSearch();
-        }
-    }
-
-    $: {
-        if ($SiteInnerBind) {
-            // updatePosition whenever Queue or Sidebar changes status
-            $QueueIsOpen || $SidebarIsPinned || $QueueIsPinned, updatePosition();
-        }
+    function changeTab(e) {
+        currentTab = e.detail.name;
     }
 
     function resetResults() {
-        initialResults = {
-            artistsStartsWith: [],
-            artistsContains:   [],
-            albumsStartsWith:  [],
-            albumsContains:    [],
-            songsStartsWith:   [],
-            songsContains:     [],
-            playlists:         [],
-            smartlists:        [],
+        results = {
+            artists: [],
+            albums: [],
+            songs: [],
+            playlists: [],
+            smartlists: [],
         };
     }
 
     async function doSearch() {
-        let sArtistsStartsWith = [];
-        let sArtistsContains   = [];
-        let sAlbumsStartsWith  = [];
-        let sAlbumsContains    = [];
-        let sSongsStartsWith   = [];
-        let sSongsContains     = [];
-        let sPlaylists         = [];
-        let sSmartlists        = [];
+        searching = true;
 
-        sArtistsStartsWith   = searchArtistsStartingWith({query: $SearchQuery, page: 0, limit: 6});
-        sArtistsContains     = searchArtistsContaining({query: $SearchQuery, page: 0, limit: 6});
-        sAlbumsStartsWith    = searchAlbumsStartingWith({query: $SearchQuery, page: 0, limit: 6});
-        sAlbumsContains      = searchAlbumsContaining({query: $SearchQuery, page: 0, limit: 6});
-        sSongsStartsWith     = searchSongsStartingWith({query: $SearchQuery, page: 0, limit: 9});
-        sSongsContains       = searchSongsContaining({query: $SearchQuery, page: 0, limit: 9});
-        sPlaylists           = searchPlaylists({query: $SearchQuery, page: 0, limit: 6});
-        sSmartlists          = searchSmartlists({query: $SearchQuery});
+        let sArtists = [];
+        let sAlbums = [];
+        let sSongs = [];
+        let sPlaylists = [];
+        let sSmartlists = [];
+
+        sArtists = searchArtists({
+            query: $SearchQuery,
+            page: 0,
+            limit: 50,
+        });
+        sAlbums = searchAlbums({
+            query: $SearchQuery,
+            page: 0,
+            limit: 50,
+        });
+        sSongs = searchSongs({
+            query: $SearchQuery,
+            page: 0,
+            limit: 100,
+        });
+        sPlaylists = searchPlaylists({
+            query: $SearchQuery,
+            page: 0,
+            limit: 50,
+        });
+        sSmartlists = searchSmartlists({
+            query: $SearchQuery,
+            page: 0,
+            limit: 50,
+        });
 
         [
-            initialResults.artistsStartsWith,
-            initialResults.artistsContains,
-            initialResults.albumsStartsWith,
-            initialResults.albumsContains,
-            initialResults.songsStartsWith,
-            initialResults.songsContains,
-            initialResults.playlists,
-            initialResults.smartlists,
+            results.artists,
+            results.albums,
+            results.songs,
+            results.playlists,
+            results.smartlists,
         ] = await Promise.all([
-            sArtistsStartsWith,
-            sArtistsContains,
-            sAlbumsStartsWith,
-            sAlbumsContains,
-            sSongsStartsWith,
-            sSongsContains,
+            sArtists,
+            sAlbums,
+            sSongs,
             sPlaylists,
-            sSmartlists
+            sSmartlists,
         ]);
 
-        // test if every array in initialResults is empty
-        noResults = Object.values(initialResults).every(value => {
-            return value.length === 0;
-        });
+        const fuseOptions = {
+            keys: ["name", "title"],
+        };
+
+        results.songs = new Fuse(results.songs, fuseOptions)
+            .search($SearchQuery)
+            .map((obj) => obj.item);
+
+        results.albums = new Fuse(results.albums, fuseOptions)
+            .search($SearchQuery)
+            .map((obj) => obj.item);
+
+        results.artists = new Fuse(results.artists, fuseOptions)
+            .search($SearchQuery)
+            .map((obj) => obj.item);
+
+        results.playlists = new Fuse(results.playlists, fuseOptions)
+            .search($SearchQuery)
+            .map((obj) => obj.item);
+
+        results.smartlists = new Fuse(results.smartlists, fuseOptions)
+            .search($SearchQuery)
+            .map((obj) => obj.item);
+
+        searching = false;
     }
 
-    function updatePosition() {
-        computePosition($SiteContentBind, searchBind, {
-            placement: "top-start",
-            middleware: [
-                offset(({rects}) => ({
-                    mainAxis: -rects.floating.height,
-                    alignmentAxis: 16,
-                })),
-                size({
-                    apply({elements}) {
-                        Object.assign(elements.floating.style, {
-                            height: `${$SiteContentBind.clientHeight}px`,
-                            width: `${$SiteContentBind.clientWidth - 16 - (($QueueIsOpen && !$QueueIsPinned) ? 330 : 0)}px`,
-                        });
-                    },
-                }),
-            ],
-        }).then(({x, y}) => {
-            Object.assign(searchBind.style, {
-                left:  `${x}px`,
-                top: `${y}px`,
-            });
-        });
+    $: {
+        $ShowSearch ? drawer?.show() : drawer?.hide();
     }
 
-    onMount(() => {
-        updatePosition();
-
-        autoUpdateCleanup = autoUpdate(
-            $SiteContentBind,
-            searchBind,
-            updatePosition
-        );
-    });
-
-    onDestroy(() => {
-        // floating-ui
-        autoUpdateCleanup();
-    })
+    $: {
+        if ($SearchQuery?.length >= minimumChars) {
+            resetResults();
+            doSearch();
+        } else {
+            resetResults();
+        }
+    }
 </script>
 
-<div class="container"
-     on:click={handleClick}
-     class:visible={$ShowSearch && $SearchQuery}
-     bind:this={searchBind}
->
-    {#key $SearchQuery}
-        <div class="header new-panel-header">
-            <h4 class="panel-title">{$_('text.search')}</h4>
-            <button class="icon-button close" on:click={handleClose}><SVGClose /></button>
-        </div>
+{#if $SiteContentBind}
+    <Portal target={$SiteContentBind}>
+        <sl-drawer
+            placement="top"
+            bind:this={drawer}
+            on:sl-hide={handleClose}
+            on:sl-initial-focus={(e) => e.preventDefault()}
+            contained
+        >
+            <div slot="label">
+                {$_("text.search")}
 
-        <div class="results">
-            <Tabs bind:activeTabValue={currentTab} bind:items={tabItems} id="search">
-                {#each tabItems as tab}
-                    {#if tab.loaded === true}
-                        {#if tab.value === 'all'}
-                            <Tab id="all" class="all" bind:activeTabValue={currentTab}>
-                                {#if noResults}
-                                    <div>{$_('text.noItemsFound')}</div>
-                                {/if}
+                {#if $SearchQuery.length > 0 && $SearchQuery.length < minimumChars}
+                    &nbsp;
+                    <sl-badge variant="warning">
+                        {minimumChars} character minimum
+                    </sl-badge>
+                {/if}
 
-                                {#if initialResults.songsStartsWith?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.songs')} {$_('text.startingWith')}" />
-                                {/if}
+                {#if searching}
+                    &nbsp;
+                    <sl-spinner></sl-spinner>
+                {/if}
+            </div>
 
-                                {#if initialResults.songsContains?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.songs')} {$_('text.containing')}" />
-                                {/if}
+            <div class="results">
+                <sl-tab-group on:sl-tab-show={changeTab}>
+                    {#each tabs as tab}
+                        <sl-tab
+                            slot="nav"
+                            panel={tab.id}
+                            active={tab.id === currentTab}
+                        >
+                            {tab.label}
 
-                                {#if initialResults.albumsStartsWith?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.albums')} {$_('text.startingWith')}" />
-                                {/if}
+                            {#if tab.id === "artists" && results.artists.length > 0}
+                                &nbsp;
+                                <sl-badge pill>
+                                    {results.artists.length}
+                                </sl-badge>
+                            {/if}
 
-                                {#if initialResults.albumsContains?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.albums')} {$_('text.containing')}" />
-                                {/if}
+                            {#if tab.id === "albums" && results.albums.length > 0}
+                                &nbsp;
+                                <sl-badge pill>
+                                    {results.albums.length}
+                                </sl-badge>
+                            {/if}
 
-                                {#if initialResults.artistsStartsWith?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.artists')} {$_('text.startingWith')}" />
-                                {/if}
+                            {#if tab.id === "songs" && results.songs.length > 0}
+                                &nbsp;
+                                <sl-badge pill>
+                                    {results.songs.length}
+                                </sl-badge>
+                            {/if}
 
-                                {#if initialResults.artistsContains?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.artists')} {$_('text.containing')}" />
-                                {/if}
+                            {#if tab.id === "playlists" && results.playlists.length > 0}
+                                &nbsp;
+                                <sl-badge pill>
+                                    {results.playlists.length}
+                                </sl-badge>
+                            {/if}
 
-                                {#if initialResults.playlists?.length > 0}
-                                    <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.playlists')}" />
-                                {/if}
+                            {#if tab.id === "smartlists" && results.smartlists.length > 0}
+                                &nbsp;
+                                <sl-badge pill>
+                                    {results.smartlists.length}
+                                </sl-badge>
+                            {/if}
+                        </sl-tab>
+                    {/each}
 
-                                {#if initialResults.smartlists?.length > 0}
-                                    <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} heading="{$_('text.smartlists')}" />
-                                {/if}
-                            </Tab>
+                    <sl-tab-panel name="all">
+                        {#if results.artists?.length > 0}
+                            <CardList
+                                type="artist"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.artists}
+                                heading={$_("text.artists")}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
                         {/if}
 
-                        {#if tab.value === 'songs'}
-                            <Tab id="songs" class="songs" bind:activeTabValue={currentTab}>
-                                {#if initialResults.songsStartsWith?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsStartsWith} dataProvider={"searchSongsStartingWith"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.startingWith')}" />
-                                {/if}
-
-                                {#if initialResults.songsContains?.length > 0}
-                                    <CardList type="song" useGenericCard={true} initialData={initialResults.songsContains} dataProvider={"searchSongs"} limit=9 arg={encodeURI($SearchQuery)} heading="{$_('text.containing')}" />
-                                {/if}
-
-                                {#if initialResults.songsStartsWith?.length === 0 && initialResults.songsContains?.length === 0}
-                                    <div>{$_('text.noItemsFound')}</div>
-                                {/if}
-                            </Tab>
+                        {#if results.albums?.length > 0}
+                            <CardList
+                                type="album"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.albums}
+                                heading={$_("text.albums")}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
                         {/if}
 
-                        {#if tab.value === 'albums'}
-                            <Tab id="albums" class="albums" bind:activeTabValue={currentTab}>
-                                {#if initialResults.albumsStartsWith?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsStartsWith} dataProvider={"searchAlbumsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.startingWith')}" />
-                                {/if}
-
-                                {#if initialResults.albumsContains?.length > 0}
-                                    <CardList type="album" useGenericCard={true} initialData={initialResults.albumsContains} dataProvider={"searchAlbums"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.containing')}" />
-                                {/if}
-
-                                {#if initialResults.albumsStartsWith?.length === 0 && initialResults.albumsContains?.length === 0}
-                                    <div>{$_('text.noItemsFound')}</div>
-                                {/if}
-                            </Tab>
+                        {#if results.songs?.length > 0}
+                            <CardList
+                                type="song"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.songs}
+                                heading={$_("text.songs")}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
                         {/if}
 
-                        {#if tab.value === 'artists'}
-                            <Tab id="artists" class="artists" bind:activeTabValue={currentTab}>
-                                {#if initialResults.artistsStartsWith?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsStartsWith} dataProvider={"searchArtistsStartingWith"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.startingWith')}" />
-                                {/if}
-
-                                {#if initialResults.artistsContains?.length > 0}
-                                    <CardList type="artist" useGenericCard={true} initialData={initialResults.artistsContains} dataProvider={"searchArtists"} limit=6 arg={encodeURI($SearchQuery)} heading="{$_('text.containing')}" />
-                                {/if}
-
-                                {#if initialResults.artistsStartsWith?.length === 0 && initialResults.artistsContains?.length === 0}
-                                    <div>{$_('text.noItemsFound')}</div>
-                                {/if}
-                            </Tab>
+                        {#if results.playlists?.length > 0}
+                            <CardList
+                                type="playlist"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.playlists}
+                                heading={$_("text.playlists")}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
                         {/if}
 
-                        {#if tab.value === 'playlists'}
-                            <Tab id="playlists" class="playlists" bind:activeTabValue={currentTab}>
-                                {#if initialResults.playlists?.length > 0}
-                                    <CardList type="playlist" useGenericCard={true} initialData={initialResults.playlists} dataProvider={"searchPlaylists"} limit=6 arg={encodeURI($SearchQuery)} />
-                                {/if}
-
-                                {#if initialResults.playlists?.length === 0}
-                                    <div>{$_('text.noItemsFound')}</div>
-                                {/if}
-                            </Tab>
+                        {#if results.smartlists?.length > 0}
+                            <CardList
+                                type="smartlist"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.smartlists}
+                                heading={$_("text.smartlists")}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
                         {/if}
+                    </sl-tab-panel>
 
-                        {#if tab.value === 'smartlists'}
-                            <Tab id="smartlists" class="smartlists" bind:activeTabValue={currentTab}>
-                                {#if initialResults.smartlists?.length > 0}
-                                    <CardList type="smartlist" useGenericCard={true} initialData={initialResults.smartlists} dataProvider={"searchSmartlists"} arg={encodeURI($SearchQuery)} />
-                                {/if}
-
-                                {#if initialResults.smartlists?.length === 0}
-                                    <div>{$_('text.noItemsFound')}</div>
-                                {/if}
-                            </Tab>
+                    <sl-tab-panel name="songs">
+                        {#if results.songs?.length > 0}
+                            <CardList
+                                type="song"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.songs}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
                         {/if}
-                    {/if}
-                {/each}
-            </Tabs>
-        </div>
-    {/key}
-</div>
+                    </sl-tab-panel>
+
+                    <sl-tab-panel name="albums">
+                        {#if results.albums?.length > 0}
+                            <CardList
+                                type="album"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.albums}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
+                        {/if}
+                    </sl-tab-panel>
+
+                    <sl-tab-panel name="artists">
+                        {#if results.artists?.length > 0}
+                            <CardList
+                                type="artist"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.artists}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
+                        {/if}
+                    </sl-tab-panel>
+
+                    <sl-tab-panel name="playlists">
+                        {#if results.playlists?.length > 0}
+                            <CardList
+                                type="playlist"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.playlists}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
+                        {/if}
+                    </sl-tab-panel>
+
+                    <sl-tab-panel name="smartlists">
+                        {#if results.smartlists?.length > 0}
+                            <CardList
+                                type="smartlist"
+                                card={GenericCard}
+                                genericOverride={true}
+                                initialData={results.smartlists}
+                                showOnlyThese={true}
+                                layout="grid"
+                            />
+                        {/if}
+                    </sl-tab-panel>
+                </sl-tab-group>
+            </div>
+        </sl-drawer>
+    </Portal>
+{/if}
 
 <style>
-    .container {
-        background-color: var(--color-background);
-        position: absolute;
-        inset-inline-start: 0;
-        inset-block-start: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 20;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.3s ease-in-out;
+    sl-drawer::part(panel) {
+        min-height: 100%;
     }
 
-    .container.visible {
-        opacity: 1;
-        pointer-events: initial;
-    }
-
-    .container:after {
-        content: '';
-        position: absolute;
-        inset-block-start: 0;
-        inset-inline-start: 0;
-        inset-inline-end: 0;
-        inset-block-end: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-    }
-
-    .header {
-        display: flex;
-        flex-shrink: 0;
-        align-items: center;
-        justify-content: space-between;
-        padding: var(--spacing-md);
-        padding-inline-start: var(--spacing-lg);
-    }
-
-    .header h4 {
-        margin: 0;
-        margin-inline-end: auto;
-    }
-
-    .results {
-        padding: 0 var(--spacing-lg) var(--spacing-lg);
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        margin-block-end: var(--spacing-lg);
-        margin-inline-end: var(--spacing-lg);
-        position: relative;
-    }
-
-    .results :global(.tab-content) {
-        overflow-y: auto;
-        position: absolute;
-        inset-inline-start: 0;
-        inset-inline-end: 0;
-        inset-block-end: 0;
-        inset-block-start: var(--spacing-xxxl);
+    /* always show the footer, though empty */
+    sl-drawer::part(footer) {
+        display: block;
     }
 </style>

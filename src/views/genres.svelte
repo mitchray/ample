@@ -1,51 +1,69 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { onMount } from "svelte";
-    import { API } from "../stores/api";
-    import { PageTitle } from "../stores/status";
-    import { sortGenresByName } from "../logic/genre";
-    import Lister from '../components/lister/lister.svelte';
+    import { _ } from "svelte-i18n";
+    import { API, User, PageTitle } from "~/stores/state";
+    import { sortGenresByName } from "~/logic/genre";
+    import Lister from "~/components/lister/lister.svelte";
+    import { genresPreset } from "~/components/lister/columns.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import localforage from "localforage";
 
-    let genres = [];
-    let loading = false;
-
-    let title = $_('text.genres');
+    let title = $_("text.genres");
     $PageTitle = title;
 
-    $: genres = genres;
+    $: query = createQuery({
+        queryKey: ["genres"],
+        initialData: async () => {
+            await localforage.getItem("genres");
+        },
+        queryFn: async () => {
+            let result = await $API.genres();
 
-    function handleSortByName() {
-        loading = true;
-        genres = sortGenresByName(genres);
-        loading = false;
-    }
+            if (result.error) {
+                console.error("Ample error getting genres:", result.error);
+                return [];
+            }
 
-    onMount(async () => {
-        genres = await $API.genres();
-        handleSortByName();
+            result = sortGenresByName(result);
+
+            await localforage.setItem("genres", result);
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
     });
+
+    // alias of returned data
+    $: genres = $query.data || {};
 </script>
 
 <svelte:head>
     <title>{title}</title>
 </svelte:head>
 
-<div class="page-main">
-    {#if !loading && genres && genres.length > 0}
-        <Lister
-            data={genres}
-            type="genre"
-            initialSort="name"
-            virtualList={true}
-            actionData={{
-                disable: true
-            }}
-        />
-    {:else}
-        <p>{$_('text.loading')}</p>
-    {/if}
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
 </div>
 
-<style>
-
-</style>
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    {#if genres?.length === 0}
+        <p>{$_("text.noItemsFound")}</p>
+    {:else}
+        <Lister
+            id="Genres"
+            data={genres}
+            columns={genresPreset}
+            type="genre"
+            virtualList={true}
+            actionData={{
+                disable: true,
+            }}
+            options={{
+                showArt: false,
+            }}
+        />
+    {/if}
+{/if}

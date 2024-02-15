@@ -1,8 +1,8 @@
 <script>
-    import { _ } from 'svelte-i18n';
-    import { PageTitle } from "../stores/status";
+    import { _ } from "svelte-i18n";
+    import { PageTitle } from "~/stores/state.js";
 
-    let title = $_('text.notFound');
+    let title = $_("text.notFound");
     $PageTitle = title;
 </script>
 
@@ -10,6 +10,6 @@
     <title>{title}</title>
 </svelte:head>
 
-<div class="page-main">
-    <p>{$_('text.notFound')}</p>
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
 </div>

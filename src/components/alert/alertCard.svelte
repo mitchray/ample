@@ -1,11 +1,6 @@
 <script>
-    import { removeAlert } from "../../logic/alert";
-
-    import SVGClose from '/src/images/close.svg';
-    import SVGInfo from "/src/images/info.svg";
-    import SVGSuccess from "/src/images/check.svg";
-    import SVGWarning from "/src/images/warning.svg";
-    import SVGError from "/src/images/error.svg";
+    import { removeAlert } from "~/logic/alert.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let item;
 </script>
@@ -13,13 +8,13 @@
 <div class="alert-card card {item.style}">
     <div class="style-icon">
         {#if item.style === "info"}
-            <SVGInfo />
+            <MaterialSymbol name="info" />
         {:else if item.style === "success"}
-            <SVGSuccess />
+            <MaterialSymbol name="check" />
         {:else if item.style === "warning"}
-            <SVGWarning />
+            <MaterialSymbol name="warning" />
         {:else if item.style === "error"}
-            <SVGError />
+            <MaterialSymbol name="error" />
         {/if}
     </div>
 
@@ -34,40 +29,45 @@
     </div>
 
     <div class="actions">
-        <button class="icon-button remove" on:click={e => { removeAlert(item.id) }}><SVGClose /></button>
+        <sl-button
+            variant="text"
+            class="remove"
+            on:click={() => {
+                removeAlert(item.id);
+            }}
+        >
+            <MaterialSymbol name="close" />
+        </sl-button>
     </div>
 </div>
 
 <style>
     .alert-card {
-        background-color: var(--color-interface);
-        /*padding: var(--spacing-lg);*/
+        background-color: var(--color-surface-container-high);
         border-radius: 4px;
-        border-inline-start: 4px solid var(--color-regular-background);
         display: flex;
         align-items: stretch;
         gap: var(--spacing-lg);
         flex-direction: row;
         justify-content: center;
-        /*align-items: center;*/
         pointer-events: initial;
         position: relative;
     }
 
     .alert-card.success {
-        border-color: var(--color-primary-background);
+        border-color: var(--swatch-green-500);
     }
 
     .alert-card.info {
-        border-color: var(--color-secondary-background);
+        border-color: var(--swatch-blue-500);
     }
 
     .alert-card.warning {
-        border-color: var(--color-warning-background);
+        border-color: var(--swatch-yellow-500);
     }
 
     .alert-card.error {
-        border-color: var(--color-danger-background);
+        border-color: var(--swatch-red-500);
     }
 
     .style-icon {
@@ -79,19 +79,19 @@
     }
 
     .success .style-icon {
-        background-color: var(--color-primary-background);
+        background-color: var(--swatch-green-500);
     }
 
     .info .style-icon {
-        background-color: var(--color-secondary-background);
+        background-color: var(--swatch-blue-500);
     }
 
     .warning .style-icon {
-        background-color: var(--color-warning-background);
+        background-color: var(--color-warning-500);
     }
 
     .error .style-icon {
-        background-color: var(--color-danger-background);
+        background-color: var(--swatch-red-500);
     }
 
     .message {

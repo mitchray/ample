@@ -1,0 +1,63 @@
+<script>
+    import { _ } from "svelte-i18n";
+    import { PageTitle } from "~/stores/state.js";
+    import { replace } from "svelte-spa-router";
+    import Newest from "./newest.svelte";
+    import Random from "./random.svelte";
+    import AlbumsAll from "~/components/album/albumsAll.svelte";
+    import AlbumsByYear from "~/components/album/albumsByYear.svelte";
+
+    export let params = {};
+
+    // default to the newest tab
+    $: {
+        if (!params.section) replace(`#/albums/newest`);
+    }
+
+    // List of tab items with labels and values.
+    const tabs = [
+        { id: "newest", label: $_("text.newest") },
+        { id: "random", label: $_("text.random") },
+        { id: "year", label: $_("text.byYear") },
+        { id: "all", label: $_("text.all") },
+    ];
+
+    function changeTab(e) {
+        replace(`#/albums/${e.detail.name}`);
+    }
+
+    let title = $_("text.albums");
+    $PageTitle = title;
+</script>
+
+<svelte:head>
+    <title>{title}</title>
+</svelte:head>
+
+<div class="page-header">
+    <h1 class="page-title">{title}</h1>
+</div>
+
+<sl-tab-group on:sl-tab-show={changeTab}>
+    {#each tabs as tab}
+        <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
+            {tab.label}
+        </sl-tab>
+    {/each}
+
+    <sl-tab-panel name="newest">
+        <Newest />
+    </sl-tab-panel>
+
+    <sl-tab-panel name="random">
+        <Random />
+    </sl-tab-panel>
+
+    <sl-tab-panel name="year">
+        <AlbumsByYear />
+    </sl-tab-panel>
+
+    <sl-tab-panel name="all">
+        <AlbumsAll />
+    </sl-tab-panel>
+</sl-tab-group>

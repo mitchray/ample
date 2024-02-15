@@ -1,10 +1,10 @@
 {
-  "text.catalog": "Catalogue",
-  "text.catalogNumber": "Catalogue Number",
-  "text.favorite": "Favourite",
-  "text.favorites": "Favourites",
-  "text.favoritesAlbum": "Favourites (Album)",
-  "text.favoritesArtist": "Favourites (Artist)",
-  "text.randomized": "Randomised",
-  "text.volumeNormalize": "Normalise Volume"
+    "text.catalog": "Catalogue",
+    "text.catalogNumber": "Catalogue Number",
+    "text.favorite": "Favourite",
+    "text.favorites": "Favourites",
+    "text.favoritesAlbum": "Favourites (Album)",
+    "text.favoritesArtist": "Favourites (Artist)",
+    "text.randomized": "Randomised",
+    "text.volumeNormalize": "Normalise Volume"
 }
