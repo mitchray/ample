@@ -1,10 +1,10 @@
 <script>
     import { _ } from "svelte-i18n";
-    import localforage from "localforage";
     import { API, User, PageTitle } from "~/stores/state";
     import Lister from "~/components/lister/lister.svelte";
     import { smartlistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
+    import { Saved } from "~/stores/settings.js";
 
     let title = $_("text.smartlists");
     $PageTitle = title;
@@ -12,7 +12,7 @@
     $: query = createQuery({
         queryKey: ["smartlists"],
         initialData: async () => {
-            await localforage.getItem("smartlists");
+            await $Saved.getItem("smartlists");
         },
         queryFn: async () => {
             let result = await $API.smartlists();
@@ -22,7 +22,7 @@
                 return [];
             }
 
-            await localforage.setItem("smartlists", result);
+            await $Saved.setItem("smartlists", result);
 
             return result;
         },

@@ -1,11 +1,11 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API, User, PageTitle } from "~/stores/state";
+    import { Saved } from "~/stores/settings.js";
     import { sortGenresByName } from "~/logic/genre";
     import Lister from "~/components/lister/lister.svelte";
     import { genresPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
-    import localforage from "localforage";
 
     let title = $_("text.genres");
     $PageTitle = title;
@@ -13,7 +13,7 @@
     $: query = createQuery({
         queryKey: ["genres"],
         initialData: async () => {
-            await localforage.getItem("genres");
+            await $Saved.getItem("genres");
         },
         queryFn: async () => {
             let result = await $API.genres();
@@ -25,7 +25,7 @@
 
             result = sortGenresByName(result);
 
-            await localforage.setItem("genres", result);
+            await $Saved.setItem("genres", result);
 
             return result;
         },

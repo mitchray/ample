@@ -4,12 +4,12 @@
     import { _ } from "svelte-i18n";
     import { podcastsPreset } from "~/components/lister/columns.js";
     import Lister from "~/components/lister/lister.svelte";
-    import localforage from "localforage";
+    import { Saved } from "~/stores/settings.js";
 
     $: query = createQuery({
         queryKey: ["podcasts"],
         initialData: async () => {
-            await localforage.getItem("podcasts");
+            await $Saved.getItem("podcasts");
         },
         queryFn: async () => {
             let result = await $API.podcasts();
@@ -19,7 +19,7 @@
                 return [];
             }
 
-            await localforage.setItem("podcasts", result);
+            await $Saved.setItem("podcasts", result);
 
             return result;
         },
