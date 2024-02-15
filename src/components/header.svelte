@@ -50,6 +50,13 @@
         <MaterialSymbol name="menu" />
     </sl-button>
 
+    <div
+        style="position: absolute; left: 50px; pointer-events: none; color: red; display: flex; flex-direction: column;"
+    >
+        <span style="font-size: 1.3rem; ">ALPHA PREVIEW</span>
+        <span>Incomplete features & bugs 🐛</span>
+    </div>
+
     <sl-input
         bind:this={inputBind}
         type="text"
