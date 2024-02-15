@@ -4,15 +4,18 @@
   "type": "module",
   "scripts": {
     "build": "vite build && npm run copy",
+    "build-demo": "npm run build && copyfiles ample-demo.json dist && npm run rename-demo-config",
     "dev": "vite",
     "start": "vite preview",
     "validate": "svelte-check",
-    "copy": "copyfiles README.md LICENSE CHANGELOG.md ample.json.dist dist"
+    "copy": "copyfiles README.md LICENSE CHANGELOG.md ample.json.dist dist",
+    "rename-demo-config": "renamer -f \"/ample-demo.json/\" -r \"ample.json\" \"dist/*\""
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.0.0",
     "@tsconfig/svelte": "^4.0.1",
     "copyfiles": "^2.4.1",
+    "renamer": "^5.0.0",
     "rollup-plugin-svelte-svg": "^1.0.0-beta.6",
     "svelte": "^3.59.2",
     "svelte-check": "^3.4.4",
@@ -20,7 +23,7 @@
     "svelte-preprocess": "^5.0.4",
     "tslib": "^2.3.0",
     "typescript": "^5.1.3",
-    "vite": "^4.0.0"
+    "vite": "^4.5.2"
   },
   "dependencies": {
     "@floating-ui/dom": "^1.2.7",

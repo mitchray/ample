@@ -9,7 +9,7 @@ Built with [Svelte](https://svelte.dev/) & [wavesurfer.js](https://github.com/ka
 - It is designed to be a front-end companion to an existing Ampache server, not a complete replacement
 
 ## Demo
-[View demo](https://demo.ampache.dev/ample/)
+[View demo](https://ample-player.vercel.app/)
 - User ```demo``` 
 - Password ```demodemo```
 
