@@ -4,12 +4,12 @@
     "type": "module",
     "scripts": {
         "build": "vite build && npm run copy",
-        "build-demo": "npm run build && copyfiles ample-demo.json dist/config && npm run rename-demo-config",
+        "build-demo": "vite build --minify false && npm run copy && npm run demo-config",
         "dev": "vite",
         "start": "vite preview",
         "validate": "svelte-check",
         "copy": "copyfiles README.md LICENSE CHANGELOG.md dist && copyfiles ample.json.dist dist/config",
-        "rename-demo-config": "renamer -f \"/ample-demo.json/\" -r \"ample.json\" \"dist/config/*\""
+        "demo-config": "copyfiles ample-demo.json dist/config && renamer -f \"/ample-demo.json/\" -r \"ample.json\" \"dist/config/*\""
     },
     "devDependencies": {
         "@sveltejs/vite-plugin-svelte": "^3.0.1",
