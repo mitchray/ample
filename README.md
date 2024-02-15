@@ -44,7 +44,7 @@ Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitc
   - Access by adding ```/ample``` to your Ampache server address e.g. ```yourampache.com/ample``` or ```localhost/ampache/ample```
 - Hard mode
   - Grab a prebuilt [release](https://github.com/mitchray/ample/releases) or build yourself from Git repository (see Developing)
-  - Put it anywhere you like, but you will have to deal with [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin) if it is on a different domain/subdomain from the Ampache server you are connecting to.
+  - Put it anywhere you like, but you will have to deal with [CORS](https://enable-cors.org/server.html) if it is on a different domain/subdomain from the Ampache server you are connecting to.
 - Enter the URL of the Ampache server you wish to connect to on the login screen 
   - Alternatively add the URL to ```ample.json``` to hardcode it (rename ```ample.json.dist``` & use the full URL with no trailing slash i.e. ```https://yourampache.com```)
 
