@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
-    import { systemPreference } from "~/logic/preferences.js";
+    import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let contextKey;
@@ -54,7 +54,7 @@
     }
 </script>
 
-{#if systemPreference("download")}
+{#if userPreference("download")}
     <sl-menu-item on:click={handleAction} title={$_("text.download")} {loading}>
         <MaterialSymbol name="download" slot="prefix" />
         {$_("text.download")}
