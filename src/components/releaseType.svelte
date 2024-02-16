@@ -8,19 +8,20 @@
 </script>
 
 <div
-    class="c-release-type release-type-label"
+    class="c-release-type release-type-label truncate"
     title="{$_('text.releaseType')}: {formatted}"
 >
-    {formatted}
+    <span class="truncate">{formatted}</span>
 </div>
 
 <style>
     .release-type-label {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
         padding: 0.25em 0.4em;
         line-height: 1;
         border-radius: 4px;
-        font-size: 0.85em;
+        font-size: 10px;
         text-transform: uppercase;
         font-weight: 500;
         letter-spacing: 0.03em;

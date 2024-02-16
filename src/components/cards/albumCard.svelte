@@ -23,7 +23,7 @@
         <div class="info">
             <div class="top">
                 <div class="details">
-                    <div class="meta secondary-info truncate">
+                    <div class="meta secondary-info">
                         {#if album.year}<span class="year">
                                 {album.year}
                             </span>{/if}
@@ -140,5 +140,10 @@
         display: flex;
         flex-direction: column;
         margin-block-end: var(--spacing-md);
+    }
+
+    .meta {
+        display: flex;
+        gap: var(--spacing-sm);
     }
 </style>
