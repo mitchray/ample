@@ -238,11 +238,13 @@
     --color-secondary: var(--swatch-secondary-400);
     --color-on-secondary: var(--swatch-secondary-900);
     --color-secondary-container: var(--swatch-secondary-800);
+    --color-secondary-container-variant: var(--swatch-secondary-900);
     --color-on-secondary-container: var(--swatch-secondary-200);
     --color-on-secondary-container-variant: var(--swatch-secondary-400);
     --color-tertiary: var(--swatch-tertiary-400);
     --color-on-tertiary: var(--swatch-tertiary-900);
     --color-tertiary-container: var(--swatch-tertiary-800);
+    --color-tertiary-container-variant: var(--swatch-tertiary-900);
     --color-on-tertiary-container: var(--swatch-tertiary-200);
     --color-on-tertiary-container-variant: var(--swatch-tertiary-400);
     --color-background: var(--swatch-background-950);
@@ -326,11 +328,13 @@
     --color-secondary: var(--swatch-secondary-700);
     --color-on-secondary: var(--swatch-secondary-50);
     --color-secondary-container: var(--swatch-secondary-200);
+    --color-secondary-container-variant: var(--swatch-secondary-200);
     --color-on-secondary-container: var(--swatch-secondary-900);
     --color-on-secondary-container-variant: var(--swatch-secondary-800);
     --color-tertiary: var(--swatch-tertiary-700);
     --color-on-tertiary: var(--swatch-tertiary-50);
     --color-tertiary-container: var(--swatch-tertiary-200);
+    --color-tertiary-container-variant: var(--swatch-tertiary-200);
     --color-on-tertiary-container: var(--swatch-tertiary-900);
     --color-on-tertiary-container-variant: var(--swatch-tertiary-800);
     --color-background: oklch(98.4% var(--chroma-override, 0.013) var(--user-hue-background));

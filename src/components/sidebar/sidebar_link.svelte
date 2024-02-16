@@ -36,7 +36,7 @@
     }
 
     .site-sidebar__link:global(.active) {
-        background-color: var(--color-tertiary-container);
+        background-color: var(--color-tertiary-container-variant);
         color: var(--color-on-tertiary-container);
         border-radius: 6px;
     }

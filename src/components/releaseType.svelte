@@ -24,7 +24,7 @@
         text-transform: uppercase;
         font-weight: 500;
         letter-spacing: 0.03em;
-        background-color: var(--color-secondary-container);
+        background-color: var(--color-secondary-container-variant);
         color: var(--color-on-secondary-container);
     }
 </style>

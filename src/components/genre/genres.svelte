@@ -28,7 +28,7 @@
 
     .genre-tag :global(a) {
         display: flex;
-        background-color: var(--color-secondary-container);
+        background-color: var(--color-secondary-container-variant);
         color: var(--color-on-secondary-container);
         border-radius: 3px;
         padding: 0.2em 0.5em;
