@@ -178,9 +178,13 @@ export async function getSimilarArtistsWithGenreFallback(id) {
     if (result.length === 0) {
         let artist = await get(API).artist({ filter: id });
 
+        if (artist?.genre.length === 0) {
+            return [];
+        }
+
         const rows = [];
 
-        artist?.genre.forEach((genre) => {
+        artist.genre.forEach((genre) => {
             rows.push(["genre", 4, genre.name]);
         });
 
