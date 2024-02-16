@@ -140,12 +140,12 @@
     }
 
     .queue-item.currentlyPlaying {
-        background-color: var(--color-secondary-container);
-        color: var(--color-on-secondary-container);
+        background-color: var(--color-tertiary-container-variant);
+        color: var(--color-on-tertiary-container);
     }
 
     .queue-item.currentlyPlaying .secondary-info {
-        color: var(--color-on-secondary-container-variant);
+        color: var(--color-on-tertiary-container-variant);
     }
 
     .details {
