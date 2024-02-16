@@ -9,7 +9,7 @@
 
 <script>
     import { readable } from "svelte/store";
-    import { setContext } from "svelte";
+    import { onMount, setContext } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import { DispatchListerEvent, ListerEvent } from "~/stores/message.js";
     import { SiteContentBind } from "~/stores/elements.js";
@@ -38,13 +38,11 @@
     let _actionData = writable(actionData);
     let _virtualList = writable(virtualList);
 
-    const tableID = `AmpleLister${id}`;
+    const tableID = `Lister${id}`;
     let _columns = readable(columns);
     let _options = readable(options);
-    let loadedOptions = writable($Saved.getItem(tableID) || {}); // load saved settings from localstorage
-    let state = writable(
-        Object.assign({}, TableDefault, $loadedOptions, options),
-    ); // merge table defaults, localstorage, passed component props
+    let loadedOptions = writable({}); // load saved settings from localstorage
+    let state = writable({}); // merge table defaults, localstorage, passed component props
 
     $: $state, $Saved.setItem(tableID, $state); // write to localstorage whenever state changes
     $: $state, ($sharedState = { id: tableID, state: $state }); // when local state changes, update the shared state
@@ -164,6 +162,11 @@
             $state = $state;
         }
     }
+
+    onMount(async () => {
+        $loadedOptions = (await $Saved.getItem(tableID)) || {};
+        $state = Object.assign({}, TableDefault, $loadedOptions, options);
+    });
 </script>
 
 <ListerDebug {contextKey} />
