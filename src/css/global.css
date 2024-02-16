@@ -263,10 +263,10 @@
     --color-surface-container: oklch(25.5% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
     --color-surface-container-high: oklch(28.6% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
 
-    --color-waveform: var(--user-color-waveform);
-    --color-shadow-val:         var(--lightness-950) var(--chroma-950) var(--hue-primary);
-    --color-rating:             var(--swatch-yellow-500);
-    --color-favorite:           var(--swatch-red-600);
+    --color-waveform:   var(--user-color-waveform);
+    --color-shadow-val: var(--lightness-950) var(--chroma-950) var(--hue-primary);
+    --color-rating:     var(--swatch-yellow-500);
+    --color-favorite:   var(--swatch-red-600);
 
     --color-btn-default-text: var(--swatch-primary-400);
     --color-btn-default-text-hover: var(--swatch-primary-100);
@@ -351,10 +351,10 @@
     --color-surface-container: oklch(95.4% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
     --color-surface-container-high: oklch(93.3% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
 
-    --color-waveform: var(--user-color-waveform);
-    --color-shadow-val:         var(--lightness-500) var(--chroma-500) var(--hue-primary);
-    --color-rating:             var(--swatch-yellow-600);
-    --color-favorite:           var(--swatch-red-600);
+    --color-waveform:   var(--user-color-waveform);
+    --color-shadow-val: var(--lightness-500) var(--chroma-500) var(--hue-primary);
+    --color-rating:     var(--swatch-yellow-600);
+    --color-favorite:   var(--swatch-red-600);
 
     --color-btn-default-text: var(--swatch-primary-700);
     --color-btn-default-text-hover: var(--swatch-primary-900);
