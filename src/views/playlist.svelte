@@ -90,7 +90,7 @@
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">
-                        <Art size="large" data={playlist} type="playlist" />
+                        <Art size="large" data={playlist} type={playlistType} />
                     </div>
 
                     {#if playlistType === "playlist"}

@@ -762,21 +762,6 @@ strong {
     margin-block-start: var(--spacing-sm);
 }
 
-.art-background {
-    filter: contrast(80%) brightness(60%) saturate(120%) blur(20px);
-    position: fixed;
-    inset-block-start: 0;
-    inset-block-end: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.2;
-    object-fit: cover;
-    pointer-events: none;
-    z-index: -1;
-}
-
 /*
  * Drawers
  */

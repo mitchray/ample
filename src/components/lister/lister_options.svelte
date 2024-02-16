@@ -55,6 +55,10 @@
     }
 
     function orderColumns() {
+        if (!$state.columnOrder) {
+            return;
+        }
+
         $availableColumns = $availableColumns.sort((a, b) => {
             const aIndex = $state.columnOrder.indexOf(a.id);
             const bIndex = $state.columnOrder.indexOf(b.id);

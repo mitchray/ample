@@ -8,7 +8,7 @@
     export let data;
 
     /** Type of object */
-    /** @type {"song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream"} */
+    /** @type {"song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream" | "mix"} */
     export let type;
 
     /** @type {"thumbnail" | "small" | "medium" | "large"} */
@@ -20,7 +20,7 @@
 
     $: query = createQuery({
         queryKey: ["art", data.id + type],
-        staleTime: 60 * 30000, // 30 minutes
+        staleTime: 60 * 1000 * 30, // 30 minutes
         queryFn: async () => {
             let result = [];
 
@@ -92,7 +92,11 @@
     }
 </script>
 
-<div class="c-art container" class:grid={images.length === 4}>
+<div
+    class="c-art container"
+    class:grid={images.length === 4}
+    class:mix-effect={type === "mix"}
+>
     {#if type === "live_stream"}
         <div class="live-stream-icon">
             <MaterialSymbol name="radio" />
@@ -156,5 +160,16 @@
         background-color: var(--color-secondary-container);
         color: var(--color-on-secondary-container);
         font-size: 1.5rem;
+    }
+
+    /* ensure the img parent has a background-color set else the mix-blend-mode may not work in some cases */
+    .mix-effect {
+        background-color: var(--color-background);
+    }
+
+    .mix-effect img {
+        opacity: 0.5;
+        filter: contrast(70%);
+        mix-blend-mode: luminosity;
     }
 </style>
