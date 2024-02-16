@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { API } from "~/stores/state";
 import { debugHelper } from "./helper";
-import { getArtist } from "./artist";
+import { getArtist, getSimilarArtistsWithGenreFallback } from "./artist";
 
 /**
  * Get songs from artist ID
@@ -29,11 +29,7 @@ export async function getSongsFromPlaylist({ id, type }) {
             results = await get(API).playlistSongs({ filter: id });
             break;
         case "artist_mix":
-            let artists = await get(API).getSimilar({
-                type: "artist",
-                filter: id,
-                limit: 20,
-            });
+            let artists = await getSimilarArtistsWithGenreFallback(id);
             let baseArtist = await getArtist(id);
 
             if (baseArtist) {

@@ -6,6 +6,7 @@
     import Art from "~/components/art.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import { getSimilarArtistsWithGenreFallback } from "~/logic/artist.js";
 
     export let data = null; // needed for cardList dynamic components
     export let type = undefined; // ignored; workaround for card list component when type is 'generic'
@@ -16,21 +17,9 @@
 
     $: query = createQuery({
         queryKey: ["playlistMix", playlist?.id],
-        staleTime: 60 * 30000, // 30 minutes
+        staleTime: 60 * 1000 * 30, // 30 minutes
         queryFn: async () => {
-            let result = await $API.getSimilar({
-                type: "artist",
-                filter: playlist.id,
-                limit: 15,
-            });
-
-            if (result.error) {
-                console.error(
-                    "Ample error getting similar artists for playlist mix:",
-                    result.error,
-                );
-                return [];
-            }
+            let result = await getSimilarArtistsWithGenreFallback(playlist.id);
 
             return sampleSize(result, 3);
         },

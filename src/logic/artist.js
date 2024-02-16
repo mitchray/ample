@@ -154,3 +154,52 @@ export function randomAlbumArtists({ page = 0, limit = 50 }) {
         rules: [["album_count", 4, 0]],
     });
 }
+
+/**
+ * Get similar artists, falling back to artists of the same genre
+ * @param {string} id
+ * @returns {Promise<*>}
+ */
+export async function getSimilarArtistsWithGenreFallback(id) {
+    let result = await get(API).getSimilar({
+        type: "artist",
+        filter: id,
+        limit: 15,
+    });
+
+    if (result.error) {
+        console.error(
+            "Ample error getting similar artists with genre fallback (get similar):",
+            result.error,
+        );
+        return [];
+    }
+
+    if (result.length === 0) {
+        let artist = await get(API).artist({ filter: id });
+
+        const rows = [];
+
+        artist?.genre.forEach((genre) => {
+            rows.push(["genre", 4, genre.name]);
+        });
+
+        result = await get(API).advancedSearch({
+            type: "artist",
+            random: 1,
+            operator: "or",
+            limit: 15,
+            rules: rows,
+        });
+
+        if (result.error) {
+            console.error(
+                "Ample error getting similar artists with genre fallback (genres):",
+                result.error,
+            );
+            return [];
+        }
+    }
+
+    return result;
+}
