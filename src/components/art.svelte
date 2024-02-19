@@ -102,6 +102,16 @@
             <MaterialSymbol name="radio" />
         </div>
     {:else if images.length > 0}
+        {#if type === "mix"}
+            <MaterialSymbol
+                name="play_arrow"
+                fill={false}
+                classes="mix-icon"
+                weight="100"
+                size="300px"
+            />
+        {/if}
+
         {#each images as image}
             <img
                 src="{image}{thumb !== null ? `&thumb=${thumb}` : ''}"
@@ -162,14 +172,67 @@
         font-size: 1.5rem;
     }
 
-    /* ensure the img parent has a background-color set else the mix-blend-mode may not work in some cases */
     .mix-effect {
-        background-color: var(--color-background);
+        position: relative;
     }
 
-    .mix-effect img {
-        opacity: 0.5;
-        filter: contrast(70%);
-        mix-blend-mode: luminosity;
+    .c-art :global(.mix-icon) {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 99;
+        color: var(--color-tertiary-container);
+        opacity: 0.8;
+        transform: translate(-50%, -50%);
+        filter: drop-shadow(0px 0px 15px black);
+        pointer-events: none;
+    }
+
+    :global(.sl-theme-dark) .c-art :global(.mix-icon) {
+        mix-blend-mode: plus-lighter;
+    }
+
+    :global(.sl-theme-light) .c-art :global(.mix-icon) {
+        /*mix-blend-mode: screen;*/
+    }
+
+    .mix-effect:before {
+        background-color: var(--color-secondary-container);
+        content: "";
+        height: 100%;
+        left: 0;
+        mix-blend-mode: plus-lighter;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 1;
+    }
+
+    :global(.sl-theme-dark) .mix-effect {
+        background-color: var(--color-primary-container);
+    }
+
+    :global(.sl-theme-dark) .mix-effect:before {
+        background-color: var(--color-secondary-container);
+        mix-blend-mode: plus-lighter;
+    }
+
+    :global(.sl-theme-dark) .mix-effect img {
+        filter: grayscale(100%) contrast(130%);
+        mix-blend-mode: multiply;
+    }
+
+    :global(.sl-theme-light) .mix-effect {
+        background-color: var(--color-primary-container);
+    }
+
+    :global(.sl-theme-light) .mix-effect:before {
+        background-color: var(--color-on-secondary-container);
+        mix-blend-mode: screen;
+    }
+
+    :global(.sl-theme-light) .mix-effect img {
+        filter: grayscale(100%) contrast(70%);
+        mix-blend-mode: multiply;
     }
 </style>
