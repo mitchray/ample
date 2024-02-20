@@ -33,7 +33,12 @@
             {/if}
 
             <a href="#/{parentUrl}/{playlist.id}" title={playlist.name}>
-                <Art size="large" data={playlist} type="playlist" />
+                <Art
+                    size="large"
+                    data={playlist}
+                    type="playlist"
+                    radius="8px"
+                />
             </a>
         </div>
 

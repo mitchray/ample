@@ -59,7 +59,12 @@
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">
-                        <Art size="large" data={album} type="album" />
+                        <Art
+                            size="large"
+                            data={album}
+                            type="album"
+                            radius="6px"
+                        />
                     </div>
 
                     <div class="below-image">
@@ -223,7 +228,6 @@
 
     .art-container {
         aspect-ratio: 1 / 1;
-        border-radius: 6px;
         overflow: hidden;
         font-size: 0;
     }

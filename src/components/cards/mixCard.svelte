@@ -38,7 +38,7 @@
                 title={playlist.name}
             >
                 <div class="image-text">{playlist.name}</div>
-                <Art size="large" data={playlist} type="mix" />
+                <Art size="large" data={playlist} type="mix" radius="8px" />
             </a>
         </div>
 
@@ -110,7 +110,6 @@
         z-index: 1;
         justify-content: center;
         display: flex;
-        border-radius: 8px;
         overflow: hidden;
         aspect-ratio: 1 / 1;
         background-color: var(--color-background);

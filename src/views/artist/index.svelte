@@ -79,7 +79,12 @@
                 <h1 class="title">{artist.name}</h1>
                 <div class="profile">
                     <div class="art-container">
-                        <Art size="large" data={artist} type="artist" />
+                        <Art
+                            size="large"
+                            data={artist}
+                            type="artist"
+                            radius="6px"
+                        />
                     </div>
 
                     <div class="below-image">
@@ -258,7 +263,6 @@
 
     .art-container {
         aspect-ratio: 1 / 1;
-        border-radius: 6px;
         overflow: hidden;
         font-size: 0;
         position: relative;

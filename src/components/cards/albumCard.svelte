@@ -16,7 +16,7 @@
     {#if album}
         <div class="image-container">
             <a href="#/album/{album.id}" title={album.name}>
-                <Art size="large" data={album} type="album" />
+                <Art size="large" data={album} type="album" radius="8px" />
             </a>
         </div>
 
@@ -116,8 +116,6 @@
         justify-content: center;
         display: flex;
         margin-block-end: var(--spacing-sm);
-        border-radius: 8px;
-        overflow: hidden;
         aspect-ratio: 1 / 1;
     }
 

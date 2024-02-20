@@ -14,6 +14,9 @@
     /** @type {"thumbnail" | "small" | "medium" | "large"} */
     export let size = "medium";
 
+    /** @type string */
+    export let radius = "0px";
+
     let dimension = 128;
     let thumb = 2;
     let images = [];
@@ -96,6 +99,7 @@
     class="c-art container"
     class:grid={images.length === 4}
     class:mix-effect={type === "mix"}
+    style:border-radius={radius}
 >
     {#if type === "live_stream"}
         <div class="live-stream-icon">
@@ -148,6 +152,34 @@
         align-self: start; /* don't stretch by default in flex parents */
         flex-shrink: 0;
         font-size: 0; /* hide the alt text */
+        position: relative;
+    }
+
+    /* :after reserved for the inset border/shadow to stand out against background */
+    .container:after {
+        content: "";
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        bottom: 0px;
+        z-index: 1;
+        /*pointer-events: none;*/
+        /*background-color: lime;*/
+        /*padding: 0;*/
+        /*display: block;*/
+        border: 1px solid transparent;
+        border-radius: inherit;
+    }
+
+    :global(.sl-theme-dark) .container:after {
+        border-color: hsla(0, 0%, 15%, 1);
+        mix-blend-mode: lighten;
+    }
+
+    :global(.sl-theme-light) .container:after {
+        border-color: hsla(0, 0%, 90%, 1);
+        mix-blend-mode: darken;
     }
 
     img {
@@ -218,7 +250,7 @@
     }
 
     :global(.sl-theme-dark) .mix-effect img {
-        filter: grayscale(100%) contrast(130%);
+        filter: grayscale(100%) contrast(110%);
         mix-blend-mode: multiply;
     }
 

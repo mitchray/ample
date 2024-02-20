@@ -13,7 +13,7 @@
     {#if artist}
         <div class="art-container">
             <a href="#/artist/{artist.id}" title={artist.name}>
-                <Art size="large" data={artist} type="artist" />
+                <Art size="large" data={artist} type="artist" radius="5px" />
             </a>
         </div>
         <div class="title truncate">
@@ -62,7 +62,6 @@
     }
 
     .art-container {
-        border-radius: 5px;
         overflow: hidden;
         padding-block-end: 100%;
         width: 100%;

@@ -18,7 +18,7 @@
 
 <div class="container">
     {#if $state.showArt}
-        <Art {type} size="thumbnail" {data} />
+        <Art {type} size="thumbnail" {data} radius="2px" />
     {/if}
 
     {#if data.id === $CurrentMedia?.id}
@@ -76,6 +76,5 @@
         width: calc(
             var(--rowHeight) - (var(--rowHeight) * 0.25)
         ); /* padding of 25% based on row height */
-        border-radius: 2px;
     }
 </style>

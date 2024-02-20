@@ -16,7 +16,7 @@
         class="album-card-mini card"
     >
         <div class="image-container">
-            <Art size="small" data={album} type="album" />
+            <Art size="small" data={album} type="album" radius="2px" />
         </div>
 
         <div class="info">
@@ -65,7 +65,6 @@
 
     .image-container {
         font-size: 0;
-        border-radius: 2px;
         overflow: hidden;
         aspect-ratio: 1 / 1;
         height: 34px;

@@ -52,7 +52,7 @@
     <div class="generic-card">
         {#if data}
             <a href="#/{urlPrefix}/{data.id}" title={data.name}>
-                <Art {data} {type} size="thumbnail" />
+                <Art {data} {type} size="thumbnail" radius="5px" />
             </a>
 
             <div class="details">
@@ -182,7 +182,6 @@
 
     .generic-card :global(.c-art) {
         height: 80px;
-        border-radius: 5px;
     }
 
     .generic-card :global(.c-art .live-stream-icon) {

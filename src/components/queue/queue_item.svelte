@@ -54,7 +54,12 @@
     </sl-button>
 
     <span class="thumb" on:mousedown={startDrag} on:touchstart={startDrag}>
-        <Art size="thumbnail" data={media} type={media.object_type} />
+        <Art
+            size="thumbnail"
+            data={media}
+            type={media.object_type}
+            radius="2px"
+        />
     </span>
 
     {#if $CurrentMedia?._id === media._id}
@@ -117,7 +122,6 @@
         line-height: 0;
         height: 36px;
         width: 36px;
-        border-radius: 2px;
     }
 
     .queue-item {

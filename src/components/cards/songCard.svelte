@@ -16,7 +16,7 @@
     {#if song}
         <div class="top">
             <div class="image-container">
-                <Art size="medium" data={song} type="song" />
+                <Art size="medium" data={song} type="song" radius="5px" />
             </div>
 
             <div class="info">
@@ -108,7 +108,6 @@
         aspect-ratio: 1 / 1;
         flex-shrink: 0;
         flex-grow: 0;
-        border-radius: 5px;
         overflow: hidden;
         align-self: start;
     }

@@ -90,7 +90,12 @@
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">
-                        <Art size="large" data={playlist} type={playlistType} />
+                        <Art
+                            size="large"
+                            data={playlist}
+                            type={playlistType}
+                            radius="6px"
+                        />
                     </div>
 
                     {#if playlistType === "playlist"}
@@ -196,7 +201,6 @@
     .art-container {
         max-width: 240px;
         aspect-ratio: 1 / 1;
-        border-radius: 6px;
         overflow: hidden;
         font-size: 0;
         margin-block-end: var(--spacing-lg);

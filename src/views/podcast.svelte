@@ -58,7 +58,7 @@
             <h1>{podcast.name}</h1>
             <p>{@html podcast.description}</p>
             <Rating type="podcast" data={podcast} />
-            <Art size="large" data={podcast} type="podcast" />
+            <Art size="large" data={podcast} type="podcast" radius="8px" />
             <Actions
                 type="podcast"
                 displayMode="fullButtons"
