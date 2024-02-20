@@ -9,6 +9,7 @@
     import ArtistList from "~/components/artist/artistList.svelte";
     import Art from "~/components/art.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import MiniRating from "~/components/rating/miniRating.svelte";
     import { MediaPlayer } from "~/stores/elements.js";
 
     export let media;
@@ -90,6 +91,12 @@
                 {media.podcast?.name}
             </div>
         {/if}
+
+        {#if media.object_type !== "live_stream"}
+            <div class="mini-rating">
+                <MiniRating data={media} />
+            </div>
+        {/if}
     </span>
 
     <sl-dropdown
@@ -113,15 +120,35 @@
             />
         {/if}
     </sl-dropdown>
+
+    <div class="test">
+        <sl-rating value={media.rating}></sl-rating>
+    </div>
 </div>
 
 <style>
+    .test {
+        position: absolute;
+        pointer-events: none;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        /*background-color: red;*/
+        filter: grayscale(100%);
+        opacity: 0;
+    }
+
+    .mini-rating {
+        /*line-height: 3px;*/
+        margin-block-start: 3px;
+    }
+
     .thumb {
         flex-shrink: 0;
         margin-inline-end: var(--spacing-md);
         line-height: 0;
-        height: 36px;
-        width: 36px;
+        height: 38px;
+        width: 38px;
     }
 
     .queue-item {

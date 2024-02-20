@@ -6,7 +6,7 @@
     import { API, User, ArtistToFilter } from "~/stores/state.js";
     import { PlaySongsByOtherArtists } from "~/stores/settings.js";
     import { formatTotalTime } from "~/logic/formatters.js";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Genres from "~/components/genre/genres.svelte";

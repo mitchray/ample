@@ -18,7 +18,6 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists,
     } from "~/logic/song.js";
-    import { filterBelow } from "~/logic/helper.js";
     import { writable } from "svelte/store";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
@@ -197,9 +196,6 @@
         result = result.filter(
             (item) => !item.state || item.state === "completed",
         );
-
-        // filter out songs below desired rating
-        result = filterBelow(result);
 
         // filter out songs not by artist if that is set, but allow a single item through with the assumption its the only one we want to play
         if (result.length > 1 && $ArtistToFilter) {

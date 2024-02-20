@@ -18,8 +18,8 @@
 
 <script>
     import { _ } from "svelte-i18n";
-    import { API, NowPlayingQueue } from "~/stores/state";
-    import MaterialSymbol from "./materialSymbol.svelte";
+    import { API, NowPlayingQueue } from "~/stores/state.js";
+    import MaterialSymbol from "../materialSymbol.svelte";
 
     export let type = null;
     export let data = {};
@@ -108,6 +108,17 @@
                     id: id,
                     flag: newFlag,
                 });
+
+                // now update any items in the queue with the new fav
+                let foundItems = $NowPlayingQueue.filter(
+                    (item) => item.id === id && item.object_type === type,
+                );
+
+                foundItems.forEach((item) => {
+                    item.flag = flag;
+                });
+
+                $NowPlayingQueue = $NowPlayingQueue;
             }
         });
     }

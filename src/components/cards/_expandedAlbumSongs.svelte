@@ -5,7 +5,7 @@
     import { formatTotalTime } from "~/logic/formatters.js";
     import { albumPreset, checkbox } from "~/components/lister/columns.js";
     import Actions from "~/components/action/actions.svelte";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import Lister from "~/components/lister/lister.svelte";
