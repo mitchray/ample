@@ -1,5 +1,5 @@
 <script>
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import Art from "~/components/art.svelte";
 
     export let data = null; // needed for cardList dynamic components

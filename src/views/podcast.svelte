@@ -3,7 +3,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { API, User } from "~/stores/state.js";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Lister from "~/components/lister/lister.svelte";
     import Art from "~/components/art.svelte";

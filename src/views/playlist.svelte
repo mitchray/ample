@@ -5,7 +5,7 @@
     import { API, PageTitle } from "~/stores/state";
     import { getSongsFromPlaylist } from "~/logic/song";
     import { songsPreset } from "~/components/lister/columns.js";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import Lister from "~/components/lister/lister.svelte";
     import Art from "~/components/art.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";

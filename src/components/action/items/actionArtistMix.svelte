@@ -4,7 +4,6 @@
     import { API } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
-    import { filterBelow } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let contextKey;
@@ -27,7 +26,7 @@
             type: "artist_mix",
         });
 
-        $MediaPlayer.playNow(filterBelow(songs));
+        $MediaPlayer.playNow(songs);
         loading = false;
     }
 

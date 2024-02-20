@@ -1,6 +1,6 @@
 <script>
     import { CurrentMedia } from "~/stores/state.js";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
 </script>
 
 {#key $CurrentMedia || 0}

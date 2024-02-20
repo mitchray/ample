@@ -1,6 +1,6 @@
 <script>
     import { removeNotification } from "~/logic/notification.js";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let item;

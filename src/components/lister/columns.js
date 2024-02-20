@@ -4,7 +4,7 @@ import Checkbox from "./components/checkbox_row.svelte";
 import Name from "./components/name.svelte";
 import RelativeDate from "~/components/relativeDate.svelte";
 import GenreList from "~/components/genreList.svelte";
-import Rating from "~/components/rating.svelte";
+import Rating from "~/components/rating/rating.svelte";
 import Badge from "~/components/badge.svelte";
 import Actions from "~/components/action/actions.svelte";
 import {

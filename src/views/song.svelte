@@ -6,7 +6,7 @@
         formatFilesize,
         formatSongQuality,
     } from "~/logic/formatters.js";
-    import Rating from "~/components/rating.svelte";
+    import Rating from "~/components/rating/rating.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Genres from "~/components/genre/genres.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
