@@ -5,12 +5,13 @@ import Name from "./components/name.svelte";
 import RelativeDate from "~/components/relativeDate.svelte";
 import GenreList from "~/components/genreList.svelte";
 import Rating from "~/components/rating.svelte";
-import ReleaseType from "~/components/releaseType.svelte";
+import Badge from "~/components/badge.svelte";
 import Actions from "~/components/action/actions.svelte";
 import {
     formatTotalTime,
     formatFilesize,
     formatSongQuality,
+    formatReleaseType,
 } from "~/logic/formatters.js";
 
 export const TableDefault = {
@@ -221,9 +222,9 @@ export let type = {
     type: "string",
     canToggle: true,
     cell: (data) => ({
-        component: ReleaseType,
+        component: Badge,
         props: {
-            type: data.type,
+            text: formatReleaseType(data.type),
         },
     }),
 };

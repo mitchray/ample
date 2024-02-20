@@ -1,21 +1,13 @@
 <script>
-    import { _ } from "svelte-i18n";
-    import { formatReleaseType } from "~/logic/formatters.js";
-
-    export let type;
-
-    $: formatted = formatReleaseType(type);
+    export let text;
 </script>
 
-<div
-    class="c-release-type release-type-label truncate"
-    title="{$_('text.releaseType')}: {formatted}"
->
-    <span class="truncate">{formatted}</span>
+<div class="c-badge badge-label truncate" title={text}>
+    <span class="truncate">{text}</span>
 </div>
 
 <style>
-    .release-type-label {
+    .badge-label {
         display: inline-flex;
         align-items: center;
         padding: 0.25em 0.4em;

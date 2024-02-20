@@ -3,7 +3,7 @@
     import Rating from "~/components/rating.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Art from "~/components/art.svelte";
-    import ReleaseType from "~/components/releaseType.svelte";
+    import Badge from "~/components/badge.svelte";
 
     export let data = null; // needed for cardList dynamic components
     export let type = undefined; // ignored; workaround for card list component when type is 'generic'
@@ -27,7 +27,9 @@
                         {#if album.year}<span class="year">
                                 {album.year}
                             </span>{/if}
-                        {#if album.type}<ReleaseType type={album.type} />{/if}
+                        {#if album.type}<Badge
+                                text={formatReleaseType(album.type)}
+                            />{/if}
                     </div>
                     <div class="title truncate">
                         <a href="#/album/{album.id}" title={album.name}>

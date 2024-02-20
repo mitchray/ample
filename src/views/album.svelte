@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { getAlbumDisks } from "~/logic/album";
-    import { formatTotalTime } from "~/logic/formatters.js";
+    import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, User } from "~/stores/state.js";
     import { checkbox, albumPreset } from "~/components/lister/columns.js";
@@ -12,7 +12,7 @@
     import Lister from "~/components/lister/lister.svelte";
     import AlbumsAround from "~/components/album/albumsAround.svelte";
     import Art from "~/components/art.svelte";
-    import ReleaseType from "~/components/releaseType.svelte";
+    import Badge from "~/components/badge.svelte";
 
     export let params = {};
 
@@ -81,7 +81,7 @@
                 <div class="info">
                     <div class="name">
                         {#if album.type}
-                            <ReleaseType type={album.type} />
+                            <Badge text={formatReleaseType(album.type)} />
                         {/if}
                         <h1 class="title">{album.name}</h1>
                         <div class="artist">

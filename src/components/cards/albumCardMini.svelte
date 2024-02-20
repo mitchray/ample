@@ -1,6 +1,6 @@
 <script>
     import Art from "~/components/art.svelte";
-    import ReleaseType from "~/components/releaseType.svelte";
+    import Badge from "~/components/badge.svelte";
 
     export let data = null;
     export let type = undefined; // ignored; workaround for card list component when type is 'generic'
@@ -26,7 +26,7 @@
                 {/if}
 
                 {#if album.type}
-                    <ReleaseType type={album.type} />
+                    <Badge text={formatReleaseType(album.type)} />
                 {/if}
             </div>
 
