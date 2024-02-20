@@ -1,6 +1,7 @@
 <script>
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
+    import { formatReleaseType } from "~/logic/formatters.js";
 
     export let data = null;
     export let type = undefined; // ignored; workaround for card list component when type is 'generic'
