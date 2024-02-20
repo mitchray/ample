@@ -11,7 +11,7 @@
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
     import Portal from "~/components/portal.svelte";
-    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import Badge from "~/components/badge.svelte";
 
     export let params = {};
 
@@ -108,14 +108,11 @@
                 <div class="info">
                     <div class="type">
                         {#if playlistType === "smartlist"}
-                            <MaterialSymbol name="electric_bolt" />
-                            &nbsp;{$_("text.smartlist")}
+                            <Badge text={$_("text.smartlist")} />
                         {:else if playlistType === "mix"}
-                            <MaterialSymbol name="radio" />
-                            &nbsp;{$_("text.mix")}
+                            <Badge text={$_("text.mix")} />
                         {:else}
-                            <MaterialSymbol name="queue_music" />
-                            &nbsp;{$_("text.playlist")}
+                            <Badge text={$_("text.playlist")} />
                         {/if}
                     </div>
 
