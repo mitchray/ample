@@ -37,7 +37,7 @@
                 href="#/mix/{playlist.playlistType}/{playlist.id}"
                 title={playlist.name}
             >
-                <div class="image-text">{playlist.name}</div>
+                <div class="image-text truncate">{playlist.name}</div>
                 <Art size="large" data={playlist} type="mix" radius="8px" />
             </a>
         </div>
@@ -136,7 +136,8 @@
         font-size: 18px;
         font-weight: 700;
         line-height: 1.2;
-        color: var(--color-on-background);
+        backdrop-filter: blur(4px);
+        color: var(--color-on-tertiary-container);
     }
 
     .image-text::before {
@@ -147,40 +148,17 @@
         inset-inline-start: 0;
         inset-inline-end: 0;
         inset-block-end: 0;
-        background-color: var(--color-background);
         z-index: -1;
-    }
-
-    /* on dark mode, fade it out */
-    :global(.sl-theme-dark) .image-text::before {
-        height: 100px;
-        mask-image: linear-gradient(
-            to top,
-            hsl(0, 0%, 0%) 0%,
-            hsla(0, 0%, 0%, 0.738) 19%,
-            hsla(0, 0%, 0%, 0.541) 34%,
-            hsla(0, 0%, 0%, 0.382) 47%,
-            hsla(0, 0%, 0%, 0.278) 56.5%,
-            hsla(0, 0%, 0%, 0.194) 65%,
-            hsla(0, 0%, 0%, 0.126) 73%,
-            hsla(0, 0%, 0%, 0.075) 80.2%,
-            hsla(0, 0%, 0%, 0.042) 86.1%,
-            hsla(0, 0%, 0%, 0.021) 91%,
-            hsla(0, 0%, 0%, 0.008) 95.2%,
-            hsla(0, 0%, 0%, 0.002) 98.2%,
-            hsla(0, 0%, 0%, 0) 100%
-        );
-    }
-
-    :global(.sl-theme-light) .image-text {
-        backdrop-filter: blur(4px);
-        color: var(--color-on-tertiary-container);
-    }
-
-    /* on light mode, use a solid bar */
-    :global(.sl-theme-light) .image-text::before {
         height: 40px;
-        opacity: 0.8;
+    }
+
+    :global(.sl-theme-dark) .image-text::before {
+        opacity: 0.5;
+        background-color: var(--color-background);
+    }
+
+    :global(.sl-theme-light) .image-text::before {
+        opacity: 0.7;
         background-color: var(--color-tertiary-container);
     }
 
