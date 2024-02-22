@@ -15,7 +15,8 @@
     } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import QueueItem from "./queue_item.svelte";
+    import QueueItem from "~/components/queue/queue_item.svelte";
+    import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
 
     const flipDurationMs = 100;
 
@@ -85,31 +86,42 @@
         <div class="header panel-header">
             <h4>{$_("text.queue")}</h4>
 
-            <sl-dropdown>
-                <sl-button slot="trigger">
-                    <MaterialSymbol name="more_horiz" />
+            <sl-button-group>
+                <sl-button
+                    class="show-current"
+                    size="small"
+                    title={$_("text.queueShowCurrent")}
+                    on:click={showCurrentMedia}
+                >
+                    <MaterialSymbol name="visibility" />
                 </sl-button>
 
-                <sl-menu>
-                    {#if !$IsMobile}
-                        <sl-menu-item on:click|stopPropagation={togglePinned}>
-                            {#if $QueueIsPinned}
-                                {$_("text.queueUnpin")}
-                            {:else}
-                                {$_("text.queuePin")}
-                            {/if}
+                <SkipBelowButton />
+
+                <sl-dropdown>
+                    <sl-button slot="trigger" size="small">
+                        <MaterialSymbol name="more_horiz" />
+                    </sl-button>
+
+                    <sl-menu>
+                        {#if !$IsMobile}
+                            <sl-menu-item
+                                on:click|stopPropagation={togglePinned}
+                            >
+                                {#if $QueueIsPinned}
+                                    {$_("text.queueUnpin")}
+                                {:else}
+                                    {$_("text.queuePin")}
+                                {/if}
+                            </sl-menu-item>
+                        {/if}
+
+                        <sl-menu-item on:click={handleClearPrevious}>
+                            {$_("text.queueClearPrevious")}
                         </sl-menu-item>
-                    {/if}
-
-                    <sl-menu-item on:click={showCurrentMedia}>
-                        {$_("text.queueShowCurrent")}
-                    </sl-menu-item>
-
-                    <sl-menu-item on:click={handleClearPrevious}>
-                        {$_("text.queueClearPrevious")}
-                    </sl-menu-item>
-                </sl-menu>
-            </sl-dropdown>
+                    </sl-menu>
+                </sl-dropdown>
+            </sl-button-group>
 
             <sl-button
                 size="small"
@@ -133,7 +145,7 @@
             }}
             on:consider={handleSort}
             on:finalize={handleSort}
-            style="display: {$QueueIsUpdating ? 'none' : 'initial'}"
+            style="display: {$QueueIsUpdating ? 'none' : null}"
         >
             {#if $NowPlayingQueue && $NowPlayingQueue.length > 0}
                 {#each $NowPlayingQueue as media, i (media)}
@@ -242,5 +254,10 @@
         background-color: var(--color-primary-container) !important;
         color: var(--color-on-primary-container);
         box-shadow: var(--shadow-lg);
+    }
+
+    .show-current :global(.icon) {
+        position: relative;
+        top: 1px;
     }
 </style>

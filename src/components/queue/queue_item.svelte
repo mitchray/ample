@@ -4,6 +4,7 @@
         NowPlayingQueue,
         NowPlayingIndex,
     } from "~/stores/state";
+    import { SkipBelow, SkipBelowRating } from "~/stores/settings.js";
     import { ticks } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
@@ -45,6 +46,8 @@
     class="queue-item"
     class:currentlyPlaying={$CurrentMedia?._id === media._id}
     class:errored={media.errored}
+    class:matches-rating-threshold={$SkipBelow &&
+        media.rating < $SkipBelowRating}
 >
     <sl-button
         class="remove"
@@ -203,5 +206,19 @@
 
     .queue-item + .queue-item {
         margin-block-start: 2px;
+    }
+
+    .matches-rating-threshold:after {
+        content: "";
+        position: absolute;
+        top: 1px;
+        left: 1px;
+        right: 1px;
+        bottom: 0;
+        background-color: var(--color-on-surface);
+        mask-image: url("/src/assets/stripe.svg");
+        z-index: 1;
+        opacity: 0.4;
+        pointer-events: none;
     }
 </style>

@@ -10,7 +10,7 @@
     import PlayerRating from "~/components/player/player_rating.svelte";
     import PlayerAutoPlay from "~/components/player/player_autoPlay.svelte";
     import PlayerLyrics from "~/components/player/player_lyrics.svelte";
-    import PlayerSkipBelow from "~/components/player/player_skipBelow.svelte";
+    import PlayerSkipBelow from "~/components/queue/queue_skipBelow.svelte";
 </script>
 
 <div class="site-player">

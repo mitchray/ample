@@ -356,7 +356,7 @@
     --color-surface-container-high: oklch(93.3% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
 
     --color-waveform:   var(--user-color-waveform);
-    --color-shadow-val: var(--lightness-500) var(--chroma-500) var(--hue-primary);
+    --color-shadow-val: var(--lightness-600) var(--chroma-200) var(--hue-primary);
     --color-rating:     var(--swatch-yellow-600);
     --color-favorite:   var(--swatch-red-600);
 

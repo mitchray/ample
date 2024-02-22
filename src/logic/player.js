@@ -16,6 +16,8 @@ import {
     RepeatEnabled,
     VolumeNormalizationEnabled,
     DynamicsCompressorEnabled,
+    SkipBelowRating,
+    SkipBelow,
 } from "~/stores/settings";
 import {
     IsPlaying,
@@ -129,7 +131,7 @@ class Player {
     /**
      * Begin playing
      */
-    start() {
+    start(forcePlay = false) {
         // Abort the previous loading request
         this.abortController.abort();
 
@@ -149,6 +151,16 @@ class Player {
             debugHelper("No items could be found");
             this.#restartQueue();
             return;
+        }
+
+        if (forcePlay) {
+            // carry on
+        } else {
+            if (get(SkipBelow) && item?.rating < get(SkipBelowRating)) {
+                // console.debug("auto skipped");
+                self.next();
+                return;
+            }
         }
 
         try {
@@ -273,10 +285,17 @@ class Player {
     previous() {
         debugHelper("previous!");
 
+        let viableItem = this.findViableItem("previous");
+
         // Only play the previous item if playback has reached a certain point
         // otherwise the current item will restart
         if (this.wavesurfer.getCurrentTime() < 3) {
-            this.#decrementIndex();
+            if (viableItem) {
+                this.setIndexToItem(viableItem);
+            } else {
+                this.#restartQueue();
+                return;
+            }
         }
 
         this.stop();
@@ -291,17 +310,60 @@ class Player {
 
         this.stop();
 
-        // if item has no rating by the end of play, notify
-        addRatingMissingNotification(this.currentMedia);
+        let viableItem = this.findViableItem("next");
 
         // only increment if we have something to increment from,
         // otherwise first queue item would be skipped
-        if (this.currentMedia) {
+        if (viableItem) {
             // Increment index and play next
-            this.#incrementIndex();
+            this.setIndexToItem(viableItem);
+        } else {
+            this.#restartQueue();
+            return;
         }
 
+        // if item has no rating by the end of play, notify
+        addRatingMissingNotification(this.currentMedia);
+
         this.start();
+    }
+
+    /**
+     *
+     * @param {'previous' | 'next'} direction
+     * @returns {null}
+     */
+    findViableItem(direction) {
+        let closestItem = null;
+        let i =
+            direction === "previous"
+                ? this.nowPlayingIndex - 1
+                : this.nowPlayingIndex + 1;
+
+        while (
+            direction === "previous" ? i >= 0 : i < this.nowPlayingQueue.length
+        ) {
+            if (
+                !get(SkipBelow) ||
+                this.nowPlayingQueue[i]?.rating >= get(SkipBelowRating)
+            ) {
+                closestItem = this.nowPlayingQueue[i];
+                break;
+            }
+            direction === "previous" ? i-- : i++;
+        }
+
+        return closestItem;
+    }
+
+    setIndexToItem(media) {
+        if (!media) return;
+
+        let foundIndex = this.nowPlayingQueue.findIndex(
+            (item) => item._id === media._id,
+        );
+
+        NowPlayingIndex.set(foundIndex);
     }
 
     /**
@@ -372,7 +434,7 @@ class Player {
     }
 
     /**
-     * Play item at this index
+     * Play item at this index, ignoring any auto-skips
      * @param {number} index
      */
     playSelected(index) {
@@ -380,7 +442,7 @@ class Player {
 
         NowPlayingIndex.set(index);
 
-        this.start();
+        this.start(true);
     }
 
     getDuration() {
@@ -614,14 +676,6 @@ class Player {
         this.#setQueueItems([this.#getCurrentQueueItem()]).then(() => {
             NowPlayingIndex.set(0);
         });
-    }
-
-    #incrementIndex() {
-        NowPlayingIndex.update((n) => n + 1);
-    }
-
-    #decrementIndex() {
-        NowPlayingIndex.update((n) => n - 1);
     }
 
     #getCurrentQueueItem() {
