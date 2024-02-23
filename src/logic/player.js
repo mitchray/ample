@@ -329,9 +329,7 @@ class Player {
     }
 
     /**
-     *
      * @param {'previous' | 'next'} direction
-     * @returns {null}
      */
     findViableItem(direction) {
         let closestItem = null;
@@ -345,6 +343,7 @@ class Player {
         ) {
             if (
                 !get(SkipBelow) ||
+                !this.nowPlayingQueue[i]?.hasOwnProperty("rating") ||
                 this.nowPlayingQueue[i]?.rating >= get(SkipBelowRating)
             ) {
                 closestItem = this.nowPlayingQueue[i];
