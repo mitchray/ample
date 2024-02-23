@@ -127,9 +127,6 @@
     :global(#app) {
         background-color: var(--color-surface-container);
         color: var(--color-on-surface);
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
     }
 
     :global(.site-header) {

@@ -431,6 +431,16 @@ body,
 #app {
     position: relative;
     overflow: clip; /* clip instead of hidden, fixes queue slide in bug */
+    width: 100vw;
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* Fix for Shoelace 2.13.0+, would reset with overflow hidden */
+body.sl-scroll-lock.sl-scroll-lock.sl-scroll-lock {
+    overflow: clip;
 }
 
 html {
@@ -765,6 +775,10 @@ strong {
 /*
  * Drawers
  */
+
+sl-drawer::part(base) {
+    overflow: clip !important; /* needed as of Shoelace 2.13.0 to fix drawer jank */
+}
 
 sl-drawer::part(panel) {
     background-color: var(--color-surface-container);

@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
     import Portal from "svelte-portal";
 
-    export let target = "body";
+    export let target = "#app";
     let ready;
 
     onMount(() => {
@@ -10,7 +10,7 @@
     });
 </script>
 
-<Portal target={target || "body"}>
+<Portal {target}>
     {#if ready}
         <slot />
     {/if}
