@@ -430,7 +430,7 @@ html,
 body,
 #app {
     position: relative;
-    overflow: hidden;
+    overflow: clip; /* clip instead of hidden, fixes queue slide in bug */
 }
 
 html {
