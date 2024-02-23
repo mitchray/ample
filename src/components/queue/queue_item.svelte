@@ -18,6 +18,8 @@
     import { MediaPlayer } from "~/stores/elements.js";
 
     export let media;
+    export let dragDisabled;
+
     let matchesRating;
 
     $: {
@@ -28,6 +30,12 @@
 
     function retest() {
         matchesRating = !$MediaPlayer.isEligibleToPlay(media);
+    }
+
+    function startDrag(e) {
+        // preventing default to prevent lag on touch devices (because of the browser checking for screen scrolling)
+        e.preventDefault();
+        dragDisabled = false;
     }
 
     function handleRemoveItem(uuid) {
@@ -49,11 +57,6 @@
         }
 
         $NowPlayingQueue = $NowPlayingQueue;
-    }
-
-    function startDrag(e) {
-        // preventing default to prevent lag on touch devices (because of the browser checking for screen scrolling)
-        e.preventDefault();
     }
 </script>
 
@@ -166,6 +169,11 @@
         line-height: 0;
         height: 38px;
         width: 38px;
+        cursor: grab;
+    }
+
+    :global(.queue-dragging) .thumb {
+        cursor: grabbing;
     }
 
     .queue-item {

@@ -20,6 +20,7 @@
 
     const flipDurationMs = 100;
 
+    let dragDisabled = true;
     let siteQueueBind;
 
     function handleAction(event, index) {
@@ -50,6 +51,8 @@
         if (currentIndex !== -1) {
             NowPlayingIndex.set(currentIndex);
         }
+
+        dragDisabled = true;
     }
 
     function transformDraggedElement(draggedEl) {
@@ -142,6 +145,7 @@
                 dropTargetStyle: {},
                 flipDurationMs: flipDurationMs,
                 transformDraggedElement,
+                dragDisabled,
             }}
             on:consider={handleSort}
             on:finalize={handleSort}
@@ -155,7 +159,7 @@
                         }}
                         animate:flip={{ duration: flipDurationMs }}
                     >
-                        <QueueItem {media} />
+                        <QueueItem {media} bind:dragDisabled />
                     </div>
                 {/each}
             {/if}
