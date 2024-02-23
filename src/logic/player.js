@@ -287,15 +287,11 @@ class Player {
 
         let viableItem = this.findViableItem("previous");
 
-        // Only play the previous item if playback has reached a certain point
-        // otherwise the current item will restart
-        if (this.wavesurfer.getCurrentTime() < 3) {
-            if (viableItem) {
-                this.setIndexToItem(viableItem);
-            } else {
-                this.#restartQueue();
-                return;
-            }
+        if (viableItem) {
+            this.setIndexToItem(viableItem);
+        } else {
+            this.#restartQueue();
+            return;
         }
 
         this.stop();
