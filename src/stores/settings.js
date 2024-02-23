@@ -5,15 +5,15 @@ import { locale } from "svelte-i18n";
 // our global localforage IndexedDB getter/setter, which will be prefixed by the user ID
 export let Saved = writable();
 
-export let SidebarIsOpen = writable(false);
-export let QueueIsOpen = writable(false);
-export let QueueIsPinned = writable(false);
+export let SidebarIsOpen = writable(true);
+export let QueueIsOpen = writable(true);
+export let QueueIsPinned = writable(true);
 
 export let PlayerVolume = writable(50);
-export let PlayerIsOpen = writable(false);
+export let PlayerIsOpen = writable(true);
 export let PlayerIsMini = writable(false);
 export let RepeatEnabled = writable(false);
-export let VolumeNormalizationEnabled = writable(false);
+export let VolumeNormalizationEnabled = writable(true);
 export let DynamicsCompressorEnabled = writable(false);
 
 export let AutoPlayEnabled = writable(false);
@@ -41,7 +41,8 @@ export let NotificationLyricsNotTimestamped = writable({
     isSilent: false,
 });
 export let SkipBelow = writable(false);
-export let SkipBelowRating = writable(3);
+export let SkipBelowRating = writable("3");
+export let SkipBelowAllowZero = writable(true);
 export let Theme = writable({
     mode: null,
     hueBackground: 60,
@@ -75,6 +76,7 @@ export async function loadSettings() {
         NotificationLyricsNotTimestamped: NotificationLyricsNotTimestamped,
         SkipBelow: SkipBelow,
         SkipBelowRating: SkipBelowRating,
+        SkipBelowAllowZero: SkipBelowAllowZero,
         Theme: Theme,
         ShowSongsByOtherArtists: ShowSongsByOtherArtists,
         PlaySongsByOtherArtists: PlaySongsByOtherArtists,
@@ -84,7 +86,7 @@ export async function loadSettings() {
     for (const storeName of Object.keys(stores)) {
         const storedItem = await get(Saved).getItem(storeName);
 
-        if (storedItem) {
+        if (storedItem !== null) {
             try {
                 // Update the store with the saved item
                 stores[storeName].set(storedItem);

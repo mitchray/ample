@@ -1,7 +1,12 @@
 <script>
     import { _ } from "svelte-i18n";
     import { tick } from "svelte";
-    import { Saved, SkipBelow, SkipBelowRating } from "~/stores/settings.js";
+    import {
+        Saved,
+        SkipBelow,
+        SkipBelowRating,
+        SkipBelowAllowZero,
+    } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     async function handleSkipBelow(e) {
@@ -17,6 +22,13 @@
         $Saved.setItem("SkipBelowRating", newValue);
         SkipBelowRating.set(newValue);
     }
+
+    async function handleAllowZero(e) {
+        await tick();
+        let newValue = e.target.checked;
+        $Saved.setItem("SkipBelowAllowZero", newValue);
+        SkipBelowAllowZero.set(newValue);
+    }
 </script>
 
 <sl-dropdown>
@@ -31,14 +43,9 @@
     </sl-button>
 
     <sl-card>
-        <div slot="header">
-            {$_("text.skipBelow")}
-
-            <sl-switch
-                on:sl-change={handleSkipBelow}
-                checked={$SkipBelow}
-            ></sl-switch>
-        </div>
+        <sl-switch on:sl-change={handleSkipBelow} checked={$SkipBelow}>
+            {$_("text.skipBelow")}:
+        </sl-switch>
 
         <sl-select
             value={$SkipBelowRating}
@@ -56,17 +63,19 @@
             <sl-option value="2">
                 {$_("text.ratingCount", { values: { count: 2 } })}
             </sl-option>
-            <sl-option value="1">
-                {$_("text.ratingCount", { values: { count: 1 } })}
-            </sl-option>
         </sl-select>
+
+        <sl-switch on:sl-change={handleAllowZero} checked={$SkipBelowAllowZero}>
+            Allow unrated items
+        </sl-switch>
     </sl-card>
 </sl-dropdown>
 
 <style>
-    sl-card [slot="header"] {
+    sl-card::part(body) {
         display: flex;
-        justify-content: space-between;
+        flex-direction: column;
+        gap: var(--spacing-lg);
     }
 
     .rating-filter.is-enabled:after {

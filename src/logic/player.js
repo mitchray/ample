@@ -16,8 +16,9 @@ import {
     RepeatEnabled,
     VolumeNormalizationEnabled,
     DynamicsCompressorEnabled,
-    SkipBelowRating,
     SkipBelow,
+    SkipBelowRating,
+    SkipBelowAllowZero,
 } from "~/stores/settings";
 import {
     IsPlaying,
@@ -156,7 +157,7 @@ class Player {
         if (forcePlay) {
             // carry on
         } else {
-            if (get(SkipBelow) && item?.rating < get(SkipBelowRating)) {
+            if (!this.isEligibleToPlay(item)) {
                 // console.debug("auto skipped");
                 self.next();
                 return;
@@ -337,11 +338,7 @@ class Player {
         while (
             direction === "previous" ? i >= 0 : i < this.nowPlayingQueue.length
         ) {
-            if (
-                !get(SkipBelow) ||
-                !this.nowPlayingQueue[i]?.hasOwnProperty("rating") ||
-                this.nowPlayingQueue[i]?.rating >= get(SkipBelowRating)
-            ) {
+            if (this.isEligibleToPlay(this.nowPlayingQueue[i])) {
                 closestItem = this.nowPlayingQueue[i];
                 break;
             }
@@ -349,6 +346,19 @@ class Player {
         }
 
         return closestItem;
+    }
+
+    isEligibleToPlay(item) {
+        return (
+            // SkipBelow is not enabled
+            !get(SkipBelow) ||
+            // Item does not have a rating property
+            !item.hasOwnProperty("rating") ||
+            // Item is unrated but SkipBelowAllowZero is true
+            (get(SkipBelow) && get(SkipBelowAllowZero) && !item.rating) ||
+            // Item rating is above the threshold
+            item.rating >= get(SkipBelowRating)
+        );
     }
 
     setIndexToItem(media) {

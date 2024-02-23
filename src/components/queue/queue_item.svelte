@@ -4,7 +4,11 @@
         NowPlayingQueue,
         NowPlayingIndex,
     } from "~/stores/state";
-    import { SkipBelow, SkipBelowRating } from "~/stores/settings.js";
+    import {
+        SkipBelow,
+        SkipBelowAllowZero,
+        SkipBelowRating,
+    } from "~/stores/settings.js";
     import { ticks } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
@@ -14,6 +18,17 @@
     import { MediaPlayer } from "~/stores/elements.js";
 
     export let media;
+    let matchesRating;
+
+    $: {
+        $SkipBelow, retest();
+        $SkipBelowRating, retest();
+        $SkipBelowAllowZero, retest();
+    }
+
+    function retest() {
+        matchesRating = !$MediaPlayer.isEligibleToPlay(media);
+    }
 
     function handleRemoveItem(uuid) {
         let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
@@ -46,8 +61,7 @@
     class="queue-item"
     class:currentlyPlaying={$CurrentMedia?._id === media._id}
     class:errored={media.errored}
-    class:matches-rating-threshold={$SkipBelow &&
-        media.rating < $SkipBelowRating}
+    class:matches-rating-threshold={matchesRating}
 >
     <sl-button
         class="remove"
