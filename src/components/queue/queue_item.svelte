@@ -95,7 +95,7 @@
         </div>
 
         {#if media.artists?.length > 0}
-            <div class="secondary-info">
+            <div class="secondary-info truncate">
                 <ArtistList data={media} disabled={true} />
             </div>
         {/if}

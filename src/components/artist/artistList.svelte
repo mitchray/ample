@@ -40,13 +40,4 @@
     .disabled {
         pointer-events: none;
     }
-
-    span {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    a {
-        flex-shrink: 0;
-    }
 </style>
