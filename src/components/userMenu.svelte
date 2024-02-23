@@ -38,7 +38,7 @@
 
             <sl-button
                 on:click={() => {
-                    $ShowPreferences = true;
+                    $ShowPreferences = !$ShowPreferences;
                 }}
             >
                 {$_("text.preferences")}
