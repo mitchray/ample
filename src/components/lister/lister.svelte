@@ -98,7 +98,7 @@
         : "auto";
     $: $offsetY = virtualList ? parseInt($offsetY) + "px" : "0px";
     $: $visibleColumns = $availableColumns;
-    $: $rowHeight = $state.rowSizing === "standard" ? "60" : "36";
+    $: $rowHeight = $state.rowSizing === "slim" ? "36" : "60";
 
     // overwrite any actionData.songs with our dataDisplay as it may have updated
     $: {

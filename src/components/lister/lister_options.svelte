@@ -124,7 +124,7 @@
                 }}
             >
                 <sl-radio-button value="slim">Slim</sl-radio-button>
-                <sl-radio-button value="standard">Standard</sl-radio-button>
+                <sl-radio-button value="spaced">Spaced</sl-radio-button>
             </sl-radio-group>
 
             <div

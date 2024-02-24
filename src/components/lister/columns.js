@@ -15,7 +15,7 @@ import {
 } from "~/logic/formatters.js";
 
 export const TableDefault = {
-    rowSizing: "standard",
+    rowSizing: "slim",
     sortBy: undefined,
     sortDirection: "none",
     columnOrder: [],
