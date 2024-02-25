@@ -1,10 +1,71 @@
 # Changelog
 
-## [2.1.0] - 2023-XX-XX
-### Requires at least Ampache 6.0.1
+## [3.0.0] - 2024-xx-xx
+
+### Player
+- Streamlined UI
+- Waveform now stylized and full width of player; can now be hidden
+- Player itself can be hidden
+- Hover over next/previous buttons for item details
+- Added buttons for +30sec & -10sec
+- Playback speed options (with pitch correction)
+- `Add to Playlist` and `Find duplicates` for the current media
 
 ### Added
-- More third party links, now with logos
+- Podcasts & Radio support
+- Theme settings & presets
+- Cache API calls for better responsiveness (localforage & Tanstack Query)
+- More 3rd party links (now with icons)
+  - Bandsintown
+  - Genius
+  - Setlist.fm
+  - Song Kick
+  - Amazon Music
+  - HDTracks
+  - Qobuz
+  - Tidal
+- Show rating for queue items
+- Artist `Releases` custom display options
+  - Display: Table, Cards (small), Cards (large), Tracks (columns), Tracks (table)
+  - Sort: Name, Artist, Rating, Year
+  - Grouping: Name, Release Type, Year, Decade (from Year tag)
+- Sidebar toggleable categories
+- Client-side settings now saved per user
+- Table columns can be repositioned via Table Options above each table
+  - Actions are now the first column by default instead of stickied at the end
+
+### Changed  
+- Improved search results
+  - Results are ordered by their weighted score (using fuse.js)
+  - Show total results per type
+  - Removed separate `X Starting With` and `X Containing` (not needed with the new ordering)
+- Moved Insights pages (e.g. Trending, Unrated etc) out of sidebar and onto homepage
+- `Skip below rating`
+  - Instead of filtering items before adding to queue, they will be added but auto-skipped if enabled (shown by diagonal shading)
+  - Can optionally allow unrated items through the filter
+  - Moved from player to queue
+- Opening the queue will reveal the currently playing media
+- Moved queued song/media parent items from the main dropdown menu to their own submenu 
+- Notifications can be 'silenced'; they will only show in the list without an alert
+- Artist `Appears On`
+  - Consolidated together at the end of artist releases instead of per release type
+  - New option to dim tracks that aren't by the artist, or hide them altogether
+  - New option to skip playing songs that aren't by the artist
+- For `Artist Mixes` which don't have any similar artists, expand search into same genre
+- Removed dedicated `Multi-rater` page in favour of being able to rate items from the Unrated page
+- Lyrics panel now a full overlay instead of a fixed panel overlaying the content
+
+### Fixed
+- Rearranging the queue could mark the currently playing media incorrectly
+- Rating the currently playing item would not be reflected elsewhere
+
+## Removed
+
+## [2.0.3] - 2024-01-08
+### Requires at least Ampache 6.0.1
+
+### Fixed
+- Preferences are now objects
 
 ## [2.0.2] - 2023-08-28
 ### Fixed
