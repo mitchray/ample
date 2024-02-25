@@ -1,8 +1,8 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { setContext } from "svelte";
+    import { setContext, getContext } from "svelte";
     import { v4 as uuidv4 } from "uuid";
-    import { API, ArtistToFilter } from "~/stores/state.js";
+    import { API } from "~/stores/state.js";
     import { sampleSize } from "lodash-es";
     import { addAlert } from "~/logic/alert.js";
     import {
@@ -18,7 +18,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists,
     } from "~/logic/song.js";
-    import { writable } from "svelte/store";
+    import { get, writable } from "svelte/store";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
     import ActionPlayLast from "./items/actionPlayLast.svelte";
@@ -35,6 +35,7 @@
     import ActionFindDuplicates from "./items/actionFindDuplicates.svelte";
     import ActionShare from "./items/actionShare.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { PlaySongsByOtherArtists } from "~/stores/settings.js";
 
     export let item = null;
     export let type; // artist, album, playlist, song etc
@@ -63,6 +64,8 @@
         _showShuffle,
         getSongs: () => doFetch(),
     });
+
+    let filterToArtistID = getContext("filterToArtistID");
 
     /**
      * Determine which method should be used to get songs
@@ -198,9 +201,13 @@
         );
 
         // filter out songs not by artist if that is set, but allow a single item through with the assumption its the only one we want to play
-        if (result.length > 1 && $ArtistToFilter) {
+        if (
+            result.length > 1 &&
+            $PlaySongsByOtherArtists === "exclude" &&
+            filterToArtistID
+        ) {
             result = result.filter((item) =>
-                item.artists.find((artist) => artist.id === $ArtistToFilter),
+                item.artists.find((artist) => artist.id === filterToArtistID),
             );
         }
 

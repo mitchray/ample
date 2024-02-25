@@ -1,6 +1,5 @@
 <script>
     import { setContext } from "svelte";
-    import { ArtistToFilter } from "~/stores/state.js";
     import AlbumCard from "~/components/cards/albumCard.svelte";
     import Songs from "~/components/cards/_expandedAlbumSongs.svelte";
     import Visibility from "~/components/visibility.svelte";
@@ -10,23 +9,17 @@
     export let zIndex = 1;
     /** @type {"slim" | "full"} */
     export let type;
-    export let filterToArtist = null;
 
     let contextKey = uuidv4(); // unique key
 
     setContext(contextKey, {
         getAlbum: () => album,
         getType: () => type,
-        getFilterToArtist: () => filterToArtist,
     });
-
-    function stealClick(e) {
-        // $ArtistToFilter = filterToArtist ? filterToArtist : null;
-    }
 </script>
 
 <div class="container type-{type}" style:z-index={1000 - zIndex}>
-    <div class="card" on:click={stealClick}>
+    <div class="card">
         <AlbumCard data={album} />
     </div>
 

@@ -3,8 +3,7 @@
     import { replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
     import { fade } from "svelte/transition";
-    import { API, User, ArtistToFilter } from "~/stores/state.js";
-    import { PlaySongsByOtherArtists } from "~/stores/settings.js";
+    import { API, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
@@ -16,7 +15,6 @@
     import Top from "./top.svelte";
     import Similar from "./similar.svelte";
     import Musicbrainz from "./musicbrainz.svelte";
-    import { onDestroy } from "svelte";
 
     export let params = {};
 
@@ -43,12 +41,6 @@
         if (!params.section) replace(`#/artist/${params.id}/releases`);
     }
 
-    // set the filtered artist if its enabled
-    $: {
-        $ArtistToFilter =
-            $PlaySongsByOtherArtists === "exclude" ? params?.id : null;
-    }
-
     const tabs = [
         { id: "releases", label: "Releases", prefix: "album" },
         { id: "top", label: "Popular Songs" },
@@ -60,10 +52,6 @@
     function changeTab(e) {
         replace(`#/artist/${params.id}/${e.detail.name}`);
     }
-
-    onDestroy(() => {
-        $ArtistToFilter = null;
-    });
 </script>
 
 {#if $query.isLoading}

@@ -4,7 +4,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { groupBy, sortBy, partition } from "lodash-es";
     import { API, User } from "~/stores/state";
-    import { Saved } from "~/stores/settings.js";
+    import { PlaySongsByOtherArtists, Saved } from "~/stores/settings.js";
     import { formatReleaseType } from "~/logic/formatters.js";
     import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -203,7 +203,7 @@
         {/if}
 
         {#if appearances.length > 0}
-            <div class="release-group">
+            <div class="release-group appearances">
                 <h3 class="group-title appearances">
                     <span class="appearances-text">Appears On</span>
 
@@ -213,7 +213,7 @@
                 <RenderReleases
                     view={$state.view}
                     items={appearances}
-                    filterToArtist={artistID}
+                    filterToArtistID={artistID}
                 />
             </div>
         {/if}

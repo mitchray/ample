@@ -1,4 +1,5 @@
 <script>
+    import { setContext } from "svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
     import AlbumCard from "~/components/cards/albumCard.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
@@ -7,7 +8,9 @@
 
     export let view;
     export let items;
-    export let filterToArtist = null;
+    export let filterToArtistID = null;
+
+    setContext("filterToArtistID", filterToArtistID);
 </script>
 
 {#if view === "table"}
@@ -41,7 +44,7 @@
 {#if view === "expanded_columns"}
     <div class="albums-expanded">
         {#each items as album, i (album.id)}
-            <ExpandedAlbum type="slim" {album} zIndex={i} {filterToArtist} />
+            <ExpandedAlbum type="slim" {album} zIndex={i} />
         {/each}
     </div>
 {/if}
@@ -49,7 +52,7 @@
 {#if view === "expanded_table"}
     <div class="albums-expanded">
         {#each items as album, i (album.id)}
-            <ExpandedAlbum type="full" {album} zIndex={i} {filterToArtist} />
+            <ExpandedAlbum type="full" {album} zIndex={i} />
         {/each}
     </div>
 {/if}

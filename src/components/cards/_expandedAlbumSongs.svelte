@@ -14,30 +14,17 @@
 
     export let contextKey;
 
-    const { getAlbum, getType, getFilterToArtist } = getContext(contextKey);
+    const { getAlbum, getType } = getContext(contextKey);
 
     let album = getAlbum();
     let type = getType();
-    let filterToArtist = getFilterToArtist();
+
+    let filterToArtistID = getContext("filterToArtistID");
 
     $: query = createQuery({
         queryKey: ["albumSongs", album.id],
         queryFn: async () => {
-            let albumDisks = await getAlbumDisks(album.id);
-
-            if (filterToArtist) {
-                albumDisks.forEach((diskArray) => {
-                    const songsArray = diskArray[1];
-
-                    songsArray.forEach((song) => {
-                        song.notByArtist = !song.artists.find(
-                            (artist) => artist.id === filterToArtist,
-                        );
-                    });
-                });
-            }
-
-            return albumDisks;
+            return await getAlbumDisks(album.id);
         },
         enabled: $User.isLoggedIn,
     });
@@ -59,10 +46,13 @@
                     <ul class="expanded-columns">
                         {#each songs as song}
                             <li
-                                class:not-by-artist={song.notByArtist}
-                                class:hide={$ShowSongsByOtherArtists === "hide"}
-                                class:highlight={$ShowSongsByOtherArtists ===
-                                    "highlight"}
+                                class:not-by-artist={!song.artists.find(
+                                    (artist) => artist.id === filterToArtistID,
+                                )}
+                                class:hide={filterToArtistID &&
+                                    $ShowSongsByOtherArtists === "hide"}
+                                class:highlight={filterToArtistID &&
+                                    $ShowSongsByOtherArtists === "highlight"}
                             >
                                 <div class="top">
                                     <span class="secondary-info">

@@ -76,5 +76,3 @@ export const IsMobile = readable(false, function start(set) {
 
     return function stop() {};
 });
-
-export let ArtistToFilter = writable(null);
