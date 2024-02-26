@@ -42,6 +42,9 @@ export async function login({ auth }) {
 }
 
 export async function logout() {
+    // destroy the session
+    await get(API).goodbye({ auth: get(User).token });
+
     await localforage.removeItem("AmpleLastSession");
 
     User.set({ ...get(User), isLoggedIn: false });
