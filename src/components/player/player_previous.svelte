@@ -1,17 +1,21 @@
 <script>
     import { MediaPlayer } from "~/stores/elements.js";
-    import { IsMobile, NowPlayingQueue } from "~/stores/state.js";
+    import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
 
     let dropdown;
     let previousItem;
-
     let timeout;
 
-    function handleOver() {
-        previousItem = $MediaPlayer.findViableItem("previous");
+    $: $CurrentMedia, update();
+    $: $NowPlayingQueue, update();
 
+    function update() {
+        previousItem = $MediaPlayer?.findViableItem("previous");
+    }
+
+    function handleOver() {
         timeout = setTimeout(() => {
             dropdown.show();
         }, 600);

@@ -1,6 +1,6 @@
 <script>
     import { MediaPlayer } from "~/stores/elements.js";
-    import { IsMobile, NowPlayingQueue } from "~/stores/state.js";
+    import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
 
@@ -8,9 +8,14 @@
     let nextItem;
     let timeout;
 
-    function handleOver() {
-        nextItem = $MediaPlayer.findViableItem("next");
+    $: $CurrentMedia, update();
+    $: $NowPlayingQueue, update();
 
+    function update() {
+        nextItem = $MediaPlayer?.findViableItem("next");
+    }
+
+    function handleOver() {
         timeout = setTimeout(() => {
             dropdown.show();
         }, 600);
