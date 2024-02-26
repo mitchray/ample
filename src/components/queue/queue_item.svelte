@@ -23,6 +23,7 @@
     let matchesRating;
 
     $: {
+        media, retest();
         $SkipBelow, retest();
         $SkipBelowRating, retest();
         $SkipBelowAllowZero, retest();
