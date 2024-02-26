@@ -211,6 +211,41 @@
             );
         }
 
+        const propertiesToKeep = [
+            //common
+            "id",
+            "name",
+            "title",
+            "art",
+            "object_type",
+            "rating",
+            "flag",
+            "url",
+
+            //song
+            "album",
+            "artist",
+            "artists",
+            "year",
+
+            //podcast
+            "podcast",
+
+            //radio
+            "site_url",
+        ];
+
+        result = result.reduce((acc, obj) => {
+            const newObj = {};
+            propertiesToKeep.forEach((prop) => {
+                if (obj.hasOwnProperty(prop)) {
+                    newObj[prop] = obj[prop];
+                }
+            });
+            acc.push(newObj);
+            return acc;
+        }, []);
+
         // assign object_type and _id
         for (let i = 0; i < result.length; i++) {
             let objectType = "song";
