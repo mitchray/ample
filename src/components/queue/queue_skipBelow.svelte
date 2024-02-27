@@ -31,7 +31,7 @@
     }
 </script>
 
-<sl-dropdown>
+<sl-dropdown hoist placement="bottom">
     <sl-button
         slot="trigger"
         class="rating-filter"

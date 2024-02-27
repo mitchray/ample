@@ -16,8 +16,11 @@ export let RepeatEnabled = writable(false);
 export let VolumeNormalizationEnabled = writable(true);
 export let DynamicsCompressorEnabled = writable(false);
 
-export let AutoPlayEnabled = writable(false);
-export let AutoPlayPlaylist = writable(null);
+export let QueueRefill = writable({
+    enabled: false,
+    mode: "smartlist",
+    smartlist: null,
+});
 
 export let NotificationGainTagsMissing = writable({
     isEnabled: false,
@@ -67,8 +70,7 @@ export async function loadSettings() {
         RepeatEnabled: RepeatEnabled,
         VolumeNormalizationEnabled: VolumeNormalizationEnabled,
         DynamicsCompressorEnabled: DynamicsCompressorEnabled,
-        AutoPlayEnabled: AutoPlayEnabled,
-        AutoPlayPlaylist: AutoPlayPlaylist,
+        QueueRefill: QueueRefill,
         NotificationGainTagsMissing: NotificationGainTagsMissing,
         NotificationRatingMissing: NotificationRatingMissing,
         NotificationAlternateVersions: NotificationAlternateVersions,

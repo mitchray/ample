@@ -37,8 +37,6 @@ export async function login({ auth }) {
         time: Date.now(),
         rememberMe: false,
     });
-
-    await loadSettings();
 }
 
 export async function logout() {

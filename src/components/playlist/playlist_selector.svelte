@@ -64,14 +64,11 @@
     {#if showSelected}
         <div class="current">
             {#if selectedPlaylist}
-                <span
-                    class="current-selected truncate"
-                    title={selectedPlaylist.name}
-                >
+                <sl-badge variant="primary" title={selectedPlaylist.name}>
                     {selectedPlaylist.name}
-                </span>
+                </sl-badge>
             {:else}
-                <span class="current-selected warning">
+                <span class="warning">
                     {$_("text.playlistNoneSelected")}
                 </span>
             {/if}
@@ -143,10 +140,6 @@
 
     .current {
         margin-block-end: var(--spacing-lg);
-    }
-
-    .current-selected {
-        font-weight: 700;
     }
 
     .warning {

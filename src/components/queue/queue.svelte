@@ -17,6 +17,7 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import QueueItem from "~/components/queue/queue_item.svelte";
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
+    import RefillButton from "~/components/queue/queue_refill.svelte";
 
     const flipDurationMs = 100;
 
@@ -100,6 +101,8 @@
                 </sl-button>
 
                 <SkipBelowButton />
+
+                <RefillButton />
 
                 <sl-dropdown>
                     <sl-button slot="trigger" size="small">

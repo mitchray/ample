@@ -100,7 +100,7 @@
 - Rebuilt "Recently Played" on main page; handles song updates much better now
 - Simplified Sidebar to only have full/collapsed modes
 - Queue actions moved to a menu
-- Smartlist Autoplay now has a 10 seconds grace period before adding songs to give user time
+- Queue Refill now has a 10 seconds grace period before adding songs to give user time
 - CSS container queries polyfill removed as browser support is stable now
 - Tabs will remember the last active tab, e.g. being on Similar Artists then going to a new artist will keep you on the Similar Artists tab
 - Rebuilt all menus and panels to use 'floating-ui'; they now scroll with the page
@@ -113,7 +113,7 @@
 ## [1.1.0] - 2023-03-03
 ### Added
 - Artist Mix recommendations on the home page (based on trending and 4/5 rated artists)
-- Alert popups, e.g. when AutoPlay adds songs to queue or when songs below set rating are skipped
+- Alert popups, e.g. when QueueRefill adds songs to queue or when songs below set rating are skipped
 - Give each page its own title to avoid a sea of "Ample" in browser history
 - 
 ### Changed
@@ -121,7 +121,7 @@
 - Backend now uses the 'javascript-ampache' library for API calls
 
 ### Fixed
-- AutoPlay would run twice
+- QueueRefill would run twice
 
 ## [1.0.0] - 2022-12-30
 ### Changed

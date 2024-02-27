@@ -7,7 +7,7 @@
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
     import { User, Server, PageTitle, ShowSearch } from "~/stores/state.js";
-    import { Theme } from "~/stores/settings";
+    import { loadSettings, Theme } from "~/stores/settings";
     import { extendSession, validateSession } from "~/logic/user";
     import { isLoading as i18nIsLoading } from "svelte-i18n";
     import { setupI18n } from "~/logic/i18n.js";
@@ -48,6 +48,12 @@
         // reset page title
         $PageTitle = "";
     };
+
+    $: {
+        if ($User.isLoggedIn) {
+            loadSettings();
+        }
+    }
 
     async function loadFromConfig() {
         let configFile = {};

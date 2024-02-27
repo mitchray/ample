@@ -52,14 +52,6 @@
 
         <sl-divider></sl-divider>
 
-        <sl-menu-item
-            value="c"
-            on:click={() => console.debug("smartlist autoplay")}
-        >
-            Smartlist Autoplay
-            <MaterialSymbol name="queue" slot="prefix" />
-        </sl-menu-item>
-
         <Lyrics
             {contextKey}
             disabled={$CurrentMedia?.object_type !== "song" || null}
