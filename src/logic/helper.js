@@ -3,7 +3,7 @@ import { get } from "svelte/store";
 import { addAlert } from "./alert";
 import { debugMode, Server } from "~/stores/state.js";
 import { SkipBelow, SkipBelowRating } from "~/stores/settings";
-
+import { v4 as uuidv4 } from "uuid";
 import JsSHA from "jssha/dist/sha1";
 
 let debugEnabled = get(debugMode);
@@ -157,4 +157,60 @@ export function filterBelow(arr) {
  */
 export function replaceSpacesWithHyphens(input) {
     return input?.replace(/ /g, "-");
+}
+
+export function prepareForQueue(arr) {
+    const propertiesToKeep = [
+        //common
+        "id",
+        "name",
+        "title",
+        "art",
+        "object_type",
+        "rating",
+        "flag",
+        "url",
+
+        //song
+        "album",
+        "artist",
+        "artists",
+        "year",
+
+        //podcast
+        "podcast",
+
+        //radio
+        "site_url",
+    ];
+
+    arr = arr.reduce((acc, obj) => {
+        const newObj = {};
+        propertiesToKeep.forEach((prop) => {
+            if (obj.hasOwnProperty(prop)) {
+                newObj[prop] = obj[prop];
+            }
+        });
+        acc.push(newObj);
+        return acc;
+    }, []);
+
+    // assign object_type and _id
+    for (let i = 0; i < arr.length; i++) {
+        let objectType = "song";
+
+        if (arr[i].podcast?.id) {
+            objectType = "podcast_episode";
+        }
+
+        if (arr[i].site_url) {
+            objectType = "live_stream";
+        }
+
+        arr[i].object_type = objectType;
+
+        arr[i]._id = uuidv4();
+    }
+
+    return arr;
 }

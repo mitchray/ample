@@ -18,6 +18,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists,
     } from "~/logic/song.js";
+    import { prepareForQueue } from "~/logic/helper.js";
     import { get, writable } from "svelte/store";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
@@ -192,7 +193,7 @@
             return [];
         }
 
-        // make sure results are an array
+        // make sure we are working with an array
         result = Array.isArray(result) ? result : [result];
 
         // filter out pending podcast episodes...
@@ -211,59 +212,7 @@
             );
         }
 
-        const propertiesToKeep = [
-            //common
-            "id",
-            "name",
-            "title",
-            "art",
-            "object_type",
-            "rating",
-            "flag",
-            "url",
-
-            //song
-            "album",
-            "artist",
-            "artists",
-            "year",
-
-            //podcast
-            "podcast",
-
-            //radio
-            "site_url",
-        ];
-
-        result = result.reduce((acc, obj) => {
-            const newObj = {};
-            propertiesToKeep.forEach((prop) => {
-                if (obj.hasOwnProperty(prop)) {
-                    newObj[prop] = obj[prop];
-                }
-            });
-            acc.push(newObj);
-            return acc;
-        }, []);
-
-        // assign object_type and _id
-        for (let i = 0; i < result.length; i++) {
-            let objectType = "song";
-
-            if (result[i].podcast?.id) {
-                objectType = "podcast_episode";
-            }
-
-            if (result[i].site_url) {
-                objectType = "live_stream";
-            }
-
-            result[i].object_type = objectType;
-
-            result[i]._id = uuidv4();
-        }
-
-        return result;
+        return prepareForQueue(result);
     }
 </script>
 

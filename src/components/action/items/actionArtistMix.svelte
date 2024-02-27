@@ -5,6 +5,7 @@
     import { MediaPlayer } from "~/stores/elements.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { prepareForQueue } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -25,6 +26,8 @@
             id: artistID,
             type: "artist_mix",
         });
+
+        songs = prepareForQueue(songs);
 
         $MediaPlayer.playNow(songs);
         loading = false;
