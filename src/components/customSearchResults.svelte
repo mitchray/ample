@@ -48,6 +48,7 @@
                 bind:data={results}
                 {type}
                 columns={[forcedCheckbox, ...albumsPreset]}
+                virtualList={true}
                 actionData={{
                     type: "albums",
                     displayMode: "fullButtons",
@@ -62,6 +63,7 @@
                 bind:data={results}
                 {type}
                 columns={[forcedCheckbox, ...artistsPreset]}
+                virtualList={true}
                 actionData={{
                     type: "artists",
                     displayMode: "fullButtons",
@@ -76,6 +78,7 @@
                 bind:data={results}
                 {type}
                 columns={[forcedCheckbox, ...playlistsPreset]}
+                virtualList={true}
                 actionData={{
                     type: "playlists",
                     displayMode: "fullButtons",
