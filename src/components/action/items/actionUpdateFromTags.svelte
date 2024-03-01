@@ -27,7 +27,7 @@
                 let urlAfter = window.location.href;
 
                 if (urlBefore === urlAfter) {
-                    $PageLoadedKey = Date.now().toString();
+                    // $PageLoadedKey = Date.now().toString(); //disabling for now as there are too many cases where this isn't practical
                 }
 
                 addAlert({ title: $_("text.tagUpdateDone"), style: "success" });
