@@ -17,7 +17,6 @@ export let PageTitle = writable("");
 export let SearchQuery = writable("");
 export let ShowSearch = writable(false);
 export let ShowLyrics = writable(false);
-export let PageLoadedKey = writable(null);
 export let ShowPreferences = writable(false);
 
 export let CurrentMedia = writable(null);

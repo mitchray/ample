@@ -1,9 +1,10 @@
 <script>
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
-    import { API, PageLoadedKey } from "~/stores/state.js";
+    import { API } from "~/stores/state.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { useQueryClient } from "@tanstack/svelte-query";
 
     export let contextKey;
 
@@ -27,7 +28,7 @@
                 let urlAfter = window.location.href;
 
                 if (urlBefore === urlAfter) {
-                    // $PageLoadedKey = Date.now().toString(); //disabling for now as there are too many cases where this isn't practical
+                    useQueryClient()?.invalidateQueries();
                 }
 
                 addAlert({ title: $_("text.tagUpdateDone"), style: "success" });

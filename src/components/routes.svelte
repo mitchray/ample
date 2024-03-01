@@ -1,5 +1,4 @@
 <script>
-    import { PageLoadedKey } from "~/stores/state.js";
     import { SiteContentBind } from "~/stores/elements.js";
     import Router from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
@@ -78,12 +77,10 @@
 
 <div class="site-content" bind:this={$SiteContentBind}>
     <div class="site-content-inner">
-        {#key $PageLoadedKey || 0}
-            <Router
-                {routes}
-                on:routeLoading={routeLoading}
-                restoreScrollState={true}
-            />
-        {/key}
+        <Router
+            {routes}
+            on:routeLoading={routeLoading}
+            restoreScrollState={true}
+        />
     </div>
 </div>
