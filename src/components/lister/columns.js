@@ -20,7 +20,7 @@ export const TableDefault = {
     sortDirection: "none",
     columnOrder: [],
     hiddenColumns: [],
-    canSort: false,
+    canSort: true,
     showArt: true,
 };
 
