@@ -1,5 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
+    import { push } from "svelte-spa-router";
     import { getAlbumDisks } from "~/logic/album";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -13,10 +14,12 @@
     import AlbumsAround from "~/components/album/albumsAround.svelte";
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
+    import { addAlert } from "~/logic/alert.js";
 
     export let params = {};
 
     let disks = [];
+    let parentItem;
 
     $: query = createQuery({
         queryKey: ["album", params.id],
@@ -24,9 +27,19 @@
             let result = await $API.album({ filter: params.id });
 
             if (result.error) {
+                if (parentItem?.id) {
+                    addAlert({
+                        title: $_("text.albumIDChanged"),
+                        style: "info",
+                    });
+                    await push(`/artist/${parentItem.id}`);
+                }
+
                 console.error("Ample error getting album:", result.error);
                 return [];
             }
+
+            parentItem = result.artist || null;
 
             return result;
         },

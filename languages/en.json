@@ -7,6 +7,7 @@
     "text.albumArtists": "Album Artists",
     "text.albumCount": "Album Count",
     "text.albumGenre": "Album Genre",
+    "text.albumIDChanged": "Album ID has changed, redirecting to artist",
     "text.albumTitle": "Album Title",
     "text.albumsByYear": "Albums by Year",
     "text.all": "All",
