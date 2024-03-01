@@ -6,7 +6,7 @@
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
     import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
 
-    let lyrics = new Lyrics();
+    let lyrics = new Lyrics(); // custom store
     let follow = true;
     let loading = true;
     let drawer;
@@ -62,7 +62,7 @@
 
     function handleClick(time) {
         if (time > 0) {
-            $MediaPlayer.seekTo(time / $CurrentMedia.time);
+            $MediaPlayer.seekTo(time / $MediaPlayer.getDuration());
             follow = true;
         }
     }
@@ -96,8 +96,8 @@
             class:disable-scroll={follow}
             class:hasTimestamps={$lyrics.isTimestamped}
         >
-            {#if $CurrentMedia}
-                {#if $CurrentMedia.lyrics && !loading}
+            {#if $CurrentMedia?.object_type === "song"}
+                {#if $lyrics.lyricsFinal && !loading}
                     {#each $lyrics.lyricsFinal as line, i}
                         <div
                             class="line"

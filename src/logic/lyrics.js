@@ -1,7 +1,6 @@
-import { writable } from "svelte/store";
+import { get, writable } from "svelte/store";
+import { API, CurrentMedia } from "~/stores/state.js";
 import { lyricsAreTimestamped } from "./helper";
-
-import { CurrentMedia } from "~/stores/state";
 
 class Lyrics {
     constructor() {
@@ -11,11 +10,12 @@ class Lyrics {
         this.lyricsByLine = [];
         this.lyricsFinal = [];
         this.isTimestamped = false;
+        this.API = get(API);
 
-        CurrentMedia.subscribe((value) => {
+        CurrentMedia.subscribe(async (value) => {
             this.currentMedia = value;
 
-            this.setLyrics();
+            await this.setLyrics();
         });
 
         this._store = writable(this);
@@ -25,9 +25,16 @@ class Lyrics {
         return this._store.subscribe(subscriber);
     }
 
-    setLyrics() {
+    async getLyrics() {
+        if (this.currentMedia?.object_type !== "song") return null;
+        let song = await this.API.song({ filter: this.currentMedia?.id });
+        return song?.lyrics;
+    }
+
+    async setLyrics() {
         if (this.currentMedia) {
-            this.lyricsRaw = this.currentMedia.lyrics || "";
+            this.lyricsRaw = await this.getLyrics();
+
             this.lyricsFinal = [];
 
             this.currentLine = null;
@@ -42,6 +49,11 @@ class Lyrics {
         let lrcAllRegex = /(\[[0-9.:\[\]]*])+(.*)/;
         let timeRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])/;
         let textRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
+
+        if (!this.lyricsRaw) {
+            this.lyricsFinal = null;
+            return;
+        }
 
         this.isTimestamped = lyricsAreTimestamped(this.lyricsRaw);
 
