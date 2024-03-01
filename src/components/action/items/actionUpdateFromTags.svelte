@@ -28,7 +28,9 @@
                 let urlAfter = window.location.href;
 
                 if (urlBefore === urlAfter) {
-                    useQueryClient()?.invalidateQueries();
+                    try {
+                        useQueryClient()?.invalidateQueries();
+                    } catch (e) {}
                 }
 
                 addAlert({ title: $_("text.tagUpdateDone"), style: "success" });
