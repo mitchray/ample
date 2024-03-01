@@ -176,6 +176,8 @@ export function prepareForQueue(arr) {
         "artist",
         "artists",
         "year",
+        "r128_track_gain",
+        "rg_track_gain",
 
         //podcast
         "podcast",
