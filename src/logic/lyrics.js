@@ -51,7 +51,7 @@ class Lyrics {
         let textRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
 
         if (!this.lyricsRaw) {
-            this.lyricsFinal = null;
+            this.lyricsFinal = [];
             return;
         }
 
