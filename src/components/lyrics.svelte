@@ -97,7 +97,7 @@
             class:hasTimestamps={$lyrics.isTimestamped}
         >
             {#if $CurrentMedia?.object_type === "song"}
-                {#if $lyrics.lyricsFinal?.length > 0 && !loading}
+                {#if $lyrics.hasLyrics() && !loading}
                     {#each $lyrics.lyricsFinal as line, i}
                         <div
                             class="line"

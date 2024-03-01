@@ -7,8 +7,6 @@ import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,
     addRatingMissingNotification,
-    addLyricsMissingNotification,
-    addLyricsNotTimestampedNotification,
 } from "./notification";
 import { debugHelper, shuffleArray, lyricsAreTimestamped } from "./helper";
 import {
@@ -724,16 +722,6 @@ class Player {
             item.replaygain_track_gain === null
         ) {
             addGainTagsMissingNotification(item);
-        }
-
-        // notify if missing lyrics
-        if (item.object_type === "song" && !item.lyrics) {
-            addLyricsMissingNotification(item);
-        }
-
-        // notify if lyrics are not timestamped
-        if (item.lyrics && !lyricsAreTimestamped(item.lyrics)) {
-            addLyricsNotTimestampedNotification(item);
         }
 
         // Search for song versions if artist is present

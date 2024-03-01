@@ -1,6 +1,10 @@
 import { get, writable } from "svelte/store";
 import { API, CurrentMedia } from "~/stores/state.js";
 import { lyricsAreTimestamped } from "./helper";
+import {
+    addLyricsMissingNotification,
+    addLyricsNotTimestampedNotification,
+} from "~/logic/notification.js";
 
 class Lyrics {
     constructor() {
@@ -102,7 +106,25 @@ class Lyrics {
             this.lyricsFinal.push(thisLine);
         }
 
+        this.checkLyrics();
+
         this.lyricsFinal.reverse();
+    }
+
+    hasLyrics() {
+        return this.lyricsFinal.length > 0;
+    }
+
+    checkLyrics() {
+        // notify if missing lyrics
+        if (this.currentMedia.object_type === "song" && !this.hasLyrics()) {
+            addLyricsMissingNotification(this.currentMedia);
+        }
+
+        // notify if lyrics are not timestamped
+        if (this.hasLyrics() && !lyricsAreTimestamped(this.lyricsRaw)) {
+            addLyricsNotTimestampedNotification(this.currentMedia);
+        }
     }
 
     timestampToSeconds(ts) {
