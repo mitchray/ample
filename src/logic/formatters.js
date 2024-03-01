@@ -14,7 +14,7 @@ export function formatReleaseType(text) {
  */
 export function formatTotalTime(secs) {
     return new Date(secs * 1000)
-        .toISOString()
+        ?.toISOString()
         .substring(11, 19)
         .replace(/^0+:?0*/, "")
         .replace(/^:/, "0:");
