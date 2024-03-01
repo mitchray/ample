@@ -12,8 +12,12 @@
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import { addAlert } from "~/logic/alert.js";
+    import { push } from "svelte-spa-router";
 
     export let params = {};
+
+    let parentItem;
 
     $: query = createQuery({
         queryKey: ["song", params.id],
@@ -21,9 +25,19 @@
             let result = await $API.song({ filter: params.id });
 
             if (result.error) {
+                if (parentItem?.id) {
+                    addAlert({
+                        title: $_("text.IDChanged"),
+                        style: "info",
+                    });
+                    await push(`/album/${parentItem.id}`);
+                }
+
                 console.error("Ample error getting song:", result.error);
                 return [];
             }
+
+            parentItem = result.album || null;
 
             return result;
         },
