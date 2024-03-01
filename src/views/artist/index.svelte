@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { replace } from "svelte-spa-router";
+    import { push, replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
     import { fade } from "svelte/transition";
     import { API, User } from "~/stores/state.js";
@@ -15,6 +15,7 @@
     import Top from "./top.svelte";
     import Similar from "./similar.svelte";
     import Musicbrainz from "./musicbrainz.svelte";
+    import { addAlert } from "~/logic/alert.js";
 
     export let params = {};
 
@@ -24,6 +25,12 @@
             let result = await $API.artist({ filter: params.id });
 
             if (result.error) {
+                addAlert({
+                    title: $_("text.IDChanged"),
+                    style: "info",
+                });
+                await push(`/artists/`);
+
                 console.error("Ample error getting artist:", result.error);
                 return [];
             }

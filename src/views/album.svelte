@@ -29,7 +29,7 @@
             if (result.error) {
                 if (parentItem?.id) {
                     addAlert({
-                        title: $_("text.albumIDChanged"),
+                        title: $_("text.IDChanged"),
                         style: "info",
                     });
                     await push(`/artist/${parentItem.id}`);
