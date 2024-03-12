@@ -7,6 +7,7 @@
     import { onMount } from "svelte";
 
     let savedStatuses = {};
+    let featuresReady = false;
 
     function handleOpen(event) {
         // filter out any sl-show events from sl-tooltip/other children
@@ -113,35 +114,37 @@
     </div>
 </sl-details>
 
-<sl-divider></sl-divider>
+{#if featuresReady}
+    <sl-divider></sl-divider>
 
-<sl-details
-    data-id="dashboards"
-    open={savedStatuses["dashboards"]}
-    on:sl-show={handleOpen}
-    on:sl-hide={handleClose}
->
-    <div class="title-wrapper" slot="summary">
-        <SidebarHeading icon="dashboard" label={$_("text.dashboards")} />
-    </div>
-    <MaterialSymbol name="expand_more" slot="expand-icon" />
-    <MaterialSymbol name="expand_less" slot="collapse-icon" />
+    <sl-details
+        data-id="dashboards"
+        open={savedStatuses["dashboards"]}
+        on:sl-show={handleOpen}
+        on:sl-hide={handleClose}
+    >
+        <div class="title-wrapper" slot="summary">
+            <SidebarHeading icon="dashboard" label={$_("text.dashboards")} />
+        </div>
+        <MaterialSymbol name="expand_more" slot="expand-icon" />
+        <MaterialSymbol name="expand_less" slot="collapse-icon" />
 
-    <div class="items">
-        <SidebarLink
-            href="#/podcasts"
-            activePath="/podcasts"
-            label={$_("text.podcasts")}
-            icon="podcasts"
-        />
-        <SidebarLink
-            href="#/radio"
-            activePath="/radio"
-            label={$_("text.radio")}
-            icon="radio"
-        />
-    </div>
-</sl-details>
+        <div class="items">
+            <SidebarLink
+                href="#/podcasts"
+                activePath="/podcasts"
+                label={$_("text.podcasts")}
+                icon="podcasts"
+            />
+            <SidebarLink
+                href="#/radio"
+                activePath="/radio"
+                label={$_("text.radio")}
+                icon="radio"
+            />
+        </div>
+    </sl-details>
+{/if}
 
 <style>
     sl-details::part(base) {
