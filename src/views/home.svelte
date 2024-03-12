@@ -58,7 +58,6 @@
     layout="scroll"
     heading={$_("text.newestAlbums")}
     viewAllURL="#/newest"
-    autoRefreshInterval={20}
 />
 
 <CardList
