@@ -42,10 +42,6 @@
     $: groupedArtists = $query.data || [];
 </script>
 
-<svelte:head>
-    <title>{title}</title>
-</svelte:head>
-
 <div class="artists-page-container">
     <div class="sidebar">
         <div class="sidebar-inner">

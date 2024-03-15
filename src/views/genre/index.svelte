@@ -37,10 +37,6 @@
     $PageTitle = title;
 </script>
 
-<svelte:head>
-    <title>{`${genre?.name}` || $_("text.loading")} (genre)</title>
-</svelte:head>
-
 {#if genre?.id}
     <div class="page-header">
         <h1 class="page-title">

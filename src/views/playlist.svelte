@@ -78,12 +78,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>
-        {loading ? $_("text.loading") : `${playlist?.name} (${playlistType})`}
-    </title>
-</svelte:head>
-
 {#if playlist?.id && !loading}
     <div class="page-wrapper">
         <div class="details-container">

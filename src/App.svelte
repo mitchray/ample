@@ -6,7 +6,7 @@
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
-    import { User, Server, PageTitle, ShowSearch } from "~/stores/state.js";
+    import { User, Server, ShowSearch } from "~/stores/state.js";
     import { loadSettings, Theme } from "~/stores/settings";
     import { extendSession, validateSession } from "~/logic/user";
     import { isLoading as i18nIsLoading } from "svelte-i18n";
@@ -26,6 +26,7 @@
     import Preferences from "~/views/preferences/preferences.svelte";
     import ItemSync from "~/components/itemSync.svelte";
     import Routes from "~/components/routes.svelte";
+    import PageTitleCoordinator from "~/components/pageTitleCoordinator.svelte";
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
     import LoginPage from "~/views/login.svelte";
     import { hideLoadingOverlay } from "~/logic/ui.js";
@@ -44,9 +45,6 @@
     window.onpopstate = () => {
         // close search after navigating
         $ShowSearch = false;
-
-        // reset page title
-        $PageTitle = "";
     };
 
     $: {
@@ -107,6 +105,7 @@
 <ItemSync />
 
 {#if !$i18nIsLoading}
+    <PageTitleCoordinator />
     {#if !$User.isLoggedIn}
         <LoginPage />
     {:else}

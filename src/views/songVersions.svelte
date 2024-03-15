@@ -11,6 +11,13 @@
     let title = $_("text.songVersions");
     $PageTitle = title;
 
+    // {$_("text.versionsOf", {
+    //     values: {
+    //         songTitle: params.songTitle,
+    //         artistName: params.artistName,
+    //     },
+    // }) || $_("text.loading")}
+
     $: query = createQuery({
         queryKey: ["songVersions", params.songTitle + params.artistName],
         queryFn: async () => {
@@ -35,17 +42,6 @@
     // alias of returned data
     $: songs = $query.data || {};
 </script>
-
-<svelte:head>
-    <title>
-        {$_("text.versionsOf", {
-            values: {
-                songTitle: params.songTitle,
-                artistName: params.artistName,
-            },
-        }) || $_("text.loading")}
-    </title>
-</svelte:head>
 
 <div class="page-header">
     <h1 class="page-title">

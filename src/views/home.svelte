@@ -14,10 +14,6 @@
     $PageTitle = title;
 </script>
 
-<svelte:head>
-    <title>{title}</title>
-</svelte:head>
-
 <div class="explore">
     <sl-button size="large" href="#/favorites">
         <MaterialSymbol name="favorite" slot="prefix" />
