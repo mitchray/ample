@@ -54,8 +54,6 @@
 
     async function processData() {
         if (!$query.data?.id) return;
-
-        disks = [];
         disks = await getAlbumDisks(params.id);
     }
 </script>
