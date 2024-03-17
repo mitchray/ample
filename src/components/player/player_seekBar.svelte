@@ -87,7 +87,6 @@
     >
         <span
             class="progress"
-            data-value={formatSongLength(currentTime)}
             style="transform: translateX({seekWidth}%)"
         ></span>
     </div>
@@ -145,20 +144,6 @@
         inset-block-end: 0;
         inset-block-start: 0;
         width: 100%;
-    }
-
-    /* TODO not appearing */
-    /* seekbar time indicator popup */
-    .progress:before {
-        opacity: 0;
-        inset-block-start: calc(50% - 20px);
-    }
-
-    /* TODO remove */
-    /* seekbar time ball */
-    .progress:after {
-        content: "";
-        width: 12px;
     }
 
     /* while dragging increase the active area  */

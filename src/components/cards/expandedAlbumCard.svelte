@@ -59,7 +59,6 @@
         display: flex;
         flex-direction: column;
         width: 100%;
-        /* overflow: hidden; */ /* TODO WAS needed for expanded_table to overflow, is it still needed? */
         margin-inline-start: var(--spacing-md);
     }
 
