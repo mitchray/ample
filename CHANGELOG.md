@@ -12,7 +12,6 @@
 - `Add to Playlist` and `Find duplicates` for the current media
 
 ### Added
-- Podcasts & Radio support
 - Theme settings & presets
 - Cache API calls for better responsiveness (localforage & Tanstack Query)
 - More 3rd party links (now with icons)
