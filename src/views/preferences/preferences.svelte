@@ -38,15 +38,6 @@
                         <sl-tab-group class="fake" placement="start">
                             <sl-tab
                                 slot="nav"
-                                panel="general"
-                                on:click={() => {
-                                    tabs.show("general");
-                                }}
-                            >
-                                General
-                            </sl-tab>
-                            <sl-tab
-                                slot="nav"
                                 panel="theme"
                                 on:click={() => {
                                     tabs.show("theme");
@@ -54,54 +45,65 @@
                             >
                                 Theme
                             </sl-tab>
-                            <sl-tab
-                                slot="nav"
-                                panel="advanced"
-                                on:click={() => {
-                                    tabs.show("advanced");
-                                }}
-                            >
-                                Advanced
-                            </sl-tab>
-                            <sl-tab
-                                slot="nav"
-                                panel="disabled"
-                                on:click={() => {
-                                    tabs.show("disabled");
-                                }}
-                                disabled
-                            >
-                                Disabled
-                            </sl-tab>
 
-                            <sl-tab-panel name="general"></sl-tab-panel>
+                            <!-- <sl-tab-->
+                            <!--     slot="nav"-->
+                            <!--     panel="general"-->
+                            <!--     on:click={() => {-->
+                            <!--         tabs.show("general");-->
+                            <!--     }}-->
+                            <!-- >-->
+                            <!--     General-->
+                            <!-- </sl-tab>-->
+                            <!-- <sl-tab-->
+                            <!--     slot="nav"-->
+                            <!--     panel="advanced"-->
+                            <!--     on:click={() => {-->
+                            <!--         tabs.show("advanced");-->
+                            <!--     }}-->
+                            <!-- >-->
+                            <!--     Advanced-->
+                            <!-- </sl-tab>-->
+                            <!-- <sl-tab-->
+                            <!--     slot="nav"-->
+                            <!--     panel="disabled"-->
+                            <!--     on:click={() => {-->
+                            <!--         tabs.show("disabled");-->
+                            <!--     }}-->
+                            <!--     disabled-->
+                            <!-- >-->
+                            <!--     Disabled-->
+                            <!-- </sl-tab>-->
+
+                            <!-- <sl-tab-panel name="general"></sl-tab-panel>-->
                             <sl-tab-panel name="theme"></sl-tab-panel>
-                            <sl-tab-panel name="advanced"></sl-tab-panel>
-                            <sl-tab-panel name="disabled"></sl-tab-panel>
+                            <!-- <sl-tab-panel name="advanced"></sl-tab-panel>-->
+                            <!-- <sl-tab-panel name="disabled"></sl-tab-panel>-->
                         </sl-tab-group>
                     </div>
                 </div>
 
                 <sl-tab-group placement="start" class="real" bind:this={tabs}>
-                    <sl-tab slot="nav" panel="general"></sl-tab>
                     <sl-tab slot="nav" panel="theme"></sl-tab>
-                    <sl-tab slot="nav" panel="advanced"></sl-tab>
-                    <sl-tab slot="nav" panel="disabled" disabled></sl-tab>
+                    <!-- <sl-tab slot="nav" panel="general"></sl-tab>-->
+                    <!-- <sl-tab slot="nav" panel="advanced"></sl-tab>-->
+                    <!-- <sl-tab slot="nav" panel="disabled" disabled></sl-tab>-->
 
-                    <sl-tab-panel name="general">
-                        <div style="height: 10000px">
-                            This is the general tab panel.
-                        </div>
-                    </sl-tab-panel>
                     <sl-tab-panel name="theme">
                         <Theme />
                     </sl-tab-panel>
-                    <sl-tab-panel name="advanced">
-                        This is the advanced tab panel.
-                    </sl-tab-panel>
-                    <sl-tab-panel name="disabled">
-                        This is a disabled tab panel.
-                    </sl-tab-panel>
+
+                    <!-- <sl-tab-panel name="general">-->
+                    <!--     <div style="height: 10000px">-->
+                    <!--         This is the general tab panel.-->
+                    <!--     </div>-->
+                    <!-- </sl-tab-panel>-->
+                    <!-- <sl-tab-panel name="advanced">-->
+                    <!--     This is the advanced tab panel.-->
+                    <!-- </sl-tab-panel>-->
+                    <!-- <sl-tab-panel name="disabled">-->
+                    <!--     This is a disabled tab panel.-->
+                    <!-- </sl-tab-panel>-->
                 </sl-tab-group>
             </div>
         </sl-drawer>
@@ -112,7 +114,6 @@
     .wrapper {
         display: grid;
         grid-template-columns: min-content auto;
-        /*justify-content: start;*/
     }
 
     sl-drawer::part(panel) {
@@ -133,11 +134,5 @@
     .fake sl-tab-panel {
         pointer-events: none;
         display: none;
-    }
-
-    sl-tab-panel {
-        /*background-color: darkblue;*/
-        /*height: 100%;*/
-        /*overflow: auto;*/
     }
 </style>
