@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
-    import DrawerDelete from "../drawers/drawerPlaylistDelete.svelte";
+    import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 

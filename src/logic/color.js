@@ -1,5 +1,5 @@
 import { FastAverageColor } from "fast-average-color";
-import { debugHelper } from "./helper";
+import { debugHelper } from "~/logic/helper";
 
 /**
  Get dominant color from image

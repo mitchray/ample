@@ -14,12 +14,12 @@
     import { DispatchListerEvent, ListerEvent } from "~/stores/message.js";
     import { SiteContentBind } from "~/stores/elements.js";
     import { Saved } from "~/stores/settings.js";
-    import ListerDebug from "./lister_debug.svelte";
-    import TableView from "./lister_tableView.svelte";
-    import ListerActions from "./lister_actions.svelte";
+    import ListerDebug from "~/components/lister/lister_debug.svelte";
+    import TableView from "~/components/lister/lister_tableView.svelte";
+    import ListerActions from "~/components/lister/lister_actions.svelte";
 
-    import { TableDefault } from "./columns.js";
-    import ListerOptions from "./lister_options.svelte";
+    import { TableDefault } from "~/components/lister/columns.js";
+    import ListerOptions from "~/components/lister/lister_options.svelte";
     import MassRater from "~/components/massRater.svelte";
 
     export let id; // How to identify this table across instances and localstorage

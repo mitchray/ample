@@ -19,7 +19,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API, NowPlayingQueue } from "~/stores/state.js";
-    import MaterialSymbol from "../materialSymbol.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let type = null;
     export let data = {};

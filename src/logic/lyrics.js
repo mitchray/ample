@@ -1,6 +1,6 @@
 import { get, writable } from "svelte/store";
 import { API, CurrentMedia } from "~/stores/state.js";
-import { lyricsAreTimestamped } from "./helper";
+import { lyricsAreTimestamped } from "~/logic/helper";
 import {
     addLyricsMissingNotification,
     addLyricsNotTimestampedNotification,

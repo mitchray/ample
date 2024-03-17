@@ -2,8 +2,8 @@
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
-    import Newest from "./newest.svelte";
-    import Random from "./random.svelte";
+    import Newest from "~/views/albums/newest.svelte";
+    import Random from "~/views/albums/random.svelte";
     import AlbumsAll from "~/components/album/albumsAll.svelte";
     import AlbumsByYear from "~/components/album/albumsByYear.svelte";
 

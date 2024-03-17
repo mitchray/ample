@@ -3,12 +3,12 @@
     import { replace } from "svelte-spa-router";
     import { onMount } from "svelte";
     import { API, PageTitle } from "~/stores/state.js";
-    import General from "./general.svelte";
-    import Buttons from "./buttons.svelte";
-    import Menus from "./menus.svelte";
-    import Actions from "./actions.svelte";
-    import Theme from "./theme.svelte";
-    import Wavesurfer from "./wavesurfer.svelte";
+    import General from "~/views/test/general.svelte";
+    import Buttons from "~/views/test/buttons.svelte";
+    import Menus from "~/views/test/menus.svelte";
+    import Actions from "~/views/test/actions.svelte";
+    import Theme from "~/views/test/theme.svelte";
+    import Wavesurfer from "~/views/test/wavesurfer.svelte";
 
     export let params = {};
 

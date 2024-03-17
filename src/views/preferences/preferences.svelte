@@ -3,7 +3,7 @@
     import { SiteContentBind } from "~/stores/elements.js";
     import { ShowPreferences } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
-    import Theme from "./_theme.svelte";
+    import Theme from "~/views/preferences/_theme.svelte";
 
     let drawer;
     let tabs;

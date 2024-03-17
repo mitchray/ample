@@ -5,8 +5,8 @@
     import { Saved } from "~/stores/settings.js";
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import ArtistsSidebar from "~/components/artist/artistsSidebar.svelte";
-    import Newest from "./newest.svelte";
-    import Random from "./random.svelte";
+    import Newest from "~/views/artists/newest.svelte";
+    import Random from "~/views/artists/random.svelte";
     import { createQuery } from "@tanstack/svelte-query";
 
     export let params = {};

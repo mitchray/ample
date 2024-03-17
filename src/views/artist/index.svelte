@@ -10,11 +10,11 @@
     import Actions from "~/components/action/actions.svelte";
     import Genres from "~/components/genre/genres.svelte";
     import Art from "~/components/art.svelte";
-    import Releases from "./releases.svelte";
-    import All from "./all.svelte";
-    import Top from "./top.svelte";
-    import Similar from "./similar.svelte";
-    import Musicbrainz from "./musicbrainz.svelte";
+    import Releases from "~/views/artist/releases.svelte";
+    import All from "~/views/artist/all.svelte";
+    import Top from "~/views/artist/top.svelte";
+    import Similar from "~/views/artist/similar.svelte";
+    import Musicbrainz from "~/views/artist/musicbrainz.svelte";
     import { addAlert } from "~/logic/alert.js";
 
     export let params = {};

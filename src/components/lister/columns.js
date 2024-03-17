@@ -1,7 +1,7 @@
 import { capitalize } from "lodash-es";
 import ArtistList from "~/components/artist/artistList.svelte";
-import Checkbox from "./components/checkbox_row.svelte";
-import Name from "./components/name.svelte";
+import Checkbox from "~/components/lister/components/checkbox_row.svelte";
+import Name from "~/components/lister/components/name.svelte";
 import RelativeDate from "~/components/relativeDate.svelte";
 import GenreList from "~/components/genreList.svelte";
 import Rating from "~/components/rating/rating.svelte";

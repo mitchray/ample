@@ -2,8 +2,8 @@
     import { _ } from "svelte-i18n";
     import { onMount, getContext, tick } from "svelte";
     import { sortBy } from "lodash-es";
-    import { Column } from "./columns.js";
-    import CheckboxHeader from "./components/checkbox_header.svelte";
+    import { Column } from "~/components/lister/columns.js";
+    import CheckboxHeader from "~/components/lister/components/checkbox_header.svelte";
 
     export let contextKey;
 

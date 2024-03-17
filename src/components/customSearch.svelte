@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { onMount } from "svelte";
     import { API } from "~/stores/state";
-    import MaterialSymbol from "./materialSymbol.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let loading = false;
     export let loadedTime;

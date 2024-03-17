@@ -3,7 +3,7 @@
     import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import Portal from "~/components/portal.svelte";
-    import DrawerShare from "../drawers/drawerShareCreate.svelte";
+    import DrawerShare from "~/components/action/drawers/drawerShareCreate.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let contextKey;

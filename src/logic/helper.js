@@ -1,6 +1,6 @@
 import { _ } from "svelte-i18n";
 import { get } from "svelte/store";
-import { addAlert } from "./alert";
+import { addAlert } from "~/logic/alert";
 import { debugMode, Server } from "~/stores/state.js";
 import { SkipBelow, SkipBelowRating } from "~/stores/settings";
 import { v4 as uuidv4 } from "uuid";

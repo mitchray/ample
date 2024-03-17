@@ -1,9 +1,9 @@
 <script>
     import { onMount, getContext, onDestroy, tick } from "svelte";
 
-    import Columns from "./lister_columns.svelte";
-    import TableRow from "./lister_tableRow.svelte";
-    import Virtual from "./lister_virtual.svelte";
+    import Columns from "~/components/lister/lister_columns.svelte";
+    import TableRow from "~/components/lister/lister_tableRow.svelte";
+    import Virtual from "~/components/lister/lister_virtual.svelte";
     import { ShowSongsByOtherArtists } from "~/stores/settings.js";
 
     export let contextKey;

@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { onMount, onDestroy } from "svelte";
     import { v4 as uuidv4 } from "uuid";
-    import MaterialSymbol from "../materialSymbol.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let card; /* the card component to render */
     export let type;

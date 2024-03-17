@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { sampleSize, uniqBy } from "lodash-es";
 import { API } from "~/stores/state";
-import { frequentArtists } from "./artist";
+import { frequentArtists } from "~/logic/artist";
 
 /**
  * Returns playlists for search

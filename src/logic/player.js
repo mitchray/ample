@@ -7,8 +7,8 @@ import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,
     addRatingMissingNotification,
-} from "./notification";
-import { debugHelper, shuffleArray, lyricsAreTimestamped } from "./helper";
+} from "~/logic/notification";
+import { debugHelper, shuffleArray } from "~/logic/helper";
 import {
     Saved,
     PlayerVolume,

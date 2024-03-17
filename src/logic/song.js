@@ -1,7 +1,7 @@
 import { get } from "svelte/store";
 import { API } from "~/stores/state";
-import { debugHelper } from "./helper";
-import { getArtist, getSimilarArtistsWithGenreFallback } from "./artist";
+import { debugHelper } from "~/logic/helper";
+import { getArtist, getSimilarArtistsWithGenreFallback } from "~/logic/artist";
 
 /**
  * Get songs from artist ID

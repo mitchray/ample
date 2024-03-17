@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { onMount } from "svelte";
-    import MaterialSymbol from "./materialSymbol.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     const currentYear = new Date().getFullYear();
 

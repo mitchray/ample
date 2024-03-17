@@ -4,12 +4,12 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { groupBy, sortBy, partition } from "lodash-es";
     import { API, User } from "~/stores/state";
-    import { PlaySongsByOtherArtists, Saved } from "~/stores/settings.js";
+    import { Saved } from "~/stores/settings.js";
     import { formatReleaseType } from "~/logic/formatters.js";
     import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import RenderReleases from "./_renderReleases.svelte";
-    import FeaturedOptions from "./_featuredOptions.svelte";
+    import RenderReleases from "~/views/artist/_renderReleases.svelte";
+    import FeaturedOptions from "~/views/artist/_featuredOptions.svelte";
 
     export let artistID;
 

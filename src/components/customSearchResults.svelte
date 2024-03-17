@@ -7,7 +7,7 @@
         artistsPreset,
         playlistsPreset,
         forcedCheckbox,
-    } from "./lister/columns.js";
+    } from "~/components/lister/columns.js";
 
     export let loadedTime;
     export let loading;

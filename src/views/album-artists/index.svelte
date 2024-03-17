@@ -5,7 +5,7 @@
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import ArtistsSidebar from "~/components/artist/artistsSidebar.svelte";
     import { replace } from "svelte-spa-router";
-    import Random from "./random.svelte";
+    import Random from "~/views/album-artists/random.svelte";
     import { createQuery } from "@tanstack/svelte-query";
 
     export let params = {};

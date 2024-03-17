@@ -3,7 +3,7 @@
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { API } from "~/stores/state.js";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
-    import DrawerEdit from "./drawerPlaylistEdit.svelte";
+    import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
 
     export const show = () => drawer.show();
     export let songs;

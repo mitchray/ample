@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { TableDefault } from "./columns.js";
+    import { TableDefault } from "~/components/lister/columns.js";
 
     export let contextKey;
 

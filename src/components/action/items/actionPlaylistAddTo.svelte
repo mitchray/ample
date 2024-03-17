@@ -3,7 +3,7 @@
     import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import Portal from "~/components/portal.svelte";
-    import DrawerAddTo from "../drawers/drawerPlaylistAddTo.svelte";
+    import DrawerAddTo from "~/components/action/drawers/drawerPlaylistAddTo.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let contextKey;

@@ -6,7 +6,7 @@
     import { getSongsFromArtist } from "~/logic/song";
     import MusicBrainz from "~/logic/musicbrainz";
     import Art from "~/components/art.svelte";
-    import Portal from "./portal.svelte";
+    import Portal from "~/components/portal.svelte";
     import { Saved } from "~/stores/settings.js";
 
     export let data;

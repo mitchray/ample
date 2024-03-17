@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
-    import DrawerEdit from "../drawers/drawerPlaylistEdit.svelte";
+    import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ticks } from "~/logic/ui.js";

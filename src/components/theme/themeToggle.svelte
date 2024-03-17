@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { Theme } from "~/stores/settings.js";
 
-    import MaterialSymbol from "../materialSymbol.svelte";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function toggleTheme() {
         let mode = $Theme.mode === "dark" ? "light" : "dark";
