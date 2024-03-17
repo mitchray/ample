@@ -213,7 +213,7 @@
                 loadCount++;
             })
             .catch((err) => {
-                console.log("Error Reading data " + err);
+                console.error("Error reading MusicBrainz data " + err);
                 return err;
             });
     }
