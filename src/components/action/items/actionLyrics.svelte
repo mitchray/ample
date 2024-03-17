@@ -3,8 +3,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ShowLyrics } from "~/stores/state.js";
 
-    export let contextKey;
-
     function handleAction() {
         let inverted = !$ShowLyrics;
         ShowLyrics.set(inverted);

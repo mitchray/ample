@@ -329,8 +329,4 @@
     .settings {
         margin-inline-start: auto;
     }
-
-    .recent.hide {
-        display: none;
-    }
 </style>

@@ -179,9 +179,9 @@
         margin: 0 var(--spacing-md);
     }
 
-    .inputs input {
+    .inputs sl-input {
         box-sizing: content-box; /* don't include padding for this */
-        width: 4ch; /* declare as Chrome doesn't honor size attribute */
+        width: 10ch;
         font-size: 1.2rem;
     }
 

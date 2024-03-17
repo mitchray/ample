@@ -227,10 +227,6 @@
         cursor: grabbing;
     }
 
-    .queue-item + .queue-item {
-        margin-block-start: 2px;
-    }
-
     .matches-rating-threshold:after {
         content: "";
         position: absolute;

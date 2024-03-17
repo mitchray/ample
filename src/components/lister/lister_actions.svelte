@@ -28,8 +28,4 @@
     .c-lister-actions :global(.c-actions) {
         display: contents;
     }
-
-    button {
-        margin: 0;
-    }
 </style>
