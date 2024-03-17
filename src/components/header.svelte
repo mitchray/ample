@@ -53,8 +53,8 @@
     <div
         style="position: absolute; left: 50px; pointer-events: none; color: red; display: flex; flex-direction: column;"
     >
-        <span style="font-size: 1.3rem; ">ALPHA PREVIEW</span>
-        <span>Incomplete features & bugs 🐛</span>
+        <span style="font-size: 1.3rem; ">BETA PREVIEW</span>
+        <span>Almost ready, final tweaks</span>
     </div>
 
     <sl-input
