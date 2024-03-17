@@ -8,15 +8,13 @@
 
     export let params = {};
 
-    let title = $_("text.songVersions");
-    $PageTitle = title;
-
-    // {$_("text.versionsOf", {
-    //     values: {
-    //         songTitle: params.songTitle,
-    //         artistName: params.artistName,
-    //     },
-    // }) || $_("text.loading")}
+    $: $PageTitle =
+        $_("text.versionsOf", {
+            values: {
+                songTitle: params.songTitle,
+                artistName: params.artistName,
+            },
+        }) || $_("text.songVersions");
 
     $: query = createQuery({
         queryKey: ["songVersions", params.songTitle + params.artistName],
@@ -45,12 +43,7 @@
 
 <div class="page-header">
     <h1 class="page-title">
-        {@html $_("text.versionsOfHTML", {
-            values: {
-                songTitle: params.songTitle,
-                artistName: params.artistName,
-            },
-        })}
+        {@html $PageTitle}
     </h1>
 </div>
 

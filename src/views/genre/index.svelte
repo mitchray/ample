@@ -33,8 +33,7 @@
         }
     });
 
-    let title = $_("text.genre");
-    $PageTitle = title;
+    $: $PageTitle = genre?.name || $_("text.genre");
 </script>
 
 {#if genre?.id}

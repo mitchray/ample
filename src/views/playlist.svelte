@@ -23,9 +23,7 @@
 
     $: songs = songs;
     $: playlist = playlist;
-
-    let title = $_("text.playlist");
-    $PageTitle = title;
+    $: $PageTitle = playlist?.name || $_("text.playlist");
 
     function handleDelete(e) {
         if (playlist?.id === e.detail.id) {

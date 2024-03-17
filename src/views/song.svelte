@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { API, User } from "~/stores/state";
+    import { API, PageTitle, User } from "~/stores/state";
     import {
         formatTotalTime,
         formatFilesize,
@@ -46,6 +46,8 @@
 
     // alias of returned data
     $: song = $query.data || {};
+
+    $: $PageTitle = song?.name || $_("text.song");
 </script>
 
 {#if $query.isLoading}

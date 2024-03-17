@@ -3,7 +3,7 @@
     import { push, replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
     import { fade } from "svelte/transition";
-    import { API, User } from "~/stores/state.js";
+    import { API, PageTitle, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
@@ -42,6 +42,8 @@
 
     // alias of returned data
     $: artist = $query.data || {};
+
+    $: $PageTitle = artist?.name || $_("text.artist");
 
     // default to releases tab
     $: {

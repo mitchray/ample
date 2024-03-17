@@ -4,7 +4,7 @@
     import { getAlbumDisks } from "~/logic/album";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
-    import { API, User } from "~/stores/state.js";
+    import { API, PageTitle, User } from "~/stores/state.js";
     import { checkbox, albumPreset } from "~/components/lister/columns.js";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
@@ -48,6 +48,8 @@
 
     // alias of returned data
     $: album = $query.data || {};
+
+    $: $PageTitle = album?.name || $_("text.album");
 
     // grab discs once we load the album
     $: $query.data, processData();

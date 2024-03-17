@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
-    import { API, User } from "~/stores/state.js";
+    import { API, PageTitle, User } from "~/stores/state.js";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
     import Rating from "~/components/rating/rating.svelte";
     import Actions from "~/components/action/actions.svelte";
@@ -32,6 +32,8 @@
 
     // alias of returned data
     $: podcast = $query.data || {};
+
+    $: $PageTitle = podcast?.name || $_("text.podcast");
 
     // grab discs once we load the album
     $: $query.data, processData();
