@@ -2,7 +2,6 @@
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
-    import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let contextKey;
@@ -41,7 +40,7 @@
     }
 </script>
 
-<sl-menu-item on:click={handleAction} title={label} {loading}>
+<sl-menu-item {loading} on:click={handleAction} title={label}>
     <MaterialSymbol
         name={$_type === "artist" ? "portrait" : "image"}
         slot="prefix"

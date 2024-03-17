@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { API, User, PageTitle } from "~/stores/state";
+    import { API, PageTitle, User } from "~/stores/state";
     import Lister from "~/components/lister/lister.svelte";
     import { smartlistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";

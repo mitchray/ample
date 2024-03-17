@@ -139,8 +139,8 @@
         {/each}
     </div>
 
-    <span on:click={handleFlag} class="flag" class:flagged={flag}>
-        <MaterialSymbol name="favorite" fill={flag || false} />
+    <span class="flag" class:flagged={flag} on:click={handleFlag}>
+        <MaterialSymbol fill={flag || false} name="favorite" />
     </span>
 
     {#if averagerating && showAverageRatings}

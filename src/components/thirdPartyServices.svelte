@@ -361,7 +361,7 @@
 </script>
 
 <sl-dropdown hoist>
-    <sl-button slot="trigger" size="small" caret>Links</sl-button>
+    <sl-button caret size="small" slot="trigger">Links</sl-button>
 
     <sl-card>
         <div class="groups">
@@ -387,10 +387,12 @@
                                     href={url}
                                     variant="neutral"
                                 >
-                                    {#if link.icon}<sl-icon
+                                    {#if link.icon}
+                                        <sl-icon
                                             src={link.icon}
                                             slot="prefix"
-                                        ></sl-icon>{/if}
+                                        ></sl-icon>
+                                    {/if}
                                     {link.title}
                                 </sl-button>
                             </li>

@@ -27,9 +27,9 @@
                         {#if album.year}<span class="year">
                                 {album.year}
                             </span>{/if}
-                        {#if album.type}<Badge
-                                text={formatReleaseType(album.type)}
-                            />{/if}
+                        {#if album.type}
+                            <Badge text={formatReleaseType(album.type)} />
+                        {/if}
                     </div>
                     <div class="title truncate">
                         <a href="#/album/{album.id}" title={album.name}>

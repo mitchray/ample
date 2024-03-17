@@ -1,14 +1,14 @@
 <script>
     import { _ } from "svelte-i18n";
     import { logout } from "~/logic/user";
-    import { User, ShowPreferences } from "~/stores/state.js";
+    import { ShowPreferences, User } from "~/stores/state.js";
     import ThemeToggle from "~/components/theme/themeToggle.svelte";
     import LanguageSelector from "~/components/languageSelector.svelte";
     import MaterialSymbol from "~/components//materialSymbol.svelte";
 </script>
 
 <sl-dropdown>
-    <sl-button slot="trigger" class="userMenu-toggle">
+    <sl-button class="userMenu-toggle" slot="trigger">
         <MaterialSymbol name="account_circle" />
     </sl-button>
 

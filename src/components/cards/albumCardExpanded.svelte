@@ -15,7 +15,7 @@
         <AlbumCard data={album} />
     </div>
 
-    <Visibility steps={100} let:percent let:unobserve>
+    <Visibility let:percent let:unobserve steps={100}>
         {#if percent > 0}
             <div class="songs" use:unobserve>
                 <AlbumSongs id={album.id} />

@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { writable } from "svelte/store";
     import { createQuery } from "@tanstack/svelte-query";
-    import { groupBy, sortBy, partition } from "lodash-es";
+    import { groupBy, partition, sortBy } from "lodash-es";
     import { API, User } from "~/stores/state";
     import { Saved } from "~/stores/settings.js";
     import { formatReleaseType } from "~/logic/formatters.js";
@@ -121,14 +121,14 @@
 </script>
 
 <sl-dropdown style="position: relative; z-index: 3000; ">
-    <sl-button slot="trigger" caret>{$_("text.options")}</sl-button>
+    <sl-button caret slot="trigger">{$_("text.options")}</sl-button>
 
     <sl-card style="width: 300px;">
         <div class="display-options">
             <sl-select
                 label="Display"
-                value={$state.view}
                 on:sl-change={(e) => ($state.view = e.target.value)}
+                value={$state.view}
             >
                 <MaterialSymbol name="visibility" slot="prefix" />
                 <sl-option value="table">Table</sl-option>
@@ -140,11 +140,11 @@
 
             <div class="sort-options">
                 <sl-select
-                    label="Sort"
                     clearable
+                    label="Sort"
+                    on:sl-change={(e) => ($state.sort = e.target.value)}
                     placeholder="None"
                     value={$state.sort}
-                    on:sl-change={(e) => ($state.sort = e.target.value)}
                 >
                     <MaterialSymbol name="sort" slot="prefix" />
                     <sl-option value="name">Name</sl-option>
@@ -168,11 +168,11 @@
             </div>
 
             <sl-select
-                label="Grouping"
                 clearable
+                label="Grouping"
+                on:sl-change={(e) => ($state.group = e.target.value)}
                 placeholder="None"
                 value={$state.group}
-                on:sl-change={(e) => ($state.group = e.target.value)}
             >
                 <MaterialSymbol name="category" slot="prefix" />
                 <sl-option value="name">Name</sl-option>

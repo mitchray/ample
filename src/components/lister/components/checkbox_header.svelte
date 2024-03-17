@@ -18,7 +18,7 @@
 </script>
 
 <sl-checkbox
-    on:sl-change={toggleAllChecked}
     checked={$selectedCount === $dataDisplay.length}
     indeterminate={$selectedCount > 0 && $selectedCount !== $dataDisplay.length}
+    on:sl-change={toggleAllChecked}
 ></sl-checkbox>

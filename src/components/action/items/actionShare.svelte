@@ -20,7 +20,7 @@
     }
 </script>
 
-<sl-menu-item on:click={handleAction} title={$_("text.share")} {...$$restProps}>
+<sl-menu-item {...$$restProps} on:click={handleAction} title={$_("text.share")}>
     <MaterialSymbol name="share" slot="prefix" />
     {$_("text.share")}&hellip;
 </sl-menu-item>

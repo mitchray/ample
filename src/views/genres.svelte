@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { API, User, PageTitle } from "~/stores/state";
+    import { API, PageTitle, User } from "~/stores/state";
     import { Saved } from "~/stores/settings.js";
     import { sortGenresByName } from "~/logic/genre";
     import Lister from "~/components/lister/lister.svelte";

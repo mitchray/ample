@@ -9,12 +9,14 @@
 
 <sl-tooltip
     content={label}
-    placement="right"
-    hoist
     disabled={$IsMobile || $SidebarIsOpen}
+    hoist
+    placement="right"
 >
     <div class="heading">
-        {#if icon}<MaterialSymbol name={icon} />{/if}
+        {#if icon}
+            <MaterialSymbol name={icon} />
+        {/if}
         <span class="sidebar-title truncate">{label}</span>
     </div>
 </sl-tooltip>

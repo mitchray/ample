@@ -9,7 +9,7 @@
         <sl-radio>That</sl-radio>
     </sl-radio-group>
 
-    <sl-input type="text" placeholder="Example"></sl-input>
+    <sl-input placeholder="Example" type="text"></sl-input>
 
     <sl-button>Button</sl-button>
 
@@ -44,7 +44,7 @@
         <sl-radio disabled>That</sl-radio>
     </sl-radio-group>
 
-    <sl-input type="text" placeholder="Example" disabled></sl-input>
+    <sl-input disabled placeholder="Example" type="text"></sl-input>
 
     <sl-button disabled>Button</sl-button>
 

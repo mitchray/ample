@@ -1,5 +1,5 @@
 <script>
-    import { onMount, getContext, onDestroy, tick } from "svelte";
+    import { getContext, onDestroy, onMount, tick } from "svelte";
 
     import Columns from "~/components/lister/lister_columns.svelte";
     import TableRow from "~/components/lister/lister_tableRow.svelte";
@@ -59,9 +59,9 @@
 <Virtual {contextKey} />
 
 <div
+    bind:this={bindForName}
     class="header-flex syncscroll"
     name="listerhack-{contextKey}"
-    bind:this={bindForName}
 >
     <div class="header">
         <Columns bind:this={$listerHeader} {contextKey} />
@@ -69,13 +69,13 @@
 </div>
 
 <div
+    bind:this={$listerScroller}
     class="lister-flex syncscroll"
     name="listerhack-{contextKey}"
-    bind:this={$listerScroller}
 >
     <div
-        class="lister"
         bind:this={$listerObject}
+        class="lister"
         style="height: {$pseudoHeight};"
     >
         {#each $dataFinal as row, i (row)}

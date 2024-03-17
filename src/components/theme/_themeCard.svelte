@@ -13,7 +13,6 @@
 <div
     class="container c-theme-card sl-theme-{mode}"
     data-uid={contextKey}
-    style="--preview-chroma-override: {getIsGray() ? 0 : null}"
     on:click={() => {
         $Theme = {
             ...$Theme,
@@ -25,6 +24,7 @@
             isGray: getIsGray(),
         };
     }}
+    style="--preview-chroma-override: {getIsGray() ? 0 : null}"
 >
     <div class="header">
         <sl-skeleton

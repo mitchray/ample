@@ -23,11 +23,11 @@
     <sl-color-picker
         class="hue-only"
         format="hsl"
-        value="hsl(--the-hue, 70%, 50%)"
-        style="--the-hue: {$Theme.hueBackground};"
         on:sl-input={(e) => {
             setHue(e, "hueBackground");
         }}
+        style="--the-hue: {$Theme.hueBackground};"
+        value="hsl(--the-hue, 70%, 50%)"
     ></sl-color-picker>
     {$_("text.colorBackground")}
 
@@ -45,11 +45,11 @@
     <sl-color-picker
         class="hue-only"
         format="hsl"
-        value="hsl(var(--the-hue), 70%, 50%)"
-        style="--the-hue: {$Theme.hue1};"
         on:sl-input={(e) => {
             setHue(e, "hue1");
         }}
+        style="--the-hue: {$Theme.hue1};"
+        value="hsl(var(--the-hue), 70%, 50%)"
     ></sl-color-picker>
     {$_("text.colorAccent1")}
 </div>
@@ -58,21 +58,21 @@
     <sl-color-picker
         class="hue-only"
         format="hsl"
-        value="hsl(var(--the-hue), 70%, 50%)"
-        style="--the-hue: {$Theme.hue2};"
         on:sl-input={(e) => {
             setHue(e, "hue2");
         }}
+        style="--the-hue: {$Theme.hue2};"
+        value="hsl(var(--the-hue), 70%, 50%)"
     ></sl-color-picker>
     {$_("text.colorAccent2")}
 </div>
 
 <div>
     <sl-color-picker
-        value={$Theme.colorWave}
         on:sl-input={(e) => {
             $Theme = { ...$Theme, colorWave: e.target.value };
         }}
+        value={$Theme.colorWave}
     ></sl-color-picker>
     {$_("text.colorWaveform")}
 </div>
@@ -85,7 +85,6 @@
 
 <div class="presets">
     <ThemePreview
-        name="Orange Crush"
         colors={{
             wave: "#ff9d00",
             hue1: 60,
@@ -93,10 +92,10 @@
             hueBackground: 60,
         }}
         isGray={true}
+        name="Orange Crush"
     />
 
     <ThemePreview
-        name="Blue Monday"
         colors={{
             wave: "hsl(207, 88%, 54%)",
             hue1: 250,
@@ -104,10 +103,10 @@
             hueBackground: 250,
         }}
         isGray={true}
+        name="Blue Monday"
     />
 
     <ThemePreview
-        name="Green Onions"
         colors={{
             wave: "hsl(108, 49%, 44%)",
             hue1: 140,
@@ -115,10 +114,10 @@
             hueBackground: 140,
         }}
         isGray={true}
+        name="Green Onions"
     />
 
     <ThemePreview
-        name="99 Red Balloons"
         colors={{
             wave: "hsl(5, 94%, 58%)",
             hue1: 30,
@@ -126,10 +125,10 @@
             hueBackground: 30,
         }}
         isGray={true}
+        name="99 Red Balloons"
     />
 
     <ThemePreview
-        name="Bubble Pop Electric"
         colors={{
             wave: "hsl(166, 100%, 33%)",
             hue1: 170,
@@ -137,10 +136,10 @@
             hueBackground: 290,
         }}
         isGray={false}
+        name="Bubble Pop Electric"
     />
 
     <ThemePreview
-        name="Little Green Men"
         colors={{
             wave: "hsl(33, 100%, 41%)",
             hue1: 60,
@@ -148,10 +147,10 @@
             hueBackground: 140,
         }}
         isGray={false}
+        name="Little Green Men"
     />
 
     <ThemePreview
-        name="Purple Haze"
         colors={{
             wave: "hsl(253, 100%, 72%)",
             hue1: 320,
@@ -159,10 +158,10 @@
             hueBackground: 290,
         }}
         isGray={false}
+        name="Purple Haze"
     />
 
     <ThemePreview
-        name="Da Ba Dee Da Ba Di"
         colors={{
             wave: "hsl(186, 100%, 35%)",
             hue1: 240,
@@ -170,6 +169,7 @@
             hueBackground: 250,
         }}
         isGray={false}
+        name="Da Ba Dee Da Ba Di"
     />
 </div>
 

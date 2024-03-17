@@ -46,14 +46,14 @@
     }
 </script>
 
-<sl-drawer label={$_("text.playlistConfirmRemoval")} bind:this={drawer}>
+<sl-drawer bind:this={drawer} label={$_("text.playlistConfirmRemoval")}>
     <div>
         {$_("text.playlistConfirmRemovalInfo", {
             values: { name: playlist?.name },
         })}
     </div>
 
-    <sl-button slot="footer" variant="danger" on:click={handleDelete}>
+    <sl-button on:click={handleDelete} slot="footer" variant="danger">
         <MaterialSymbol name="delete" slot="prefix" />
         {$_("text.delete")}
     </sl-button>

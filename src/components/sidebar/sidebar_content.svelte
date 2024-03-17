@@ -33,12 +33,12 @@
 </script>
 
 <div class="items">
-    <SidebarLink href="#/" activePath="/" label={$_("text.home")} icon="home" />
+    <SidebarLink activePath="/" href="#/" icon="home" label={$_("text.home")} />
     <SidebarLink
-        href="#/search"
         activePath="/search"
-        label={$_("text.advancedSearch")}
+        href="#/search"
         icon="search"
+        label={$_("text.advancedSearch")}
     />
 </div>
 
@@ -46,40 +46,40 @@
 
 <sl-details
     data-id="library"
-    open={savedStatuses["library"]}
-    on:sl-show={handleOpen}
     on:sl-hide={handleClose}
+    on:sl-show={handleOpen}
+    open={savedStatuses["library"]}
 >
     <div class="title-wrapper" slot="summary">
-        <SidebarHeading label={$_("text.library")} icon="library_music" />
+        <SidebarHeading icon="library_music" label={$_("text.library")} />
     </div>
     <MaterialSymbol name="expand_more" slot="expand-icon" />
     <MaterialSymbol name="expand_less" slot="collapse-icon" />
 
     <div class="items">
         <SidebarLink
-            href="#/artists"
             activePath="/artists?(\/(.*?))?"
-            label={$_("text.artists")}
+            href="#/artists"
             icon="person_outline"
+            label={$_("text.artists")}
         />
         <SidebarLink
-            href="#/album-artists"
             activePath="/album-artists(\/(.*?))?"
-            label={$_("text.albumArtists")}
+            href="#/album-artists"
             icon="artist"
+            label={$_("text.albumArtists")}
         />
         <SidebarLink
-            href="#/albums"
             activePath="/albums?(\/(.*?))?"
-            label={$_("text.albums")}
+            href="#/albums"
             icon="album"
+            label={$_("text.albums")}
         />
         <SidebarLink
-            href="#/genres"
             activePath="/genres"
-            label={$_("text.genres")}
+            href="#/genres"
             icon="label"
+            label={$_("text.genres")}
         />
     </div>
 </sl-details>
@@ -88,9 +88,9 @@
 
 <sl-details
     data-id="playlists"
-    open={savedStatuses["playlists"]}
-    on:sl-show={handleOpen}
     on:sl-hide={handleClose}
+    on:sl-show={handleOpen}
+    open={savedStatuses["playlists"]}
 >
     <div class="title-wrapper" slot="summary">
         <SidebarHeading icon="library_books" label="Playlists" />
@@ -100,16 +100,16 @@
 
     <div class="items">
         <SidebarLink
-            href="#/playlists"
             activePath="/playlists"
-            label={$_("text.playlists")}
+            href="#/playlists"
             icon="queue_music"
+            label={$_("text.playlists")}
         />
         <SidebarLink
-            href="#/smartlists"
             activePath="/smartlists"
-            label={$_("text.smartlists")}
+            href="#/smartlists"
             icon="electric_bolt"
+            label={$_("text.smartlists")}
         />
     </div>
 </sl-details>

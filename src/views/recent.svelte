@@ -15,8 +15,8 @@
 
 <CardList
     card={SongCard}
-    layout="grid"
-    type="song"
     dataProvider={recentSongs}
+    layout="grid"
     limit="20"
+    type="song"
 />

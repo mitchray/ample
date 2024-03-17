@@ -43,9 +43,9 @@
 
 <div class="site-header">
     <sl-button
-        on:click={handleSidebarToggle}
         class="menu-button"
         id="sidebar-button"
+        on:click={handleSidebarToggle}
     >
         <MaterialSymbol name="menu" />
     </sl-button>
@@ -59,17 +59,17 @@
 
     <sl-input
         bind:this={inputBind}
-        type="text"
-        placeholder={$_("text.search")}
         class="site-search"
-        value={$SearchQuery}
-        on:click={handleClick}
-        on:paste={handleInputChange}
-        on:keyup={handleInputChange}
-        on:sl-change={handleInputChange}
-        on:sl-input={handleInputChange}
-        on:sl-clear={handleClear}
         clearable
+        on:click={handleClick}
+        on:keyup={handleInputChange}
+        on:paste={handleInputChange}
+        on:sl-change={handleInputChange}
+        on:sl-clear={handleClear}
+        on:sl-input={handleInputChange}
+        placeholder={$_("text.search")}
+        type="text"
+        value={$SearchQuery}
     >
         <MaterialSymbol name="search" slot="prefix" />
     </sl-input>

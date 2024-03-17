@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from "uuid";
 import { API } from "~/stores/state";
 import { Notifications } from "~/stores/message";
 import {
-    NotificationRatingMissing,
+    NotificationAlternateVersions,
     NotificationGainTagsMissing,
     NotificationLyricsMissing,
     NotificationLyricsNotTimestamped,
-    NotificationAlternateVersions,
+    NotificationRatingMissing,
 } from "~/stores/settings";
 
 export function addNotification(settings) {

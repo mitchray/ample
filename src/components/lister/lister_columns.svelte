@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { onMount, getContext, tick } from "svelte";
+    import { getContext, onMount, tick } from "svelte";
     import { sortBy } from "lodash-es";
     import { Column } from "~/components/lister/columns.js";
     import CheckboxHeader from "~/components/lister/components/checkbox_header.svelte";
@@ -221,7 +221,7 @@
         >
             <!-- prettier-ignore -->
             {#if col.id === "checkbox" || col.id === "forcedCheckbox"}
-                <CheckboxHeader {contextKey} /><!--
+                <CheckboxHeader {contextKey}/><!--
                 no whitespace
          -->{:else}
                 <span

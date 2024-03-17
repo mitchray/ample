@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { onMount, createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import { API } from "~/stores/state.js";
 
     export let type;
@@ -76,11 +76,11 @@
     {/if}
 
     <sl-input
-        type="text"
         class="filter"
-        placeholder={$_("text.filter")}
-        on:sl-input={handleChange}
         clearable
+        on:sl-input={handleChange}
+        placeholder={$_("text.filter")}
+        type="text"
     ></sl-input>
 
     <ul class="playlists">

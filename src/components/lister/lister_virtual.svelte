@@ -1,5 +1,5 @@
 <script>
-    import { onMount, getContext, onDestroy } from "svelte";
+    import { getContext, onDestroy, onMount } from "svelte";
     import { waitForElement } from "~/logic/helper.js";
 
     export let contextKey;

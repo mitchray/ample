@@ -910,16 +910,16 @@
     ];
 </script>
 
-<div class="container" bind:this={containerBind}>
+<div bind:this={containerBind} class="container">
     <div class="options">
         <div class="type">
             <sl-select
-                value={settings.type}
+                label={$_("text.searchFor")}
                 on:sl-change={(e) => {
                     settings.type = e.target.value;
                     clearAll();
                 }}
-                label={$_("text.searchFor")}
+                value={settings.type}
             >
                 <sl-option value="song">{$_("text.songs")}</sl-option>
                 <sl-option value="album">{$_("text.albums")}</sl-option>
@@ -930,11 +930,11 @@
 
         <div class="maximum">
             <sl-select
-                value={settings.limit}
                 label={$_("text.limit")}
                 on:sl-change={(e) => {
                     settings.limit = e.target.value;
                 }}
+                value={settings.limit}
             >
                 <sl-option value="0">{$_("text.unlimited")}</sl-option>
                 <sl-option value="1">1</sl-option>
@@ -1335,7 +1335,7 @@
             </div>
         {/each}
 
-        <sl-button variant="primary" on:click={addNewRow}>
+        <sl-button on:click={addNewRow} variant="primary">
             <MaterialSymbol name="add" slot="prefix" />
             {$_("text.searchAddRule")}
         </sl-button>
@@ -1344,7 +1344,7 @@
     <sl-divider></sl-divider>
 
     <div class="actions">
-        <sl-button variant="primary" on:click={search}>
+        <sl-button on:click={search} variant="primary">
             {$_("text.search")}
         </sl-button>
     </div>

@@ -23,9 +23,9 @@
 </script>
 
 <sl-menu-item
+    {...$$restProps}
     on:click={handleAction}
     title={$_("text.playlistAddTo")}
-    {...$$restProps}
 >
     <MaterialSymbol name="queue_music" slot="prefix" />
     {$_("text.playlistAddTo")}&hellip;

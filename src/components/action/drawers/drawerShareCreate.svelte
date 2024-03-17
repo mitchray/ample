@@ -9,15 +9,15 @@
 </script>
 
 <sl-drawer
-    label={$_("text.shareCreate")}
     bind:this={drawer}
+    label={$_("text.shareCreate")}
     on:sl-request-close={keepDrawerOpen}
 >
     <div>
         Sharing <strong>{name}</strong>
     </div>
 
-    <sl-input type="number" label="Expiry Days" value="7"></sl-input>
+    <sl-input label="Expiry Days" type="number" value="7"></sl-input>
     <sl-switch checked>Allow Stream</sl-switch>
     <sl-switch checked>Allow Download</sl-switch>
 

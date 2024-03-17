@@ -70,10 +70,10 @@
 
 <Portal target={$SiteContentBind}>
     <sl-drawer
-        placement="bottom"
         bind:this={drawer}
-        on:sl-hide={handleClose}
         contained
+        on:sl-hide={handleClose}
+        placement="bottom"
     >
         <div slot="label">
             {$_("text.lyrics")}
@@ -82,8 +82,8 @@
         <div slot="header-actions">
             <sl-button
                 class="follow"
-                on:click={() => (follow = true)}
                 hidden={!$lyrics.isTimestamped || follow}
+                on:click={() => (follow = true)}
             >
                 {$_("text.follow")}
             </sl-button>
@@ -91,10 +91,10 @@
 
         <div
             class="lyrics-container"
-            on:wheel={handleScroll}
-            on:touchstart={handleScroll}
             class:disable-scroll={follow}
             class:hasTimestamps={$lyrics.isTimestamped}
+            on:touchstart={handleScroll}
+            on:wheel={handleScroll}
         >
             {#if $CurrentMedia?.object_type === "song"}
                 {#if $lyrics.hasLyrics() && !loading}

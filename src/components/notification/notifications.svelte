@@ -3,12 +3,12 @@
     import { _ } from "svelte-i18n";
     import { Notifications } from "~/stores/message.js";
     import {
-        Saved,
         NotificationAlternateVersions,
         NotificationGainTagsMissing,
-        NotificationRatingMissing,
         NotificationLyricsMissing,
         NotificationLyricsNotTimestamped,
+        NotificationRatingMissing,
+        Saved,
     } from "~/stores/settings.js";
     import Portal from "~/components/portal.svelte";
     import NotificationList from "~/components/notification/_notificationList.svelte";
@@ -35,7 +35,7 @@
             <MaterialSymbol name="notifications" />
 
             <span>
-                <sl-badge variant="neutral" pill>
+                <sl-badge pill variant="neutral">
                     {$Notifications.length}
                 </sl-badge>
             </span>
@@ -47,12 +47,12 @@
             {$_("text.notifications")}
 
             <sl-button
-                size="small"
-                variant="danger"
-                class="clear-notifications"
                 circle
+                class="clear-notifications"
                 on:click={handleClearNotifications}
+                size="small"
                 title={$_("text.clearAll")}
+                variant="danger"
             >
                 <MaterialSymbol name="delete" />
             </sl-button>
@@ -67,7 +67,7 @@
 </sl-dropdown>
 
 <Portal>
-    <sl-dialog label="Notifications settings" bind:this={dialog}>
+    <sl-dialog bind:this={dialog} label="Notifications settings">
         <div class="table">
             <div class="row heading">
                 <div class="text header"></div>
@@ -84,7 +84,7 @@
                             {$_("text.alternateSongVersionsInfo")}
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </div>
                 <div class="checkbox">
@@ -124,7 +124,7 @@
                             {$_("text.missingVolumeTagsInfo")}
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </div>
                 <div class="checkbox">
@@ -164,7 +164,7 @@
                             {$_("text.missingSongRatingInfo")}
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </div>
                 <div class="checkbox">
@@ -204,7 +204,7 @@
                             {$_("text.missingLyricsInfo")}
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </div>
                 <div class="checkbox">
@@ -244,7 +244,7 @@
                             {$_("text.missingLyricsTimestampInfo")}
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </div>
                 <div class="checkbox">
@@ -277,14 +277,14 @@
         </div>
 
         <sl-alert open>
-            <MaterialSymbol name="info" slot="icon" size="1.5em" />
+            <MaterialSymbol name="info" size="1.5em" slot="icon" />
             Silent notifications won't display an alert, but will still be listed
         </sl-alert>
 
         <sl-button
+            on:click={() => dialog.hide()}
             slot="footer"
             variant="primary"
-            on:click={() => dialog.hide()}
         >
             Done
         </sl-button>

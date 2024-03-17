@@ -4,7 +4,7 @@
     import Lister from "~/components/lister/lister.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
-    import { User, PageTitle } from "~/stores/state.js";
+    import { PageTitle, User } from "~/stores/state.js";
 
     let title = $_("text.newest");
     $PageTitle = title;

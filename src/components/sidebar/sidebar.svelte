@@ -12,14 +12,14 @@
 
 <div
     class="site-sidebar"
+    class:is-drawer={$IsMobile}
     class:is-list={$IsMobile || $SidebarIsOpen}
     class:is-mini={!$SidebarIsOpen && !$IsMobile}
     class:is-open={$SidebarIsOpen}
-    class:is-drawer={$IsMobile}
+    on:clickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#sidebar-button",
     }}
-    on:clickedOutside={handleClickOutside}
 >
     <div class="site-sidebar-inner">
         <SidebarContent />

@@ -19,11 +19,11 @@
 </script>
 
 <sl-button
-    variant="primary"
-    on:click={handleAction}
-    title={$_("text.play")}
     {loading}
+    on:click={handleAction}
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
+    title={$_("text.play")}
+    variant="primary"
 >
     <MaterialSymbol name="play_arrow" />
     <span class="label">{$_("text.play")}</span>

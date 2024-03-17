@@ -26,15 +26,15 @@
 </script>
 
 <sl-drawer
-    label={$_("text.playlistAddTo")}
     bind:this={drawer}
-    on:sl-request-close={keepDrawerOpen}
+    label={$_("text.playlistAddTo")}
     on:sl-after-hide
+    on:sl-request-close={keepDrawerOpen}
 >
     <PlaylistSelector
-        type="playlists"
-        showSelected={true}
         bind:selectedPlaylist
+        showSelected={true}
+        type="playlists"
     />
 
     <sl-checkbox
@@ -45,27 +45,27 @@
     </sl-checkbox>
 
     <sl-button
+        on:click={() => drawerEdit.show()}
         slot="footer"
         variant="primary"
-        on:click={() => drawerEdit.show()}
     >
         New Playlist
     </sl-button>
 
     <sl-button
+        disabled={!selectedPlaylist}
+        on:click={handleSave}
         slot="footer"
         variant="primary"
-        on:click={handleSave}
-        disabled={!selectedPlaylist}
     >
         Add
     </sl-button>
 
     <DrawerEdit
-        contained
-        bind:this={drawerEdit}
-        isNew={true}
         bind:playlist={selectedPlaylist}
+        bind:this={drawerEdit}
+        contained
+        isNew={true}
         on:created={handleSave}
     />
 </sl-drawer>

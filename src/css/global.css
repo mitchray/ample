@@ -1,4 +1,4 @@
-@import 'material-symbols/outlined.css';
+@import "material-symbols/outlined.css";
 
 /* font paths are relative to build directory */
 
@@ -52,25 +52,25 @@
     /* Base Colors - based on the Harmony color palette https://evilmartians.com/opensource/harmony */
     /*--hue-primary:   290;*/
     /*--hue-secondary: 220;*/
-    --hue-green:     140;
-    --hue-red:       20;
-    --hue-blue:      240;
-    --hue-yellow:    66;
-    --hue-black:     275;
+    --hue-green: 140;
+    --hue-red: 20;
+    --hue-blue: 240;
+    --hue-yellow: 66;
+    --hue-black: 275;
 
-    --lightness-50:  98.83%;
+    --lightness-50: 98.83%;
     --lightness-100: 96.68%;
     --lightness-200: 92.19%;
     --lightness-300: 86.13%;
     --lightness-400: 80.08%;
     --lightness-500: 74.22%;
-    --lightness-600: 62.70%;
+    --lightness-600: 62.7%;
     --lightness-700: 53.52%;
     --lightness-800: 41.99%;
     --lightness-900: 30.66%;
     --lightness-950: 19.34%;
 
-    --chroma-50:  0.005;
+    --chroma-50: 0.005;
     --chroma-100: 0.017;
     --chroma-200: 0.042;
     --chroma-300: 0.078;
@@ -83,119 +83,337 @@
     --chroma-950: 0.041;
 
     /* User accent 1 */
-    --swatch-primary-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-primary));
-    --swatch-primary-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-primary));
-    --swatch-primary-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-primary));
-    --swatch-primary-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-primary));
-    --swatch-primary-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-primary));
-    --swatch-primary-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-primary));
-    --swatch-primary-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-primary));
-    --swatch-primary-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-primary));
-    --swatch-primary-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-primary));
-    --swatch-primary-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-primary));
-    --swatch-primary-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-primary));
+    --swatch-primary-50: oklch(
+        var(--lightness-50) var(--chroma-50) var(--hue-primary)
+    );
+    --swatch-primary-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-primary)
+    );
+    --swatch-primary-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-primary)
+    );
+    --swatch-primary-300: oklch(
+        var(--lightness-300) var(--chroma-300) var(--hue-primary)
+    );
+    --swatch-primary-400: oklch(
+        var(--lightness-400) var(--chroma-400) var(--hue-primary)
+    );
+    --swatch-primary-500: oklch(
+        var(--lightness-500) var(--chroma-500) var(--hue-primary)
+    );
+    --swatch-primary-600: oklch(
+        var(--lightness-600) var(--chroma-600) var(--hue-primary)
+    );
+    --swatch-primary-700: oklch(
+        var(--lightness-700) var(--chroma-700) var(--hue-primary)
+    );
+    --swatch-primary-800: oklch(
+        var(--lightness-800) var(--chroma-800) var(--hue-primary)
+    );
+    --swatch-primary-900: oklch(
+        var(--lightness-900) var(--chroma-900) var(--hue-primary)
+    );
+    --swatch-primary-950: oklch(
+        var(--lightness-950) var(--chroma-950) var(--hue-primary)
+    );
 
     /* User background */
-    --swatch-secondary-50:  oklch(var(--lightness-50)  var(--chroma-override, var(--chroma-50))  var(--hue-secondary));
-    --swatch-secondary-100: oklch(var(--lightness-100) var(--chroma-override, var(--chroma-100)) var(--hue-secondary));
-    --swatch-secondary-200: oklch(var(--lightness-200) var(--chroma-override, var(--chroma-200)) var(--hue-secondary));
-    --swatch-secondary-300: oklch(var(--lightness-300) var(--chroma-override, var(--chroma-300)) var(--hue-secondary));
-    --swatch-secondary-400: oklch(var(--lightness-400) var(--chroma-override, var(--chroma-400)) var(--hue-secondary));
-    --swatch-secondary-500: oklch(var(--lightness-500) var(--chroma-override, var(--chroma-500)) var(--hue-secondary));
-    --swatch-secondary-600: oklch(var(--lightness-600) var(--chroma-override, var(--chroma-600)) var(--hue-secondary));
-    --swatch-secondary-700: oklch(var(--lightness-700) var(--chroma-override, var(--chroma-700)) var(--hue-secondary));
-    --swatch-secondary-800: oklch(var(--lightness-800) var(--chroma-override, var(--chroma-800)) var(--hue-secondary));
-    --swatch-secondary-900: oklch(var(--lightness-900) var(--chroma-override, var(--chroma-900)) var(--hue-secondary));
-    --swatch-secondary-950: oklch(var(--lightness-950) var(--chroma-override, var(--chroma-950)) var(--hue-secondary));
+    --swatch-secondary-50: oklch(
+        var(--lightness-50) var(--chroma-override, var(--chroma-50))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-100: oklch(
+        var(--lightness-100) var(--chroma-override, var(--chroma-100))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-200: oklch(
+        var(--lightness-200) var(--chroma-override, var(--chroma-200))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-300: oklch(
+        var(--lightness-300) var(--chroma-override, var(--chroma-300))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-400: oklch(
+        var(--lightness-400) var(--chroma-override, var(--chroma-400))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-500: oklch(
+        var(--lightness-500) var(--chroma-override, var(--chroma-500))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-600: oklch(
+        var(--lightness-600) var(--chroma-override, var(--chroma-600))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-700: oklch(
+        var(--lightness-700) var(--chroma-override, var(--chroma-700))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-800: oklch(
+        var(--lightness-800) var(--chroma-override, var(--chroma-800))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-900: oklch(
+        var(--lightness-900) var(--chroma-override, var(--chroma-900))
+            var(--hue-secondary)
+    );
+    --swatch-secondary-950: oklch(
+        var(--lightness-950) var(--chroma-override, var(--chroma-950))
+            var(--hue-secondary)
+    );
 
     /* User background */
-    --swatch-background-50:  oklch(var(--lightness-50)  var(--chroma-override, var(--chroma-50))  var(--user-hue-background));
-    --swatch-background-100: oklch(var(--lightness-100) var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
-    --swatch-background-200: oklch(var(--lightness-200) var(--chroma-override, var(--chroma-200)) var(--user-hue-background));
-    --swatch-background-300: oklch(var(--lightness-300) var(--chroma-override, var(--chroma-300)) var(--user-hue-background));
-    --swatch-background-400: oklch(var(--lightness-400) var(--chroma-override, var(--chroma-400)) var(--user-hue-background));
-    --swatch-background-500: oklch(var(--lightness-500) var(--chroma-override, var(--chroma-500)) var(--user-hue-background));
-    --swatch-background-600: oklch(var(--lightness-600) var(--chroma-override, var(--chroma-600)) var(--user-hue-background));
-    --swatch-background-700: oklch(var(--lightness-700) var(--chroma-override, var(--chroma-700)) var(--user-hue-background));
-    --swatch-background-800: oklch(var(--lightness-800) var(--chroma-override, var(--chroma-800)) var(--user-hue-background));
-    --swatch-background-900: oklch(var(--lightness-900) var(--chroma-override, var(--chroma-900)) var(--user-hue-background));
-    --swatch-background-950: oklch(var(--lightness-950) var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+    --swatch-background-50: oklch(
+        var(--lightness-50) var(--chroma-override, var(--chroma-50))
+            var(--user-hue-background)
+    );
+    --swatch-background-100: oklch(
+        var(--lightness-100) var(--chroma-override, var(--chroma-100))
+            var(--user-hue-background)
+    );
+    --swatch-background-200: oklch(
+        var(--lightness-200) var(--chroma-override, var(--chroma-200))
+            var(--user-hue-background)
+    );
+    --swatch-background-300: oklch(
+        var(--lightness-300) var(--chroma-override, var(--chroma-300))
+            var(--user-hue-background)
+    );
+    --swatch-background-400: oklch(
+        var(--lightness-400) var(--chroma-override, var(--chroma-400))
+            var(--user-hue-background)
+    );
+    --swatch-background-500: oklch(
+        var(--lightness-500) var(--chroma-override, var(--chroma-500))
+            var(--user-hue-background)
+    );
+    --swatch-background-600: oklch(
+        var(--lightness-600) var(--chroma-override, var(--chroma-600))
+            var(--user-hue-background)
+    );
+    --swatch-background-700: oklch(
+        var(--lightness-700) var(--chroma-override, var(--chroma-700))
+            var(--user-hue-background)
+    );
+    --swatch-background-800: oklch(
+        var(--lightness-800) var(--chroma-override, var(--chroma-800))
+            var(--user-hue-background)
+    );
+    --swatch-background-900: oklch(
+        var(--lightness-900) var(--chroma-override, var(--chroma-900))
+            var(--user-hue-background)
+    );
+    --swatch-background-950: oklch(
+        var(--lightness-950) var(--chroma-override, var(--chroma-950))
+            var(--user-hue-background)
+    );
 
     /* User accent 2 */
-    --swatch-tertiary-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-tertiary));
-    --swatch-tertiary-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-tertiary));
-    --swatch-tertiary-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-tertiary));
-    --swatch-tertiary-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-tertiary));
-    --swatch-tertiary-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-tertiary));
-    --swatch-tertiary-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-tertiary));
-    --swatch-tertiary-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-tertiary));
-    --swatch-tertiary-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-tertiary));
-    --swatch-tertiary-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-tertiary));
-    --swatch-tertiary-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-tertiary));
-    --swatch-tertiary-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-tertiary));
+    --swatch-tertiary-50: oklch(
+        var(--lightness-50) var(--chroma-50) var(--hue-tertiary)
+    );
+    --swatch-tertiary-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-tertiary)
+    );
+    --swatch-tertiary-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-tertiary)
+    );
+    --swatch-tertiary-300: oklch(
+        var(--lightness-300) var(--chroma-300) var(--hue-tertiary)
+    );
+    --swatch-tertiary-400: oklch(
+        var(--lightness-400) var(--chroma-400) var(--hue-tertiary)
+    );
+    --swatch-tertiary-500: oklch(
+        var(--lightness-500) var(--chroma-500) var(--hue-tertiary)
+    );
+    --swatch-tertiary-600: oklch(
+        var(--lightness-600) var(--chroma-600) var(--hue-tertiary)
+    );
+    --swatch-tertiary-700: oklch(
+        var(--lightness-700) var(--chroma-700) var(--hue-tertiary)
+    );
+    --swatch-tertiary-800: oklch(
+        var(--lightness-800) var(--chroma-800) var(--hue-tertiary)
+    );
+    --swatch-tertiary-900: oklch(
+        var(--lightness-900) var(--chroma-900) var(--hue-tertiary)
+    );
+    --swatch-tertiary-950: oklch(
+        var(--lightness-950) var(--chroma-950) var(--hue-tertiary)
+    );
 
     /* max chroma 200 */
-    --swatch-neutral-50:  oklch(var(--lightness-50)  var(--chroma-50) var(--hue-secondary));
-    --swatch-neutral-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-secondary));
-    --swatch-neutral-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-300: oklch(var(--lightness-300) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-400: oklch(var(--lightness-400) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-500: oklch(var(--lightness-500) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-600: oklch(var(--lightness-600) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-700: oklch(var(--lightness-700) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-800: oklch(var(--lightness-800) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-900: oklch(var(--lightness-900) var(--chroma-200) var(--hue-secondary));
-    --swatch-neutral-950: oklch(var(--lightness-950) var(--chroma-200) var(--hue-secondary));
+    --swatch-neutral-50: oklch(
+        var(--lightness-50) var(--chroma-50) var(--hue-secondary)
+    );
+    --swatch-neutral-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-secondary)
+    );
+    --swatch-neutral-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-300: oklch(
+        var(--lightness-300) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-400: oklch(
+        var(--lightness-400) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-500: oklch(
+        var(--lightness-500) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-600: oklch(
+        var(--lightness-600) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-700: oklch(
+        var(--lightness-700) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-800: oklch(
+        var(--lightness-800) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-900: oklch(
+        var(--lightness-900) var(--chroma-200) var(--hue-secondary)
+    );
+    --swatch-neutral-950: oklch(
+        var(--lightness-950) var(--chroma-200) var(--hue-secondary)
+    );
 
-    --swatch-green-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-green));
-    --swatch-green-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-green));
-    --swatch-green-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-green));
-    --swatch-green-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-green));
-    --swatch-green-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-green));
-    --swatch-green-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-green));
-    --swatch-green-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-green));
-    --swatch-green-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-green));
-    --swatch-green-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-green));
-    --swatch-green-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-green));
-    --swatch-green-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-green));
+    --swatch-green-50: oklch(
+        var(--lightness-50) var(--chroma-50) var(--hue-green)
+    );
+    --swatch-green-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-green)
+    );
+    --swatch-green-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-green)
+    );
+    --swatch-green-300: oklch(
+        var(--lightness-300) var(--chroma-300) var(--hue-green)
+    );
+    --swatch-green-400: oklch(
+        var(--lightness-400) var(--chroma-400) var(--hue-green)
+    );
+    --swatch-green-500: oklch(
+        var(--lightness-500) var(--chroma-500) var(--hue-green)
+    );
+    --swatch-green-600: oklch(
+        var(--lightness-600) var(--chroma-600) var(--hue-green)
+    );
+    --swatch-green-700: oklch(
+        var(--lightness-700) var(--chroma-700) var(--hue-green)
+    );
+    --swatch-green-800: oklch(
+        var(--lightness-800) var(--chroma-800) var(--hue-green)
+    );
+    --swatch-green-900: oklch(
+        var(--lightness-900) var(--chroma-900) var(--hue-green)
+    );
+    --swatch-green-950: oklch(
+        var(--lightness-950) var(--chroma-950) var(--hue-green)
+    );
 
-    --swatch-red-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-red));
-    --swatch-red-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-red));
-    --swatch-red-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-red));
-    --swatch-red-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-red));
-    --swatch-red-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-red));
-    --swatch-red-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-red));
-    --swatch-red-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-red));
-    --swatch-red-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-red));
-    --swatch-red-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-red));
-    --swatch-red-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-red));
-    --swatch-red-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-red));
+    --swatch-red-50: oklch(var(--lightness-50) var(--chroma-50) var(--hue-red));
+    --swatch-red-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-red)
+    );
+    --swatch-red-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-red)
+    );
+    --swatch-red-300: oklch(
+        var(--lightness-300) var(--chroma-300) var(--hue-red)
+    );
+    --swatch-red-400: oklch(
+        var(--lightness-400) var(--chroma-400) var(--hue-red)
+    );
+    --swatch-red-500: oklch(
+        var(--lightness-500) var(--chroma-500) var(--hue-red)
+    );
+    --swatch-red-600: oklch(
+        var(--lightness-600) var(--chroma-600) var(--hue-red)
+    );
+    --swatch-red-700: oklch(
+        var(--lightness-700) var(--chroma-700) var(--hue-red)
+    );
+    --swatch-red-800: oklch(
+        var(--lightness-800) var(--chroma-800) var(--hue-red)
+    );
+    --swatch-red-900: oklch(
+        var(--lightness-900) var(--chroma-900) var(--hue-red)
+    );
+    --swatch-red-950: oklch(
+        var(--lightness-950) var(--chroma-950) var(--hue-red)
+    );
 
-    --swatch-blue-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-blue));
-    --swatch-blue-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-blue));
-    --swatch-blue-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-blue));
-    --swatch-blue-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-blue));
-    --swatch-blue-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-blue));
-    --swatch-blue-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-blue));
-    --swatch-blue-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-blue));
-    --swatch-blue-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-blue));
-    --swatch-blue-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-blue));
-    --swatch-blue-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-blue));
-    --swatch-blue-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-blue));
+    --swatch-blue-50: oklch(
+        var(--lightness-50) var(--chroma-50) var(--hue-blue)
+    );
+    --swatch-blue-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-blue)
+    );
+    --swatch-blue-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-blue)
+    );
+    --swatch-blue-300: oklch(
+        var(--lightness-300) var(--chroma-300) var(--hue-blue)
+    );
+    --swatch-blue-400: oklch(
+        var(--lightness-400) var(--chroma-400) var(--hue-blue)
+    );
+    --swatch-blue-500: oklch(
+        var(--lightness-500) var(--chroma-500) var(--hue-blue)
+    );
+    --swatch-blue-600: oklch(
+        var(--lightness-600) var(--chroma-600) var(--hue-blue)
+    );
+    --swatch-blue-700: oklch(
+        var(--lightness-700) var(--chroma-700) var(--hue-blue)
+    );
+    --swatch-blue-800: oklch(
+        var(--lightness-800) var(--chroma-800) var(--hue-blue)
+    );
+    --swatch-blue-900: oklch(
+        var(--lightness-900) var(--chroma-900) var(--hue-blue)
+    );
+    --swatch-blue-950: oklch(
+        var(--lightness-950) var(--chroma-950) var(--hue-blue)
+    );
 
-    --swatch-yellow-50:  oklch(var(--lightness-50)  var(--chroma-50)  var(--hue-yellow));
-    --swatch-yellow-100: oklch(var(--lightness-100) var(--chroma-100) var(--hue-yellow));
-    --swatch-yellow-200: oklch(var(--lightness-200) var(--chroma-200) var(--hue-yellow));
-    --swatch-yellow-300: oklch(var(--lightness-300) var(--chroma-300) var(--hue-yellow));
-    --swatch-yellow-400: oklch(var(--lightness-400) var(--chroma-400) var(--hue-yellow));
-    --swatch-yellow-500: oklch(var(--lightness-500) var(--chroma-500) var(--hue-yellow));
-    --swatch-yellow-600: oklch(var(--lightness-600) var(--chroma-600) var(--hue-yellow));
-    --swatch-yellow-700: oklch(var(--lightness-700) var(--chroma-700) var(--hue-yellow));
-    --swatch-yellow-800: oklch(var(--lightness-800) var(--chroma-800) var(--hue-yellow));
-    --swatch-yellow-900: oklch(var(--lightness-900) var(--chroma-900) var(--hue-yellow));
-    --swatch-yellow-950: oklch(var(--lightness-950) var(--chroma-950) var(--hue-yellow));
+    --swatch-yellow-50: oklch(
+        var(--lightness-50) var(--chroma-50) var(--hue-yellow)
+    );
+    --swatch-yellow-100: oklch(
+        var(--lightness-100) var(--chroma-100) var(--hue-yellow)
+    );
+    --swatch-yellow-200: oklch(
+        var(--lightness-200) var(--chroma-200) var(--hue-yellow)
+    );
+    --swatch-yellow-300: oklch(
+        var(--lightness-300) var(--chroma-300) var(--hue-yellow)
+    );
+    --swatch-yellow-400: oklch(
+        var(--lightness-400) var(--chroma-400) var(--hue-yellow)
+    );
+    --swatch-yellow-500: oklch(
+        var(--lightness-500) var(--chroma-500) var(--hue-yellow)
+    );
+    --swatch-yellow-600: oklch(
+        var(--lightness-600) var(--chroma-600) var(--hue-yellow)
+    );
+    --swatch-yellow-700: oklch(
+        var(--lightness-700) var(--chroma-700) var(--hue-yellow)
+    );
+    --swatch-yellow-800: oklch(
+        var(--lightness-800) var(--chroma-800) var(--hue-yellow)
+    );
+    --swatch-yellow-900: oklch(
+        var(--lightness-900) var(--chroma-900) var(--hue-yellow)
+    );
+    --swatch-yellow-950: oklch(
+        var(--lightness-950) var(--chroma-950) var(--hue-yellow)
+    );
 
-    --swatch-black-50:  oklch(var(--lightness-50)  0.005 var(--hue-black));
+    --swatch-black-50: oklch(var(--lightness-50) 0.005 var(--hue-black));
     --swatch-black-100: oklch(var(--lightness-100) 0.018 var(--hue-black));
     --swatch-black-200: oklch(var(--lightness-200) 0.024 var(--hue-black));
     --swatch-black-300: oklch(var(--lightness-300) 0.024 var(--hue-black));
@@ -212,9 +430,15 @@
     /*--user-hue-accent-1: 140; !* user defined *!*/
     /*--user-hue-accent-2: 340; !* user defined *!*/
     /*--user-color-waveform: seagreen; !* user defined *!*/
-    --hue-primary: var(--user-hue-accent-1, var(--user-hue-background)); /* fallback to background */
+    --hue-primary: var(
+        --user-hue-accent-1,
+        var(--user-hue-background)
+    ); /* fallback to background */
     --hue-secondary: var(--user-hue-background); /* based on hue-background */
-    --hue-tertiary: var(--user-hue-accent-2, var(--user-hue-background)); /* fallback to hue-background */
+    --hue-tertiary: var(
+        --user-hue-accent-2,
+        var(--user-hue-background)
+    ); /* fallback to hue-background */
 
     /* Shadows */
     --shadow-inner: oklch(var(--color-shadow-val) / 0.12) 0px 2px 4px 0px inset;
@@ -249,26 +473,48 @@
     --color-on-tertiary-container-variant: var(--swatch-tertiary-400);
     --color-background: var(--swatch-background-950);
     --color-on-background: var(--swatch-background-200);
-    --color-surface: oklch(18.7% var(--chroma-override, var(--chroma-900)) var(--user-hue-background));
+    --color-surface: oklch(
+        18.7% var(--chroma-override, var(--chroma-900))
+            var(--user-hue-background)
+    );
     --color-on-surface: var(--swatch-background-200);
-    --color-surface-variant: oklch(39.8% var(--chroma-override, 0.017) var(--user-hue-background));
+    --color-surface-variant: oklch(
+        39.8% var(--chroma-override, 0.017) var(--user-hue-background)
+    );
     --color-on-surface-variant: var(--swatch-background-400);
-    --color-outline: oklch(65.7% var(--chroma-override, 0.05) var(--user-hue-background));
-    --color-outline-variant: oklch(39.8% var(--chroma-override, 0.05) var(--user-hue-background));
+    --color-outline: oklch(
+        65.7% var(--chroma-override, 0.05) var(--user-hue-background)
+    );
+    --color-outline-variant: oklch(
+        39.8% var(--chroma-override, 0.05) var(--user-hue-background)
+    );
     --color-shadow: oklch(0% 0 var(--user-hue-background));
     --color-scrim: oklch(0% 0 var(--user-hue-background));
     --color-inverse-surface: var(--swatch-background-200);
     --color-inverse-on-surface: var(--swatch-background-900);
     --color-inverse-primary: var(--swatch-primary-700);
-    --color-surface-container-lowest: oklch(16.418% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
-    --color-surface-container-low: oklch(23.7% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
-    --color-surface-container: oklch(25.5% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
-    --color-surface-container-high: oklch(28.6% var(--chroma-override, var(--chroma-950)) var(--user-hue-background));
+    --color-surface-container-lowest: oklch(
+        16.418% var(--chroma-override, var(--chroma-950))
+            var(--user-hue-background)
+    );
+    --color-surface-container-low: oklch(
+        23.7% var(--chroma-override, var(--chroma-950))
+            var(--user-hue-background)
+    );
+    --color-surface-container: oklch(
+        25.5% var(--chroma-override, var(--chroma-950))
+            var(--user-hue-background)
+    );
+    --color-surface-container-high: oklch(
+        28.6% var(--chroma-override, var(--chroma-950))
+            var(--user-hue-background)
+    );
 
-    --color-waveform:   var(--user-color-waveform);
-    --color-shadow-val: var(--lightness-950) var(--chroma-950) var(--hue-primary);
-    --color-rating:     var(--swatch-yellow-500);
-    --color-favorite:   var(--swatch-red-600);
+    --color-waveform: var(--user-color-waveform);
+    --color-shadow-val: var(--lightness-950) var(--chroma-950)
+        var(--hue-primary);
+    --color-rating: var(--swatch-yellow-500);
+    --color-favorite: var(--swatch-red-600);
 
     --color-btn-default-text: var(--swatch-primary-400);
     --color-btn-default-text-hover: var(--swatch-primary-100);
@@ -337,28 +583,63 @@
     --color-tertiary-container-variant: var(--swatch-tertiary-200);
     --color-on-tertiary-container: var(--swatch-tertiary-900);
     --color-on-tertiary-container-variant: var(--swatch-tertiary-800);
-    --color-background: oklch(98.4% var(--chroma-override, 0.013) var(--user-hue-background));
-    --color-on-background: oklch(22.7% var(--chroma-override, 0.01) var(--user-hue-background));
-    --color-surface: oklch(98.4% var(--chrome-override, 0.013) var(--user-hue-background));
-    --color-on-surface: oklch(22.7% var(--chroma-override, 0.01) var(--user-hue-background));
-    --color-surface-variant: oklch(91.6% var(--chroma-override, 0.018) var(--user-hue-background));
-    --color-on-surface-variant: oklch(39.8% var(--chroma-override, 0.017) var(--user-hue-background));
-    --color-outline: oklch(56.7% var(--chroma-override, 0.016) var(--user-hue-background));
-    --color-outline-variant: oklch(82.9% var(--chroma-override, 0.018) var(--user-hue-background));
+    --color-background: oklch(
+        98.4% var(--chroma-override, 0.013) var(--user-hue-background)
+    );
+    --color-on-background: oklch(
+        22.7% var(--chroma-override, 0.01) var(--user-hue-background)
+    );
+    --color-surface: oklch(
+        98.4% var(--chrome-override, 0.013) var(--user-hue-background)
+    );
+    --color-on-surface: oklch(
+        22.7% var(--chroma-override, 0.01) var(--user-hue-background)
+    );
+    --color-surface-variant: oklch(
+        91.6% var(--chroma-override, 0.018) var(--user-hue-background)
+    );
+    --color-on-surface-variant: oklch(
+        39.8% var(--chroma-override, 0.017) var(--user-hue-background)
+    );
+    --color-outline: oklch(
+        56.7% var(--chroma-override, 0.016) var(--user-hue-background)
+    );
+    --color-outline-variant: oklch(
+        82.9% var(--chroma-override, 0.018) var(--user-hue-background)
+    );
     --color-shadow: oklch(0% 0 var(--user-hue-background));
     --color-scrim: oklch(0% 0 var(--user-hue-background));
-    --color-inverse-surface: oklch(31.1% var(--chroma-override, 0.011) var(--user-hue-background));
-    --color-inverse-on-surface: oklch(95.9% var(--chroma-override, 0.012) var(--user-hue-background));
-    --color-inverse-primary: oklch(83.5% var(--chroma-override, 0.095) var(--hue-primary));
-    --color-surface-container-lowest: oklch(100% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
-    --color-surface-container-low: oklch(96.7% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
-    --color-surface-container: oklch(95.4% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
-    --color-surface-container-high: oklch(93.3% var(--chroma-override, var(--chroma-100)) var(--user-hue-background));
+    --color-inverse-surface: oklch(
+        31.1% var(--chroma-override, 0.011) var(--user-hue-background)
+    );
+    --color-inverse-on-surface: oklch(
+        95.9% var(--chroma-override, 0.012) var(--user-hue-background)
+    );
+    --color-inverse-primary: oklch(
+        83.5% var(--chroma-override, 0.095) var(--hue-primary)
+    );
+    --color-surface-container-lowest: oklch(
+        100% var(--chroma-override, var(--chroma-100))
+            var(--user-hue-background)
+    );
+    --color-surface-container-low: oklch(
+        96.7% var(--chroma-override, var(--chroma-100))
+            var(--user-hue-background)
+    );
+    --color-surface-container: oklch(
+        95.4% var(--chroma-override, var(--chroma-100))
+            var(--user-hue-background)
+    );
+    --color-surface-container-high: oklch(
+        93.3% var(--chroma-override, var(--chroma-100))
+            var(--user-hue-background)
+    );
 
-    --color-waveform:   var(--user-color-waveform);
-    --color-shadow-val: var(--lightness-600) var(--chroma-200) var(--hue-primary);
-    --color-rating:     var(--swatch-yellow-600);
-    --color-favorite:   var(--swatch-red-600);
+    --color-waveform: var(--user-color-waveform);
+    --color-shadow-val: var(--lightness-600) var(--chroma-200)
+        var(--hue-primary);
+    --color-rating: var(--swatch-yellow-600);
+    --color-favorite: var(--swatch-red-600);
 
     --color-btn-default-text: var(--swatch-primary-700);
     --color-btn-default-text-hover: var(--swatch-primary-900);
@@ -575,13 +856,17 @@ sl-button::part(base) {
 
 @supports (mix-blend-mode: multiply) {
     sl-button:not([variant="text"])::part(base)::after {
-        content: '';
+        content: "";
         position: absolute;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background-image: linear-gradient(to bottom, transparent 30%, currentColor 100%);
+        background-image: linear-gradient(
+            to bottom,
+            transparent 30%,
+            currentColor 100%
+        );
         z-index: 1;
         pointer-events: none;
         mix-blend-mode: multiply;

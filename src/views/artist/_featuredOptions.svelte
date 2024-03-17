@@ -1,9 +1,9 @@
 <script>
     import { _ } from "svelte-i18n";
     import {
+        PlaySongsByOtherArtists,
         Saved,
         ShowSongsByOtherArtists,
-        PlaySongsByOtherArtists,
     } from "~/stores/settings.js";
 
     function handleShowSongs(e) {
@@ -20,7 +20,7 @@
 </script>
 
 <sl-dropdown style="position: relative; z-index: 2000;">
-    <sl-button slot="trigger" size="small" caret>
+    <sl-button caret size="small" slot="trigger">
         {$_("text.options")}
     </sl-button>
 
@@ -28,10 +28,10 @@
         <sl-radio-group
             label="Display of songs by other artists"
             name="display"
-            value={$ShowSongsByOtherArtists}
             on:sl-change={(e) => {
                 handleShowSongs(e);
             }}
+            value={$ShowSongsByOtherArtists}
         >
             <sl-radio-button value="show">Show</sl-radio-button>
             <sl-radio-button value="highlight">
@@ -45,10 +45,10 @@
         <sl-radio-group
             label="Playback of songs by other artists"
             name="playback"
-            value={$PlaySongsByOtherArtists}
             on:sl-change={(e) => {
                 handlePlaySongs(e);
             }}
+            value={$PlaySongsByOtherArtists}
         >
             <sl-radio-button value="include">Include</sl-radio-button>
             <sl-radio-button value="exclude">Skip</sl-radio-button>

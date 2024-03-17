@@ -3,9 +3,9 @@
     import { API, User } from "~/stores/state";
     import Lister from "~/components/lister/lister.svelte";
     import {
+        checkbox,
         index,
         songsPreset,
-        checkbox,
     } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
 

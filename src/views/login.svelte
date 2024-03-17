@@ -3,11 +3,11 @@
     import { fade } from "svelte/transition";
     import AmpacheAPI from "javascript-ampache";
     import {
-        API,
         ampleVersion,
-        Server,
+        API,
         debugMode,
         PageTitle,
+        Server,
     } from "~/stores/state.js";
     import { loginNew } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
@@ -132,43 +132,43 @@
 
                     <p>
                         <sl-input
-                            type="text"
                             label={$_("text.username")}
-                            value={username}
+                            on:paste={handleUsername}
                             on:sl-change={handleUsername}
                             on:sl-input={handleUsername}
-                            on:paste={handleUsername}
+                            type="text"
+                            value={username}
                         ></sl-input>
                         <input
-                            type="text"
                             autocomplete="username"
                             bind:value={username}
                             hidden
+                            type="text"
                         />
                     </p>
 
                     <p>
                         <sl-input
-                            type="password"
                             label={$_("text.password")}
-                            value={password}
+                            on:paste={handlePassword}
                             on:sl-change={handlePassword}
                             on:sl-input={handlePassword}
-                            on:paste={handlePassword}
+                            type="password"
+                            value={password}
                         ></sl-input>
                         <input
-                            type="password"
                             autocomplete="current-password"
                             bind:value={password}
                             hidden
+                            type="password"
                         />
                     </p>
-                    <input type="submit" hidden />
+                    <input hidden type="submit" />
 
                     <sl-button
-                        variant="primary"
                         disabled={!$Server.url || !username || !password}
                         type="submit"
+                        variant="primary"
                     >
                         <MaterialSymbol name="login" slot="prefix" />
                         {$_("text.login")}
@@ -193,20 +193,20 @@
                     {/if}
                     <p>
                         <sl-input
-                            type="text"
                             label={$_("text.apiKey")}
-                            value={apiKey}
+                            on:paste={handleAPIkey}
                             on:sl-change={handleAPIkey}
                             on:sl-input={handleAPIkey}
-                            on:paste={handleAPIkey}
+                            type="text"
+                            value={apiKey}
                         ></sl-input>
                     </p>
 
-                    <input type="submit" hidden />
+                    <input hidden type="submit" />
                     <sl-button
-                        variant="primary"
                         disabled={!$Server.url || !apiKey}
                         type="submit"
+                        variant="primary"
                     >
                         <MaterialSymbol name="login" slot="prefix" />
                         {$_("text.login")}

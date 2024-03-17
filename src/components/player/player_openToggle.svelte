@@ -1,5 +1,5 @@
 <script>
-    import { Saved, PlayerIsOpen } from "~/stores/settings.js";
+    import { PlayerIsOpen, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function handlePlayerOpenToggle() {
@@ -10,7 +10,7 @@
 </script>
 
 <sl-tooltip content={$PlayerIsOpen ? "Hide player" : "Show player"}>
-    <sl-button circle variant="neutral" on:click={handlePlayerOpenToggle}>
+    <sl-button circle on:click={handlePlayerOpenToggle} variant="neutral">
         {#if $PlayerIsOpen}
             <MaterialSymbol name="expand_more" />
         {:else}

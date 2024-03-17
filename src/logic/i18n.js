@@ -1,4 +1,4 @@
-import { register, init, getLocaleFromNavigator } from "svelte-i18n";
+import { getLocaleFromNavigator, init, register } from "svelte-i18n";
 
 export function setupI18n() {
     register("en", () => import("../../languages/en.json"));

@@ -143,15 +143,15 @@
 </script>
 
 <sl-drawer
-    label={isNew ? $_("text.playlistNew") : $_("text.playlistEdit")}
     {...$$restProps}
     bind:this={drawer}
+    label={isNew ? $_("text.playlistNew") : $_("text.playlistEdit")}
     on:sl-request-close={keepDrawerOpen}
 >
     <sl-input
+        on:sl-input={handleChange}
         placeholder={$_("text.name")}
         type="text"
-        on:sl-input={handleChange}
         value={playlistName}
     ></sl-input>
 
@@ -163,10 +163,10 @@
     </sl-switch>
 
     <sl-button
+        disabled={!playlistName}
+        on:click={savePlaylist}
         slot="footer"
         variant="primary"
-        on:click={savePlaylist}
-        disabled={!playlistName}
     >
         Save
     </sl-button>

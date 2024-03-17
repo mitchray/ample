@@ -1,5 +1,5 @@
 <script>
-    import { Saved, QueueIsOpen } from "~/stores/settings.js";
+    import { QueueIsOpen, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { showCurrentMedia } from "~/logic/ui.js";
 
@@ -16,10 +16,10 @@
 
 <sl-tooltip content={$QueueIsOpen ? "Hide Queue" : "Show Queue"}>
     <sl-button
-        id="queue-button"
-        variant="primary"
         circle
+        id="queue-button"
         on:click={handleQueueToggle}
+        variant="primary"
     >
         <MaterialSymbol name="playlist_play" />
     </sl-button>

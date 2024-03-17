@@ -4,8 +4,8 @@
     import {
         Saved,
         SkipBelow,
-        SkipBelowRating,
         SkipBelowAllowZero,
+        SkipBelowRating,
     } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
@@ -33,23 +33,23 @@
 
 <sl-dropdown hoist placement="bottom">
     <sl-button
-        slot="trigger"
         class="rating-filter"
         class:is-enabled={$SkipBelow}
         size="small"
+        slot="trigger"
         title={$_("text.skipBelow")}
     >
-        <MaterialSymbol name="star" fill={$SkipBelow} />
+        <MaterialSymbol fill={$SkipBelow} name="star" />
     </sl-button>
 
     <sl-card>
-        <sl-switch on:sl-change={handleSkipBelow} checked={$SkipBelow}>
+        <sl-switch checked={$SkipBelow} on:sl-change={handleSkipBelow}>
             {$_("text.skipBelow")}:
         </sl-switch>
 
         <sl-select
-            value={$SkipBelowRating}
             on:sl-change={handleSkipBelowRating}
+            value={$SkipBelowRating}
         >
             <sl-option value="5">
                 {$_("text.ratingCount", { values: { count: 5 } })}
@@ -65,7 +65,7 @@
             </sl-option>
         </sl-select>
 
-        <sl-switch on:sl-change={handleAllowZero} checked={$SkipBelowAllowZero}>
+        <sl-switch checked={$SkipBelowAllowZero} on:sl-change={handleAllowZero}>
             Allow unrated items
         </sl-switch>
     </sl-card>

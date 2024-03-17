@@ -172,8 +172,8 @@
 <ListerDebug {contextKey} />
 
 <div
-    class="lister-actions"
     bind:this={actionsBind}
+    class="lister-actions"
     class:not-empty={actionsBind?.firstElementChild}
 >
     <ListerActions {contextKey} />
@@ -183,8 +183,8 @@
 
 <div class="lister-wrapper">
     <div
-        class="lister-container is-table"
         bind:this={$listerContainer}
+        class="lister-container is-table"
         class:is-virtual={$_virtualList}
         style:--rowHeight={$rowHeight + "px"}
     >

@@ -1,13 +1,13 @@
 <script>
-    import { onMount, onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import {
-        computePosition,
         autoUpdate,
+        computePosition,
         offset,
         size,
     } from "@floating-ui/dom";
     import { quintOut } from "svelte/easing";
-    import { fly, fade } from "svelte/transition";
+    import { fade, fly } from "svelte/transition";
     import { flip } from "svelte/animate";
     import { SiteContentBind } from "~/stores/elements.js";
     import { AlertsList } from "~/stores/message.js";
@@ -96,7 +96,7 @@
     });
 </script>
 
-<div class="site-alerts" bind:this={listBind}>
+<div bind:this={listBind} class="site-alerts">
     {#each freshAlerts as alert (alert.id)}
         <div
             class="card-container"

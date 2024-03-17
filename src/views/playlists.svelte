@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import Portal from "~/components/portal.svelte";
-    import { API, User, PageTitle } from "~/stores/state.js";
+    import { API, PageTitle, User } from "~/stores/state.js";
     import { Saved } from "~/stores/settings.js";
     import Lister from "~/components/lister/lister.svelte";
     import { playlistsPreset } from "~/components/lister/columns.js";
@@ -42,9 +42,9 @@
 </div>
 
 <sl-button
-    variant="primary"
-    on:click={() => drawerEdit.show()}
     class="new-playlist-button"
+    on:click={() => drawerEdit.show()}
+    variant="primary"
 >
     {$_("text.playlistNew")}
 </sl-button>

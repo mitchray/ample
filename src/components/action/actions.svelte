@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { setContext, getContext } from "svelte";
+    import { getContext, setContext } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import { API } from "~/stores/state.js";
     import { sampleSize } from "lodash-es";
@@ -19,7 +19,7 @@
         getSongsFromPlaylists,
     } from "~/logic/song.js";
     import { prepareForQueue } from "~/logic/helper.js";
-    import { get, writable } from "svelte/store";
+    import { writable } from "svelte/store";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
     import ActionPlayLast from "./items/actionPlayLast.svelte";

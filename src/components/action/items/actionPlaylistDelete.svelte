@@ -21,9 +21,9 @@
 </script>
 
 <sl-menu-item
-    variant="danger"
     on:click={handleAction}
     title={$_("text.playlistDelete")}
+    variant="danger"
 >
     <MaterialSymbol name="delete" slot="prefix" />
     {$_("text.playlistDelete")}

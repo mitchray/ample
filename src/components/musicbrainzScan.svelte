@@ -463,7 +463,7 @@
 </div>
 
 <Portal>
-    <sl-dialog label="Filters" bind:this={dialog}>
+    <sl-dialog bind:this={dialog} label="Filters">
         <div class="filters">
             <div class="group">
                 <h4>{$_("text.mbHideByStatus")}</h4>
@@ -527,7 +527,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -551,7 +551,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -570,7 +570,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -588,7 +588,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -606,7 +606,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -624,7 +624,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -648,7 +648,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -666,7 +666,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
 
@@ -686,7 +686,7 @@
                             </ul>
                         </div>
 
-                        <sl-badge variant="neutral" pill>?</sl-badge>
+                        <sl-badge pill variant="neutral">?</sl-badge>
                     </sl-tooltip>
                 </sl-checkbox>
             </div>

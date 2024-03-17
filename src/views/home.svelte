@@ -15,76 +15,76 @@
 </script>
 
 <div class="explore">
-    <sl-button size="large" href="#/favorites">
+    <sl-button href="#/favorites" size="large">
         <MaterialSymbol name="favorite" slot="prefix" />
         {$_("text.favorites")}
     </sl-button>
 
-    <sl-button size="large" href="#/trending">
+    <sl-button href="#/trending" size="large">
         <MaterialSymbol name="trending_up" slot="prefix" />
         {$_("text.trending")}
     </sl-button>
 
-    <sl-button size="large" href="#/top-rated">
+    <sl-button href="#/top-rated" size="large">
         <MaterialSymbol name="star" slot="prefix" />
         {$_("text.topRated")}
     </sl-button>
 
-    <sl-button size="large" href="#/forgotten">
+    <sl-button href="#/forgotten" size="large">
         <MaterialSymbol name="trending_down" slot="prefix" />
         {$_("text.forgotten")}
     </sl-button>
 
-    <sl-button size="large" href="#/random">
+    <sl-button href="#/random" size="large">
         <MaterialSymbol name="gesture" slot="prefix" />
         {$_("text.random")}
     </sl-button>
 
-    <sl-button size="large" href="#/unrated">
-        <MaterialSymbol name="star" slot="prefix" fill={false} />
+    <sl-button href="#/unrated" size="large">
+        <MaterialSymbol fill={false} name="star" slot="prefix" />
         {$_("text.unrated")}
     </sl-button>
 </div>
 
 <CardList
     card={AlbumCard}
-    type="album"
     dataProvider={newestAlbums}
-    limit="12"
-    layout="scroll"
     heading={$_("text.newestAlbums")}
+    layout="scroll"
+    limit="12"
+    type="album"
     viewAllURL="#/newest"
 />
 
 <CardList
     card={MixCard}
-    type="mix"
     dataProvider={artistMixes}
+    heading={$_("text.artistMixes")}
+    layout="scroll"
     limit="5"
     refresh="true"
-    layout="scroll"
-    heading={$_("text.artistMixes")}
+    type="mix"
 />
 
 <CardList
-    card={SongCard}
-    type="song"
-    dataProvider={recentSongs}
-    limit="10"
-    layout="scroll"
-    heading={$_("text.recentlyPlayed")}
-    viewAllURL="#/recent"
     autoRefreshInterval={5}
+    card={SongCard}
+    dataProvider={recentSongs}
+    heading={$_("text.recentlyPlayed")}
+    layout="scroll"
+    limit="10"
+    type="song"
+    viewAllURL="#/recent"
 />
 
 <CardList
     card={AlbumCard}
-    type="album"
     dataProvider={randomAlbums}
+    heading={$_("text.randomAlbums")}
+    layout="scroll"
     limit="12"
     refresh="true"
-    layout="scroll"
-    heading={$_("text.randomAlbums")}
+    type="album"
 />
 
 <style>

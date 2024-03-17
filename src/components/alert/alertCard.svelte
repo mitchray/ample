@@ -30,11 +30,11 @@
 
     <div class="actions">
         <sl-button
-            variant="text"
             class="remove"
             on:click={() => {
                 removeAlert(item.id);
             }}
+            variant="text"
         >
             <MaterialSymbol name="close" />
         </sl-button>

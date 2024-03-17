@@ -1,8 +1,8 @@
 <script>
     import {
         CurrentMedia,
-        NowPlayingQueue,
         NowPlayingIndex,
+        NowPlayingQueue,
     } from "~/stores/state";
     import {
         SkipBelow,
@@ -77,10 +77,10 @@
 
     <span class="thumb" on:mousedown={startDrag} on:touchstart={startDrag}>
         <Art
-            size="thumbnail"
             data={media}
-            type={media.object_type}
             radius="2px"
+            size="thumbnail"
+            type={media.object_type}
         />
     </span>
 
@@ -121,8 +121,8 @@
     </span>
 
     <sl-dropdown
-        on:click|stopPropagation
         class="more"
+        on:click|stopPropagation
         on:sl-show={async () => {
             media.isActionsLoaded = true;
             await ticks(2);

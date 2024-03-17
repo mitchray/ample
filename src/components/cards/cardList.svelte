@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { onMount, onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
@@ -144,7 +144,8 @@
 
     {#if refresh}
         <sl-button on:click={refreshItems} size="small">
-            <MaterialSymbol name="refresh" slot="prefix" /> Refresh
+            <MaterialSymbol name="refresh" slot="prefix" />
+            Refresh
         </sl-button>
     {/if}
 
@@ -184,8 +185,8 @@
 </div>
 
 <ul
-    class="cardlist-{layout} {genericOverride ? 'generic' : type}-{layout}"
     bind:this={containerBind}
+    class="cardlist-{layout} {genericOverride ? 'generic' : type}-{layout}"
     on:scroll={parseScroll}
 >
     {#if loading && (loadCount < 1 || refresh) && limit}

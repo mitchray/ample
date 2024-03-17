@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import { getSongsFromArtist, sortSongsByName } from "~/logic/song.js";
     import Lister from "~/components/lister/lister.svelte";
-    import { track, songsPreset } from "~/components/lister/columns.js";
+    import { songsPreset, track } from "~/components/lister/columns.js";
 
     export let artistID;
 

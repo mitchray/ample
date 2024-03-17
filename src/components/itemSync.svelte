@@ -1,5 +1,5 @@
 <script>
-    import { User, Server } from "~/stores/state.js";
+    import { Server, User } from "~/stores/state.js";
     import { Saved } from "~/stores/settings.js";
 
     let timer;

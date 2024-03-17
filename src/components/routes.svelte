@@ -75,12 +75,12 @@
     }
 </script>
 
-<div class="site-content" bind:this={$SiteContentBind}>
+<div bind:this={$SiteContentBind} class="site-content">
     <div class="site-content-inner">
         <Router
-            {routes}
             on:routeLoading={routeLoading}
             restoreScrollState={true}
+            {routes}
         />
     </div>
 </div>

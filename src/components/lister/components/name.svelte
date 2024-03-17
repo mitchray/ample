@@ -1,10 +1,7 @@
 <script>
     import { getContext } from "svelte";
-    import { IsMobile } from "/src/stores/state.js";
     import { CurrentMedia } from "~/stores/state.js";
-    import { formatTotalTime } from "~/logic/formatters.js";
     import Art from "~/components/art.svelte";
-    import ArtistList from "~/components/artist/artistList.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     /** @type {Object} */

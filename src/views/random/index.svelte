@@ -39,7 +39,8 @@
     <h1 class="page-title">{title}</h1>
 
     <sl-button on:click={refreshItems} size="small">
-        <MaterialSymbol name="refresh" slot="prefix" /> Refresh
+        <MaterialSymbol name="refresh" slot="prefix" />
+        Refresh
     </sl-button>
 </div>
 

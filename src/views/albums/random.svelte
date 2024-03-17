@@ -1,5 +1,5 @@
 <script>
-    import { randomAlbums, topAlbums } from "~/logic/album.js";
+    import { randomAlbums } from "~/logic/album.js";
     import { _ } from "svelte-i18n";
     import Lister from "~/components/lister/lister.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";

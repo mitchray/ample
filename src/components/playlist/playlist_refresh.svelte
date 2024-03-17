@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
-    import { setIndexes, getPlaylistIDFromUrl } from "~/logic/helper.js";
+    import { getPlaylistIDFromUrl, setIndexes } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
 
     export let contextKey;
@@ -22,6 +22,6 @@
     }
 </script>
 
-<sl-button title={$_("text.refresh")} on:click={handleRefresh}>
+<sl-button on:click={handleRefresh} title={$_("text.refresh")}>
     {$_("text.refresh")}
 </sl-button>

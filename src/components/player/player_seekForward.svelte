@@ -5,10 +5,10 @@
 </script>
 
 <sl-button
+    disabled={$NowPlayingQueue.length === 0}
     on:click={() => {
         $MediaPlayer.goForward(30);
     }}
-    disabled={$NowPlayingQueue.length === 0}
     variant="text"
 >
     <MaterialSymbol name="redo" />

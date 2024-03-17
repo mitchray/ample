@@ -29,10 +29,10 @@
 
 <sl-dropdown bind:this={dropdown} on:pointerleave={handleOut} placement="top">
     <sl-button
-        slot="trigger"
+        disabled={$NowPlayingQueue.length === 0}
         on:click={() => $MediaPlayer.previous()}
         on:pointerover={handleOver}
-        disabled={$NowPlayingQueue.length === 0}
+        slot="trigger"
     >
         <MaterialSymbol name="skip_previous" />
     </sl-button>

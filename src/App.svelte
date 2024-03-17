@@ -6,7 +6,7 @@
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
-    import { User, Server, ShowSearch } from "~/stores/state.js";
+    import { Server, ShowSearch, User } from "~/stores/state.js";
     import { loadSettings, Theme } from "~/stores/settings";
     import { extendSession, validateSession } from "~/logic/user";
     import { isLoading as i18nIsLoading } from "svelte-i18n";
@@ -14,8 +14,6 @@
 
     // Use custom string as dnd-action ID
     import { overrideItemIdKeyNameBeforeInitialisingDndZones } from "svelte-dnd-action";
-    overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
-
     import ThemeHandler from "~/components/theme/themeHandler.svelte";
     import Header from "~/components/header.svelte";
     import Sidebar from "~/components/sidebar/sidebar.svelte";
@@ -31,6 +29,8 @@
     import LoginPage from "~/views/login.svelte";
     import { hideLoadingOverlay } from "~/logic/ui.js";
     import localforage from "localforage";
+
+    overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
 
     setupI18n();
 

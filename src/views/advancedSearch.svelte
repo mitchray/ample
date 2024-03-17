@@ -18,10 +18,10 @@
 </div>
 
 <CustomSearch
-    bind:results
     bind:loadedTime
     bind:loading
+    bind:results
     bind:selectedObjectType={type}
 />
 
-<CustomSearchResults bind:results bind:loadedTime bind:loading bind:type />
+<CustomSearchResults bind:loadedTime bind:loading bind:results bind:type />

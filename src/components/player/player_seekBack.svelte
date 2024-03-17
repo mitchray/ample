@@ -5,10 +5,10 @@
 </script>
 
 <sl-button
+    disabled={$NowPlayingQueue.length === 0}
     on:click={() => {
         $MediaPlayer.goBackward(10);
     }}
-    disabled={$NowPlayingQueue.length === 0}
     variant="text"
 >
     <MaterialSymbol name="undo" />

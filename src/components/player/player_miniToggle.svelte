@@ -1,5 +1,5 @@
 <script>
-    import { Saved, PlayerIsMini } from "~/stores/settings.js";
+    import { PlayerIsMini, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function handlePlayerMiniToggle() {

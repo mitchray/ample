@@ -3,9 +3,9 @@
     import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
     import {
-        shuffleArray,
-        setIndexes,
         getPlaylistIDFromUrl,
+        setIndexes,
+        shuffleArray,
     } from "~/logic/helper.js";
 
     export let contextKey;

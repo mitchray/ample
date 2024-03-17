@@ -42,9 +42,9 @@
 </script>
 
 <sl-menu-item
+    {loading}
     on:click={handleAction}
     title={$_("text.updateFromTags")}
-    {loading}
 >
     <MaterialSymbol name="sync" slot="prefix" />
     {$_("text.updateFromTags")}

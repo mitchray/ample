@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import WavesurferConnector from "~/logic/player.js";
-    import { PlayerIsOpen, PlayerIsMini } from "~/stores/settings.js";
+    import { PlayerIsMini, PlayerIsOpen } from "~/stores/settings.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
     import OpenToggle from "~/components/player/player_openToggle.svelte";
     import QueueToggle from "~/components/player/player_queueToggle.svelte";
@@ -30,12 +30,12 @@
 </script>
 
 <div
-    class="site-player"
-    bind:this={$SitePlayerBind}
-    style:height={$PlayerIsOpen ? "auto" : "0"}
     bind:clientHeight={currentHeight}
-    class:is-open={$PlayerIsOpen}
+    bind:this={$SitePlayerBind}
+    class="site-player"
     class:is-expanded={!$PlayerIsMini}
+    class:is-open={$PlayerIsOpen}
+    style:height={$PlayerIsOpen ? "auto" : "0"}
 >
     <OpenToggle />
     <QueueToggle />

@@ -47,7 +47,7 @@
     });
 </script>
 
-<div class="indicator" bind:this={element}></div>
+<div bind:this={element} class="indicator"></div>
 
 <slot {percent} {unobserve} />
 

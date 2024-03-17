@@ -19,10 +19,10 @@
 </script>
 
 <sl-button
-    on:click={handleAction}
-    title={$_("text.playLast")}
     {loading}
+    on:click={handleAction}
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
+    title={$_("text.playLast")}
 >
     <MaterialSymbol name="playlist_add" slot="prefix" />
 </sl-button>

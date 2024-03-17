@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { replace } from "svelte-spa-router";
-    import { User, PageTitle } from "~/stores/state.js";
+    import { PageTitle, User } from "~/stores/state.js";
     import { Saved } from "~/stores/settings.js";
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import ArtistsSidebar from "~/components/artist/artistsSidebar.svelte";

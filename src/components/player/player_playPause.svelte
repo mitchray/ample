@@ -1,14 +1,14 @@
 <script>
     import { MediaPlayer } from "~/stores/elements.js";
-    import { NowPlayingQueue, IsPlaying } from "~/stores/state.js";
+    import { IsPlaying, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 </script>
 
 <sl-button
     class="play-pause"
+    disabled={$NowPlayingQueue.length === 0}
     name="play"
     on:click={$MediaPlayer.playPause()}
-    disabled={$NowPlayingQueue.length === 0}
 >
     <MaterialSymbol name={$IsPlaying ? "pause" : "play_arrow"} />
 </sl-button>

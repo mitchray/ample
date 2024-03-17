@@ -23,9 +23,9 @@
     <MaterialSymbol name="speed" slot="prefix" />
 
     <sl-menu
-        on:sl-select={handleSelection}
-        on:click={handleClick}
         bind:this={menu}
+        on:click={handleClick}
+        on:sl-select={handleSelection}
         slot="submenu"
     >
         <sl-menu-item type="checkbox" value="0.25">0.25×</sl-menu-item>
@@ -36,7 +36,7 @@
 
         <sl-divider></sl-divider>
 
-        <sl-menu-item type="checkbox" value="1.0" checked>1×</sl-menu-item>
+        <sl-menu-item checked type="checkbox" value="1.0">1×</sl-menu-item>
 
         <sl-divider></sl-divider>
 

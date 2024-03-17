@@ -1,5 +1,4 @@
 <script>
-    import { getContext } from "svelte";
     import { _ } from "svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ShowLyrics } from "~/stores/state.js";
@@ -13,9 +12,9 @@
 </script>
 
 <sl-menu-item
+    {...$$restProps}
     on:click={handleAction}
     title={$ShowLyrics ? $_("text.lyricsHide") : $_("text.lyricsShow")}
-    {...$$restProps}
 >
     <MaterialSymbol name="lyrics" slot="prefix" />
     {$ShowLyrics ? $_("text.lyricsHide") : $_("text.lyricsShow")}

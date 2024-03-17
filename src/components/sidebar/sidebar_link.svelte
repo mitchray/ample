@@ -12,11 +12,11 @@
 
 <sl-tooltip
     content={label}
-    placement="right"
-    hoist
     disabled={$IsMobile || $SidebarIsOpen}
+    hoist
+    placement="right"
 >
-    <a {href} use:active={activePath} class="site-sidebar__link">
+    <a class="site-sidebar__link" {href} use:active={activePath}>
         <MaterialSymbol name={icon} />
         <span class="label truncate">{label}</span>
     </a>

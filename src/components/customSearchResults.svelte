@@ -2,11 +2,11 @@
     import { _ } from "svelte-i18n";
     import Lister from "~/components/lister/lister.svelte";
     import {
-        songsPreset,
         albumsPreset,
         artistsPreset,
-        playlistsPreset,
         forcedCheckbox,
+        playlistsPreset,
+        songsPreset,
     } from "~/components/lister/columns.js";
 
     export let loadedTime;

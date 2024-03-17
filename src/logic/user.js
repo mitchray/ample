@@ -2,17 +2,8 @@ import { get } from "svelte/store";
 import AmpacheAPI from "javascript-ampache";
 import localforage from "localforage";
 import { MediaPlayer } from "~/stores/elements.js";
-import {
-    API,
-    User,
-    APIVersion,
-    Server,
-    debugMode,
-    SystemPreferences,
-    UserPreferences,
-} from "~/stores/state.js";
-import { Saved, loadSettings } from "~/stores/settings.js";
-import { locale } from "svelte-i18n";
+import { API, APIVersion, debugMode, Server, User } from "~/stores/state.js";
+import { Saved } from "~/stores/settings.js";
 
 export async function login({ auth }) {
     get(API).setSessionKey(auth);

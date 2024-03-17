@@ -56,12 +56,12 @@
     <div class="inputs">
         <div class="input-group">
             <sl-input
-                value={fromFinal}
-                type="number"
                 label={$_("text.from")}
                 maxlength="4"
                 no-spin-buttons
                 on:sl-change={handleFrom}
+                type="number"
+                value={fromFinal}
             ></sl-input>
 
             <sl-button
@@ -86,12 +86,12 @@
 
         <div class="input-group">
             <sl-input
-                value={toFinal}
-                type="number"
                 label={$_("text.to")}
                 maxlength="4"
                 no-spin-buttons
                 on:sl-change={handleTo}
+                type="number"
+                value={toFinal}
             ></sl-input>
 
             <sl-button
@@ -116,7 +116,7 @@
         </div>
     </div>
 
-    <sl-button variant="primary" class="submit" on:click={handleSearch}>
+    <sl-button class="submit" on:click={handleSearch} variant="primary">
         {$_("text.search")}
     </sl-button>
 </div>

@@ -19,10 +19,10 @@
 </script>
 
 <sl-button
-    on:click={handleAction}
-    title={$_("text.playNext")}
     {loading}
+    on:click={handleAction}
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
+    title={$_("text.playNext")}
 >
     <MaterialSymbol name="menu_open" slot="prefix" />
 </sl-button>

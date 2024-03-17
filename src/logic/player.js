@@ -10,21 +10,21 @@ import {
 } from "~/logic/notification";
 import { debugHelper, shuffleArray } from "~/logic/helper";
 import {
-    Saved,
+    DynamicsCompressorEnabled,
     PlayerVolume,
     RepeatEnabled,
-    VolumeNormalizationEnabled,
-    DynamicsCompressorEnabled,
+    Saved,
     SkipBelow,
-    SkipBelowRating,
     SkipBelowAllowZero,
+    SkipBelowRating,
+    VolumeNormalizationEnabled,
 } from "~/stores/settings";
 import {
-    IsPlaying,
-    IsMobile,
     CurrentMedia,
-    NowPlayingQueue,
+    IsMobile,
+    IsPlaying,
     NowPlayingIndex,
+    NowPlayingQueue,
     PlaybackSpeed,
     QueueIsUpdating,
 } from "~/stores/state.js";

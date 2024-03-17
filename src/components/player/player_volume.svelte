@@ -1,17 +1,17 @@
 <script>
     import { _ } from "svelte-i18n";
     import {
-        Saved,
-        PlayerVolume,
-        VolumeNormalizationEnabled,
         DynamicsCompressorEnabled,
+        PlayerVolume,
+        Saved,
+        VolumeNormalizationEnabled,
     } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import {
-        debugMode,
         CurrentMedia,
-        NowPlayingQueue,
+        debugMode,
         IsMuted,
+        NowPlayingQueue,
     } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { onMount } from "svelte";
@@ -105,8 +105,8 @@
 
 <sl-button
     class="volume-control"
-    on:click={handleMuteToggle}
     disabled={$NowPlayingQueue.length === 0}
+    on:click={handleMuteToggle}
     title={$IsMuted ? $_("text.volumeUnmute") : $_("text.volumeMute")}
     variant="text"
 >
@@ -114,11 +114,11 @@
 </sl-button>
 
 <div
+    bind:this={volumeSlider}
     class="site-player__volume-slider volume-control"
     on:click={handleVolumeSlider}
     on:mousedown={handleVolumeMouseDown}
     on:mousemove={handleVolumeDrag}
-    bind:this={volumeSlider}
 >
     <span
         class="site-player__volume-value"
@@ -129,9 +129,9 @@
 
 <sl-dropdown>
     <sl-button
+        on:click={toggleMenu}
         slot="trigger"
         title={$_("text.volumeSettings")}
-        on:click={toggleMenu}
         variant="text"
     >
         <MaterialSymbol name="tune" />
@@ -143,8 +143,8 @@
         </div>
 
         <sl-checkbox
-            on:sl-change={handleVolumeNormalize}
             checked={$VolumeNormalizationEnabled}
+            on:sl-change={handleVolumeNormalize}
         >
             {$_("text.volumeNormalize")}
         </sl-checkbox>
@@ -193,8 +193,8 @@
         <sl-divider></sl-divider>
 
         <sl-checkbox
-            on:sl-change={handleDynamicsCompressor}
             checked={$DynamicsCompressorEnabled}
+            on:sl-change={handleDynamicsCompressor}
         >
             {$_("text.volumeNightMode")}
         </sl-checkbox>

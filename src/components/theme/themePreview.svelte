@@ -55,8 +55,8 @@
 </style>`}
 
 <div class="container">
-    <ThemeCard mode="dark" {contextKey} />
-    <ThemeCard mode="light" {contextKey} />
+    <ThemeCard {contextKey} mode="dark" />
+    <ThemeCard {contextKey} mode="light" />
     <div class="name">{name}</div>
 </div>
 

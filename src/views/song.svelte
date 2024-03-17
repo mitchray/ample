@@ -2,9 +2,9 @@
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
     import {
-        formatTotalTime,
         formatFilesize,
         formatSongQuality,
+        formatTotalTime,
     } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
     import Actions from "~/components/action/actions.svelte";

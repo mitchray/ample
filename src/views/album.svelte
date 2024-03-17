@@ -5,7 +5,7 @@
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { checkbox, albumPreset } from "~/components/lister/columns.js";
+    import { albumPreset, checkbox } from "~/components/lister/columns.js";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import Actions from "~/components/action/actions.svelte";

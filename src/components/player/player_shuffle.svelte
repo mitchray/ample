@@ -6,8 +6,8 @@
 </script>
 
 <sl-button
-    on:click={$MediaPlayer.shuffle()}
     disabled={$NowPlayingQueue.length === 0}
+    on:click={$MediaPlayer.shuffle()}
     title={$_("text.shuffle")}
     variant="text"
 >

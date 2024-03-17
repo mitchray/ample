@@ -5,12 +5,12 @@
 <h2>Buttons</h2>
 <h4>Plain</h4>
 <sl-button size="small">Default</sl-button>
-<sl-button variant="neutral" size="small">Neutral</sl-button>
-<sl-button variant="primary" size="small">Primary</sl-button>
-<sl-button variant="success" size="small">Success</sl-button>
-<sl-button variant="warning" size="small">Warning</sl-button>
-<sl-button variant="danger" size="small">Danger</sl-button>
-<sl-button variant="text" size="small">Text</sl-button>
+<sl-button size="small" variant="neutral">Neutral</sl-button>
+<sl-button size="small" variant="primary">Primary</sl-button>
+<sl-button size="small" variant="success">Success</sl-button>
+<sl-button size="small" variant="warning">Warning</sl-button>
+<sl-button size="small" variant="danger">Danger</sl-button>
+<sl-button size="small" variant="text">Text</sl-button>
 <br />
 <sl-button>Default</sl-button>
 <sl-button variant="neutral">Neutral</sl-button>
@@ -21,12 +21,12 @@
 <sl-button variant="text">Text</sl-button>
 <br />
 <sl-button size="large">Default</sl-button>
-<sl-button variant="neutral" size="large">Neutral</sl-button>
-<sl-button variant="primary" size="large">Primary</sl-button>
-<sl-button variant="success" size="large">Success</sl-button>
-<sl-button variant="warning" size="large">Warning</sl-button>
-<sl-button variant="danger" size="large">Danger</sl-button>
-<sl-button variant="text" size="large">Text</sl-button>
+<sl-button size="large" variant="neutral">Neutral</sl-button>
+<sl-button size="large" variant="primary">Primary</sl-button>
+<sl-button size="large" variant="success">Success</sl-button>
+<sl-button size="large" variant="warning">Warning</sl-button>
+<sl-button size="large" variant="danger">Danger</sl-button>
+<sl-button size="large" variant="text">Text</sl-button>
 <br />
 
 <hr />
@@ -36,27 +36,27 @@
     <MaterialSymbol name="shuffle" slot="prefix" />
     Default
 </sl-button>
-<sl-button variant="neutral" size="small">
+<sl-button size="small" variant="neutral">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Neutral
 </sl-button>
-<sl-button variant="primary" size="small">
+<sl-button size="small" variant="primary">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Primary
 </sl-button>
-<sl-button variant="success" size="small">
+<sl-button size="small" variant="success">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Success
 </sl-button>
-<sl-button variant="warning" size="small">
+<sl-button size="small" variant="warning">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Warning
 </sl-button>
-<sl-button variant="danger" size="small">
+<sl-button size="small" variant="danger">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Danger
 </sl-button>
-<sl-button variant="text" size="small">
+<sl-button size="small" variant="text">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Text
 </sl-button>
@@ -95,27 +95,27 @@
     <MaterialSymbol name="shuffle" slot="prefix" />
     Default
 </sl-button>
-<sl-button variant="neutral" size="large">
+<sl-button size="large" variant="neutral">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Neutral
 </sl-button>
-<sl-button variant="primary" size="large">
+<sl-button size="large" variant="primary">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Primary
 </sl-button>
-<sl-button variant="success" size="large">
+<sl-button size="large" variant="success">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Success
 </sl-button>
-<sl-button variant="warning" size="large">
+<sl-button size="large" variant="warning">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Warning
 </sl-button>
-<sl-button variant="danger" size="large">
+<sl-button size="large" variant="danger">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Danger
 </sl-button>
-<sl-button variant="text" size="large">
+<sl-button size="large" variant="text">
     <MaterialSymbol name="shuffle" slot="prefix" />
     Text
 </sl-button>
@@ -123,69 +123,69 @@
 <hr />
 
 <h4>Icons only</h4>
-<sl-button size="small" circle>
+<sl-button circle size="small">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="neutral" size="small" circle>
+<sl-button circle size="small" variant="neutral">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="primary" size="small" circle>
+<sl-button circle size="small" variant="primary">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="success" size="small" circle>
+<sl-button circle size="small" variant="success">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="warning" size="small" circle>
+<sl-button circle size="small" variant="warning">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="danger" size="small" circle>
+<sl-button circle size="small" variant="danger">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="text" size="small" circle>
+<sl-button circle size="small" variant="text">
     <MaterialSymbol name="shuffle" />
 </sl-button>
 <br />
 <sl-button circle>
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="neutral" circle>
+<sl-button circle variant="neutral">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="primary" circle>
+<sl-button circle variant="primary">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="success" circle>
+<sl-button circle variant="success">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="warning" circle>
+<sl-button circle variant="warning">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="danger" circle>
+<sl-button circle variant="danger">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="text" circle>
+<sl-button circle variant="text">
     <MaterialSymbol name="shuffle" />
 </sl-button>
 <br />
-<sl-button size="large" circle>
+<sl-button circle size="large">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="neutral" size="large" circle>
+<sl-button circle size="large" variant="neutral">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="primary" size="large" circle>
+<sl-button circle size="large" variant="primary">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="success" size="large" circle>
+<sl-button circle size="large" variant="success">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="warning" size="large" circle>
+<sl-button circle size="large" variant="warning">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="danger" size="large" circle>
+<sl-button circle size="large" variant="danger">
     <MaterialSymbol name="shuffle" />
 </sl-button>
-<sl-button variant="text" size="large" circle>
+<sl-button circle size="large" variant="text">
     <MaterialSymbol name="shuffle" />
 </sl-button>
 
@@ -193,12 +193,12 @@
 
 <h4>Disabled</h4>
 <sl-button disabled>Default</sl-button>
-<sl-button variant="neutral" disabled>Neutral</sl-button>
-<sl-button variant="primary" disabled>Primary</sl-button>
-<sl-button variant="success" disabled>Success</sl-button>
-<sl-button variant="warning" disabled>Warning</sl-button>
-<sl-button variant="danger" disabled>Danger</sl-button>
-<sl-button variant="text" disabled>Text</sl-button>
+<sl-button disabled variant="neutral">Neutral</sl-button>
+<sl-button disabled variant="primary">Primary</sl-button>
+<sl-button disabled variant="success">Success</sl-button>
+<sl-button disabled variant="warning">Warning</sl-button>
+<sl-button disabled variant="danger">Danger</sl-button>
+<sl-button disabled variant="text">Text</sl-button>
 <hr />
 
 <style>

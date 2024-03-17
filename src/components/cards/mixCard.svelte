@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { API, User } from "~/stores/state.js";
+    import { User } from "~/stores/state.js";
     import Actions from "~/components/action/actions.svelte";
     import { sampleSize } from "lodash-es";
     import Art from "~/components/art.svelte";

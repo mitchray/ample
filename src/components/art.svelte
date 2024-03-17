@@ -1,6 +1,6 @@
 <script>
     import { API, Server, User } from "~/stores/state.js";
-    import { uniqBy, shuffle } from "lodash-es";
+    import { shuffle, uniqBy } from "lodash-es";
     import { createQuery } from "@tanstack/svelte-query";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 

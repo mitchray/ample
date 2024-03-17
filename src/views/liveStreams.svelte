@@ -1,6 +1,6 @@
 <script>
     import { createQuery } from "@tanstack/svelte-query";
-    import { API, User, PageTitle } from "~/stores/state.js";
+    import { API, PageTitle, User } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
     import { liveStreamsPreset } from "~/components/lister/columns.js";
     import Lister from "~/components/lister/lister.svelte";

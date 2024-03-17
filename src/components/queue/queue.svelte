@@ -5,13 +5,13 @@
     import { waitForElement } from "~/logic/helper.js";
     import { showCurrentMedia } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
-    import { Saved, QueueIsOpen, QueueIsPinned } from "~/stores/settings.js";
+    import { QueueIsOpen, QueueIsPinned, Saved } from "~/stores/settings.js";
     import {
-        IsMobile,
         CurrentMedia,
+        IsMobile,
+        NowPlayingIndex,
         NowPlayingQueue,
         QueueIsUpdating,
-        NowPlayingIndex,
     } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -76,15 +76,15 @@
 </script>
 
 <div
-    class="site-queue"
-    class:is-open={$QueueIsOpen}
-    class:is-drawer={$IsMobile || !$QueueIsPinned}
     bind:this={siteQueueBind}
+    class="site-queue"
+    class:is-drawer={$IsMobile || !$QueueIsPinned}
+    class:is-open={$QueueIsOpen}
+    on:clickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#queue-button",
         ignore: ".c-menu",
     }}
-    on:clickedOutside={handleClickOutside}
 >
     <div class="site-queue-inner">
         <div class="header panel-header">
@@ -93,9 +93,9 @@
             <sl-button-group>
                 <sl-button
                     class="show-current"
+                    on:click={showCurrentMedia}
                     size="small"
                     title={$_("text.queueShowCurrent")}
-                    on:click={showCurrentMedia}
                 >
                     <MaterialSymbol name="visibility" />
                 </sl-button>
@@ -105,7 +105,7 @@
                 <RefillButton />
 
                 <sl-dropdown>
-                    <sl-button slot="trigger" size="small">
+                    <sl-button size="small" slot="trigger">
                         <MaterialSymbol name="more_horiz" />
                     </sl-button>
 
@@ -130,12 +130,12 @@
             </sl-button-group>
 
             <sl-button
-                size="small"
-                variant="danger"
-                class="clear-all"
                 circle
+                class="clear-all"
                 on:click={handleClearQueue}
+                size="small"
                 title={$_("text.clearAll")}
+                variant="danger"
             >
                 <MaterialSymbol name="delete" />
             </sl-button>
@@ -143,6 +143,9 @@
 
         <div
             class="queue-list"
+            on:consider={handleSort}
+            on:finalize={handleSort}
+            style="display: {$QueueIsUpdating ? 'none' : null}"
             use:dndzone={{
                 items: $NowPlayingQueue,
                 dropTargetStyle: {},
@@ -150,9 +153,6 @@
                 transformDraggedElement,
                 dragDisabled,
             }}
-            on:consider={handleSort}
-            on:finalize={handleSort}
-            style="display: {$QueueIsUpdating ? 'none' : null}"
         >
             {#if $NowPlayingQueue && $NowPlayingQueue.length > 0}
                 {#each $NowPlayingQueue as media, i (media)}

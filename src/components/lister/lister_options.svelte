@@ -95,12 +95,12 @@
     });
 </script>
 
-<sl-button variant="neutral" on:click={showDialog}>
+<sl-button on:click={showDialog} variant="neutral">
     <MaterialSymbol name="settings" />
 </sl-button>
 
 <Portal>
-    <sl-dialog label="Table options" bind:this={dialog} style="--width: 300px;">
+    <sl-dialog bind:this={dialog} label="Table options" style="--width: 300px;">
         <div class="container">
             <sl-button on:click={resetColumnWidths}>
                 Reset column widths
@@ -118,18 +118,18 @@
             <sl-radio-group
                 label="Row height"
                 name="rowSizing"
-                value={$state.rowSizing}
                 on:sl-change={(e) => {
                     handleRowSizing(e);
                 }}
+                value={$state.rowSizing}
             >
                 <sl-radio-button value="slim">Slim</sl-radio-button>
                 <sl-radio-button value="spaced">Spaced</sl-radio-button>
             </sl-radio-group>
 
             <div
-                class="columns"
                 bind:this={columnElements}
+                class="columns"
                 on:sort={(e) => {
                     handleSort(e);
                 }}
@@ -154,7 +154,7 @@
             </div>
         </div>
 
-        <sl-button slot="footer" variant="primary" on:click={hideDialog}>
+        <sl-button on:click={hideDialog} slot="footer" variant="primary">
             Close
         </sl-button>
     </sl-dialog>

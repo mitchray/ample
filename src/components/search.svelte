@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import Fuse from "fuse.js";
-    import { ShowSearch, SearchQuery } from "~/stores/state.js";
+    import { SearchQuery, ShowSearch } from "~/stores/state.js";
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";
     import { searchArtists } from "~/logic/artist";

@@ -31,16 +31,17 @@
             disabled={$CurrentMedia?.object_type !== "song" || null}
         />
 
-        <sl-menu-item value="c" on:click={() => console.debug("share")}>
-            Share <MaterialSymbol name="share" slot="prefix" />
+        <sl-menu-item on:click={() => console.debug("share")} value="c">
+            Share
+            <MaterialSymbol name="share" slot="prefix" />
         </sl-menu-item>
-        <sl-menu-item value="c" on:click={() => console.debug("post shout")}>
+        <sl-menu-item on:click={() => console.debug("post shout")} value="c">
             Post shout
             <MaterialSymbol name="chat" slot="prefix" />
         </sl-menu-item>
         <sl-menu-item
-            value="c"
             on:click={() => console.debug("start broadcast")}
+            value="c"
         >
             Start broadcast
             <MaterialSymbol name="cell_tower" slot="prefix" />
@@ -58,11 +59,11 @@
         />
 
         <sl-menu-item
-            value="c"
             on:click={() => console.debug("show visualizer")}
+            value="c"
         >
             Show visualizer
-            <MaterialSymbol name="browse_activity" fill={false} slot="prefix" />
+            <MaterialSymbol fill={false} name="browse_activity" slot="prefix" />
         </sl-menu-item>
 
         <sl-divider></sl-divider>

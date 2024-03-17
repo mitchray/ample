@@ -1,13 +1,13 @@
 <script>
-    import { onMount, onDestroy } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import {
-        computePosition,
         autoUpdate,
+        computePosition,
         offset,
         size,
     } from "@floating-ui/dom";
     import { quintOut } from "svelte/easing";
-    import { fly, fade } from "svelte/transition";
+    import { fade, fly } from "svelte/transition";
     import { SiteContentBind } from "~/stores/elements.js";
     import { Notifications } from "~/stores/message";
     import NotificationList from "~/components/notification/_notificationList.svelte";
@@ -106,7 +106,7 @@
     });
 </script>
 
-<div class="site-notifications" bind:this={listBind}>
+<div bind:this={listBind} class="site-notifications">
     <div
         class="container"
         on:mouseenter={() => handleEnter()}

@@ -141,17 +141,17 @@
     }
 </script>
 
-<sl-dropdown placement="bottom" hoist>
+<sl-dropdown hoist placement="bottom">
     <sl-button
-        slot="trigger"
         class="rating-filter"
         class:is-enabled={$QueueRefill.enabled}
         size="small"
+        slot="trigger"
         title={$_("text.queueRefill")}
     >
         <MaterialSymbol
-            name="play_circle"
             fill={$QueueRefill.enabled}
+            name="play_circle"
             size="13px"
         />
     </sl-button>
@@ -161,15 +161,15 @@
             {$_("text.queueRefill")}
 
             <sl-switch
-                on:sl-change={toggleEnabled}
                 checked={$QueueRefill.enabled}
+                on:sl-change={toggleEnabled}
             ></sl-switch>
         </div>
 
         <sl-radio-group
             name="mode"
-            value={$QueueRefill.mode}
             on:sl-change={handleMode}
+            value={$QueueRefill.mode}
         >
             <sl-radio-button value="smartlist">
                 <MaterialSymbol name="electric_bolt" slot="prefix" />

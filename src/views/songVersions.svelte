@@ -4,7 +4,7 @@
     import { getSongVersions } from "~/logic/song";
     import { songsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
-    import { User, PageTitle } from "~/stores/state.js";
+    import { PageTitle, User } from "~/stores/state.js";
 
     export let params = {};
 

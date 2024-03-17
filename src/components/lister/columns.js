@@ -8,10 +8,10 @@ import Rating from "~/components/rating/rating.svelte";
 import Badge from "~/components/badge.svelte";
 import Actions from "~/components/action/actions.svelte";
 import {
-    formatTotalTime,
     formatFilesize,
-    formatSongQuality,
     formatReleaseType,
+    formatSongQuality,
+    formatTotalTime,
 } from "~/logic/formatters.js";
 
 export const TableDefault = {

@@ -47,9 +47,9 @@
 </script>
 
 <sl-button
-    title={$_("text.remove")}
     disabled={$isEditMode || $selectedCount < 1}
     on:click={handleRemove}
+    title={$_("text.remove")}
     variant="danger"
 >
     {$_("text.remove")}

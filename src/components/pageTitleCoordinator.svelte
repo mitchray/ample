@@ -1,5 +1,5 @@
 <script>
-    import { PageTitle, CurrentMedia, IsPlaying } from "~/stores/state.js";
+    import { CurrentMedia, IsPlaying, PageTitle } from "~/stores/state.js";
 
     window.addEventListener("blur", updateTitle);
     window.addEventListener("focus", updateTitle);

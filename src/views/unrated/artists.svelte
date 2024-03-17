@@ -2,8 +2,8 @@
     import { unratedArtists } from "~/logic/artist.js";
     import { _ } from "svelte-i18n";
     import {
-        forcedCheckbox,
         artistsPreset,
+        forcedCheckbox,
     } from "~/components/lister/columns.js";
     import Lister from "~/components/lister/lister.svelte";
     import { createQuery } from "@tanstack/svelte-query";
