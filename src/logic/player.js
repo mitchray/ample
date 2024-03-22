@@ -618,6 +618,12 @@ class Player {
     #initWavesurferEvents() {
         let self = this;
 
+        this.wavesurfer.on("error", function (e) {
+            debugHelper(e, "Wavesurfer play error");
+            IsPlaying.set(false);
+            self.next();
+        });
+
         this.wavesurfer.on("play", function () {
             debugHelper("Wavesurfer playing");
             IsPlaying.set(true);
