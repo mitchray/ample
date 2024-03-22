@@ -13,6 +13,9 @@
     $: query = createQuery({
         queryKey: ["albumsAround", album.id],
         queryFn: async () => {
+            // 'Various' has no id so abort
+            if (parseInt(album.artist.id) === 0) return [];
+
             let result = await $API.artistAlbums({ filter: album.artist.id });
 
             if (result.error) {
@@ -75,7 +78,7 @@
         class:not-empty={containerBind?.firstElementChild}
         in:fade
     >
-        {#if [...albums.previous.values()].find((arr) => arr.length > 0)}
+        {#if albums.previous && [...albums.previous.values()].find((arr) => arr.length > 0)}
             <div class="previous">
                 <h3>{$_("text.previous")}</h3>
 
@@ -89,7 +92,7 @@
             </div>
         {/if}
 
-        {#if [...albums.same.values()].find((arr) => arr.length > 0)}
+        {#if albums.same && [...albums.same.values()].find((arr) => arr.length > 0)}
             <div class="same">
                 <h3>{$_("text.sameYear")}</h3>
 
@@ -103,7 +106,7 @@
             </div>
         {/if}
 
-        {#if [...albums.next.values()].find((arr) => arr.length > 0)}
+        {#if albums.next && [...albums.next.values()].find((arr) => arr.length > 0)}
             <div class="next">
                 <h3>{$_("text.next")}</h3>
 
