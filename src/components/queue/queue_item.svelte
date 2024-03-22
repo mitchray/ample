@@ -64,7 +64,6 @@
 <div
     class="queue-item"
     class:currentlyPlaying={$CurrentMedia?._id === media._id}
-    class:errored={media.errored}
     class:matches-rating-threshold={matchesRating}
 >
     <sl-button
@@ -186,10 +185,6 @@
         user-select: none;
         cursor: pointer;
         position: relative;
-    }
-
-    .errored {
-        opacity: 0.6;
     }
 
     .current-icon {

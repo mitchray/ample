@@ -202,48 +202,16 @@ class Player {
             this.filterGain.gain.value = this.#calculateGain();
             this.updateFilters();
 
-            let wrappedPromise = new Promise((resolve, reject) => {
-                abortSignal.addEventListener("abort", () => {
-                    let customError = new Error("Promise aborted");
-                    customError.name = "AbortError";
-                    reject(customError);
-                });
-
-                this.wavesurfer
-                    .play()
-                    .then((result) => {
-                        resolve(result);
-                    })
-                    .catch((error) => {
-                        reject(error);
-                    });
-            });
-
-            // attempt to play the media
-            wrappedPromise
+            this.wavesurfer
+                .play()
                 .then(async () => {
                     // (re)set the playback speed
                     this.setPlaybackRate(get(PlaybackSpeed));
-
-                    // remove any possible error indications
-                    this.#getCurrentQueueItem().errored = undefined;
-                    await self.#setQueueItems(this.nowPlayingQueue);
-
                     this.#runChecks(item);
                 })
-                .catch(async (error) => {
-                    // AbortError is ok, it means we cancelled loading a previously pending item
-                    if (error.name !== "AbortError") {
-                        debugHelper(error, "Failed to start playing");
-
-                        IsPlaying.set(false);
-
-                        // mark there being an error
-                        this.#getCurrentQueueItem().errored = true;
-                        await self.#setQueueItems(this.nowPlayingQueue);
-
-                        self.next();
-                    }
+                .catch((e) => {
+                    // probably a race condition between quick succession load/play, ignore
+                    debugHelper("Wavesurfer race condition?");
                 });
         } catch (e) {
             console.warn("Something went wrong during start", e);
