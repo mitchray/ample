@@ -425,11 +425,6 @@
     --swatch-black-900: oklch(var(--lightness-900) 0.024 var(--hue-black));
     --swatch-black-950: oklch(var(--lightness-950) 0.024 var(--hue-black));
 
-    /* New colors */
-    /*--user-hue-background: 290; !* user defined *!*/
-    /*--user-hue-accent-1: 140; !* user defined *!*/
-    /*--user-hue-accent-2: 340; !* user defined *!*/
-    /*--user-color-waveform: seagreen; !* user defined *!*/
     --hue-primary: var(
         --user-hue-accent-1,
         var(--user-hue-background)
@@ -689,11 +684,6 @@
     --color-btn-danger-bg-hover: var(--swatch-red-600);
     --color-btn-danger-border: var(--swatch-red-500);
     --color-btn-danger-border-hover: var(--swatch-red-600);
-}
-
-:root body {
-    /* shoelace color overrides */
-    /*--sl-panel-background-color:  var(--color-interface);*/
 }
 
 /* --------------------------
