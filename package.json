@@ -47,6 +47,6 @@
         "svelte-spa-router": "^4.0.0",
         "throttle-wait": "0.0.5",
         "uuid": "^9.0.1",
-        "wavesurfer.js": "7.7.5"
+        "wavesurfer.js": "7.7.8"
     }
 }
