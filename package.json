@@ -31,7 +31,7 @@
     },
     "dependencies": {
         "@floating-ui/dom": "^1.4.2",
-        "@shoelace-style/shoelace": "2.14.0",
+        "@shoelace-style/shoelace": "2.15.0",
         "@tanstack/svelte-query": "^5.15.0",
         "dompurify": "^3.0.6",
         "fuse.js": "^7.0.0",
@@ -39,14 +39,14 @@
         "jssha": "^3.3.1",
         "localforage": "^1.10.0",
         "lodash-es": "^4.17.21",
-        "material-symbols": "^0.14.3",
+        "material-symbols": "^0.17.3",
         "sortablejs": "^1.15.1",
-        "svelte-dnd-action": "^0.9.38",
+        "svelte-dnd-action": "^0.9.43",
         "svelte-i18n": "^4.0.0",
         "svelte-portal": "^2.2.0",
         "svelte-spa-router": "^4.0.0",
         "throttle-wait": "0.0.5",
         "uuid": "^9.0.1",
-        "wavesurfer.js": "7.7.9"
+        "wavesurfer.js": "7.7.11"
     }
 }
