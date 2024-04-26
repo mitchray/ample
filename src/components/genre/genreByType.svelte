@@ -1,6 +1,7 @@
 <script>
     import { onMount } from "svelte";
     import { API } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
     import Lister from "~/components/lister/lister.svelte";
     import {
         albumsPreset,
@@ -21,7 +22,7 @@
         genre = await $API.genre({ filter: id });
 
         if (genre.error) {
-            console.error("Ample error getting genre:", genre.error);
+            errorHandler("getting genre", genre.error);
             return;
         }
 

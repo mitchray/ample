@@ -3,6 +3,7 @@
     import { onDestroy, onMount } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let card; /* the card component to render */
     export let type;
@@ -80,7 +81,7 @@
         });
 
         if (latest.error) {
-            console.error("Ample error getting latest update:", latest.error);
+            errorHandler("getting latest update", latest.error);
         } else {
             if (latest[0].id !== data[0].id) {
                 latest[0]._id = uuidv4(); // ensures unique key
@@ -99,7 +100,7 @@
         });
 
         if (newBatch.error) {
-            console.error("Ample error loading more data:", newBatch.error);
+            errorHandler("loading more data", newBatch.error);
             newBatch = [];
         } else {
             loadCount++;

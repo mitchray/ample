@@ -4,6 +4,7 @@
     import { API } from "~/stores/state.js";
     import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -28,7 +29,7 @@
         let song = await $API.song({ filter: $_item.id });
 
         if (song.error) {
-            console.error("Ample error getting song:", song.error);
+            errorHandler("getting song", song.error);
             loading = false;
             return;
         }
@@ -40,7 +41,7 @@
         });
 
         if (file.error) {
-            console.error("Ample error downloading:", file.error);
+            errorHandler("downloading", file.error);
             loading = false;
             return;
         }

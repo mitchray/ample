@@ -1,5 +1,6 @@
 import { get } from "svelte/store";
 import { API } from "~/stores/state";
+import { errorHandler } from "~/logic/helper.js";
 
 /**
  * Search artists containing specified string
@@ -168,8 +169,8 @@ export async function getSimilarArtistsWithGenreFallback(id) {
     });
 
     if (result.error) {
-        console.error(
-            "Ample error getting similar artists with genre fallback (get similar):",
+        errorHandler(
+            "getting similar artists with genre fallback (get similar)",
             result.error,
         );
         return [];
@@ -197,8 +198,8 @@ export async function getSimilarArtistsWithGenreFallback(id) {
         });
 
         if (result.error) {
-            console.error(
-                "Ample error getting similar artists with genre fallback (genres):",
+            errorHandler(
+                "getting similar artists with genre fallback (genres)",
                 result.error,
             );
             return [];

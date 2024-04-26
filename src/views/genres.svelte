@@ -6,6 +6,7 @@
     import Lister from "~/components/lister/lister.svelte";
     import { genresPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     let title = $_("text.genres");
     $PageTitle = title;
@@ -19,7 +20,7 @@
             let result = await $API.genres();
 
             if (result.error) {
-                console.error("Ample error getting genres:", result.error);
+                errorHandler("getting genres", result.error);
                 return [];
             }
 

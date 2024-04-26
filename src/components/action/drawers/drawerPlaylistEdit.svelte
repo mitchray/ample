@@ -5,6 +5,7 @@
     import { DispatchListerEvent } from "~/stores/message.js";
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { addAlert } from "~/logic/alert.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let playlist = null;
     export let isNew = false;
@@ -49,10 +50,7 @@
                 });
 
                 if (playlist.error) {
-                    console.error(
-                        "Ample error creating playlist:",
-                        playlist.error,
-                    );
+                    errorHandler("creating playlist", playlist.error);
                     return;
                 }
 
@@ -85,10 +83,7 @@
                 });
 
                 if (result.error) {
-                    console.error(
-                        "Ample error editing playlist:",
-                        result.error,
-                    );
+                    errorHandler("editing playlist", result.error);
                     return;
                 }
 
@@ -98,10 +93,7 @@
                     });
 
                     if (tempPlaylist.error) {
-                        console.error(
-                            "Ample error getting playlist:",
-                            tempPlaylist.error,
-                        );
+                        errorHandler("getting playlist", tempPlaylist.error);
                     }
 
                     if (playlist.isNew) {

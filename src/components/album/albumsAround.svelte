@@ -5,6 +5,7 @@
     import { groupAlbumsByReleaseType } from "~/logic/album.js";
     import AlbumCardMini from "~/components/cards/albumCardMini.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let album;
 
@@ -19,10 +20,7 @@
             let result = await $API.artistAlbums({ filter: album.artist.id });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting albums around",
-                    result.error,
-                );
+                errorHandler("getting albums around", result.error);
                 return [];
             }
 

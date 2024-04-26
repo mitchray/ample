@@ -19,6 +19,14 @@ export function debugHelper(val, description = "--") {
     }
 }
 
+export function errorHandler(description, err) {
+    if (err.errorCode && err.errorCode === 4701) {
+        console.debug("ERROR 4701");
+    }
+
+    console.error("Ample error: " + description, err.error);
+}
+
 export function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }

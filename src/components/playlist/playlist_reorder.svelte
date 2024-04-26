@@ -6,6 +6,7 @@
         getPlaylistIDFromUrl,
         setIndexes,
         shuffleArray,
+        errorHandler,
     } from "~/logic/helper.js";
 
     export let contextKey;
@@ -36,7 +37,7 @@
         });
 
         if (result.error) {
-            console.error("Ample error editing playlist:", result.error);
+            errorHandler("editing playlist", result.error);
             return;
         }
 

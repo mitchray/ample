@@ -8,6 +8,7 @@
         songsPreset,
     } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let artistID;
 
@@ -21,10 +22,7 @@
             });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting top songs for artist:",
-                    result.error,
-                );
+                errorHandler("getting top songs for artist", result.error);
                 return [];
             }
 

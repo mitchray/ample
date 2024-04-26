@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { getContext } from "svelte";
-    import { getPlaylistIDFromUrl } from "~/logic/helper.js";
+    import { errorHandler, getPlaylistIDFromUrl } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -18,10 +18,7 @@
                     song: item.id,
                 }).then((result) => {
                     if (result.error) {
-                        console.error(
-                            "Ample error removing playlist song:",
-                            result.error,
-                        );
+                        errorHandler("removing playlist song", result.error);
                         return;
                     }
 

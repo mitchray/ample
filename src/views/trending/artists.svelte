@@ -5,6 +5,7 @@
     import Lister from "~/components/lister/lister.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["trendingArtists"],
@@ -12,10 +13,7 @@
             let result = await frequentArtists({ limit: 50 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting frequent artists:",
-                    result.error,
-                );
+                errorHandler("getting frequent artists", result.error);
                 return [];
             }
 

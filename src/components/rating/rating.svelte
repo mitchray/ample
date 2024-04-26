@@ -20,6 +20,7 @@
     import { _ } from "svelte-i18n";
     import { API, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let type = null;
     export let data = {};
@@ -65,7 +66,7 @@
 
         $API.rate({ type: type, id: id, rating: newRating }).then((result) => {
             if (result.error) {
-                console.error("Ample error while rating:", result.error);
+                errorHandler("while rating", result.error);
             }
 
             if (!result.error) {
@@ -97,7 +98,7 @@
 
         $API.flag({ type: type, id: id, flag: newFlag }).then((result) => {
             if (result.error) {
-                console.error("Ample error while flagging:", result.error);
+                errorHandler("while flagging", result.error);
                 return;
             }
 

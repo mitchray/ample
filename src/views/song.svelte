@@ -14,6 +14,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { addAlert } from "~/logic/alert.js";
     import { push } from "svelte-spa-router";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -33,7 +34,7 @@
                     await push(`/album/${parentItem.id}`);
                 }
 
-                console.error("Ample error getting song:", result.error);
+                errorHandler("getting song", result.error);
                 return [];
             }
 

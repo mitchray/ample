@@ -6,7 +6,7 @@
     import { API, NowPlayingIndex, NowPlayingQueue } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { addAlert } from "~/logic/alert.js";
-    import { prepareForQueue } from "~/logic/helper.js";
+    import { errorHandler, prepareForQueue } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
 
     let selectedPlaylist = $QueueRefill.smartlist;
@@ -57,8 +57,8 @@
                     apiCall
                         .then((response) => {
                             if (response.error) {
-                                console.error(
-                                    "Ample error getting items for queue refill:",
+                                errorHandler(
+                                    "getting items for queue refill",
                                     response.error,
                                 );
                                 return;
@@ -128,10 +128,7 @@
                 filter: $QueueRefill.smartlist,
             }).then((result) => {
                 if (result.error) {
-                    console.error(
-                        "Ample error getting playlists:",
-                        result.error,
-                    );
+                    errorHandler("getting playlists", result.error);
                     selectedPlaylist = null;
                 } else {
                     selectedPlaylist = result;

@@ -18,7 +18,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists,
     } from "~/logic/song.js";
-    import { prepareForQueue } from "~/logic/helper.js";
+    import { errorHandler, prepareForQueue } from "~/logic/helper.js";
     import { writable } from "svelte/store";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
@@ -91,10 +91,7 @@
                     let genre = await $API.genre({ filter: item?.id });
 
                     if (genre.error) {
-                        console.error(
-                            "Ample error getting genre:",
-                            genre.error,
-                        );
+                        errorHandler("getting genre", genre.error);
                     } else {
                         data.name = genre.name;
                     }
@@ -186,10 +183,7 @@
         let result = data.songs ? songSubset : await determineFetchURL();
 
         if (result.error) {
-            console.error(
-                "Ample error in determining fetch URL:",
-                result.error,
-            );
+            errorHandler("determining fetch URL", result.error);
             return [];
         }
 

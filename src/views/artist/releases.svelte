@@ -10,6 +10,7 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import RenderReleases from "~/views/artist/_renderReleases.svelte";
     import FeaturedOptions from "~/views/artist/_featuredOptions.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let artistID;
 
@@ -22,10 +23,7 @@
             let result = await $API.artistAlbums({ filter: artistID });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting artist albums:",
-                    result.error,
-                );
+                errorHandler("getting artist albums", result.error);
                 return [];
             }
 

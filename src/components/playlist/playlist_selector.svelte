@@ -2,6 +2,7 @@
     import { _ } from "svelte-i18n";
     import { createEventDispatcher, onMount } from "svelte";
     import { API } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let type;
     export let selectedPlaylist;
@@ -23,7 +24,7 @@
         let testPlaylist = await $API.playlist({ filter: playlist.id });
 
         if (testPlaylist.error) {
-            console.error("Ample error getting playlist:", testPlaylist.error);
+            errorHandler("getting playlist", testPlaylist.error);
             return;
         }
 
@@ -47,7 +48,7 @@
                 playlistItems = await $API.playlists({ hide_search: 1 });
             }
         } catch (error) {
-            console.error(`Ample error getting ${type}:`, error);
+            errorHandler(`getting ${type}`, error);
         }
     }
 

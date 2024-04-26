@@ -5,6 +5,7 @@
     import { songsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { PageTitle, User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -25,10 +26,7 @@
             );
 
             if (result.error) {
-                console.error(
-                    "Ample error getting song versions",
-                    result.error,
-                );
+                errorHandler("getting song versions", result.error);
                 return [];
             }
 

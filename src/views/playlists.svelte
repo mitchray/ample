@@ -7,6 +7,7 @@
     import { playlistsPreset } from "~/components/lister/columns.js";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     let drawerEdit;
 
@@ -22,7 +23,7 @@
             let result = await $API.playlists({ hide_search: 1 });
 
             if (result.error) {
-                console.error("Ample error getting playlists:", result.error);
+                errorHandler("getting playlists", result.error);
                 return [];
             }
 

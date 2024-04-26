@@ -1,5 +1,6 @@
 <script>
     import { frequentSongs } from "~/logic/song.js";
+    import { errorHandler } from "~/logic/helper.js";
     import { _ } from "svelte-i18n";
     import { songsPreset } from "~/components/lister/columns.js";
     import Lister from "~/components/lister/lister.svelte";
@@ -12,10 +13,7 @@
             let result = await frequentSongs({ limit: 50 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting frequent songs:",
-                    result.error,
-                );
+                errorHandler("getting frequent songs", result.error);
                 return [];
             }
 

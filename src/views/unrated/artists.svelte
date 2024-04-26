@@ -1,5 +1,6 @@
 <script>
     import { unratedArtists } from "~/logic/artist.js";
+    import { errorHandler } from "~/logic/helper.js";
     import { _ } from "svelte-i18n";
     import {
         artistsPreset,
@@ -15,10 +16,7 @@
             let result = await unratedArtists({ limit: 100 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting unrated artists:",
-                    result.error,
-                );
+                errorHandler("getting unrated artists", result.error);
                 return [];
             }
 

@@ -16,6 +16,7 @@
     import Similar from "~/views/artist/similar.svelte";
     import Musicbrainz from "~/views/artist/musicbrainz.svelte";
     import { addAlert } from "~/logic/alert.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -31,7 +32,7 @@
                 });
                 await push(`/artists/`);
 
-                console.error("Ample error getting artist:", result.error);
+                errorHandler("getting artist", result.error);
                 return [];
             }
 

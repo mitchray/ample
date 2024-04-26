@@ -4,6 +4,7 @@
     import { _ } from "svelte-i18n";
     import { liveStreamsPreset } from "~/components/lister/columns.js";
     import Lister from "~/components/lister/lister.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["liveStreams"],
@@ -11,7 +12,7 @@
             let result = await $API.liveStreams();
 
             if (result.error) {
-                console.error("Ample error getting artist:", result.error);
+                errorHandler("getting artist", result.error);
                 return [];
             }
 

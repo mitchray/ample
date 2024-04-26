@@ -15,6 +15,7 @@
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
     import { addAlert } from "~/logic/alert.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -35,7 +36,7 @@
                     await push(`/artist/${parentItem.id}`);
                 }
 
-                console.error("Ample error getting album:", result.error);
+                errorHandler("getting album", result.error);
                 return [];
             }
 

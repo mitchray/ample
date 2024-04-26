@@ -5,6 +5,7 @@
     import { artistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["newestArtists"],
@@ -12,10 +13,7 @@
             let result = await newestArtists({ limit: 50 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting newest artists:",
-                    result.error,
-                );
+                errorHandler("getting newest artists", result.error);
                 return [];
             }
 

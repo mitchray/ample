@@ -5,6 +5,7 @@
     import { podcastsPreset } from "~/components/lister/columns.js";
     import Lister from "~/components/lister/lister.svelte";
     import { Saved } from "~/stores/settings.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["podcasts"],
@@ -15,7 +16,7 @@
             let result = await $API.podcasts();
 
             if (result.error) {
-                console.error("Ample error getting podcasts:", result.error);
+                errorHandler("getting podcasts", result.error);
                 return [];
             }
 

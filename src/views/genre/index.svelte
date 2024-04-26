@@ -5,6 +5,7 @@
     import { replace } from "svelte-spa-router";
     import GenreByType from "~/components/genre/genreByType.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -29,7 +30,7 @@
         genre = await $API.genre({ filter: params.id });
 
         if (genre.error) {
-            console.error("Ample error getting genre:", genre.error);
+            errorHandler("getting genre", genre.error);
         }
     });
 

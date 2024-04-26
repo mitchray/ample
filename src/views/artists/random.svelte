@@ -1,6 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { randomArtists } from "~/logic/artist";
+    import { errorHandler } from "~/logic/helper.js";
     import Lister from "~/components/lister/lister.svelte";
     import { artistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -12,10 +13,7 @@
             let result = await randomArtists({ limit: 50 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting random artists:",
-                    result.error,
-                );
+                errorHandler("getting random artists", result.error);
                 return [];
             }
 

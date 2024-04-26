@@ -5,6 +5,7 @@
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { useQueryClient } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -21,7 +22,7 @@
 
         $API.updateFromTags({ type: $_type, id: $_item.id }).then((result) => {
             if (result.error) {
-                console.error("Ample error updating from tags:", result.error);
+                errorHandler("updating from tags", result.error);
             }
 
             if (result.success) {

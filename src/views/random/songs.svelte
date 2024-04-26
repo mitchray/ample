@@ -5,6 +5,7 @@
     import { songsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["randomSongs"],
@@ -12,10 +13,7 @@
             let result = await randomSongs({ limit: 50 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting random songs:",
-                    result.error,
-                );
+                errorHandler("getting random songs", result.error);
                 return [];
             }
 

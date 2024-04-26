@@ -5,6 +5,7 @@
     import { albumsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { PageTitle, User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     let title = $_("text.newest");
     $PageTitle = title;
@@ -15,10 +16,7 @@
             let result = await newestAlbums({ limit: 100 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting newest albums:",
-                    result.error,
-                );
+                errorHandler("getting newest albums", result.error);
                 return [];
             }
 

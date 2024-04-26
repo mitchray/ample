@@ -5,6 +5,7 @@
     import Lister from "~/components/lister/lister.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["newestAlbums"],
@@ -12,10 +13,7 @@
             let result = await newestAlbums({ limit: 50 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting newest albums:",
-                    result.error,
-                );
+                errorHandler("getting newest albums", result.error);
                 return [];
             }
 

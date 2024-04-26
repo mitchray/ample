@@ -5,6 +5,7 @@
     import { artistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["forgottenArtists"],
@@ -12,10 +13,7 @@
             let result = await forgottenArtists({ limit: 1000 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting forgotten artists:",
-                    result.error,
-                );
+                errorHandler("getting forgotten artists", result.error);
                 return [];
             }
 

@@ -3,6 +3,7 @@
     import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -19,7 +20,7 @@
 
         $API.updateArt({ type: $_type, id: $_item.id }).then((result) => {
             if (result.error) {
-                console.error("Ample error updating art:", result.error);
+                errorHandler("updating art", result.error);
             }
 
             if (result.success) {

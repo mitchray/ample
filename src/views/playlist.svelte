@@ -12,6 +12,7 @@
     import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
     import Portal from "~/components/portal.svelte";
     import Badge from "~/components/badge.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -49,10 +50,7 @@
             playlist = await $API.artist({ filter: params.id });
 
             if (playlist.error) {
-                console.error(
-                    "Ample error getting artist for playlist mix:",
-                    playlist.error,
-                );
+                errorHandler("getting artist for playlist mix", playlist.error);
                 loading = false;
                 return;
             }
@@ -63,10 +61,7 @@
             });
 
             if (songs.error) {
-                console.error(
-                    "Ample error getting songs from playlist:",
-                    songs.error,
-                );
+                errorHandler("getting songs from playlist", songs.error);
                 loading = false;
                 return;
             }

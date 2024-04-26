@@ -3,6 +3,7 @@
     import { shuffle, uniqBy } from "lodash-es";
     import { createQuery } from "@tanstack/svelte-query";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     /** Data of the item */
     export let data;
@@ -34,7 +35,7 @@
                 });
 
                 if (result.error) {
-                    console.error("Ample error getting art", result.error);
+                    errorHandler("getting art", result.error);
                     return [];
                 }
 

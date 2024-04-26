@@ -3,6 +3,7 @@
     import { _ } from "svelte-i18n";
     import ArtistCard from "~/components/cards/artistCard.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let artistID;
 
@@ -16,10 +17,7 @@
             });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting similar artists:",
-                    result.error,
-                );
+                errorHandler("getting similar artists", result.error);
                 return [];
             }
 

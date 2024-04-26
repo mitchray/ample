@@ -5,6 +5,7 @@
     import { smartlistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { Saved } from "~/stores/settings.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     let title = $_("text.smartlists");
     $PageTitle = title;
@@ -18,7 +19,7 @@
             let result = await $API.smartlists();
 
             if (result.error) {
-                console.error("Ample error getting smartlists:", result.error);
+                errorHandler("getting smartlists", result.error);
                 return [];
             }
 

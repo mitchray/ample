@@ -1,6 +1,7 @@
 <script>
     import Lister from "~/components/lister/lister.svelte";
     import { topSongs } from "~/logic/song.js";
+    import { errorHandler } from "~/logic/helper.js";
     import { _ } from "svelte-i18n";
     import { songsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -12,10 +13,7 @@
             let result = await topSongs({ limit: 5000 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting top rated songs:",
-                    result.error,
-                );
+                errorHandler("getting top rated songs", result.error);
                 return [];
             }
 

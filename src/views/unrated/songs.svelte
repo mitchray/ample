@@ -8,6 +8,7 @@
     import { unratedSongs } from "~/logic/song.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["unratedSongs"],
@@ -15,10 +16,7 @@
             let result = await unratedSongs({ limit: 100 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting unrated songs:",
-                    result.error,
-                );
+                errorHandler("getting unrated songs", result.error);
                 return [];
             }
 

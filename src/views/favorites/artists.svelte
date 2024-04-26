@@ -1,6 +1,7 @@
 <script>
     import Lister from "~/components/lister/lister.svelte";
     import { favoriteArtists } from "~/logic/artist.js";
+    import { errorHandler } from "~/logic/helper.js";
     import { _ } from "svelte-i18n";
     import { artistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -12,10 +13,7 @@
             let result = await favoriteArtists({ limit: 5000 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting favorite artists:",
-                    result.error,
-                );
+                errorHandler("getting favorite artists", result.error);
                 return [];
             }
 

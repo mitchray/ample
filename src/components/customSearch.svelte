@@ -3,6 +3,7 @@
     import { onMount } from "svelte";
     import { API } from "~/stores/state";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let loading = false;
     export let loadedTime;
@@ -229,7 +230,7 @@
         }
 
         if (results.error) {
-            console.error("Ample error with advanced search:", results.error);
+            errorHandler("advanced search", results.error);
         }
 
         loadedTime = new Date();
@@ -241,25 +242,22 @@
 
         allUsers = await $API.users();
         if (allUsers.error) {
-            console.error("Ample error getting users:", allUsers.error);
+            errorHandler("getting users", allUsers.error);
         }
 
         allCatalogs = await $API.catalogs();
         if (allCatalogs.error) {
-            console.error("Ample error getting catalogs:", allCatalogs.error);
+            errorHandler("getting catalogs", allCatalogs.error);
         }
 
         allPlaylists = await $API.playlists({ hide_search: 1 });
         if (allPlaylists.error) {
-            console.error("Ample error getting playlists:", allPlaylists.error);
+            errorHandler("getting playlists", allPlaylists.error);
         }
 
         allSmartlists = await $API.smartlists();
         if (allSmartlists.error) {
-            console.error(
-                "Ample error getting smartlists:",
-                allSmartlists.error,
-            );
+            errorHandler("getting smartlists", allSmartlists.error);
         }
 
         loaded = true;

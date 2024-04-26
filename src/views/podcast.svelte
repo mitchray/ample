@@ -7,6 +7,7 @@
     import Actions from "~/components/action/actions.svelte";
     import Lister from "~/components/lister/lister.svelte";
     import Art from "~/components/art.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -21,7 +22,7 @@
             });
 
             if (result.error) {
-                console.error("Ample error getting podcast:", result.error);
+                errorHandler("getting podcast", result.error);
                 return [];
             }
 

@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import WaveSurfer from "wavesurfer.js";
     import { API } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     let wavesurfer;
     let audioElement = new Audio({
@@ -37,7 +38,7 @@
         wavesurfer?.pause();
         $API.liveStream({ filter: 2 }).then((r) => {
             if (r.error) {
-                console.error("Ample error getting live stream:", r.error);
+                errorHandler("getting live stream", r.error);
             }
 
             console.debug(r);
@@ -55,7 +56,7 @@
         wavesurfer?.pause();
         $API.podcastEpisode({ filter: 672 }).then((r) => {
             if (r.error) {
-                console.error("Ample error getting podcast episode:", r.error);
+                errorHandler("getting podcast episode:", r.error);
             }
 
             console.debug(r);
@@ -72,7 +73,7 @@
         wavesurfer?.pause();
         $API.stream({ id: 35209, type: "song", format: "raw" }).then((r) => {
             if (r.error) {
-                console.error("Ample error getting stream:", r.error);
+                errorHandler("getting stream:", r.error);
             }
 
             console.debug(r);
@@ -88,7 +89,7 @@
         wavesurfer?.pause();
         $API.song({ filter: 35209 }).then((r) => {
             if (r.error) {
-                console.error("Ample error getting song:", r.error);
+                errorHandler("getting song:", r.error);
             }
 
             console.debug(r);

@@ -9,6 +9,7 @@
     import Actions from "~/views/test/actions.svelte";
     import Theme from "~/views/test/theme.svelte";
     import Wavesurfer from "~/views/test/wavesurfer.svelte";
+    import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
@@ -39,7 +40,7 @@
         data.playlist = await $API.playlist({ filter: 26 });
 
         if (data.playlist.error) {
-            console.error("Ample error getting playlist:", data.playlist.error);
+            errorHandler("getting playlist", data.playlist.error);
         }
     });
 </script>

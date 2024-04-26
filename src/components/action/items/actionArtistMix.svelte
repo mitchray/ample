@@ -5,7 +5,7 @@
     import { MediaPlayer } from "~/stores/elements.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { prepareForQueue } from "~/logic/helper.js";
+    import { errorHandler, prepareForQueue } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -44,7 +44,7 @@
                 let album = await $API.album({ filter: $_item.id });
 
                 if (album.error) {
-                    console.error("Ample error getting album:", album.error);
+                    errorHandler("getting album", album.error);
                     return null;
                 }
 
@@ -55,7 +55,7 @@
                 let song = await $API.song({ filter: $_item.id });
 
                 if (song.error) {
-                    console.error("Ample error getting song:", song.error);
+                    errorHandler("getting song", song.error);
                     return null;
                 }
 

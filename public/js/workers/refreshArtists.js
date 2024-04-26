@@ -1,4 +1,5 @@
 import AmpacheAPI from "javascript-ampache";
+import { errorHandler } from "~/logic/helper.js";
 
 onmessage = async function (message) {
     const { userToken, serverURL } = message.data;
@@ -23,7 +24,7 @@ onmessage = async function (message) {
         // Posting back to the page
         self.postMessage(final);
     } catch (e) {
-        console.error("Ample error refreshing all items in web worker", e);
+        errorHandler("refreshing all items in web worker", e);
     }
 };
 // Terminate with: worker.terminate()

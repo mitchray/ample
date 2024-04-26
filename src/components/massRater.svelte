@@ -2,6 +2,7 @@
     import { _ } from "svelte-i18n";
     import { getContext } from "svelte";
     import { API } from "~/stores/state";
+    import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let contextKey;
@@ -21,7 +22,7 @@
             });
 
             if (result.error) {
-                console.error("Ample error while rating:", result.error);
+                errorHandler("while rating", result.error);
             }
 
             let index = $dataDisplay.findIndex((el) => el.id === item.id);

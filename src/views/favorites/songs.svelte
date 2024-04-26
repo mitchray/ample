@@ -5,6 +5,7 @@
     import { songsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     $: query = createQuery({
         queryKey: ["favoriteSongs"],
@@ -12,10 +13,7 @@
             let result = await favoriteSongs({ limit: 5000 });
 
             if (result.error) {
-                console.error(
-                    "Ample error getting favorite songs:",
-                    result.error,
-                );
+                errorHandler("getting favorite songs", result.error);
                 return [];
             }
 
