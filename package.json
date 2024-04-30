@@ -4,6 +4,7 @@
     "type": "module",
     "scripts": {
         "build": "vite build && npm run copy",
+        "build-unminified": "vite build --minify false && npm run copy",
         "build-demo": "vite build --minify false && npm run copy && npm run demo-config",
         "dev": "vite",
         "start": "vite preview",
