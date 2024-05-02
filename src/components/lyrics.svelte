@@ -52,7 +52,7 @@
 
         if (follow) {
             waitForElement(".lyrics-container .current").then((selector) => {
-                selector.scrollIntoView({
+                selector?.scrollIntoView({
                     block: "center",
                     behavior: "auto",
                 });
