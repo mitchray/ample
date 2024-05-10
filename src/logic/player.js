@@ -316,6 +316,8 @@ class Player {
     }
 
     isEligibleToPlay(item) {
+        if (!item) return false;
+
         return (
             // SkipBelow is not enabled
             !get(SkipBelow) ||
