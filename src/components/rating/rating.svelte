@@ -21,6 +21,7 @@
     import { API, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { updateQueue } from "~/logic/ui.js";
 
     export let type = null;
     export let data = {};
@@ -88,7 +89,7 @@
                     item.rating = newRating;
                 });
 
-                $NowPlayingQueue = $NowPlayingQueue;
+                updateQueue();
             }
         });
     }
@@ -119,7 +120,7 @@
                     item.flag = flag;
                 });
 
-                $NowPlayingQueue = $NowPlayingQueue;
+                updateQueue();
             }
         });
     }

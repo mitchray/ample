@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { createVirtualizer } from "@tanstack/svelte-virtual";
     import { waitForElement } from "~/logic/helper.js";
-    import { showQueueItemAtIndex } from "~/logic/ui.js";
+    import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
     import { QueueIsOpen, QueueIsPinned, Saved } from "~/stores/settings.js";
     import {
@@ -22,9 +22,9 @@
         $MediaPlayer.playSelected(index);
     }
 
-    function handleClearPrevious() {
+    async function handleClearPrevious() {
         $NowPlayingQueue.splice(0, $NowPlayingIndex);
-        $NowPlayingQueue = $NowPlayingQueue;
+        await updateQueue();
         $NowPlayingIndex = 0;
 
         waitForElement(".queue-list").then((selector) => {
@@ -135,15 +135,13 @@
                 bind:this={virtualListEl}
                 style="overflow-y: auto; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
             >
-                <div
-                    style="height: {$virtualizer.getTotalSize()}px; position: relative;"
-                >
+                <div style="height: {$virtualizer.getTotalSize()}px;">
                     {#each items as item (item.index)}
                         <div
                             on:click={(e) => {
                                 handleAction(e, item.index);
                             }}
-                            style="transform: translateY({item.start}px; position: absolute; top: 0; left: 0; width: 100%;"
+                            style="top: {item.start}px; position: absolute; left: 0; width: 100%;"
                             data-index={item.index}
                         >
                             <QueueItem media={$NowPlayingQueue[item.index]} />
@@ -240,7 +238,7 @@
         background-color: var(--color-background);
         border-radius: 15px;
         margin-block-end: var(--spacing-lg);
-        contain: strict;
+        position: relative;
     }
 
     :global(.queue-dragging) {

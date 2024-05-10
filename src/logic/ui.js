@@ -1,5 +1,5 @@
 import { Saved, SidebarIsOpen } from "~/stores/settings.js";
-import { IsMobile, NowPlayingIndex } from "~/stores/state.js";
+import { IsMobile, NowPlayingIndex, NowPlayingQueue } from "~/stores/state.js";
 import { get } from "svelte/store";
 import { tick } from "svelte";
 import { QueueVirtualListBind } from "~/stores/elements.js";
@@ -39,6 +39,14 @@ export function showQueueItemAtIndex(index) {
         behavior: "smooth",
         align: "start",
     });
+}
+
+export async function updateQueue() {
+    // need to restore scroll offset as the list will reset
+    let offsetBefore = get(QueueVirtualListBind).scrollOffset;
+    NowPlayingQueue.set(get(NowPlayingQueue));
+    await tick();
+    get(QueueVirtualListBind).scrollToOffset(offsetBefore);
 }
 
 export function hideLoadingOverlay() {

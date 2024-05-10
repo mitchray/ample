@@ -1,5 +1,4 @@
 <script>
-    import { tick } from "svelte";
     import {
         CurrentMedia,
         NowPlayingIndex,
@@ -10,8 +9,8 @@
         SkipBelowAllowZero,
         SkipBelowRating,
     } from "~/stores/settings.js";
-    import { MediaPlayer, QueueVirtualListBind } from "~/stores/elements.js";
-    import { ticks } from "~/logic/ui.js";
+    import { MediaPlayer } from "~/stores/elements.js";
+    import { ticks, updateQueue } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import Art from "~/components/art.svelte";
@@ -51,11 +50,7 @@
             NowPlayingIndex.set($NowPlayingIndex - 1);
         }
 
-        // need to restore scroll offset as the list will reset
-        let offsetBefore = $QueueVirtualListBind.scrollOffset;
-        $NowPlayingQueue = $NowPlayingQueue;
-        await tick();
-        $QueueVirtualListBind.scrollToOffset(offsetBefore);
+        await updateQueue();
     }
 </script>
 
