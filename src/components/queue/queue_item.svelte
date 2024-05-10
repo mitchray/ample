@@ -1,4 +1,5 @@
 <script>
+    import { tick } from "svelte";
     import {
         CurrentMedia,
         NowPlayingIndex,
@@ -9,16 +10,15 @@
         SkipBelowAllowZero,
         SkipBelowRating,
     } from "~/stores/settings.js";
+    import { MediaPlayer, QueueVirtualListBind } from "~/stores/elements.js";
     import { ticks } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import Art from "~/components/art.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import MiniRating from "~/components/rating/miniRating.svelte";
-    import { MediaPlayer } from "~/stores/elements.js";
 
     export let media;
-    export let dragDisabled;
 
     let matchesRating;
 
@@ -33,13 +33,7 @@
         matchesRating = !$MediaPlayer.isEligibleToPlay(media);
     }
 
-    function startDrag(e) {
-        // preventing default to prevent lag on touch devices (because of the browser checking for screen scrolling)
-        e.preventDefault();
-        dragDisabled = false;
-    }
-
-    function handleRemoveItem(uuid) {
+    async function handleRemoveItem(uuid) {
         let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
 
         if (index === -1) return;
@@ -57,7 +51,11 @@
             NowPlayingIndex.set($NowPlayingIndex - 1);
         }
 
+        // need to restore scroll offset as the list will reset
+        let offsetBefore = $QueueVirtualListBind.scrollOffset;
         $NowPlayingQueue = $NowPlayingQueue;
+        await tick();
+        $QueueVirtualListBind.scrollToOffset(offsetBefore);
     }
 </script>
 
@@ -74,7 +72,7 @@
         <MaterialSymbol name="close" />
     </sl-button>
 
-    <span class="thumb" on:mousedown={startDrag} on:touchstart={startDrag}>
+    <span class="thumb">
         <Art
             data={media}
             radius="2px"
@@ -169,11 +167,7 @@
         line-height: 0;
         height: 38px;
         width: 38px;
-        cursor: grab;
-    }
-
-    :global(.queue-dragging) .thumb {
-        cursor: grabbing;
+        /*cursor: grab;*/
     }
 
     .queue-item {
@@ -216,10 +210,6 @@
 
     .queue-item .more {
         margin-inline-start: auto;
-    }
-
-    :global(.queue-dragging) .queue-item {
-        cursor: grabbing;
     }
 
     .matches-rating-threshold:after {

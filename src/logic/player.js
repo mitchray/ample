@@ -2,7 +2,7 @@ import { tick } from "svelte";
 import { get } from "svelte/store";
 import WaveSurfer from "wavesurfer.js";
 import { getSongVersions } from "~/logic/song";
-import { showCurrentMedia } from "~/logic/ui.js";
+import { showQueueItemAtIndex } from "~/logic/ui.js";
 import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,
@@ -349,7 +349,7 @@ class Player {
         this.#setQueueItems(tempArray).then(() => {
             NowPlayingIndex.set(0);
             this.start();
-            tick().then((r) => showCurrentMedia({ smooth: false }));
+            tick().then((r) => showQueueItemAtIndex(0));
         });
     }
 

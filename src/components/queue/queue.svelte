@@ -1,27 +1,21 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { flip } from "svelte/animate";
-    import { dndzone } from "svelte-dnd-action";
+    import { createVirtualizer } from "@tanstack/svelte-virtual";
     import { waitForElement } from "~/logic/helper.js";
-    import { showCurrentMedia } from "~/logic/ui.js";
+    import { showQueueItemAtIndex } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
     import { QueueIsOpen, QueueIsPinned, Saved } from "~/stores/settings.js";
     import {
-        CurrentMedia,
         IsMobile,
         NowPlayingIndex,
         NowPlayingQueue,
-        QueueIsUpdating,
     } from "~/stores/state.js";
-    import { MediaPlayer } from "~/stores/elements.js";
+    import { MediaPlayer, QueueVirtualListBind } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import QueueItem from "~/components/queue/queue_item.svelte";
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
     import RefillButton from "~/components/queue/queue_refill.svelte";
 
-    const flipDurationMs = 100;
-
-    let dragDisabled = true;
     let siteQueueBind;
 
     function handleAction(event, index) {
@@ -42,24 +36,6 @@
         $MediaPlayer.clearQueue();
     }
 
-    function handleSort(e) {
-        NowPlayingQueue.set([...e.detail.items]);
-
-        let currentIndex = $NowPlayingQueue.findIndex(
-            (item) => item._id === $CurrentMedia._id,
-        );
-
-        if (currentIndex !== -1) {
-            NowPlayingIndex.set(currentIndex);
-        }
-
-        dragDisabled = true;
-    }
-
-    function transformDraggedElement(draggedEl) {
-        draggedEl.classList.add("queue-dragging");
-    }
-
     function togglePinned() {
         let inverted = !$QueueIsPinned;
         $Saved.setItem("QueueIsPinned", inverted);
@@ -73,6 +49,19 @@
             QueueIsOpen.set(status);
         }
     }
+
+    $: virtualizer = createVirtualizer({
+        count: $NowPlayingQueue.length,
+        getScrollElement: () => virtualListEl,
+        estimateSize: () => 46,
+        overscan: 10,
+    });
+
+    $: items = $virtualizer.getVirtualItems();
+
+    $: $QueueVirtualListBind = $virtualizer;
+
+    let virtualListEl;
 </script>
 
 <div
@@ -93,7 +82,7 @@
             <sl-button-group>
                 <sl-button
                     class="show-current"
-                    on:click={showCurrentMedia}
+                    on:click={showQueueItemAtIndex($NowPlayingIndex)}
                     size="small"
                     title={$_("text.queueShowCurrent")}
                 >
@@ -141,31 +130,27 @@
             </sl-button>
         </div>
 
-        <div
-            class="queue-list"
-            on:consider={handleSort}
-            on:finalize={handleSort}
-            style="display: {$QueueIsUpdating ? 'none' : null}"
-            use:dndzone={{
-                items: $NowPlayingQueue,
-                dropTargetStyle: {},
-                flipDurationMs: flipDurationMs,
-                transformDraggedElement,
-                dragDisabled,
-            }}
-        >
-            {#if $NowPlayingQueue && $NowPlayingQueue.length > 0}
-                {#each $NowPlayingQueue as media, i (media)}
-                    <div
-                        on:click={(e) => {
-                            handleAction(e, i);
-                        }}
-                        animate:flip={{ duration: flipDurationMs }}
-                    >
-                        <QueueItem {media} bind:dragDisabled />
-                    </div>
-                {/each}
-            {/if}
+        <div class="queue-list">
+            <div
+                bind:this={virtualListEl}
+                style="overflow-y: auto; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
+            >
+                <div
+                    style="height: {$virtualizer.getTotalSize()}px; position: relative;"
+                >
+                    {#each items as item (item.index)}
+                        <div
+                            on:click={(e) => {
+                                handleAction(e, item.index);
+                            }}
+                            style="transform: translateY({item.start}px; position: absolute; top: 0; left: 0; width: 100%;"
+                            data-index={item.index}
+                        >
+                            <QueueItem media={$NowPlayingQueue[item.index]} />
+                        </div>
+                    {/each}
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -255,6 +240,7 @@
         background-color: var(--color-background);
         border-radius: 15px;
         margin-block-end: var(--spacing-lg);
+        contain: strict;
     }
 
     :global(.queue-dragging) {

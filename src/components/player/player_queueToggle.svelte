@@ -1,7 +1,8 @@
 <script>
     import { QueueIsOpen, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { showCurrentMedia } from "~/logic/ui.js";
+    import { showQueueItemAtIndex } from "~/logic/ui.js";
+    import { NowPlayingIndex } from "~/stores/state.js";
 
     function handleQueueToggle() {
         let inverted = !$QueueIsOpen;
@@ -9,7 +10,7 @@
         QueueIsOpen.set(inverted);
 
         if (inverted === true) {
-            showCurrentMedia({ smooth: false });
+            showQueueItemAtIndex($NowPlayingIndex);
         }
     }
 </script>

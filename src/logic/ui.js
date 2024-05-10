@@ -1,8 +1,8 @@
 import { Saved, SidebarIsOpen } from "~/stores/settings.js";
-import { IsMobile } from "~/stores/state.js";
+import { IsMobile, NowPlayingIndex } from "~/stores/state.js";
 import { get } from "svelte/store";
 import { tick } from "svelte";
-import { waitForElement } from "~/logic/helper.js";
+import { QueueVirtualListBind } from "~/stores/elements.js";
 
 /**
  * Close sidebar
@@ -34,11 +34,10 @@ export async function ticks(count) {
     }
 }
 
-export function showCurrentMedia({ smooth = true }) {
-    waitForElement(".site-queue .currentlyPlaying").then((selector) => {
-        selector.scrollIntoView({
-            behavior: smooth ? "smooth" : "instant",
-        });
+export function showQueueItemAtIndex(index) {
+    get(QueueVirtualListBind)?.scrollToIndex(index, {
+        behavior: "smooth",
+        align: "start",
     });
 }
 

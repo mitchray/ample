@@ -48,7 +48,7 @@
 
     const contextKey = uuidv4(); // unique key for each instance of actions
 
-    let playLimit = 500;
+    let playLimit = 5000;
 
     // underscore prefixed items are accessor aliases of exported params
     let _item = writable(item);
