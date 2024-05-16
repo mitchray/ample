@@ -106,24 +106,13 @@ export function lyricsAreTimestamped(lyrics) {
  Wait for an element to exist before continuing
  */
 export async function waitForElement(selector, useNodeDirectly) {
-    function find() {
-        return useNodeDirectly ? selector : document.querySelector(selector);
-    }
-    return new Promise((resolve, reject) => {
-        let el = find();
-        if (el) {
-            resolve(el);
-        }
+    let item = useNodeDirectly ? selector : document.querySelector(selector);
 
-        new MutationObserver((mutationRecords, observer) => {
-            let el = find();
-            resolve(el);
-            observer.disconnect();
-        }).observe(document.documentElement, {
-            childList: true,
-            subtree: true,
-        });
-    });
+    while (item === null) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+    }
+
+    return item;
 }
 
 export function setIndexes(items) {
