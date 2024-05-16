@@ -29,7 +29,7 @@
 
 <sl-dropdown bind:this={dropdown} on:pointerleave={handleOut} placement="top">
     <sl-button
-        disabled={$NowPlayingQueue.length === 0}
+        disabled={!previousItem}
         on:click={() => $MediaPlayer.previous()}
         on:pointerover={handleOver}
         slot="trigger"
