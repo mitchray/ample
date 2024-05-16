@@ -119,7 +119,7 @@
                     col.width = "180px";
                     break;
                 case "actions":
-                    col.width = "160px";
+                    col.width = "180px";
                     break;
                 case "fit":
                     col.width = getMaxWidth(col, 50);
