@@ -1,6 +1,5 @@
 <script>
     import { getContext, onDestroy, onMount } from "svelte";
-    import { waitForElement } from "~/logic/helper.js";
 
     export let contextKey;
 
@@ -70,10 +69,7 @@
 
     onMount(() => {
         if ($_virtualList && $listerScroller) {
-            // get row height based on first item
-            waitForElement($listerObject, true).then((selector) => {
-                $rowHeight = selector.firstChild?.clientHeight || $rowHeight;
-            });
+            $rowHeight = $listerObject?.firstChild?.clientHeight || $rowHeight;
 
             $listerScroller.addEventListener("scroll", handleScroll);
             update();

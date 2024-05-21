@@ -1,7 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
     import { createVirtualizer } from "@tanstack/svelte-virtual";
-    import { waitForElement } from "~/logic/helper.js";
     import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
     import { QueueIsOpen, QueueIsPinned, Saved } from "~/stores/settings.js";
@@ -26,10 +25,7 @@
         $NowPlayingQueue.splice(0, $NowPlayingIndex);
         await updateQueue();
         $NowPlayingIndex = 0;
-
-        waitForElement(".queue-list").then((selector) => {
-            selector.scrollTop = 0;
-        });
+        virtualListEl.scrollTop = 0;
     }
 
     function handleClearQueue() {

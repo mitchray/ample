@@ -102,19 +102,6 @@ export function lyricsAreTimestamped(lyrics) {
     return new RegExp(/\[\d\d:/gi).test(lyrics);
 }
 
-/**
- Wait for an element to exist before continuing
- */
-export async function waitForElement(selector, useNodeDirectly) {
-    let item = useNodeDirectly ? selector : document.querySelector(selector);
-
-    while (item === null) {
-        await new Promise((resolve) => requestAnimationFrame(resolve));
-    }
-
-    return item;
-}
-
 export function setIndexes(items) {
     for (let i = 0; i < items.length; i++) {
         items[i].initialOrder = i;

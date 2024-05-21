@@ -1,6 +1,5 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { waitForElement } from "~/logic/helper";
     import Lyrics from "~/logic/lyrics";
     import Portal from "~/components/portal.svelte";
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
@@ -10,6 +9,7 @@
     let follow = true;
     let loading = true;
     let drawer;
+    let container;
 
     $: {
         if (lyrics && $CurrentMedia) {
@@ -37,10 +37,8 @@
         $MediaPlayer.wavesurfer.un("timeupdate", changeLine);
         $MediaPlayer.wavesurfer.on("timeupdate", changeLine);
 
-        waitForElement(".lyrics-container").then((selector) => {
-            selector.scrollTop = 0;
-            follow = $lyrics.isTimestamped;
-        });
+        container.scrollTop = 0;
+        follow = $lyrics.isTimestamped;
     }
 
     function handleScroll() {
@@ -51,11 +49,9 @@
         $lyrics.move($MediaPlayer.getCurrentTime());
 
         if (follow) {
-            waitForElement(".lyrics-container .current").then((selector) => {
-                selector?.scrollIntoView({
-                    block: "center",
-                    behavior: "auto",
-                });
+            container.querySelector(".current")?.scrollIntoView({
+                block: "center",
+                behavior: "auto",
             });
         }
     }
@@ -95,6 +91,7 @@
             class:hasTimestamps={$lyrics.isTimestamped}
             on:touchstart={handleScroll}
             on:wheel={handleScroll}
+            bind:this={container}
         >
             {#if $CurrentMedia?.object_type === "song"}
                 {#if $lyrics.hasLyrics() && !loading}
