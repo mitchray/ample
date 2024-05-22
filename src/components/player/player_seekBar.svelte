@@ -2,7 +2,6 @@
     import { onMount } from "svelte";
     import { CurrentMedia } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
-    import { formatSongLength } from "~/logic/formatters.js";
 
     let seekWidth;
     let currentTime;
@@ -144,6 +143,7 @@
         inset-block-end: 0;
         inset-block-start: 0;
         width: 100%;
+        will-change: transform;
     }
 
     /* while dragging increase the active area  */
