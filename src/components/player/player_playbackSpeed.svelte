@@ -1,50 +1,74 @@
 <script>
+    import "nouislider/dist/nouislider.css";
+    import noUiSlider from "nouislider";
+    import { onMount } from "svelte";
     import { PlaybackSpeed } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let menu;
+    let speedSlider;
 
-    function handleClick() {
-        let options = menu.querySelectorAll("sl-menu-item");
-
-        // uncheck all other items
-        options.forEach((opt) => {
-            opt.checked = false;
+    onMount(() => {
+        noUiSlider.create(speedSlider, {
+            start: [1],
+            orientation: "vertical",
+            range: {
+                min: [0.2, 0.1],
+                "35%": [1, 0.1],
+                "80%": [2, 0.25],
+                max: [3],
+            },
+            pips: {
+                mode: "steps",
+                density: 10,
+                format: {
+                    to: function (value) {
+                        return value + "×";
+                    },
+                },
+                filter: (value, type) => {
+                    const highlight = [0.2, 1, 2, 3];
+                    return highlight.includes(value) ? 1 : 0;
+                },
+            },
         });
-    }
 
-    function handleSelection(e) {
-        $PlaybackSpeed = e.detail.item.value;
-    }
+        speedSlider.noUiSlider.on("update", (values, handle) => {
+            $PlaybackSpeed = values[handle];
+        });
+    });
 </script>
 
 <sl-menu-item>
     Playback speed
     <MaterialSymbol name="speed" slot="prefix" />
 
-    <sl-menu
-        bind:this={menu}
-        on:click={handleClick}
-        on:sl-select={handleSelection}
-        slot="submenu"
-    >
-        <sl-menu-item type="checkbox" value="0.25">0.25×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="0.5">0.5×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="0.7">0.7×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="0.8">0.8×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="0.9">0.9×</sl-menu-item>
-
+    <sl-card slot="submenu" style="width: 100px;">
+        <div
+            class="slider"
+            bind:this={speedSlider}
+            style="height: 250px;"
+        ></div>
         <sl-divider></sl-divider>
-
-        <sl-menu-item checked type="checkbox" value="1.0">1×</sl-menu-item>
-
-        <sl-divider></sl-divider>
-
-        <sl-menu-item type="checkbox" value="1.1">1.1×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="1.2">1.2×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="1.3">1.3×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="1.5">1.5×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="1.75">1.75×</sl-menu-item>
-        <sl-menu-item type="checkbox" value="1.75">2×</sl-menu-item>
-    </sl-menu>
+        {$PlaybackSpeed}×
+    </sl-card>
 </sl-menu-item>
+
+<style>
+    .slider:global(.noUi-target) {
+        background-color: var(--color-outline-variant);
+        border-color: transparent;
+        box-shadow: none;
+        border-radius: 3px;
+    }
+
+    .slider :global(.noUi-handle) {
+        background-color: var(--color-primary);
+        box-shadow: none;
+        border-color: transparent;
+    }
+
+    .slider :global(.noUi-handle):before,
+    .slider :global(.noUi-handle):after {
+        background-color: var(--color-on-primary);
+    }
+</style>

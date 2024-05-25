@@ -42,6 +42,7 @@
         "localforage": "^1.10.0",
         "lodash-es": "^4.17.21",
         "material-symbols": "^0.17.3",
+        "nouislider": "^15.7.2",
         "sortablejs": "^1.15.1",
         "svelte-dnd-action": "^0.9.43",
         "svelte-i18n": "^4.0.0",
