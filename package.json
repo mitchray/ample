@@ -32,7 +32,7 @@
     },
     "dependencies": {
         "@floating-ui/dom": "^1.4.2",
-        "@shoelace-style/shoelace": "2.15.0",
+        "@shoelace-style/shoelace": "2.15.1",
         "@tanstack/svelte-query": "^5.15.0",
         "@tanstack/svelte-virtual": "^3.5.0",
         "dompurify": "^3.0.6",
