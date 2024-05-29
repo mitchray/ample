@@ -12,6 +12,7 @@ export function setupI18n() {
     register("fr", () => import("../../languages/fr.json"));
     register("pt", () => import("../../languages/pt.json"));
     register("es", () => import("../../languages/es.json"));
+    register("zh-Hant", () => import("../../languages/zh-Hant.json"));
 
     init({
         fallbackLocale: "en",
@@ -311,6 +312,32 @@ export const tabulatorStrings = {
             time: "Longitud",
             counter: "Visitas",
             year: "Fecha",
+        },
+    },
+    "zh-hant": {
+        columns: {
+            actions: "動作",
+            "album.name": "專輯",
+            albumCount: "專輯數量",
+            albums: "專輯",
+            artist: "創作者",
+            artists: "創作者",
+            count: "數量",
+            genres: "類型",
+            items: "項目",
+            name: "名稱",
+            owner: "擁有者",
+            playcount: "播放次數",
+            published: "發布",
+            quality: "品質",
+            rating: "評分",
+            size: "大小",
+            songcount: "歌曲數量",
+            songs: "歌曲",
+            state: "狀態",
+            time: "時間",
+            type: "種類",
+            year: "年",
         },
     },
 };

@@ -11,7 +11,8 @@
         "it",
         "ko",
         "pl",
-        "pt"
+        "pt",
+        "zh-Hant"
     ],
     "modules": [
         "https://cdn.jsdelivr.net/npm/@inlang/plugin-json@latest/dist/index.js",
