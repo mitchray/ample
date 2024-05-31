@@ -1,43 +1,44 @@
 <script>
-    import { _ } from "svelte-i18n";
     import { createEventDispatcher, onMount } from "svelte";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
     export let type;
-    export let selectedPlaylist;
-    export let showSelected;
+    export let selectedPlaylists = [];
+    export let multiple = false;
 
     const dispatch = createEventDispatcher();
 
-    let search = "";
-    let filteredList;
     let playlistItems = [];
 
     $: playlistItems = playlistItems;
-    $: filteredList = playlistItems.filter(
-        (item) => item.name.toLocaleLowerCase().indexOf(search) !== -1,
-    );
 
-    async function handleSelection(playlist) {
-        // test if selected playlist is still valid (i.e. not deleted)
-        let testPlaylist = await $API.playlist({ filter: playlist.id });
+    function handleRadio(e) {
+        selectedPlaylists = [e.target.value];
 
-        if (testPlaylist.error) {
-            errorHandler("getting playlist", testPlaylist.error);
-            return;
+        announce();
+    }
+
+    function handleCheckbox(e) {
+        if (e.target.checked) {
+            selectedPlaylists.push(e.target.name);
+        } else {
+            selectedPlaylists = selectedPlaylists.filter(
+                (item) => item !== e.target.name,
+            );
         }
 
-        // if invalid, remove from the list and reload the playlists
-        if (!testPlaylist.id) {
-            await loadData();
-            selectedPlaylist = null;
+        selectedPlaylists = selectedPlaylists;
+
+        announce();
+    }
+
+    async function announce() {
+        if (selectedPlaylists.length < 1) {
             dispatch("cleared");
-            return;
+        } else {
+            dispatch("selected");
         }
-
-        selectedPlaylist = playlist;
-        dispatch("selected");
     }
 
     async function loadData() {
@@ -52,52 +53,40 @@
         }
     }
 
-    function handleChange(e) {
-        search = e.target.value;
-    }
-
     onMount(() => {
         loadData();
     });
 </script>
 
 <div class="container">
-    {#if showSelected}
-        <div class="current">
-            {#if selectedPlaylist}
-                <sl-badge variant="primary" title={selectedPlaylist.name}>
-                    {selectedPlaylist.name}
-                </sl-badge>
-            {:else}
-                <span class="warning">
-                    {$_("text.playlistNoneSelected")}
-                </span>
-            {/if}
-        </div>
-    {/if}
-
-    <sl-input
-        class="filter"
-        clearable
-        on:sl-input={handleChange}
-        placeholder={$_("text.filter")}
-        type="text"
-    ></sl-input>
-
     <ul class="playlists">
-        {#if filteredList.length > 0}
-            {#each filteredList as item}
-                <li
-                    class="item"
-                    on:click={handleSelection(item)}
-                    class:selected={selectedPlaylist &&
-                        selectedPlaylist.id === item.id}
-                >
+        {#if multiple}
+            {#each playlistItems as item}
+                <li class="item">
                     <span class="item-inner truncate" title={item.name}>
-                        {item.name}
+                        <sl-checkbox
+                            name={item.id}
+                            on:sl-change={handleCheckbox}
+                        >
+                            {item.name}
+                        </sl-checkbox>
                     </span>
                 </li>
             {/each}
+        {:else}
+            <sl-radio-group
+                name="selected"
+                value={selectedPlaylists[0]}
+                on:sl-change={handleRadio}
+            >
+                {#each playlistItems as item}
+                    <li class="item">
+                        <span class="item-inner truncate" title={item.name}>
+                            <sl-radio value={item.id}>{item.name}</sl-radio>
+                        </span>
+                    </li>
+                {/each}
+            </sl-radio-group>
         {/if}
     </ul>
 </div>
@@ -110,16 +99,11 @@
         overflow: hidden;
     }
 
-    .selected {
-        font-weight: 700;
-        background-color: var(--color-secondary-container);
-        color: var(--color-on-secondary-container);
-    }
-
     .playlists {
         display: flex;
         flex-direction: column;
         overflow-y: auto;
+        overflow-x: hidden;
         gap: 1px;
         flex: 1;
         border: 1px solid var(--color-outline-variant);
@@ -133,17 +117,5 @@
         display: block;
         padding: var(--spacing-sm) var(--spacing-md);
         max-width: 100%; /* key to having overflow take effect with the flex-start items */
-    }
-
-    .filter {
-        margin-block-end: var(--spacing-sm);
-    }
-
-    .current {
-        margin-block-end: var(--spacing-lg);
-    }
-
-    .warning {
-        color: var(--swatch-yellow-500);
     }
 </style>

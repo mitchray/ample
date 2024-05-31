@@ -9,9 +9,13 @@
     import { errorHandler, prepareForQueue } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
 
-    let selectedPlaylist = $QueueRefill.smartlist;
+    let selectedPlaylist;
+    let playlistsArray = [];
     let isFetching = false;
     let timeout;
+
+    // when selected playlist changes, pass it back up to the selector component
+    $: selectedPlaylist, (playlistsArray = [selectedPlaylist]);
 
     $: shouldAdd =
         $QueueRefill.enabled &&
@@ -30,6 +34,22 @@
         }
     }
 
+    $: {
+        // test the saved smartlist does exist
+        if ($QueueRefill.smartlist) {
+            $API.playlist({
+                filter: $QueueRefill.smartlist,
+            }).then((result) => {
+                if (result.error) {
+                    errorHandler("getting playlists", result.error);
+                    selectedPlaylist = null;
+                } else {
+                    selectedPlaylist = result.id;
+                }
+            });
+        }
+    }
+
     function fetchItems() {
         return new Promise((resolve, reject) => {
             try {
@@ -37,7 +57,7 @@
 
                 if ($QueueRefill.mode === "smartlist" && selectedPlaylist) {
                     apiCall = $API.playlistSongs({
-                        filter: selectedPlaylist.id,
+                        filter: selectedPlaylist,
                         limit: 100,
                     });
                 } else if ($QueueRefill.mode === "mix") {
@@ -112,29 +132,14 @@
     }
 
     function handleSelectedPlaylist() {
-        QueueRefill.set({ ...$QueueRefill, smartlist: selectedPlaylist.id });
+        selectedPlaylist = playlistsArray[0];
+        QueueRefill.set({ ...$QueueRefill, smartlist: selectedPlaylist });
         $Saved.setItem("QueueRefill", $QueueRefill);
     }
 
     function handleClearedPlaylist() {
         QueueRefill.set({ ...$QueueRefill, smartlist: null });
         $Saved.setItem("QueueRefill", $QueueRefill);
-    }
-
-    $: {
-        // test the saved smartlist does exist
-        if ($QueueRefill.smartlist) {
-            $API.playlist({
-                filter: $QueueRefill.smartlist,
-            }).then((result) => {
-                if (result.error) {
-                    errorHandler("getting playlists", result.error);
-                    selectedPlaylist = null;
-                } else {
-                    selectedPlaylist = result;
-                }
-            });
-        }
     }
 </script>
 
@@ -185,8 +190,7 @@
 
             <PlaylistSelector
                 type="smartlists"
-                showSelected={true}
-                bind:selectedPlaylist
+                bind:selectedPlaylists={playlistsArray}
                 on:selected={handleSelectedPlaylist}
                 on:cleared={handleClearedPlaylist}
             />

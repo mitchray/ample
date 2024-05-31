@@ -9,15 +9,22 @@
     export let songs;
 
     let drawer, drawerEdit;
-    let selectedPlaylist;
+    let newPlaylist = null;
+    let selectedPlaylists;
     let ignoreDuplicates = true;
 
     function handleSave() {
-        songs.forEach((element) => {
-            $API.playlistAddSong({
-                filter: selectedPlaylist.id,
-                song: element.id,
-                check: ignoreDuplicates ? 1 : 0,
+        if (newPlaylist) {
+            selectedPlaylists = [newPlaylist.id];
+        }
+
+        selectedPlaylists.forEach((playlistID) => {
+            songs.forEach((element) => {
+                $API.playlistAddSong({
+                    filter: playlistID,
+                    song: element.id,
+                    check: ignoreDuplicates ? 1 : 0,
+                });
             });
         });
 
@@ -31,11 +38,7 @@
     on:sl-after-hide
     on:sl-request-close={keepDrawerOpen}
 >
-    <PlaylistSelector
-        bind:selectedPlaylist
-        showSelected={true}
-        type="playlists"
-    />
+    <PlaylistSelector bind:selectedPlaylists multiple={true} type="playlists" />
 
     <sl-checkbox
         checked={ignoreDuplicates}
@@ -53,7 +56,7 @@
     </sl-button>
 
     <sl-button
-        disabled={!selectedPlaylist}
+        disabled={selectedPlaylists?.length < 1}
         on:click={handleSave}
         slot="footer"
         variant="primary"
@@ -62,7 +65,7 @@
     </sl-button>
 
     <DrawerEdit
-        bind:playlist={selectedPlaylist}
+        bind:playlist={newPlaylist}
         bind:this={drawerEdit}
         contained
         isNew={true}
