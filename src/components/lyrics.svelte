@@ -4,6 +4,7 @@
     import Portal from "~/components/portal.svelte";
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
     import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
+    import { throttle } from "lodash-es";
 
     let lyrics = new Lyrics(); // custom store
     let follow = true;
@@ -33,9 +34,11 @@
         }
     }
 
+    const throttledAction = throttle(changeLine, 0.25 * 1000);
+
     function resetEvents() {
-        $MediaPlayer.wavesurfer.un("timeupdate", changeLine);
-        $MediaPlayer.wavesurfer.on("timeupdate", changeLine);
+        $MediaPlayer.wavesurfer.un("timeupdate", throttledAction);
+        $MediaPlayer.wavesurfer.on("timeupdate", throttledAction);
 
         container.scrollTop = 0;
         follow = $lyrics.isTimestamped;
@@ -45,20 +48,25 @@
         follow = false;
     }
 
+    function scrollToLine() {
+        container.querySelector(".current")?.scrollIntoView({
+            block: "center",
+            behavior: "smooth",
+        });
+    }
+
     function changeLine() {
         $lyrics.move($MediaPlayer.getCurrentTime());
 
         if (follow) {
-            container.querySelector(".current")?.scrollIntoView({
-                block: "center",
-                behavior: "auto",
-            });
+            scrollToLine();
         }
     }
 
     function handleClick(time) {
         if (time > 0) {
             $MediaPlayer.seekTo(time / $MediaPlayer.getDuration());
+            scrollToLine();
             follow = true;
         }
     }
@@ -131,9 +139,12 @@
         gap: var(--spacing-lg);
     }
 
+    .line {
+        transition: color 0.25s ease-in-out;
+    }
+
     .current {
         color: var(--color-primary);
-        transition: color 0.1s ease-in-out;
     }
 
     .disable-scroll {
