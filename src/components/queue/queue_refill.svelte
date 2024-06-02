@@ -20,18 +20,22 @@
     $: shouldAdd =
         $QueueRefill.enabled &&
         $NowPlayingQueue.length > 0 &&
-        $NowPlayingIndex > $NowPlayingQueue.length - 10;
+        $NowPlayingIndex > $NowPlayingQueue.length - 10 &&
+        !isFetching;
 
     $: {
-        if (shouldAdd && !isFetching) {
+        if (shouldAdd) {
             clearTimeout(timeout);
-            isFetching = true;
-            timeout = setTimeout(() => {
-                fetchItems().then(() => {
-                    isFetching = false;
-                });
-            }, 10000);
+            startFetching();
         }
+    }
+
+    async function startFetching() {
+        isFetching = true;
+        timeout = setTimeout(async () => {
+            await fetchItems();
+            isFetching = false;
+        }, 10000);
     }
 
     $: {
@@ -87,7 +91,7 @@
                             let result = Array.isArray(response)
                                 ? response
                                 : [response];
-                            if (result.length > 0) {
+                            if (result.length > 0 && shouldAdd) {
                                 $MediaPlayer.playLast(prepareForQueue(result));
 
                                 addAlert({
