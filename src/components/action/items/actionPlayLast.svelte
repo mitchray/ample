@@ -24,5 +24,5 @@
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.playLast")}
 >
-    <MaterialSymbol name="playlist_add" slot="prefix" />
+    <MaterialSymbol name="add" slot="prefix" />
 </sl-button>

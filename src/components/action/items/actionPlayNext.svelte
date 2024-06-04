@@ -24,5 +24,5 @@
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.playNext")}
 >
-    <MaterialSymbol name="menu_open" slot="prefix" />
+    <MaterialSymbol name="skip_next" slot="prefix" />
 </sl-button>
