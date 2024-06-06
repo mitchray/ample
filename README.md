@@ -1,6 +1,6 @@
 ## _Ample_: A web browser client for [Ampache](https://ampache.org/) v6+
 
-<img src="https://github.com/mitchray/ample/assets/5735900/e2564e30-d7af-4fc8-b2e1-bbff93a3356e" width=800 alt="Ample screenshot" />
+<img src="https://github.com/mitchray/ample/assets/5735900/194c98a2-db2b-4f6c-be3b-92c80342436a" width=800 alt="Ample screenshot" />
 
 ## Demo
 
