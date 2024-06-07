@@ -18,7 +18,7 @@
     import Header from "~/components/header.svelte";
     import Sidebar from "~/components/sidebar/sidebar.svelte";
     import Queue from "~/components/queue/queue.svelte";
-    import Player from "~/components/player/player2.svelte";
+    import Player from "~/components/player/player.svelte";
     import Alerts from "~/components/alert/alertsContainer.svelte";
     import Lyrics from "~/components/lyrics.svelte";
     import Preferences from "~/views/preferences/preferences.svelte";
