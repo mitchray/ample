@@ -34,7 +34,8 @@ export async function ticks(count) {
     }
 }
 
-export function showQueueItemAtIndex(index) {
+export async function showQueueItemAtIndex(index) {
+    await tick();
     get(QueueVirtualListBind)?.scrollToIndex(index, {
         behavior: "smooth",
         align: "start",
