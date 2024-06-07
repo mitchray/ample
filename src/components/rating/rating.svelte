@@ -41,6 +41,7 @@
             $recentRating.rating !== rating
         ) {
             rating = $recentRating.rating;
+            refreshAverageRating();
         }
 
         if (
@@ -90,6 +91,7 @@
                 });
 
                 updateQueue();
+                refreshAverageRating();
             }
         });
     }
@@ -124,6 +126,48 @@
             }
         });
     }
+
+    function refreshAverageRating() {
+        switch (type) {
+            case "song":
+                $API.song({ filter: id }).then((r) => {
+                    if (!r.error) {
+                        averagerating = r.averagerating;
+                    }
+                });
+                break;
+            case "album":
+                $API.album({ filter: id }).then((r) => {
+                    if (!r.error) {
+                        averagerating = r.averagerating;
+                    }
+                });
+                break;
+            case "artist":
+                $API.artist({ filter: id }).then((r) => {
+                    if (!r.error) {
+                        averagerating = r.averagerating;
+                    }
+                });
+                break;
+            case "playlist":
+                $API.playlist({ filter: id }).then((r) => {
+                    if (!r.error) {
+                        averagerating = r.averagerating;
+                    }
+                });
+                break;
+            case "podcast":
+                $API.podcast({ filter: id }).then((r) => {
+                    if (!r.error) {
+                        averagerating = r.averagerating;
+                    }
+                });
+                break;
+            default:
+                break;
+        }
+    }
 </script>
 
 <div class="c-rating" class:disabled={!id}>
@@ -146,9 +190,14 @@
     </span>
 
     {#if averagerating && showAverageRatings}
-        <span class="average" title={$_("text.ratingAverage")}>
-            ({averagerating})
-        </span>
+        <sl-badge
+            class="average"
+            title={$_("text.ratingAverage")}
+            variant="neutral"
+            pill
+        >
+            {averagerating.toFixed(1)}
+        </sl-badge>
     {/if}
 </div>
 
@@ -203,6 +252,8 @@
     .average {
         cursor: default;
         padding-inline-start: var(--spacing-sm);
+        overflow: visible !important;
+        opacity: 0.7;
     }
 
     .new {
