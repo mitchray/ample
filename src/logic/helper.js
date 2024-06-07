@@ -163,6 +163,7 @@ export function prepareForQueue(arr) {
         "art",
         "object_type",
         "rating",
+        "averagerating",
         "flag",
         "url",
 
