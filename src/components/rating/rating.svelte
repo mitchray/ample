@@ -128,44 +128,20 @@
     }
 
     function refreshAverageRating() {
-        switch (type) {
-            case "song":
-                $API.song({ filter: id }).then((r) => {
-                    if (!r.error) {
-                        averagerating = r.averagerating;
-                    }
-                });
-                break;
-            case "album":
-                $API.album({ filter: id }).then((r) => {
-                    if (!r.error) {
-                        averagerating = r.averagerating;
-                    }
-                });
-                break;
-            case "artist":
-                $API.artist({ filter: id }).then((r) => {
-                    if (!r.error) {
-                        averagerating = r.averagerating;
-                    }
-                });
-                break;
-            case "playlist":
-                $API.playlist({ filter: id }).then((r) => {
-                    if (!r.error) {
-                        averagerating = r.averagerating;
-                    }
-                });
-                break;
-            case "podcast":
-                $API.podcast({ filter: id }).then((r) => {
-                    if (!r.error) {
-                        averagerating = r.averagerating;
-                    }
-                });
-                break;
-            default:
-                break;
+        const apiMap = {
+            song: () => $API.song({ filter: id }),
+            album: () => $API.album({ filter: id }),
+            artist: () => $API.artist({ filter: id }),
+            playlist: () => $API.playlist({ filter: id }),
+            podcast: () => $API.podcast({ filter: id }),
+        };
+
+        if (apiMap[type]) {
+            apiMap[type]().then((r) => {
+                if (!r.error) {
+                    averagerating = r.averagerating;
+                }
+            });
         }
     }
 </script>
