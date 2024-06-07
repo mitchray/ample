@@ -833,6 +833,10 @@ sl-select small {
     outline: 0;
 }
 
+.current-icon {
+    flex-shrink: 0;
+}
+
 /*
 Variants
 */
