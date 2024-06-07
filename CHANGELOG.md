@@ -5,7 +5,7 @@
 ### Player
 - Streamlined UI
 - Waveform now stylized and full width of player; can now be hidden
-- Player itself can be hidden
+- Entire player itself can be hidden
 - Hover over next/previous buttons for item details
 - Added buttons for +30sec & -10sec
 - Playback speed options (with pitch correction)
@@ -28,23 +28,22 @@
   - Display: Table, Cards (small), Cards (large), Tracks (columns), Tracks (table)
   - Sort: Name, Artist, Rating, Year
   - Grouping: Name, Release Type, Year, Decade (from Year tag)
-- Sidebar toggleable categories
 - Client-side settings now saved per user
-- Table columns can be repositioned via Table Options above each table
+- Table columns can be repositioned via Table Options located above each table
   - Actions are now the first column by default instead of stickied at the end
 
 ### Changed  
 - Improved search results
   - Results are ordered by their weighted score (using fuse.js)
   - Show total results per type
-  - Removed separate `X Starting With` and `X Containing` (not needed with the new ordering)
+  - Removed separate `X Starting With` and `X Containing` (not needed with the new system)
 - Moved Insights pages (e.g. Trending, Unrated etc) out of sidebar and onto homepage
 - `Skip below rating`
   - Instead of filtering items before adding to queue, they will be added but auto-skipped if enabled (shown by diagonal shading)
   - Can optionally allow unrated items through the filter
   - Moved from player to queue
 - Opening the queue will reveal the currently playing media
-- Moved queued song/media parent items from the main dropdown menu to their own submenu 
+- Moved song/media parent items from the main dropdown menu to their own submenu 
 - Notifications can be 'silenced'; they will only show in the list without an alert
 - Artist `Appears On`
   - Consolidated together at the end of artist releases instead of per release type
@@ -55,10 +54,12 @@
 - Lyrics panel now a full overlay instead of a fixed panel overlaying the content
 
 ### Fixed
-- Rearranging the queue could mark the currently playing media incorrectly
+- ^~~Rearranging the queue could mark the currently playing media incorrectly~~
 - Rating the currently playing item would not be reflected elsewhere
+- Improved error handling
 
 ## Removed
+- ^Queue reordering is temporarily disabled in favour of having it be virtualised for performance
 
 ## [2.0.3] - 2024-01-08
 ### Requires at least Ampache 6.0.1
