@@ -195,6 +195,7 @@
             title={$_("text.ratingAverage")}
             variant="neutral"
             pill
+            on:click={refreshAverageRating}
         >
             {averagerating.toFixed(1)}
         </sl-badge>
