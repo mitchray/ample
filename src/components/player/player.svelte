@@ -250,6 +250,7 @@
     }
 
     .player__settings {
+        display: none;
         inset-block-end: var(--spacing-sm);
         inset-inline-end: var(--spacing-sm);
     }
