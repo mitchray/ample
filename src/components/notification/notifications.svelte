@@ -30,14 +30,12 @@
 </script>
 
 <sl-dropdown hoist>
-    <div class="container" slot="trigger">
+    <div slot="trigger">
         <sl-button>
-            <MaterialSymbol name="notifications" />
+            <MaterialSymbol name="notifications" slot="prefix" />
 
-            <span>
-                <sl-badge pill variant="neutral">
-                    {$Notifications.length}
-                </sl-badge>
+            <span class="counter">
+                {$Notifications.length}
             </span>
         </sl-button>
     </div>
@@ -315,9 +313,8 @@
         margin-inline-end: auto;
     }
 
-    .container {
+    .counter {
         display: flex;
-        align-items: center;
     }
 
     .header {
