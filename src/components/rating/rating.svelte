@@ -184,6 +184,7 @@
         align-items: center;
         line-height: 0;
         user-select: none;
+        height: 1em; /* set a height avg rating doesn't misalign ones without it */
     }
 
     .c-rating.disabled {
@@ -227,7 +228,6 @@
     }
 
     .average {
-        cursor: default;
         padding-inline-start: var(--spacing-sm);
         overflow: visible !important;
     }
