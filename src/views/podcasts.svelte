@@ -2,16 +2,13 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
-    import { podcastsPreset } from "~/components/lister/columns.js";
-    import Lister from "~/components/lister/lister.svelte";
-    import { Saved } from "~/stores/settings.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { podcastsPreset } from "~/components/lister/columns.js";
 
     $: query = createQuery({
         queryKey: ["podcasts"],
-        initialData: async () => {
-            await $Saved.getItem("podcasts");
-        },
         queryFn: async () => {
             let result = await $API.podcasts();
 
@@ -19,8 +16,6 @@
                 errorHandler("getting podcasts", result.error);
                 return [];
             }
-
-            await $Saved.setItem("podcasts", result);
 
             return result;
         },
@@ -32,6 +27,8 @@
 
     let title = $_("text.podcasts");
     $PageTitle = title;
+
+    let tabulator = null;
 </script>
 
 <div class="page-header">
@@ -46,15 +43,17 @@
     {#if podcasts.length < 1}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Podcasts"
-            data={podcasts}
-            columns={podcastsPreset}
-            type="podcasts"
-            virtualList={true}
-            actionData={{
-                disable: true,
-            }}
-        />
+        <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <MassRater bind:tabulator />
+            </div>
+
+            <Tabulator
+                bind:tabulator
+                data={podcasts}
+                columns={podcastsPreset}
+                options={{ persistenceID: "podcasts" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

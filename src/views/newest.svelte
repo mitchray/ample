@@ -1,14 +1,17 @@
 <script>
     import { _ } from "svelte-i18n";
     import { newestAlbums } from "~/logic/album";
-    import Lister from "~/components/lister/lister.svelte";
-    import { albumsPreset } from "~/components/lister/columns.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { PageTitle, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
+    import { albumsPreset } from "~/components/lister/columns.js";
 
     let title = $_("text.newest");
     $PageTitle = title;
+    let tabulator = null;
 
     $: query = createQuery({
         queryKey: ["newestAlbums"],
@@ -41,18 +44,24 @@
     {#if albums.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Albums"
-            data={albums}
-            columns={albumsPreset}
-            type="album"
-            virtualList={true}
-            actionData={{
-                type: "albums",
-                displayMode: "fullButtons",
-                showShuffle: albums.length > 1,
-                data: Object.create({ albums: albums }),
-            }}
-        />
+        <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <Actions
+                    type="songs"
+                    displayMode="fullButtons"
+                    showShuffle={albums.length > 1}
+                    data={Object.create({ albums: albums })}
+                />
+
+                <MassRater bind:tabulator />
+            </div>
+
+            <Tabulator
+                bind:tabulator
+                data={albums}
+                columns={albumsPreset}
+                options={{ persistenceID: "albums" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

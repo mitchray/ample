@@ -1079,3 +1079,18 @@ sl-drawer::part(body) {
 sl-tab::part(base) {
     font-size: inherit;
 }
+
+/* override display: none behavior to prevent Tabulator from rerendering */
+sl-tab-panel[aria-hidden=true] {
+    display: block !important;
+    height: 0 !important;
+    overflow: hidden;
+    visibility: hidden;
+}
+
+/* remove padding if Tabulator is last child so its sits flush */
+sl-tab-panel::part(base),
+.site-content-inner:has(sl-tab-panel[aria-hidden=false] .tabulator:last-child),
+.site-content-inner:has(.tabulator:last-child) {
+    padding-block-end: 0 !important;
+}

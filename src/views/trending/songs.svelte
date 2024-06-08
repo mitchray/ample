@@ -3,9 +3,13 @@
     import { errorHandler } from "~/logic/helper.js";
     import { _ } from "svelte-i18n";
     import { songsPreset } from "~/components/lister/columns.js";
-    import Lister from "~/components/lister/lister.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
+    import Actions from "~/components/action/actions.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+
+    let tabulator = null;
 
     $: query = createQuery({
         queryKey: ["trendingSongs"],
@@ -34,18 +38,24 @@
     {#if songs.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Songs"
-            data={songs}
-            columns={songsPreset}
-            type="song"
-            virtualList={true}
-            actionData={{
-                type: "songs",
-                displayMode: "fullButtons",
-                showShuffle: songs.length > 1,
-                data: Object.create({ songs: songs }),
-            }}
-        />
+        <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <Actions
+                    type="songs"
+                    displayMode="fullButtons"
+                    showShuffle={songs.length > 1}
+                    data={Object.create({ songs: songs })}
+                />
+
+                <MassRater bind:tabulator />
+            </div>
+
+            <Tabulator
+                bind:tabulator
+                data={songs}
+                columns={songsPreset}
+                options={{ persistenceID: "songs" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

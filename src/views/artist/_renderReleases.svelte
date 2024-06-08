@@ -1,28 +1,34 @@
 <script>
     import { setContext } from "svelte";
-    import { albumsPreset } from "~/components/lister/columns.js";
     import AlbumCard from "~/components/cards/albumCard.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
     import ExpandedAlbum from "~/components/cards/expandedAlbumCard.svelte";
-    import Lister from "~/components/lister/lister.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
+    import { albumsPreset } from "~/components/lister/columns.js";
 
     export let view;
     export let items;
     export let filterToArtistID = null;
 
+    let tabulator = null;
+
     setContext("filterToArtistID", filterToArtistID);
 </script>
 
 {#if view === "table"}
-    <Lister
-        id="Albums"
-        data={items}
-        columns={albumsPreset}
-        type="album"
-        actionData={{
-            disable: true,
-        }}
-    />
+    <div class="lister-tabulator">
+        <div class="lister-tabulator__actions">
+            <MassRater bind:tabulator />
+        </div>
+
+        <Tabulator
+            bind:tabulator
+            data={items}
+            columns={albumsPreset}
+            options={{ persistenceID: "albums" }}
+        ></Tabulator>
+    </div>
 {/if}
 
 {#if view === "card-small"}

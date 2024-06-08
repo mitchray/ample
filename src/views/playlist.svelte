@@ -1,18 +1,25 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import { replace } from "svelte-spa-router";
     import { API, PageTitle } from "~/stores/state";
     import { getSongsFromPlaylist } from "~/logic/song";
-    import { songsPreset } from "~/components/lister/columns.js";
     import Rating from "~/components/rating/rating.svelte";
-    import Lister from "~/components/lister/lister.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import PlaylistRemoveFrom from "~/components/playlist/playlist_removeFrom2.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import Art from "~/components/art.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
     import Portal from "~/components/portal.svelte";
     import Badge from "~/components/badge.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import {
+        moveHandle,
+        moveHandleDisabled,
+        songsPreset,
+    } from "~/components/lister/columns.js";
 
     export let params = {};
 
@@ -21,15 +28,50 @@
     let loading = true;
     let playlistType = "playlist";
     let drawerEdit, drawerDelete;
+    let tabulator = null;
 
     $: songs = songs;
     $: playlist = playlist;
     $: $PageTitle = playlist?.name || $_("text.playlist");
+    $: tabulator, setupEvents();
 
     function handleDelete(e) {
         if (playlist?.id === e.detail.id) {
             replace("#/playlists");
         }
+    }
+
+    function setupEvents() {
+        if (!tabulator) return;
+
+        // hide moveHandle if table has been sorted
+        tabulator.on("dataSorting", () => {
+            if (tabulator.getSorters().length > 0) {
+                tabulator.hideColumn("moveHandle");
+                tabulator.showColumn("moveHandleDisabled");
+            } else {
+                tabulator.hideColumn("moveHandleDisabled");
+                tabulator.showColumn("moveHandle");
+            }
+        });
+
+        tabulator.on("rowMoved", async () => {
+            let allItems = tabulator.getData();
+            let ids = allItems.map((obj) => obj.id);
+            let newOrders = Array.from(allItems.keys(), (n) => n + 1);
+
+            let result = await $API.playlistEdit({
+                filter: playlist.id,
+                items: ids.join(","),
+                tracks: newOrders.join(","),
+            });
+
+            if (result.error) {
+                errorHandler("editing playlist", result.error);
+            }
+
+            songs = allItems;
+        });
     }
 
     onMount(async () => {
@@ -68,6 +110,13 @@
         }
 
         loading = false;
+
+        setupEvents();
+    });
+
+    onDestroy(() => {
+        tabulator?.off("dataSorting");
+        tabulator?.off("rowMoved");
     });
 </script>
 
@@ -132,19 +181,40 @@
 
         <div class="songs-container">
             <div class="songs">
-                <Lister
-                    id="Playlist"
-                    bind:data={songs}
-                    columns={songsPreset}
-                    type="playlist_songs"
-                    virtualList={true}
-                    actionData={{
-                        type: "songs",
-                        displayMode: "fullButtons",
-                        showShuffle: songs.length > 1,
-                        data: Object.create({ songs: songs }),
-                    }}
-                />
+                <div class="lister-tabulator">
+                    <div class="lister-tabulator__actions">
+                        <Actions
+                            type="songs"
+                            displayMode="fullButtons"
+                            showShuffle={songs.length > 1}
+                            data={{ songs: songs }}
+                        />
+
+                        <MassRater bind:tabulator />
+
+                        {#if playlistType === "playlist"}
+                            <PlaylistRemoveFrom
+                                bind:tabulator
+                                bind:songs
+                                playlistID={playlist.id}
+                            />
+                        {/if}
+                    </div>
+
+                    <Tabulator
+                        bind:tabulator
+                        bind:data={songs}
+                        columns={[
+                            moveHandle,
+                            moveHandleDisabled,
+                            ...songsPreset,
+                        ]}
+                        options={{
+                            movableRows: true,
+                            persistenceID: "playlist",
+                        }}
+                    ></Tabulator>
+                </div>
             </div>
         </div>
     </div>
@@ -217,6 +287,10 @@
         font-weight: 300;
         text-transform: uppercase;
         align-items: center;
+    }
+
+    .songs-container {
+        overflow-y: hidden; /* prevent Tabulator from growing horizontally */
     }
 
     @container playlist-details-wrapper (min-width: 500px) {

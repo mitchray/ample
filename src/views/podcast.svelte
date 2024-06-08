@@ -2,16 +2,18 @@
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { podcastEpisodesPreset } from "~/components/lister/columns.js";
     import Rating from "~/components/rating/rating.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import Lister from "~/components/lister/lister.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import Art from "~/components/art.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { podcastEpisodesPreset } from "~/components/lister/columns.js";
 
     export let params = {};
 
     let episodes = [];
+    let tabulator = null;
 
     $: query = createQuery({
         queryKey: ["podcast", params.id],
@@ -78,18 +80,18 @@
             </sl-button>
 
             {#if episodes.length > 0}
-                <Lister
-                    id="Podcast"
-                    data={episodes}
-                    columns={podcastEpisodesPreset}
-                    type="song"
-                    actionData={{
-                        disable: true,
-                    }}
-                    options={{
-                        showArt: false,
-                    }}
-                />
+                <div class="lister-tabulator">
+                    <div class="lister-tabulator__actions">
+                        <MassRater bind:tabulator />
+                    </div>
+
+                    <Tabulator
+                        bind:tabulator
+                        data={episodes}
+                        columns={podcastEpisodesPreset}
+                        options={{ persistenceID: "podcast" }}
+                    ></Tabulator>
+                </div>
             {/if}
         {/key}
     {/if}

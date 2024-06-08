@@ -1,10 +1,11 @@
 <script>
     import { _ } from "svelte-i18n";
-    import Lister from "~/components/lister/lister.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import {
         albumsPreset,
         artistsPreset,
-        forcedCheckbox,
         playlistsPreset,
         songsPreset,
     } from "~/components/lister/columns.js";
@@ -13,6 +14,8 @@
     export let loading;
     export let results = [];
     export let type;
+
+    let tabulator = null;
 
     $: {
         // reset results if type changes
@@ -28,63 +31,99 @@
     <div class="total">{$_("text.total")}: {results.length}</div>
     {#key loadedTime}
         {#if type === "song"}
-            <Lister
-                id="Songs"
-                bind:data={results}
-                {type}
-                columns={[forcedCheckbox, ...songsPreset]}
-                virtualList={true}
-                actionData={{
-                    type: "songs",
-                    displayMode: "fullButtons",
-                    data: Object.create({ songs: results }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="songs"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ songs: results }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    bind:data={results}
+                    columns={songsPreset}
+                    options={{
+                        persistenceID: "songs",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
 
         {#if type === "album"}
-            <Lister
-                id="Albums"
-                bind:data={results}
-                {type}
-                columns={[forcedCheckbox, ...albumsPreset]}
-                virtualList={true}
-                actionData={{
-                    type: "albums",
-                    displayMode: "fullButtons",
-                    data: Object.create({ albums: results }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="albums"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ albums: results }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    bind:data={results}
+                    columns={albumsPreset}
+                    options={{
+                        persistenceID: "albums",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
 
         {#if type === "artist"}
-            <Lister
-                id="Artists"
-                bind:data={results}
-                {type}
-                columns={[forcedCheckbox, ...artistsPreset]}
-                virtualList={true}
-                actionData={{
-                    type: "artists",
-                    displayMode: "fullButtons",
-                    data: Object.create({ artists: results }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="artists"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ artists: results }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    bind:data={results}
+                    columns={artistsPreset}
+                    options={{
+                        persistenceID: "artists",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
 
         {#if type === "playlist"}
-            <Lister
-                id="Playlists"
-                bind:data={results}
-                {type}
-                columns={[forcedCheckbox, ...playlistsPreset]}
-                virtualList={true}
-                actionData={{
-                    type: "playlists",
-                    displayMode: "fullButtons",
-                    data: Object.create({ playlists: results }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="playlists"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ playlists: results }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    bind:data={results}
+                    columns={playlistsPreset}
+                    options={{
+                        persistenceID: "playlists",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
     {/key}
 {:else}

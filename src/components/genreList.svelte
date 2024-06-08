@@ -28,7 +28,7 @@
 
         {#if overflowGenres.length}
             <li>
-                <sl-dropdown>
+                <sl-dropdown hoist>
                     <sl-button
                         slot="trigger"
                         variant="text"

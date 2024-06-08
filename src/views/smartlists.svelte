@@ -1,20 +1,18 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
-    import Lister from "~/components/lister/lister.svelte";
-    import { smartlistsPreset } from "~/components/lister/columns.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
     import { createQuery } from "@tanstack/svelte-query";
-    import { Saved } from "~/stores/settings.js";
     import { errorHandler } from "~/logic/helper.js";
+    import { smartlistsPreset } from "~/components/lister/columns.js";
 
     let title = $_("text.smartlists");
     $PageTitle = title;
 
+    let tabulator = null;
+
     $: query = createQuery({
         queryKey: ["smartlists"],
-        initialData: async () => {
-            await $Saved.getItem("smartlists");
-        },
         queryFn: async () => {
             let result = await $API.smartlists();
 
@@ -23,15 +21,13 @@
                 return [];
             }
 
-            await $Saved.setItem("smartlists", result);
-
             return result;
         },
         enabled: $User.isLoggedIn,
     });
 
     // alias of returned data
-    $: smartlists = $query.data || {};
+    $: smartlists = $query.data || [];
 </script>
 
 <div class="page-header">
@@ -46,15 +42,13 @@
     {#if smartlists.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Smartlists"
-            data={smartlists}
-            columns={smartlistsPreset}
-            type="smartlist"
-            virtualList={true}
-            actionData={{
-                disable: true,
-            }}
-        />
+        <div class="lister-tabulator">
+            <Tabulator
+                bind:tabulator
+                data={smartlists}
+                columns={smartlistsPreset}
+                options={{ persistenceID: "smartlists" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

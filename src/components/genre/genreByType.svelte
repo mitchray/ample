@@ -2,7 +2,9 @@
     import { onMount } from "svelte";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
-    import Lister from "~/components/lister/lister.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import {
         albumsPreset,
         artistsPreset,
@@ -15,6 +17,7 @@
     let genre;
     let data = [];
     let loadedTime = 0;
+    let tabulator = null;
 
     $: data = data;
 
@@ -53,48 +56,75 @@
 {#key loadedTime}
     {#if genre?.name && data}
         {#if type === "artist"}
-            <Lister
-                id="Artists"
-                {data}
-                columns={artistsPreset}
-                type="artist"
-                virtualList={true}
-                actionData={{
-                    type: "artistGenre",
-                    displayMode: "fullButtons",
-                    data: Object.create({ name: genre.name }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="artistGenre"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ name: genre.name }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    {data}
+                    columns={artistsPreset}
+                    options={{
+                        persistenceID: "artists",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
 
         {#if type === "album"}
-            <Lister
-                id="Albums"
-                {data}
-                columns={albumsPreset}
-                type="album"
-                virtualList={true}
-                actionData={{
-                    type: "albumGenre",
-                    displayMode: "fullButtons",
-                    data: Object.create({ name: genre.name }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="albumGenre"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ name: genre.name }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    {data}
+                    columns={albumsPreset}
+                    options={{
+                        persistenceID: "albums",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
 
         {#if type === "song"}
-            <Lister
-                id="Songs"
-                {data}
-                columns={songsPreset}
-                type="song"
-                virtualList={true}
-                actionData={{
-                    type: "songGenre",
-                    displayMode: "fullButtons",
-                    data: Object.create({ name: genre.name }),
-                }}
-            />
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <Actions
+                        type="songGenre"
+                        displayMode="fullButtons"
+                        showShuffle={true}
+                        data={{ name: genre.name }}
+                    />
+
+                    <MassRater bind:tabulator />
+                </div>
+
+                <Tabulator
+                    bind:tabulator
+                    {data}
+                    columns={songsPreset}
+                    options={{
+                        persistenceID: "songs",
+                    }}
+                ></Tabulator>
+            </div>
         {/if}
     {/if}
 {/key}

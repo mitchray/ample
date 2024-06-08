@@ -1,40 +1,48 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { getContext } from "svelte";
-    import { API } from "~/stores/state";
+    import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    export let tabulator;
 
-    const { _type, selectedCount, dataDisplay } = getContext(contextKey);
+    let selectedCount = 0;
+
+    $: {
+        if (tabulator) {
+            tabulator.on(
+                "rowSelectionChanged",
+                function (data, rows, selected, deselected) {
+                    selectedCount = data.length;
+                },
+            );
+        }
+    }
 
     function handleApply(e) {
         let newRating = parseInt(e.detail.item.value);
+        let selected = tabulator.getSelectedData();
 
-        let selected = $dataDisplay.filter((item) => item.selected);
-
-        selected.forEach((item) => {
-            let result = $API.rate({
-                type: $_type,
+        selected.forEach(async (item) => {
+            // rate on the backend
+            let result = await $API.rate({
+                type: "song",
                 id: item.id,
                 rating: newRating,
             });
 
             if (result.error) {
                 errorHandler("while rating", result.error);
+                return;
             }
 
-            let index = $dataDisplay.findIndex((el) => el.id === item.id);
-
-            if (index !== -1) $dataDisplay[index].rating = newRating;
+            // update data in the table
+            item.rating = newRating;
         });
-
-        $dataDisplay = $dataDisplay;
     }
 </script>
 
-{#if $selectedCount > 0}
+{#if selectedCount > 0}
     <sl-dropdown>
         <sl-button slot="trigger" variant="primary" caret>
             <MaterialSymbol name="star" slot="prefix" />

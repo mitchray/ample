@@ -1,12 +1,11 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API, User } from "~/stores/state";
-    import Lister from "~/components/lister/lister.svelte";
-    import {
-        checkbox,
-        index,
-        songsPreset,
-    } from "~/components/lister/columns.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
+    import { index, songsPreset } from "~/components/lister/columns.js";
+
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
@@ -26,10 +25,16 @@
                 return [];
             }
 
+            for (let i = 0; i < result.length; i++) {
+                result[i].order = i + 1;
+            }
+
             return result;
         },
         enabled: $User.isLoggedIn,
     });
+
+    let tabulator = null;
 
     // alias of returned data
     $: songs = $query.data || {};
@@ -43,20 +48,24 @@
     {#if songs.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="SongsArtistTop"
-            data={songs}
-            columns={[checkbox, index, ...songsPreset]}
-            type="song"
-            options={{ canSort: true }}
-            actionData={{
-                type: "songs",
-                displayMode: "fullButtons",
-                showShuffle: songs.length > 1,
-                data: Object.create({
-                    songs: songs,
-                }),
-            }}
-        />
+        <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <Actions
+                    type="songs"
+                    displayMode="fullButtons"
+                    showShuffle={songs.length > 1}
+                    data={Object.create({ songs: songs })}
+                />
+
+                <MassRater bind:tabulator />
+            </div>
+
+            <Tabulator
+                bind:tabulator
+                data={songs}
+                columns={[index, ...songsPreset]}
+                options={{ persistenceID: "songsArtistTop" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

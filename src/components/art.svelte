@@ -1,7 +1,7 @@
 <script>
-    import { API, Server, User } from "~/stores/state.js";
+    import { onMount } from "svelte";
+    import { API, Server } from "~/stores/state.js";
     import { shuffle, uniqBy } from "lodash-es";
-    import { createQuery } from "@tanstack/svelte-query";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
@@ -22,42 +22,34 @@
     let thumb = 2;
     let images = [];
 
-    $: query = createQuery({
-        queryKey: ["art", data.id + type],
-        staleTime: 60 * 1000 * 30, // 30 minutes
-        queryFn: async () => {
-            let result = [];
+    let playlistSongs = [];
 
-            if (type === "playlist" || type === "smartlist") {
-                result = await $API.playlistSongs({
-                    filter: data.id,
-                    limit: 30,
-                });
+    onMount(async () => {
+        let result = [];
 
-                if (result.error) {
-                    errorHandler("getting art", result.error);
-                    return [];
-                }
+        if (type === "playlist" || type === "smartlist") {
+            result = await $API.playlistSongs({
+                filter: data.id,
+                limit: 30,
+            });
 
-                result = uniqBy(result, "album.id");
-
-                if (type === "smartlist") {
-                    result = shuffle(result);
-                }
-
-                result = result.slice(0, 4);
+            if (result.error) {
+                errorHandler("getting art", result.error);
+                return [];
             }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
+            result = uniqBy(result, "album.id");
+
+            if (type === "smartlist") {
+                result = shuffle(result);
+            }
+
+            playlistSongs = result.slice(0, 4);
+        }
     });
 
-    // alias of returned data
-    $: playlistSongs = $query.data || [];
-
     // process the art once we finish fetching
-    $: $query.data, processData();
+    $: playlistSongs, processData();
 
     async function processData() {
         // if ($query.data?.length < 1) return;

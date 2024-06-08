@@ -1,11 +1,11 @@
 import { capitalize } from "lodash-es";
 import ArtistList from "~/components/artist/artistList.svelte";
-import Checkbox from "~/components/lister/components/checkbox_row.svelte";
 import Name from "~/components/lister/components/name.svelte";
 import RelativeDate from "~/components/relativeDate.svelte";
 import GenreList from "~/components/genreList.svelte";
 import Rating from "~/components/rating/rating.svelte";
 import Badge from "~/components/badge.svelte";
+import Art from "~/components/art.svelte";
 import Actions from "~/components/action/actions.svelte";
 import {
     formatFilesize,
@@ -14,51 +14,48 @@ import {
     formatTotalTime,
 } from "~/logic/formatters.js";
 
-export const TableDefault = {
-    rowSizing: "slim",
-    sortBy: undefined,
-    sortDirection: "none",
-    columnOrder: [],
-    hiddenColumns: [],
-    canSort: true,
-    showArt: true,
+export const ColumnDefaults = {
+    headerSort: true,
+    resizable: true,
+    headerSortTristate: true,
+    vertAlign: "middle",
+    minWidth: 100,
 };
 
-/** @type {Column} */
-export class Column {
-    constructor(config = {}) {
-        this._cell = null;
-        this.id = config.id;
-        this.label = config.label || "";
-        this.widthPreset = config.widthPreset || undefined;
-        this.fixedSize = config.fixedSize || undefined;
-        this.type = config.type || undefined;
+/*
+ BASES FOR EXTENDING
+ */
 
-        this.accessorKey = config.accessorKey;
-        this.canSort = config.canSort === undefined ? true : config.canSort;
-        this.canResize = config.canResize || false;
-        this.canToggle =
-            config.canToggle === undefined ? true : config.canToggle;
-        this.load = config.load === undefined ? true : config.load;
-        this.show = config.show === undefined ? true : config.show;
-        this.isNumerical = config.isNumerical || false;
-        this.sortBy = config.sortBy || undefined;
-        this.fixedWidth = config.fixedWidth || undefined;
-        this.ratioWidth = config.ratioWidth || "1fr";
-        this.minWidth = config.minWidth || "30px";
-        this.displayOrder = config.displayOrder || 0;
-    }
+/** @type Column */
+let actionsBase = {
+    field: "actions",
+    title: "Actions",
+    minWidth: 180,
+    headerSort: false,
+};
 
-    getCell(rowData) {
-        return typeof this._cell === "function"
-            ? this._cell(rowData)
-            : this._cell;
-    }
+/** @type Column */
+let artBase = {
+    field: "art",
+    title: "",
+    minWidth: 20,
+    headerSort: false,
+    hozAlign: "center",
+};
 
-    setCell(newValue) {
-        this._cell = newValue;
-    }
-}
+/** @type Column */
+let ratingBase = {
+    field: "rating",
+    title: "Rating",
+    minWidth: 130,
+};
+
+/** @type Column */
+let nameBase = {
+    field: "name",
+    title: "Name",
+    width: 300,
+};
 
 /*
  INDIVIDUAL COLUMNS
@@ -66,405 +63,391 @@ export class Column {
 
 /** @type Column */
 export let checkbox = {
-    id: "checkbox",
-    label: "Checkbox",
-    widthPreset: "fit",
-    fixedSize: true,
-    type: "checkbox",
-    cell: (data) => ({
-        component: Checkbox,
-        props: {
-            row: data,
-        },
-    }),
+    title: "",
+    formatter: "rowSelection",
+    titleFormatter: "rowSelection",
+    headerSort: false,
+    resizable: false,
+    headerHozAlign: "center",
+    hozAlign: "center",
+    width: 30,
+    minWidth: 30,
 };
 
 /** @type Column */
-export let forcedCheckbox = {
-    ...checkbox,
-    canToggle: false,
+export let moveHandle = {
+    field: "moveHandle",
+    title: "",
+    rowHandle: true,
+    formatter: "handle",
+    headerSort: false,
+    resizable: false,
+    width: 30,
+    minWidth: 30,
+};
+
+/** @type Column */
+export let moveHandleDisabled = {
+    field: "moveHandleDisabled",
+    title: "",
+    headerSort: false,
+    resizable: false,
+    width: 30,
+    minWidth: 30,
 };
 
 /** @type Column */
 export let index = {
-    id: "index",
-    label: "№",
-    widthPreset: "fit",
-    fixedSize: true,
-    type: "number",
-    sortBy: "initialOrder",
-    isNumerical: true,
-    cell: (data) => data.initialOrder + 1,
+    field: "order",
+    title: "№",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    width: 50,
+    minWidth: 50,
+    sorter: "number",
+    headerSortTristate: false,
 };
 
 /** @type Column */
 export let track = {
-    id: "track",
-    label: "#",
-    widthPreset: "fit",
-    fixedSize: true,
-    type: "number",
-    canToggle: true,
-    sortBy: "track",
-    isNumerical: true,
-    cell: (data) => data.track,
+    field: "track",
+    title: "#",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    width: 50,
+    minWidth: 50,
 };
 
 /** @type Column */
 export let artist = {
-    id: "artist",
-    label: "text.artist",
-    widthPreset: "medium",
-    sortBy: "artist.name",
-    type: "string",
-    canToggle: true,
-    cell: (data) => ({
-        component: ArtistList,
-        props: {
-            data: data,
-        },
-    }),
+    field: "artists",
+    title: "Artist",
+    width: 200,
+    headerSort: false,
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new ArtistList({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let album = {
-    id: "album",
-    label: "text.album",
-    widthPreset: "medium",
-    sortBy: "album.name",
-    type: "string",
-    canToggle: true,
-    cell: (data) =>
-        `<a href="#/album/${data.album.id}">
+    field: "album",
+    title: "Album",
+    width: 200,
+    formatter: (cell, formatterParams, onRendered) => {
+        const data = cell.getData();
+        return `<a href="#/album/${data.album.id}">
             ${data.album.name}
-        </a>`,
+        </a>`;
+    },
 };
 
 /** @type Column */
 export let date = {
-    id: "date",
-    label: "text.date",
-    fixedSize: true,
-    sortBy: "year",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => data.year,
+    field: "year",
+    title: "Date",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
 };
 
 /** @type Column */
 export let items = {
-    id: "items",
-    label: "text.items",
-    fixedSize: true,
-    sortBy: "items",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => data.items || "-",
+    field: "items",
+    title: "Items",
+    sorter: "number",
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
 };
 
 /** @type Column */
 export let songCount = {
-    id: "songCount",
-    label: "text.songs",
-    fixedSize: true,
-    sortBy: "songcount",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => data.songcount || "-",
+    field: "songcount",
+    title: "Songs",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
 };
 
 /** @type Column */
 export let albumCount = {
-    id: "albumCount",
-    label: "text.releases",
-    fixedSize: true,
-    sortBy: "albumcount",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => data.albumcount || "-",
+    field: "albumcount",
+    title: "Releases",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
 };
 
 /** @type Column */
 export let length = {
-    id: "length",
-    label: "text.length",
-    fixedSize: true,
-    sortBy: "time",
-    type: "time",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => formatTotalTime(data.time),
+    field: "time",
+    title: "Length",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) =>
+        formatTotalTime(cell.getValue()),
 };
 
 /** @type Column */
 export let count = {
-    id: "count",
-    label: "text.count",
-    fixedSize: true,
-    sortBy: "count",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) =>
-        `${data.items} ${parseInt(data.items) === 1 ? "song" : "songs"}`,
+    field: "count",
+    title: "Count",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) => {
+        const data = cell.getData();
+        return `${data.items} ${parseInt(data.items) === 1 ? "song" : "songs"}`;
+    },
 };
 
 /** @type Column */
 export let type = {
-    id: "type",
-    label: "text.type",
-    widthPreset: "small",
-    sortBy: "type",
-    type: "string",
-    canToggle: true,
-    cell: (data) => ({
-        component: Badge,
-        props: {
-            text: formatReleaseType(data.type),
-        },
-    }),
+    field: "type",
+    title: "Type",
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            return new Badge({
+                target: cell.getElement(),
+                props: {
+                    text: formatReleaseType(cell.getValue()),
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let genreArtistsCount = {
-    id: "genreArtistsCount",
-    label: "text.artists",
-    fixedSize: true,
-    sortBy: "artists",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) =>
-        `<a href="#/genre/${data.id}">
+    field: "artists",
+    title: "Artists",
+    sorter: "number",
+    formatter: (cell, formatterParams, onRendered) => {
+        const data = cell.getData();
+        return `<a href="#/genre/${data.id}">
             <MaterialSymbol name="artist" />
             ${data.artists}
-        </a>`,
+        </a>`;
+    },
 };
 
 /** @type Column */
 export let genreAlbumsCount = {
-    id: "genreAlbumsCount",
-    label: "text.albums",
-    fixedSize: true,
-    sortBy: "albums",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) =>
-        `<a href="#/genre/${data.id}">
+    field: "albums",
+    title: "Albums",
+    sorter: "number",
+    formatter: (cell, formatterParams, onRendered) => {
+        const data = cell.getData();
+        return `<a href="#/genre/${data.id}">
             <MaterialSymbol name="album" />
             ${data.albums}
-        </a>`,
+        </a>`;
+    },
 };
 
 /** @type Column */
 export let genreSongsCount = {
-    id: "genreSongsCount",
-    label: "text.songs",
-    fixedSize: true,
-    sortBy: "songs",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) =>
-        `<a href="#/genre/${data.id}">
+    field: "songs",
+    title: "Songs",
+    sorter: "number",
+    formatter: (cell, formatterParams, onRendered) => {
+        const data = cell.getData();
+        return `<a href="#/genre/${data.id}">
             <MaterialSymbol name="music_note" />
             ${data.songs}
-        </a>`,
+        </a>`;
+    },
 };
 
 /** @type Column */
 export let genres = {
-    id: "genres",
-    label: "text.genres",
-    widthPreset: "medium",
-    type: "string",
-    canToggle: true,
-    cell: (data) => ({
-        component: GenreList,
-        props: {
-            items: data.genre,
-            limit: 1,
-        },
-    }),
+    field: "genres",
+    title: "Genres",
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new GenreList({
+                target: cell.getElement(),
+                props: {
+                    items: cell.getData().genre,
+                    limit: 1,
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let owner = {
-    id: "owner",
-    label: "text.owner",
-    widthPreset: "small",
-    sortBy: "owner",
-    type: "string",
-    canToggle: true,
-    cell: (data) => data.owner,
+    field: "owner",
+    title: "Owner",
 };
 
 /** @type Column */
 export let privacy = {
-    id: "privacy",
-    label: "text.privacy",
-    widthPreset: "small",
-    sortBy: "privacy",
-    type: "string",
-    canToggle: true,
-    cell: (data) => capitalize(data.type),
+    field: "privacy",
+    title: "Privacy",
+    formatter: (cell, formatterParams, onRendered) =>
+        capitalize(cell.getData().type),
 };
 
 /** @type Column */
 export let playCount = {
-    id: "playCount",
-    label: "text.plays",
-    fixedSize: true,
-    sortBy: "playcount",
-    type: "number",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => data.playcount || "-",
+    field: "playcount",
+    title: "Plays",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
 };
 
 /** @type Column */
 export let quality = {
-    id: "quality",
-    label: "text.quality",
-    fixedSize: true,
-    type: "string",
-    canToggle: true,
-    cell: (data) => formatSongQuality(data),
+    field: "quality",
+    title: "Quality",
+    sorter: "string",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) =>
+        formatSongQuality(cell.getData()),
 };
 
 /** @type Column */
 export let size = {
-    id: "size",
-    label: "text.size",
-    fixedSize: true,
-    type: "number",
-    sortBy: "size",
-    canToggle: true,
-    isNumerical: true,
-    cell: (data) => formatFilesize(data.size),
+    field: "size",
+    title: "Size",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell, formatterParams, onRendered) =>
+        formatFilesize(cell.getValue()),
 };
 
 /** @type Column */
 export let state = {
-    id: "state",
-    label: "text.state",
-    fixedSize: true,
-    type: "string",
-    canToggle: true,
-    cell: (data) => data.state,
+    field: "state",
+    title: "State",
 };
 
 /** @type Column */
 export let published = {
-    id: "published",
-    label: "text.published",
-    widthPreset: "medium",
-    type: "date",
-    canToggle: true,
-    cell: (data) => ({
-        component: RelativeDate,
-        props: {
-            date: data.pubdate,
-        },
-    }),
-};
-
-/** @type Column */
-let ratingBase = {
-    id: "rating",
-    label: "text.rating",
-    widthPreset: "rating",
-    fixedSize: true,
-    sortBy: "rating",
-    type: "rating",
-    canToggle: true,
+    field: "published",
+    title: "Published",
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new RelativeDate({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData().pubdate,
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let ratingSong = {
     ...ratingBase,
-    cell: (data) => ({
-        component: Rating,
-        props: {
-            data: data,
-            type: "song",
-        },
-    }),
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Rating({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "song",
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let ratingAlbum = {
     ...ratingBase,
-    cell: (data) => ({
-        component: Rating,
-        props: {
-            data: data,
-            type: "album",
-        },
-    }),
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Rating({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "album",
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let ratingArtist = {
     ...ratingBase,
-    cell: (data) => ({
-        component: Rating,
-        props: {
-            data: data,
-            type: "artist",
-        },
-    }),
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Rating({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "artist",
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let ratingPlaylist = {
     ...ratingBase,
-    cell: (data) => ({
-        component: Rating,
-        props: {
-            data: data,
-            type: "playlist",
-        },
-    }),
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Rating({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "playlist",
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let ratingPodcast = {
     ...ratingBase,
-    cell: (data) => ({
-        component: Rating,
-        props: {
-            data: data,
-            type: "podcast",
-        },
-    }),
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Rating({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "podcast",
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
 export let ratingPodcastEpisode = {
     ...ratingBase,
-    cell: (data) => ({
-        component: Rating,
-        props: {
-            data: data,
-            type: "podcast_episode",
-        },
-    }),
-};
-
-/** @type Column */
-export let actions = {
-    id: "actions",
-    label: "text.actions",
-    widthPreset: "actions",
-    fixedSize: true,
-    show: true,
-    canToggle: false,
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Rating({
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "podcast_episode",
+                },
+            });
+        });
+    },
 };
 
 /*
@@ -473,43 +456,61 @@ export let actions = {
 
 /** @type Column[] */
 export let songsPreset = [
+    checkbox,
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "song",
-                displayMode: "miniButtons",
-                item: data,
-                data: Object.create({
-                    album: data.album ? data.album : null,
-                    artists: data.artists?.length > 0 ? data.artists : null,
-                    albumArtist: data.albumartist ? data.albumartist : null,
-                    playlist: null,
-                }),
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "song",
+                        displayMode: "miniButtons",
+                        item: data,
+                        data: Object.create({
+                            album: data.album ? data.album : null,
+                            artists:
+                                data.artists?.length > 0 ? data.artists : null,
+                            albumArtist: data.albumartist
+                                ? data.albumartist
+                                : null,
+                            playlist: null,
+                        }),
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "song",
-            },
-        }),
+        ...artBase,
+        width: 32,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Art({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                        size: "small",
+                    },
+                });
+            });
+        },
+    },
+    {
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                    },
+                });
+            });
+        },
     },
     ratingSong,
     artist,
@@ -523,44 +524,46 @@ export let songsPreset = [
 
 /** @type Column[] */
 export let albumPreset = [
+    checkbox,
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "song",
-                displayMode: "miniButtons",
-                item: data,
-                data: Object.create({
-                    album: data.album ? data.album : null,
-                    artists: data.artists?.length > 0 ? data.artists : null,
-                    albumArtist: data.albumartist ? data.albumartist : null,
-                    playlist: null,
-                }),
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "song",
+                        displayMode: "miniButtons",
+                        item: data,
+                        data: Object.create({
+                            album: data.album ? data.album : null,
+                            artists:
+                                data.artists?.length > 0 ? data.artists : null,
+                            albumArtist: data.albumartist
+                                ? data.albumartist
+                                : null,
+                            playlist: null,
+                        }),
+                    },
+                });
+            });
+        },
     },
     track,
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "song",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                    },
+                });
+            });
+        },
     },
     ratingSong,
     artist,
@@ -572,44 +575,62 @@ export let albumPreset = [
 
 /** @type Column[] */
 export let albumsPreset = [
+    checkbox,
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "album",
-                displayMode: "miniButtons",
-                item: data,
-                showShuffle: true,
-                data: Object.create({
-                    album: data.album ? data.album : null,
-                    artists: data.artists?.length > 0 ? data.artists : null,
-                    albumArtist: data.albumartist ? data.albumartist : null,
-                    playlist: null,
-                }),
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "album",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({
+                            album: data.album ? data.album : null,
+                            artists:
+                                data.artists?.length > 0 ? data.artists : null,
+                            albumArtist: data.albumartist
+                                ? data.albumartist
+                                : null,
+                            playlist: null,
+                        }),
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "album",
-            },
-        }),
+        ...artBase,
+        width: 42,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Art({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                        size: "small",
+                    },
+                });
+            });
+        },
+    },
+    {
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "album",
+                    },
+                });
+            });
+        },
     },
     ratingAlbum,
     artist,
@@ -622,39 +643,54 @@ export let albumsPreset = [
 
 /** @type Column[] */
 export let artistsPreset = [
+    checkbox,
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "artist",
-                displayMode: "miniButtons",
-                item: data,
-                showShuffle: true,
-                data: Object.create({}),
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "artist",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({}),
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "artist",
-            },
-        }),
+        ...artBase,
+        width: 60,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Art({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "artist",
+                        size: "small",
+                    },
+                });
+            });
+        },
+    },
+    {
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "artist",
+                    },
+                });
+            });
+        },
     },
     ratingArtist,
     songCount,
@@ -665,41 +701,40 @@ export let artistsPreset = [
 
 /** @type Column[] */
 export let playlistsPreset = [
+    checkbox,
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "playlist",
-                displayMode: "miniButtons",
-                item: data,
-                showShuffle: true,
-                data: Object.create({
-                    playlist: data,
-                }),
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "playlist",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({
+                            playlist: data,
+                        }),
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "playlist",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "playlist",
+                    },
+                });
+            });
+        },
     },
     ratingPlaylist,
     items,
@@ -710,38 +745,36 @@ export let playlistsPreset = [
 /** @type Column[] */
 export let smartlistsPreset = [
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "playlist",
-                displayMode: "miniButtons",
-                item: data,
-                showShuffle: true,
-                data: Object.create({}),
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "playlist",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({}),
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "smartlist",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "smartlist",
+                    },
+                });
+            });
+        },
     },
     items,
     owner,
@@ -751,37 +784,35 @@ export let smartlistsPreset = [
 /** @type Column[] */
 export let genresPreset = [
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "genre",
-                displayMode: "miniButtons",
-                item: data,
-                showShuffle: true,
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "genre",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "genre",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "genre",
+                    },
+                });
+            });
+        },
     },
     genreArtistsCount,
     genreAlbumsCount,
@@ -791,132 +822,107 @@ export let genresPreset = [
 /** @type Column[] */
 export let liveStreamsPreset = [
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "live_stream",
-                displayMode: "miniButtons",
-                item: data,
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "live_stream",
+                        displayMode: "miniButtons",
+                        item: data,
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "live_stream",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "live_stream",
+                    },
+                });
+            });
+        },
     },
 ];
 
 /** @type Column[] */
 export let podcastsPreset = [
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "podcast",
-                displayMode: "miniButtons",
-                item: data,
-                showShuffle: true,
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "podcast",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "large",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "podcast",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "podcast",
+                    },
+                });
+            });
+        },
     },
 ];
 
 /** @type Column[] */
 export let podcastEpisodesPreset = [
     {
-        id: "actions",
-        label: "text.actions",
-        widthPreset: "actions",
-        fixedSize: true,
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Actions,
-            props: {
-                type: "podcast_episode",
-                displayMode: "miniButtons",
-                item: data,
-                hidden: data.state !== "completed",
-            },
-        }),
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "podcast_episode",
+                        displayMode: "miniButtons",
+                        item: data,
+                        hidden: data.state !== "completed",
+                    },
+                });
+            });
+        },
     },
     {
-        id: "name",
-        label: "text.name",
-        widthPreset: "xl",
-        sortBy: "name",
-        type: "string",
-        show: true,
-        canToggle: false,
-        cell: (data) => ({
-            component: Name,
-            props: {
-                data: data,
-                type: "podcast_episode",
-            },
-        }),
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "podcast_episode",
+                    },
+                });
+            });
+        },
     },
     published,
     state,
     length,
     ratingPodcastEpisode,
 ];
-
-/** @typedef {import('svelte').SvelteComponent} SvelteComponent */
-
-/**
- * @typedef {object} Column
- * @property {string} id
- * @property {string} [accessorKey] - Pull data from this object property; else 'id' will be used. Also used as default sort source.
- * @property {string|function(component: SvelteComponent, props: Object)} [label=""] - Heading to display.
- * @property {string|function(component: SvelteComponent, props: Object)} [cell=""] - Contents of the row cell of this column.
- * @property {boolean} [canSort=true] - Can sort column.
- * @property {boolean} [canResize=false] - Can resize column.
- * @property {boolean} [canToggle=true] - Can toggle display of column.
- * @property {boolean} [load=true] - Load data in this column (persists).
- * @property {boolean} [show=true] - Visibility of column (temporary).
- * @property {boolean} [isNumerical=false] - Data is a number (so right align).
- * @property {string} [minWidth="24px"] - Min width of column as CSS unit.
- * @property {string} [maxWidth=`${Number.MAX_SAFE_INTEGER}px`] - Max width of column as CSS unit.
- * @property {number} [displayOrder=0] - Order of column.
- */

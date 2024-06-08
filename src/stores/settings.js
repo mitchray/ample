@@ -1,6 +1,7 @@
 import { get, writable } from "svelte/store";
 import { API, SystemPreferences, UserPreferences } from "~/stores/state.js";
 import { locale } from "svelte-i18n";
+import { setTabulatorLang } from "~/logic/i18n.js";
 
 // our global localforage IndexedDB getter/setter, which will be prefixed by the user ID
 export let Saved = writable();
@@ -109,6 +110,7 @@ export async function loadSettings() {
         .then((lang) => {
             if (lang) {
                 locale.set(lang);
+                setTabulatorLang(lang);
             }
         });
 }

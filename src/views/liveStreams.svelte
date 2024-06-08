@@ -2,9 +2,9 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
-    import { liveStreamsPreset } from "~/components/lister/columns.js";
-    import Lister from "~/components/lister/lister.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { liveStreamsPreset } from "~/components/lister/columns.js";
 
     $: query = createQuery({
         queryKey: ["liveStreams"],
@@ -26,6 +26,8 @@
 
     let title = $_("text.radio");
     $PageTitle = title;
+
+    let tabulator = null;
 </script>
 
 <div class="page-header">
@@ -40,18 +42,13 @@
     {#if liveStreams.length < 1}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="LiveStreams"
-            data={liveStreams}
-            columns={liveStreamsPreset}
-            type="live_stream"
-            virtualList={true}
-            actionData={{
-                disable: true,
-            }}
-            options={{
-                showArt: false,
-            }}
-        />
+        <div class="lister-tabulator">
+            <Tabulator
+                bind:tabulator
+                data={liveStreams}
+                columns={liveStreamsPreset}
+                options={{ persistenceID: "livestreams" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

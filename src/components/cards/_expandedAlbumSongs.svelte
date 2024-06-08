@@ -3,12 +3,13 @@
     import { ShowSongsByOtherArtists } from "~/stores/settings.js";
     import { CurrentMedia, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
-    import { albumPreset, checkbox } from "~/components/lister/columns.js";
-    import Actions from "~/components/action/actions.svelte";
     import Rating from "~/components/rating/rating.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
-    import Lister from "~/components/lister/lister.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
+    import { albumPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { getAlbumDisks } from "~/logic/album.js";
 
@@ -18,7 +19,7 @@
 
     let album = getAlbum();
     let type = getType();
-
+    let tabulator = null;
     let filterToArtistID = getContext("filterToArtistID");
 
     $: query = createQuery({
@@ -100,25 +101,28 @@
                         {/each}
                     </ul>
                 {:else}
-                    <Lister
-                        id="Album"
-                        type="song"
-                        data={songs}
-                        columns={[checkbox, ...albumPreset]}
-                        actionData={{
-                            disable: [...$query.data].length < 2,
-                            type: "album",
-                            id: album.id,
-                            displayMode: "fullButtons",
-                            showShuffle: songs.length > 1,
-                            data: Object.create({
-                                songs: songs,
-                            }),
-                        }}
-                        options={{
-                            showArt: false,
-                        }}
-                    />
+                    <div class="lister-tabulator">
+                        <div class="lister-tabulator__actions">
+                            <Actions
+                                type="album"
+                                id={album.id}
+                                displayMode="fullButtons"
+                                showShuffle={songs.length > 1}
+                                data={{ songs: songs }}
+                            />
+
+                            <MassRater bind:tabulator />
+                        </div>
+
+                        <Tabulator
+                            bind:tabulator
+                            data={songs}
+                            columns={albumPreset}
+                            options={{
+                                persistenceID: "album",
+                            }}
+                        ></Tabulator>
+                    </div>
                 {/if}
             </div>
         {/if}

@@ -1,21 +1,19 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
-    import { Saved } from "~/stores/settings.js";
     import { sortGenresByName } from "~/logic/genre";
-    import Lister from "~/components/lister/lister.svelte";
-    import { genresPreset } from "~/components/lister/columns.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
+    import { genresPreset } from "~/components/lister/columns.js";
+
+    let tabulator = null;
 
     let title = $_("text.genres");
     $PageTitle = title;
 
     $: query = createQuery({
         queryKey: ["genres"],
-        initialData: async () => {
-            await $Saved.getItem("genres");
-        },
         queryFn: async () => {
             let result = await $API.genres();
 
@@ -25,8 +23,6 @@
             }
 
             result = sortGenresByName(result);
-
-            await $Saved.setItem("genres", result);
 
             return result;
         },
@@ -49,18 +45,13 @@
     {#if genres?.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Genres"
-            data={genres}
-            columns={genresPreset}
-            type="genre"
-            virtualList={true}
-            actionData={{
-                disable: true,
-            }}
-            options={{
-                showArt: false,
-            }}
-        />
+        <div class="lister-tabulator">
+            <Tabulator
+                bind:tabulator
+                data={genres}
+                columns={genresPreset}
+                options={{ layout: "fitDataFill", persistenceID: "genres" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

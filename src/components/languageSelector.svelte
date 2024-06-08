@@ -1,12 +1,16 @@
 <script>
     import { locale } from "svelte-i18n";
     import { Saved } from "~/stores/settings.js";
+    import { setTabulatorLang } from "~/logic/i18n.js";
 
     async function handleLocaleChange(e) {
         e.preventDefault();
         let newLanguage = e.target.value;
         locale.set(newLanguage);
         await $Saved?.setItem("Language", newLanguage);
+
+        // update Tabulator instances
+        setTabulatorLang(newLanguage);
     }
 </script>
 

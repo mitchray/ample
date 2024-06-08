@@ -2,23 +2,21 @@
     import { _ } from "svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { Saved } from "~/stores/settings.js";
-    import Lister from "~/components/lister/lister.svelte";
-    import { playlistsPreset } from "~/components/lister/columns.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
+    import { playlistsPreset } from "~/components/lister/columns.js";
 
     let drawerEdit;
+    let tabulator = null;
 
     let title = $_("text.playlists");
     $PageTitle = title;
 
     $: query = createQuery({
         queryKey: ["playlists"],
-        initialData: async () => {
-            await $Saved.getItem("playlists");
-        },
         queryFn: async () => {
             let result = await $API.playlists({ hide_search: 1 });
 
@@ -26,8 +24,6 @@
                 errorHandler("getting playlists", result.error);
                 return [];
             }
-
-            await $Saved.setItem("playlists", result);
 
             return result;
         },
@@ -62,16 +58,18 @@
     {#if playlists?.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Playlists"
-            bind:data={playlists}
-            type="playlist"
-            columns={playlistsPreset}
-            virtualList={true}
-            actionData={{
-                disable: true,
-            }}
-        />
+        <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <MassRater bind:tabulator />
+            </div>
+
+            <Tabulator
+                bind:tabulator
+                data={playlists}
+                columns={playlistsPreset}
+                options={{ persistenceID: "playlists" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}
 

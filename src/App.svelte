@@ -22,7 +22,6 @@
     import Alerts from "~/components/alert/alertsContainer.svelte";
     import Lyrics from "~/components/lyrics.svelte";
     import Preferences from "~/views/preferences/preferences.svelte";
-    import ItemSync from "~/components/itemSync.svelte";
     import Routes from "~/components/routes.svelte";
     import PageTitleCoordinator from "~/components/pageTitleCoordinator.svelte";
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
@@ -102,7 +101,6 @@
 </script>
 
 <ThemeHandler />
-<ItemSync />
 
 {#if !$i18nIsLoading}
     <PageTitleCoordinator />
@@ -190,6 +188,7 @@
 
     :global(.site-content-inner > *) {
         grid-column: content;
+        overflow-y: hidden; /* prevent Tabulator from growing horizontally */
     }
 
     :global(.site-player) {

@@ -1,11 +1,15 @@
 <script>
     import { _ } from "svelte-i18n";
     import { newestArtists } from "~/logic/artist";
-    import Lister from "~/components/lister/lister.svelte";
-    import { artistsPreset } from "~/components/lister/columns.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import Actions from "~/components/action/actions.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
+    import { artistsPreset } from "~/components/lister/columns.js";
+
+    let tabulator = null;
 
     $: query = createQuery({
         queryKey: ["newestArtists"],
@@ -34,19 +38,24 @@
     {#if artists.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <Lister
-            id="Artists"
-            data={artists}
-            columns={artistsPreset}
-            type="artist"
-            actionData={{
-                type: "artists",
-                displayMode: "fullButtons",
-                showShuffle: artists.length > 1,
-                data: Object.create({
-                    artists: artists,
-                }),
-            }}
-        />
+        <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <Actions
+                    type="songs"
+                    displayMode="fullButtons"
+                    showShuffle={artists.length > 1}
+                    data={Object.create({ artists: artists })}
+                />
+
+                <MassRater bind:tabulator />
+            </div>
+
+            <Tabulator
+                bind:tabulator
+                data={artists}
+                columns={artistsPreset}
+                options={{ persistenceID: "artists" }}
+            ></Tabulator>
+        </div>
     {/if}
 {/if}

@@ -9,7 +9,7 @@ import { getArtist, getSimilarArtistsWithGenreFallback } from "~/logic/artist";
  * @returns {Promise<*>}
  */
 export async function getSongsFromArtist(id) {
-    let songs = await get(API).artistSongs({ filter: id });
+    let songs = await get(API).artistSongs({ filter: id, sort: "track,ASC" });
     songs = sortSongsByYear(songs);
 
     return songs;
@@ -365,17 +365,6 @@ export function groupSongsByDisc(songs) {
     }
 
     return discs;
-}
-
-/**
- * Sort songs alphabetically
- * @param {array} songs
- * @returns {*}
- */
-export function sortSongsByName(songs) {
-    return songs.sort(function (obj1, obj2) {
-        return obj1.name.localeCompare(obj2.name);
-    });
 }
 
 /**

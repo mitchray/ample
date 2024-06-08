@@ -60,6 +60,7 @@
         flex-direction: column;
         width: 100%;
         margin-inline-start: var(--spacing-md);
+        overflow-y: hidden; /* prevent Tabulator from growing horizontally */
     }
 
     @container (min-width: 500px) {
