@@ -143,7 +143,7 @@
     }
 
     .expanded-columns {
-        columns: 30ch;
+        columns: 31ch;
         column-rule: 1px solid var(--color-outline-variant);
         column-gap: var(--spacing-xxxl);
         row-gap: var(--spacing-md);

@@ -230,7 +230,13 @@
         cursor: default;
         padding-inline-start: var(--spacing-sm);
         overflow: visible !important;
-        opacity: 0.7;
+    }
+
+    .average::part(base) {
+        font-size: 0.8em;
+        border: 0;
+        color: var(--color-on-surface-variant);
+        background-color: var(--color-surface-variant);
     }
 
     .new {
