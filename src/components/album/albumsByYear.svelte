@@ -9,8 +9,8 @@
     export let showYear = new Date().getFullYear();
 
     let dataDisplay = [];
-    let fromYear = showYear; // default to current year
-    let toYear = showYear; // default to current year
+    let fromYear = null;
+    let toYear = null;
     let loadedTime = 0;
     let tabulator = null;
 

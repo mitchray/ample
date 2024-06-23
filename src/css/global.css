@@ -1094,3 +1094,35 @@ sl-tab-panel::part(base),
 .site-content-inner:has(.tabulator:last-child) {
     padding-block-end: 0 !important;
 }
+
+/*
+ * NoUiSlider
+ */
+#app .noUi-target {
+    background-color: var(--color-outline-variant);
+    border-color: transparent;
+    box-shadow: none;
+    border-radius: 3px;
+}
+
+#app .noUi-handle {
+    background-color: var(--color-primary);
+    box-shadow: none;
+    border-color: transparent;
+}
+
+#app .noUi-handle:before,
+#app .noUi-handle:after {
+    background-color: var(--color-on-primary);
+}
+
+#app .noUi-connect {
+    background-color: var(--color-tertiary-container);
+}
+
+#app .noUi-tooltip {
+    background-color: var(--color-primary-container);
+    color: var(--color-on-primary-container);
+    border: 0;
+    line-height: 1;
+}

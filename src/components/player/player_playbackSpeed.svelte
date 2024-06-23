@@ -43,32 +43,8 @@
     <MaterialSymbol name="speed" slot="prefix" />
 
     <sl-card slot="submenu" style="width: 100px;">
-        <div
-            class="slider"
-            bind:this={speedSlider}
-            style="height: 250px;"
-        ></div>
+        <div bind:this={speedSlider} style="height: 250px;"></div>
         <sl-divider></sl-divider>
         {$PlaybackSpeed}×
     </sl-card>
 </sl-menu-item>
-
-<style>
-    .slider:global(.noUi-target) {
-        background-color: var(--color-outline-variant);
-        border-color: transparent;
-        box-shadow: none;
-        border-radius: 3px;
-    }
-
-    .slider :global(.noUi-handle) {
-        background-color: var(--color-primary);
-        box-shadow: none;
-        border-color: transparent;
-    }
-
-    .slider :global(.noUi-handle):before,
-    .slider :global(.noUi-handle):after {
-        background-color: var(--color-on-primary);
-    }
-</style>
