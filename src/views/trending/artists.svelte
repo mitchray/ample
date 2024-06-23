@@ -47,7 +47,7 @@
                     data={Object.create({ artists: artists })}
                 />
 
-                <MassRater bind:tabulator />
+                <MassRater bind:tabulator type="artist" />
             </div>
 
             <Tabulator

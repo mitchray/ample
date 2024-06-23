@@ -111,7 +111,7 @@
                                 data={{ songs: songs }}
                             />
 
-                            <MassRater bind:tabulator />
+                            <MassRater bind:tabulator type="song" />
                         </div>
 
                         <Tabulator

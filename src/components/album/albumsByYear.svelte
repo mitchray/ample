@@ -45,7 +45,7 @@
                         data={{ from: fromYear, to: toYear }}
                     />
 
-                    <MassRater bind:tabulator />
+                    <MassRater bind:tabulator type="album" />
                 </div>
 
                 <Tabulator

@@ -9,7 +9,7 @@
 
 <div class="lister-tabulator">
     <div class="lister-tabulator__actions">
-        <MassRater bind:tabulator />
+        <MassRater bind:tabulator type="album" />
     </div>
 
     <Tabulator

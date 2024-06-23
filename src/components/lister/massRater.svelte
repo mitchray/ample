@@ -5,6 +5,7 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let tabulator;
+    export let type;
 
     let selectedCount = 0;
 
@@ -26,7 +27,7 @@
         selected.forEach(async (item) => {
             // rate on the backend
             let result = await $API.rate({
-                type: "song",
+                type: type,
                 id: item.id,
                 rating: newRating,
             });

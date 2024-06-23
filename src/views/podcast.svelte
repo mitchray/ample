@@ -82,7 +82,7 @@
             {#if episodes.length > 0}
                 <div class="lister-tabulator">
                     <div class="lister-tabulator__actions">
-                        <MassRater bind:tabulator />
+                        <MassRater bind:tabulator type="podcast_episode" />
                     </div>
 
                     <Tabulator

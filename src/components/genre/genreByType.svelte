@@ -65,7 +65,7 @@
                         data={{ name: genre.name }}
                     />
 
-                    <MassRater bind:tabulator />
+                    <MassRater bind:tabulator type="artist" />
                 </div>
 
                 <Tabulator
@@ -89,7 +89,7 @@
                         data={{ name: genre.name }}
                     />
 
-                    <MassRater bind:tabulator />
+                    <MassRater bind:tabulator type="album" />
                 </div>
 
                 <Tabulator
@@ -113,7 +113,7 @@
                         data={{ name: genre.name }}
                     />
 
-                    <MassRater bind:tabulator />
+                    <MassRater bind:tabulator type="song" />
                 </div>
 
                 <Tabulator

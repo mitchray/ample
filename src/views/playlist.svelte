@@ -190,7 +190,7 @@
                             data={{ songs: songs }}
                         />
 
-                        <MassRater bind:tabulator />
+                        <MassRater bind:tabulator type="song" />
 
                         {#if playlistType === "playlist"}
                             <PlaylistRemoveFrom
