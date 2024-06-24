@@ -15,7 +15,7 @@
     let tableElement;
 
     function centreOnTable() {
-        tableElement.scrollIntoView({
+        tableElement?.scrollIntoView({
             block: "start",
             inline: "nearest",
             behavior: "smooth",
