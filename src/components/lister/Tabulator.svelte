@@ -1,5 +1,5 @@
 <script>
-    import "tabulator-tables/dist/css/tabulator_midnight.min.css";
+    import "tabulator-tables/dist/css/tabulator.min.css";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { onDestroy, onMount } from "svelte";
     import { throttle } from "lodash-es";

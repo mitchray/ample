@@ -1126,3 +1126,47 @@ sl-tab-panel::part(base),
     border: 0;
     line-height: 1;
 }
+
+/*
+ * Tabulator
+ */
+#app .tabulator {
+    border: 0;
+    background-color: var(--color-surface);
+}
+
+#app .tabulator-col-resize-handle:hover {
+    background-color: var(--color-outline-variant);
+}
+
+#app .tabulator-row {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+    border-bottom: 1px solid var(--color-outline-variant);
+}
+
+#app .tabulator-header {
+    border-bottom: 2px solid var(--color-outline-variant);
+}
+
+#app .tabulator-header .tabulator-col {
+    border: 0;
+}
+
+#app .tabulator-header,
+#app .tabulator-header .tabulator-col {
+    background-color: var(--color-surface);
+    color: var(--color-on-surface);
+}
+
+#app .tabulator-cell {
+    border: 0;
+}
+
+#app .tabulator-selectable:hover {
+    cursor: unset;
+}
+
+#app .tabulator-row [tabulator-field="actions"] {
+    min-height: 36px;
+}
