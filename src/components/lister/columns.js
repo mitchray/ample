@@ -484,7 +484,7 @@ export let songsPreset = [
     },
     {
         ...artBase,
-        width: 32,
+        width: 40,
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 new Art({
@@ -604,7 +604,7 @@ export let albumsPreset = [
     },
     {
         ...artBase,
-        width: 42,
+        width: 40,
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 new Art({
@@ -664,7 +664,7 @@ export let artistsPreset = [
     },
     {
         ...artBase,
-        width: 60,
+        width: 40,
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 new Art({
