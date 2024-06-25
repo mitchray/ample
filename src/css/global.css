@@ -1189,3 +1189,21 @@ sl-tab-panel::part(base),
 #app .tabulator-paginator {
     color: var(--color-on-surface);
 }
+
+#app .tabulator-col-title-holder {
+    display: flex;
+}
+
+#app .tabulator-col-sorter {
+    position: relative;
+}
+
+#app .tabulator-col-title {
+    width: unset;
+    padding-right: 15px;
+}
+
+/* simulate text-align: right since we break it */
+#app .tabulator-col-title-holder:has(.tabulator-col-title[style*="right"]) {
+    justify-content: end;
+}
