@@ -135,7 +135,7 @@
     }
 
     .container.not-empty {
-        margin-block-start: var(--spacing-xxl);
+        margin-block: var(--spacing-xxl);
     }
 
     @container (min-width: 800px) {
