@@ -1170,3 +1170,22 @@ sl-tab-panel::part(base),
 #app .tabulator-row [tabulator-field="actions"] {
     min-height: 36px;
 }
+
+#app .tabulator-footer {
+    background-color: var(--color-surface-container);
+    color: var(--color-on-surface);
+    border: 0;
+}
+
+#app .tabulator-page {
+    background-color: unset;
+    border: 0;
+}
+
+#app .tabulator-page.active {
+    color: var(--color-primary)
+}
+
+#app .tabulator-paginator {
+    color: var(--color-on-surface);
+}
