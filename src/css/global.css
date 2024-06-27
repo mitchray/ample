@@ -1083,9 +1083,20 @@ sl-tab::part(base) {
 /* override display: none behavior to prevent Tabulator from rerendering */
 sl-tab-panel[aria-hidden=true] {
     display: block !important;
-    height: 0 !important;
-    overflow: hidden;
-    visibility: hidden;
+}
+
+@supports (content-visibility: hidden) {
+    sl-tab-panel[aria-hidden=true] {
+        content-visibility: hidden;
+    }
+}
+
+@supports not (content-visibility: hidden) {
+    sl-tab-panel[aria-hidden=true] {
+        height: 0 !important;
+        overflow: hidden;
+        visibility: hidden;
+    }
 }
 
 /* remove padding if Tabulator is last child so its sits flush */
