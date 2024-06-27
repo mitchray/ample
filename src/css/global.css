@@ -1146,6 +1146,10 @@ sl-tab-panel::part(base),
     background-color: var(--color-surface);
 }
 
+#app .tabulator-table {
+    background-color: var(--color-surface);
+}
+
 #app .tabulator-col-resize-handle:hover {
     background-color: var(--color-outline-variant);
 }
