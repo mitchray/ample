@@ -1,7 +1,11 @@
 <script>
-    import { User, Server } from "~/stores/state";
+    import { API, User } from "~/stores/state";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import { artistsPreset } from "~/components/lister/columns.js";
+    import {
+        artistsPreset,
+        normalizeResponse,
+        remotePaginationDefaults,
+    } from "~/components/lister/columns.js";
 
     /** @type {'artist'|'album_artist'} */
     export let type;
@@ -13,19 +17,12 @@
     bind:tabulator
     columns={artistsPreset}
     options={{
-        pagination: true, //enable pagination
-        paginationMode: "remote", //enable remote pagination
-        paginationCounter: "rows",
-        paginationInitialPage: 1,
-        paginationButtonCount: 9,
-        paginationSize: 100,
-        paginationSizeSelector: [10, 25, 50, 100, 200, true],
-        ajaxURL: "not used, see ajaxURLGenerator",
+        ...remotePaginationDefaults,
         ajaxConfig: {
             mode: "cors",
             method: "GET", //set request type to Position
             headers: {
-                //Authorization: "Bearer " + $User.token, //set specific content type
+                Authorization: "Bearer " + $User.token, //set specific content type
             },
         },
         ajaxURLGenerator: function (url, config, params) {
@@ -33,39 +30,15 @@
                 params.size = 0;
             }
 
-            let request =
-                $Server.url +
-                "/server/json.server.php" +
-                "?action=artists" +
-                "&album_artist=" +
-                (type === "album_artist" ? 1 : 0) +
-                "&sort=basename,ASC" +
-                "&limit=" +
-                params.size +
-                "&offset=" +
-                (params.page - 1) * params.size +
-                "&auth=" +
-                $User.token;
-
-            //console.debug(request);
-
-            return request;
+            return $API.rawURL("artists", {
+                album_artist: type === "album_artist" ? 1 : 0,
+                sort: "basename,ASC",
+                limit: params.size,
+                offset: (params.page - 1) * params.size,
+            });
         },
         ajaxResponse: function (url, params, response) {
-            // rename 'artist' to 'data'
-            delete Object.assign(response, { ["data"]: response["artist"] })[
-                "artist"
-            ];
-
-            // convert value of total_count to last_page
-            response.last_page = Math.ceil(response.total_count / params.size);
-
-            // rename 'total_count' to 'last_row'
-            delete Object.assign(response, {
-                ["last_row"]: response["total_count"],
-            })["total_count"];
-
-            return response; //return the response data to tabulator
+            return normalizeResponse("artist", url, params, response);
         },
         persistenceID: "artists",
     }}

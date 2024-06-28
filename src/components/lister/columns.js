@@ -22,6 +22,42 @@ export const ColumnDefaults = {
     minWidth: 100,
 };
 
+export const remotePaginationDefaults = {
+    pagination: true, //enable pagination
+    paginationMode: "remote", //enable remote pagination
+    paginationCounter: "rows",
+    paginationInitialPage: 1,
+    paginationButtonCount: 9,
+    paginationSize: 100,
+    paginationSizeSelector: [10, 25, 50, 100, 200, true],
+    ajaxURL: "not used, see ajaxURLGenerator",
+};
+
+/**
+ * Convert Ampache response into format Tabulator expects
+ * @param objectName - Will be converted to 'data'
+ * @param url
+ * @param params
+ * @param response
+ * @returns {*}
+ */
+export function normalizeResponse(objectName, url, params, response) {
+    // rename objectName to 'data'
+    delete Object.assign(response, { ["data"]: response[objectName] })[
+        objectName
+    ];
+
+    // convert value of total_count to last_page
+    response.last_page = Math.ceil(response.total_count / params.size);
+
+    // rename 'total_count' to 'last_row'
+    delete Object.assign(response, {
+        ["last_row"]: response["total_count"],
+    })["total_count"];
+
+    return response; // return the response data
+}
+
 /*
  BASES FOR EXTENDING
  */
