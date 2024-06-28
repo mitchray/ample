@@ -1,6 +1,6 @@
 <script>
-    import { onMount } from "svelte";
-    import { API } from "~/stores/state.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { API, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
@@ -10,51 +10,57 @@
         artistsPreset,
         songsPreset,
     } from "~/components/lister/columns.js";
+    import { _ } from "svelte-i18n";
 
     export let id;
     export let type;
 
-    let genre;
-    let data = [];
-    let loadedTime = 0;
     let tabulator = null;
 
-    $: data = data;
+    $: query = createQuery({
+        queryKey: ["genre", id, type],
+        queryFn: async () => {
+            let result = {};
 
-    async function getData() {
-        genre = await $API.genre({ filter: id });
-
-        if (genre.error) {
-            errorHandler("getting genre", genre.error);
-            return;
-        }
-
-        if (genre.id) {
             switch (type) {
                 case "artist":
-                    data = await $API.genreArtists({ filter: id, limit: 100 });
+                    result = await $API.genreArtists({
+                        filter: id,
+                        limit: 100,
+                    });
                     break;
                 case "album":
-                    data = await $API.genreAlbums({ filter: id, limit: 100 });
+                    result = await $API.genreAlbums({ filter: id, limit: 100 });
                     break;
                 case "song":
-                    data = await $API.genreSongs({ filter: id, limit: 100 });
+                    result = await $API.genreSongs({ filter: id, limit: 100 });
                     break;
                 default:
                     break;
             }
-        }
 
-        loadedTime = new Date();
-    }
+            if (result.error) {
+                errorHandler("getting genre type " + type, result.error);
+                return [];
+            }
 
-    onMount(async () => {
-        await getData();
+            return result;
+        },
+        enabled: $User.isLoggedIn,
     });
+
+    // alias of returned data
+    $: items = $query.data || {};
 </script>
 
-{#key loadedTime}
-    {#if genre?.name && data}
+{#if $query.isLoading}
+    <p>{$_("text.loading")}</p>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
+{:else if $query.isSuccess}
+    {#if items?.length === 0}
+        <p>{$_("text.noItemsFound")}</p>
+    {:else}
         {#if type === "artist"}
             <div class="lister-tabulator">
                 <div class="lister-tabulator__actions">
@@ -62,7 +68,7 @@
                         type="artistGenre"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ name: genre.name }}
+                        data={{ id: id }}
                     />
 
                     <MassRater bind:tabulator type="artist" />
@@ -70,7 +76,7 @@
 
                 <Tabulator
                     bind:tabulator
-                    {data}
+                    data={items}
                     columns={artistsPreset}
                     options={{
                         persistenceID: "artists",
@@ -86,7 +92,7 @@
                         type="albumGenre"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ name: genre.name }}
+                        data={{ id: id }}
                     />
 
                     <MassRater bind:tabulator type="album" />
@@ -94,7 +100,7 @@
 
                 <Tabulator
                     bind:tabulator
-                    {data}
+                    data={items}
                     columns={albumsPreset}
                     options={{
                         persistenceID: "albums",
@@ -110,7 +116,7 @@
                         type="songGenre"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ name: genre.name }}
+                        data={{ id: id }}
                     />
 
                     <MassRater bind:tabulator type="song" />
@@ -118,7 +124,7 @@
 
                 <Tabulator
                     bind:tabulator
-                    {data}
+                    data={items}
                     columns={songsPreset}
                     options={{
                         persistenceID: "songs",
@@ -127,4 +133,4 @@
             </div>
         {/if}
     {/if}
-{/key}
+{/if}

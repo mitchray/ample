@@ -793,7 +793,7 @@ export let genresPreset = [
                     props: {
                         type: "genre",
                         displayMode: "miniButtons",
-                        item: data,
+                        data: { id: data.id },
                         showShuffle: true,
                     },
                 });

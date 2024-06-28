@@ -1,7 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
-    import { sortGenresByName } from "~/logic/genre";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
@@ -15,14 +14,12 @@
     $: query = createQuery({
         queryKey: ["genres"],
         queryFn: async () => {
-            let result = await $API.genres();
+            let result = await $API.genres({ sort: "name,ASC" });
 
             if (result.error) {
                 errorHandler("getting genres", result.error);
                 return [];
             }
-
-            result = sortGenresByName(result);
 
             return result;
         },

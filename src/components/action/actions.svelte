@@ -87,16 +87,7 @@
                 break;
             case "artistGenre":
             case "genre":
-                if (data.name == null) {
-                    let genre = await $API.genre({ filter: item?.id });
-
-                    if (genre.error) {
-                        errorHandler("getting genre", genre.error);
-                    } else {
-                        data.name = genre.name;
-                    }
-                }
-                fetchURL = getSomeSongsFromArtistsByGenre(data.name);
+                fetchURL = getSomeSongsFromArtistsByGenre(data.id);
                 break;
             case "album":
                 fetchURL = $API.albumSongs({ filter: item?.id });
@@ -105,7 +96,7 @@
                 fetchURL = getSongsFromAlbums(sampleSize(data.albums, 100));
                 break;
             case "albumGenre":
-                fetchURL = getSomeSongsFromAlbumsByGenre(data.name);
+                fetchURL = getSomeSongsFromAlbumsByGenre(data.id);
                 break;
             case "albumAlpha":
                 fetchURL = getSongsFromAlbumsStartingWith(data.char);
@@ -115,7 +106,7 @@
                 fetchURL = $API.song({ filter: item?.id });
                 break;
             case "songGenre":
-                fetchURL = getSomeSongsByGenre(data.name);
+                fetchURL = getSomeSongsByGenre(data.id);
                 break;
             case "playlist":
             case "smartlist":

@@ -20,7 +20,7 @@
     <ul class="genres" class:is-overflow={limit}>
         {#each genres as genre}
             <li class="genre-tag">
-                <sl-button href="#/genres/{genre.id}" size="small" pill>
+                <sl-button href="#/genre/{genre.id}" size="small" pill>
                     {genre.name}
                 </sl-button>
             </li>
@@ -43,7 +43,7 @@
                             {#each overflowGenres as genre}
                                 <li class="genre-tag">
                                     <sl-button
-                                        href="#/genres/{genre.id}"
+                                        href="#/genre/{genre.id}"
                                         size="small"
                                         pill
                                     >

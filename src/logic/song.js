@@ -304,46 +304,58 @@ export function randomSongs({ page = 0, limit = 50 }) {
 
 /**
  * Get songs by genre
- * @param {string} genre
+ * @param {number} genreID
  * @returns {Promise<*>}
  */
-export function getSomeSongsByGenre(genre) {
+export async function getSomeSongsByGenre(genreID) {
+    let genre = await get(API).genre({ filter: genreID });
+
+    if (!genre.name) return;
+
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [["genre", 4, genre]],
+        rules: [["genre", 4, genre.name]],
     });
 }
 
 /**
  * Get songs from albums by genre
- * @param {string} genre
+ * @param {number} genreID
  * @returns {Promise<*>}
  */
-export function getSomeSongsFromAlbumsByGenre(genre) {
+export async function getSomeSongsFromAlbumsByGenre(genreID) {
+    let genre = await get(API).genre({ filter: genreID });
+
+    if (!genre.name) return;
+
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [["album_genre", 4, genre]],
+        rules: [["album_genre", 4, genre.name]],
     });
 }
 
 /**
  * Get songs from albums by genre
- * @param {string} genre
+ * @param {number} genreID
  * @returns {Promise<*>}
  */
-export function getSomeSongsFromArtistsByGenre(genre) {
+export async function getSomeSongsFromArtistsByGenre(genreID) {
+    let genre = await get(API).genre({ filter: genreID });
+
+    if (!genre.name) return;
+
     return get(API).advancedSearch({
         type: "song",
         random: 1,
         operator: "and",
         limit: 100,
-        rules: [["artist_genre", 4, genre]],
+        rules: [["artist_genre", 4, genre.name]],
     });
 }
 
