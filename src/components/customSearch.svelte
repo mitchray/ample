@@ -1353,6 +1353,7 @@
         container-name: custom-search-wrapper;
         container-type: inline-size;
         margin-block-end: var(--spacing-xxl);
+        overflow-y: visible; /* prevent selects from being cut off */
     }
 
     .rules {
