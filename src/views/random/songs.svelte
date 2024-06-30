@@ -1,61 +1,49 @@
 <script>
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import Actions from "~/components/action/actions.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
-    import { randomSongs } from "~/logic/song.js";
-    import { _ } from "svelte-i18n";
-    import { createQuery } from "@tanstack/svelte-query";
-    import { User } from "~/stores/state.js";
-    import { errorHandler } from "~/logic/helper.js";
-    import { songsPreset } from "~/components/lister/columns.js";
+    import { API, User } from "~/stores/state.js";
+    import {
+        songsPreset,
+        normalizeResponse,
+        remotePaginationDefaults,
+    } from "~/components/lister/columns.js";
 
     let tabulator = null;
-
-    $: query = createQuery({
-        queryKey: ["randomSongs"],
-        queryFn: async () => {
-            let result = await randomSongs({ limit: 50 });
-
-            if (result.error) {
-                errorHandler("getting random songs", result.error);
-                return [];
-            }
-
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    });
-
-    // alias of returned data
-    $: songs = $query.data || {};
 </script>
 
-{#if $query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if songs.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-                <Actions
-                    type="songs"
-                    displayMode="fullButtons"
-                    showShuffle={songs.length > 1}
-                    data={Object.create({ songs: songs })}
-                />
+<div class="lister-tabulator">
+    <div class="lister-tabulator__actions">
+        <MassRater bind:tabulator type="song" />
+    </div>
 
-                <MassRater bind:tabulator type="song" />
-            </div>
+    <Tabulator
+        bind:tabulator
+        columns={songsPreset}
+        options={{
+            ...remotePaginationDefaults,
+            ajaxConfig: {
+                mode: "cors",
+                method: "GET", //set request type to Position
+                headers: {
+                    Authorization: "Bearer " + $User.token, //set specific content type
+                },
+            },
+            ajaxURLGenerator: function (url, config, params) {
+                if (params.size === true) {
+                    params.size = 0;
+                }
 
-            <Tabulator
-                bind:tabulator
-                data={songs}
-                columns={songsPreset}
-                options={{ persistenceID: "songs" }}
-            ></Tabulator>
-        </div>
-    {/if}
-{/if}
+                return $API.rawURL("stats", {
+                    type: "song",
+                    filter: "random",
+                    limit: params.size,
+                    offset: (params.page - 1) * params.size,
+                });
+            },
+            ajaxResponse: function (url, params, response) {
+                return normalizeResponse("song", url, params, response);
+            },
+            persistenceID: "songs",
+        }}
+    ></Tabulator>
+</div>
