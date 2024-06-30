@@ -2,8 +2,8 @@
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import Artists from "~/views/trending/artists.svelte";
-    import Albums from "~/views/top-rated/albums.svelte";
-    import Songs from "~/views/top-rated/songs.svelte";
+    import Albums from "~/views/trending/albums.svelte";
+    import Songs from "~/views/trending/songs.svelte";
     import { replace } from "svelte-spa-router";
 
     export let params = {};
