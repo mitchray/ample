@@ -1213,7 +1213,7 @@ sl-tab-panel::part(base),
     position: relative;
 }
 
-#app .tabulator-col-title {
+#app .tabulator-col-title:not([style*="center"]) {
     width: unset;
     padding-right: 15px;
 }
