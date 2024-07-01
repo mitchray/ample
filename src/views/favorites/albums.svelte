@@ -30,7 +30,7 @@
             },
             ajaxURLGenerator: function (url, config, params) {
                 if (params.size === true) {
-                    params.size = 0;
+                    params.size = 5000;
                 }
 
                 return $API.rawURL("stats", {
