@@ -21,28 +21,22 @@
     export let params = {};
 
     let disks = [];
-    let parentItem;
     let tabulator = null;
 
     $: query = createQuery({
         queryKey: ["album", params.id],
         queryFn: async () => {
+            // reset otherwise it doesn't update
+            disks = [];
+
             let result = await $API.album({ filter: params.id });
 
             if (result.error) {
-                if (parentItem?.id) {
-                    addAlert({
-                        title: $_("text.IDChanged"),
-                        style: "info",
-                    });
-                    await push(`/artist/${parentItem.id}`);
-                }
-
                 errorHandler("getting album", result.error);
                 return [];
             }
 
-            parentItem = result.artist || null;
+            disks = await getAlbumDisks(params.id);
 
             return result;
         },
@@ -53,14 +47,6 @@
     $: album = $query.data || {};
 
     $: $PageTitle = album?.name || $_("text.album");
-
-    // grab discs once we load the album
-    $: $query.data, processData();
-
-    async function processData() {
-        if (!$query.data?.id) return;
-        disks = await getAlbumDisks(params.id);
-    }
 </script>
 
 {#if $query.isLoading}
