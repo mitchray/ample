@@ -23,7 +23,7 @@
     let filterToArtistID = getContext("filterToArtistID");
 
     $: query = createQuery({
-        queryKey: ["albumSongs", album.id],
+        queryKey: ["albumDisks", album.id],
         queryFn: async () => {
             return await getAlbumDisks(album.id);
         },
@@ -33,6 +33,8 @@
 
 {#if $query.isLoading}
     <sl-spinner style="font-size: 2rem;"></sl-spinner>
+{:else if $query.isError}
+    <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
     {#each $query.data as [disk, songs]}
         {#if $ShowSongsByOtherArtists === "hide" && songs.every((song) => song.notByArtist)}
