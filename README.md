@@ -19,7 +19,7 @@ Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitc
    - or compile yourself from Git repository (see [Developing](#developing))
 2. Place it anywhere on your server
    - If you want to keep it close to your Ampache install, copy the `ample` folder into your Ampache `public` folder, then you can access by adding `/ample` to your Ampache server address e.g. `yourampache.com/ample`
-   - Otherwise, you can put it anywhere you like (even on a different server from Ampache, just be mindful that the Ampache server will need [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS/Errors/CORSMissingAllowOrigin))
+   - Otherwise, you can put it anywhere you like (even on a different server from Ampache, just be mindful that the remote Ampache server will need [configuring](https://github.com/mitchray/ample/wiki/Connecting-to-a-remote-Ampache-server-(CORS))
 3. At the login screen, enter the full URL of the Ampache server you wish to connect to
    - Alternatively you can hardcode an instance of Ample to a specific Ampache server, see [Config file](#config-file)
 
