@@ -11,6 +11,7 @@
     import RenderReleases from "~/views/artist/_renderReleases.svelte";
     import FeaturedOptions from "~/views/artist/_featuredOptions.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { onMount } from "svelte";
 
     export let artistID;
 
@@ -48,15 +49,18 @@
         sortReversed: false,
     };
 
-    let loadedOptions = writable($Saved.getItem("ArtistReleases") || {}); // load saved settings from localstorage
-
-    let state = writable(Object.assign({}, defaultOptions, $loadedOptions)); // merge table defaults, localstorage, passed component props
+    let loadedOptions = writable({});
+    let state = writable(defaultOptions);
 
     // run processData whenever $query.data or displayOptions change
     $: $query.data, processData();
     $: $state, processData();
-
     $: $state, $Saved.setItem("ArtistReleases", $state); // write to localstorage whenever state changes
+
+    onMount(async () => {
+        $loadedOptions = (await $Saved.getItem("ArtistReleases")) || {}; // load saved settings from localstorage
+        $state = Object.assign({}, defaultOptions, $loadedOptions); // merge table defaults, localstorage, passed component props
+    });
 
     async function processData() {
         // sort entire array together
