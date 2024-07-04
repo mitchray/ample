@@ -1099,13 +1099,6 @@ sl-tab-panel[aria-hidden=true] {
     }
 }
 
-/* remove padding if Tabulator is last child so its sits flush */
-sl-tab-panel::part(base),
-.site-content-inner:has(sl-tab-panel[aria-hidden=false] .tabulator:last-child),
-.site-content-inner:has(.tabulator:last-child) {
-    padding-block-end: 0 !important;
-}
-
 /*
  * NoUiSlider
  */
