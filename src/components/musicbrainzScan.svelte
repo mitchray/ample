@@ -8,6 +8,7 @@
     import Art from "~/components/art.svelte";
     import Portal from "~/components/portal.svelte";
     import { Saved } from "~/stores/settings.js";
+    import { onMount } from "svelte";
 
     export let data;
 
@@ -32,8 +33,12 @@
         flagged: 0,
         missing: 0,
     };
-    let filters = $Saved.getItem("MusicBrainzFilters") || {};
+    let filters = {};
     let dialog;
+
+    onMount(async () => {
+        filters = (await $Saved.getItem("MusicBrainzFilters")) || {};
+    });
 
     $: {
         queryURL = `https://musicbrainz.org/ws/2/recording/?artist=${
