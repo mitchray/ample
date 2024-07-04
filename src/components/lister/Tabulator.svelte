@@ -46,7 +46,7 @@
         });
 
         // centre table in viewport on scroll
-        // tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
+        tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
 
         // resize rows when art column is resized
         tabulator.on("columnResized", (column) => {

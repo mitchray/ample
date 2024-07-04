@@ -38,9 +38,18 @@
         disks = [];
 
         $query.data?.forEach(([disk, songs]) => {
+            songs.forEach((song) => {
+                song.doesNotContainArtist = !song.artists.find(
+                    (a) => a.id === filterToArtistID,
+                );
+            });
+
             disks.push({
                 index: disk,
                 songs: songs,
+                songsByArtist: songs.filter((song) =>
+                    song.artists?.some((a) => a.id === filterToArtistID),
+                ),
                 doesNotContainArtist: songs.every(
                     (song) =>
                         !song.artists.some((a) => a.id === filterToArtistID),
@@ -70,9 +79,7 @@
                     <ul class="expanded-columns">
                         {#each disk.songs as song}
                             <li
-                                class:not-by-artist={!song.artists.find(
-                                    (artist) => artist.id === filterToArtistID,
-                                )}
+                                class:not-by-artist={song.doesNotContainArtist}
                                 class:hide={filterToArtistID &&
                                     $ShowSongsByOtherArtists === "hide"}
                                 class:highlight={filterToArtistID &&
@@ -125,28 +132,46 @@
                     </ul>
                 {:else}
                     <div class="lister-tabulator">
-                        <div class="lister-tabulator__actions">
-                            {#if disks.length > 1}
-                                <Actions
-                                    type="album"
-                                    id={album.id}
-                                    displayMode="fullButtons"
-                                    showShuffle={disk.songs.length > 1}
-                                    data={{ songs: disk.songs }}
-                                />
-                            {/if}
+                        {#key $ShowSongsByOtherArtists || 0}
+                            <div class="lister-tabulator__actions">
+                                {#if disks.length > 1}
+                                    <Actions
+                                        type="album"
+                                        id={album.id}
+                                        displayMode="fullButtons"
+                                        showShuffle={disk.songs.length > 1}
+                                        data={{ songs: disk.songs }}
+                                    />
+                                {/if}
 
-                            <MassRater bind:tabulator type="song" />
-                        </div>
+                                <MassRater bind:tabulator type="song" />
+                            </div>
 
-                        <Tabulator
-                            bind:tabulator
-                            data={disk.songs}
-                            columns={albumPreset}
-                            options={{
-                                persistenceID: "album",
-                            }}
-                        ></Tabulator>
+                            <Tabulator
+                                bind:tabulator
+                                data={$ShowSongsByOtherArtists === "hide" &&
+                                filterToArtistID
+                                    ? disk.songsByArtist
+                                    : disk.songs}
+                                columns={albumPreset}
+                                options={{
+                                    rowFormatter: function (row) {
+                                        if (
+                                            $ShowSongsByOtherArtists ===
+                                                "highlight" &&
+                                            filterToArtistID &&
+                                            row.getData().doesNotContainArtist
+                                        ) {
+                                            row.getElement().classList.add(
+                                                "not-by-artist",
+                                                "highlight",
+                                            );
+                                        }
+                                    },
+                                    persistenceID: "album",
+                                }}
+                            ></Tabulator>
+                        {/key}
                     </div>
                 {/if}
             </div>
