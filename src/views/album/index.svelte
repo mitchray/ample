@@ -1,42 +1,29 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { push } from "svelte-spa-router";
-    import { getAlbumDisks } from "~/logic/album";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { albumPreset } from "~/components/lister/columns.js";
+    import Disks from "~/views/album/_disks.svelte";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
-    import Tabulator from "~/components/lister/Tabulator.svelte";
     import Genres from "~/components/genre/genres.svelte";
     import AlbumsAround from "~/components/album/albumsAround.svelte";
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
-    import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
 
     export let params = {};
 
-    let disks = [];
-    let tabulator = null;
-
     $: query = createQuery({
         queryKey: ["album", params.id],
         queryFn: async () => {
-            // reset otherwise it doesn't update
-            disks = [];
-
             let result = await $API.album({ filter: params.id });
 
             if (result.error) {
                 errorHandler("getting album", result.error);
                 return [];
             }
-
-            disks = await getAlbumDisks(params.id);
 
             return result;
         },
@@ -154,39 +141,7 @@
                 </div>
             </div>
             <div class="songs">
-                {#if disks.length > 0}
-                    {#each disks as [disk, tracks]}
-                        <section>
-                            {#if disks.length > 1}
-                                <h3 class="disk-title">Disc {disk}</h3>
-                            {/if}
-
-                            <div class="lister-tabulator">
-                                <div class="lister-tabulator__actions">
-                                    {#if disks.length > 1}
-                                        <Actions
-                                            type="album"
-                                            id={album.id}
-                                            displayMode="fullButtons"
-                                            showShuffle={tracks.length > 1}
-                                            data={{ songs: tracks }}
-                                        />
-                                    {/if}
-                                    <MassRater bind:tabulator type="song" />
-                                </div>
-
-                                <Tabulator
-                                    bind:tabulator
-                                    data={tracks}
-                                    columns={albumPreset}
-                                    options={{
-                                        persistenceID: "album",
-                                    }}
-                                ></Tabulator>
-                            </div>
-                        </section>
-                    {/each}
-                {/if}
+                <Disks albumID={album.id} />
             </div>
 
             <div class="albums-around-time">
@@ -284,10 +239,6 @@
 
     section:not(:first-of-type) {
         margin-block-start: var(--spacing-xxxl);
-    }
-
-    .disk-title {
-        margin-block-end: var(--spacing-md);
     }
 
     @container (min-width: 530px) {

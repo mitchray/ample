@@ -11,7 +11,7 @@
     import ArtistsIndex from "~/views/artists/index.svelte";
     import AlbumArtistsIndex from "~/views/album-artists/index.svelte";
     import AlbumsIndex from "~/views/albums/index.svelte";
-    import Album from "~/views/album.svelte";
+    import Album from "~/views/album/index.svelte";
     import Song from "~/views/song.svelte";
     import Genre from "~/views/genre/index.svelte";
     import Genres from "~/views/genres.svelte";
