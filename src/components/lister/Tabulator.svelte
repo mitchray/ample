@@ -30,7 +30,6 @@
             layout: "fitColumns",
             columns: columns, //define table columns
             movableColumns: true,
-            minHeight: 200, //workaround to sl-dropdown hoist not working
             maxHeight:
                 $SiteContentBind?.clientHeight > 0
                     ? $SiteContentBind.clientHeight
