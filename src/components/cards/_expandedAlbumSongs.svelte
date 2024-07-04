@@ -21,24 +21,23 @@
     let type = getType();
     let tabulator = null;
     let filterToArtistID = getContext("filterToArtistID");
+    let disks = [];
 
     $: query = createQuery({
         queryKey: ["albumDisks", album.id],
         queryFn: async () => {
-            let result = await getAlbumDisks(album.id);
-
-            return processData(result);
+            return await getAlbumDisks(album.id);
         },
         enabled: $User.isLoggedIn,
     });
 
     // alias of returned data
-    $: disks = $query.data || {};
+    $: $query.data, processData();
 
-    function processData(data) {
-        let disks = [];
+    function processData() {
+        disks = [];
 
-        data.forEach(([disk, songs]) => {
+        $query.data?.forEach(([disk, songs]) => {
             disks.push({
                 index: disk,
                 songs: songs,
