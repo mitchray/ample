@@ -25,10 +25,32 @@
     $: query = createQuery({
         queryKey: ["albumDisks", album.id],
         queryFn: async () => {
-            return await getAlbumDisks(album.id);
+            let result = await getAlbumDisks(album.id);
+
+            return processData(result);
         },
         enabled: $User.isLoggedIn,
     });
+
+    // alias of returned data
+    $: disks = $query.data || {};
+
+    function processData(data) {
+        let disks = [];
+
+        data.forEach(([disk, songs]) => {
+            disks.push({
+                index: disk,
+                songs: songs,
+                doesNotContainArtist: songs.every(
+                    (song) =>
+                        !song.artists.some((a) => a.id === filterToArtistID),
+                ),
+            });
+        });
+
+        return disks;
+    }
 </script>
 
 {#if $query.isLoading}
@@ -36,18 +58,18 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#each $query.data as [disk, songs]}
-        {#if $ShowSongsByOtherArtists === "hide" && songs.every((song) => song.notByArtist)}
+    {#each disks as disk}
+        {#if $ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
             <!-- Hide this disk-->
         {:else}
             <div class="disk">
-                {#if $query.data.length > 1}
-                    <h4 class="disk-title">Disc {disk}</h4>
+                {#if disks.length > 1}
+                    <h4 class="disk-title">Disc {disk.index}</h4>
                 {/if}
 
                 {#if type === "slim"}
                     <ul class="expanded-columns">
-                        {#each songs as song}
+                        {#each disk.songs as song}
                             <li
                                 class:not-by-artist={!song.artists.find(
                                     (artist) => artist.id === filterToArtistID,
@@ -105,20 +127,22 @@
                 {:else}
                     <div class="lister-tabulator">
                         <div class="lister-tabulator__actions">
-                            <Actions
-                                type="album"
-                                id={album.id}
-                                displayMode="fullButtons"
-                                showShuffle={songs.length > 1}
-                                data={{ songs: songs }}
-                            />
+                            {#if disks.length > 1}
+                                <Actions
+                                    type="album"
+                                    id={album.id}
+                                    displayMode="fullButtons"
+                                    showShuffle={disk.songs.length > 1}
+                                    data={{ songs: disk.songs }}
+                                />
+                            {/if}
 
                             <MassRater bind:tabulator type="song" />
                         </div>
 
                         <Tabulator
                             bind:tabulator
-                            data={songs}
+                            data={disk.songs}
                             columns={albumPreset}
                             options={{
                                 persistenceID: "album",
