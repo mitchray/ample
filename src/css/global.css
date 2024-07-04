@@ -1136,11 +1136,11 @@ sl-tab-panel[aria-hidden=true] {
  */
 #app .tabulator {
     border: 0;
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
 }
 
 #app .tabulator-table {
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
 }
 
 #app .tabulator-col-resize-handle:hover {
@@ -1148,7 +1148,7 @@ sl-tab-panel[aria-hidden=true] {
 }
 
 #app .tabulator-row {
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
     color: var(--color-on-surface);
     border-bottom: 1px solid var(--color-outline-variant);
 }
@@ -1163,7 +1163,7 @@ sl-tab-panel[aria-hidden=true] {
 
 #app .tabulator-header,
 #app .tabulator-header .tabulator-col {
-    background-color: var(--color-surface);
+    background-color: var(--color-background);
     color: var(--color-on-surface);
 }
 
