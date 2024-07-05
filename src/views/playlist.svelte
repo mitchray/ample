@@ -123,6 +123,8 @@
     });
 
     onDestroy(() => {
+        if (!tabulator || playlistType !== "playlist") return;
+
         tabulator?.off("dataSorting");
         tabulator?.off("rowMoved");
     });
