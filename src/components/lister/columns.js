@@ -812,6 +812,7 @@ export let smartlistsPreset = [
             });
         },
     },
+    ratingPlaylist,
     items,
     owner,
     privacy,

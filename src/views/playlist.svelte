@@ -134,11 +134,9 @@
                         />
                     </div>
 
-                    {#if playlistType === "playlist"}
-                        <div class="rating">
-                            <Rating type="playlist" data={playlist} />
-                        </div>
-                    {/if}
+                    <div class="rating">
+                        <Rating type="playlist" data={playlist} />
+                    </div>
                 </div>
 
                 <div class="info">
