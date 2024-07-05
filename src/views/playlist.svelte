@@ -29,6 +29,7 @@
     let playlistType = "playlist";
     let drawerEdit, drawerDelete;
     let tabulator = null;
+    let columns = [];
 
     $: songs = songs;
     $: playlist = playlist;
@@ -42,7 +43,7 @@
     }
 
     function setupEvents() {
-        if (!tabulator) return;
+        if (!tabulator || playlistType !== "playlist") return;
 
         // hide moveHandle if table has been sorted
         tabulator.on("dataSorting", () => {
@@ -108,6 +109,11 @@
                 return;
             }
         }
+
+        columns =
+            playlistType === "playlist"
+                ? [moveHandle, moveHandleDisabled, ...songsPreset]
+                : songsPreset;
 
         loading = false;
 
@@ -202,11 +208,7 @@
                     <Tabulator
                         bind:tabulator
                         bind:data={songs}
-                        columns={[
-                            moveHandle,
-                            moveHandleDisabled,
-                            ...songsPreset,
-                        ]}
+                        {columns}
                         options={{
                             movableRows: true,
                             persistenceID: "playlist",
