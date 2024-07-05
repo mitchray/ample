@@ -20,6 +20,8 @@
         moveHandleDisabled,
         songsPreset,
     } from "~/components/lister/columns.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { capitalize } from "lodash-es";
 
     export let params = {};
 
@@ -146,19 +148,50 @@
                 </div>
 
                 <div class="info">
-                    <div class="type">
-                        {#if playlistType === "smartlist"}
-                            <Badge text={$_("text.smartlist")} />
-                        {:else if playlistType === "mix"}
-                            <Badge text={$_("text.mix")} />
-                        {:else}
-                            <Badge text={$_("text.playlist")} />
-                        {/if}
+                    <div class="name">
+                        <div class="type">
+                            {#if playlistType === "smartlist"}
+                                <Badge text={$_("text.smartlist")} />
+                            {:else if playlistType === "mix"}
+                                <Badge text={$_("text.mix")} />
+                            {:else}
+                                <Badge text={$_("text.playlist")} />
+                            {/if}
+                        </div>
+
+                        <h1 class="title">
+                            {playlist.name}
+                        </h1>
                     </div>
 
-                    <h1 class="title">
-                        {playlist.name}
-                    </h1>
+                    <div class="meta-container">
+                        <div class="meta-entry">
+                            <span class="meta-field">
+                                {$_("text.items")}
+                            </span>
+                            <span class="meta-value">
+                                {playlist.items}
+                            </span>
+                        </div>
+
+                        <div class="meta-entry">
+                            <span class="meta-field">
+                                {$_("text.owner")}
+                            </span>
+                            <span class="meta-value">
+                                {playlist.owner}
+                            </span>
+                        </div>
+
+                        <div class="meta-entry">
+                            <span class="meta-field">
+                                {$_("text.type")}
+                            </span>
+                            <span class="meta-value">
+                                {capitalize(playlist.type)}
+                            </span>
+                        </div>
+                    </div>
 
                     {#if playlistType === "playlist"}
                         <div class="playlist-actions">
@@ -167,14 +200,16 @@
                                 on:click={() => drawerEdit.show()}
                                 title={$_("text.edit")}
                             >
+                                <MaterialSymbol name="edit" slot="prefix" />
                                 {$_("text.edit")}
                             </sl-button>
 
                             <sl-button
-                                variant="danger"
+                                variant="neutral"
                                 on:click={() => drawerDelete.show()}
                                 title={$_("text.delete")}
                             >
+                                <MaterialSymbol name="delete" slot="prefix" />
                                 {$_("text.delete")}
                             </sl-button>
                         </div>
@@ -262,7 +297,7 @@
 
     .info {
         display: flex;
-        gap: var(--spacing-sm);
+        gap: var(--spacing-xl);
         flex-direction: column;
     }
 
@@ -271,7 +306,6 @@
         line-height: 1.1;
         font-weight: 300;
         display: flex;
-        margin-block-end: var(--spacing-lg);
     }
 
     .playlist-actions {
@@ -322,6 +356,7 @@
     @container playlist-details-wrapper (min-width: 800px) {
         .title {
             font-size: 40px;
+            font-weight: 200;
         }
 
         .art-container {

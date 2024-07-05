@@ -97,25 +97,25 @@
                 </div>
 
                 <div class="details">
-                    <div class="meta">
+                    <div class="meta-container">
                         {#if artist.albumcount > 0}
-                            <div class="entry">
-                                <span class="field">
+                            <div class="meta-entry">
+                                <span class="meta-field">
                                     {$_("text.releasesPlural", {
                                         values: {
                                             count: parseInt(artist.albumcount),
                                         },
                                     })}
                                 </span>
-                                <span class="value">
+                                <span class="meta-value">
                                     {artist.albumcount}
                                 </span>
                             </div>
                         {/if}
 
                         {#if artist.appearanceCount > 0}
-                            <div class="entry">
-                                <span class="field">
+                            <div class="meta-entry">
+                                <span class="meta-field">
                                     {$_("text.appearancesPlural", {
                                         values: {
                                             count: parseInt(
@@ -124,42 +124,42 @@
                                         },
                                     })}
                                 </span>
-                                <span class="value">
+                                <span class="meta-value">
                                     {artist.appearanceCount}
                                 </span>
                             </div>
                         {/if}
 
-                        <div class="entry">
-                            <span class="field">
+                        <div class="meta-entry">
+                            <span class="meta-field">
                                 {$_("text.songsPlural", {
                                     values: {
                                         count: parseInt(artist.songcount),
                                     },
                                 })}
                             </span>
-                            <span class="value">
+                            <span class="meta-value">
                                 {artist.songcount}
                             </span>
                         </div>
 
                         {#if artist.time > 0}
-                            <div class="entry">
-                                <span class="field">
+                            <div class="meta-entry">
+                                <span class="meta-field">
                                     {$_("text.total")}
                                 </span>
-                                <span class="value">
+                                <span class="meta-value">
                                     {formatTotalTime(artist.time)}
                                 </span>
                             </div>
                         {/if}
 
                         {#if artist.yearformed}
-                            <div class="entry">
-                                <span class="field">
+                            <div class="meta-entry">
+                                <span class="meta-field">
                                     {$_("text.yearFormed")}
                                 </span>
-                                <span class="value">
+                                <span class="meta-value">
                                     <a
                                         href="#/album/year/{artist.yearformed}"
                                         title={artist.yearformed}
@@ -171,11 +171,11 @@
                         {/if}
 
                         {#if artist.placeformed}
-                            <div class="entry">
-                                <span class="field">
+                            <div class="meta-entry">
+                                <span class="meta-field">
                                     {$_("text.placeFormed")}
                                 </span>
-                                <span class="value">
+                                <span class="meta-value">
                                     {artist.placeformed}
                                 </span>
                             </div>
@@ -299,29 +299,6 @@
         display: flex;
         flex-direction: column;
         gap: var(--spacing-xl);
-    }
-
-    .meta {
-        display: flex;
-        flex-direction: row;
-        column-gap: var(--spacing-xl);
-        row-gap: var(--spacing-lg);
-        flex-wrap: wrap;
-    }
-
-    .meta .entry {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .meta .field {
-        color: var(--color-on-surface-variant);
-        flex-shrink: 0;
-    }
-
-    .meta .value {
-        font-size: 1.2em;
-        font-weight: 500;
     }
 
     .actions {

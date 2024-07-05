@@ -80,10 +80,10 @@
                         </div>
                     </div>
 
-                    <div class="meta">
-                        <div class="entry">
-                            <span class="field">{$_("text.year")}</span>
-                            <span class="value">
+                    <div class="meta-container">
+                        <div class="meta-entry">
+                            <span class="meta-field">{$_("text.year")}</span>
+                            <span class="meta-value">
                                 <a
                                     href="#/album/year/{album.year}"
                                     title={album.year}
@@ -94,32 +94,32 @@
                         </div>
 
                         {#if album.diskcount > 1}
-                            <div class="entry">
-                                <span class="field">
+                            <div class="meta-entry">
+                                <span class="meta-field">
                                     {$_("text.disks", {
                                         values: { count: album.diskcount },
                                     })}
                                 </span>
-                                <span class="value">
+                                <span class="meta-value">
                                     {album.diskcount}
                                 </span>
                             </div>
                         {/if}
 
-                        <div class="entry">
-                            <span class="field">
+                        <div class="meta-entry">
+                            <span class="meta-field">
                                 {$_("text.songs")}
                             </span>
-                            <span class="value">
+                            <span class="meta-value">
                                 {album.songcount}
                             </span>
                         </div>
 
-                        <div class="entry">
-                            <span class="field">
+                        <div class="meta-entry">
+                            <span class="meta-field">
                                 {$_("text.length")}
                             </span>
-                            <span class="value">
+                            <span class="meta-value">
                                 {formatTotalTime(album.time)}
                             </span>
                         </div>
@@ -212,29 +212,6 @@
         margin-block-end: 0;
         font-weight: 300;
         text-wrap: balance;
-    }
-
-    .meta {
-        display: flex;
-        flex-direction: row;
-        column-gap: var(--spacing-xl);
-        row-gap: var(--spacing-lg);
-        flex-wrap: wrap;
-    }
-
-    .meta .entry {
-        display: flex;
-        flex-direction: column;
-    }
-
-    .meta .field {
-        color: var(--color-on-surface-variant);
-        flex-shrink: 0;
-    }
-
-    .meta .value {
-        font-size: 1.2em;
-        font-weight: 500;
     }
 
     section:not(:first-of-type) {

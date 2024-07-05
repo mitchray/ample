@@ -1051,6 +1051,29 @@ strong {
     margin-block-start: var(--spacing-sm);
 }
 
+.meta-container {
+    display: flex;
+    flex-direction: row;
+    column-gap: var(--spacing-xl);
+    row-gap: var(--spacing-lg);
+    flex-wrap: wrap;
+}
+
+.meta-entry {
+    display: flex;
+    flex-direction: column;
+}
+
+.meta-field {
+    color: var(--color-on-surface-variant);
+    flex-shrink: 0;
+}
+
+.meta-value {
+    font-size: 1.2em;
+    font-weight: 500;
+}
+
 /*
  * Drawers
  */
