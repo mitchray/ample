@@ -142,9 +142,11 @@
                         />
                     </div>
 
-                    <div class="rating">
-                        <Rating type="playlist" data={playlist} />
-                    </div>
+                    {#if playlistType !== "mix"}
+                        <div class="rating">
+                            <Rating type="playlist" data={playlist} />
+                        </div>
+                    {/if}
                 </div>
 
                 <div class="info">
@@ -164,34 +166,36 @@
                         </h1>
                     </div>
 
-                    <div class="meta-container">
-                        <div class="meta-entry">
-                            <span class="meta-field">
-                                {$_("text.items")}
-                            </span>
-                            <span class="meta-value">
-                                {playlist.items}
-                            </span>
-                        </div>
+                    {#if playlistType !== "mix"}
+                        <div class="meta-container">
+                            <div class="meta-entry">
+                                <span class="meta-field">
+                                    {$_("text.items")}
+                                </span>
+                                <span class="meta-value">
+                                    {playlist.items}
+                                </span>
+                            </div>
 
-                        <div class="meta-entry">
-                            <span class="meta-field">
-                                {$_("text.owner")}
-                            </span>
-                            <span class="meta-value">
-                                {playlist.owner}
-                            </span>
-                        </div>
+                            <div class="meta-entry">
+                                <span class="meta-field">
+                                    {$_("text.owner")}
+                                </span>
+                                <span class="meta-value">
+                                    {playlist.owner}
+                                </span>
+                            </div>
 
-                        <div class="meta-entry">
-                            <span class="meta-field">
-                                {$_("text.type")}
-                            </span>
-                            <span class="meta-value">
-                                {capitalize(playlist.type)}
-                            </span>
+                            <div class="meta-entry">
+                                <span class="meta-field">
+                                    {$_("text.type")}
+                                </span>
+                                <span class="meta-value">
+                                    {capitalize(playlist.type)}
+                                </span>
+                            </div>
                         </div>
-                    </div>
+                    {/if}
 
                     {#if playlistType === "playlist"}
                         <div class="playlist-actions">
