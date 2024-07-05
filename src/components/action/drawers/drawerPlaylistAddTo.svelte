@@ -4,6 +4,7 @@
     import { API } from "~/stores/state.js";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
+    import { onMount } from "svelte";
 
     export const show = () => drawer.show();
     export let songs;
@@ -11,7 +12,7 @@
     let drawer, drawerEdit;
     let newPlaylist = null;
     let selectedPlaylists;
-    let ignoreDuplicates = true;
+    let ignoreDuplicates = false;
 
     function handleSave() {
         if (newPlaylist) {
@@ -20,16 +21,32 @@
 
         selectedPlaylists.forEach((playlistID) => {
             songs.forEach((element) => {
-                $API.playlistAddSong({
+                $API.playlistAdd({
                     filter: playlistID,
-                    song: element.id,
-                    check: ignoreDuplicates ? 1 : 0,
+                    id: element.id,
+                    type: "song",
                 });
             });
         });
 
         drawer.hide();
     }
+
+    function toggleUniqueItems() {
+        $API.preferenceEdit({
+            filter: "unique_playlist",
+            value: ignoreDuplicates ? "0" : "1",
+        }).then((result) => {
+            ignoreDuplicates = parseInt(result.value) === 1;
+        });
+    }
+
+    onMount(async () => {
+        let uniquePlaylistPref = await $API.userPreference({
+            filter: "unique_playlist",
+        });
+        ignoreDuplicates = parseInt(uniquePlaylistPref.value) === 1;
+    });
 </script>
 
 <sl-drawer
@@ -40,10 +57,7 @@
 >
     <PlaylistSelector bind:selectedPlaylists multiple={true} type="playlists" />
 
-    <sl-checkbox
-        checked={ignoreDuplicates}
-        on:sl-change={() => (ignoreDuplicates = !ignoreDuplicates)}
-    >
+    <sl-checkbox checked={ignoreDuplicates} on:sl-change={toggleUniqueItems}>
         {$_("text.skipDuplicates")}
     </sl-checkbox>
 

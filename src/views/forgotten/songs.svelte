@@ -41,7 +41,6 @@
                 });
             },
             ajaxResponse: function (url, params, response) {
-                console.debug(response);
                 return normalizeResponse("song", url, params, response);
             },
             persistenceID: "songs",
