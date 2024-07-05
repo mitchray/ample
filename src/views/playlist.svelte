@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { onDestroy, onMount } from "svelte";
-    import { replace } from "svelte-spa-router";
+    import { replace, location } from "svelte-spa-router";
     import { API, PageTitle } from "~/stores/state";
     import { getSongsFromPlaylist } from "~/logic/song";
     import Rating from "~/components/rating/rating.svelte";
@@ -78,18 +78,7 @@
     }
 
     onMount(async () => {
-        playlist = await $API.playlist({ filter: params.id });
-
-        if (playlist?.id) {
-            songs = await getSongsFromPlaylist({
-                id: params.id,
-                type: "playlist",
-            });
-
-            if (playlist.id.match(/^smart_/)) {
-                playlistType = "smartlist";
-            }
-        } else {
+        if ($location.startsWith("/mix")) {
             // artist mix
             playlistType = "mix";
             playlist = await $API.artist({ filter: params.id });
@@ -109,6 +98,24 @@
                 errorHandler("getting songs from playlist", songs.error);
                 loading = false;
                 return;
+            }
+        } else {
+            playlist = await $API.playlist({ filter: params.id });
+
+            if (playlist.error) {
+                loading = false;
+                return;
+            }
+
+            if (playlist?.id) {
+                songs = await getSongsFromPlaylist({
+                    id: params.id,
+                    type: "playlist",
+                });
+
+                if (playlist.id.match(/^smart_/)) {
+                    playlistType = "smartlist";
+                }
             }
         }
 
@@ -130,7 +137,11 @@
     });
 </script>
 
-{#if playlist?.id && !loading}
+{#if loading}
+    <p>{$_("text.loading")}</p>
+{:else if playlist.error}
+    <p>{$_("text.noItemsFound")}</p>
+{:else if playlist?.id}
     <div class="page-wrapper">
         <div class="details-container">
             <div class="details">
@@ -271,8 +282,6 @@
             on:playlistDeleted={afterDelete}
         />
     </Portal>
-{:else}
-    <p>{$_("text.loading")}</p>
 {/if}
 
 <style>
