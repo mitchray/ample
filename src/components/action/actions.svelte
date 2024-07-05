@@ -50,9 +50,9 @@
     const contextKey = uuidv4(); // unique key for each instance of actions
 
     let playLimit = 5000;
-    let tabulator;
     let actionsBind;
     let dialogBind;
+    let dropdownBind;
 
     // underscore prefixed items are accessor aliases of exported params
     let _item = writable(item);
@@ -203,10 +203,6 @@
 
         return prepareForQueue(result);
     }
-
-    onMount(() => {
-        tabulator = actionsBind?.closest(".tabulator");
-    });
 </script>
 
 <!-- Dynamic context menu -->
@@ -363,67 +359,72 @@
             {#if !hidden}<ActionPlayNext {contextKey} />{/if}
             {#if !hidden}<ActionPlayLast {contextKey} />{/if}
 
-            {#if tabulator?.offsetHeight < 250}
-                <Portal>
-                    <sl-dialog
-                        bind:this={dialogBind}
-                        on:click={() => {
-                            dialogBind?.hide();
-                        }}
-                    >
-                        <svelte:self {...$$props} displayMode="menu" />
-
-                        <sl-divider></sl-divider>
-
-                        <sl-alert open>
-                            <MaterialSymbol name="help" slot="icon" />
-                            <strong>Why was this not a dropdown menu?</strong>
-                            <p>
-                                There was not enough room to display the
-                                dropdown, due to technical reasons (CSS
-                                containing block) nothing can appear outside of
-                                the table area.
-                            </p>
-
-                            <p>
-                                This is a temporary workaround until the UI
-                                library starts using the new Popover API.
-                            </p>
-                        </sl-alert>
-
-                        <sl-button
-                            slot="footer"
-                            variant="primary"
-                            on:click={() => {
-                                dialogBind?.hide();
-                            }}
-                        >
-                            Close
-                        </sl-button>
-                    </sl-dialog>
-                </Portal>
+            <sl-dropdown hoist bind:this={dropdownBind}>
+                <!-- button not shown, only used for positioning the dropdown -->
                 <sl-button
+                    slot="trigger"
                     size={displayMode === "miniButtons" ? "small" : "medium"}
-                    on:click={() => dialogBind?.show()}
+                    style="visibility: hidden; pointer-events: none; width: 0;"
                 >
-                    <MaterialSymbol name="more_horiz" />
+                    &nbsp;
                 </sl-button>
-            {:else}
-                <sl-dropdown hoist>
-                    <sl-button
-                        slot="trigger"
-                        size={displayMode === "miniButtons"
-                            ? "small"
-                            : "medium"}
-                    >
-                        <MaterialSymbol name="more_horiz" />
-                    </sl-button>
+                <svelte:self {...$$props} displayMode="menu" />
+            </sl-dropdown>
 
-                    <svelte:self {...$$props} displayMode="menu" />
-                </sl-dropdown>
-            {/if}
+            <sl-button
+                size={displayMode === "miniButtons" ? "small" : "medium"}
+                on:click={(e) => {
+                    let tabulator = actionsBind?.closest(".tabulator");
+                    if (tabulator?.offsetHeight < 250) {
+                        dialogBind?.show();
+                    } else {
+                        dropdownBind?.show();
+                    }
+                }}
+            >
+                <MaterialSymbol name="more_horiz" />
+            </sl-button>
         </sl-button-group>
     </div>
+
+    <!-- used when Tabulator is too short to show dropdown -->
+    <Portal>
+        <sl-dialog
+            bind:this={dialogBind}
+            on:click={() => {
+                dialogBind?.hide();
+            }}
+        >
+            <svelte:self {...$$props} displayMode="menu" />
+
+            <sl-divider></sl-divider>
+
+            <sl-alert open>
+                <MaterialSymbol name="help" slot="icon" />
+                <strong>Why was this not a dropdown menu?</strong>
+                <p>
+                    There was not enough room to display the dropdown, due to
+                    technical reasons (CSS containing block) nothing can appear
+                    outside of the table area.
+                </p>
+
+                <p>
+                    This is a temporary workaround until the UI library can
+                    implement the new Popover API.
+                </p>
+            </sl-alert>
+
+            <sl-button
+                slot="footer"
+                variant="primary"
+                on:click={() => {
+                    dialogBind?.hide();
+                }}
+            >
+                Close
+            </sl-button>
+        </sl-dialog>
+    </Portal>
 {/if}
 
 <style>
