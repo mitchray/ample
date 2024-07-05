@@ -38,7 +38,7 @@
     $: $PageTitle = playlist?.name || $_("text.playlist");
     $: tabulator, setupEvents();
 
-    function handleDelete(e) {
+    function afterDelete(e) {
         if (playlist?.id === e.detail.id) {
             replace("#/playlists");
         }
@@ -268,7 +268,7 @@
         <DrawerDelete
             bind:this={drawerDelete}
             bind:playlist
-            on:playlistDeleted={handleDelete}
+            on:playlistDeleted={afterDelete}
         />
     </Portal>
 {:else}

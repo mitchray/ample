@@ -2,10 +2,10 @@
     import { _ } from "svelte-i18n";
     import { createEventDispatcher } from "svelte";
     import { API } from "~/stores/state.js";
-    import { DispatchListerEvent } from "~/stores/message.js";
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
+    import { Tabulator } from "tabulator-tables";
 
     export let playlist = null;
     export let isNew = false;
@@ -54,6 +54,9 @@
                     return;
                 }
 
+                let playlistsTable = Tabulator.findTable("#playlists")[0];
+                playlistsTable?.addRow(playlist, true);
+
                 addAlert({
                     title: $_("text.playlistCreated"),
                     style: "success",
@@ -61,13 +64,6 @@
 
                 // informs parent component
                 dispatch("created");
-
-                // informs lister
-                $DispatchListerEvent = {
-                    event: "addedPlaylist",
-                    data: playlist,
-                    type: "playlist",
-                };
 
                 // reset once completed
                 playlist = null;
@@ -105,23 +101,11 @@
                         title: $_("text.playlistUpdated"),
                         style: "success",
                     });
-
-                    $DispatchListerEvent = {
-                        event: "editedPlaylist",
-                        data: playlist,
-                        type: "playlist",
-                    };
                 } else {
                     addAlert({
                         title: $_("text.playlistGone"),
                         style: "warning",
                     });
-
-                    $DispatchListerEvent = {
-                        event: "deletedPlaylist",
-                        data: playlist,
-                        type: "playlist",
-                    };
                 }
             }
         }

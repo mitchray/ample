@@ -58,18 +58,20 @@
     {#if playlists?.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-                <MassRater bind:tabulator type="playlist" />
-            </div>
+        {#key $query.dataUpdatedAt || 0}
+            <div class="lister-tabulator">
+                <div class="lister-tabulator__actions">
+                    <MassRater bind:tabulator type="playlist" />
+                </div>
 
-            <Tabulator
-                bind:tabulator
-                data={playlists}
-                columns={playlistsPreset}
-                options={{ persistenceID: "playlists" }}
-            ></Tabulator>
-        </div>
+                <Tabulator
+                    bind:tabulator
+                    bind:data={playlists}
+                    columns={playlistsPreset}
+                    options={{ id: "playlists", persistenceID: "playlists" }}
+                ></Tabulator>
+            </div>
+        {/key}
     {/if}
 {/if}
 

@@ -1,10 +1,10 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
-    import { DispatchListerEvent } from "~/stores/message.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { createEventDispatcher } from "svelte";
+    import { Tabulator } from "tabulator-tables";
 
     export let playlist = null;
     export const show = () => drawer.show();
@@ -15,24 +15,14 @@
     function handleDelete() {
         $API.playlistDelete({ filter: playlist.id }).then((result) => {
             if (result.success) {
-                let playlists = document.querySelectorAll(
-                    `[data-id=playlist-${playlist.id}]`,
-                );
-                playlists.forEach((p) => {
-                    p.style.display = "none";
-                });
+                let playlistsTable = Tabulator.findTable("#playlists")[0];
+                playlistsTable?.deleteRow(playlist.id);
+                dispatch("playlistDeleted", { id: playlist.id });
 
                 addAlert({
                     title: $_("text.playlistDeleted"),
                     style: "success",
                 });
-                $DispatchListerEvent = {
-                    event: "deletedPlaylist",
-                    data: playlist,
-                    type: "playlist",
-                };
-
-                dispatch("playlistDeleted", { id: playlist.id });
             } else {
                 addAlert({
                     title: $_("text.playlistDeleteFailed"),
