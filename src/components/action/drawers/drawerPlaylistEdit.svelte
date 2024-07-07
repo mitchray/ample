@@ -84,7 +84,6 @@
                     filter: playlist.id,
                 });
 
-                console.debug(editedPlaylist, "EDITED PLAYLIST");
                 playlistsTable?.updateRow(editedPlaylist.id, editedPlaylist);
             }
         }

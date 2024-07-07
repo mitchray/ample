@@ -29,6 +29,7 @@
             });
         });
 
+        selectedPlaylists = [];
         drawer.hide();
     }
 
@@ -52,7 +53,6 @@
 <sl-drawer
     bind:this={drawer}
     label={$_("text.playlistAddTo")}
-    on:sl-after-hide
     on:sl-request-close={keepDrawerOpen}
 >
     <PlaylistSelector bind:selectedPlaylists multiple={true} type="playlists" />
