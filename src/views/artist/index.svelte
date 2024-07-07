@@ -17,6 +17,7 @@
     import Musicbrainz from "~/views/artist/musicbrainz.svelte";
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
+    import Visibility from "~/components/visibility.svelte";
 
     export let params = {};
 
@@ -214,23 +215,33 @@
                     {/each}
 
                     <sl-tab-panel name="releases">
-                        <Releases artistID={params.id} />
+                        <Visibility>
+                            <Releases artistID={params.id} />
+                        </Visibility>
                     </sl-tab-panel>
 
                     <sl-tab-panel name="top">
-                        <Top artistID={params.id} />
+                        <Visibility>
+                            <Top artistID={params.id} />
+                        </Visibility>
                     </sl-tab-panel>
 
                     <sl-tab-panel name="all">
-                        <All artistID={params.id} />
+                        <Visibility>
+                            <All artistID={params.id} />
+                        </Visibility>
                     </sl-tab-panel>
 
                     <sl-tab-panel name="similar">
-                        <Similar artistID={params.id} />
+                        <Visibility>
+                            <Similar artistID={params.id} />
+                        </Visibility>
                     </sl-tab-panel>
 
                     <sl-tab-panel name="musicbrainz">
-                        <Musicbrainz {artist} />
+                        <Visibility>
+                            <Musicbrainz {artist} />
+                        </Visibility>
                     </sl-tab-panel>
                 </sl-tab-group>
             </div>

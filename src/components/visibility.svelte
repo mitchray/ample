@@ -6,7 +6,7 @@
     export let bottom = 500;
     export let left = 0;
     export let right = 0;
-
+    export let percentThreshold = 0;
     export let steps = 100;
 
     let element;
@@ -49,10 +49,18 @@
 
 <div bind:this={element} class="indicator"></div>
 
-<slot {percent} {unobserve} />
+{#if percent > percentThreshold}
+    <div class="dummy" use:unobserve>
+        <slot {percent} />
+    </div>
+{/if}
 
 <style>
     .indicator {
         display: inline;
+    }
+
+    .dummy {
+        display: contents;
     }
 </style>

@@ -23,12 +23,10 @@
         <AlbumCard data={album} />
     </div>
 
-    <Visibility let:percent let:unobserve steps={100}>
-        {#if percent > 0}
-            <div class="disks" use:unobserve>
-                <Songs {contextKey} />
-            </div>
-        {/if}
+    <Visibility>
+        <div class="disks">
+            <Songs {contextKey} />
+        </div>
     </Visibility>
 </div>
 
