@@ -330,7 +330,7 @@ export let owner = {
 
 /** @type Column */
 export let privacy = {
-    field: "privacy",
+    field: "type",
     title: "Type",
     formatter: (cell, formatterParams, onRendered) =>
         capitalize(cell.getData().type),

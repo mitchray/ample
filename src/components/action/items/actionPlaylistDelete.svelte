@@ -20,14 +20,16 @@
     }
 </script>
 
-<sl-menu-item
-    on:click={handleAction}
-    title={$_("text.playlistDelete")}
-    variant="danger"
->
-    <MaterialSymbol name="delete" slot="prefix" />
-    {$_("text.playlistDelete")}
-</sl-menu-item>
+{#if $_data.playlist?.has_access}
+    <sl-menu-item
+        on:click={handleAction}
+        title={$_("text.playlistDelete")}
+        variant="danger"
+    >
+        <MaterialSymbol name="delete" slot="prefix" />
+        {$_("text.playlistDelete")}
+    </sl-menu-item>
+{/if}
 
 {#if loaded}
     <Portal>

@@ -20,10 +20,12 @@
     }
 </script>
 
-<sl-menu-item on:click={handleAction} title={$_("text.playlistEdit")}>
-    <MaterialSymbol name="edit" slot="prefix" />
-    {$_("text.playlistEdit")}
-</sl-menu-item>
+{#if $_data.playlist?.has_access}
+    <sl-menu-item on:click={handleAction} title={$_("text.playlistEdit")}>
+        <MaterialSymbol name="edit" slot="prefix" />
+        {$_("text.playlistEdit")}
+    </sl-menu-item>
+{/if}
 
 {#if loaded}
     <Portal>

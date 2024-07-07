@@ -13,107 +13,100 @@
     export const show = () => drawer.show();
     const dispatch = createEventDispatcher();
 
+    let originalName = playlist?.name || null;
     let playlistName = playlist?.name || "";
     let playlistType = playlist?.type || "private";
-    let playlistTypeValue = playlist?.type === "public";
+    let playlistTypeBoolean = playlist?.type === "public";
     let drawer;
 
     $: {
-        playlistType = playlistTypeValue ? "public" : "private";
+        playlistType = playlistTypeBoolean ? "public" : "private";
     }
 
     async function savePlaylist() {
+        // do checks
         playlistName = playlistName.trim();
+        if (playlistName.length < 1) return;
 
-        if (playlistName) {
-            let playlistTest = await $API.playlists({
-                filter: playlistName,
-                exact: 1,
-                limit: 1,
-                hide_search: 1,
-            });
+        let result;
+        const existingPlaylist = await $API.playlists({
+            filter: playlistName,
+            exact: 1,
+            limit: 1,
+            hide_search: 1,
+        });
 
-            if (isNew) {
-                if (playlistTest.length > 0 && playlistTest[0].id) {
-                    addAlert({
-                        title: $_("text.playlistExists", {
-                            values: { name: playlistName },
-                        }),
-                        style: "warning",
-                    });
-                    return;
-                }
-
-                playlist = await $API.playlistCreate({
-                    name: playlistName,
-                    type: playlistType,
-                });
-
-                if (playlist.error) {
-                    errorHandler("creating playlist", playlist.error);
-                    return;
-                }
-
-                let playlistsTable = Tabulator.findTable("#playlists")[0];
-                playlistsTable?.addRow(playlist, true);
-
+        if (existingPlaylist.length > 0) {
+            if (isNew || playlistName !== originalName) {
                 addAlert({
-                    title: $_("text.playlistCreated"),
-                    style: "success",
+                    title: $_("text.playlistExists", {
+                        values: { name: playlistName },
+                    }),
+                    style: "warning",
                 });
-
-                // informs parent component
-                dispatch("created");
-
-                // reset once completed
-                playlist = null;
-            } else {
-                if (playlistTest?.id && playlistTest?.id !== playlist.id) {
-                    return;
-                }
-
-                let result = await $API.playlistEdit({
-                    filter: playlist.id,
-                    name: playlistName,
-                    type: playlistType,
-                });
-
-                if (result.error) {
-                    errorHandler("editing playlist", result.error);
-                    return;
-                }
-
-                if (result.success) {
-                    let tempPlaylist = await $API.playlist({
-                        filter: playlist.id,
-                    });
-
-                    if (tempPlaylist.error) {
-                        errorHandler("getting playlist", tempPlaylist.error);
-                    }
-
-                    if (playlist.isNew) {
-                        tempPlaylist.isNew = true;
-                    }
-                    playlist = tempPlaylist;
-
-                    addAlert({
-                        title: $_("text.playlistUpdated"),
-                        style: "success",
-                    });
-                } else {
-                    addAlert({
-                        title: $_("text.playlistGone"),
-                        style: "warning",
-                    });
-                }
+                return;
             }
         }
 
+        // create/edit
+        if (isNew) {
+            result = await $API.playlistCreate({
+                name: playlistName,
+                type: playlistType,
+            });
+        } else {
+            result = await $API.playlistEdit({
+                filter: playlist.id,
+                name: playlistName,
+                type: playlistType,
+            });
+        }
+
+        if (result.error) {
+            errorHandler("saving playlist", result.error);
+            return;
+        }
+
+        if (isNew) {
+            playlist = result;
+        }
+
+        // update Tabulator if that exists
+        const playlistsTable = Tabulator.findTable("#playlists")[0];
+
+        if (playlistsTable) {
+            if (isNew) {
+                // add to top of list
+                playlistsTable?.addRow(result, true);
+            } else {
+                // update existing
+                const editedPlaylist = await $API.playlist({
+                    filter: playlist.id,
+                });
+
+                console.debug(editedPlaylist, "EDITED PLAYLIST");
+                playlistsTable?.updateRow(editedPlaylist.id, editedPlaylist);
+            }
+        }
+
+        addAlert({
+            title: $_("text.playlistSaved"),
+            style: "success",
+        });
+
+        // informs parent component
+        dispatch("created");
+
         drawer.hide();
+        setDefaults();
     }
 
-    function handleChange(e) {
+    function setDefaults() {
+        playlistName = "";
+        playlistTypeBoolean = 0; // private
+    }
+
+    function handleName(e) {
         playlistName = e.target.value.trim();
     }
 </script>
@@ -125,15 +118,15 @@
     on:sl-request-close={keepDrawerOpen}
 >
     <sl-input
-        on:sl-input={handleChange}
+        on:sl-input={handleName}
         placeholder={$_("text.name")}
         type="text"
         value={playlistName}
     ></sl-input>
 
     <sl-switch
-        checked={playlistTypeValue}
-        on:sl-change={() => (playlistTypeValue = !playlistTypeValue)}
+        checked={playlistTypeBoolean}
+        on:sl-change={() => (playlistTypeBoolean = !playlistTypeBoolean)}
     >
         Public
     </sl-switch>
