@@ -128,12 +128,14 @@
     }
 
     function scroll(direction) {
+        if (!containerBind) return;
         let width = containerBind.clientWidth;
         let value = direction === "end" ? width : -width;
         containerBind.scrollLeft += value;
     }
 
     function parseScroll() {
+        if (!containerBind) return;
         containerScrollX = containerBind.scrollLeft;
     }
 </script>
