@@ -240,10 +240,6 @@
         scroll-snap-type: x;
     }
 
-    ul:not(:last-of-type) {
-        margin-block-end: var(--spacing-xxxl);
-    }
-
     li {
         scroll-snap-align: start;
     }
@@ -278,13 +274,6 @@
     /* currently only Firefox supports scrollbar-width */
     :global(.cardlist-scroll::-webkit-scrollbar) {
         display: none;
-    }
-
-    :global(
-            .cardlist-grid:not(:last-child),
-            .cardlist-scroll:not(:last-child)
-        ) {
-        margin-block-end: var(--spacing-xxl);
     }
 
     /* override specificity */

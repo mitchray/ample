@@ -56,6 +56,8 @@
     viewAllURL="#/newest"
 />
 
+<sl-divider style="--spacing: var(--spacing-xxl)"></sl-divider>
+
 <CardList
     card={MixCard}
     dataProvider={artistMixes}
@@ -65,6 +67,8 @@
     refresh="true"
     type="mix"
 />
+
+<sl-divider style="--spacing: var(--spacing-xxl)"></sl-divider>
 
 <CardList
     autoRefreshInterval={5}
@@ -76,6 +80,8 @@
     type="song"
     viewAllURL="#/recent"
 />
+
+<sl-divider style="--spacing: var(--spacing-xxl)"></sl-divider>
 
 <CardList
     card={AlbumCard}
