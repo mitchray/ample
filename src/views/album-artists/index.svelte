@@ -4,6 +4,7 @@
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import { replace } from "svelte-spa-router";
     import Random from "~/views/album-artists/random.svelte";
+    import Visibility from "~/components/visibility.svelte";
 
     export let params = {};
 
@@ -38,10 +39,10 @@
     {/each}
 
     <sl-tab-panel name="random">
-        <Random />
+        <Visibility><Random /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="all">
-        <ArtistsAll type="album_artist" />
+        <Visibility><ArtistsAll type="album_artist" /></Visibility>
     </sl-tab-panel>
 </sl-tab-group>

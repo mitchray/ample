@@ -5,6 +5,7 @@
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import Newest from "~/views/artists/newest.svelte";
     import Random from "~/views/artists/random.svelte";
+    import Visibility from "~/components/visibility.svelte";
 
     export let params = {};
 
@@ -40,14 +41,14 @@
     {/each}
 
     <sl-tab-panel name="newest">
-        <Newest />
+        <Visibility><Newest /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="random">
-        <Random />
+        <Visibility><Random /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="all">
-        <ArtistsAll type="artist" />
+        <Visibility><ArtistsAll type="artist" /></Visibility>
     </sl-tab-panel>
 </sl-tab-group>

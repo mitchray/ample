@@ -6,6 +6,7 @@
     import Random from "~/views/albums/random.svelte";
     import AlbumsAll from "~/components/album/albumsAll.svelte";
     import AlbumsByYear from "~/components/album/albumsByYear.svelte";
+    import Visibility from "~/components/visibility.svelte";
 
     export let params = {};
 
@@ -42,18 +43,18 @@
     {/each}
 
     <sl-tab-panel name="newest">
-        <Newest />
+        <Visibility><Newest /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="random">
-        <Random />
+        <Visibility><Random /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="year">
-        <AlbumsByYear />
+        <Visibility><AlbumsByYear /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="all">
-        <AlbumsAll />
+        <Visibility><AlbumsAll /></Visibility>
     </sl-tab-panel>
 </sl-tab-group>

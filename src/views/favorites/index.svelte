@@ -4,6 +4,7 @@
     import Artists from "~/views/favorites/artists.svelte";
     import Albums from "~/views/favorites/albums.svelte";
     import Songs from "~/views/favorites/songs.svelte";
+    import Visibility from "~/components/visibility.svelte";
     import { replace } from "svelte-spa-router";
 
     export let params = {};
@@ -39,14 +40,14 @@
     {/each}
 
     <sl-tab-panel name="artists">
-        <Artists />
+        <Visibility><Artists /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="albums">
-        <Albums />
+        <Visibility><Albums /></Visibility>
     </sl-tab-panel>
 
     <sl-tab-panel name="songs">
-        <Songs />
+        <Visibility><Songs /></Visibility>
     </sl-tab-panel>
 </sl-tab-group>

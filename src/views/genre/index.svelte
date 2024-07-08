@@ -6,6 +6,7 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { createQuery } from "@tanstack/svelte-query";
+    import Visibility from "~/components/visibility.svelte";
 
     export let params = {};
 
@@ -73,15 +74,21 @@
                 {/each}
 
                 <sl-tab-panel name="artists">
-                    <GenreByType id={genre.id} type="artist" />
+                    <Visibility>
+                        <GenreByType id={genre.id} type="artist" />
+                    </Visibility>
                 </sl-tab-panel>
 
                 <sl-tab-panel name="albums">
-                    <GenreByType id={genre.id} type="album" />
+                    <Visibility>
+                        <GenreByType id={genre.id} type="album" />
+                    </Visibility>
                 </sl-tab-panel>
 
                 <sl-tab-panel name="songs">
-                    <GenreByType id={genre.id} type="song" />
+                    <Visibility>
+                        <GenreByType id={genre.id} type="song" />
+                    </Visibility>
                 </sl-tab-panel>
             </sl-tab-group>
         {/key}
