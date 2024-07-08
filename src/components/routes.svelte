@@ -19,7 +19,7 @@
     import Podcasts from "~/views/podcasts.svelte";
     import PodcastEpisode from "~/views/podcastEpisode.svelte";
     import Playlist from "~/views/playlist.svelte";
-    import Playlists from "~/views/playlists.svelte";
+    import Playlists from "~/views/playlists/index.svelte";
     import Smartlists from "~/views/smartlists.svelte";
     import LiveStreams from "~/views/liveStreams.svelte";
     import LiveStream from "~/views/liveStream.svelte";
@@ -44,9 +44,9 @@
         "/album/:id": Album,
         "/song/:id": Song,
         "/playlist/:id": Playlist,
-        "/playlists": Playlists,
+        "/playlists/:section?": Playlists,
         "/smartlist/:id": Playlist,
-        "/smartlists": Smartlists,
+        "/smartlists/:section?": Smartlists,
         "/mix/:mixType/:id": Playlist,
         "/genre/:id/:section?": Genre,
         "/genres": Genres,
