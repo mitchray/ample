@@ -1,19 +1,14 @@
 <script>
     import { _ } from "svelte-i18n";
-    import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
+    import { replace } from "svelte-spa-router";
+    import Visibility from "~/components/visibility.svelte";
     import Mine from "./mine.svelte";
     import All from "./all.svelte";
-    import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
-    import Visibility from "~/components/visibility.svelte";
-    import { replace } from "svelte-spa-router";
-    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     export let params = {};
 
-    let drawerEdit;
-
-    let title = $_("text.playlists");
+    let title = $_("text.smartlists");
     $PageTitle = title;
 
     const tabs = [
@@ -22,27 +17,17 @@
     ];
 
     function changeTab(e) {
-        replace(`#/playlists/${e.detail.name}`);
+        replace(`#/smartlists/${e.detail.name}`);
     }
 
     // default to mine tab
     $: {
-        if (!params.section) replace(`#/playlists/mine`);
+        if (!params.section) replace(`#/smartlists/mine`);
     }
 </script>
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
-
-    <sl-button
-        class="new-playlist-button"
-        on:click={() => drawerEdit.show()}
-        variant="primary"
-        size="small"
-    >
-        <MaterialSymbol name="add" slot="prefix" />
-        {$_("text.new")}
-    </sl-button>
 </div>
 
 <sl-tab-group on:sl-tab-show={changeTab}>
@@ -64,7 +49,3 @@
         </Visibility>
     </sl-tab-panel>
 </sl-tab-group>
-
-<Portal>
-    <DrawerEdit bind:this={drawerEdit} isNew={true} />
-</Portal>

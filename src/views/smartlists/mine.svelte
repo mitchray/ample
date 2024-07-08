@@ -1,25 +1,25 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { API, PageTitle, User } from "~/stores/state";
-    import Tabulator from "~/components/lister/Tabulator.svelte";
-    import { createQuery } from "@tanstack/svelte-query";
-    import { errorHandler } from "~/logic/helper.js";
     import { smartlistsPreset } from "~/components/lister/columns.js";
-
-    let title = $_("text.smartlists");
-    $PageTitle = title;
+    import { createQuery } from "@tanstack/svelte-query";
+    import { API, User } from "~/stores/state.js";
+    import { errorHandler } from "~/logic/helper.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import MassRater from "~/components/lister/massRater.svelte";
 
     let tabulator = null;
 
     $: query = createQuery({
-        queryKey: ["smartlists"],
+        queryKey: ["mySmartlists"],
         queryFn: async () => {
-            let result = await $API.smartlists();
+            let result = await $API.userSmartlists();
 
             if (result.error) {
-                errorHandler("getting smartlists", result.error);
+                errorHandler("getting my smartlists", result.error);
                 return [];
             }
+
+            tabulator?.setData(result);
 
             return result;
         },
@@ -27,27 +27,27 @@
     });
 
     // alias of returned data
-    $: smartlists = $query.data || [];
+    $: smartlists = $query.data || {};
 </script>
-
-<div class="page-header">
-    <h1 class="page-title">{title}</h1>
-</div>
 
 {#if $query.isLoading}
     <p>{$_("text.loading")}</p>
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if smartlists.length === 0}
+    {#if smartlists?.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
+            <div class="lister-tabulator__actions">
+                <MassRater bind:tabulator type="playlist" />
+            </div>
+
             <Tabulator
                 bind:tabulator
-                data={smartlists}
+                bind:data={smartlists}
                 columns={smartlistsPreset}
-                options={{ persistenceID: "smartlists" }}
+                options={{ id: "smartlists", persistenceID: "smartlists" }}
             ></Tabulator>
         </div>
     {/if}

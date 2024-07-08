@@ -780,6 +780,7 @@ export let playlistsPreset = [
 
 /** @type Column[] */
 export let smartlistsPreset = [
+    checkbox,
     {
         ...actionsBase,
         formatter: (cell, formatterParams, onRendered) => {

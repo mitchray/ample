@@ -20,7 +20,7 @@
     import PodcastEpisode from "~/views/podcastEpisode.svelte";
     import Playlist from "~/views/playlist.svelte";
     import Playlists from "~/views/playlists/index.svelte";
-    import Smartlists from "~/views/smartlists.svelte";
+    import Smartlists from "~/views/smartlists/index.svelte";
     import LiveStreams from "~/views/liveStreams.svelte";
     import LiveStream from "~/views/liveStream.svelte";
     import Newest from "~/views/newest.svelte";
