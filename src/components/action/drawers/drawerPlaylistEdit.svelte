@@ -72,19 +72,23 @@
         }
 
         // update Tabulator if that exists
-        const playlistsTable = Tabulator.findTable("#playlists")[0];
+        const playlistsTables = Tabulator.findTable("[data-id=playlists]");
 
-        if (playlistsTable) {
+        if (playlistsTables.length > 0) {
             if (isNew) {
                 // add to top of list
-                playlistsTable?.addRow(result, true);
+                playlistsTables.forEach((table) => {
+                    table.addRow(result, true);
+                });
             } else {
                 // update existing
                 const editedPlaylist = await $API.playlist({
                     filter: playlist.id,
                 });
 
-                playlistsTable?.updateRow(editedPlaylist.id, editedPlaylist);
+                playlistsTables.forEach((table) => {
+                    table?.updateRow(editedPlaylist.id, editedPlaylist);
+                });
             }
         }
 

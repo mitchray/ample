@@ -15,8 +15,12 @@
     function handleDelete() {
         $API.playlistDelete({ filter: playlist.id }).then((result) => {
             if (result.success) {
-                let playlistsTable = Tabulator.findTable("#playlists")[0];
-                playlistsTable?.deleteRow(playlist.id);
+                let playlistsTables = Tabulator.findTable(
+                    "[data-id=playlists]",
+                );
+                playlistsTables.forEach((table) => {
+                    table.deleteRow(playlist.id);
+                });
                 dispatch("playlistDeleted", { id: playlist.id });
 
                 addAlert({

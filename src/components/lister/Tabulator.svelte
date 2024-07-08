@@ -63,7 +63,7 @@
     });
 </script>
 
-<div bind:this={tableElement} id={options.id || null}></div>
+<div bind:this={tableElement} data-id={options.id || null}></div>
 
 <style>
     :global(.lister-tabulator) {
