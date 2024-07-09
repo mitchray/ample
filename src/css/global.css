@@ -1227,11 +1227,17 @@ sl-tab-panel[aria-hidden=true] {
 
 #app .tabulator-col-sorter {
     position: relative;
+    color: inherit;
+    transform: scale(0.8);
+}
+
+#app .tabulator-sortable[aria-sort="none"] .tabulator-col-sorter {
+    opacity: 0.5;
 }
 
 #app .tabulator-col-title:not([style*="center"]) {
     width: unset;
-    padding-right: 15px;
+    padding-right: 10px;
 }
 
 /* simulate text-align: right since we break it */

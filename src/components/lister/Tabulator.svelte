@@ -30,6 +30,23 @@
             layout: "fitColumns",
             columns: columns, //define table columns
             movableColumns: true,
+            headerSortElement: function (column, dir) {
+                let icon = "";
+
+                switch (dir) {
+                    case "asc":
+                        icon = `<span class="material-symbols-outlined">arrow_upward</span>`;
+                        break;
+                    case "desc":
+                        icon = `<span class="material-symbols-outlined">arrow_downward</span>`;
+                        break;
+                    default:
+                        icon = `<span class="material-symbols-outlined">swap_vert</span>`;
+                        break;
+                }
+
+                return icon;
+            },
             maxHeight:
                 $SiteContentBind?.clientHeight > 0
                     ? $SiteContentBind.clientHeight
