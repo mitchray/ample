@@ -17,10 +17,15 @@
 </script>
 
 {#if genres.length > 0}
-    <ul class="genres" class:is-overflow={limit}>
+    <ul class="container" class:is-overflow={limit}>
         {#each genres as genre}
             <li class="genre-tag">
-                <sl-button href="#/genre/{genre.id}" size="small" pill>
+                <sl-button
+                    href="#/genre/{genre.id}"
+                    size="small"
+                    title={genre.name}
+                    pill
+                >
                     {genre.name}
                 </sl-button>
             </li>
@@ -60,14 +65,29 @@
 {/if}
 
 <style>
-    .genres {
+    .container {
         display: flex;
         gap: var(--spacing-sm);
         align-items: center;
+        width: 100%;
     }
 
-    .genres:not(.is-overflow) {
+    .container:not(.is-overflow) {
         flex-wrap: wrap;
+    }
+
+    .genre-tag {
+        overflow: hidden;
+    }
+
+    .genre-tag sl-button {
+        max-width: 100%;
+    }
+
+    .genre-tag sl-button::part(label) {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .overflow-menu {
