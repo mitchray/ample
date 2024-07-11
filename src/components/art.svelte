@@ -119,7 +119,7 @@
                 on:error={(e) => {
                     e.onerror = null;
                     e.target.src =
-                        $Server.url +
+                        $Server.ampacheURL +
                         "/image.php?object_id=0&object_type=album&thumb=32";
                 }}
             />

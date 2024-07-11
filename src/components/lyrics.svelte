@@ -72,7 +72,7 @@
     }
 </script>
 
-<Portal target={$SiteContentBind}>
+<Portal target={$SiteContentBind || ".site-content"}>
     <sl-drawer
         bind:this={drawer}
         contained

@@ -9,10 +9,9 @@
         PageTitle,
         Server,
     } from "~/stores/state.js";
-    import { loginNew } from "~/logic/user";
+    import { attemptLogin } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import localforage from "localforage";
 
     $: username = "";
     $: password = "";
@@ -45,9 +44,9 @@
 
         try {
             if (currentTab === "apikey") {
-                result = await loginNew({ passphrase: apiKey });
+                result = await attemptLogin({ passphrase: apiKey });
             } else {
-                result = await loginNew({
+                result = await attemptLogin({
                     passphrase: password,
                     username: username,
                 });
@@ -59,16 +58,11 @@
 
     function setServerDetails() {
         fatalError = false;
-        $API = new AmpacheAPI({ url: $Server.url, debug: $debugMode });
-        localforage.setItem("AmpleServerURL", $Server.url);
+        $API = new AmpacheAPI({ url: $Server.ampacheURL, debug: $debugMode });
 
         $API.ping().then((result) => {
             $Server = { ...$Server, version: result.version };
         });
-    }
-
-    function handleServer(e) {
-        $Server.url = e.target.value || "";
     }
 
     function handleUsername(e) {
@@ -84,16 +78,33 @@
     }
 </script>
 
-<div class="container">
+<div class="header">
     <UserMenu />
+</div>
 
+<div class="inner">
     <div class="form" in:fade out:fade>
+        <div class="logo">
+            {#if $Server.logo}
+                <img src={$Server.logo} alt="" />
+            {:else}
+                <div class="ample"></div>
+            {/if}
+        </div>
+
         {#if versionCheck && versionCheck < 6}
             <sl-badge class="server-message" variant="danger" in:fade>
                 {$_("versionWarning", {
                     values: { serverVersion: $Server.version },
                 })}
             </sl-badge>
+        {/if}
+
+        {#if !$Server.ampacheURL}
+            <sl-alert variant="danger" open>
+                {$_("text.errorNoURL")}
+            </sl-alert>
+            <sl-divider></sl-divider>
         {/if}
 
         {#if $Server.loginMessage}
@@ -116,20 +127,6 @@
 
             <sl-tab-panel name="username">
                 <form on:submit|preventDefault={handleSubmit}>
-                    {#if !$Server.isHardcodedURL}
-                        <p>
-                            <sl-input
-                                type="text"
-                                label={$_("text.serverURL")}
-                                placeholder="e.g. https://ampache-server"
-                                value={$Server.url}
-                                on:sl-change={handleServer}
-                                on:sl-input={handleServer}
-                                on:paste={handleServer}
-                            ></sl-input>
-                        </p>
-                    {/if}
-
                     <p>
                         <sl-input
                             label={$_("text.username")}
@@ -166,7 +163,7 @@
                     <input hidden type="submit" />
 
                     <sl-button
-                        disabled={!$Server.url || !username || !password}
+                        disabled={!username || !password}
                         type="submit"
                         variant="primary"
                     >
@@ -178,19 +175,6 @@
 
             <sl-tab-panel name="apikey">
                 <form on:submit|preventDefault={handleSubmit}>
-                    {#if !$Server.isHardcodedURL}
-                        <p>
-                            <sl-input
-                                type="text"
-                                label={$_("text.serverURL")}
-                                placeholder="e.g. https://ampache-server"
-                                value={$Server.url}
-                                on:sl-change={handleServer}
-                                on:sl-input={handleServer}
-                                on:paste={handleServer}
-                            ></sl-input>
-                        </p>
-                    {/if}
                     <p>
                         <sl-input
                             label={$_("text.apiKey")}
@@ -204,7 +188,7 @@
 
                     <input hidden type="submit" />
                     <sl-button
-                        disabled={!$Server.url || !apiKey}
+                        disabled={!apiKey}
                         type="submit"
                         variant="primary"
                     >
@@ -227,35 +211,33 @@
             </sl-badge>
         {/if}
     </div>
+</div>
 
+<div class="footer">
     <div class="meta">
         <span>Ample v{$ampleVersion}</span>
         {#if $Server.version}- <span>Ampache v{$Server.version}</span>{/if}
     </div>
 </div>
 
-<style>
-    .container {
+<!-- override App overflow on this page -->
+{@html `<style>
+    #app {
+        overflow: auto;
         background-color: var(--color-surface-container-lowest);
-        width: 100vw;
-        height: 100vh;
-        z-index: 10;
     }
+</style>`}
 
-    .container :global(.userMenu-toggle) {
-        position: absolute;
-        inset-block-start: var(--spacing-md);
-        inset-inline-end: var(--spacing-md);
-        margin: 0;
+<style>
+    .inner {
+        display: flex;
+        flex: 1;
+        justify-content: center;
+        align-items: center;
     }
 
     .form {
-        /* cover version details when the mobile keyboard appears */
         background-color: var(--color-surface-container);
-        position: absolute;
-        inset-inline-start: 50%;
-        inset-block-start: 50%;
-        transform: translateY(-50%) translateX(-50%);
         width: 100%;
         max-width: 400px;
         padding: var(--spacing-xl);
@@ -270,14 +252,36 @@
         width: 100%;
     }
 
+    .header,
+    .footer {
+        display: flex;
+        justify-content: end;
+        padding: var(--spacing-md);
+    }
+
     .meta {
-        position: absolute;
-        inset-block-end: var(--spacing-lg);
-        inset-inline-end: var(--spacing-lg);
         opacity: 0.4;
     }
 
     sl-badge::part(base) {
         white-space: normal;
+    }
+
+    .logo {
+        display: flex;
+        margin-block-end: var(--spacing-lg);
+        justify-content: center;
+    }
+
+    .logo img {
+        max-width: 100%;
+        max-height: 150px;
+    }
+
+    .logo .ample {
+        width: 100%;
+        height: 30px;
+        background-color: var(--color-on-surface-variant);
+        mask: url("/src/assets/ample_logo.svg") no-repeat top center;
     }
 </style>

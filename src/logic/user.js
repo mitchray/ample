@@ -30,34 +30,38 @@ export async function login({ auth }) {
     });
 }
 
-export async function logout() {
+export function logout() {
     // destroy the session
-    await get(API).goodbye({ auth: get(User).token });
+    get(API).goodbye({ auth: get(User).token });
 
-    await localforage.removeItem("AmpleLastSession");
+    localforage.removeItem("AmpleLastSession");
 
     User.set({ ...get(User), isLoggedIn: false });
 
     // stop playing
     get(MediaPlayer)?.clearAll();
-
-    // TODO stop the web worker
 }
 
 export async function validateSession() {
-    let newCachedSession = await localforage.getItem("AmpleLastSession");
-
-    if (!get(Server).url) {
+    if (!get(Server).ampacheURL) {
         logout();
         return;
     }
 
+    let guestUserAPIKey = get(Server).guestUserAPIKey;
+    let ampleLastSession = await localforage.getItem("AmpleLastSession");
+
     try {
         API.set(
-            new AmpacheAPI({ url: get(Server).url, debug: get(debugMode) }),
+            new AmpacheAPI({
+                url: get(Server).ampacheURL,
+                debug: get(debugMode),
+            }),
         );
 
-        let result = await get(API).ping({ auth: newCachedSession?.token });
+        get(API).setSessionKey(ampleLastSession?.token || guestUserAPIKey);
+
+        let result = await get(API).ping();
 
         if (result.auth) {
             await login({
@@ -71,7 +75,7 @@ export async function validateSession() {
     }
 }
 
-export async function loginNew({ passphrase = null, username = null }) {
+export async function attemptLogin({ passphrase = null, username = null }) {
     let result;
 
     // if username, attempt login with username/password
@@ -98,7 +102,7 @@ export async function loginNew({ passphrase = null, username = null }) {
     if (result.auth) {
         await login({ auth: result.auth, username: username });
     } else {
-        await logout();
+        logout();
     }
 
     return result;
@@ -108,5 +112,11 @@ export async function loginNew({ passphrase = null, username = null }) {
  * Extend an existing session by pinging the server with auth
  */
 export let extendSession = () => {
-    get(API).ping({ auth: get(User).token });
+    get(API)
+        .ping({ auth: get(User).token })
+        .then((result) => {
+            if (!result.auth) {
+                logout();
+            }
+        });
 };

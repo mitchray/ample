@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
     import WavesurferConnector from "~/logic/player.js";
     import { PlayerIsMini, PlayerIsOpen } from "~/stores/settings.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
@@ -26,6 +26,11 @@
 
     onMount(() => {
         $MediaPlayer = new WavesurferConnector();
+    });
+
+    onDestroy(() => {
+        $MediaPlayer?.wavesurfer?.unAll();
+        $MediaPlayer?.wavesurfer?.destroy();
     });
 </script>
 

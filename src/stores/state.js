@@ -48,7 +48,6 @@ export let User = writable({
 /**
  * Hold info about the Ampache server
  * @typedef {Object} AmpleServer
- * @property {boolean} isHardcodedURL
  * @property {string|null} [url]
  * @property {string|null} [version]
  */
@@ -56,7 +55,6 @@ export let User = writable({
 export let Server = writable({
     url: null,
     version: null,
-    isHardcodedURL: false,
 });
 
 export const IsMobile = readable(false, function start(set) {

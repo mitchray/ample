@@ -46,9 +46,9 @@
                         id: "ampache",
                         title: "Ampache",
                         icon: AmpacheLogo,
-                        artistURL: `${$Server.url}/artists.php?action=show&artist=${data.id}`,
-                        albumURL: `${$Server.url}/albums.php?action=show&album=${data.id}`,
-                        songURL: `${$Server.url}/song.php?action=show_song&song_id=${data.id}`,
+                        artistURL: `${$Server.ampacheURL}/artists.php?action=show&artist=${data.id}`,
+                        albumURL: `${$Server.ampacheURL}/albums.php?action=show&album=${data.id}`,
+                        songURL: `${$Server.ampacheURL}/song.php?action=show_song&song_id=${data.id}`,
                     },
                     {
                         id: "bandsintown",

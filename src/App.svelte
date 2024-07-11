@@ -6,9 +6,10 @@
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
-    import { Server, ShowSearch, User } from "~/stores/state.js";
+    import { ShowSearch, User } from "~/stores/state.js";
     import { loadSettings, Theme } from "~/stores/settings";
-    import { extendSession, validateSession } from "~/logic/user";
+    import { extendSession, validateSession } from "~/logic/user.js";
+    import { loadFromConfig } from "~/logic/ample.js";
     import { isLoading as i18nIsLoading } from "svelte-i18n";
     import { setupI18n } from "~/logic/i18n.js";
 
@@ -27,7 +28,6 @@
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
     import LoginPage from "~/views/login.svelte";
     import { hideLoadingOverlay } from "~/logic/ui.js";
-    import localforage from "localforage";
 
     overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
 
@@ -50,35 +50,6 @@
         if ($User.isLoggedIn) {
             loadSettings();
         }
-    }
-
-    async function loadFromConfig() {
-        let configFile = {};
-
-        // just `config/ample.json` when developing locally,
-        try {
-            configFile = await fetch(
-                `${import.meta.env.BASE_URL}/config/ample.json`,
-            )
-                .then((response) => response.json())
-                .then((data) => {
-                    return data;
-                });
-        } catch (e) {}
-
-        let newObject = {
-            ...configFile,
-            url:
-                configFile?.ampacheURL ||
-                (await localforage.getItem("AmpleServerURL")) ||
-                "",
-            isHardcodedURL: configFile?.ampacheURL?.length > 1,
-        };
-
-        // we don't need this anymore as it becomes the url property
-        delete newObject.ampacheURL;
-
-        $Server = { ...$Server, ...newObject };
     }
 
     const queryClient = new QueryClient();
