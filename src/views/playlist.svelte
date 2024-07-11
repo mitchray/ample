@@ -6,6 +6,7 @@
     import { getSongsFromPlaylist } from "~/logic/song";
     import Rating from "~/components/rating/rating.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
+    import Privacy from "~/components/privacy.svelte";
     import PlaylistRemoveFrom from "~/components/playlist/playlist_removeFrom2.svelte";
     import Actions from "~/components/action/actions.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
@@ -204,7 +205,7 @@
                                     {$_("text.type")}
                                 </span>
                                 <span class="meta-value">
-                                    {capitalize(playlist.type)}
+                                    <Privacy type={playlist.type} />
                                 </span>
                             </div>
                         </div>

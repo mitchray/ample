@@ -22,8 +22,8 @@
 
     // List of tab items with labels and values.
     let tabs = [
-        { id: "username", label: "Username" },
-        { id: "apikey", label: "API key" },
+        { id: "username", label: $_("text.username") },
+        { id: "apikey", label: $_("text.apiKey") },
     ];
 
     let fatalError = false;

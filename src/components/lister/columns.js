@@ -1,6 +1,6 @@
-import { capitalize } from "lodash-es";
 import ArtistList from "~/components/artist/artistList.svelte";
 import Name from "~/components/lister/components/name.svelte";
+import Privacy from "~/components/privacy.svelte";
 import RelativeDate from "~/components/relativeDate.svelte";
 import GenreList from "~/components/genreList.svelte";
 import Rating from "~/components/rating/rating.svelte";
@@ -276,7 +276,7 @@ export let count = {
 };
 
 /** @type Column */
-export let type = {
+export let releaseType = {
     field: "type",
     title: "Type",
     formatter: (cell, formatterParams, onRendered) => {
@@ -361,8 +361,16 @@ export let owner = {
 export let privacy = {
     field: "type",
     title: "Type",
-    formatter: (cell, formatterParams, onRendered) =>
-        capitalize(cell.getData().type),
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new Privacy({
+                target: cell.getElement(),
+                props: {
+                    type: cell.getData().type,
+                },
+            });
+        });
+    },
 };
 
 /** @type Column */
@@ -702,7 +710,7 @@ export let albumsPreset = [
     date,
     songCount,
     length,
-    type,
+    releaseType,
     genres,
 ];
 

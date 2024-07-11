@@ -53,11 +53,11 @@
     }
 
     const tabs = [
-        { id: "releases", label: "Releases", prefix: "album" },
-        { id: "top", label: "Popular Songs" },
-        { id: "all", label: "All Songs" },
-        { id: "similar", label: "Similar Artists" },
-        { id: "musicbrainz", label: "MusicBrainz Compare" },
+        { id: "releases", label: $_("text.releases"), prefix: "album" },
+        { id: "top", label: $_("text.popularSongs") },
+        { id: "all", label: $_("text.allSongs") },
+        { id: "similar", label: $_("text.similarArtists") },
+        { id: "musicbrainz", label: $_("text.musicbrainzCompare") },
     ];
 
     function changeTab(e) {

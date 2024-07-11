@@ -148,13 +148,13 @@
     {#if refresh}
         <sl-button on:click={refreshItems} size="small">
             <MaterialSymbol name="refresh" slot="prefix" />
-            Refresh
+            {$_("text.refresh")}
         </sl-button>
     {/if}
 
     {#if viewAllURL}
         <sl-button class="view-all" href={viewAllURL} size="small">
-            View all
+            {$_("text.viewAll")}
         </sl-button>
     {/if}
 

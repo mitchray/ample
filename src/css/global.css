@@ -834,10 +834,11 @@ sl-select small {
 }
 
 .current-icon {
+    display: inline-block;
     flex-shrink: 0;
     margin-inline-end: var(--spacing-sm);
     line-height: 1;
-    height: 1em;
+    vertical-align: middle;
 }
 
 /*

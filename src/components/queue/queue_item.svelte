@@ -176,10 +176,6 @@
         position: relative;
     }
 
-    .current-icon {
-        margin-inline-end: var(--spacing-sm);
-    }
-
     .queue-item.currentlyPlaying {
         background-color: var(--color-tertiary-container-variant);
         color: var(--color-on-tertiary-container);

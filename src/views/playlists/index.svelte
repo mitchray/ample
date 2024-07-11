@@ -17,8 +17,8 @@
     $PageTitle = title;
 
     const tabs = [
-        { id: "mine", label: "Mine" },
-        { id: "all", label: "All" },
+        { id: "mine", label: $_("text.mine") },
+        { id: "all", label: $_("text.all") },
     ];
 
     function changeTab(e) {

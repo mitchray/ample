@@ -66,7 +66,7 @@
         </sl-select>
 
         <sl-switch checked={$SkipBelowAllowZero} on:sl-change={handleAllowZero}>
-            Allow unrated items
+            {$_("text.allowUnrated")}
         </sl-switch>
     </sl-card>
 </sl-dropdown>

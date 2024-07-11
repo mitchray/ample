@@ -1,5 +1,5 @@
 <script>
-    import { locale } from "svelte-i18n";
+    import { _, getLocaleFromNavigator, locale } from "svelte-i18n";
     import { Saved } from "~/stores/settings.js";
     import { setTabulatorLang } from "~/logic/i18n.js";
 
@@ -15,6 +15,9 @@
 </script>
 
 <sl-select on:sl-change={handleLocaleChange} value={$locale}>
+    <sl-option value={getLocaleFromNavigator()}>
+        ({$_("text.autodetect")})
+    </sl-option>
     <sl-option value="en">English (US)</sl-option>
     <sl-option value="en-AU">English (AU)</sl-option>
     <sl-option value="de">Deutsch</sl-option>

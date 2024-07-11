@@ -93,7 +93,7 @@
     open={savedStatuses["playlists"]}
 >
     <div class="title-wrapper" slot="summary">
-        <SidebarHeading icon="library_books" label="Playlists" />
+        <SidebarHeading icon="library_books" label={$_("text.playlists")} />
     </div>
     <MaterialSymbol name="expand_more" slot="expand-icon" />
     <MaterialSymbol name="expand_less" slot="collapse-icon" />
