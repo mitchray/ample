@@ -84,6 +84,7 @@ let ratingBase = {
     field: "rating",
     title: "Rating",
     minWidth: 130,
+    sorter: "number",
 };
 
 /** @type Column */
@@ -160,7 +161,6 @@ export let artist = {
     field: "artists",
     title: "Artist",
     width: 200,
-    headerSort: false,
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             new ArtistList({
@@ -171,11 +171,39 @@ export let artist = {
             });
         });
     },
+    sorter: function (a, b, aRow, bRow, column, dir, sorterParams) {
+        const artistA = a[0].name.toLowerCase();
+        const artistB = b[0].name.toLowerCase();
+
+        if (artistA < artistB) {
+            return -1;
+        }
+        if (artistA > artistB) {
+            return 1;
+        }
+
+        // If the first artist is the same, compare subsequent artists
+        const length = Math.min(a.length, b.length);
+        for (let i = 1; i < length; i++) {
+            const nextArtistA = a[i].name.toLowerCase();
+            const nextArtistB = b[i].name.toLowerCase();
+
+            if (nextArtistA < nextArtistB) {
+                return -1;
+            }
+            if (nextArtistA > nextArtistB) {
+                return 1;
+            }
+        }
+
+        // If all compared artists are the same and one list is longer, the shorter list comes first
+        return a.length - b.length;
+    },
 };
 
 /** @type Column */
 export let album = {
-    field: "album",
+    field: "album.name",
     title: "Album",
     width: 200,
     formatter: (cell, formatterParams, onRendered) => {
@@ -309,6 +337,7 @@ export let genreSongsCount = {
 export let genres = {
     field: "genres",
     title: "Genres",
+    headerSort: false,
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             new GenreList({
@@ -350,7 +379,7 @@ export let playCount = {
 export let quality = {
     field: "quality",
     title: "Quality",
-    sorter: "string",
+    headerSort: false,
     hozAlign: "right",
     headerHozAlign: "right",
     formatter: (cell, formatterParams, onRendered) =>
