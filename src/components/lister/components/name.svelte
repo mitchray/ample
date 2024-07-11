@@ -54,18 +54,3 @@
 {#if type === "genre"}
     <a href="#/genre/{data.id}">{data.name}</a>
 {/if}
-
-<style>
-    .container {
-        display: flex;
-        gap: var(--spacing-md);
-        align-items: center;
-        height: 100%;
-    }
-
-    .container :global(.c-art) {
-        width: calc(
-            var(--rowHeight) - (var(--rowHeight) * 0.25)
-        ); /* padding of 25% based on row height */
-    }
-</style>

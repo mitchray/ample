@@ -835,6 +835,9 @@ sl-select small {
 
 .current-icon {
     flex-shrink: 0;
+    margin-inline-end: var(--spacing-sm);
+    line-height: 1;
+    height: 1em;
 }
 
 /*
