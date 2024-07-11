@@ -54,6 +54,7 @@
             locale: true,
             langs: tabulatorStrings,
             persistence: {
+                columns: ["order"],
                 page: {
                     size: true,
                 },
