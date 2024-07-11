@@ -180,7 +180,7 @@ export let album = {
     width: 200,
     formatter: (cell, formatterParams, onRendered) => {
         const data = cell.getData();
-        return `<a href="#/album/${data.album.id}">
+        return `<a href="#/album/${data.album.id}" class="truncate">
             ${data.album.name}
         </a>`;
     },
