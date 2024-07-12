@@ -4,7 +4,13 @@ import { TabulatorFull as Tabulator } from "tabulator-tables";
 export function setupI18n() {
     register("en", () => import("../../languages/en.json"));
     register("en-AU", () => import("../../languages/en-AU.json"));
-    register("de", () => import("../../languages/de.json"));
+    register("ko", () => import("../../languages/ko.json"));
+    register("it", () => import("../../languages/it.json"));
+    register("hu", () => import("../../languages/hu.json"));
+    register("pl", () => import("../../languages/pl.json"));
+    register("fr", () => import("../../languages/fr.json"));
+    register("pt", () => import("../../languages/pt.json"));
+    register("es", () => import("../../languages/es.json"));
 
     init({
         fallbackLocale: "en",
