@@ -19,6 +19,14 @@
   - Happier development as I don't have to maintain a custom table library anymore
 
 ### Added
+- Translations
+  - Korean (한국어)
+  - Italian (Italiano) 
+  - Hungarian (Magyar) 
+  - Polish (Polski) 
+  - French (Français) 
+  - Portuguese (Português) 
+  - Spanish (Español) 
 - Theme color settings & presets
 - More 3rd party links (now with icons)
   - Bandsintown
