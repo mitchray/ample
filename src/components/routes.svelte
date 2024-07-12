@@ -3,71 +3,101 @@
     import Router from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
     import { closeSidebar } from "~/logic/ui.js";
-    import NotFound404Page from "~/views/notFound404.svelte";
-    import HomePage from "~/views/home.svelte";
-    import AdvancedSearch from "~/views/advancedSearch.svelte";
-    import SongVersions from "~/views/songVersions.svelte";
-    import ArtistIndex from "~/views/artist/index.svelte";
-    import ArtistsIndex from "~/views/artists/index.svelte";
-    import AlbumArtistsIndex from "~/views/album-artists/index.svelte";
-    import AlbumsIndex from "~/views/albums/index.svelte";
-    import Album from "~/views/album/index.svelte";
-    import Song from "~/views/song.svelte";
-    import Genre from "~/views/genre/index.svelte";
-    import Genres from "~/views/genres.svelte";
-    import Podcast from "~/views/podcast.svelte";
-    import Podcasts from "~/views/podcasts.svelte";
-    import PodcastEpisode from "~/views/podcastEpisode.svelte";
-    import Playlist from "~/views/playlist.svelte";
-    import Playlists from "~/views/playlists/index.svelte";
-    import Smartlists from "~/views/smartlists/index.svelte";
-    import LiveStreams from "~/views/liveStreams.svelte";
-    import LiveStream from "~/views/liveStream.svelte";
-    import Newest from "~/views/newest.svelte";
-    import Recent from "~/views/recent.svelte";
-    import FavoritesIndex from "~/views/favorites/index.svelte";
-    import TrendingIndex from "~/views/trending/index.svelte";
-    import TopRatedIndex from "~/views/top-rated/index.svelte";
-    import ForgottenIndex from "~/views/forgotten/index.svelte";
-    import RandomIndex from "~/views/random/index.svelte";
-    import UnratedIndex from "~/views/unrated/index.svelte";
 
     const routes = {
-        "/search": AdvancedSearch,
-        "/versions/:songTitle/:artistName": SongVersions,
-        "/artist/:id/:section?": ArtistIndex,
-        "/artists/:section?": ArtistsIndex,
-        "/album-artists/:section?": AlbumArtistsIndex,
-        // "/albums/year/:year": AlbumsByYear,
-        // "/albums/year": AlbumsByYear,
-        "/albums/:section?": AlbumsIndex,
-        "/album/:id": Album,
-        "/song/:id": Song,
-        "/playlist/:id": Playlist,
-        "/playlists/:section?": Playlists,
-        "/smartlist/:id": Playlist,
-        "/smartlists/:section?": Smartlists,
-        "/mix/:mixType/:id": Playlist,
-        "/genre/:id/:section?": Genre,
-        "/genres": Genres,
-        "/podcasts": Podcasts,
-        "/podcast/:id": Podcast,
-        "/podcast-episode/:id": PodcastEpisode,
-        "/radio": LiveStreams,
-        "/radio-station/:id": LiveStream,
-        "/newest": Newest,
-        "/recent": Recent,
-        "/favorites/:section?": FavoritesIndex,
-        "/trending/:section?": TrendingIndex,
-        "/top-rated/:section?": TopRatedIndex,
-        "/forgotten/:section?": ForgottenIndex,
-        "/random/:section?": RandomIndex,
-        "/unrated/:section?": UnratedIndex,
+        "/search": wrap({
+            asyncComponent: () => import("~/views/advancedSearch.svelte"),
+        }),
+        "/versions/:songTitle/:artistName": wrap({
+            asyncComponent: () => import("~/views/songVersions.svelte"),
+        }),
+        "/artist/:id/:section?": wrap({
+            asyncComponent: () => import("~/views/artist/index.svelte"),
+        }),
+        "/artists/:section?": wrap({
+            asyncComponent: () => import("~/views/artists/index.svelte"),
+        }),
+        "/album-artists/:section?": wrap({
+            asyncComponent: () => import("~/views/album-artists/index.svelte"),
+        }),
+        "/albums/:section?": wrap({
+            asyncComponent: () => import("~/views/albums/index.svelte"),
+        }),
+        "/album/:id": wrap({
+            asyncComponent: () => import("~/views/album/index.svelte"),
+        }),
+        "/song/:id": wrap({
+            asyncComponent: () => import("~/views/song.svelte"),
+        }),
+        "/playlist/:id": wrap({
+            asyncComponent: () => import("~/views/playlist.svelte"),
+        }),
+        "/playlists/:section?": wrap({
+            asyncComponent: () => import("~/views/playlists/index.svelte"),
+        }),
+        "/smartlist/:id": wrap({
+            asyncComponent: () => import("~/views/playlist.svelte"),
+        }),
+        "/smartlists/:section?": wrap({
+            asyncComponent: () => import("~/views/smartlists/index.svelte"),
+        }),
+        "/mix/:mixType/:id": wrap({
+            asyncComponent: () => import("~/views/playlist.svelte"),
+        }),
+        "/genre/:id/:section?": wrap({
+            asyncComponent: () => import("~/views/genre/index.svelte"),
+        }),
+        "/genres": wrap({
+            asyncComponent: () => import("~/views/genres.svelte"),
+        }),
+        "/podcasts": wrap({
+            asyncComponent: () => import("~/views/podcasts.svelte"),
+        }),
+        "/podcast/:id": wrap({
+            asyncComponent: () => import("~/views/podcast.svelte"),
+        }),
+        "/podcast-episode/:id": wrap({
+            asyncComponent: () => import("~/views/podcastEpisode.svelte"),
+        }),
+        "/radio": wrap({
+            asyncComponent: () => import("~/views/liveStreams.svelte"),
+        }),
+        "/radio-station/:id": wrap({
+            asyncComponent: () => import("~/views/liveStream.svelte"),
+        }),
+        "/newest": wrap({
+            asyncComponent: () => import("~/views/newest.svelte"),
+        }),
+        "/recent": wrap({
+            asyncComponent: () => import("~/views/recent.svelte"),
+        }),
+        "/favorites/:section?": wrap({
+            asyncComponent: () => import("~/views/favorites/index.svelte"),
+        }),
+        "/trending/:section?": wrap({
+            asyncComponent: () => import("~/views/trending/index.svelte"),
+        }),
+        "/top-rated/:section?": wrap({
+            asyncComponent: () => import("~/views/top-rated/index.svelte"),
+        }),
+        "/forgotten/:section?": wrap({
+            asyncComponent: () => import("~/views/forgotten/index.svelte"),
+        }),
+        "/random/:section?": wrap({
+            asyncComponent: () => import("~/views/random/index.svelte"),
+        }),
+        "/unrated/:section?": wrap({
+            asyncComponent: () => import("~/views/unrated/index.svelte"),
+        }),
         "/test/:section?": wrap({
             asyncComponent: () => import("~/views/test/index.svelte"),
         }),
-        "/": HomePage,
-        "*": NotFound404Page,
+        "/": wrap({
+            asyncComponent: () => import("~/views/home.svelte"),
+        }),
+        "*": wrap({
+            asyncComponent: () => import("~/views/notFound404.svelte"),
+        }),
     };
 
     function routeLoading(event) {
