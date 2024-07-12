@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
-    import { throttle } from "lodash-es";
+    import { throttle } from "throttle-wait";
     import { formatTotalTime } from "~/logic/formatters.js";
     import { getSongsFromArtist } from "~/logic/song";
     import MusicBrainz from "~/logic/musicbrainz";
@@ -223,7 +223,7 @@
             });
     }
 
-    const throttledMbQuery = throttle(mbQuery, 2.5 * 1000);
+    const throttledMbQuery = throttle(2.5 * 1000, mbQuery);
 
     function sanitiseText(text) {
         let similarChars = /(…|\.|,|'|’|"|!|\?)/gi;
