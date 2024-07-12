@@ -56,7 +56,9 @@
             parseScroll();
         });
 
-        observer.observe(containerBind);
+        if (containerBind) {
+            observer.observe(containerBind);
+        }
 
         // recent_songs has its own interval to check for fresh songs
         if (autoRefreshInterval) {
@@ -67,10 +69,7 @@
     });
 
     onDestroy(() => {
-        if (observer) {
-            observer.disconnect();
-        }
-
+        observer?.disconnect();
         clearInterval(refreshLoop);
     });
 
