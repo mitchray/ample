@@ -257,6 +257,12 @@
         z-index: -1; /* needed to ensure third party links show on top */
     }
 
+    .tabs sl-tab-panel::part(base) {
+        min-height: calc(
+            100vh - 180px
+        ); /* reduce position shift between tabs */
+    }
+
     .header {
         position: relative;
         display: grid;
