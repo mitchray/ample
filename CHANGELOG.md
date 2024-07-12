@@ -1,19 +1,25 @@
 # Changelog
 
 ## [3.0.0] - 2024-xx-xx
+### Requires at least Ampache 6.5.1
 
-### Player
+### Player changes
 - Streamlined UI
 - Waveform now stylized and full width of player; can now be hidden
 - Entire player itself can be hidden
 - Hover over next/previous buttons for item details
 - Added buttons for +30sec & -10sec
-- Playback speed options (with pitch correction)
+- Change playback speed (with pitch correction)
 - `Add to Playlist` and `Find duplicates` for the current media
 
+### Data table changes
+- Now using the [Tabulator](https://tabulator.info/) library which brings
+  - Column reordering
+  - Remote pagination
+  - Happier development as I don't have to maintain a custom table library anymore
+
 ### Added
-- Theme settings & presets
-- Cache API calls for better responsiveness (localforage & Tanstack Query)
+- Theme color settings & presets
 - More 3rd party links (now with icons)
   - Bandsintown
   - Genius
@@ -23,20 +29,24 @@
   - HDTracks
   - Qobuz
   - Tidal
-- Show rating for queue items
+- Show mini-rating for items in the queue
 - Artist `Releases` custom display options
   - Display: Table, Cards (small), Cards (large), Tracks (columns), Tracks (table)
   - Sort: Name, Artist, Rating, Year
   - Grouping: Name, Release Type, Year, Decade (from Year tag)
 - Client-side settings now saved per user
-- Table columns can be repositioned via Table Options located above each table
-  - Actions are now the first column by default instead of stickied at the end
+- Albums by Year range slider
+- Cache and invalidate stale data with Tanstack Query
 
-### Changed  
-- Improved search results
+### Changed
+- Rebuilt UI atop [Shoelace](https://shoelace.style/) web components
+- Must define a URL in config file instead of entering at login
+- Better playlist reordering (don't need to enter 'Edit mode' anymore)
+- Improved search
   - Results are ordered by their weighted score (using fuse.js)
   - Show total results per type
   - Removed separate `X Starting With` and `X Containing` (not needed with the new system)
+- 'Public' Ampache servers can auto-login with a defined Guest user API key, see config
 - Moved Insights pages (e.g. Trending, Unrated etc) out of sidebar and onto homepage
 - `Skip below rating`
   - Instead of filtering items before adding to queue, they will be added but auto-skipped if enabled (shown by diagonal shading)
@@ -50,16 +60,16 @@
   - New option to dim tracks that aren't by the artist, or hide them altogether
   - New option to skip playing songs that aren't by the artist
 - For `Artist Mixes` which don't have any similar artists, expand search into same genre
-- Removed dedicated `Multi-rater` page in favour of being able to rate items from the Unrated page
-- Lyrics panel now a full overlay instead of a fixed panel overlaying the content
+- Removed dedicated `Multi-rater` page in favour of being able to rate items from the Unrated page (or anywhere)
+- Lyrics panel now a full overlay instead of a floating panel
 
 ### Fixed
-- ^~~Rearranging the queue could mark the currently playing media incorrectly~~
+- Rearranging the queue could mark the currently playing media incorrectly
 - Rating the currently playing item would not be reflected elsewhere
 - Improved error handling
 
 ## Removed
-- ^Queue reordering is temporarily disabled in favour of having it be virtualised for performance
+- Queue reordering is temporarily disabled in favour of having it be virtualised for performance
 
 ## [2.0.3] - 2024-01-08
 ### Requires at least Ampache 6.0.1

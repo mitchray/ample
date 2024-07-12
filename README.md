@@ -5,12 +5,6 @@
 ## Demo
 
 [View demo](https://ample-player.vercel.app)
--   User `demo`
--   Password `demodemo`
-
-## Translations
-
-Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitchray/ample)
 
 ## Installing
 
@@ -22,6 +16,29 @@ Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitc
    - Otherwise, you can put it anywhere you like (even on a different server from Ampache, just be mindful that the remote Ampache server will need [configuring](https://github.com/mitchray/ample/wiki/Connecting-to-a-remote-Ampache-server-(CORS))
 3. Set up the [config file](#config-file)
 
+## Translations
+
+Edit or add new languages via [Inlang Fink](https://inlang.com/editor/github.com/mitchray/ample)
+
+## Config file
+
+| Key             | Description                                                                         |
+|-----------------|-------------------------------------------------------------------------------------|
+| ampacheURL      | Full URL to the Ampache server                                                      |
+| guestUserAPIKey | Login with this user's API key (use lowest Guest level permissions, this is public) |
+| loginMessage    | Will be displayed on the login screen                                               |
+| logo            | Use custom image on the login screen (full URL or relative path to Ample folder)    |
+
+Example
+```
+{
+  "ampacheURL": "https://example.com", 
+  "guestUserAPIKey": "123456789", 
+  "loginMessage": "There's no place like 127.0.0.1", 
+  "logo": "./config/logo.svg", 
+}
+```
+
 ## Developing
 
 - Clone the Ample repository and from the ample directory `cd ample`
@@ -30,11 +47,3 @@ Edit or add new languages via [Inlang](https://inlang.com/editor/github.com/mitc
 - For building `npm run build`, and see the contents of `dist`
 
 Additional console logging can be enabled by setting `debugMode true` in `src/stores/state.js`
-
-## Config file
-```
-{
-  // your Ampache server URL without trailing slash
-  "ampacheURL": "https://example.com", 
-}
-```
