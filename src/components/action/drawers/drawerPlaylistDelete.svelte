@@ -18,9 +18,13 @@
                 let playlistsTables = Tabulator.findTable(
                     "[data-id=playlists]",
                 );
-                playlistsTables.forEach((table) => {
-                    table.deleteRow(playlist.id);
-                });
+
+                if (Array.isArray(playlistsTables)) {
+                    playlistsTables.forEach((table) => {
+                        table.deleteRow(playlist.id);
+                    });
+                }
+
                 dispatch("playlistDeleted", { id: playlist.id });
 
                 addAlert({

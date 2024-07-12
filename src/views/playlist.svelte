@@ -211,7 +211,7 @@
                         </div>
                     {/if}
 
-                    {#if playlistType === "playlist"}
+                    {#if playlistType === "playlist" && playlist.has_access}
                         <div class="playlist-actions">
                             <sl-button
                                 variant="primary"

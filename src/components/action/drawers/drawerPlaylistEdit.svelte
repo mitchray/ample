@@ -77,18 +77,22 @@
         if (playlistsTables.length > 0) {
             if (isNew) {
                 // add to top of list
-                playlistsTables.forEach((table) => {
-                    table.addRow(result, true);
-                });
+                if (Array.isArray(playlistsTables)) {
+                    playlistsTables.forEach((table) => {
+                        table.addRow(result, true);
+                    });
+                }
             } else {
                 // update existing
                 const editedPlaylist = await $API.playlist({
                     filter: playlist.id,
                 });
 
-                playlistsTables.forEach((table) => {
-                    table?.updateRow(editedPlaylist.id, editedPlaylist);
-                });
+                if (Array.isArray(playlistsTables)) {
+                    playlistsTables.forEach((table) => {
+                        table?.updateRow(editedPlaylist.id, editedPlaylist);
+                    });
+                }
             }
         }
 
