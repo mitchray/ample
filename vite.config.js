@@ -3,6 +3,7 @@ import { svelte } from "@sveltejs/vite-plugin-svelte";
 import sveltePreprocess from "svelte-preprocess";
 import autoprefixer from "autoprefixer";
 import path from "path";
+//import { visualizer } from "rollup-plugin-visualizer";
 
 export default defineConfig({
     base: "", // relative paths
@@ -44,5 +45,8 @@ export default defineConfig({
                 handler(warning);
             },
         }),
+        // visualizer({
+        //     open: true,
+        // }),
     ],
 });
