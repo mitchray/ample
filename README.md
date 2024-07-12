@@ -22,12 +22,14 @@ Edit or add new languages via [Inlang Fink](https://inlang.com/editor/github.com
 
 ## Config file
 
-| Key             | Description                                                                         |
-|-----------------|-------------------------------------------------------------------------------------|
-| ampacheURL      | Full URL to the Ampache server                                                      |
-| guestUserAPIKey | Login with this user's API key (use lowest Guest level permissions, this is public) |
-| loginMessage    | Will be displayed on the login screen                                               |
-| logo            | Use custom image on the login screen (full URL or relative path to Ample folder)    |
+Stored in ```config/ample.json```
+
+| Key             | Type     | Description                                                                        |
+|-----------------|----------|------------------------------------------------------------------------------------|
+| ampacheURL      | Required | Full URL to the Ampache server                                                     |
+| guestUserAPIKey | Optional | Login with this user's API key (use lowest Guest level permissions, this is public) |
+| loginMessage    | Optional | Will be displayed on the login screen                                              |
+| logo            | Optional | Use custom image on the login screen (full URL or relative path to Ample folder)   |
 
 Example
 ```
