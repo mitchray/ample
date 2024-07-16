@@ -21,7 +21,7 @@ Edit or add new languages via [Inlang Fink](https://inlang.com/editor/github.com
 
 ## Config file
 
-Stored in ```config/ample.json```
+Save as ```config/ample.json```, must be valid JSON (i.e. no trailing comma on the last item)
 
 | Key             | Type     | Description                                                                        |
 |-----------------|----------|------------------------------------------------------------------------------------|
@@ -36,7 +36,7 @@ Example
   "ampacheURL": "https://example.com", 
   "guestUserAPIKey": "123456789", 
   "loginMessage": "There's no place like 127.0.0.1", 
-  "logo": "./config/logo.svg", 
+  "logo": "./config/logo.svg" 
 }
 ```
 
