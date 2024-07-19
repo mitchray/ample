@@ -214,63 +214,73 @@
 
                     <sl-tab-panel name="all">
                         {#if results.artists?.length > 0}
-                            <CardList
-                                type="artist"
-                                card={GenericCard}
-                                genericOverride={true}
-                                initialData={results.artists}
-                                heading={$_("text.artists")}
-                                showOnlyThese={true}
-                                layout="grid"
-                            />
+                            <section>
+                                <CardList
+                                    type="artist"
+                                    card={GenericCard}
+                                    genericOverride={true}
+                                    initialData={results.artists}
+                                    heading={$_("text.artists")}
+                                    showOnlyThese={true}
+                                    layout="grid"
+                                />
+                            </section>
                         {/if}
 
                         {#if results.albums?.length > 0}
-                            <CardList
-                                type="album"
-                                card={GenericCard}
-                                genericOverride={true}
-                                initialData={results.albums}
-                                heading={$_("text.albums")}
-                                showOnlyThese={true}
-                                layout="grid"
-                            />
+                            <section>
+                                <CardList
+                                    type="album"
+                                    card={GenericCard}
+                                    genericOverride={true}
+                                    initialData={results.albums}
+                                    heading={$_("text.albums")}
+                                    showOnlyThese={true}
+                                    layout="grid"
+                                />
+                            </section>
                         {/if}
 
                         {#if results.songs?.length > 0}
-                            <CardList
-                                type="song"
-                                card={GenericCard}
-                                genericOverride={true}
-                                initialData={results.songs}
-                                heading={$_("text.songs")}
-                                showOnlyThese={true}
-                                layout="grid"
-                            />
+                            <section>
+                                <CardList
+                                    type="song"
+                                    card={GenericCard}
+                                    genericOverride={true}
+                                    initialData={results.songs}
+                                    heading={$_("text.songs")}
+                                    showOnlyThese={true}
+                                    layout="grid"
+                                />
+                            </section>
                         {/if}
 
                         {#if results.playlists?.length > 0}
-                            <CardList
-                                type="playlist"
-                                card={GenericCard}
-                                genericOverride={true}
-                                initialData={results.playlists}
-                                heading={$_("text.playlists")}
-                                showOnlyThese={true}
-                                layout="grid"
-                            />
+                            <section>
+                                <CardList
+                                    type="playlist"
+                                    card={GenericCard}
+                                    genericOverride={true}
+                                    initialData={results.playlists}
+                                    heading={$_("text.playlists")}
+                                    showOnlyThese={true}
+                                    layout="grid"
+                                />
+                            </section>
                         {/if}
 
                         {#if results.smartlists?.length > 0}
-                            <CardList
-                                type="smartlist"
-                                card={GenericCard}
-                                genericOverride={true}
-                                initialData={results.smartlists}
-                                heading={$_("text.smartlists")}
-                                showOnlyThese={true}
-                                layout="grid"
-                            />
+                            <section>
+                                <CardList
+                                    type="smartlist"
+                                    card={GenericCard}
+                                    genericOverride={true}
+                                    initialData={results.smartlists}
+                                    heading={$_("text.smartlists")}
+                                    showOnlyThese={true}
+                                    layout="grid"
+                                />
+                            </section>
                         {/if}
                     </sl-tab-panel>
 
@@ -352,5 +362,9 @@
     /* always show the footer, though empty */
     sl-drawer::part(footer) {
         display: block;
+    }
+
+    section + section {
+        margin-top: var(--spacing-xxl);
     }
 </style>
