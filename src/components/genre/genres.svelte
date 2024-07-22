@@ -8,7 +8,7 @@
     <ul class="genres">
         {#each genres as genre}
             <li class="genre-tag">
-                <a href="#/genres/{genre.id}">
+                <a href="#/genre/{genre.id}">
                     <MaterialSymbol name="label" />
                     {genre.name}
                 </a>

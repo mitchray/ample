@@ -26,19 +26,19 @@
     {#if genre}
         <div class="info">
             <div class="title genre-title truncate" title={genre.name}>
-                <a href="#/genres/{genre.id}">{genre.name}</a>
+                <a href="#/genre/{genre.id}">{genre.name}</a>
             </div>
 
             <div class="meta">
-                <a href="#/genres/{genre.id}">
+                <a href="#/genre/{genre.id}">
                     <MaterialSymbol name="artist" />
                     {genre.artists}
                 </a>
-                <a href="#/genres/{genre.id}">
+                <a href="#/genre/{genre.id}">
                     <MaterialSymbol name="album" />
                     {genre.albums}
                 </a>
-                <a href="#/genres/{genre.id}">
+                <a href="#/genre/{genre.id}">
                     <MaterialSymbol name="music_note" />
                     {genre.songs}
                 </a>
