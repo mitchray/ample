@@ -281,6 +281,11 @@
         /*opacity: 1;*/
     }
 
+    /* ensure disabled buttons are not interactive */
+    .site-player :global(*[disabled]) {
+        pointer-events: none;
+    }
+
     .site-player.is-expanded .player__waveform {
         height: auto;
         pointer-events: initial;
