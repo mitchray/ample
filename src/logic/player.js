@@ -246,7 +246,10 @@ class Player {
     stop() {
         this.wavesurfer.pause();
         IsPlaying.set(false);
-        this.wavesurfer.empty();
+        
+       // workaround for this.wavesurfer.empty() firefox console repeating
+       this.wavesurfer.load("/audio/silence.mp3", [[0]], 0.001);
+       this.wavesurfer.stop();
     }
 
     /**
@@ -498,10 +501,8 @@ class Player {
     clearAll() {
         this.stop();
         CurrentMedia.set(null);
-        this.#setQueueItems([]).then(() => {
-            NowPlayingIndex.set(0);
-            IsPlaying.set(false);
-        });
+        NowPlayingIndex.set(0);
+        this.#setQueueItems([]);
     }
 
     updateFilters() {
