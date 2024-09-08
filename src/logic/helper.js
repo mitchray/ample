@@ -51,6 +51,10 @@ export function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
+export function truncateDecimals(num) {
+    return num % 1 === 0 ? num : parseFloat(num.toFixed(2));
+}
+
 /**
  Get hash of image and compare it to the placeholder art
  Based on https://stackoverflow.com/a/16566198/4968507

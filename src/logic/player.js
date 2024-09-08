@@ -8,7 +8,7 @@ import {
     addGainTagsMissingNotification,
     addRatingMissingNotification,
 } from "~/logic/notification";
-import { debugHelper, shuffleArray } from "~/logic/helper";
+import { debugHelper, shuffleArray, truncateDecimals } from "~/logic/helper";
 import {
     DynamicsCompressorEnabled,
     PlayerVolume,
@@ -47,7 +47,7 @@ class Player {
         // volume normalization
         this.targetVolume = parseInt(-14);
         this.masteredVolume = null;
-        this.gainNeeded = null;
+        this.gainFactor = null;
         this.gainType = null;
         this.gainTagValue = null;
 
@@ -722,7 +722,7 @@ class Player {
         let parsedGainLevel = 0;
 
         this.masteredVolume = 0;
-        this.gainNeeded = 0;
+        this.gainFactor = 0;
         this.gainType = "None";
 
         let r128_track_gain =
@@ -746,8 +746,8 @@ class Player {
             finalGainAmount = Math.pow(10, difference / 20);
 
             this.gainType = "EBU R128";
-            this.masteredVolume = masteredVolume.toFixed(2);
-            this.gainNeeded = finalGainAmount.toFixed(2);
+            this.masteredVolume = truncateDecimals(masteredVolume);
+            this.gainFactor = truncateDecimals(finalGainAmount);
         } else if (replaygain_track_gain !== null) {
             // ReplayGain
             const referenceLevel = -18; // ReplayGain 2.0 reference level is -18 LUFS
@@ -759,8 +759,8 @@ class Player {
 
             this.gainType = "ReplayGain";
             this.gainTagValue = parsedGainLevel;
-            this.masteredVolume = trackLoudness.toFixed(2);
-            this.gainNeeded = finalGainAmount.toFixed(2);
+            this.masteredVolume = truncateDecimals(trackLoudness);
+            this.gainFactor = truncateDecimals(finalGainAmount);
         }
 
         return finalGainAmount;

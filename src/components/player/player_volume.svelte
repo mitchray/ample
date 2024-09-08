@@ -174,8 +174,8 @@
                             </tr>
 
                             <tr>
-                                <td class="label">{$_("text.gain")}</td>
-                                <td>{$MediaPlayer.gainNeeded}db</td>
+                                <td class="label">{$_("text.gainFactor")}</td>
+                                <td>×{$MediaPlayer.gainFactor}</td>
                             </tr>
                         {/if}
                     </table>
