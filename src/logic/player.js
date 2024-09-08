@@ -57,10 +57,8 @@ class Player {
         this.filterCompressor = null;
         this.filterBiquad = null; //(for testing only)
 
-        this.abortController = new AbortController();         // initial AbortController
-        this.retryCount = 0;
-        this.maxRetries = 5;
-        this.baseRetryDelay = 1000; // 1 second
+        // initial AbortController
+        this.abortController = new AbortController();
 
         this.wavesurfer = new WaveSurfer({
             autoplay: true,
@@ -210,34 +208,15 @@ class Player {
                     // (re)set the playback speed
                     this.setPlaybackRate(get(PlaybackSpeed));
                     this.#runChecks(item);
-                    this.retryCount = 0; // Reset retry count on successful play
                 })
                 .catch((e) => {
                     // probably a race condition between quick succession load/play, ignore
                     debugHelper("Wavesurfer race condition?");
-                    this.#handlePlayError();
                 });
         } catch (e) {
             console.warn("Something went wrong during start", e);
-            this.#handlePlayError();
+            self.next();
         }
-    }
-
-    #handlePlayError() {
-        if (this.retryCount < this.maxRetries) {
-            this.retryCount++;
-            const delay = this.#calculateRetryDelay();
-            debugHelper(`Retrying playback in ${delay}ms (attempt ${this.retryCount})`);
-            setTimeout(() => this.start(), delay);
-        } else {
-            debugHelper("Max retries reached, moving to next track");
-            this.retryCount = 0;
-            this.next();
-        }
-    }
-
-    #calculateRetryDelay() {
-        return Math.min(30000, this.baseRetryDelay * Math.pow(2, this.retryCount - 1));
     }
 
     /**
