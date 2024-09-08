@@ -154,40 +154,33 @@
         </div>
 
         {#if $CurrentMedia}
-            <div class="current">
-                <table>
-                    <tr>
-                        <td class="label">{$_("text.current")}</td>
-                        <td>{$MediaPlayer.gainType}</td>
-                    </tr>
+            {#key $CurrentMedia}
+                <div class="current">
+                    <table>
+                        <tr>
+                            <td class="label">{$_("text.current")}</td>
+                            <td>{$MediaPlayer.gainType}</td>
+                        </tr>
 
-                    {#if $MediaPlayer.gainType === "EBU R128"}
                         <tr>
                             <td class="label">{$_("text.target")}</td>
                             <td>{$MediaPlayer.targetVolume}db</td>
                         </tr>
 
-                        <tr>
-                            <td class="label">{$_("text.mastered")}</td>
-                            <td>{$MediaPlayer.masteredVolume}db</td>
-                        </tr>
-                    {/if}
+                        {#if $MediaPlayer.gainType !== "None"}
+                            <tr>
+                                <td class="label">{$_("text.mastered")}</td>
+                                <td>{$MediaPlayer.masteredVolume}db</td>
+                            </tr>
 
-                    {#if $MediaPlayer.gainType === "ReplayGain"}
-                        <tr>
-                            <td class="label">
-                                {$_("text.replaygain")}
-                            </td>
-                            <td>{$MediaPlayer.gainTagValue}</td>
-                        </tr>
-                    {/if}
-
-                    <tr>
-                        <td class="label">{$_("text.gain")}</td>
-                        <td>{$MediaPlayer.gainNeeded}db</td>
-                    </tr>
-                </table>
-            </div>
+                            <tr>
+                                <td class="label">{$_("text.gain")}</td>
+                                <td>{$MediaPlayer.gainNeeded}db</td>
+                            </tr>
+                        {/if}
+                    </table>
+                </div>
+            {/key}
         {/if}
 
         <sl-divider></sl-divider>

@@ -714,59 +714,56 @@ class Player {
 
     /**
      * Calculate gain (R128 & ReplayGain)
-     * @returns {number} gainLevel
+     * @returns {number} finalGainAmount
      */
     #calculateGain() {
         // defaults
-        let gainLevel = 0;
-        let replayGain = 0;
+        let finalGainAmount = 0;
+        let parsedGainLevel = 0;
 
         this.masteredVolume = 0;
         this.gainNeeded = 0;
+        this.gainType = "None";
 
         let r128_track_gain =
             this.currentMedia.r128_track_gain !== undefined &&
             this.currentMedia.r128_track_gain !== null
                 ? this.currentMedia.r128_track_gain.toString()
                 : null;
-        let rg_track_gain =
+        let replaygain_track_gain =
             this.currentMedia.replaygain_track_gain !== undefined &&
             this.currentMedia.replaygain_track_gain !== null
                 ? this.currentMedia.replaygain_track_gain.toString()
                 : null;
 
         if (r128_track_gain !== null) {
-            // R128 PREFERRED
-            this.gainType = "EBU R128";
-
-            replayGain = parseInt(r128_track_gain / 256); // LU/dB away from baseline of -23 LUFS/dB, stored as Q7.8 (2 ^ 8) https://datatracker.ietf.org/doc/html/rfc7845.html#section-5.2.1
+            // EBU R128
             const referenceLevel = parseInt(-23); // LUFS https://en.wikipedia.org/wiki/EBU_R_128#Specification
-            let masteredVolume = referenceLevel - replayGain;
+            parsedGainLevel = parseInt(r128_track_gain / 256); // LU/dB away from baseline of -23 LUFS/dB, stored as Q7.8 (2 ^ 8) https://datatracker.ietf.org/doc/html/rfc7845.html#section-5.2.1
+            let masteredVolume = referenceLevel - parsedGainLevel;
             let difference = this.targetVolume - masteredVolume;
 
-            gainLevel = difference;
+            finalGainAmount = Math.pow(10, difference / 20);
 
-            this.masteredVolume = masteredVolume;
-            this.gainNeeded = gainLevel.toFixed(2);
+            this.gainType = "EBU R128";
+            this.masteredVolume = masteredVolume.toFixed(2);
+            this.gainNeeded = finalGainAmount.toFixed(2);
+        } else if (replaygain_track_gain !== null) {
+            // ReplayGain
+            const referenceLevel = -18; // ReplayGain 2.0 reference level is -18 LUFS
+            parsedGainLevel = parseFloat(replaygain_track_gain);
+            let trackLoudness = referenceLevel - parsedGainLevel;
+            let difference = this.targetVolume - trackLoudness;
 
-            gainLevel = Math.pow(10, gainLevel / 20);
-        } else if (rg_track_gain !== null) {
-            // Replay Gain fallback
+            finalGainAmount = Math.pow(10, difference / 20);
+
             this.gainType = "ReplayGain";
-
-            replayGain = parseFloat(rg_track_gain);
-            this.gainTagValue = replayGain;
-
-            gainLevel = replayGain;
-
-            this.gainNeeded = gainLevel.toFixed(2);
-
-            gainLevel = Math.pow(10, gainLevel / 20);
-        } else {
-            this.gainType = "None";
+            this.gainTagValue = parsedGainLevel;
+            this.masteredVolume = trackLoudness.toFixed(2);
+            this.gainNeeded = finalGainAmount.toFixed(2);
         }
 
-        return gainLevel;
+        return finalGainAmount;
     }
 }
 
