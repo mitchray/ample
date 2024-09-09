@@ -1105,6 +1105,15 @@ sl-drawer::part(body) {
 
 sl-tab::part(base) {
     font-size: inherit;
+    color: var(--color-on-surface-variant);
+}
+
+sl-tab[active]::part(base) {
+    color: var(--color-primary);
+}
+
+sl-tab-group::part(active-tab-indicator) {
+    --indicator-color: var(--color-primary);
 }
 
 /* override display: none behavior to prevent Tabulator from rerendering */
