@@ -131,7 +131,7 @@ class Player {
     /**
      * Begin playing
      */
-    start(forcePlay = false) {
+    async start(forcePlay = false) {
         // Abort the previous loading request
         this.abortController.abort();
 
@@ -157,7 +157,6 @@ class Player {
             // carry on
         } else {
             if (!this.isEligibleToPlay(item)) {
-                // console.debug("auto skipped");
                 self.next();
                 return;
             }
@@ -184,18 +183,18 @@ class Player {
                 });
             }
 
-            // pass media url to audio element
-            this.audioElement.src = this.currentMedia.url;
-
             // special handling for live_stream which has to go through <audio> element
             if (item.object_type === "live_stream") {
-                // pass media url to audio element
                 this.audioElement.src = this.currentMedia.url;
-
-                // pass audio element to wavesurfer
                 this.wavesurfer.setMediaElement(this.audioElement);
             } else {
-                this.wavesurfer.load(item.url);
+                // Fetch the audio file with abort signal
+                const response = await fetch(item.url, { signal: abortSignal });
+                const blob = await response.blob();
+                const audioUrl = URL.createObjectURL(blob);
+                
+                // Load the audio into WaveSurfer
+                this.wavesurfer.load(audioUrl);
             }
 
             // set gain of this item
@@ -214,8 +213,12 @@ class Player {
                     debugHelper("Wavesurfer race condition?");
                 });
         } catch (e) {
-            console.warn("Something went wrong during start", e);
-            self.next();
+            if (e.name === 'AbortError') {
+                debugHelper("Loading aborted");
+            } else {
+                console.warn("Something went wrong during start", e);
+                self.next();
+            }
         }
     }
 
@@ -274,6 +277,9 @@ class Player {
      */
     next() {
         debugHelper("next!");
+
+        // Abort any in-progress loading
+        this.abortController.abort();
 
         this.stop();
 
