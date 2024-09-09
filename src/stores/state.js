@@ -5,10 +5,10 @@ import AmpacheAPI from "javascript-ampache";
 export let debugMode = writable(false);
 
 // Ample version
-export let ampleVersion = readable("3.0.0-beta6");
+export let ampleVersion = readable("3.0.0");
 
 // Ampache API version this app should use
-export let APIVersion = writable("6.3.0");
+export let APIVersion = writable("6.6.0");
 
 // our instance of javascript-ampache
 export let API = writable(new AmpacheAPI({ url: "" }));

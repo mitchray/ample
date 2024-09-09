@@ -1,8 +1,8 @@
 # Changelog
 
-## [3.0.0] - 2024-xx-xx
+## [3.0.0] - 2024-09-10
 
-### Requires at least Ampache 6.5.1
+### Requires at least Ampache 6.6.0
 
 ### Player changes
 
