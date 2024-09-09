@@ -5,7 +5,7 @@
 
 ### Player changes
 - Streamlined UI
-- Waveform now stylized and full width of player; can now be hidden
+- Waveform now full width of player & can be hidden
 - Entire player itself can be hidden
 - Hover over next/previous buttons for item details
 - Added buttons for +30sec & -10sec
@@ -47,8 +47,8 @@
 - Cache and invalidate stale data with Tanstack Query
 
 ### Changed
-- Rebuilt UI atop [Shoelace](https://shoelace.style/) web components
 - Must define a URL in config file instead of entering at login
+- Rebuilt UI atop [Shoelace](https://shoelace.style/) web components
 - Better playlist reordering (don't need to enter 'Edit mode' anymore)
 - Improved search
   - Results are ordered by their weighted score (using fuse.js)
@@ -57,7 +57,7 @@
 - 'Public' Ampache servers can auto-login with a defined Guest user API key, see config
 - Moved Insights pages (e.g. Trending, Unrated etc) out of sidebar and onto homepage
 - `Skip below rating`
-  - Instead of filtering items before adding to queue, they will be added but auto-skipped if enabled (shown by diagonal shading)
+  - Instead of filtering items before adding to queue, they will be added but auto-skipped if enabled (indicated by diagonal shading)
   - Can optionally allow unrated items through the filter
   - Moved from player to queue
 - Opening the queue will reveal the currently playing media
@@ -66,10 +66,11 @@
 - Artist `Appears On`
   - Consolidated together at the end of artist releases instead of per release type
   - New option to dim tracks that aren't by the artist, or hide them altogether
-  - New option to skip playing songs that aren't by the artist
+  - New option to skip playing songs that aren't by the artist being viewed
 - For `Artist Mixes` which don't have any similar artists, expand search into same genre
 - Removed dedicated `Multi-rater` page in favour of being able to rate items from the Unrated page (or anywhere)
 - Lyrics panel now a full overlay instead of a floating panel
+- Reworked albums by year interface, now uses a range slider
 
 ### Fixed
 - Rearranging the queue could mark the currently playing media incorrectly
