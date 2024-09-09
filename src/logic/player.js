@@ -230,7 +230,7 @@ class Player {
         IsPlaying.set(false);
         
        // workaround for this.wavesurfer.empty() firefox console repeating
-       this.wavesurfer.load("/audio/silence.mp3", [[0]], 0.001);
+       this.wavesurfer.load("./audio/silence.mp3", [[0]], 0.001);
        this.wavesurfer.stop();
     }
 
