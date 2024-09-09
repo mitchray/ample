@@ -20,6 +20,7 @@ export let ShowLyrics = writable(false);
 export let ShowPreferences = writable(false);
 
 export let CurrentMedia = writable(null);
+export let CurrentMediaGainInfo = writable({});
 export let NowPlayingQueue = writable([]);
 export let NowPlayingIndex = writable(0);
 export let IsPlaying = writable(false);

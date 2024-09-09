@@ -9,6 +9,7 @@
     import { MediaPlayer } from "~/stores/elements.js";
     import {
         CurrentMedia,
+        CurrentMediaGainInfo,
         debugMode,
         IsMuted,
         NowPlayingQueue,
@@ -153,34 +154,32 @@
             {$_("text.volumeNormalizeInfo")}
         </div>
 
-        {#if $CurrentMedia}
-            {#key $CurrentMedia}
-                <div class="current">
-                    <table>
+        {#if $CurrentMedia && $CurrentMediaGainInfo}
+            <div class="current">
+                <table>
+                    <tr>
+                        <td class="label">{$_("text.current")}</td>
+                        <td>{$CurrentMediaGainInfo.gainType}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="label">{$_("text.target")}</td>
+                        <td>{$MediaPlayer.targetVolume}dB</td>
+                    </tr>
+
+                    {#if $CurrentMediaGainInfo.gainType !== "None"}
                         <tr>
-                            <td class="label">{$_("text.current")}</td>
-                            <td>{$MediaPlayer.gainType}</td>
+                            <td class="label">{$_("text.mastered")}</td>
+                            <td>{$CurrentMediaGainInfo.masteredVolume}dB</td>
                         </tr>
 
                         <tr>
-                            <td class="label">{$_("text.target")}</td>
-                            <td>{$MediaPlayer.targetVolume}db</td>
+                            <td class="label">{$_("text.gainFactor")}</td>
+                            <td>×{$CurrentMediaGainInfo.gainFactor}</td>
                         </tr>
-
-                        {#if $MediaPlayer.gainType !== "None"}
-                            <tr>
-                                <td class="label">{$_("text.mastered")}</td>
-                                <td>{$MediaPlayer.masteredVolume}db</td>
-                            </tr>
-
-                            <tr>
-                                <td class="label">{$_("text.gainFactor")}</td>
-                                <td>×{$MediaPlayer.gainFactor}</td>
-                            </tr>
-                        {/if}
-                    </table>
-                </div>
-            {/key}
+                    {/if}
+                </table>
+        </div>
         {/if}
 
         <sl-divider></sl-divider>

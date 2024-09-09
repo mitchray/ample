@@ -21,6 +21,7 @@ import {
 } from "~/stores/settings";
 import {
     CurrentMedia,
+    CurrentMediaGainInfo,
     IsMobile,
     IsPlaying,
     NowPlayingIndex,
@@ -49,7 +50,6 @@ class Player {
         this.masteredVolume = null;
         this.gainFactor = null;
         this.gainType = null;
-        this.gainTagValue = null;
 
         // filter nodes
         this.filters = [];
@@ -727,9 +727,11 @@ class Player {
         let finalGainAmount = 0;
         let parsedGainLevel = 0;
 
-        this.masteredVolume = 0;
-        this.gainFactor = 0;
-        this.gainType = "None";
+        CurrentMediaGainInfo.set({
+            gainType: "None",
+            gainFactor: 0,
+            masteredVolume: 0,
+        });
 
         let r128_track_gain =
             this.currentMedia.r128_track_gain !== undefined &&
@@ -751,9 +753,11 @@ class Player {
 
             finalGainAmount = Math.pow(10, difference / 20);
 
-            this.gainType = "EBU R128";
-            this.masteredVolume = truncateDecimals(masteredVolume);
-            this.gainFactor = truncateDecimals(finalGainAmount);
+            CurrentMediaGainInfo.set({
+                gainType: "EBU R128",
+                gainFactor: truncateDecimals(finalGainAmount),
+                masteredVolume: truncateDecimals(masteredVolume),
+            });
         } else if (replaygain_track_gain !== null) {
             // ReplayGain
             const referenceLevel = -18; // ReplayGain 2.0 reference level is -18 LUFS
@@ -763,10 +767,11 @@ class Player {
 
             finalGainAmount = Math.pow(10, difference / 20);
 
-            this.gainType = "ReplayGain";
-            this.gainTagValue = parsedGainLevel;
-            this.masteredVolume = truncateDecimals(trackLoudness);
-            this.gainFactor = truncateDecimals(finalGainAmount);
+            CurrentMediaGainInfo.set({
+                gainType: "ReplayGain",
+                gainFactor: truncateDecimals(finalGainAmount),
+                masteredVolume: truncateDecimals(trackLoudness),
+            });
         }
 
         return finalGainAmount;
