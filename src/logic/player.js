@@ -760,7 +760,7 @@ class Player {
             });
         } else if (replaygain_track_gain !== null) {
             // ReplayGain
-            const referenceLevel = -18; // ReplayGain 2.0 reference level is -18 LUFS
+            const referenceLevel = parseInt(-18); // ReplayGain 2.0 reference level is -18 LUFS
             parsedGainLevel = parseFloat(replaygain_track_gain);
             let trackLoudness = referenceLevel - parsedGainLevel;
             let difference = this.targetVolume - trackLoudness;
