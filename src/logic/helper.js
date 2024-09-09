@@ -64,7 +64,8 @@ export async function placeholderArtCheck(url) {
     // across sessions, making it impractical to hardcode results
     let results = [];
     let images = [
-        get(Server).ampacheURL + "/image.php?object_id=0&object_type=album&thumb=10",
+        get(Server).ampacheURL +
+            "/image.php?object_id=0&object_type=album&thumb=10",
         url + "&thumb=10",
     ];
 

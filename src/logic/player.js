@@ -192,7 +192,7 @@ class Player {
                 const response = await fetch(item.url, { signal: abortSignal });
                 const blob = await response.blob();
                 const audioUrl = URL.createObjectURL(blob);
-                
+
                 // Load the audio into WaveSurfer
                 this.wavesurfer.load(audioUrl);
             }
@@ -213,7 +213,7 @@ class Player {
                     debugHelper("Wavesurfer race condition?");
                 });
         } catch (e) {
-            if (e.name === 'AbortError') {
+            if (e.name === "AbortError") {
                 debugHelper("Loading aborted");
             } else {
                 console.warn("Something went wrong during start", e);
@@ -228,10 +228,10 @@ class Player {
     stop() {
         this.wavesurfer.pause();
         IsPlaying.set(false);
-        
-       // workaround for this.wavesurfer.empty() firefox console repeating
-       this.wavesurfer.load("./audio/silence.mp3", [[0]], 0.001);
-       this.wavesurfer.stop();
+
+        // workaround for this.wavesurfer.empty() firefox console repeating
+        this.wavesurfer.load("./audio/silence.mp3", [[0]], 0.001);
+        this.wavesurfer.stop();
     }
 
     /**

@@ -179,7 +179,7 @@
                         </tr>
                     {/if}
                 </table>
-        </div>
+            </div>
         {/if}
 
         <sl-divider></sl-divider>

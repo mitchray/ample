@@ -1,33 +1,30 @@
 {
-  "$schema": "https://inlang.com/schema/project-settings",
-  "sourceLanguageTag": "en",
-  "languageTags": [
-    "en",
-    "de",
-    "en-AU",
-    "es",
-    "fr",
-    "hu",
-    "it",
-    "ko",
-    "pl",
-    "pt"
-  ],
-  "modules": [
-    "https://cdn.jsdelivr.net/npm/@inlang/plugin-json@latest/dist/index.js",
-    "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@latest/dist/index.js",
-    "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@latest/dist/index.js",
-    "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-without-source@latest/dist/index.js",
-    "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-identical-pattern@latest/dist/index.js"
-  ],
-  "messageLintRuleLevels": {
-    "messageLintRule.inlang.missingTranslation": "error"
-  },
-  "plugin.inlang.json": {
-    "pathPattern": "./languages/{languageTag}.json",
-    "variableReferencePattern": [
-      "{",
-      "}"
-    ]
-  }
+    "$schema": "https://inlang.com/schema/project-settings",
+    "sourceLanguageTag": "en",
+    "languageTags": [
+        "en",
+        "de",
+        "en-AU",
+        "es",
+        "fr",
+        "hu",
+        "it",
+        "ko",
+        "pl",
+        "pt"
+    ],
+    "modules": [
+        "https://cdn.jsdelivr.net/npm/@inlang/plugin-json@latest/dist/index.js",
+        "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-missing-translation@latest/dist/index.js",
+        "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-empty-pattern@latest/dist/index.js",
+        "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-without-source@latest/dist/index.js",
+        "https://cdn.jsdelivr.net/npm/@inlang/message-lint-rule-identical-pattern@latest/dist/index.js"
+    ],
+    "messageLintRuleLevels": {
+        "messageLintRule.inlang.missingTranslation": "error"
+    },
+    "plugin.inlang.json": {
+        "pathPattern": "./languages/{languageTag}.json",
+        "variableReferencePattern": ["{", "}"]
+    }
 }

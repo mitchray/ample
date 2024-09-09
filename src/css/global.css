@@ -1117,18 +1117,18 @@ sl-tab-group::part(active-tab-indicator) {
 }
 
 /* override display: none behavior to prevent Tabulator from rerendering */
-sl-tab-panel[aria-hidden=true] {
+sl-tab-panel[aria-hidden="true"] {
     display: block !important;
 }
 
 @supports (content-visibility: hidden) {
-    sl-tab-panel[aria-hidden=true] {
+    sl-tab-panel[aria-hidden="true"] {
         content-visibility: hidden;
     }
 }
 
 @supports not (content-visibility: hidden) {
-    sl-tab-panel[aria-hidden=true] {
+    sl-tab-panel[aria-hidden="true"] {
         height: 0 !important;
         overflow: hidden;
         visibility: hidden;
@@ -1227,7 +1227,7 @@ sl-tab-panel[aria-hidden=true] {
 }
 
 #app .tabulator-page.active {
-    color: var(--color-primary)
+    color: var(--color-primary);
 }
 
 #app .tabulator-paginator {
