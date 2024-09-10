@@ -420,11 +420,80 @@ export let published = {
             new RelativeDate({
                 target: cell.getElement(),
                 props: {
-                    data: cell.getData().pubdate,
+                    date: cell.getData().pubdate,
                 },
             });
         });
     },
+};
+
+/** @type Column */
+export let creationDate = {
+    field: "creation_date",
+    title: "Created",
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            new RelativeDate({
+                target: cell.getElement(),
+                props: {
+                    date: cell.getValue() * 1000,
+                },
+            });
+        });
+    },
+};
+
+/** @type Column */
+export let allowStream = {
+    field: "allow_stream",
+    title: "Streaming",
+    formatter: (cell) => cell.getValue() ? "Yes" : "No",
+    hozAlign: "center",
+};
+
+/** @type Column */
+export let allowDownload = {
+    field: "allow_download",
+    title: "Download",
+    formatter: (cell) => cell.getValue() ? "Yes" : "No",
+    hozAlign: "center",
+};
+
+/** @type Column */
+export let expireDays = {
+    field: "expire_days",
+    title: "Duration",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell) => cell.getValue() + " days" || "Forever",
+};
+
+/** @type Column */
+export let maxCounter = {
+    field: "max_counter",
+    title: "Max Visits",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+    formatter: (cell) => cell.getValue() || "Unlimited",
+};
+
+/** @type Column */
+export let counter = {
+    field: "counter",
+    title: "Visits",
+    sorter: "number",
+    hozAlign: "right",
+    headerHozAlign: "right",
+};
+
+/** @type Column */
+export let publicUrl = {
+    field: "public_url",
+    title: "Public URL",
+    formatter: (cell) => `<a href="${cell.getValue()}" target="_blank" rel="noopener noreferrer">${cell.getValue()}</a>`,
+    width: 300,
 };
 
 /** @type Column */
@@ -521,6 +590,42 @@ export let ratingPodcastEpisode = {
             });
         });
     },
+};
+
+/** @type Column */
+export let description = {
+    field: "description",
+    title: "Description",
+    width: 200,
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
+};
+
+/** @type Column */
+export let lastVisitDate = {
+    field: "lastvisit_date",
+    title: "Last Visited",
+    width: 300,
+    formatter: (cell, formatterParams, onRendered) => {
+        const value = cell.getValue();
+        if (value === 0) {
+            return "-";
+        }
+        onRendered(function () {
+            new RelativeDate({
+                target: cell.getElement(),
+                props: {
+                    date: value * 1000,
+                },
+            });
+        });
+    },
+};
+
+/** @type Column */
+export let shareType = {
+    field: "object_type",
+    title: "Type",
+    formatter: (cell, formatterParams, onRendered) => cell.getValue() || "-",
 };
 
 /*
@@ -976,7 +1081,7 @@ export let podcastEpisodesPreset = [
                         type: "podcast_episode",
                         displayMode: "miniButtons",
                         item: data,
-                        hidden: data.state !== "completed",
+                        hideDefaultActions: data.state !== "completed",
                     },
                 });
             });
@@ -1000,4 +1105,51 @@ export let podcastEpisodesPreset = [
     state,
     length,
     ratingPodcastEpisode,
+];
+
+/** @type Column[] */
+export let sharesPreset = [
+    {
+        ...actionsBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                let data = cell.getData();
+                return new Actions({
+                    target: cell.getElement(),
+                    props: {
+                        type: "share",
+                        displayMode: "miniButtons",
+                        item: data,
+                        hideDefaultActions: true,
+                    },
+                });
+            });
+        },
+        minWidth: 80,
+    },
+    {
+        ...nameBase,
+        formatter: (cell, formatterParams, onRendered) => {
+            onRendered(function () {
+                new Name({
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "share",
+                    },
+                });
+            });
+        },
+    },
+    description,
+    shareType,
+    owner,
+    creationDate,
+    lastVisitDate,
+    allowStream,
+    allowDownload,
+    expireDays,
+    maxCounter,
+    counter,
+    publicUrl,
 ];

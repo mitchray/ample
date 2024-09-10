@@ -146,6 +146,30 @@
     </sl-details>
 {/if}
 
+<sl-divider></sl-divider>
+
+<sl-details
+    data-id="system"
+    open={savedStatuses["system"]}
+    on:sl-show={handleOpen}
+    on:sl-hide={handleClose}
+>
+    <div class="title-wrapper" slot="summary">
+        <SidebarHeading icon="settings" label={$_("text.system")} />
+    </div>
+    <MaterialSymbol name="expand_more" slot="expand-icon" />
+    <MaterialSymbol name="expand_less" slot="collapse-icon" />
+
+    <div class="items">
+        <SidebarLink
+            href="#/shares"
+            activePath="/shares"
+            label={$_("text.shares")}
+            icon="share"
+        />
+    </div>
+</sl-details>
+
 <style>
     sl-details::part(base) {
         background-color: transparent;

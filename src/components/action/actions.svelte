@@ -34,7 +34,9 @@
     import ActionUpdateArt from "./items/actionUpdateArt.svelte";
     import ActionDownload from "./items/actionDownload.svelte";
     import ActionFindDuplicates from "./items/actionFindDuplicates.svelte";
-    import ActionShare from "./items/actionShare.svelte";
+    import ActionShareCreate from "./items/actionShareCreate.svelte";
+    import ActionShareEdit from "./items/actionShareEdit.svelte";
+    import ActionShareDelete from "./items/actionShareDelete.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Portal from "~/components/portal.svelte";
     import { PlaySongsByOtherArtists } from "~/stores/settings.js";
@@ -44,7 +46,7 @@
     export let displayMode; // menu, miniButtons or fullButtons; the UI elements to be rendered
     export let showShuffle = false;
     export let showLinks = false;
-    export let hidden = false;
+    export let hideDefaultActions = false;
     export let data = {}; // any extra data needed, passed as an object key e.g. data.playlists
 
     const contextKey = uuidv4(); // unique key for each instance of actions
@@ -324,13 +326,15 @@
             <ActionArtistMix {contextKey} />
         {/if}
 
-        {#if type === "song"}
-            <ActionShare {contextKey} />
+        {#if type === "song" || type === "album" || type === "artist" || type === "playlist" || type === "podcast" || type === "podcast_episode" || type === "video"}
+            <ActionShareCreate {contextKey} />
         {/if}
 
-        <ActionAddToPlaylist {contextKey} />
-        <ActionShuffleNext {contextKey} />
-        <ActionShuffleLast {contextKey} />
+        {#if type !== "share"}
+            <ActionAddToPlaylist {contextKey} />
+            <ActionShuffleNext {contextKey} />
+            <ActionShuffleLast {contextKey} />
+        {/if}
 
         {#if type === "artist" || type === "album" || type === "song"}
             <ActionUpdateFromTags {contextKey} />
@@ -354,36 +358,46 @@
 {#if displayMode === "miniButtons" || displayMode === "fullButtons"}
     <div class="c-actions {displayMode}" bind:this={actionsBind}>
         <sl-button-group>
-            {#if !hidden}<ActionPlay {contextKey} />{/if}
-            {#if !hidden}<ActionShuffle {contextKey} />{/if}
-            {#if !hidden}<ActionPlayNext {contextKey} />{/if}
-            {#if !hidden}<ActionPlayLast {contextKey} />{/if}
+            {#if !hideDefaultActions}<ActionPlay {contextKey} />{/if}
+            {#if !hideDefaultActions}<ActionShuffle {contextKey} />{/if}
+            {#if !hideDefaultActions}<ActionPlayNext {contextKey} />{/if}
+            {#if !hideDefaultActions}<ActionPlayLast {contextKey} />{/if}
 
-            <sl-dropdown hoist bind:this={dropdownBind}>
-                <!-- button not shown, only used for positioning the dropdown -->
+            <!-- special actions for Shares -->
+            {#if type === "share"}
+                <ActionShareEdit {contextKey} />
+                <ActionShareDelete {contextKey} />
+            {/if}
+
+            {#if type !== "share"}
+                <sl-dropdown hoist bind:this={dropdownBind}>
+                    <!-- button not shown, only used for positioning the dropdown -->
+                    <sl-button
+                        slot="trigger"
+                        size={displayMode === "miniButtons"
+                            ? "small"
+                            : "medium"}
+                        style="visibility: hidden; pointer-events: none; width: 0;"
+                    >
+                        &nbsp;
+                    </sl-button>
+                    <svelte:self {...$$props} displayMode="menu" />
+                </sl-dropdown>
+
                 <sl-button
-                    slot="trigger"
                     size={displayMode === "miniButtons" ? "small" : "medium"}
-                    style="visibility: hidden; pointer-events: none; width: 0;"
+                    on:click={(e) => {
+                        let tabulator = actionsBind?.closest(".tabulator");
+                        if (tabulator?.offsetHeight < 250) {
+                            dialogBind?.show();
+                        } else {
+                            dropdownBind?.show();
+                        }
+                    }}
                 >
-                    &nbsp;
+                    <MaterialSymbol name="more_horiz" />
                 </sl-button>
-                <svelte:self {...$$props} displayMode="menu" />
-            </sl-dropdown>
-
-            <sl-button
-                size={displayMode === "miniButtons" ? "small" : "medium"}
-                on:click={(e) => {
-                    let tabulator = actionsBind?.closest(".tabulator");
-                    if (tabulator?.offsetHeight < 250) {
-                        dialogBind?.show();
-                    } else {
-                        dropdownBind?.show();
-                    }
-                }}
-            >
-                <MaterialSymbol name="more_horiz" />
-            </sl-button>
+            {/if}
         </sl-button-group>
     </div>
 

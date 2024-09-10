@@ -32,6 +32,10 @@
         <a href="#/podcast/{data.id}">{data.name}</a>
     {/if}
 
+    {#if type === "share"}
+        <a href="#/{data.object_type}/{data.object_id}">{data.name}</a>
+    {/if}
+
     {#if type === "artist"}
         <a href="#/artist/{data.id}">{data.name}</a>
     {/if}

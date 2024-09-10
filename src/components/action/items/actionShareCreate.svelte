@@ -3,17 +3,26 @@
     import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import Portal from "~/components/portal.svelte";
-    import DrawerShare from "~/components/action/drawers/drawerShareCreate.svelte";
+    import DrawerShareEdit from "~/components/action/drawers/drawerShareEdit.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { API } from "~/stores/state.js";
 
     export let contextKey;
 
-    const { getSongs } = getContext(contextKey);
+    const { _item, _type } = getContext(contextKey);
 
     let drawerShare;
     let loaded = false;
+    let newShare;
 
     async function handleAction() {
+        loaded = false;
+
+        newShare = await $API.shareCreate({
+            filter: $_item.id,
+            type: $_type,
+        });
+
         loaded = true;
         await ticks(2);
         drawerShare.show();
@@ -27,6 +36,10 @@
 
 {#if loaded}
     <Portal>
-        <DrawerShare bind:this={drawerShare} {name} />
+        <DrawerShareEdit
+            bind:this={drawerShare}
+            share={newShare}
+            isNew={true}
+        />
     </Portal>
 {/if}

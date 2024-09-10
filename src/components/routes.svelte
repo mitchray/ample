@@ -65,6 +65,9 @@
         "/radio-station/:id": wrap({
             asyncComponent: () => import("~/views/liveStream.svelte"),
         }),
+        "/shares": wrap({
+            asyncComponent: () => import("~/views/shares.svelte"),
+        }),
         "/newest": wrap({
             asyncComponent: () => import("~/views/newest.svelte"),
         }),
