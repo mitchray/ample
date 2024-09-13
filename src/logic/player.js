@@ -724,12 +724,12 @@ class Player {
      */
     #calculateGain() {
         // defaults
-        let finalGainAmount = 0;
-        let parsedGainLevel = 0;
+        let finalGainAmount = 1;
+        let parsedGainLevel = 1;
 
         CurrentMediaGainInfo.set({
             gainType: "None",
-            gainFactor: 0,
+            gainFactor: 1,
             masteredVolume: 0,
         });
 
