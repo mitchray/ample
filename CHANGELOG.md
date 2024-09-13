@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.2] - 2024-09-13
+
+### Requires at least Ampache 6.6.0
+
+### Fixed
+
+-   Sharing is a preference so only show if enabled
+
 ## [3.0.1] - 2024-09-13
 
 ### Requires at least Ampache 6.6.0
