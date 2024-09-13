@@ -85,7 +85,7 @@
                             <span class="meta-field">{$_("text.year")}</span>
                             <span class="meta-value">
                                 <a
-                                    href="#/album/year/{album.year}"
+                                    href="#/albums/year/{album.year}"
                                     title={album.year}
                                 >
                                     {album.year}

@@ -23,6 +23,9 @@
         "/albums/:section?": wrap({
             asyncComponent: () => import("~/views/albums/index.svelte"),
         }),
+        "/albums/year/:year": wrap({
+            asyncComponent: () => import("~/views/albumsByYear.svelte"),
+        }),
         "/album/:id": wrap({
             asyncComponent: () => import("~/views/album/index.svelte"),
         }),
