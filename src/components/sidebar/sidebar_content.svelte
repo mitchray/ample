@@ -5,7 +5,9 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Saved } from "~/stores/settings.js";
     import { onMount } from "svelte";
+    import { systemPreference } from "~/logic/preferences.js";
 
+    const sharePreference = systemPreference("share");
     let savedStatuses = {};
     let featuresReady = false;
 
@@ -146,29 +148,31 @@
     </sl-details>
 {/if}
 
-<sl-divider></sl-divider>
+{#if $sharePreference}
+    <sl-divider></sl-divider>
 
-<sl-details
-    data-id="system"
-    open={savedStatuses["system"]}
-    on:sl-show={handleOpen}
-    on:sl-hide={handleClose}
->
-    <div class="title-wrapper" slot="summary">
-        <SidebarHeading icon="settings" label={$_("text.system")} />
-    </div>
-    <MaterialSymbol name="expand_more" slot="expand-icon" />
-    <MaterialSymbol name="expand_less" slot="collapse-icon" />
+    <sl-details
+        data-id="system"
+        open={savedStatuses["system"]}
+        on:sl-show={handleOpen}
+        on:sl-hide={handleClose}
+    >
+        <div class="title-wrapper" slot="summary">
+            <SidebarHeading icon="settings" label={$_("text.system")} />
+        </div>
+        <MaterialSymbol name="expand_more" slot="expand-icon" />
+        <MaterialSymbol name="expand_less" slot="collapse-icon" />
 
-    <div class="items">
-        <SidebarLink
-            href="#/shares"
-            activePath="/shares"
-            label={$_("text.shares")}
-            icon="share"
-        />
-    </div>
-</sl-details>
+        <div class="items">
+            <SidebarLink
+                href="#/shares"
+                activePath="/shares"
+                label={$_("text.shares")}
+                icon="share"
+            />
+        </div>
+    </sl-details>
+{/if}
 
 <style>
     sl-details::part(base) {

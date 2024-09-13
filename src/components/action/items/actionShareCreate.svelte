@@ -6,11 +6,12 @@
     import DrawerShareEdit from "~/components/action/drawers/drawerShareEdit.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { API } from "~/stores/state.js";
+    import { systemPreference } from "~/logic/preferences.js";
 
     export let contextKey;
 
     const { _item, _type } = getContext(contextKey);
-
+    const sharePreference = systemPreference("share");
     let drawerShare;
     let loaded = false;
     let newShare;
@@ -29,10 +30,16 @@
     }
 </script>
 
-<sl-menu-item {...$$restProps} on:click={handleAction} title={$_("text.share")}>
-    <MaterialSymbol name="share" slot="prefix" />
-    {$_("text.share")}&hellip;
-</sl-menu-item>
+{#if $sharePreference}
+    <sl-menu-item
+        {...$$restProps}
+        on:click={handleAction}
+        title={$_("text.share")}
+    >
+        <MaterialSymbol name="share" slot="prefix" />
+        {$_("text.share")}&hellip;
+    </sl-menu-item>
+{/if}
 
 {#if loaded}
     <Portal>
