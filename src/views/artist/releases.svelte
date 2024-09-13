@@ -15,6 +15,7 @@
 
     export let artistID;
 
+    const releaseTypesOrder = userPreference("album_release_type_sort") || "";
     let appearances = [];
     let releases = [];
 
@@ -101,10 +102,7 @@
 
         // reorder the groups to match the order set in preference
         if ($state.group === "release_type") {
-            let releaseTypesOrder =
-                userPreference("album_release_type_sort") || "";
-
-            let arr = releaseTypesOrder.split(",");
+            let arr = $releaseTypesOrder.split(",");
 
             grouped.sort(function (a, b) {
                 // ensures the order matches preference, with new items appended

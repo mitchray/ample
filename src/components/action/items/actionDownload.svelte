@@ -9,6 +9,7 @@
     export let contextKey;
 
     const { _item } = getContext(contextKey);
+    const downloadPreference = userPreference("download");
 
     let loading = false;
 
@@ -55,7 +56,7 @@
     }
 </script>
 
-{#if userPreference("download")}
+{#if $downloadPreference}
     <sl-menu-item on:click={handleAction} title={$_("text.download")} {loading}>
         <MaterialSymbol name="download" slot="prefix" />
         {$_("text.download")}

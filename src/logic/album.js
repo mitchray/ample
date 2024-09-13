@@ -189,8 +189,8 @@ export function randomAlbums({ page = 0, limit = 50 }) {
  */
 export async function groupAlbumsByReleaseType(albums, artistID) {
     let releaseTypes = new Map();
-    let preferenceAlbumReleaseType = userPreference("album_release_type");
-    let preferenceAlbumReleaseTypeSort = userPreference(
+    let preferenceAlbumReleaseType = get(userPreference)("album_release_type");
+    let preferenceAlbumReleaseTypeSort = get(userPreference)(
         "album_release_type_sort",
     );
     let preferenceReleaseTypes = preferenceAlbumReleaseTypeSort.split(",");
