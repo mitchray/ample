@@ -290,6 +290,10 @@ class Player {
         if (viableItem) {
             // Increment index and play next
             this.setIndexToItem(viableItem);
+        } else if (this.nowPlayingQueue.length === 1) {
+            // Avoid recursive loop edge case
+            this.stop();
+            return;
         } else {
             this.#restartQueue();
             return;
@@ -735,12 +739,12 @@ class Player {
 
         let r128_track_gain =
             this.currentMedia.r128_track_gain !== undefined &&
-            this.currentMedia.r128_track_gain !== null
+                this.currentMedia.r128_track_gain !== null
                 ? this.currentMedia.r128_track_gain.toString()
                 : null;
         let replaygain_track_gain =
             this.currentMedia.replaygain_track_gain !== undefined &&
-            this.currentMedia.replaygain_track_gain !== null
+                this.currentMedia.replaygain_track_gain !== null
                 ? this.currentMedia.replaygain_track_gain.toString()
                 : null;
 
