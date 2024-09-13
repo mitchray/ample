@@ -29,8 +29,8 @@
     async function handleSave() {
         await $API.shareEdit({
             filter: share.id,
-            stream: canStream,
-            download: canDownload,
+            stream: canStream ? 1 : 0,
+            download: canDownload ? 1 : 0,
             expires: expiryDays,
             description: description,
         });
@@ -90,7 +90,7 @@
     <sl-switch
         checked={canStream}
         on:sl-change={(e) => {
-            canStream = e.target.checked ? 1 : 0;
+            canStream = e.target.checked;
         }}
     >
         Allow Stream
@@ -98,7 +98,7 @@
     <sl-switch
         checked={canDownload}
         on:sl-change={(e) => {
-            canDownload = e.target.checked ? 1 : 0;
+            canDownload = e.target.checked;
         }}
     >
         Allow Download
