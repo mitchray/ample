@@ -739,12 +739,12 @@ class Player {
 
         let r128_track_gain =
             this.currentMedia.r128_track_gain !== undefined &&
-                this.currentMedia.r128_track_gain !== null
+            this.currentMedia.r128_track_gain !== null
                 ? this.currentMedia.r128_track_gain.toString()
                 : null;
         let replaygain_track_gain =
             this.currentMedia.replaygain_track_gain !== undefined &&
-                this.currentMedia.replaygain_track_gain !== null
+            this.currentMedia.replaygain_track_gain !== null
                 ? this.currentMedia.replaygain_track_gain.toString()
                 : null;
 
