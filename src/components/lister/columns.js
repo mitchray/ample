@@ -447,7 +447,7 @@ export let creationDate = {
 export let allowStream = {
     field: "allow_stream",
     title: "Streaming",
-    formatter: (cell) => cell.getValue() ? "Yes" : "No",
+    formatter: (cell) => (cell.getValue() ? "Yes" : "No"),
     hozAlign: "center",
 };
 
@@ -455,7 +455,7 @@ export let allowStream = {
 export let allowDownload = {
     field: "allow_download",
     title: "Download",
-    formatter: (cell) => cell.getValue() ? "Yes" : "No",
+    formatter: (cell) => (cell.getValue() ? "Yes" : "No"),
     hozAlign: "center",
 };
 
@@ -492,7 +492,8 @@ export let counter = {
 export let publicUrl = {
     field: "public_url",
     title: "Public URL",
-    formatter: (cell) => `<a href="${cell.getValue()}" target="_blank" rel="noopener noreferrer">${cell.getValue()}</a>`,
+    formatter: (cell) =>
+        `<a href="${cell.getValue()}" target="_blank" rel="noopener noreferrer">${cell.getValue()}</a>`,
     width: 300,
 };
 
