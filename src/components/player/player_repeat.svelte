@@ -13,3 +13,21 @@
 >
     <MaterialSymbol name="repeat" />
 </sl-button>
+
+<style>
+    sl-button {
+        display: relative;
+    }
+
+    .active:after {
+        content: "";
+        background-color: var(--color-primary);
+        position: absolute;
+        width: 3px;
+        height: 3px;
+        border-radius: 100%;
+        top: 80%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+</style>
