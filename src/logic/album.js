@@ -189,13 +189,15 @@ export function randomAlbums({ page = 0, limit = 50 }) {
  */
 export async function groupAlbumsByReleaseType(albums, artistID) {
     let releaseTypes = new Map();
-    let preferenceAlbumReleaseType = get(userPreference)("album_release_type");
-    let preferenceAlbumReleaseTypeSort = get(userPreference)(
+
+    let preferenceAlbumReleaseType = userPreference("album_release_type");
+    let preferenceAlbumReleaseTypeSort = userPreference(
         "album_release_type_sort",
     );
-    let preferenceReleaseTypes = preferenceAlbumReleaseTypeSort.split(",");
 
-    if (preferenceAlbumReleaseType === "1") {
+    let preferenceReleaseTypes = get(preferenceAlbumReleaseTypeSort).split(",");
+
+    if (get(preferenceAlbumReleaseType) === "1") {
         // Create base types in specified order from server setting
         for (let i = 0; i < preferenceReleaseTypes.length; i++) {
             let typeText = preferenceReleaseTypes[i].toLowerCase();
