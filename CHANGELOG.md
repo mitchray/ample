@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.1] - 2024-09-13
+
+### Requires at least Ampache 6.6.0
+
+### Fixed
+
+-   Show indication that queue repeat is enabled
+-   Songs without gain tags would play silently
+-   'Share' was present in UI but not implemented (implemented now)
+-   Bookmark button present in player UI but not implemented (disabled until implemented)
+
 ## [3.0.0] - 2024-09-10
 
 ### Requires at least Ampache 6.6.0
