@@ -90,7 +90,7 @@
     <sl-switch
         checked={canStream}
         on:sl-change={(e) => {
-            canStream = e.target.checked;
+            canStream = e.target.checked ? 1 : 0;
         }}
     >
         Allow Stream
@@ -98,7 +98,7 @@
     <sl-switch
         checked={canDownload}
         on:sl-change={(e) => {
-            canDownload = e.target.checked;
+            canDownload = e.target.checked ? 1 : 0;
         }}
     >
         Allow Download
