@@ -94,7 +94,7 @@
             <SeekForward />
         </span>
         <span class="player__bookmark">
-            <sl-button variant="text">
+            <sl-button variant="text" disabled>
                 <MaterialSymbol name="bookmark" />
             </sl-button>
         </span>
