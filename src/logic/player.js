@@ -290,7 +290,7 @@ class Player {
         if (viableItem) {
             // Increment index and play next
             this.setIndexToItem(viableItem);
-        } else if (this.nowPlayingQueue.length === 1) {
+        } else if (!this.hasEligibleItems()) {
             // Avoid recursive loop edge case
             this.stop();
             return;
@@ -303,6 +303,14 @@ class Player {
         addRatingMissingNotification(this.currentMedia);
 
         this.start();
+    }
+
+    /**
+     * Determine if there are any eligible items in the queue
+     * @returns {boolean} True if there's at least one eligible item, false otherwise
+     */
+    hasEligibleItems() {
+        return this.nowPlayingQueue.some(item => this.isEligibleToPlay(item));
     }
 
     /**
@@ -739,12 +747,12 @@ class Player {
 
         let r128_track_gain =
             this.currentMedia.r128_track_gain !== undefined &&
-            this.currentMedia.r128_track_gain !== null
+                this.currentMedia.r128_track_gain !== null
                 ? this.currentMedia.r128_track_gain.toString()
                 : null;
         let replaygain_track_gain =
             this.currentMedia.replaygain_track_gain !== undefined &&
-            this.currentMedia.replaygain_track_gain !== null
+                this.currentMedia.replaygain_track_gain !== null
                 ? this.currentMedia.replaygain_track_gain.toString()
                 : null;
 
