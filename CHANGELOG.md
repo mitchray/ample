@@ -1,5 +1,15 @@
 # Changelog
 
+## [3.0.3] - 2024-09-15
+
+### Requires at least Ampache 6.6.0
+
+### Fixed
+
+-   Share toggles were not set correctly
+-   Avoid recursive loop edge case when no items in queue are eligible to play
+-   Mass rating would only work on the last disk in multi-disk releases
+
 ## [3.0.2] - 2024-09-13
 
 ### Requires at least Ampache 6.6.0

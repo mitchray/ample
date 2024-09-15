@@ -5,9 +5,9 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Saved } from "~/stores/settings.js";
     import { onMount } from "svelte";
-    import { systemPreference } from "~/logic/preferences.js";
+    import { userPreference } from "~/logic/preferences.js";
 
-    const sharePreference = systemPreference("share");
+    const sharePreference = userPreference("share");
     let savedStatuses = {};
     let featuresReady = false;
 

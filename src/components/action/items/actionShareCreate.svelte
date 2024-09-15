@@ -6,12 +6,12 @@
     import DrawerShareEdit from "~/components/action/drawers/drawerShareEdit.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { API } from "~/stores/state.js";
-    import { systemPreference } from "~/logic/preferences.js";
+    import { userPreference } from "~/logic/preferences.js";
 
     export let contextKey;
 
     const { _item, _type } = getContext(contextKey);
-    const sharePreference = systemPreference("share");
+    const sharePreference = userPreference("share");
     let drawerShare;
     let loaded = false;
     let newShare;
