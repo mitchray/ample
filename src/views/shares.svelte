@@ -41,7 +41,7 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if shares.length < 1}
+    {#if shares.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
