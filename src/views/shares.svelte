@@ -13,7 +13,7 @@
 
             if (result.error) {
                 errorHandler("getting shares", result.error);
-                return [];
+                return {};
             }
 
             tabulator?.setData(result);
@@ -22,9 +22,6 @@
         },
         enabled: $User.isLoggedIn,
     });
-
-    // alias of returned data
-    $: shares = $query.data || {};
 
     let title = $_("text.shares");
     $PageTitle = title;
@@ -41,13 +38,13 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if shares.total_count === 0}
+    {#if $query.data.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
             <Tabulator
                 bind:tabulator
-                data={shares}
+                data={$query.data.share}
                 columns={sharesPreset}
                 options={{ id: "shares", persistenceID: "shares" }}
             ></Tabulator>

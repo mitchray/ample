@@ -72,5 +72,5 @@ export const IsMobile = readable(false, function start(set) {
     // Kick-off
     handleDeviceChange(mobile);
 
-    return function stop() { };
+    return function stop() {};
 });
