@@ -27,9 +27,8 @@
     export let data = {};
 
     let showAverageRatings = true;
-    let pendingRating = null;
-    let loading = false;
-
+    let ratingErrored = false;
+    let flagErrored = false;
     const values = [1, 2, 3, 4, 5];
 
     $: ({ id, rating, flag, averagerating } = data);
@@ -57,29 +56,29 @@
     $: type = type === "playlist_songs" ? "song" : type;
 
     function handleRating() {
-        loading = true;
-
+        ratingErrored = false;
         let parsedRating = parseInt(this.dataset.rating);
+        let originalRating = rating;
+        let newRating = parsedRating === rating ? 0 : parsedRating; // clear rating if it matches existing
 
-        // clear rating if it matches existing
-        let newRating = parsedRating === rating ? 0 : parsedRating;
-
-        pendingRating = newRating;
+        // update the displayed rating immediately
+        rating = newRating;
 
         $API.rate({ type: type, id: id, rating: newRating }).then((result) => {
             if (result.error) {
                 errorHandler("while rating", result.error);
+                ratingErrored = true;
+
+                // revert the displayed rating
+                rating = originalRating;
             }
 
             if (!result.error) {
-                rating = newRating;
                 recentRating.set({
                     type: type,
                     id: id,
                     rating: newRating,
                 });
-
-                loading = false;
 
                 // now update any items in the queue with the new rating
                 let foundItems = $NowPlayingQueue.filter(
@@ -97,11 +96,13 @@
     }
 
     function handleFlag() {
+        flagErrored = false;
         let newFlag = flag ? 0 : 1;
 
         $API.flag({ type: type, id: id, flag: newFlag }).then((result) => {
             if (result.error) {
                 errorHandler("while flagging", result.error);
+                flagErrored = true;
                 return;
             }
 
@@ -147,13 +148,12 @@
 </script>
 
 <div class="c-rating" class:disabled={!id}>
-    <div class="stars">
+    <div class="stars" class:errored={ratingErrored}>
         {#each values as ratingValue, i}
             <span
                 on:click={handleRating}
                 data-rating={ratingValue}
                 class="star"
-                class:new={loading && pendingRating === ratingValue}
                 class:filled={ratingValue <= rating}
             >
                 <MaterialSymbol name="star" fill={rating > i} />
@@ -161,7 +161,12 @@
         {/each}
     </div>
 
-    <span class="flag" class:flagged={flag} on:click={handleFlag}>
+    <span
+        class="flag"
+        class:flagged={flag}
+        on:click={handleFlag}
+        class:errored={flagErrored}
+    >
         <MaterialSymbol fill={flag || false} name="favorite" />
     </span>
 
@@ -239,19 +244,30 @@
         background-color: var(--color-surface-variant);
     }
 
-    .new {
-        animation-name: spin;
-        animation-duration: 1s;
-        animation-delay: 0.1s;
-        animation-timing-function: ease-in;
+    .errored {
+        animation: shake 0.8s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
 
-    @keyframes spin {
-        0% {
-            transform: rotate(0);
+    @keyframes shake {
+        10%,
+        90% {
+            transform: translate3d(-1px, 0, 0);
         }
-        100% {
-            transform: rotate(360deg);
+
+        20%,
+        80% {
+            transform: translate3d(1px, 0, 0);
+        }
+
+        30%,
+        50%,
+        70% {
+            transform: translate3d(-1px, 0, 0);
+        }
+
+        40%,
+        60% {
+            transform: translate3d(1px, 0, 0);
         }
     }
 </style>
