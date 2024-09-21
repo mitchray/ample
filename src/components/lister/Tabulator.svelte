@@ -7,7 +7,7 @@
     import { tabulatorStrings } from "~/logic/i18n.js";
     import { SiteContentBind } from "~/stores/elements.js";
 
-    export let data,
+    export let data = undefined,
         columns,
         options = {},
         tabulator = null;
