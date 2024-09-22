@@ -176,7 +176,7 @@ export async function getSimilarArtistsWithGenreFallback(id) {
         return [];
     }
 
-    if (result.length === 0) {
+    if (result.total_count === 0) {
         let artist = await get(API).artist({ filter: id });
 
         if (artist?.genre.length === 0) {
@@ -206,5 +206,5 @@ export async function getSimilarArtistsWithGenreFallback(id) {
         }
     }
 
-    return result;
+    return result.artist;
 }

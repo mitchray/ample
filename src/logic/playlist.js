@@ -51,7 +51,7 @@ export async function artistMixes() {
 
     let trending = await frequentArtists({ limit: 5 });
 
-    let mixedArtists = [...top, ...trending];
+    let mixedArtists = [...top.artist, ...trending.artist];
 
     // filter out duplicates
     let uniqueArtists = uniqBy(mixedArtists, (item) => {

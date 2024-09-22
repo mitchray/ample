@@ -9,9 +9,9 @@
 
     const dispatch = createEventDispatcher();
 
-    let playlistItems = [];
+    let playlistResponse = {};
 
-    $: playlistItems = playlistItems;
+    $: playlistResponse = playlistResponse;
 
     function handleRadio(e) {
         selectedPlaylists = [e.target.value];
@@ -44,9 +44,9 @@
     async function loadData() {
         try {
             if (type === "smartlists") {
-                playlistItems = await $API.smartlists();
+                playlistResponse = await $API.smartlists();
             } else {
-                playlistItems = await $API.playlists({ hide_search: 1 });
+                playlistResponse = await $API.playlists({ hide_search: 1 });
             }
         } catch (error) {
             errorHandler(`getting ${type}`, error);
@@ -61,31 +61,35 @@
 <div class="container">
     <ul class="playlists">
         {#if multiple}
-            {#each playlistItems as item}
-                <li class="item">
-                    <span class="item-inner truncate" title={item.name}>
-                        <sl-checkbox
-                            name={item.id}
-                            on:sl-change={handleCheckbox}
-                        >
-                            {item.name}
-                        </sl-checkbox>
-                    </span>
-                </li>
-            {/each}
+            {#if Array.isArray(playlistResponse.playlist)}
+                {#each playlistResponse.playlist as item}
+                    <li class="item">
+                        <span class="item-inner truncate" title={item.name}>
+                            <sl-checkbox
+                                name={item.id}
+                                on:sl-change={handleCheckbox}
+                            >
+                                {item.name}
+                            </sl-checkbox>
+                        </span>
+                    </li>
+                {/each}
+            {/if}
         {:else}
             <sl-radio-group
                 name="selected"
                 value={selectedPlaylists[0]}
                 on:sl-change={handleRadio}
             >
-                {#each playlistItems as item}
-                    <li class="item">
-                        <span class="item-inner truncate" title={item.name}>
-                            <sl-radio value={item.id}>{item.name}</sl-radio>
-                        </span>
-                    </li>
-                {/each}
+                {#if Array.isArray(playlistResponse.playlist)}
+                    {#each playlistResponse.playlist as item}
+                        <li class="item">
+                            <span class="item-inner truncate" title={item.name}>
+                                <sl-radio value={item.id}>{item.name}</sl-radio>
+                            </span>
+                        </li>
+                    {/each}
+                {/if}
             </sl-radio-group>
         {/if}
     </ul>

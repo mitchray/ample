@@ -74,7 +74,7 @@
     });
 
     async function getLatestUpdate() {
-        let latest = await dataProvider({
+        let latest = await getAPIResponse({
             limit: 1,
             page: 0,
         });
@@ -93,7 +93,7 @@
     async function loadMore() {
         loading = true;
 
-        newBatch = await dataProvider({
+        newBatch = await getAPIResponse({
             limit: limit,
             page: loadCount,
         });
@@ -121,7 +121,7 @@
         loading = true;
         data = [];
         newBatch = [];
-        newBatch = await dataProvider({ limit: limit });
+        newBatch = await getAPIResponse({ limit: limit });
         loading = false;
         parseScroll();
     }
@@ -136,6 +136,34 @@
     function parseScroll() {
         if (!containerBind) return;
         containerScrollX = containerBind.scrollLeft;
+    }
+
+    async function getAPIResponse(params) {
+        let response = await dataProvider(params);
+
+        let result = [];
+
+        switch (type) {
+            case "song":
+                result = response.song;
+                break;
+            case "album":
+                result = response.album;
+                break;
+            case "artist":
+                result = response.artist;
+                break;
+            case "playlist":
+                result = response.playlist;
+                break;
+            case "mix":
+                result = response;
+                break;
+            default:
+                break;
+        }
+
+        return result;
     }
 </script>
 

@@ -102,8 +102,11 @@ export async function loadSettings() {
         }
     }
 
-    SystemPreferences.set(await get(API).systemPreferences());
-    UserPreferences.set(await get(API).userPreferences());
+    let systemsPrefsResponse = await get(API).systemPreferences();
+    SystemPreferences.set(systemsPrefsResponse.preference);
+
+    let userPrefsResponse = await get(API).systemPreferences();
+    UserPreferences.set(userPrefsResponse.preference);
 
     get(Saved)
         ?.getItem("Language")
