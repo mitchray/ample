@@ -21,13 +21,15 @@
                 return [];
             }
 
+            tabulator?.setData(result.genre);
+
             return result;
         },
         enabled: $User.isLoggedIn,
     });
 
     // alias of returned data
-    $: genres = $query.data || {};
+    $: genres = $query.data?.genre || {};
 </script>
 
 <div class="page-header">
@@ -39,7 +41,7 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if genres?.length === 0}
+    {#if $query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">

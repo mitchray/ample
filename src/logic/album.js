@@ -246,10 +246,10 @@ export async function groupAlbumsByReleaseType(albums) {
  * @param {number} albumID
  */
 export async function getAlbumDisks(albumID) {
-    let tracks = await get(API).albumSongs({ filter: albumID });
+    let response = await get(API).albumSongs({ filter: albumID });
 
     // group into disks
-    let grouped = groupBy(tracks, "disk");
+    let grouped = groupBy(response.song, "disk");
 
     // convert to array and append disksubtitle from first track if present
     return Object.entries(grouped).map(([key, value]) => {

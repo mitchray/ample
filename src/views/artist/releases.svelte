@@ -34,7 +34,7 @@
         enabled: $User.isLoggedIn,
         select: (data) => {
             let divide = partition(
-                data,
+                data.album,
                 (item) => item.artist?.id === artistID,
             );
             let byArtist = divide[0];

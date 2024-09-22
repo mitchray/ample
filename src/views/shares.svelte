@@ -16,7 +16,7 @@
                 return {};
             }
 
-            tabulator?.setData(result);
+            tabulator?.setData(result.share);
 
             return result;
         },
@@ -27,6 +27,9 @@
     $PageTitle = title;
 
     let tabulator = null;
+
+    // alias of returned data
+    $: shares = $query.data?.share || [];
 </script>
 
 <div class="page-header">
@@ -38,13 +41,13 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if $query.data.total_count === 0}
+    {#if $query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
             <Tabulator
                 bind:tabulator
-                data={$query.data.share}
+                data={shares}
                 columns={sharesPreset}
                 options={{ id: "shares", persistenceID: "shares" }}
             ></Tabulator>

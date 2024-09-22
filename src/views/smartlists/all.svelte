@@ -19,7 +19,7 @@
                 return [];
             }
 
-            tabulator?.setData(result);
+            tabulator?.setData(result.playlist);
 
             return result;
         },
@@ -27,7 +27,7 @@
     });
 
     // alias of returned data
-    $: smartlists = $query.data || [];
+    $: smartlists = $query.data?.playlist || [];
 </script>
 
 {#if $query.isLoading}
@@ -35,7 +35,7 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if smartlists.length === 0}
+    {#if $query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">

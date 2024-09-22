@@ -44,7 +44,7 @@
                 return [];
             }
 
-            return result;
+            return result[type];
         },
         enabled: $User.isLoggedIn,
     });

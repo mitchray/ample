@@ -89,7 +89,7 @@ export function searchSongs({ page = 0, limit = 50, query }) {
 export async function getSongVersions(songTitle, artistName) {
     let cleanedTitle = parseTitle(songTitle);
 
-    let songs = await get(API).advancedSearch({
+    let response = await get(API).advancedSearch({
         type: "song",
         operator: "and",
         limit: 100,
@@ -99,13 +99,13 @@ export async function getSongVersions(songTitle, artistName) {
         ],
     });
 
-    if (songs.error) {
+    if (response.error) {
         return false;
     }
 
     let theRegex = "^" + cleanedTitle + "$";
     let re = new RegExp(theRegex, "gi");
-    let filtered = songs.filter((e) => parseTitle(e.title).match(re));
+    let filtered = response?.song?.filter((e) => parseTitle(e.title).match(re));
 
     debugHelper(filtered, "getSongVersions after filtering");
     return filtered;

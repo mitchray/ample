@@ -22,11 +22,14 @@
     }
 
     async function getData() {
-        dataDisplay = await getAlbumsByYear({
+        let response = await getAlbumsByYear({
             limit: 5000,
             from: fromYear,
             to: toYear,
         });
+
+        dataDisplay = response.album || [];
+
         loadedTime = new Date();
     }
 </script>

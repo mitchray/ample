@@ -63,26 +63,36 @@
             query: $SearchQuery,
             page: 0,
             limit: 50,
+        }).then((response) => {
+            return response.artist;
         });
         sAlbums = searchAlbums({
             query: $SearchQuery,
             page: 0,
             limit: 50,
+        }).then((response) => {
+            return response.album;
         });
         sSongs = searchSongs({
             query: $SearchQuery,
             page: 0,
             limit: 100,
+        }).then((response) => {
+            return response.song;
         });
         sPlaylists = searchPlaylists({
             query: $SearchQuery,
             page: 0,
             limit: 50,
+        }).then((response) => {
+            return response.playlist;
         });
         sSmartlists = searchSmartlists({
             query: $SearchQuery,
             page: 0,
             limit: 50,
+        }).then((response) => {
+            return response.playlist;
         });
 
         [

@@ -177,6 +177,7 @@
             return;
         }
 
+        let response;
         results = [];
         loading = true;
         loadedTime = null;
@@ -190,47 +191,51 @@
 
         switch (settings.type) {
             case "song":
-                results = await $API.advancedSearch({
+                response = await $API.advancedSearch({
                     type: "song",
                     limit: settings.limit,
                     random: settings.random ? 1 : 0,
                     operator: settings.operator,
                     rules: simpleRows,
                 });
+                results = response.song;
                 break;
             case "album":
-                results = await $API.advancedSearch({
+                response = await $API.advancedSearch({
                     type: "album",
                     limit: settings.limit,
                     random: settings.random ? 1 : 0,
                     operator: settings.operator,
                     rules: simpleRows,
                 });
+                results = response.album;
                 break;
             case "artist":
-                results = await $API.advancedSearch({
+                response = await $API.advancedSearch({
                     type: "artist",
                     limit: settings.limit,
                     random: settings.random ? 1 : 0,
                     operator: settings.operator,
                     rules: simpleRows,
                 });
+                results = response.artist;
                 break;
             case "playlist":
-                results = await $API.advancedSearch({
+                response = await $API.advancedSearch({
                     type: "playlist",
                     limit: settings.limit,
                     random: settings.random ? 1 : 0,
                     operator: settings.operator,
                     rules: simpleRows,
                 });
+                results = response.playlist;
                 break;
             default:
                 break;
         }
 
-        if (results.error) {
-            errorHandler("advanced search", results.error);
+        if (response.error) {
+            errorHandler("advanced search", response.error);
         }
 
         loadedTime = new Date();

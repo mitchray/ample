@@ -79,40 +79,54 @@
      * @returns function
      */
     async function determineFetchURL() {
-        let fetchURL = null;
+        let response = null;
+        let final = [];
 
         switch (type) {
             case "artist":
-                fetchURL = getSongsFromArtist(item?.id);
+                response = await getSongsFromArtist(item?.id);
+                final = response.song;
                 break;
             case "artists":
-                fetchURL = getSongsFromArtists(sampleSize(data.artists, 100));
+                response = await getSongsFromArtists(
+                    sampleSize(data.artists, 100),
+                );
+                final = response.song;
                 break;
             case "artistAlpha":
-                fetchURL = getSongsFromArtistsStartingWith(data.char);
+                response = await getSongsFromArtistsStartingWith(data.char);
+                final = response.song;
                 break;
             case "artistGenre":
             case "genre":
-                fetchURL = getSomeSongsFromArtistsByGenre(data.id);
+                response = await getSomeSongsFromArtistsByGenre(data.id);
+                final = response.song;
                 break;
             case "album":
-                fetchURL = $API.albumSongs({ filter: item?.id });
+                response = await $API.albumSongs({ filter: item?.id });
+                final = response.song;
                 break;
             case "albums":
-                fetchURL = getSongsFromAlbums(sampleSize(data.albums, 100));
+                response = await getSongsFromAlbums(
+                    sampleSize(data.albums, 100),
+                );
+                final = response.song;
                 break;
             case "albumGenre":
-                fetchURL = getSomeSongsFromAlbumsByGenre(data.id);
+                response = await getSomeSongsFromAlbumsByGenre(data.id);
+                final = response.song;
                 break;
             case "albumAlpha":
-                fetchURL = getSongsFromAlbumsStartingWith(data.char);
+                response = await getSongsFromAlbumsStartingWith(data.char);
+                final = response.song;
                 break;
             case "song":
             case "playlist_songs":
-                fetchURL = $API.song({ filter: item?.id });
+                final = await $API.song({ filter: item?.id });
                 break;
             case "songGenre":
-                fetchURL = getSomeSongsByGenre(data.id);
+                response = await getSomeSongsByGenre(data.id);
+                final = response.song;
                 break;
             case "playlist":
             case "smartlist":
@@ -129,37 +143,44 @@
                     });
                 }
 
-                fetchURL = $API.playlistSongs({
+                response = await $API.playlistSongs({
                     filter: item?.id,
                     limit: playlistLimit,
                 });
+                final = response.song;
                 break;
             case "playlists":
-                fetchURL = getSongsFromPlaylists(data.playlists);
+                response = await getSongsFromPlaylists(data.playlists);
+                final = response.song;
                 break;
             case "year":
-                fetchURL = getSongsByYear(data.from, data.to);
+                response = await getSongsByYear(data.from, data.to);
+                final = response.song;
                 break;
             case "artistMix":
-                fetchURL = getSongsFromPlaylist({
+                response = await getSongsFromPlaylist({
                     id: item?.id,
                     type: "artist_mix",
                 });
+                final = response.song;
                 break;
             case "live_stream":
-                fetchURL = $API.liveStream({ filter: item?.id });
+                response = await $API.liveStream({ filter: item?.id });
+                final = response.live_stream;
                 break;
             case "podcast":
-                fetchURL = $API.podcastEpisodes({ filter: item?.id });
+                response = await $API.podcastEpisodes({ filter: item?.id });
+                final = response.podcast_episode;
                 break;
             case "podcast_episode":
-                fetchURL = $API.podcastEpisode({ filter: item?.id });
+                response = await $API.podcastEpisode({ filter: item?.id });
+                final = response.podcast_episode;
                 break;
             default:
                 break;
         }
 
-        return fetchURL;
+        return final;
     }
 
     /**

@@ -21,13 +21,15 @@
                 return [];
             }
 
+            tabulator?.setData(result.artist);
+
             return result;
         },
         enabled: $User.isLoggedIn,
     });
 
     // alias of returned data
-    $: artists = $query.data || {};
+    $: artists = $query.data?.artist || {};
 </script>
 
 {#if $query.isLoading}
@@ -35,7 +37,7 @@
 {:else if $query.isError}
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
-    {#if artists.length === 0}
+    {#if $query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">

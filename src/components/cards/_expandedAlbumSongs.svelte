@@ -31,7 +31,6 @@
         enabled: $User.isLoggedIn,
     });
 
-    // alias of returned data
     $: $query.data, processData();
 
     function processData() {
