@@ -310,7 +310,7 @@ class Player {
      * @returns {boolean} True if there's at least one eligible item, false otherwise
      */
     hasEligibleItems() {
-        return this.nowPlayingQueue.some(item => this.isEligibleToPlay(item));
+        return this.nowPlayingQueue.some((item) => this.isEligibleToPlay(item));
     }
 
     /**
@@ -459,8 +459,8 @@ class Player {
         this.wavesurfer?.skip(-seconds);
     }
 
-    seekTo(seconds) {
-        this.wavesurfer.seekTo(seconds);
+    seekTo(percentage) {
+        this.wavesurfer.seekTo(percentage);
     }
 
     setMuted(bool) {
@@ -747,12 +747,12 @@ class Player {
 
         let r128_track_gain =
             this.currentMedia.r128_track_gain !== undefined &&
-                this.currentMedia.r128_track_gain !== null
+            this.currentMedia.r128_track_gain !== null
                 ? this.currentMedia.r128_track_gain.toString()
                 : null;
         let replaygain_track_gain =
             this.currentMedia.replaygain_track_gain !== undefined &&
-                this.currentMedia.replaygain_track_gain !== null
+            this.currentMedia.replaygain_track_gain !== null
                 ? this.currentMedia.replaygain_track_gain.toString()
                 : null;
 

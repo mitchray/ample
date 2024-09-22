@@ -88,10 +88,19 @@
             class="progress"
             style="transform: translateX({seekWidth}%)"
         ></span>
+        <div class="bookmarks-container"></div>
     </div>
 {/if}
 
 <style>
+    .bookmarks-container {
+        height: var(--size-seekbar-height);
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+    }
+
     .seekBar {
         display: block;
         height: var(--size-seekbar-height);
@@ -153,5 +162,9 @@
 
     :global(.dragging.seekBar) {
         z-index: 300; /* above all player items */
+    }
+
+    :global(.dragging.seekBar .bookmarks-container) {
+        pointer-events: none;
     }
 </style>

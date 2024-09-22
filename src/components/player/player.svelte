@@ -18,6 +18,7 @@
     import SeekForward from "~/components/player/player_seekForward.svelte";
     import Volume from "~/components/player/player_volume.svelte";
     import Shuffle from "~/components/player/player_shuffle.svelte";
+    import Bookmark from "~/components/player/player_bookmark.svelte";
     import Repeat from "~/components/player/player_repeat.svelte";
     import MoreOptions from "~/components/player/player_moreOptions.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -94,9 +95,7 @@
             <SeekForward />
         </span>
         <span class="player__bookmark">
-            <sl-button variant="text" disabled>
-                <MaterialSymbol name="bookmark" />
-            </sl-button>
+            <Bookmark />
         </span>
         <span class="player__more-options">
             <MoreOptions />
