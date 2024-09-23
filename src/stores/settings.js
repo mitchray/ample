@@ -105,7 +105,7 @@ export async function loadSettings() {
     let systemsPrefsResponse = await get(API).systemPreferences();
     SystemPreferences.set(systemsPrefsResponse.preference);
 
-    let userPrefsResponse = await get(API).systemPreferences();
+    let userPrefsResponse = await get(API).userPreferences();
     UserPreferences.set(userPrefsResponse.preference);
 
     get(Saved)
