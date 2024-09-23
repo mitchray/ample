@@ -22,7 +22,6 @@
         songsPreset,
     } from "~/components/lister/columns.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { capitalize } from "lodash-es";
 
     export let params = {};
 
@@ -90,16 +89,18 @@
                 return;
             }
 
-            songs = await getSongsFromPlaylist({
+            let response = await getSongsFromPlaylist({
                 id: params.id,
                 type: "artist_mix",
             });
 
-            if (songs.error) {
-                errorHandler("getting songs from playlist", songs.error);
+            if (response.error) {
+                errorHandler("getting songs from playlist", response.error);
                 loading = false;
                 return;
             }
+
+            songs = response.song;
         } else {
             playlist = await $API.playlist({ filter: params.id });
 
@@ -109,7 +110,7 @@
             }
 
             if (playlist?.id) {
-                songs = await getSongsFromPlaylist({
+                let songsRequest = await getSongsFromPlaylist({
                     id: params.id,
                     type: "playlist",
                 });
@@ -117,6 +118,8 @@
                 if (playlist.id.match(/^smart_/)) {
                     playlistType = "smartlist";
                 }
+
+                songs = songsRequest.song;
             }
         }
 
