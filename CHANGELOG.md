@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.0] - 2024-xx-xx
+
+### Requires at least Ampache 6.6.0
+
+### Added
+
+-   Bookmarks (user-created)
+
 ## [3.0.3] - 2024-09-15
 
 ### Requires at least Ampache 6.6.0
