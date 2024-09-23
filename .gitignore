@@ -3,3 +3,4 @@ node_modules/
 public/build/
 dist/
 config/
+package-lock.json
