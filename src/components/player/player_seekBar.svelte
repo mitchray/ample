@@ -57,6 +57,9 @@
     }
 
     function handleSeek(event) {
+        // ignore clicks on bookmarks
+        if (event.target.classList.contains("bookmark")) return;
+
         let seekElementWidth = event.target.offsetWidth;
         let seekClickLocation =
             (event.clientX || event.targetTouches[0].screenX) -
