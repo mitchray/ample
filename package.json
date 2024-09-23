@@ -38,7 +38,7 @@
         "@tanstack/svelte-virtual": "^3.10.8",
         "dompurify": "^3.1.6",
         "fuse.js": "^7.0.0",
-        "javascript-ampache": "1.1.0",
+        "javascript-ampache": "1.1.1",
         "jssha": "^3.3.1",
         "localforage": "^1.10.0",
         "lodash-es": "^4.17.21",
