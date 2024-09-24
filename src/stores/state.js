@@ -18,6 +18,7 @@ export let SearchQuery = writable("");
 export let ShowSearch = writable(false);
 export let ShowLyrics = writable(false);
 export let ShowPreferences = writable(false);
+export let ShowVisualizer = writable(false);
 
 export let CurrentMedia = writable(null);
 export let CurrentMediaGainInfo = writable({});

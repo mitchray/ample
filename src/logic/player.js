@@ -1,5 +1,6 @@
 import { tick } from "svelte";
 import { get } from "svelte/store";
+import butterchurn from "butterchurn";
 import WaveSurfer from "wavesurfer.js";
 import { getSongVersions } from "~/logic/song";
 import { showQueueItemAtIndex } from "~/logic/ui.js";
@@ -29,6 +30,7 @@ import {
     PlaybackSpeed,
     QueueIsUpdating,
 } from "~/stores/state.js";
+import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 
 /**
  * Interface with wavesurfer.js
@@ -59,6 +61,9 @@ class Player {
 
         // initial AbortController
         this.abortController = new AbortController();
+
+        // visualizer
+        this.visualizer = null;
 
         this.wavesurfer = new WaveSurfer({
             autoplay: true,
@@ -200,6 +205,9 @@ class Player {
             // set gain of this item
             this.filterGain.gain.value = this.#calculateGain();
             this.updateFilters();
+
+            // update visualiser with this media
+            this.visualizer.connectAudio(this.mediaNode);
 
             this.wavesurfer
                 .play()
@@ -480,14 +488,18 @@ class Player {
     }
 
     setWaveColors() {
+        let player = document.querySelector(".site-player");
+
         tick().then(() => {
             this.wavesurfer.setOptions({
-                waveColor: getComputedStyle(document.body).getPropertyValue(
+                // get from the player
+                waveColor: getComputedStyle(player).getPropertyValue(
                     "--color-outline-variant",
                 ),
-                progressColor: getComputedStyle(document.body).getPropertyValue(
-                    "--color-waveform",
-                ),
+                progressColor:
+                    getComputedStyle(player).getPropertyValue(
+                        "--color-waveform",
+                    ),
             });
         });
     }
@@ -527,6 +539,10 @@ class Player {
 
     setPlaybackRate(val) {
         this.wavesurfer.setPlaybackRate(val);
+    }
+
+    loadVisualizerPreset(presetData, blendTime) {
+        this.visualizer.loadPreset(presetData, blendTime);
     }
 
     /*
@@ -584,6 +600,34 @@ class Player {
 
         // set up keyboard media buttons
         this.#initKeyboardMediaKeys();
+
+        // set up visualizer
+        this.visualizer = butterchurn.createVisualizer(
+            this.audioContext,
+            document.querySelector("#visualizer"),
+            {
+                width: 1600,
+                height: 900,
+                pixelRatio: window.devicePixelRatio || 1,
+                textureRatio: 1,
+            },
+        );
+
+        this.visualizer.connectAudio(this.mediaNode);
+        const presets = getCuratedVisualizerPresets();
+        const preset = presets["$$$ Royal - Mashup (197)"];
+        this.visualizer.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
+        this.#startRenderer();
+    }
+
+    #startRenderer() {
+        requestAnimationFrame(() => {
+            if (this.isPlaying) {
+                // Check if media is playing
+                this.visualizer.render();
+            }
+            this.#startRenderer();
+        });
     }
 
     #initFilters() {
@@ -745,16 +789,13 @@ class Player {
             masteredVolume: 0,
         });
 
+        let r128 = this.currentMedia.r128_track_gain;
+        let rg = this.currentMedia.replaygain_track_gain;
+
         let r128_track_gain =
-            this.currentMedia.r128_track_gain !== undefined &&
-            this.currentMedia.r128_track_gain !== null
-                ? this.currentMedia.r128_track_gain.toString()
-                : null;
+            r128 !== undefined && r128 !== null ? r128.toString() : null;
         let replaygain_track_gain =
-            this.currentMedia.replaygain_track_gain !== undefined &&
-            this.currentMedia.replaygain_track_gain !== null
-                ? this.currentMedia.replaygain_track_gain.toString()
-                : null;
+            rg !== undefined && rg !== null ? rg.toString() : null;
 
         if (r128_track_gain !== null) {
             // EBU R128

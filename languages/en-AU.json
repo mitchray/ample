@@ -6,5 +6,9 @@
     "text.favoritesAlbum": "Favourites (Album)",
     "text.favoritesArtist": "Favourites (Artist)",
     "text.randomized": "Randomised",
+    "text.visualizer": "Visualiser",
+    "text.visualizerSettings": "Visualiser Settings",
+    "text.visualizerShow": "Show Visualiser",
+    "text.visualizerHide": "Hide Visualiser",
     "text.volumeNormalize": "Normalise Volume"
 }

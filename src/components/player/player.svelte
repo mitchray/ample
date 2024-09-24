@@ -1,8 +1,13 @@
 <script>
     import { onDestroy, onMount } from "svelte";
     import WavesurferConnector from "~/logic/player.js";
-    import { PlayerIsMini, PlayerIsOpen } from "~/stores/settings.js";
+    import {
+        PlayerIsMini,
+        PlayerIsOpen,
+        QueueIsOpen,
+    } from "~/stores/settings.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
+    import { ShowVisualizer } from "~/stores/state.js";
     import OpenToggle from "~/components/player/player_openToggle.svelte";
     import QueueToggle from "~/components/player/player_queueToggle.svelte";
     import MiniToggle from "~/components/player/player_miniToggle.svelte";
@@ -21,6 +26,7 @@
     import Bookmark from "~/components/player/player_bookmark.svelte";
     import Repeat from "~/components/player/player_repeat.svelte";
     import MoreOptions from "~/components/player/player_moreOptions.svelte";
+    import VisualizerSettings from "~/components/player/visualizerSettings.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let currentHeight;
@@ -41,6 +47,9 @@
     class="site-player"
     class:is-expanded={!$PlayerIsMini}
     class:is-open={$PlayerIsOpen}
+    class:sl-theme-dark={$ShowVisualizer}
+    class:visualizer-open={$ShowVisualizer}
+    class:queue-open={$QueueIsOpen}
     style:height={$PlayerIsOpen ? "auto" : "0"}
 >
     <OpenToggle />
@@ -105,17 +114,97 @@
             <Volume />
         </span>
     </div>
+
+    <VisualizerSettings />
+    <div class="canvas-container" on:click={$MediaPlayer.playPause()}>
+        <canvas
+            id="visualizer"
+            class="viz-canvas"
+            height="900"
+            width="1600"
+        ></canvas>
+    </div>
+    <div class="behind"></div>
 </div>
 
 {@html `<style>:root { --size-player-height: ${currentHeight + "px"} }</style>`}
 
 <style>
+    .canvas-container {
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: -2;
+        pointer-events: none;
+        opacity: 0;
+        transform: translateX(0);
+        will-change: transform;
+        transition: transform ease-in-out 0.5s;
+        overflow: hidden;
+    }
+
+    .visualizer-open .canvas-container {
+        pointer-events: auto;
+        opacity: 1;
+    }
+
+    .queue-open .canvas-container {
+        transform: translateX(calc(-1 * var(--size-queue-width)));
+    }
+
+    .viz-canvas {
+        transition: transform ease-in-out 0.5s;
+        transform: translateX(0);
+        width: 100%;
+        height: 100%;
+    }
+
+    .queue-open .viz-canvas {
+        transform: translateX(calc(0.5 * var(--size-queue-width)));
+    }
+
+    .is-open .viz-canvas {
+        transform: translateY(calc(-0.5 * var(--size-player-height)));
+    }
+
+    .is-open.queue-open .viz-canvas {
+        transform: translateX(calc(0.5 * var(--size-queue-width)))
+            translateY(calc(-0.5 * var(--size-player-height)));
+    }
+
+    /* behind the player UI */
+    .behind {
+        display: none;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background-color: var(--color-surface-container);
+        width: 100%;
+        z-index: -1;
+        pointer-events: none;
+    }
+
+    .visualizer-open .behind {
+        display: block;
+    }
+
+    .is-open .behind {
+        height: 63px;
+    }
+
+    .is-open.is-expanded .behind {
+        height: 103px;
+    }
+
     /* COMMON */
     .site-player {
         --main-area-height: 84px;
         height: var(--size-player-height);
         z-index: 100;
         position: relative;
+        color: var(--color-on-surface);
     }
 
     .site-player :global(sl-skeleton) {
@@ -148,7 +237,7 @@
         padding-inline: 0;
     }
 
-    .site-player :global(sl-button::part(base)) {
+    .site-player .container :global(sl-button::part(base)) {
         min-width: 32px;
         aspect-ratio: 1/1;
     }

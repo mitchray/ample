@@ -20,11 +20,6 @@
     let volumeWidth; // volume in this file is treated as a linear 0-100 value
     let mouseDown = false;
     let volumeSlider;
-    let menuIsVisible = false;
-
-    function toggleMenu() {
-        menuIsVisible = !menuIsVisible;
-    }
 
     async function handleMuteToggle() {
         let inverted = !$IsMuted;
@@ -129,12 +124,7 @@
 </div>
 
 <sl-dropdown>
-    <sl-button
-        on:click={toggleMenu}
-        slot="trigger"
-        title={$_("text.volumeSettings")}
-        variant="text"
-    >
+    <sl-button slot="trigger" title={$_("text.volumeSettings")} variant="text">
         <MaterialSymbol name="tune" />
     </sl-button>
 

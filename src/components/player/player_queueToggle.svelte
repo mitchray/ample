@@ -2,7 +2,7 @@
     import { QueueIsOpen, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { showQueueItemAtIndex } from "~/logic/ui.js";
-    import { NowPlayingIndex } from "~/stores/state.js";
+    import { NowPlayingIndex, ShowVisualizer } from "~/stores/state.js";
 
     function handleQueueToggle() {
         let inverted = !$QueueIsOpen;
