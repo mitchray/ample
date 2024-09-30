@@ -1,14 +1,11 @@
 import butterchurnPresets from "butterchurn-presets";
-import { chain } from "lodash-es";
 
 export function getCuratedVisualizerPresets() {
     let presets = butterchurnPresets.getPresets();
 
-    presets = chain(presets)
-        .toPairs()
-        .sortBy(([k, v]) => k.toLowerCase())
-        .fromPairs()
-        .value();
+    const pairs = Object.entries(presets);
+    const sortedPairs = pairs.sort(([k1], [k2]) => k1.toLowerCase().localeCompare(k2.toLowerCase()));
+    presets = Object.fromEntries(sortedPairs);
 
     let toKeep = [
         "$$$ Royal - Mashup (197)",

@@ -13,6 +13,8 @@
     $: $CurrentMedia, requestAnimationFrame(updateProgress);
 
     function updateProgress() {
+        if (!$MediaPlayer) return;
+
         if ($CurrentMedia?.object_type === "live_stream") {
             return;
         }

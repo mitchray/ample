@@ -87,8 +87,6 @@
 
     function updateSelect() {
         bindSelector.value = currentPresetIndex.toString();
-
-        console.debug(presetKeys[currentPresetIndex]);
     }
 
     // Function to handle the change of the randomize checkbox
