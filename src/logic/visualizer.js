@@ -2,6 +2,7 @@ import butterchurnPresets from "butterchurn-presets";
 
 export function getCuratedVisualizerPresets() {
     let presets = butterchurnPresets.getPresets();
+    // TODO note for v3, use butterchurnPresets directly
 
     const pairs = Object.entries(presets);
     const sortedPairs = pairs.sort(([k1], [k2]) => k1.toLowerCase().localeCompare(k2.toLowerCase()));
