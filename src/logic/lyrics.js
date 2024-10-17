@@ -54,8 +54,6 @@ class Lyrics {
         let timeRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])/;
         let textRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
 
-        this.lyricsFinal = [];
-
         // only care about songs
         if (this.currentMedia.object_type !== "song") {
             return;
@@ -123,7 +121,7 @@ class Lyrics {
     }
 
     hasLyrics() {
-        return this.lyricsFinal.length > 0;
+        return this.lyricsRaw.length > 0;
     }
 
     timestampToSeconds(ts) {
