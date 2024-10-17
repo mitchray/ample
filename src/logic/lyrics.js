@@ -121,7 +121,7 @@ class Lyrics {
     }
 
     hasLyrics() {
-        return this.lyricsRaw.length > 0;
+        return this.lyricsRaw?.length > 0;
     }
 
     timestampToSeconds(ts) {
