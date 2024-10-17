@@ -54,8 +54,16 @@ class Lyrics {
         let timeRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])/;
         let textRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
 
-        if (!this.lyricsRaw) {
-            this.lyricsFinal = [];
+        this.lyricsFinal = [];
+
+        // only care about songs
+        if (this.currentMedia.object_type !== "song") {
+            return;
+        }
+
+        // notify if missing lyrics
+        if (!this.hasLyrics()) {
+            addLyricsMissingNotification(this.currentMedia);
             return;
         }
 
@@ -106,25 +114,16 @@ class Lyrics {
             this.lyricsFinal.push(thisLine);
         }
 
-        this.checkLyrics();
+        // notify if lyrics are not timestamped
+        if (this.hasLyrics() && !lyricsAreTimestamped(this.lyricsRaw)) {
+            addLyricsNotTimestampedNotification(this.currentMedia);
+        }
 
         this.lyricsFinal.reverse();
     }
 
     hasLyrics() {
         return this.lyricsFinal.length > 0;
-    }
-
-    checkLyrics() {
-        // notify if missing lyrics
-        if (this.currentMedia.object_type === "song" && !this.hasLyrics()) {
-            addLyricsMissingNotification(this.currentMedia);
-        }
-
-        // notify if lyrics are not timestamped
-        if (this.hasLyrics() && !lyricsAreTimestamped(this.lyricsRaw)) {
-            addLyricsNotTimestampedNotification(this.currentMedia);
-        }
     }
 
     timestampToSeconds(ts) {
