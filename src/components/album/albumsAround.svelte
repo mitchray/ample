@@ -14,6 +14,8 @@
     $: query = createQuery({
         queryKey: ["albumsAround", album.id],
         queryFn: async () => {
+            let final = {};
+
             // 'Various' has no id so abort
             if (parseInt(album.artist.id) === 0) return [];
 
@@ -24,21 +26,21 @@
                 return [];
             }
 
-            let final = {};
+            let albums = result.album || [];
 
             // filter out albums that aren't explicitly by artist
-            result = result.filter((a) => a.artist.id === album.artist.id);
+            albums = albums.filter((a) => a.artist.id === album.artist.id);
 
             // filter out the album being compared
-            result = result.filter((a) => a.id !== album.id);
+            albums = albums.filter((a) => a.id !== album.id);
 
-            final.same = result.filter((a) => a.year === album.year);
+            final.same = albums.filter((a) => a.year === album.year);
             final.same = await groupAlbumsByReleaseType(
                 final.same,
                 album.artist.id,
             );
 
-            final.previous = result.filter((a) => a.year < album.year);
+            final.previous = albums.filter((a) => a.year < album.year);
             let closestPrevious = final.previous[final.previous.length - 1];
             final.previous = final.previous.filter(
                 (a) => a.year === closestPrevious.year,
@@ -48,7 +50,7 @@
                 album.artist.id,
             );
 
-            final.next = result.filter((a) => a.year > album.year);
+            final.next = albums.filter((a) => a.year > album.year);
             let closestNext = final.next[0];
             final.next = final.next.filter((a) => a.year === closestNext.year);
             final.next = await groupAlbumsByReleaseType(
