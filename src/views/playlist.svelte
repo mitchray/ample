@@ -292,6 +292,7 @@
     .page-wrapper {
         display: grid;
         gap: var(--spacing-xxl);
+        overflow: initial; /* let the art glow through */
     }
 
     .details-container {
@@ -312,6 +313,10 @@
         overflow: hidden;
         font-size: 0;
         margin-block-end: var(--spacing-lg);
+    }
+
+    :global(.sl-theme-dark) .art-container {
+        filter: url(#blur-and-scale);
     }
 
     .info {

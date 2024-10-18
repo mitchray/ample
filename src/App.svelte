@@ -96,6 +96,40 @@
     {/if}
 {/if}
 
+<svg width="0" height="0">
+    <filter
+        id="blur-and-scale"
+        y="-50%"
+        x="-50%"
+        width="300%"
+        height="300%"
+        color-interpolation-filters="sRGB"
+    >
+        <!-- blur -->
+        <feGaussianBlur
+            in="SourceGraphic"
+            stdDeviation="100"
+            result="Blurred"
+        />
+        <!-- blur opacity -->
+        <feComponentTransfer in="Blurred" result="TransparentBlur">
+            <feFuncA type="linear" slope="0.5" />
+        </feComponentTransfer>
+        <!-- saturate -->
+        <feColorMatrix
+            type="saturate"
+            in="TransparentBlur"
+            values="10"
+            result="Saturated"
+        />
+        <!-- merge -->
+        <feMerge>
+            <feMergeNode in="Saturated" />
+            <feMergeNode in="SourceGraphic" />
+        </feMerge>
+    </filter>
+</svg>
+
 <style>
     :global(body),
     :global(#app) {

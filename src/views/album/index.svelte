@@ -159,6 +159,7 @@
             "image"
             "info";
         margin-block-end: var(--spacing-xxl);
+        overflow: initial; /* let the art glow through */
     }
 
     .info {
@@ -191,6 +192,10 @@
         aspect-ratio: 1 / 1;
         overflow: hidden;
         font-size: 0;
+    }
+
+    :global(.sl-theme-dark) .art-container {
+        filter: url(#blur-and-scale);
     }
 
     .actions {

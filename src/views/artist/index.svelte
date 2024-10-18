@@ -274,6 +274,7 @@
         grid-template-rows: auto auto auto auto;
         gap: var(--spacing-xl);
         margin-block-end: var(--spacing-lg);
+        overflow: initial; /* let the art glow through */
     }
 
     .art-container {
@@ -281,6 +282,10 @@
         overflow: hidden;
         font-size: 0;
         position: relative;
+    }
+
+    :global(.sl-theme-dark) .art-container {
+        filter: url(#blur-and-scale);
     }
 
     .profile {
