@@ -31,8 +31,16 @@
 
 <sl-dropdown hoist>
     <div slot="trigger">
-        <sl-button>
-            <MaterialSymbol name="notifications" slot="prefix" />
+        <sl-button
+            class="main-button"
+            variant="text"
+            title={$_("text.notifications")}
+        >
+            <MaterialSymbol
+                name="notifications"
+                slot="prefix"
+                fill={$Notifications.length > 0 ? 1 : 0}
+            />
 
             <span class="counter">
                 {$Notifications.length}
@@ -290,7 +298,6 @@
 </Portal>
 
 <style>
-    /* new */
     .table {
         display: grid;
         grid-template-columns: 1fr min-content min-content;
@@ -311,6 +318,10 @@
 
     .clear-notifications {
         margin-inline-end: auto;
+    }
+
+    .main-button::part(label) {
+        padding-inline-start: var(--spacing-sm);
     }
 
     .counter {

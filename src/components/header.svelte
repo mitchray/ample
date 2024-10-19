@@ -73,7 +73,6 @@
     >
         <MaterialSymbol name="search" slot="prefix" />
     </sl-input>
-    <!--    <div style="background-color: red; width: 250px; max-width: 100%;">oh</div>-->
 
     <div class="misc-container">
         <Notifications />
