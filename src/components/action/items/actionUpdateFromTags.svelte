@@ -16,8 +16,6 @@
     async function handleAction() {
         loading = true;
 
-        addAlert({ title: $_("text.tagUpdateStart"), style: "info" });
-
         let urlBefore = window.location.href;
 
         $API.updateFromTags({ type: $_type, id: $_item.id }).then((result) => {
