@@ -8,8 +8,16 @@
 </script>
 
 <sl-dropdown>
-    <sl-button class="userMenu-toggle" slot="trigger">
-        <MaterialSymbol name="account_circle" />
+    <sl-button
+        class="userMenu-toggle"
+        slot="trigger"
+        variant="text"
+        style="width: var(--size-header-height)"
+    >
+        <sl-avatar
+            image={$User.has_art ? $User.art : null}
+            style="--size: calc(var(--size-header-height) - var(--spacing-md));"
+        ></sl-avatar>
     </sl-button>
 
     <sl-card style="max-width: 250px">
