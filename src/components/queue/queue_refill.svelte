@@ -88,9 +88,8 @@
                                 return;
                             }
 
-                            let result = Array.isArray(response)
-                                ? response
-                                : [response];
+                            let result = response.song || [response];
+
                             if (result.length > 0 && shouldAdd) {
                                 $MediaPlayer.playLast(prepareForQueue(result));
 
