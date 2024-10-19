@@ -84,8 +84,7 @@
 
         switch (type) {
             case "artist":
-                response = await getSongsFromArtist(item?.id);
-                final = response.song;
+                final = await getSongsFromArtist(item?.id);
                 break;
             case "artists":
                 response = await getSongsFromArtists(

@@ -10,7 +10,7 @@ import { getArtist, getSimilarArtistsWithGenreFallback } from "~/logic/artist";
  */
 export async function getSongsFromArtist(id) {
     let songs = await get(API).artistSongs({ filter: id, sort: "track,ASC" });
-    songs = sortSongsByYear(songs);
+    songs = sortSongsByYear(songs.song);
 
     return songs;
 }
