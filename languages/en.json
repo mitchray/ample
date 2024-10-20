@@ -302,6 +302,7 @@
     "text.remove": "Remove",
     "text.reorder": "Reorder",
     "text.repeat": "Repeat",
+    "text.repeatOne": "Repeat This",
     "text.replaygain": "ReplayGain",
     "text.replaygainAlbumGain": "ReplayGain Album Gain",
     "text.replaygainAlbumPeak": "ReplayGain Album Peak",

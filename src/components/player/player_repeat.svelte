@@ -8,7 +8,9 @@
 <sl-button
     class:active={$RepeatState !== "disabled"}
     on:click={$MediaPlayer.repeat()}
-    title={$_("text.repeat")}
+    title={$RepeatState === "repeat_one"
+        ? $_("text.repeatOne")
+        : $_("text.repeat")}
     variant="text"
 >
     {#if $RepeatState === "repeat_one"}
