@@ -13,7 +13,7 @@ import { debugHelper, shuffleArray, truncateDecimals } from "~/logic/helper";
 import {
     DynamicsCompressorEnabled,
     PlayerVolume,
-    RepeatEnabled,
+    RepeatState,
     Saved,
     SkipBelow,
     SkipBelowAllowZero,
@@ -122,8 +122,8 @@ class Player {
             this.currentMedia = value;
         });
 
-        RepeatEnabled.subscribe((value) => {
-            this.repeatEnabled = value;
+        RepeatState.subscribe((value) => {
+            this.repeatState = value;
         });
 
         this.#init();
@@ -385,13 +385,20 @@ class Player {
     }
 
     /**
-     * Toggle repeat of queue
+     * Toggle repeat states of queue
      */
     repeat() {
-        let inverted = !this.repeatEnabled;
-        get(Saved).setItem("RepeatEnabled", inverted);
-        RepeatEnabled.set(inverted);
-        debugHelper("repeat: " + this.repeatEnabled);
+        let newState;
+        if (this.repeatState === "disabled") {
+            newState = "enabled";
+        } else if (this.repeatState === "enabled") {
+            newState = "repeat_one";
+        } else {
+            newState = "disabled";
+        }
+        get(Saved).setItem("RepeatState", newState);
+        RepeatState.set(newState);
+        debugHelper("repeat: " + newState);
     }
 
     /**
@@ -669,7 +676,12 @@ class Player {
 
         this.wavesurfer.on("finish", function () {
             debugHelper("Wavesurfer finished");
-            self.next();
+
+            if (self.repeatState === "repeat_one") {
+                self.start();
+            } else {
+                self.next();
+            }
         });
 
         this.wavesurfer.on("ready", function () {
@@ -736,7 +748,7 @@ class Player {
         this.audioElement.src = null;
         CurrentMedia.set(null);
 
-        if (this.repeatEnabled) {
+        if (this.repeatState === "enabled") {
             debugHelper("queue restarted");
             this.start();
         } else {

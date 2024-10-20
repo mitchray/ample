@@ -13,7 +13,7 @@ export let QueueIsPinned = writable(true);
 export let PlayerVolume = writable(50);
 export let PlayerIsOpen = writable(true);
 export let PlayerIsMini = writable(false);
-export let RepeatEnabled = writable(false);
+export let RepeatState = writable("disabled");
 export let VolumeNormalizationEnabled = writable(true);
 export let DynamicsCompressorEnabled = writable(false);
 
@@ -68,7 +68,7 @@ export async function loadSettings() {
         PlayerVolume: PlayerVolume,
         PlayerIsOpen: PlayerIsOpen,
         PlayerIsMini: PlayerIsMini,
-        RepeatEnabled: RepeatEnabled,
+        RepeatState: RepeatState,
         VolumeNormalizationEnabled: VolumeNormalizationEnabled,
         DynamicsCompressorEnabled: DynamicsCompressorEnabled,
         QueueRefill: QueueRefill,

@@ -1,17 +1,21 @@
 <script>
     import { _ } from "svelte-i18n";
     import { MediaPlayer } from "~/stores/elements.js";
-    import { RepeatEnabled } from "~/stores/settings.js";
+    import { RepeatState } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 </script>
 
 <sl-button
-    class:active={$RepeatEnabled}
+    class:active={$RepeatState !== "disabled"}
     on:click={$MediaPlayer.repeat()}
     title={$_("text.repeat")}
     variant="text"
 >
-    <MaterialSymbol name="repeat" />
+    {#if $RepeatState === "repeat_one"}
+        <MaterialSymbol name="repeat_one_on" />
+    {:else}
+        <MaterialSymbol name="repeat" />
+    {/if}
 </sl-button>
 
 <style>
