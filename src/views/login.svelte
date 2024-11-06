@@ -1,4 +1,5 @@
 <script>
+    import { onMount } from "svelte";
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
     import AmpacheAPI from "javascript-ampache";
@@ -12,12 +13,16 @@
     import { attemptLogin } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import localforage from "localforage";
 
     $: username = "";
     $: password = "";
     let versionCheck;
     let apiKey = "";
     let result;
+    let lastUsedTab;
+    let currentTab;
+    let loaded = false;
 
     // List of tab items with labels and values.
     let tabs = [
@@ -29,9 +34,6 @@
 
     let title = $_("text.login");
     $PageTitle = title;
-
-    // Current active tab
-    let currentTab = "username";
 
     $: versionCheck = $Server.version?.charAt(0);
 
@@ -51,6 +53,8 @@
                     username: username,
                 });
             }
+
+            await localforage.setItem("AmpleLastLoginMethod", currentTab);
         } catch (e) {
             fatalError = true;
         }
@@ -76,6 +80,12 @@
     function handleAPIkey(e) {
         apiKey = e.target.value;
     }
+
+    onMount(async () => {
+        lastUsedTab = await localforage.getItem("AmpleLastLoginMethod");
+        currentTab = lastUsedTab || "username";
+        loaded = true;
+    });
 </script>
 
 <div class="header">
@@ -114,90 +124,92 @@
             <sl-divider></sl-divider>
         {/if}
 
-        <sl-tab-group on:sl-tab-show={changeTab}>
-            {#each tabs as tab}
-                <sl-tab
-                    slot="nav"
-                    panel={tab.id}
-                    active={tab.id === currentTab}
-                >
-                    {tab.label}
-                </sl-tab>
-            {/each}
-
-            <sl-tab-panel name="username">
-                <form on:submit|preventDefault={handleSubmit}>
-                    <p>
-                        <sl-input
-                            label={$_("text.username")}
-                            on:paste={handleUsername}
-                            on:sl-change={handleUsername}
-                            on:sl-input={handleUsername}
-                            type="text"
-                            value={username}
-                        ></sl-input>
-                        <input
-                            autocomplete="username"
-                            bind:value={username}
-                            hidden
-                            type="text"
-                        />
-                    </p>
-
-                    <p>
-                        <sl-input
-                            label={$_("text.password")}
-                            on:paste={handlePassword}
-                            on:sl-change={handlePassword}
-                            on:sl-input={handlePassword}
-                            type="password"
-                            value={password}
-                        ></sl-input>
-                        <input
-                            autocomplete="current-password"
-                            bind:value={password}
-                            hidden
-                            type="password"
-                        />
-                    </p>
-                    <input hidden type="submit" />
-
-                    <sl-button
-                        disabled={!username || !password}
-                        type="submit"
-                        variant="primary"
+        {#if loaded}
+            <sl-tab-group on:sl-tab-show={changeTab}>
+                {#each tabs as tab}
+                    <sl-tab
+                        slot="nav"
+                        panel={tab.id}
+                        active={tab.id === currentTab}
                     >
-                        <MaterialSymbol name="login" slot="prefix" />
-                        {$_("text.login")}
-                    </sl-button>
-                </form>
-            </sl-tab-panel>
+                        {tab.label}
+                    </sl-tab>
+                {/each}
 
-            <sl-tab-panel name="apikey">
-                <form on:submit|preventDefault={handleSubmit}>
-                    <p>
-                        <sl-input
-                            label={$_("text.apiKey")}
-                            on:paste={handleAPIkey}
-                            on:sl-change={handleAPIkey}
-                            on:sl-input={handleAPIkey}
-                            type="text"
-                            value={apiKey}
-                        ></sl-input>
-                    </p>
+                <sl-tab-panel name="username">
+                    <form on:submit|preventDefault={handleSubmit}>
+                        <p>
+                            <sl-input
+                                label={$_("text.username")}
+                                on:paste={handleUsername}
+                                on:sl-change={handleUsername}
+                                on:sl-input={handleUsername}
+                                type="text"
+                                value={username}
+                            ></sl-input>
+                            <input
+                                autocomplete="username"
+                                bind:value={username}
+                                hidden
+                                type="text"
+                            />
+                        </p>
 
-                    <input hidden type="submit" />
-                    <sl-button
-                        disabled={!apiKey}
-                        type="submit"
-                        variant="primary"
-                    >
-                        <MaterialSymbol name="login" slot="prefix" />
-                        {$_("text.login")}
-                    </sl-button>
-                </form>
-            </sl-tab-panel>
-        </sl-tab-group>
+                        <p>
+                            <sl-input
+                                label={$_("text.password")}
+                                on:paste={handlePassword}
+                                on:sl-change={handlePassword}
+                                on:sl-input={handlePassword}
+                                type="password"
+                                value={password}
+                            ></sl-input>
+                            <input
+                                autocomplete="current-password"
+                                bind:value={password}
+                                hidden
+                                type="password"
+                            />
+                        </p>
+                        <input hidden type="submit" />
+
+                        <sl-button
+                            disabled={!username || !password}
+                            type="submit"
+                            variant="primary"
+                        >
+                            <MaterialSymbol name="login" slot="prefix" />
+                            {$_("text.login")}
+                        </sl-button>
+                    </form>
+                </sl-tab-panel>
+
+                <sl-tab-panel name="apikey">
+                    <form on:submit|preventDefault={handleSubmit}>
+                        <p>
+                            <sl-input
+                                label={$_("text.apiKey")}
+                                on:paste={handleAPIkey}
+                                on:sl-change={handleAPIkey}
+                                on:sl-input={handleAPIkey}
+                                type="password"
+                                value={apiKey}
+                            ></sl-input>
+                        </p>
+
+                        <input hidden type="submit" />
+                        <sl-button
+                            disabled={!apiKey}
+                            type="submit"
+                            variant="primary"
+                        >
+                            <MaterialSymbol name="login" slot="prefix" />
+                            {$_("text.login")}
+                        </sl-button>
+                    </form>
+                </sl-tab-panel>
+            </sl-tab-group>
+        {/if}
 
         {#if result?.error?.errorMessage}
             <sl-badge class="login-message" variant="warning" in:fade>
