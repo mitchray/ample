@@ -27,7 +27,7 @@
     });
 
     // alias of returned data
-    $: albums = $query.data || {};
+    $: albums = $query.data?.album || {};
 </script>
 
 {#if $query.isLoading}
