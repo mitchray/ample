@@ -23,9 +23,9 @@
             ...remotePaginationDefaults,
             ajaxConfig: {
                 mode: "cors",
-                method: "GET", //set request type to Position
+                method: "GET",
                 headers: {
-                    Authorization: "Bearer " + $User.token, //set specific content type
+                    Authorization: "Bearer " + $User.token,
                 },
             },
             ajaxURLGenerator: function (url, config, params) {
