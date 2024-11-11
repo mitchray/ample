@@ -29,7 +29,7 @@
     });
 
     // alias of returned data
-    $: albums = $query.data || {};
+    $: albums = $query.data?.album || {};
 </script>
 
 <div class="page-header">
