@@ -302,15 +302,15 @@
                         id: "qobuz",
                         title: "Qobuz",
                         icon: QobuzLogo,
-                        artistURL: `https://www.qobuz.com/search?q=${encodeURIComponent(
+                        artistURL: `https://www.qobuz.com/us-en/search/artists/${encodeURIComponent(
                             data.name,
                         )}`,
-                        albumURL: `https://www.qobuz.com/search?q=${encodeURIComponent(
+                        albumURL: `https://www.qobuz.com/us-en/search/albums/${encodeURIComponent(
                             data.name,
-                        )}&f[an]=${encodeURIComponent(data.artist.name)}`,
-                        songURL: `https://www.qobuz.com/search?q=${encodeURIComponent(
+                        )}`,
+                        songURL: `https://www.qobuz.com/us-en/search/tracks/${encodeURIComponent(
                             data.name,
-                        )}&f[an]=${encodeURIComponent(data.artist.name)}`,
+                        )}`,
                     },
                     {
                         id: "spotify",
