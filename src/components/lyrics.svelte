@@ -72,57 +72,59 @@
     }
 </script>
 
-<Portal target={$SiteContentBind || ".site-content"}>
-    <sl-drawer
-        bind:this={drawer}
-        contained
-        on:sl-hide={handleClose}
-        placement="bottom"
-    >
-        <div slot="label">
-            {$_("text.lyrics")}
-        </div>
-
-        <div slot="header-actions">
-            <sl-button
-                class="follow"
-                hidden={!$lyrics.isTimestamped || follow}
-                on:click={() => (follow = true)}
-            >
-                {$_("text.follow")}
-            </sl-button>
-        </div>
-
-        <div
-            class="lyrics-container"
-            class:disable-scroll={follow}
-            class:hasTimestamps={$lyrics.isTimestamped}
-            on:touchstart={handleScroll}
-            on:wheel={handleScroll}
-            bind:this={container}
+{#if $SiteContentBind}
+    <Portal target={$SiteContentBind}>
+        <sl-drawer
+            bind:this={drawer}
+            contained
+            on:sl-hide={handleClose}
+            placement="bottom"
         >
-            {#if $CurrentMedia?.object_type === "song"}
-                {#if $lyrics.hasLyrics() && !loading}
-                    {#each $lyrics.lyricsFinal as line, i}
-                        <div
-                            class="line"
-                            class:current={$lyrics.currentLine === i}
-                            on:click={() => {
-                                handleClick(line.startSeconds);
-                            }}
-                        >
-                            {@html line.text}
-                        </div>
-                    {/each}
+            <div slot="label">
+                {$_("text.lyrics")}
+            </div>
+
+            <div slot="header-actions">
+                <sl-button
+                    class="follow"
+                    hidden={!$lyrics.isTimestamped || follow}
+                    on:click={() => (follow = true)}
+                >
+                    {$_("text.follow")}
+                </sl-button>
+            </div>
+
+            <div
+                class="lyrics-container"
+                class:disable-scroll={follow}
+                class:hasTimestamps={$lyrics.isTimestamped}
+                on:touchstart={handleScroll}
+                on:wheel={handleScroll}
+                bind:this={container}
+            >
+                {#if $CurrentMedia?.object_type === "song"}
+                    {#if $lyrics.hasLyrics() && !loading}
+                        {#each $lyrics.lyricsFinal as line, i}
+                            <div
+                                class="line"
+                                class:current={$lyrics.currentLine === i}
+                                on:click={() => {
+                                    handleClick(line.startSeconds);
+                                }}
+                            >
+                                {@html line.text}
+                            </div>
+                        {/each}
+                    {:else}
+                        {$_("text.lyricsMissing")}
+                    {/if}
                 {:else}
-                    {$_("text.lyricsMissing")}
+                    {$_("text.lyricsNoSong")}
                 {/if}
-            {:else}
-                {$_("text.lyricsNoSong")}
-            {/if}
-        </div>
-    </sl-drawer>
-</Portal>
+            </div>
+        </sl-drawer>
+    </Portal>
+{/if}
 
 <style>
     sl-drawer::part(panel) {
