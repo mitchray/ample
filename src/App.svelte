@@ -6,7 +6,7 @@
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
-    import { ShowSearch, User } from "~/stores/state.js";
+    import { ShowLyrics, ShowSearch, User } from "~/stores/state.js";
     import { loadSettings, Theme } from "~/stores/settings";
     import { extendSession, validateSession } from "~/logic/user.js";
     import { loadFromConfig } from "~/logic/ample.js";
@@ -42,8 +42,8 @@
 
     // hook into back/forward events
     window.onpopstate = () => {
-        // close search after navigating
         $ShowSearch = false;
+        $ShowLyrics = false;
     };
 
     $: {
