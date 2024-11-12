@@ -365,6 +365,10 @@
 {/if}
 
 <style>
+    sl-drawer::part(base) {
+        z-index: 100;
+    }
+
     sl-drawer::part(panel) {
         min-height: 100%;
     }
