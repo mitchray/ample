@@ -1,12 +1,34 @@
 # Changelog
 
-## [3.1.0] - 2024-xx-xx
+## [3.1.0] - 2024-11-12
 
-### Requires at least Ampache 6.6.0
+### Requires at least Ampache 6.6.0 (untested with 7.x yet)
 
 ### Added
 
 -   Bookmarks (user-created)
+    - Add at current time with Bookmark button in player
+    - Double click to remove
+-   Visualizer (Butterchurn) available in player menu
+-   Added ```Repeat This``` to Repeat button cycle
+    - Also show dot beneath to indicate activation 
+-   Glow behind main images (dark mode only)
+-   Display user profile picture
+-   API key should be remembered by password managers now
+
+### Fixed
+
+-   'Missing lyrics' check was not firing
+-   Updated Qobuz search URLs
+
+### Changed
+
+-   Rate optimistically (update in UI instantly)
+-   Subdued notifications button
+-   Don't create alert when beginning update from tags
+-   Show Search above other elements
+-   Hide lyrics when navigating
+-   [Ampache API] Account for ```total_count``` and ```md5``` in responses, bulk of this update is for this
 
 ## [3.0.3] - 2024-09-15
 
