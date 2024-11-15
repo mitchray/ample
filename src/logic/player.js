@@ -212,7 +212,7 @@ class Player {
             this.updateFilters();
 
             // update visualiser with this media
-            this.visualizer.connectAudio(this.mediaNode);
+            this.visualizer?.connectAudio(this.mediaNode);
 
             this.wavesurfer
                 .play()
@@ -554,7 +554,7 @@ class Player {
     }
 
     loadVisualizerPreset(presetData, blendTime) {
-        this.visualizer.loadPreset(presetData, blendTime);
+        this.visualizer?.loadPreset(presetData, blendTime);
     }
 
     /*
@@ -629,8 +629,8 @@ class Player {
                 },
             );
 
-            this.visualizer.connectAudio(this.mediaNode);
-            this.visualizer.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
+            this.visualizer?.connectAudio(this.mediaNode);
+            this.visualizer?.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
             this.#startRenderer();
         } catch (e) {
             errorHandler("initializing visualizer", e);
@@ -641,7 +641,7 @@ class Player {
         requestAnimationFrame(() => {
             if (this.isPlaying) {
                 // Check if media is playing
-                this.visualizer.render();
+                this.visualizer?.render();
             }
             this.#startRenderer();
         });
