@@ -9,7 +9,12 @@ import {
     addGainTagsMissingNotification,
     addRatingMissingNotification,
 } from "~/logic/notification";
-import { debugHelper, shuffleArray, truncateDecimals } from "~/logic/helper";
+import {
+    debugHelper,
+    errorHandler,
+    shuffleArray,
+    truncateDecimals,
+} from "~/logic/helper";
 import {
     DynamicsCompressorEnabled,
     PlayerVolume,
@@ -597,6 +602,9 @@ class Player {
      * More setup which doesn't belong in constructor
      */
     #init() {
+        const presets = getCuratedVisualizerPresets();
+        const preset = presets["$$$ Royal - Mashup (197)"];
+
         this.wavesurfer.setVolume(this.globalVolume);
 
         // initialise filters
@@ -608,23 +616,25 @@ class Player {
         // set up keyboard media buttons
         this.#initKeyboardMediaKeys();
 
-        // set up visualizer
-        this.visualizer = butterchurn.createVisualizer(
-            this.audioContext,
-            document.querySelector("#visualizer"),
-            {
-                width: 1600,
-                height: 900,
-                pixelRatio: window.devicePixelRatio || 1,
-                textureRatio: 1,
-            },
-        );
+        try {
+            // set up visualizer
+            this.visualizer = butterchurn.createVisualizer(
+                this.audioContext,
+                document.querySelector("#visualizer"),
+                {
+                    width: 1600,
+                    height: 900,
+                    pixelRatio: window.devicePixelRatio || 1,
+                    textureRatio: 1,
+                },
+            );
 
-        this.visualizer.connectAudio(this.mediaNode);
-        const presets = getCuratedVisualizerPresets();
-        const preset = presets["$$$ Royal - Mashup (197)"];
-        this.visualizer.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
-        this.#startRenderer();
+            this.visualizer.connectAudio(this.mediaNode);
+            this.visualizer.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
+            this.#startRenderer();
+        } catch (e) {
+            errorHandler("initializing visualizer", e);
+        }
     }
 
     #startRenderer() {
