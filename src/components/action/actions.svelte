@@ -20,6 +20,7 @@
     } from "~/logic/song.js";
     import { errorHandler, prepareForQueue } from "~/logic/helper.js";
     import { writable } from "svelte/store";
+    import Actions from "~/components/action/actions.svelte";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
     import ActionPlayLast from "./items/actionPlayLast.svelte";
@@ -41,20 +42,33 @@
     import Portal from "~/components/portal.svelte";
     import { PlaySongsByOtherArtists } from "~/stores/settings.js";
 
-    export let item = null;
-    export let type; // artist, album, playlist, song etc
-    export let displayMode; // menu, miniButtons or fullButtons; the UI elements to be rendered
-    export let showShuffle = false;
-    export let showLinks = false;
-    export let hideDefaultActions = false;
-    export let data = {}; // any extra data needed, passed as an object key e.g. data.playlists
+    // interface Props {
+    //     item?: any;
+    //     type: any; // artist, album, playlist, song etc
+    //     displayMode: any; // menu, miniButtons or fullButtons; the UI elements to be rendered
+    //     showShuffle?: boolean;
+    //     showLinks?: boolean;
+    //     hideDefaultActions?: boolean;
+    //     data?: any; // any extra data needed, passed as an object key e.g. data.playlists
+    // }
+
+    let {
+        item = null,
+        type,
+        displayMode,
+        showShuffle = false,
+        showLinks = false,
+        hideDefaultActions = false,
+        data = {},
+    } = $props();
+    // TODO: need to pass the $props() (previously $$props) to Actions instances
 
     const contextKey = uuidv4(); // unique key for each instance of actions
 
     let playLimit = 5000;
-    let actionsBind;
-    let dialogBind;
-    let dropdownBind;
+    let actionsBind = $state();
+    let dialogBind = $state();
+    let dropdownBind = $state();
 
     // underscore prefixed items are accessor aliases of exported params
     let _item = writable(item);
@@ -401,12 +415,12 @@
                     >
                         &nbsp;
                     </sl-button>
-                    <svelte:self {...$$props} displayMode="menu" />
+                    <Actions displayMode="menu" />
                 </sl-dropdown>
 
                 <sl-button
                     size={displayMode === "miniButtons" ? "small" : "medium"}
-                    on:click={(e) => {
+                    onclick={(e) => {
                         let tabulator = actionsBind?.closest(".tabulator");
                         if (tabulator?.offsetHeight < 250) {
                             dialogBind?.show();
@@ -425,11 +439,11 @@
     <Portal>
         <sl-dialog
             bind:this={dialogBind}
-            on:click={() => {
+            onclick={() => {
                 dialogBind?.hide();
             }}
         >
-            <svelte:self {...$$props} displayMode="menu" />
+            <Actions displayMode="menu" />
 
             <sl-divider></sl-divider>
 
@@ -451,7 +465,7 @@
             <sl-button
                 slot="footer"
                 variant="primary"
-                on:click={() => {
+                onclick={() => {
                     dialogBind?.hide();
                 }}
             >

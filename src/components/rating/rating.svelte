@@ -26,44 +26,44 @@
     import { updateQueue } from "~/logic/ui.js";
 
     /** @type {{type?: any, data?: any}} */
-    let { type = $bindable(null), data = {} } = $props();
+    let {
+        type = $bindable(null),
+        data = {}
+    } = $props();
 
     let showAverageRatings = true;
     let ratingErrored = $state(false);
     let flagErrored = $state(false);
     const values = [1, 2, 3, 4, 5];
 
-
-
-
     function handleRating() {
         ratingErrored = false;
         let parsedRating = parseInt(this.dataset.rating);
-        let originalRating = rating;
-        let newRating = parsedRating === rating ? 0 : parsedRating; // clear rating if it matches existing
+        let originalRating = data.rating;
+        let newRating = parsedRating === data.rating ? 0 : parsedRating; // clear rating if it matches existing
 
         // update the displayed rating immediately
-        rating = newRating;
+        data.rating = newRating;
 
-        $API.rate({ type: type, id: id, rating: newRating }).then((result) => {
+        $API.rate({ type: type, id: data.id, rating: newRating }).then((result) => {
             if (result.error) {
                 errorHandler("while rating", result.error);
                 ratingErrored = true;
 
                 // revert the displayed rating
-                rating = originalRating;
+                data.rating = originalRating;
             }
 
             if (!result.error) {
                 recentRating.set({
                     type: type,
-                    id: id,
+                    id: data.id,
                     rating: newRating,
                 });
 
                 // now update any items in the queue with the new rating
                 let foundItems = $NowPlayingQueue.filter(
-                    (item) => item.id === id && item.object_type === type,
+                    (item) => item.id === data.id && item.object_type === type,
                 );
 
                 foundItems.forEach((item) => {
@@ -78,9 +78,9 @@
 
     function handleFlag() {
         flagErrored = false;
-        let newFlag = flag ? 0 : 1;
+        let newFlag = data.flag ? 0 : 1;
 
-        $API.flag({ type: type, id: id, flag: newFlag }).then((result) => {
+        $API.flag({ type: type, id: data.id, flag: newFlag }).then((result) => {
             if (result.error) {
                 errorHandler("while flagging", result.error);
                 flagErrored = true;
@@ -88,20 +88,20 @@
             }
 
             if (!result.error) {
-                flag = newFlag;
+                data.flag = newFlag;
                 recentFlag.set({
                     type: type,
-                    id: id,
+                    id: data.id,
                     flag: newFlag,
                 });
 
                 // now update any items in the queue with the new fav
                 let foundItems = $NowPlayingQueue.filter(
-                    (item) => item.id === id && item.object_type === type,
+                    (item) => item.id === data.id && item.object_type === type,
                 );
 
                 foundItems.forEach((item) => {
-                    item.flag = flag;
+                    item.flag = data.flag;
                 });
 
                 updateQueue();
@@ -111,27 +111,22 @@
 
     function refreshAverageRating() {
         const apiMap = {
-            song: () => $API.song({ filter: id }),
-            album: () => $API.album({ filter: id }),
-            artist: () => $API.artist({ filter: id }),
-            playlist: () => $API.playlist({ filter: id }),
-            podcast: () => $API.podcast({ filter: id }),
+            song: () => $API.song({ filter: data.id }),
+            album: () => $API.album({ filter: data.id }),
+            artist: () => $API.artist({ filter: data.id }),
+            playlist: () => $API.playlist({ filter: data.id }),
+            podcast: () => $API.podcast({ filter: data.id }),
         };
 
         if (apiMap[type]) {
             apiMap[type]().then((r) => {
                 if (!r.error) {
-                    averagerating = r.averagerating;
+                    data.averagerating = r.averagerating;
                 }
             });
         }
     }
-    let averagerating;
-    let flag;
-    let rating;
-    run(() => {
-        ({ id, rating, flag, averagerating } = data);
-    });
+
     // override for playlist_songs
     run(() => {
         type = type === "playlist_songs" ? "song" : type;
@@ -139,47 +134,47 @@
     run(() => {
         if (
             $recentRating.type === type &&
-            $recentRating.id === id &&
-            $recentRating.rating !== rating
+            $recentRating.id === data.id &&
+            $recentRating.rating !== data.rating
         ) {
-            rating = $recentRating.rating;
+            data.rating = $recentRating.rating;
             refreshAverageRating();
         }
 
         if (
             $recentFlag.type === type &&
-            $recentFlag.id === id &&
-            $recentFlag.flag !== flag
+            $recentFlag.id === data.id &&
+            $recentFlag.flag !== data.flag
         ) {
-            flag = $recentFlag.flag;
+            data.flag = $recentFlag.flag;
         }
     });
 </script>
 
-<div class="c-rating" class:disabled={!id}>
+<div class="c-rating" class:disabled={!data.id}>
     <div class="stars" class:errored={ratingErrored}>
         {#each values as ratingValue, i}
             <span
                 onclick={handleRating}
                 data-rating={ratingValue}
                 class="star"
-                class:filled={ratingValue <= rating}
+                class:filled={ratingValue <= data.rating}
             >
-                <MaterialSymbol name="star" fill={rating > i} />
+                <MaterialSymbol name="star" fill={data.rating > i} />
             </span>
         {/each}
     </div>
 
     <span
         class="flag"
-        class:flagged={flag}
+        class:flagged={data.flag}
         onclick={handleFlag}
         class:errored={flagErrored}
     >
-        <MaterialSymbol fill={flag || false} name="favorite" />
+        <MaterialSymbol fill={data.flag || false} name="favorite" />
     </span>
 
-    {#if averagerating && showAverageRatings}
+    {#if data.averagerating && showAverageRatings}
         <sl-badge
             class="average"
             title={$_("text.ratingAverage")}
@@ -187,7 +182,7 @@
             pill
             onclick={refreshAverageRating}
         >
-            {averagerating.toFixed(1)}
+            {data.averagerating.toFixed(1)}
         </sl-badge>
     {/if}
 </div>
