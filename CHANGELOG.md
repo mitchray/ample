@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.1.1] - 2024-11-18
+
+### Requires at least Ampache 6.6.0 (untested with 7.x yet)
+
+### Fixed
+-   Handle rare visualizer initialization failure due to GPU error
+
 ## [3.1.0] - 2024-11-12
 
 ### Requires at least Ampache 6.6.0 (untested with 7.x yet)
