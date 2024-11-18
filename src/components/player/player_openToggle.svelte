@@ -10,7 +10,7 @@
 </script>
 
 <sl-tooltip content={$PlayerIsOpen ? "Hide player" : "Show player"}>
-    <sl-button circle on:click={handlePlayerOpenToggle} variant="neutral">
+    <sl-button circle onclick={handlePlayerOpenToggle} variant="neutral">
         {#if $PlayerIsOpen}
             <MaterialSymbol name="expand_more" />
         {:else}

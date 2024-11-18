@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -8,14 +10,15 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Visibility from "~/components/visibility.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    let loadedTime;
+    let loadedTime = $state();
 
     // default to artists tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/unrated/artists`);
-    }
+    });
 
     // List of tab items with labels and values.
     let tabs = [
@@ -39,14 +42,14 @@
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
 
-    <sl-button on:click={refreshItems} size="small">
         <MaterialSymbol name="refresh" slot="prefix" />
+    <sl-button onclick={refreshItems} size="small">
         Refresh
     </sl-button>
 </div>
 
 {#key loadedTime || 0}
-    <sl-tab-group on:sl-tab-show={changeTab}>
+    <sl-tab-group onsl-tab-show={changeTab}>
         {#each tabs as tab}
             <sl-tab
                 slot="nav"

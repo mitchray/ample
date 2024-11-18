@@ -7,11 +7,12 @@
     import { useQueryClient } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _type, _item } = getContext(contextKey);
 
-    let loading = false;
+    let loading = $state(false);
 
     async function handleAction() {
         loading = true;
@@ -42,7 +43,7 @@
 
 <sl-menu-item
     {loading}
-    on:click={handleAction}
+    onclick={handleAction}
     title={$_("text.updateFromTags")}
 >
     <MaterialSymbol name="sync" slot="prefix" />

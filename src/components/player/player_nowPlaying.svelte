@@ -1,11 +1,13 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { CurrentMedia } from "~/stores/state";
     import Art from "~/components/art.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
 
-    let parentInfo;
+    let parentInfo = $state();
 
-    $: {
+    run(() => {
         if ($CurrentMedia) {
             if ($CurrentMedia.object_type === "song") {
                 parentInfo.name =
@@ -26,7 +28,7 @@
         } else {
             parentInfo = {};
         }
-    }
+    });
 </script>
 
 <div class="container">

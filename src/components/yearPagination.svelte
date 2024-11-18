@@ -6,13 +6,12 @@
 
     const currentYear = new Date().getFullYear();
 
-    export let fromYear = currentYear;
-    export let toYear = currentYear;
-    export let showYear = currentYear;
+    /** @type {{fromYear?: any, toYear?: any, showYear?: any}} */
+    let { fromYear = $bindable(currentYear), toYear = $bindable(currentYear), showYear = currentYear } = $props();
 
-    let yearSlider;
-    let fromInterim = showYear || currentYear - 10;
-    let toInterim = showYear || currentYear;
+    let yearSlider = $state();
+    let fromInterim = $state(showYear || currentYear - 10);
+    let toInterim = $state(showYear || currentYear);
 
     const commit = () => {
         fromYear = fromInterim;
@@ -70,7 +69,7 @@
 <div class="container">
     <div class="slider" bind:this={yearSlider}></div>
 
-    <sl-button class="submit" on:click={commit} variant="primary">
+    <sl-button class="submit" onclick={commit} variant="primary">
         {$_("text.search")}
         {fromInterim} &ndash; {toInterim}
     </sl-button>

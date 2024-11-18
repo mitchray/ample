@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { writable } from "svelte/store";
     import { createQuery } from "@tanstack/svelte-query";
@@ -13,35 +15,13 @@
     import { errorHandler } from "~/logic/helper.js";
     import { onMount } from "svelte";
 
-    export let artistID;
+    /** @type {{artistID: any}} */
+    let { artistID } = $props();
 
     const releaseTypesOrder = userPreference("album_release_type_sort") || "";
-    let appearances = [];
-    let releases = [];
+    let appearances = $state([]);
+    let releases = $state([]);
 
-    $: query = createQuery({
-        queryKey: ["artistAlbums", artistID],
-        queryFn: async () => {
-            let result = await $API.artistAlbums({ filter: artistID });
-
-            if (result.error) {
-                errorHandler("getting artist albums", result.error);
-                return [];
-            }
-
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-        select: (data) => {
-            let divide = partition(
-                data.album,
-                (item) => item.artist?.id === artistID,
-            );
-            let byArtist = divide[0];
-            appearances = divide[1];
-            return byArtist;
-        },
-    });
 
     let defaultOptions = {
         view: "expanded_columns",
@@ -53,10 +33,6 @@
     let loadedOptions = writable({});
     let state = writable(defaultOptions);
 
-    // run processData whenever $query.data or displayOptions change
-    $: $query.data, processData();
-    $: $state, processData();
-    $: $state, $Saved.setItem("ArtistReleases", $state); // write to localstorage whenever state changes
 
     onMount(async () => {
         $loadedOptions = (await $Saved.getItem("ArtistReleases")) || {}; // load saved settings from localstorage
@@ -118,6 +94,39 @@
 
         releases = grouped;
     }
+    let query = $derived(createQuery({
+        queryKey: ["artistAlbums", artistID],
+        queryFn: async () => {
+            let result = await $API.artistAlbums({ filter: artistID });
+
+            if (result.error) {
+                errorHandler("getting artist albums", result.error);
+                return [];
+            }
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+        select: (data) => {
+            let divide = partition(
+                data.album,
+                (item) => item.artist?.id === artistID,
+            );
+            let byArtist = divide[0];
+            appearances = divide[1];
+            return byArtist;
+        },
+    }));
+    // run processData whenever $query.data or displayOptions change
+    run(() => {
+        $query.data, processData();
+    });
+    run(() => {
+        $state, processData();
+    });
+    run(() => {
+        $state, $Saved.setItem("ArtistReleases", $state);
+    }); // write to localstorage whenever state changes
 </script>
 
 <sl-dropdown style="position: relative; z-index: 3000; ">
@@ -127,7 +136,7 @@
         <div class="display-options">
             <sl-select
                 label="Display"
-                on:sl-change={(e) => ($state.view = e.target.value)}
+                onsl-change={(e) => ($state.view = e.target.value)}
                 value={$state.view}
             >
                 <MaterialSymbol name="visibility" slot="prefix" />
@@ -142,7 +151,7 @@
                 <sl-select
                     clearable
                     label="Sort"
-                    on:sl-change={(e) => ($state.sort = e.target.value)}
+                    onsl-change={(e) => ($state.sort = e.target.value)}
                     placeholder="None"
                     value={$state.sort}
                 >
@@ -155,7 +164,7 @@
 
                 <sl-tooltip content="Direction">
                     <sl-button
-                        on:click={() =>
+                        onclick={() =>
                             ($state.sortReversed = !$state.sortReversed)}
                     >
                         {#if $state.sortReversed}
@@ -170,7 +179,7 @@
             <sl-select
                 clearable
                 label="Grouping"
-                on:sl-change={(e) => ($state.group = e.target.value)}
+                onsl-change={(e) => ($state.group = e.target.value)}
                 placeholder="None"
                 value={$state.group}
             >

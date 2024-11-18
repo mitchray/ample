@@ -2,11 +2,11 @@
     import { CurrentMedia } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {Object} */
-    export let data;
+    
 
-    /** @type {"album" | "song" | "podcast_episode" | "artist" | "playlist" | "smartlist" | "radio_station"} */
-    export let type;
+    
+    /** @type {{data: Object, type: "album" | "song" | "podcast_episode" | "artist" | "playlist" | "smartlist" | "radio_station"}} */
+    let { data, type } = $props();
 </script>
 
 <div class="container truncate">

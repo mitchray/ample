@@ -6,13 +6,14 @@
     import DrawerAddTo from "~/components/action/drawers/drawerPlaylistAddTo.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    /** @type {{contextKey: any, [key: string]: any}} */
+    let { contextKey, ...rest } = $props();
 
     const { getSongs } = getContext(contextKey);
 
-    let loaded = false;
-    let drawerAddTo;
-    let songsForPlaylistAdd = [];
+    let loaded = $state(false);
+    let drawerAddTo = $state();
+    let songsForPlaylistAdd = $state([]);
 
     async function handleAction() {
         loaded = true;
@@ -23,8 +24,8 @@
 </script>
 
 <sl-menu-item
-    {...$$restProps}
-    on:click={handleAction}
+    {...rest}
+    onclick={handleAction}
     title={$_("text.playlistAddTo")}
 >
     <MaterialSymbol name="queue_music" slot="prefix" />

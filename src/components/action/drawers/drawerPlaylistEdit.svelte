@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { createEventDispatcher } from "svelte";
     import { API } from "~/stores/state.js";
@@ -7,21 +9,21 @@
     import { errorHandler } from "~/logic/helper.js";
     import { Tabulator } from "tabulator-tables";
 
-    export let playlist = null;
-    export let isNew = false;
+    /** @type {{playlist?: any, isNew?: boolean, [key: string]: any}} */
+    let { playlist = $bindable(null), isNew = false, ...rest } = $props();
 
     export const show = () => drawer.show();
     const dispatch = createEventDispatcher();
 
     let originalName = playlist?.name || null;
-    let playlistName = playlist?.name || "";
-    let playlistType = playlist?.type || "private";
-    let playlistTypeBoolean = playlist?.type === "public";
-    let drawer;
+    let playlistName = $state(playlist?.name || "");
+    let playlistType = $state(playlist?.type || "private");
+    let playlistTypeBoolean = $state(playlist?.type === "public");
+    let drawer = $state();
 
-    $: {
+    run(() => {
         playlistType = playlistTypeBoolean ? "public" : "private";
-    }
+    });
 
     async function savePlaylist() {
         // do checks
@@ -119,13 +121,13 @@
 </script>
 
 <sl-drawer
-    {...$$restProps}
+    {...rest}
     bind:this={drawer}
     label={isNew ? $_("text.playlistNew") : $_("text.playlistEdit")}
-    on:sl-request-close={keepDrawerOpen}
+    onsl-request-close={keepDrawerOpen}
 >
     <sl-input
-        on:sl-input={handleName}
+        onsl-input={handleName}
         placeholder={$_("text.name")}
         type="text"
         value={playlistName}
@@ -133,14 +135,14 @@
 
     <sl-switch
         checked={playlistTypeBoolean}
-        on:sl-change={() => (playlistTypeBoolean = !playlistTypeBoolean)}
+        onsl-change={() => (playlistTypeBoolean = !playlistTypeBoolean)}
     >
         Public
     </sl-switch>
 
     <sl-button
         disabled={!playlistName}
-        on:click={savePlaylist}
+        onclick={savePlaylist}
         slot="footer"
         variant="primary"
     >

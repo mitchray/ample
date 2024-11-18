@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onDestroy, onMount } from "svelte";
     import {
         autoUpdate,
@@ -13,22 +15,11 @@
     import { AlertsList } from "~/stores/message.js";
     import AlertCard from "~/components/alert/alertCard.svelte";
 
-    let timeout;
-    let freshAlerts = [];
-    let listBind;
+    let timeout = $state();
+    let freshAlerts = $state([]);
+    let listBind = $state();
     let autoUpdateCleanup;
 
-    $: {
-        if ($AlertsList) {
-            freshAlerts = $AlertsList.filter((e) => e.fresh === true);
-        }
-
-        if (freshAlerts.length > 0) {
-            clearTimeout(timeout);
-
-            startTimeout();
-        }
-    }
 
     function handleEnter(e) {
         if (freshAlerts[0] && e.target.dataset.id === freshAlerts[0].id) {
@@ -94,6 +85,17 @@
         // floating-ui
         autoUpdateCleanup();
     });
+    run(() => {
+        if ($AlertsList) {
+            freshAlerts = $AlertsList.filter((e) => e.fresh === true);
+        }
+
+        if (freshAlerts.length > 0) {
+            clearTimeout(timeout);
+
+            startTimeout();
+        }
+    });
 </script>
 
 <div bind:this={listBind} class="site-alerts">
@@ -103,8 +105,8 @@
             in:fly={{ y: -100, duration: 300, easing: quintOut }}
             out:fade={{ duration: 300, easing: quintOut }}
             animate:flip={{ duration: 300 }}
-            on:mouseenter={(e) => handleEnter(e)}
-            on:mouseleave={(e) => handleLeave(e)}
+            onmouseenter={(e) => handleEnter(e)}
+            onmouseleave={(e) => handleLeave(e)}
             data-id={alert.id}
         >
             <AlertCard item={alert} />

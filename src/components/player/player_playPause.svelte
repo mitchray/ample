@@ -8,7 +8,7 @@
     class="play-pause"
     disabled={$NowPlayingQueue.length === 0}
     name="play"
-    on:click={$MediaPlayer.playPause()}
+    onclick={$MediaPlayer.playPause()}
 >
     <MaterialSymbol name={$IsPlaying ? "pause" : "play_arrow"} />
 </sl-button>

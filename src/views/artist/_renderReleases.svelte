@@ -7,11 +7,10 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
 
-    export let view;
-    export let items;
-    export let filterToArtistID = null;
+    /** @type {{view: any, items: any, filterToArtistID?: any}} */
+    let { view, items, filterToArtistID = null } = $props();
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
     setContext("filterToArtistID", filterToArtistID);
 </script>

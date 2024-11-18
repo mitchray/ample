@@ -6,11 +6,12 @@
     import { createEventDispatcher } from "svelte";
     import { Tabulator } from "tabulator-tables";
 
-    export let playlist = null;
+    /** @type {{playlist?: any}} */
+    let { playlist = null } = $props();
     export const show = () => drawer.show();
 
     const dispatch = createEventDispatcher();
-    let drawer;
+    let drawer = $state();
 
     function handleDelete() {
         $API.playlistDelete({ filter: playlist.id }).then((result) => {
@@ -51,8 +52,8 @@
         })}
     </div>
 
-    <sl-button on:click={handleDelete} slot="footer" variant="danger">
         <MaterialSymbol name="delete" slot="prefix" />
+    <sl-button onclick={handleDelete} slot="footer" variant="danger">
         {$_("text.delete")}
     </sl-button>
 </sl-drawer>

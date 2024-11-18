@@ -3,8 +3,8 @@
     import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let icon = null;
-    export let label;
+    /** @type {{icon?: any, label: any}} */
+    let { icon = null, label } = $props();
 </script>
 
 <sl-tooltip

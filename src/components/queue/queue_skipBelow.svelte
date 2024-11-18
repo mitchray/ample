@@ -43,12 +43,12 @@
     </sl-button>
 
     <sl-card>
-        <sl-switch checked={$SkipBelow} on:sl-change={handleSkipBelow}>
+        <sl-switch checked={$SkipBelow} onsl-change={handleSkipBelow}>
             {$_("text.skipBelow")}:
         </sl-switch>
 
         <sl-select
-            on:sl-change={handleSkipBelowRating}
+            onsl-change={handleSkipBelowRating}
             value={$SkipBelowRating}
         >
             <sl-option value="5">
@@ -65,7 +65,7 @@
             </sl-option>
         </sl-select>
 
-        <sl-switch checked={$SkipBelowAllowZero} on:sl-change={handleAllowZero}>
+        <sl-switch checked={$SkipBelowAllowZero} onsl-change={handleAllowZero}>
             {$_("text.allowUnrated")}
         </sl-switch>
     </sl-card>

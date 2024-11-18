@@ -4,7 +4,8 @@
     import { getPlaylistIDFromUrl, setIndexes } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { dataDisplay } = getContext(contextKey);
 
@@ -22,6 +23,6 @@
     }
 </script>
 
-<sl-button on:click={handleRefresh} title={$_("text.refresh")}>
+<sl-button onclick={handleRefresh} title={$_("text.refresh")}>
     {$_("text.refresh")}
 </sl-button>

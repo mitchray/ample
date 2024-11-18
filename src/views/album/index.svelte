@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -13,9 +15,10 @@
     import Badge from "~/components/badge.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["album", params.id],
         queryFn: async () => {
             let result = await $API.album({ filter: params.id });
@@ -28,12 +31,14 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: album = $query.data || {};
+    let album = $derived($query.data || {});
 
-    $: $PageTitle = album?.name || $_("text.album");
+    run(() => {
+        $PageTitle = album?.name || $_("text.album");
+    });
 </script>
 
 {#if $query.isLoading}

@@ -8,13 +8,14 @@
     import { API } from "~/stores/state.js";
     import { userPreference } from "~/logic/preferences.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any, [key: string]: any}} */
+    let { contextKey, ...rest } = $props();
 
     const { _item, _type } = getContext(contextKey);
     const sharePreference = userPreference("share");
-    let drawerShare;
-    let loaded = false;
-    let newShare;
+    let drawerShare = $state();
+    let loaded = $state(false);
+    let newShare = $state();
 
     async function handleAction() {
         loaded = false;
@@ -32,8 +33,8 @@
 
 {#if $sharePreference}
     <sl-menu-item
-        {...$$restProps}
-        on:click={handleAction}
+        {...rest}
+        onclick={handleAction}
         title={$_("text.share")}
     >
         <MaterialSymbol name="share" slot="prefix" />

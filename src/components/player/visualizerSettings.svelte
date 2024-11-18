@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { QueueIsOpen, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ShowVisualizer, IsPlaying } from "~/stores/state.js";
@@ -8,24 +10,17 @@
     import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 
     let menuIsVisible = false;
-    let bindSelector;
+    let bindSelector = $state();
     let presets = getCuratedVisualizerPresets();
     let presetsArray = Object.entries(presets);
     let presetKeys = keys(presets);
     let currentPresetIndex = 0;
     let isRandomizeEnabled = false;
-    let isCycleEnabled = false;
-    let cycleInterval = 10;
-    let transitionDuration = 3;
-    let cycleTimer;
+    let isCycleEnabled = $state(false);
+    let cycleInterval = $state(10);
+    let transitionDuration = $state(3);
+    let cycleTimer = $state();
 
-    // Watch for changes in the cycle checkbox and interval
-    $: if (isCycleEnabled) {
-        clearInterval(cycleTimer);
-        cycleTimer = setInterval(cycleHandler, cycleInterval * 1000);
-    } else {
-        clearInterval(cycleTimer);
-    }
 
     function handleQueueToggle() {
         let inverted = !$QueueIsOpen;
@@ -109,17 +104,26 @@
     function handleTransitionDurationChange(e) {
         transitionDuration = e.target.value;
     }
+    // Watch for changes in the cycle checkbox and interval
+    run(() => {
+        if (isCycleEnabled) {
+            clearInterval(cycleTimer);
+            cycleTimer = setInterval(cycleHandler, cycleInterval * 1000);
+        } else {
+            clearInterval(cycleTimer);
+        }
+    });
 </script>
 
 {#if $ShowVisualizer}
-    <sl-button class="close-button" on:click={hideVisualizer} variant="text">
+    <sl-button class="close-button" onclick={hideVisualizer} variant="text">
         <MaterialSymbol name="close" />
     </sl-button>
 
     <sl-dropdown placement="left-end">
         <sl-button
             circle
-            on:click={toggleMenu}
+            onclick={toggleMenu}
             variant="neutral"
             slot="trigger"
             title="Visualizer Settings"
@@ -137,7 +141,7 @@
                 <sl-select
                     bind:this={bindSelector}
                     label="Preset"
-                    on:sl-change={(e) => handlePresetChange(e)}
+                    onsl-change={(e) => handlePresetChange(e)}
                 >
                     {#each presetsArray as [name, code], index}
                         <sl-option value={index}>{name}</sl-option>
@@ -148,7 +152,7 @@
                     <sl-button
                         size="small"
                         variant="neutral"
-                        on:click={handlePreviousPreset}
+                        onclick={handlePreviousPreset}
                     >
                         <MaterialSymbol name="skip_previous" />
                         {$_("text.previous")}
@@ -156,7 +160,7 @@
                     <sl-button
                         size="small"
                         variant="neutral"
-                        on:click={handleNextPreset}
+                        onclick={handleNextPreset}
                     >
                         {$_("text.next")}
                         <MaterialSymbol name="skip_next" />
@@ -167,7 +171,7 @@
             <sl-divider></sl-divider>
 
             <div class="settings">
-                <sl-checkbox on:sl-change={handleRandomizeChange}>
+                <sl-checkbox onsl-change={handleRandomizeChange}>
                     {$_("text.randomized")}
                 </sl-checkbox>
 
@@ -176,10 +180,10 @@
                     min="1"
                     value={transitionDuration}
                     label={$_("text.visualizerTransitionInterval")}
-                    on:sl-input={handleTransitionDurationChange}
+                    onsl-input={handleTransitionDurationChange}
                 ></sl-input>
 
-                <sl-checkbox on:sl-change={handleCycleChange}>
+                <sl-checkbox onsl-change={handleCycleChange}>
                     {$_("text.visualizerCycle")}
                 </sl-checkbox>
 
@@ -188,7 +192,7 @@
                     min="1"
                     value={cycleInterval}
                     label={$_("text.visualizerCycleInterval")}
-                    on:sl-input={handleCycleIntervalChange}
+                    onsl-input={handleCycleIntervalChange}
                 ></sl-input>
             </div>
         </sl-card>

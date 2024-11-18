@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
@@ -8,13 +10,14 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import { songsPreset, track } from "~/components/lister/columns.js";
 
-    export let artistID;
+    /** @type {{artistID: any}} */
+    let { artistID } = $props();
 
-    let songs = [];
+    let songs = $state([]);
     let loading = false;
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["allArtistSongs", artistID],
         queryFn: async () => {
             let result = await $API.artistSongs({ filter: artistID });
@@ -27,10 +30,12 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: songs = $query.data?.song || {};
+    run(() => {
+        songs = $query.data?.song || {};
+    });
 </script>
 
 {#if !loading && songs && songs.length > 0}

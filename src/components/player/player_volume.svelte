@@ -147,27 +147,31 @@
         {#if $CurrentMedia && $CurrentMediaGainInfo}
             <div class="current">
                 <table>
-                    <tr>
-                        <td class="label">{$_("text.current")}</td>
-                        <td>{$CurrentMediaGainInfo.gainType}</td>
-                    </tr>
-
-                    <tr>
-                        <td class="label">{$_("text.target")}</td>
-                        <td>{$MediaPlayer.targetVolume}dB</td>
-                    </tr>
-
-                    {#if $CurrentMediaGainInfo.gainType !== "None"}
+                    <tbody>
                         <tr>
-                            <td class="label">{$_("text.mastered")}</td>
-                            <td>{$CurrentMediaGainInfo.masteredVolume}dB</td>
+                            <td class="label">{$_("text.current")}</td>
+                            <td>{$CurrentMediaGainInfo.gainType}</td>
                         </tr>
 
                         <tr>
-                            <td class="label">{$_("text.gainFactor")}</td>
-                            <td>×{$CurrentMediaGainInfo.gainFactor}</td>
+                            <td class="label">{$_("text.target")}</td>
+                            <td>{$MediaPlayer.targetVolume}dB</td>
                         </tr>
-                    {/if}
+
+                        {#if $CurrentMediaGainInfo.gainType !== "None"}
+                            <tr>
+                                <td class="label">{$_("text.mastered")}</td>
+                                <td>
+                                    {$CurrentMediaGainInfo.masteredVolume}dB
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="label">{$_("text.gainFactor")}</td>
+                                <td>×{$CurrentMediaGainInfo.gainFactor}</td>
+                            </tr>
+                        {/if}
+                    </tbody>
                 </table>
             </div>
         {/if}

@@ -1,5 +1,6 @@
 <script>
-    export let text;
+    /** @type {{text: any}} */
+    let { text } = $props();
 </script>
 
 <div class="c-badge badge-label truncate" title={text}>

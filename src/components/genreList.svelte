@@ -1,12 +1,12 @@
 <script>
-    /** All the genres */
-    export let items;
+    
 
-    /** Overflow items beyond the limit */
-    export let limit = null;
+    
+    /** @type {{items: any, limit?: any}} */
+    let { items, limit = null } = $props();
 
-    let genres = [];
-    let overflowGenres = [];
+    let genres = $state([]);
+    let overflowGenres = $state([]);
 
     if (limit) {
         genres = items.slice(0, limit);

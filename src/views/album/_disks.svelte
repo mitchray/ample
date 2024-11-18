@@ -6,9 +6,10 @@
     import { errorHandler } from "~/logic/helper.js";
     import Disk from "~/views/album/_disk.svelte";
 
-    export let albumID;
+    /** @type {{albumID: any}} */
+    let { albumID } = $props();
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["albumDisks", albumID],
         queryFn: async () => {
             let result = await getAlbumDisks(albumID);
@@ -21,10 +22,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: disks = $query.data || {};
+    let disks = $derived($query.data || {});
 </script>
 
 {#if $query.isLoading}

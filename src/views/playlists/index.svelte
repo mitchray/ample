@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
@@ -9,9 +11,10 @@
     import { replace } from "svelte-spa-router";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    let drawerEdit;
+    let drawerEdit = $state();
 
     let title = $_("text.playlists");
     $PageTitle = title;
@@ -26,9 +29,9 @@
     }
 
     // default to mine tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/playlists/mine`);
-    }
+    });
 </script>
 
 <div class="page-header">
@@ -36,7 +39,7 @@
 
     <sl-button
         class="new-playlist-button"
-        on:click={() => drawerEdit.show()}
+        onclick={() => drawerEdit.show()}
         variant="primary"
         size="small"
     >
@@ -45,7 +48,7 @@
     </sl-button>
 </div>
 
-<sl-tab-group on:sl-tab-show={changeTab}>
+<sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
         <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
             {tab.label}

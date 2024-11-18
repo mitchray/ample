@@ -9,9 +9,9 @@
     import { errorHandler } from "~/logic/helper.js";
     import { artistsPreset } from "~/components/lister/columns.js";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["newestArtists"],
         queryFn: async () => {
             let result = await newestArtists({ limit: 50 });
@@ -26,10 +26,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: artists = $query.data?.artist || {};
+    let artists = $derived($query.data?.artist || {});
 </script>
 
 {#if $query.isLoading}

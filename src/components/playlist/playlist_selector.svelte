@@ -1,17 +1,20 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { createEventDispatcher, onMount } from "svelte";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let type;
-    export let selectedPlaylists = [];
-    export let multiple = false;
+    /** @type {{type: any, selectedPlaylists?: any, multiple?: boolean}} */
+    let { type, selectedPlaylists = $bindable([]), multiple = false } = $props();
 
     const dispatch = createEventDispatcher();
 
-    let playlistResponse = {};
+    let playlistResponse = $state({});
 
-    $: playlistResponse = playlistResponse;
+    run(() => {
+        playlistResponse = playlistResponse;
+    });
 
     function handleRadio(e) {
         selectedPlaylists = [e.target.value];
@@ -67,7 +70,7 @@
                         <span class="item-inner truncate" title={item.name}>
                             <sl-checkbox
                                 name={item.id}
-                                on:sl-change={handleCheckbox}
+                                onsl-change={handleCheckbox}
                             >
                                 {item.name}
                             </sl-checkbox>
@@ -79,7 +82,7 @@
             <sl-radio-group
                 name="selected"
                 value={selectedPlaylists[0]}
-                on:sl-change={handleRadio}
+                onsl-change={handleRadio}
             >
                 {#if Array.isArray(playlistResponse.playlist)}
                     {#each playlistResponse.playlist as item}

@@ -1,4 +1,4 @@
-<script context="module">
+<script module>
     import { writable } from "svelte/store";
 
     // shared across component instances
@@ -17,43 +17,24 @@
 </script>
 
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { API, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { updateQueue } from "~/logic/ui.js";
 
-    export let type = null;
-    export let data = {};
+    /** @type {{type?: any, data?: any}} */
+    let { type = $bindable(null), data = {} } = $props();
 
     let showAverageRatings = true;
-    let ratingErrored = false;
-    let flagErrored = false;
+    let ratingErrored = $state(false);
+    let flagErrored = $state(false);
     const values = [1, 2, 3, 4, 5];
 
-    $: ({ id, rating, flag, averagerating } = data);
 
-    $: {
-        if (
-            $recentRating.type === type &&
-            $recentRating.id === id &&
-            $recentRating.rating !== rating
-        ) {
-            rating = $recentRating.rating;
-            refreshAverageRating();
-        }
 
-        if (
-            $recentFlag.type === type &&
-            $recentFlag.id === id &&
-            $recentFlag.flag !== flag
-        ) {
-            flag = $recentFlag.flag;
-        }
-    }
-
-    // override for playlist_songs
-    $: type = type === "playlist_songs" ? "song" : type;
 
     function handleRating() {
         ratingErrored = false;
@@ -145,13 +126,41 @@
             });
         }
     }
+    let averagerating;
+    let flag;
+    let rating;
+    run(() => {
+        ({ id, rating, flag, averagerating } = data);
+    });
+    // override for playlist_songs
+    run(() => {
+        type = type === "playlist_songs" ? "song" : type;
+    });
+    run(() => {
+        if (
+            $recentRating.type === type &&
+            $recentRating.id === id &&
+            $recentRating.rating !== rating
+        ) {
+            rating = $recentRating.rating;
+            refreshAverageRating();
+        }
+
+        if (
+            $recentFlag.type === type &&
+            $recentFlag.id === id &&
+            $recentFlag.flag !== flag
+        ) {
+            flag = $recentFlag.flag;
+        }
+    });
 </script>
 
 <div class="c-rating" class:disabled={!id}>
     <div class="stars" class:errored={ratingErrored}>
         {#each values as ratingValue, i}
             <span
-                on:click={handleRating}
+                onclick={handleRating}
                 data-rating={ratingValue}
                 class="star"
                 class:filled={ratingValue <= rating}
@@ -164,7 +173,7 @@
     <span
         class="flag"
         class:flagged={flag}
-        on:click={handleFlag}
+        onclick={handleFlag}
         class:errored={flagErrored}
     >
         <MaterialSymbol fill={flag || false} name="favorite" />
@@ -176,7 +185,7 @@
             title={$_("text.ratingAverage")}
             variant="neutral"
             pill
-            on:click={refreshAverageRating}
+            onclick={refreshAverageRating}
         >
             {averagerating.toFixed(1)}
         </sl-badge>

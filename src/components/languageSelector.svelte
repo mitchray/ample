@@ -14,7 +14,7 @@
     }
 </script>
 
-<sl-select on:sl-change={handleLocaleChange} value={$locale}>
+<sl-select onsl-change={handleLocaleChange} value={$locale}>
     <sl-option value={getLocaleFromNavigator()}>
         ({$_("text.autodetect")})
     </sl-option>

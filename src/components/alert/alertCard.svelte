@@ -2,7 +2,8 @@
     import { removeAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let item;
+    /** @type {{item: any}} */
+    let { item } = $props();
 </script>
 
 <div class="alert-card card {item.style}">
@@ -31,7 +32,7 @@
     <div class="actions">
         <sl-button
             class="remove"
-            on:click={() => {
+            onclick={() => {
                 removeAlert(item.id);
             }}
             variant="text"

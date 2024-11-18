@@ -8,7 +8,7 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 <div class="lister-tabulator">

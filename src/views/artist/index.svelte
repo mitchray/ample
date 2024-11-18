@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { push, replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
@@ -19,9 +21,10 @@
     import { errorHandler } from "~/logic/helper.js";
     import Visibility from "~/components/visibility.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["artist", params.id],
         queryFn: async () => {
             let result = await $API.artist({ filter: params.id });
@@ -40,17 +43,19 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: artist = $query.data || {};
+    let artist = $derived($query.data || {});
 
-    $: $PageTitle = artist?.name || $_("text.artist");
+    run(() => {
+        $PageTitle = artist?.name || $_("text.artist");
+    });
 
     // default to releases tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/artist/${params.id}/releases`);
-    }
+    });
 
     const tabs = [
         { id: "releases", label: $_("text.releases"), prefix: "album" },
@@ -203,7 +208,7 @@
             </div>
 
             <div class="tabs">
-                <sl-tab-group on:sl-tab-show={changeTab}>
+                <sl-tab-group onsl-tab-show={changeTab}>
                     {#each tabs as tab}
                         <sl-tab
                             slot="nav"

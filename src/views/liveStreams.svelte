@@ -6,7 +6,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import { liveStreamsPreset } from "~/components/lister/columns.js";
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["liveStreams"],
         queryFn: async () => {
             let result = await $API.liveStreams();
@@ -19,15 +19,15 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: liveStreams = $query.data || {};
+    let liveStreams = $derived($query.data || {});
 
     let title = $_("text.radio");
     $PageTitle = title;
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 <div class="page-header">

@@ -6,12 +6,12 @@
     import { errorHandler } from "~/logic/helper.js";
     import { genresPreset } from "~/components/lister/columns.js";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
     let title = $_("text.genres");
     $PageTitle = title;
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["genres"],
         queryFn: async () => {
             let result = await $API.genres({ sort: "name,ASC" });
@@ -26,10 +26,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: genres = $query.data?.genre || {};
+    let genres = $derived($query.data?.genre || {});
 </script>
 
 <div class="page-header">

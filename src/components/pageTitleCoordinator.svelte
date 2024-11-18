@@ -1,12 +1,11 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { CurrentMedia, IsPlaying, PageTitle } from "~/stores/state.js";
 
     window.addEventListener("blur", updateTitle);
     window.addEventListener("focus", updateTitle);
 
-    $: $PageTitle, updateTitle();
-    $: $IsPlaying, updateTitle();
-    $: $CurrentMedia, updateTitle();
 
     function updateTitle() {
         if (document.hasFocus()) {
@@ -28,4 +27,13 @@
             }
         }
     }
+    run(() => {
+        $PageTitle, updateTitle();
+    });
+    run(() => {
+        $IsPlaying, updateTitle();
+    });
+    run(() => {
+        $CurrentMedia, updateTitle();
+    });
 </script>

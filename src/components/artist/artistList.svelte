@@ -1,19 +1,22 @@
 <script>
-    export let data;
 
     // only show 'featured' artists
-    export let featuredOnly = false;
 
     // when no results, show a dash
-    export let showDash = false;
 
     // disable the links
-    export let disabled = false;
 
     // usually want this as default, but mixCard can wrap lines
-    export let truncate = true;
+    /** @type {{data: any, featuredOnly?: boolean, showDash?: boolean, disabled?: boolean, truncate?: boolean}} */
+    let {
+        data,
+        featuredOnly = false,
+        showDash = false,
+        disabled = false,
+        truncate = true
+    } = $props();
 
-    let artists = data.artists;
+    let artists = $state(data.artists);
 
     if (featuredOnly) {
         // filter album artist

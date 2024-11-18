@@ -3,7 +3,8 @@
     import Rating from "~/components/rating/rating.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let item;
+    /** @type {{item: any}} */
+    let { item } = $props();
 </script>
 
 <div class="notification-card card {item.style}">
@@ -47,7 +48,7 @@
     <div class="actions">
         <sl-button
             class="remove"
-            on:click={() => {
+            onclick={() => {
                 removeNotification(item.id);
             }}
             variant="text"

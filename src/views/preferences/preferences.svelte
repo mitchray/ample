@@ -1,16 +1,18 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";
     import { ShowPreferences } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
     import Theme from "~/views/preferences/_theme.svelte";
 
-    let drawer;
-    let tabs;
+    let drawer = $state();
+    let tabs = $state();
 
-    $: {
+    run(() => {
         $ShowPreferences ? drawer?.show() : drawer?.hide();
-    }
+    });
 
     function handleClose(event) {
         // ignore bubbled sl-hide events from other components
@@ -25,7 +27,7 @@
         <sl-drawer
             placement="bottom"
             bind:this={drawer}
-            on:sl-hide={handleClose}
+            onsl-hide={handleClose}
             contained
         >
             <div slot="label">
@@ -39,7 +41,7 @@
                             <sl-tab
                                 slot="nav"
                                 panel="theme"
-                                on:click={() => {
+                                onclick={() => {
                                     tabs.show("theme");
                                 }}
                             >

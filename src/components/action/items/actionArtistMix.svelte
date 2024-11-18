@@ -7,11 +7,12 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler, prepareForQueue } from "~/logic/helper.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _type, _item } = getContext(contextKey);
 
-    let loading = false;
+    let loading = $state(false);
     let show =
         $_type === "artist" ||
         $_type === "album" ||
@@ -71,7 +72,7 @@
 
 {#if show}
     <sl-menu-item
-        on:click={handleAction}
+        onclick={handleAction}
         title={$_("text.startArtistMix")}
         {loading}
     >

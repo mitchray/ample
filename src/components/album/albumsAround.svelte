@@ -7,11 +7,12 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let album;
+    /** @type {{album: any}} */
+    let { album } = $props();
 
-    let containerBind;
+    let containerBind = $state();
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["albumsAround", album.id],
         queryFn: async () => {
             let final = {};
@@ -61,10 +62,10 @@
             return final;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: albums = $query.data || {};
+    let albums = $derived($query.data || {});
 </script>
 
 {#if $query.isLoading}

@@ -1,19 +1,21 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { Tabulator } from "tabulator-tables";
     import { addAlert } from "~/logic/alert.js";
 
-    export let share = {};
     export const show = () => drawer.show();
-    export let isNew = false;
+    /** @type {{share?: any, isNew?: boolean}} */
+    let { share = $bindable({}), isNew = false } = $props();
 
-    let drawer;
-    let canStream;
-    let canDownload;
-    let description;
-    let expiryDays;
+    let drawer = $state();
+    let canStream = $state();
+    let canDownload = $state();
+    let description = $state();
+    let expiryDays = $state();
 
     function resetValues() {
         canStream = share.allow_stream;
@@ -22,9 +24,11 @@
         expiryDays = share.expire_days;
     }
 
-    $: if (share) {
-        resetValues();
-    }
+    run(() => {
+        if (share) {
+            resetValues();
+        }
+    });
 
     async function handleSave() {
         await $API.shareEdit({
@@ -71,8 +75,8 @@
 <sl-drawer
     bind:this={drawer}
     label={isNew ? $_("text.shareCreate") : $_("text.shareEdit")}
-    on:sl-request-close={keepDrawerOpen}
-    on:sl-hide={handleClose}
+    onsl-request-close={keepDrawerOpen}
+    onsl-hide={handleClose}
 >
     <div>
         Sharing <strong>{share.name}</strong>
@@ -83,13 +87,13 @@
         type="number"
         value={expiryDays}
         min="1"
-        on:sl-change={(e) => {
+        onsl-change={(e) => {
             expiryDays = e.target.value;
         }}
     ></sl-input>
     <sl-switch
         checked={canStream}
-        on:sl-change={(e) => {
+        onsl-change={(e) => {
             canStream = e.target.checked;
         }}
     >
@@ -97,7 +101,7 @@
     </sl-switch>
     <sl-switch
         checked={canDownload}
-        on:sl-change={(e) => {
+        onsl-change={(e) => {
             canDownload = e.target.checked;
         }}
     >
@@ -109,7 +113,7 @@
         type="text"
         value={description}
         help-text="(Optional)"
-        on:sl-change={(e) => {
+        onsl-change={(e) => {
             description = e.target.value;
         }}
     ></sl-input>
@@ -125,7 +129,7 @@
     <sl-qr-code value={share.public_url} label="Share link"></sl-qr-code>
 
     <div class="footer" slot="footer">
-        <sl-button variant="primary" on:click={handleSave}>
+        <sl-button variant="primary" onclick={handleSave}>
             {$_("text.save")}
         </sl-button>
     </div>

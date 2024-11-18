@@ -27,11 +27,11 @@
     import TidalLogo from "/src/assets/logos/tidal.svg";
     import YoutubeLogo from "/src/assets/logos/youtubemusic.svg";
 
-    export let data;
-    export let type;
+    /** @type {{data: any, type: any}} */
+    let { data = $bindable(), type } = $props();
 
     let mb = new MusicBrainz();
-    let menu = [];
+    let menu = $state([]);
     let hasMusicbrainz = mb.hasMBID(data);
 
     onMount(() => {

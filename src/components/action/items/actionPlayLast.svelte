@@ -4,11 +4,12 @@
     import { MediaPlayer } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { getSongs, _displayMode } = getContext(contextKey);
 
-    let loading = false;
+    let loading = $state(false);
 
     async function handleAction() {
         loading = true;
@@ -20,7 +21,7 @@
 
 <sl-button
     {loading}
-    on:click={handleAction}
+    onclick={handleAction}
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.playLast")}
 >

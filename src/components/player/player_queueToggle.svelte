@@ -19,7 +19,7 @@
     <sl-button
         circle
         id="queue-button"
-        on:click={handleQueueToggle}
+        onclick={handleQueueToggle}
         variant="primary"
     >
         <MaterialSymbol name="playlist_play" />

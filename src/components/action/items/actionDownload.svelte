@@ -6,12 +6,13 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _item } = getContext(contextKey);
     const downloadPreference = userPreference("download");
 
-    let loading = false;
+    let loading = $state(false);
 
     export function downloadFile(blob, name = "download") {
         const url = window.URL.createObjectURL(blob);
@@ -57,8 +58,8 @@
 </script>
 
 {#if $downloadPreference}
-    <sl-menu-item on:click={handleAction} title={$_("text.download")} {loading}>
         <MaterialSymbol name="download" slot="prefix" />
+    <sl-menu-item onclick={handleAction} title={$_("text.download")} {loading}>
         {$_("text.download")}
     </sl-menu-item>
 {/if}

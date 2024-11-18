@@ -6,15 +6,14 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Actions from "~/components/action/actions.svelte";
 
-    /** The complete object being displayed */
-    export let data = {};
+    
 
-    /** @type {'album' | 'artist' | 'song' | 'playlist' | 'smartlist' | 'podcast' | 'podcast_episode' | 'live_stream'} */
-    export let type;
+    
 
-    export let showActions = true;
+    /** @type {{data?: any, type: 'album' | 'artist' | 'song' | 'playlist' | 'smartlist' | 'podcast' | 'podcast_episode' | 'live_stream', showActions?: boolean}} */
+    let { data = {}, type, showActions = true } = $props();
 
-    let urlPrefix = "";
+    let urlPrefix = $state("");
 
     onMount(() => {
         switch (type) {

@@ -2,7 +2,8 @@
     import { _ } from "svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let item;
+    /** @type {{item: any}} */
+    let { item } = $props();
 </script>
 
 <a href="#/versions/{item?.name}/{item?.artist?.name}">

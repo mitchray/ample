@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { getAlbumsByYear } from "~/logic/album.js";
     import YearPagination from "~/components/yearPagination.svelte";
     import Actions from "~/components/action/actions.svelte";
@@ -6,20 +8,15 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
 
-    export let showYear = new Date().getFullYear();
+    /** @type {{showYear?: any}} */
+    let { showYear = new Date().getFullYear() } = $props();
 
-    let dataDisplay = [];
-    let fromYear = null;
-    let toYear = null;
-    let loadedTime = 0;
-    let tabulator = null;
+    let dataDisplay = $state([]);
+    let fromYear = $state(null);
+    let toYear = $state(null);
+    let loadedTime = $state(0);
+    let tabulator = $state(null);
 
-    $: {
-        // YearPagination 'Search' button just passes the final value, so get data if the years change
-        if (fromYear && toYear) {
-            getData();
-        }
-    }
 
     async function getData() {
         let response = await getAlbumsByYear({
@@ -32,6 +29,12 @@
 
         loadedTime = new Date();
     }
+    run(() => {
+        // YearPagination 'Search' button just passes the final value, so get data if the years change
+        if (fromYear && toYear) {
+            getData();
+        }
+    });
 </script>
 
 <YearPagination bind:fromYear bind:toYear {showYear} />

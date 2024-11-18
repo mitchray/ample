@@ -1,7 +1,8 @@
 <script>
     import MusicbrainzScan from "~/components/musicbrainzScan.svelte";
 
-    export let artist;
+    /** @type {{artist: any}} */
+    let { artist } = $props();
 </script>
 
 <MusicbrainzScan data={artist} />

@@ -1,4 +1,6 @@
 <script>
+    import { run, stopPropagation } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { createVirtualizer } from "@tanstack/svelte-virtual";
     import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
@@ -15,7 +17,7 @@
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
     import RefillButton from "~/components/queue/queue_refill.svelte";
 
-    let siteQueueBind;
+    let siteQueueBind = $state();
 
     function handleAction(event, index) {
         $MediaPlayer.playSelected(index);
@@ -46,18 +48,20 @@
         }
     }
 
-    $: virtualizer = createVirtualizer({
+
+
+
+    let virtualListEl = $state();
+    let virtualizer = $derived(createVirtualizer({
         count: $NowPlayingQueue.length,
         getScrollElement: () => virtualListEl,
         estimateSize: () => 46,
         overscan: 10,
+    }));
+    let items = $derived($virtualizer.getVirtualItems());
+    run(() => {
+        $QueueVirtualListBind = $virtualizer;
     });
-
-    $: items = $virtualizer.getVirtualItems();
-
-    $: $QueueVirtualListBind = $virtualizer;
-
-    let virtualListEl;
 </script>
 
 <div
@@ -65,7 +69,7 @@
     class="site-queue"
     class:is-drawer={$IsMobile || !$QueueIsPinned}
     class:is-open={$QueueIsOpen}
-    on:clickedOutside={handleClickOutside}
+    onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#queue-button",
         ignore: ".c-menu",
@@ -78,7 +82,7 @@
             <sl-button-group>
                 <sl-button
                     class="show-current"
-                    on:click={showQueueItemAtIndex($NowPlayingIndex)}
+                    onclick={showQueueItemAtIndex($NowPlayingIndex)}
                     size="small"
                     title={$_("text.queueShowCurrent")}
                 >
@@ -97,7 +101,7 @@
                     <sl-menu>
                         {#if !$IsMobile}
                             <sl-menu-item
-                                on:click|stopPropagation={togglePinned}
+                                onclick={stopPropagation(togglePinned)}
                             >
                                 {#if $QueueIsPinned}
                                     {$_("text.queueUnpin")}
@@ -107,7 +111,7 @@
                             </sl-menu-item>
                         {/if}
 
-                        <sl-menu-item on:click={handleClearPrevious}>
+                        <sl-menu-item onclick={handleClearPrevious}>
                             {$_("text.queueClearPrevious")}
                         </sl-menu-item>
                     </sl-menu>
@@ -117,7 +121,7 @@
             <sl-button
                 circle
                 class="clear-all"
-                on:click={handleClearQueue}
+                onclick={handleClearQueue}
                 size="small"
                 title={$_("text.clearAll")}
                 variant="danger"
@@ -134,7 +138,7 @@
                 <div style="height: {$virtualizer.getTotalSize()}px;">
                     {#each items as item (item)}
                         <div
-                            on:click={(e) => {
+                            onclick={(e) => {
                                 handleAction(e, item.index);
                             }}
                             style="top: {item.start}px; position: absolute; left: 0; width: 100%;"

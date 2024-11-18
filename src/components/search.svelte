@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import Fuse from "fuse.js";
     import { SearchQuery, ShowSearch } from "~/stores/state.js";
@@ -11,9 +13,9 @@
     import CardList from "~/components/cards/cardList.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
 
-    let drawer;
-    let results = {};
-    let searching = false;
+    let drawer = $state();
+    let results = $state({});
+    let searching = $state(false);
     let minimumChars = 3;
 
     // List of tab items with labels and values.
@@ -27,7 +29,7 @@
     ];
 
     // Current active tab
-    let currentTab = "all";
+    let currentTab = $state("all");
 
     function handleClose(event) {
         // ignore bubbled sl-hide events from other components
@@ -136,18 +138,18 @@
         searching = false;
     }
 
-    $: {
+    run(() => {
         $ShowSearch ? drawer?.show() : drawer?.hide();
-    }
+    });
 
-    $: {
+    run(() => {
         if ($SearchQuery?.length >= minimumChars) {
             resetResults();
             doSearch();
         } else {
             resetResults();
         }
-    }
+    });
 </script>
 
 {#if $SiteContentBind}
@@ -155,8 +157,8 @@
         <sl-drawer
             placement="top"
             bind:this={drawer}
-            on:sl-hide={handleClose}
-            on:sl-initial-focus={(e) => e.preventDefault()}
+            onsl-hide={handleClose}
+            onsl-initial-focus={(e) => e.preventDefault()}
             contained
         >
             <div slot="label">
@@ -176,7 +178,7 @@
             </div>
 
             <div class="results">
-                <sl-tab-group on:sl-tab-show={changeTab}>
+                <sl-tab-group onsl-tab-show={changeTab}>
                     {#each tabs as tab}
                         <sl-tab
                             slot="nav"

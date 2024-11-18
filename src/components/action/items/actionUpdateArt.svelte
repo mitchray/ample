@@ -5,11 +5,12 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _type, _item } = getContext(contextKey);
 
-    let loading = false;
+    let loading = $state(false);
     let label =
         $_type === "artist"
             ? $_("text.updateArtistImage")
@@ -41,10 +42,10 @@
     }
 </script>
 
-<sl-menu-item {loading} on:click={handleAction} title={label}>
     <MaterialSymbol
         name={$_type === "artist" ? "portrait" : "image"}
         slot="prefix"
     />
+<sl-menu-item {loading} onclick={handleAction} title={label}>
     {label}
 </sl-menu-item>

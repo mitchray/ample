@@ -9,9 +9,9 @@
     import { errorHandler } from "~/logic/helper.js";
     import { albumsPreset } from "~/components/lister/columns.js";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["unratedAlbums"],
         queryFn: async () => {
             let result = await unratedAlbums({ limit: 100 });
@@ -24,10 +24,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: albums = $query.data?.album || {};
+    let albums = $derived($query.data?.album || {});
 </script>
 
 {#if $query.isLoading}

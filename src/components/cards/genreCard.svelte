@@ -1,14 +1,18 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import Actions from "~/components/action/actions.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let data = null; // needed for cardList dynamic components
-    export let type = undefined; // ignored; workaround for card list component when type is 'generic'
+    /** @type {{data?: any, type?: any}} */
+    let { data = null, type = undefined } = $props();
 
-    let angle = 50;
-    let genre;
-    $: genre = data;
+    let angle = $state(50);
+    let genre = $state();
+    run(() => {
+        genre = data;
+    });
 
     onMount(() => {
         // each char has a unique integer associated with it, use the sum of these as the degree angle

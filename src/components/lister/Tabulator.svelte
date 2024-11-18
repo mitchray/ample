@@ -7,12 +7,15 @@
     import { tabulatorStrings } from "~/logic/i18n.js";
     import { SiteContentBind } from "~/stores/elements.js";
 
-    export let data = undefined,
+    /** @type {{data?: any, columns: any, options?: any, tabulator?: any}} */
+    let {
+        data = undefined,
         columns,
         options = {},
-        tabulator = null;
+        tabulator = $bindable(null)
+    } = $props();
 
-    let tableElement;
+    let tableElement = $state();
 
     function centreOnTable() {
         tableElement?.scrollIntoView({

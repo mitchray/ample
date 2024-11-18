@@ -7,7 +7,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import { podcastsPreset } from "~/components/lister/columns.js";
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["podcasts"],
         queryFn: async () => {
             let result = await $API.podcasts();
@@ -20,15 +20,15 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: podcasts = $query.data || {};
+    let podcasts = $derived($query.data || {});
 
     let title = $_("text.podcasts");
     $PageTitle = title;
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 <div class="page-header">

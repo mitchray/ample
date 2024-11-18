@@ -9,9 +9,10 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let artistID;
+    /** @type {{artistID: any}} */
+    let { artistID } = $props();
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["topArtistSongs", artistID],
         queryFn: async () => {
             let result = await $API.artistSongs({
@@ -32,12 +33,12 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
     // alias of returned data
-    $: songs = $query.data?.song || {};
+    let songs = $derived($query.data?.song || {});
 </script>
 
 {#if $query.isLoading}

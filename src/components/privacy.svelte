@@ -1,8 +1,9 @@
 <script>
     import { _ } from "svelte-i18n";
 
-    /** @type {Object} */
-    export let type;
+    
+    /** @type {{type: Object}} */
+    let { type } = $props();
 </script>
 
 {#if type === "private"}

@@ -29,7 +29,7 @@
     import VisualizerSettings from "~/components/player/visualizerSettings.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let currentHeight;
+    let currentHeight = $state();
 
     onMount(() => {
         $MediaPlayer = new WavesurferConnector();
@@ -116,7 +116,7 @@
     </div>
 
     <VisualizerSettings />
-    <div class="canvas-container" on:click={$MediaPlayer.playPause()}>
+    <div class="canvas-container" onclick={$MediaPlayer.playPause()}>
         <canvas
             id="visualizer"
             class="viz-canvas"

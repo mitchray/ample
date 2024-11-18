@@ -9,9 +9,9 @@
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["randomAlbumArtists"],
         queryFn: async () => {
             let result = await randomAlbumArtists({ limit: 50 });
@@ -26,10 +26,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: artists = $query.data?.artist || {};
+    let artists = $derived($query.data?.artist || {});
 </script>
 
 {#if $query.isLoading}

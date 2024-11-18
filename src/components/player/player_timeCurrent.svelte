@@ -4,8 +4,8 @@
     import { formatSongLength } from "~/logic/formatters.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
-    let duration;
-    let currentTime;
+    let duration = $state();
+    let currentTime = $state();
 
     function handleTimeToggle() {
         $TimeToggled = !$TimeToggled;
@@ -24,7 +24,7 @@
 </script>
 
 {#if $CurrentMedia?.object_type !== "live_stream"}
-    <span class="current" on:click={handleTimeToggle}>
+    <span class="current" onclick={handleTimeToggle}>
         {#if $TimeToggled}
             -{formatSongLength(duration - currentTime)}
         {:else}

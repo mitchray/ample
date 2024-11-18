@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
@@ -10,19 +12,22 @@
         songsPreset,
     } from "~/components/lister/columns.js";
 
-    export let loadedTime;
-    export let loading;
-    export let results = [];
-    export let type;
+    /** @type {{loadedTime: any, loading: any, results?: any, type: any}} */
+    let {
+        loadedTime,
+        loading,
+        results = $bindable([]),
+        type
+    } = $props();
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: {
+    run(() => {
         // reset results if type changes
         if (type) {
             results = [];
         }
-    }
+    });
 </script>
 
 {#if loading}

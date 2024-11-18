@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
     import {
@@ -16,11 +18,12 @@
     import { push } from "svelte-spa-router";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    let parentItem;
+    let parentItem = $state();
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["song", params.id],
         queryFn: async () => {
             let result = await $API.song({ filter: params.id });
@@ -43,12 +46,14 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: song = $query.data || {};
+    let song = $derived($query.data || {});
 
-    $: $PageTitle = song?.name || $_("text.song");
+    run(() => {
+        $PageTitle = song?.name || $_("text.song");
+    });
 </script>
 
 {#if $query.isLoading}

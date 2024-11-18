@@ -11,9 +11,9 @@
 
     let title = $_("text.newest");
     $PageTitle = title;
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["newestAlbums"],
         queryFn: async () => {
             let result = await newestAlbums({ limit: 100 });
@@ -26,10 +26,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: albums = $query.data?.album || {};
+    let albums = $derived($query.data?.album || {});
 </script>
 
 <div class="page-header">

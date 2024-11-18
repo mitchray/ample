@@ -1,12 +1,16 @@
 <script>
-    export let name;
-    export let variant = "outlined";
-    export let fill = true;
-    export let weight = 400;
-    export let grade = 0;
-    export let opticalSize = 24;
-    export let size = "1em";
-    export let classes = "";
+    /** @type {{name: any, variant?: string, fill?: boolean, weight?: number, grade?: number, opticalSize?: number, size?: string, classes?: string, [key: string]: any}} */
+    let {
+        name,
+        variant = "outlined",
+        fill = true,
+        weight = 400,
+        grade = 0,
+        opticalSize = 24,
+        size = "1em",
+        classes = "",
+        ...rest
+    } = $props();
 </script>
 
 {#if name}
@@ -18,7 +22,7 @@
         'wght' {weight},
         'GRAD' {grade},
         'opsz' {opticalSize};"
-        {...$$restProps}
+        {...rest}
     >
         {name}
     </span>

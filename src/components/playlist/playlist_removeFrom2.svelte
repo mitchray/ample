@@ -1,17 +1,18 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let tabulator;
-    export let playlistID;
-    export let songs;
+    /** @type {{tabulator: any, playlistID: any, songs: any}} */
+    let { tabulator, playlistID, songs = $bindable() } = $props();
 
-    let selectedCount = 0;
-    let confirm = null;
+    let selectedCount = $state(0);
+    let confirm = $state(null);
 
-    $: {
+    run(() => {
         if (tabulator) {
             tabulator.on(
                 "rowSelectionChanged",
@@ -20,7 +21,7 @@
                 },
             );
         }
-    }
+    });
 
     function handleApply(e) {
         // close confirmation and reset selectedCount
@@ -64,11 +65,11 @@
             </div>
 
             <div class="options">
-                <sl-button on:click={confirm.hide()} variant="text">
+                <sl-button onclick={confirm.hide()} variant="text">
                     {$_("text.cancel")}
                 </sl-button>
-                <sl-button on:click={handleApply} variant="danger">
                     <MaterialSymbol name="cancel" slot="prefix" />
+                <sl-button onclick={handleApply} variant="danger">
                     {$_("text.remove")}
                 </sl-button>
             </div>

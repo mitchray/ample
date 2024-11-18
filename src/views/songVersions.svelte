@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
@@ -9,19 +11,22 @@
     import { PageTitle, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: $PageTitle =
-        $_("text.versionsOf", {
-            values: {
-                songTitle: params.songTitle,
-                artistName: params.artistName,
-            },
-        }) || $_("text.songVersions");
+    run(() => {
+        $PageTitle =
+            $_("text.versionsOf", {
+                values: {
+                    songTitle: params.songTitle,
+                    artistName: params.artistName,
+                },
+            }) || $_("text.songVersions");
+    });
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["songVersions", params.songTitle + params.artistName],
         queryFn: async () => {
             let result = await getSongVersions(
@@ -37,10 +42,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: songs = $query.data || {};
+    let songs = $derived($query.data || {});
 </script>
 
 <div class="page-header">

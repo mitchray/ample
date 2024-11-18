@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import Lyrics from "~/logic/lyrics";
     import Portal from "~/components/portal.svelte";
@@ -7,25 +9,12 @@
     import { throttle } from "lodash-es";
 
     let lyrics = new Lyrics(); // custom store
-    let follow = true;
-    let loading = true;
-    let drawer;
-    let container;
+    let follow = $state(true);
+    let loading = $state(true);
+    let drawer = $state();
+    let container = $state();
 
-    $: {
-        if (lyrics && $CurrentMedia) {
-            loading = true;
 
-            // reset any previous instance
-            resetEvents();
-
-            loading = false;
-        }
-    }
-
-    $: {
-        $ShowLyrics ? drawer?.show() : drawer?.hide();
-    }
 
     function handleClose(event) {
         // ignore bubbled sl-hide events from other components
@@ -70,6 +59,19 @@
             follow = true;
         }
     }
+    run(() => {
+        if (lyrics && $CurrentMedia) {
+            loading = true;
+
+            // reset any previous instance
+            resetEvents();
+
+            loading = false;
+        }
+    });
+    run(() => {
+        $ShowLyrics ? drawer?.show() : drawer?.hide();
+    });
 </script>
 
 {#if $SiteContentBind}
@@ -77,7 +79,7 @@
         <sl-drawer
             bind:this={drawer}
             contained
-            on:sl-hide={handleClose}
+            onsl-hide={handleClose}
             placement="bottom"
         >
             <div slot="label">
@@ -88,7 +90,7 @@
                 <sl-button
                     class="follow"
                     hidden={!$lyrics.isTimestamped || follow}
-                    on:click={() => (follow = true)}
+                    onclick={() => (follow = true)}
                 >
                     {$_("text.follow")}
                 </sl-button>
@@ -98,8 +100,8 @@
                 class="lyrics-container"
                 class:disable-scroll={follow}
                 class:hasTimestamps={$lyrics.isTimestamped}
-                on:touchstart={handleScroll}
-                on:wheel={handleScroll}
+                ontouchstart={handleScroll}
+                onwheel={handleScroll}
                 bind:this={container}
             >
                 {#if $CurrentMedia?.object_type === "song"}
@@ -108,7 +110,7 @@
                             <div
                                 class="line"
                                 class:current={$lyrics.currentLine === i}
-                                on:click={() => {
+                                onclick={() => {
                                     handleClick(line.startSeconds);
                                 }}
                             >

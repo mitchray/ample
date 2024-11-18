@@ -9,7 +9,7 @@
     import { tick } from "svelte";
 
     let timeout;
-    let inputBind;
+    let inputBind = $state();
 
     function handleClick() {
         ShowSearch.set(true);
@@ -45,7 +45,7 @@
     <sl-button
         class="menu-button"
         id="sidebar-button"
-        on:click={handleSidebarToggle}
+        onclick={handleSidebarToggle}
     >
         <MaterialSymbol name="menu" />
     </sl-button>
@@ -61,12 +61,12 @@
         bind:this={inputBind}
         class="site-search"
         clearable
-        on:click={handleClick}
-        on:keyup={handleInputChange}
-        on:paste={handleInputChange}
-        on:sl-change={handleInputChange}
-        on:sl-clear={handleClear}
-        on:sl-input={handleInputChange}
+        onclick={handleClick}
+        onkeyup={handleInputChange}
+        onpaste={handleInputChange}
+        onsl-change={handleInputChange}
+        onsl-clear={handleClear}
+        onsl-input={handleInputChange}
         placeholder={$_("text.search")}
         type="text"
         value={$SearchQuery}

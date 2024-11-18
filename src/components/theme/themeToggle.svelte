@@ -9,13 +9,13 @@
         $Theme = { ...$Theme, mode: mode };
     }
 
-    $: text =
-        $Theme.mode === "dark"
+    let text =
+        $derived($Theme.mode === "dark"
             ? $_("text.themeLightMode")
-            : $_("text.themeDarkMode");
+            : $_("text.themeDarkMode"));
 </script>
 
-<sl-button class="icon-button theme-toggle" on:click={toggleTheme} title={text}>
+<sl-button class="icon-button theme-toggle" onclick={toggleTheme} title={text}>
     {#if $Theme.mode === "dark"}
         <MaterialSymbol name="light_mode" slot="prefix" />
     {:else}

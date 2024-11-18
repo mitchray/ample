@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
     import { throttle } from "throttle-wait";
@@ -10,37 +12,38 @@
     import { Saved } from "~/stores/settings.js";
     import { onMount } from "svelte";
 
-    export let data;
+    /** @type {{data: any}} */
+    let { data } = $props();
 
     let mb = new MusicBrainz();
     let hasMusicbrainz = mb.hasMBID(data);
 
-    let combinedSources = [];
+    let combinedSources = $state([]);
     let songs = [];
     let allRecordings = [];
-    let loadCount = 0;
+    let loadCount = $state(0);
     let limit = 100;
-    let fetching = false;
-    let loaded = false;
-    let queryURL;
-    let additionalQueries;
-    let filteredRecordings = [];
-    let counts = {
+    let fetching = $state(false);
+    let loaded = $state(false);
+    let queryURL = $state();
+    let additionalQueries = $state();
+    let filteredRecordings = $state([]);
+    let counts = $state({
         reported: 0,
         matches: 0,
         duplicates: 0,
         issues: 0,
         flagged: 0,
         missing: 0,
-    };
-    let filters = {};
-    let dialog;
+    });
+    let filters = $state({});
+    let dialog = $state();
 
     onMount(async () => {
         filters = (await $Saved.getItem("MusicBrainzFilters")) || {};
     });
 
-    $: {
+    run(() => {
         queryURL = `https://musicbrainz.org/ws/2/recording/?artist=${
             data.mbid
         }&limit=${limit}&offset=${loadCount * limit}`;
@@ -202,7 +205,7 @@
                 return obj1.title.localeCompare(obj2.title);
             });
         }
-    }
+    });
 
     async function mbQuery() {
         return await fetch(queryURL, {
@@ -356,7 +359,7 @@
 
 <div class="top">
     <sl-button
-        on:click={() => {
+        onclick={() => {
             dialog.show();
         }}
     >
@@ -382,7 +385,7 @@
 
     {#if hasMusicbrainz}
         {#if loadCount < 1}
-            <sl-button variant="primary" on:click={handleGo} class="submit">
+            <sl-button variant="primary" onclick={handleGo} class="submit">
                 {$_("text.beginComparison")}
             </sl-button>
         {/if}
@@ -475,7 +478,7 @@
 
                 <sl-checkbox
                     checked={filters.hideMatches}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideMatches = e.target.checked)}
                 >
                     {$_("text.mbExactMatches")} ({counts.matches})
@@ -483,7 +486,7 @@
 
                 <sl-checkbox
                     checked={filters.hideDuplicates}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideDuplicates = e.target.checked)}
                 >
                     {$_("text.mbDuplicates")} ({counts.duplicates})
@@ -491,7 +494,7 @@
 
                 <sl-checkbox
                     checked={filters.hideIssues}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideIssues = e.target.checked)}
                 >
                     {$_("text.mbIssues")} ({counts.issues})
@@ -499,7 +502,7 @@
 
                 <sl-checkbox
                     checked={filters.hideFlagged}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideFlagged = e.target.checked)}
                 >
                     {$_("text.mbFlagged")} ({counts.flagged})
@@ -507,7 +510,7 @@
 
                 <sl-checkbox
                     checked={filters.hideMissing}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideMissing = e.target.checked)}
                 >
                     {$_("text.mbMissing")} ({counts.missing})
@@ -519,7 +522,7 @@
 
                 <sl-checkbox
                     checked={filters.hideRemixes}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideRemixes = e.target.checked)}
                 >
                     {$_("text.mbRemixes")}
@@ -538,7 +541,7 @@
 
                 <sl-checkbox
                     checked={filters.hideInstrumentals}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideInstrumentals = e.target.checked)}
                 >
                     {$_("text.mbInstrumentals")}
@@ -562,7 +565,7 @@
 
                 <sl-checkbox
                     checked={filters.hideRadioEdits}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideRadioEdits = e.target.checked)}
                 >
                     {$_("text.mbRadioEdits")}
@@ -581,7 +584,7 @@
 
                 <sl-checkbox
                     checked={filters.hideLive}
-                    on:sl-change={(e) => (filters.hideLive = e.target.checked)}
+                    onsl-change={(e) => (filters.hideLive = e.target.checked)}
                 >
                     {$_("text.mbLive")}
 
@@ -599,7 +602,7 @@
 
                 <sl-checkbox
                     checked={filters.hideShortSongs}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideShortSongs = e.target.checked)}
                 >
                     {$_("text.mbShort")}
@@ -617,7 +620,7 @@
 
                 <sl-checkbox
                     checked={filters.hideDemos}
-                    on:sl-change={(e) => (filters.hideDemos = e.target.checked)}
+                    onsl-change={(e) => (filters.hideDemos = e.target.checked)}
                 >
                     {$_("text.mbDemos")}
 
@@ -635,7 +638,7 @@
 
                 <sl-checkbox
                     checked={filters.hideInterviews}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideInterviews = e.target.checked)}
                 >
                     {$_("text.mbInterviews")}
@@ -659,7 +662,7 @@
 
                 <sl-checkbox
                     checked={filters.hideZeroTimes}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideZeroTimes = e.target.checked)}
                 >
                     {$_("text.mbZeroLength")}
@@ -677,7 +680,7 @@
 
                 <sl-checkbox
                     checked={filters.hideVideos}
-                    on:sl-change={(e) =>
+                    onsl-change={(e) =>
                         (filters.hideVideos = e.target.checked)}
                 >
                     {$_("text.mbVideos")}

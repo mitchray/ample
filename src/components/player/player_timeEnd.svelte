@@ -4,7 +4,7 @@
     import { formatSongLength } from "~/logic/formatters.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
-    let duration;
+    let duration = $state();
 
     function updateProgress() {
         duration = $MediaPlayer.getDuration();

@@ -5,7 +5,7 @@
     import { PlaybackSpeed } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let speedSlider;
+    let speedSlider = $state();
 
     onMount(() => {
         noUiSlider.create(speedSlider, {

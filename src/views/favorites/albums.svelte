@@ -8,7 +8,7 @@
         remotePaginationDefaults,
     } from "~/components/lister/columns.js";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 <div class="lister-tabulator">

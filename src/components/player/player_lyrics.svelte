@@ -10,7 +10,7 @@
 </script>
 
 <sl-button
-    on:click={toggleLyrics}
+    onclick={toggleLyrics}
     title={$ShowLyrics ? $_("text.lyricsHide") : $_("text.lyricsShow")}
 >
     <MaterialSymbol name="lyrics" />

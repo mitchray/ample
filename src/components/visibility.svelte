@@ -2,17 +2,21 @@
     // Courtesy of https://dev.to/dan_1s/visibility-detection-using-svelte-2e96
     import { onMount } from "svelte";
 
-    export let top = 0;
-    export let bottom = 500;
-    export let left = 0;
-    export let right = 0;
-    export let percentThreshold = 0;
-    export let steps = 100;
+    /** @type {{top?: number, bottom?: number, left?: number, right?: number, percentThreshold?: number, steps?: number, children?: import('svelte').Snippet<[any]>}} */
+    let {
+        top = 0,
+        bottom = 500,
+        left = 0,
+        right = 0,
+        percentThreshold = 0,
+        steps = 100,
+        children
+    } = $props();
 
-    let element;
-    let percent;
+    let element = $state();
+    let percent = $state();
     let observer;
-    let unobserve = () => {};
+    let unobserve = $state(() => {});
     let intersectionObserverSupport = false;
 
     function intersectPercent(entries) {
@@ -51,7 +55,7 @@
 
 {#if percent > percentThreshold}
     <div class="dummy" use:unobserve>
-        <slot {percent} />
+        {@render children?.({ percent, })}
     </div>
 {/if}
 

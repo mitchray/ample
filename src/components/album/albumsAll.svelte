@@ -8,7 +8,7 @@
     } from "~/components/lister/columns.js";
     import MassRater from "~/components/lister/massRater.svelte";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 <div class="lister-tabulator">

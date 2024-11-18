@@ -3,9 +3,8 @@
     import ThemeCard from "~/components/theme/_themeCard.svelte";
     import { setContext } from "svelte";
 
-    export let name;
-    export let isGray;
-    export let colors;
+    /** @type {{name: any, isGray: any, colors: any}} */
+    let { name, isGray, colors } = $props();
 
     let contextKey = uuidv4(); // unique key
 

@@ -2,11 +2,11 @@
     import Rating from "~/components/rating/rating.svelte";
     import Art from "~/components/art.svelte";
 
-    export let data = null; // needed for cardList dynamic components
-    export let type = undefined; // ignored; workaround for card list component when type is 'generic'
+    /** @type {{data?: any, type?: any}} */
+    let { data = null, type = undefined } = $props();
 
-    let artist;
-    $: artist = data;
+    let artist = $derived(data);
+    
 </script>
 
 <div class="artist-card card">

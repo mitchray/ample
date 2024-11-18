@@ -23,7 +23,7 @@
     <sl-color-picker
         class="hue-only"
         format="hsl"
-        on:sl-input={(e) => {
+        onsl-input={(e) => {
             setHue(e, "hueBackground");
         }}
         style="--the-hue: {$Theme.hueBackground};"
@@ -33,7 +33,7 @@
 
     <sl-switch
         checked={$Theme.isGray}
-        on:sl-change={(e) => {
+        onsl-change={(e) => {
             $Theme = { ...$Theme, isGray: e.target.checked };
         }}
     >
@@ -45,7 +45,7 @@
     <sl-color-picker
         class="hue-only"
         format="hsl"
-        on:sl-input={(e) => {
+        onsl-input={(e) => {
             setHue(e, "hue1");
         }}
         style="--the-hue: {$Theme.hue1};"
@@ -58,7 +58,7 @@
     <sl-color-picker
         class="hue-only"
         format="hsl"
-        on:sl-input={(e) => {
+        onsl-input={(e) => {
             setHue(e, "hue2");
         }}
         style="--the-hue: {$Theme.hue2};"
@@ -69,7 +69,7 @@
 
 <div>
     <sl-color-picker
-        on:sl-input={(e) => {
+        onsl-input={(e) => {
             $Theme = { ...$Theme, colorWave: e.target.value };
         }}
         value={$Theme.colorWave}

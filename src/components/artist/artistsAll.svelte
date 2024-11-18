@@ -8,10 +8,11 @@
         remotePaginationDefaults,
     } from "~/components/lister/columns.js";
 
-    /** @type {'artist'|'album_artist'} */
-    export let type;
+    
+    /** @type {{type: 'artist'|'album_artist'}} */
+    let { type } = $props();
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 <div class="lister-tabulator">

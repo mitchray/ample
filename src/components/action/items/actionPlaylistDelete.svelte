@@ -6,12 +6,13 @@
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _data } = getContext(contextKey);
 
-    let drawerDelete;
-    let loaded = false;
+    let drawerDelete = $state();
+    let loaded = $state(false);
 
     async function handleAction() {
         loaded = true;
@@ -22,7 +23,7 @@
 
 {#if $_data.playlist?.has_access}
     <sl-menu-item
-        on:click={handleAction}
+        onclick={handleAction}
         title={$_("text.playlistDelete")}
         variant="danger"
     >

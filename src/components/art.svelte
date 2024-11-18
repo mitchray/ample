@@ -1,28 +1,33 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { API, Server } from "~/stores/state.js";
     import { shuffle, uniqBy } from "lodash-es";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** Data of the item */
-    export let data;
+    
 
     /** Type of object */
-    /** @type {"song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream" | "mix"} */
-    export let type;
+    
 
-    /** @type {"thumbnail" | "small" | "medium" | "large"} */
-    export let size = "medium";
+    
 
-    /** @type string */
-    export let radius = "0px";
+    
+    /** @type {{data: any, type: "song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream" | "mix", size?: "thumbnail" | "small" | "medium" | "large", radius?: string}} */
+    let {
+        data,
+        type,
+        size = "medium",
+        radius = "0px"
+    } = $props();
 
-    let dimension = 128;
-    let thumb = 2;
-    let images = [];
+    let dimension = $state(128);
+    let thumb = $state(2);
+    let images = $state([]);
 
-    let playlistSongs = [];
+    let playlistSongs = $state([]);
 
     onMount(async () => {
         let result = [];
@@ -48,8 +53,6 @@
         }
     });
 
-    // process the art once we finish fetching
-    $: playlistSongs, processData();
 
     async function processData() {
         // if ($query.data?.length < 1) return;
@@ -86,6 +89,10 @@
                 break;
         }
     }
+    // process the art once we finish fetching
+    run(() => {
+        playlistSongs, processData();
+    });
 </script>
 
 <div
@@ -116,7 +123,7 @@
                 height={dimension}
                 width={dimension}
                 data-id="art-{type}-{data.id}"
-                on:error={(e) => {
+                onerror={(e) => {
                     e.onerror = null;
                     e.target.src =
                         $Server.ampacheURL +

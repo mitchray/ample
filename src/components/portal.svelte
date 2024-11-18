@@ -2,8 +2,9 @@
     import { onMount } from "svelte";
     import Portal from "svelte-portal";
 
-    export let target = "#app";
-    let ready;
+    /** @type {{target?: string, children?: import('svelte').Snippet}} */
+    let { target = "#app", children } = $props();
+    let ready = $state();
 
     onMount(() => {
         ready = true;
@@ -12,6 +13,6 @@
 
 <Portal {target}>
     {#if ready}
-        <slot />
+        {@render children?.()}
     {/if}
 </Portal>

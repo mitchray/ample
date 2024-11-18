@@ -5,10 +5,11 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Tabulator } from "tabulator-tables";
 
-    export let share = null;
+    /** @type {{share?: any}} */
+    let { share = null } = $props();
     export const show = () => drawer.show();
 
-    let drawer;
+    let drawer = $state();
 
     function handleDelete() {
         $API.shareDelete({ filter: share.id }).then((result) => {
@@ -45,8 +46,8 @@
         })}
     </div>
 
-    <sl-button on:click={handleDelete} slot="footer" variant="danger">
         <MaterialSymbol name="delete" slot="prefix" />
+    <sl-button onclick={handleDelete} slot="footer" variant="danger">
         {$_("text.delete")}
     </sl-button>
 </sl-drawer>

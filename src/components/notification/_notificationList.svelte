@@ -5,7 +5,8 @@
     import { flip } from "svelte/animate";
     import NotificationCard from "~/components/notification/notificationCard.svelte";
 
-    export let notifications;
+    /** @type {{notifications: any}} */
+    let { notifications } = $props();
 </script>
 
 <div class="container">

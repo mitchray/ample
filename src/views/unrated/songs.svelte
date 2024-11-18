@@ -9,9 +9,9 @@
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["unratedSongs"],
         queryFn: async () => {
             let result = await unratedSongs({ limit: 100 });
@@ -24,10 +24,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: songs = $query.data?.song || {};
+    let songs = $derived($query.data?.song || {});
 </script>
 
 {#if $query.isLoading}

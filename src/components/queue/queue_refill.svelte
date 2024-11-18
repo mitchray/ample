@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { QueueRefill, Saved } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -9,26 +11,13 @@
     import { errorHandler, prepareForQueue } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
 
-    let selectedPlaylist;
-    let playlistsArray = [];
-    let isFetching = false;
-    let timeout;
+    let selectedPlaylist = $state();
+    let playlistsArray = $state([]);
+    let isFetching = $state(false);
+    let timeout = $state();
 
-    // when selected playlist changes, pass it back up to the selector component
-    $: selectedPlaylist, (playlistsArray = [selectedPlaylist]);
 
-    $: shouldAdd =
-        $QueueRefill.enabled &&
-        $NowPlayingQueue.length > 0 &&
-        $NowPlayingIndex > $NowPlayingQueue.length - 10 &&
-        !isFetching;
 
-    $: {
-        if (shouldAdd) {
-            clearTimeout(timeout);
-            startFetching();
-        }
-    }
 
     async function startFetching() {
         isFetching = true;
@@ -38,21 +27,6 @@
         }, 10000);
     }
 
-    $: {
-        // test the saved smartlist does exist
-        if ($QueueRefill.smartlist) {
-            $API.playlist({
-                filter: $QueueRefill.smartlist,
-            }).then((result) => {
-                if (result.error) {
-                    errorHandler("getting playlists", result.error);
-                    selectedPlaylist = null;
-                } else {
-                    selectedPlaylist = result.id;
-                }
-            });
-        }
-    }
 
     function fetchItems() {
         return new Promise((resolve, reject) => {
@@ -144,6 +118,36 @@
         QueueRefill.set({ ...$QueueRefill, smartlist: null });
         $Saved.setItem("QueueRefill", $QueueRefill);
     }
+    run(() => {
+        // test the saved smartlist does exist
+        if ($QueueRefill.smartlist) {
+            $API.playlist({
+                filter: $QueueRefill.smartlist,
+            }).then((result) => {
+                if (result.error) {
+                    errorHandler("getting playlists", result.error);
+                    selectedPlaylist = null;
+                } else {
+                    selectedPlaylist = result.id;
+                }
+            });
+        }
+    });
+    // when selected playlist changes, pass it back up to the selector component
+    run(() => {
+        selectedPlaylist, (playlistsArray = [selectedPlaylist]);
+    });
+    let shouldAdd =
+        $derived($QueueRefill.enabled &&
+        $NowPlayingQueue.length > 0 &&
+        $NowPlayingIndex > $NowPlayingQueue.length - 10 &&
+        !isFetching);
+    run(() => {
+        if (shouldAdd) {
+            clearTimeout(timeout);
+            startFetching();
+        }
+    });
 </script>
 
 <sl-dropdown hoist placement="bottom">
@@ -167,13 +171,13 @@
 
             <sl-switch
                 checked={$QueueRefill.enabled}
-                on:sl-change={toggleEnabled}
+                onsl-change={toggleEnabled}
             ></sl-switch>
         </div>
 
         <sl-radio-group
             name="mode"
-            on:sl-change={handleMode}
+            onsl-change={handleMode}
             value={$QueueRefill.mode}
         >
             <sl-radio-button value="smartlist">

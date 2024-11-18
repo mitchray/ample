@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { User } from "~/stores/state.js";
     import Actions from "~/components/action/actions.svelte";
@@ -8,14 +10,16 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { getSimilarArtistsWithGenreFallback } from "~/logic/artist.js";
 
-    export let data = null; // needed for cardList dynamic components
-    export let type = undefined; // ignored; workaround for card list component when type is 'generic'
+    /** @type {{data?: any, type?: any}} */
+    let { data = null, type = undefined } = $props();
 
-    let playlist;
+    let playlist = $state();
 
-    $: playlist = data;
+    run(() => {
+        playlist = data;
+    });
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["playlistMix", playlist?.id],
         staleTime: 60 * 1000 * 30, // 30 minutes
         queryFn: async () => {
@@ -24,10 +28,10 @@
             return sampleSize(result, 3);
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: artists = $query.data || {};
+    let artists = $derived($query.data || {});
 </script>
 
 <div class="mix-card card">

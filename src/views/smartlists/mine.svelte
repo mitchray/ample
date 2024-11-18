@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { smartlistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -7,9 +9,9 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["mySmartlists"],
         queryFn: async () => {
             let result = await $API.userSmartlists();
@@ -24,10 +26,13 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: smartlists = $query.data?.playlist || {};
+    let smartlists;
+    run(() => {
+        smartlists = $query.data?.playlist || {};
+    });
 </script>
 
 {#if $query.isLoading}

@@ -13,7 +13,7 @@
         "demo-config": "copyfiles ample-demo.json dist/config && renamer -f \"/ample-demo.json/\" -r \"ample.json\" \"dist/config/*\""
     },
     "devDependencies": {
-        "@sveltejs/vite-plugin-svelte": "^3.1.2",
+        "@sveltejs/vite-plugin-svelte": "^4.0.0",
         "@tsconfig/svelte": "^5.0.4",
         "@types/lodash-es": "^4.17.12",
         "autoprefixer": "^10.4.20",
@@ -24,7 +24,7 @@
         "prettier-plugin-svelte": "^3.2.6",
         "renamer": "^5.0.2",
         "rollup-plugin-visualizer": "^5.12.0",
-        "svelte": "^4.2.19",
+        "svelte": "^5.0.0",
         "svelte-check": "^4.0.2",
         "svelte-preprocess": "^6.0.2",
         "tslib": "^2.7.0",

@@ -5,11 +5,11 @@
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
 
-    export let data = null; // needed for cardList dynamic components
-    export let type = undefined; // ignored; workaround for card list component when type is 'generic'
+    /** @type {{data?: any, type?: any}} */
+    let { data = null, type = undefined } = $props();
 
-    let album;
-    $: album = data;
+    let album = $derived(data);
+    
 </script>
 
 <div class="album-card card">

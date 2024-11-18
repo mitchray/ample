@@ -5,11 +5,12 @@
     import { shuffleArray } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { getSongs, _showShuffle, _displayMode } = getContext(contextKey);
 
-    let loading = false;
+    let loading = $state(false);
 
     async function handleAction() {
         loading = true;
@@ -23,7 +24,7 @@
 {#if $_showShuffle}
     <sl-button
         variant="primary-alt"
-        on:click={handleAction}
+        onclick={handleAction}
         title={$_("text.shuffle")}
         {loading}
         size={$_displayMode === "miniButtons" ? "small" : "medium"}

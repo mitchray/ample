@@ -9,9 +9,9 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["randomArtists"],
         queryFn: async () => {
             let result = await randomArtists({ limit: 50 });
@@ -26,10 +26,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: artists = $query.data?.artist || {};
+    let artists = $derived($query.data?.artist || {});
 </script>
 
 {#if $query.isLoading}

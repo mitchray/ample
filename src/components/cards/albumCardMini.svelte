@@ -3,11 +3,11 @@
     import Badge from "~/components/badge.svelte";
     import { formatReleaseType } from "~/logic/formatters.js";
 
-    export let data = null;
-    export let type = undefined; // ignored; workaround for card list component when type is 'generic'
+    /** @type {{data?: any, type?: any}} */
+    let { data = null, type = undefined } = $props();
 
-    let album;
-    $: album = data;
+    let album = $derived(data);
+    
 </script>
 
 {#if album}

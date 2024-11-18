@@ -1,15 +1,15 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { MediaPlayer } from "~/stores/elements.js";
     import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
 
-    let dropdown;
-    let previousItem;
+    let dropdown = $state();
+    let previousItem = $state();
     let timeout;
 
-    $: $CurrentMedia, update();
-    $: $NowPlayingQueue, update();
 
     function update() {
         previousItem = $MediaPlayer?.findViableItem("previous");
@@ -25,13 +25,19 @@
         clearTimeout(timeout);
         dropdown.hide();
     }
+    run(() => {
+        $CurrentMedia, update();
+    });
+    run(() => {
+        $NowPlayingQueue, update();
+    });
 </script>
 
-<sl-dropdown bind:this={dropdown} on:pointerleave={handleOut} placement="top">
+<sl-dropdown bind:this={dropdown} onpointerleave={handleOut} placement="top">
     <sl-button
         disabled={!previousItem}
-        on:click={() => $MediaPlayer.previous()}
-        on:pointerover={handleOver}
+        onclick={() => $MediaPlayer.previous()}
+        onpointerover={handleOver}
         slot="trigger"
     >
         <MaterialSymbol name="skip_previous" />

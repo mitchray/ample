@@ -4,11 +4,11 @@
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    let wavesurfer;
-    let audioElement = new Audio({
+    let wavesurfer = $state();
+    let audioElement = $state(new Audio({
         crossorigin: "anonymous",
         crossOrigin: "anonymous",
-    });
+    }));
 
     onMount(async () => {
         wavesurfer = new WaveSurfer({
@@ -31,10 +31,10 @@
 
 <div id="waveformtest"></div>
 
-<button on:click={wavesurfer?.playPause()}>Toggle Play/Pause</button>
+<button onclick={wavesurfer?.playPause()}>Toggle Play/Pause</button>
 
 <button
-    on:click={() => {
+    onclick={() => {
         wavesurfer?.pause();
         $API.liveStream({ filter: 2 }).then((r) => {
             if (r.error) {
@@ -52,7 +52,7 @@
 </button>
 
 <button
-    on:click={() => {
+    onclick={() => {
         wavesurfer?.pause();
         $API.podcastEpisode({ filter: 672 }).then((r) => {
             if (r.error) {
@@ -69,7 +69,7 @@
 </button>
 
 <button
-    on:click={() => {
+    onclick={() => {
         wavesurfer?.pause();
         $API.stream({ id: 35209, type: "song", format: "raw" }).then((r) => {
             if (r.error) {
@@ -85,7 +85,7 @@
 </button>
 
 <button
-    on:click={() => {
+    onclick={() => {
         wavesurfer?.pause();
         $API.song({ filter: 35209 }).then((r) => {
             if (r.error) {

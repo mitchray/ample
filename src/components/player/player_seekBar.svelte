@@ -1,16 +1,16 @@
 <script>
+    import { run, passive } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { CurrentMedia } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
-    let seekWidth;
+    let seekWidth = $state();
     let currentTime;
     let isPressed = false;
-    let progressSlider;
+    let progressSlider = $state();
     let endTime;
 
-    // restart for each new media item
-    $: $CurrentMedia, requestAnimationFrame(updateProgress);
 
     function updateProgress() {
         if (!$MediaPlayer) return;
@@ -75,6 +75,10 @@
     onMount(() => {
         requestAnimationFrame(updateProgress);
     });
+    // restart for each new media item
+    run(() => {
+        $CurrentMedia, requestAnimationFrame(updateProgress);
+    });
 </script>
 
 {#if $CurrentMedia?.object_type === "live_stream"}
@@ -83,11 +87,11 @@
     <div
         class="seekBar"
         bind:this={progressSlider}
-        on:click={handleSeek}
-        on:mousedown={handleSeekMouseDown}
-        on:touchstart={handleSeekTouchDown}
-        on:mousemove={handleSeekDrag}
-        on:touchmove|passive={handleSeekDrag}
+        onclick={handleSeek}
+        onmousedown={handleSeekMouseDown}
+        ontouchstart={handleSeekTouchDown}
+        onmousemove={handleSeekDrag}
+        use:passive={['touchmove', () => handleSeekDrag]}
     >
         <span
             class="progress"

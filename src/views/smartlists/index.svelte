@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -6,7 +8,8 @@
     import Mine from "./mine.svelte";
     import All from "./all.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
     let title = $_("text.smartlists");
     $PageTitle = title;
@@ -21,16 +24,16 @@
     }
 
     // default to mine tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/smartlists/mine`);
-    }
+    });
 </script>
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
 </div>
 
-<sl-tab-group on:sl-tab-show={changeTab}>
+<sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
         <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
             {tab.label}

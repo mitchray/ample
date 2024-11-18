@@ -6,7 +6,7 @@
 
 <sl-button
     disabled={$NowPlayingQueue.length === 0}
-    on:click={() => {
+    onclick={() => {
         $MediaPlayer.goBackward(10);
     }}
     variant="text"

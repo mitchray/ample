@@ -8,7 +8,7 @@
     import { userPreference } from "~/logic/preferences.js";
 
     const sharePreference = userPreference("share");
-    let savedStatuses = {};
+    let savedStatuses = $state({});
     let featuresReady = false;
 
     function handleOpen(event) {
@@ -48,8 +48,8 @@
 
 <sl-details
     data-id="library"
-    on:sl-hide={handleClose}
-    on:sl-show={handleOpen}
+    onsl-hide={handleClose}
+    onsl-show={handleOpen}
     open={savedStatuses["library"]}
 >
     <div class="title-wrapper" slot="summary">
@@ -90,8 +90,8 @@
 
 <sl-details
     data-id="playlists"
-    on:sl-hide={handleClose}
-    on:sl-show={handleOpen}
+    onsl-hide={handleClose}
+    onsl-show={handleOpen}
     open={savedStatuses["playlists"]}
 >
     <div class="title-wrapper" slot="summary">
@@ -122,8 +122,8 @@
     <sl-details
         data-id="dashboards"
         open={savedStatuses["dashboards"]}
-        on:sl-show={handleOpen}
-        on:sl-hide={handleClose}
+        onsl-show={handleOpen}
+        onsl-hide={handleClose}
     >
         <div class="title-wrapper" slot="summary">
             <SidebarHeading icon="dashboard" label={$_("text.dashboards")} />
@@ -154,8 +154,8 @@
     <sl-details
         data-id="system"
         open={savedStatuses["system"]}
-        on:sl-show={handleOpen}
-        on:sl-hide={handleClose}
+        onsl-show={handleOpen}
+        onsl-hide={handleClose}
     >
         <div class="title-wrapper" slot="summary">
             <SidebarHeading icon="settings" label={$_("text.system")} />

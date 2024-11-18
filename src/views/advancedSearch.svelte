@@ -4,10 +4,10 @@
     import CustomSearchResults from "~/components/customSearchResults.svelte";
     import { PageTitle } from "~/stores/state.js";
 
-    let loadedTime;
-    let loading;
-    let results = [];
-    let type;
+    let loadedTime = $state();
+    let loading = $state();
+    let results = $state([]);
+    let type = $state();
 
     let title = $_("text.advancedSearch");
     $PageTitle = title;

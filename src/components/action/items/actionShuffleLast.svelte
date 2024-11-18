@@ -5,11 +5,12 @@
     import { shuffleArray } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { getSongs, _showShuffle } = getContext(contextKey);
 
-    let loading = false;
+    let loading = $state(false);
 
     async function handleAction() {
         loading = true;
@@ -22,7 +23,7 @@
 
 {#if $_showShuffle}
     <sl-menu-item
-        on:click={handleAction}
+        onclick={handleAction}
         title={$_("text.shuffleLast")}
         {loading}
     >

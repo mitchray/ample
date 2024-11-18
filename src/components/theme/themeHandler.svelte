@@ -1,10 +1,19 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { Saved, Theme } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
-    $: $Theme, handleChange();
 
-    $: {
+
+    function handleChange() {
+        // $Saved won't be available until we're logged in
+        $Saved?.setItem("Theme", { ...$Theme });
+
+        // update waveform colors when theme is toggled
+        $MediaPlayer?.setWaveColors();
+    }
+    run(() => {
         if (!$Theme.mode) {
             if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
                 $Theme.mode = "dark";
@@ -22,15 +31,10 @@
             document.documentElement.classList.remove("sl-theme-dark");
             document.documentElement.classList.add("sl-theme-light");
         }
-    }
-
-    function handleChange() {
-        // $Saved won't be available until we're logged in
-        $Saved?.setItem("Theme", { ...$Theme });
-
-        // update waveform colors when theme is toggled
-        $MediaPlayer?.setWaveColors();
-    }
+    });
+    run(() => {
+        $Theme, handleChange();
+    });
 </script>
 
 {@html `<style>

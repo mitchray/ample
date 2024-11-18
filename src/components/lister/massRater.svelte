@@ -1,15 +1,17 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let tabulator;
-    export let type;
+    /** @type {{tabulator: any, type: any}} */
+    let { tabulator, type } = $props();
 
-    let selectedCount = 0;
+    let selectedCount = $state(0);
 
-    $: {
+    run(() => {
         if (tabulator) {
             tabulator.on(
                 "rowSelectionChanged",
@@ -18,7 +20,7 @@
                 },
             );
         }
-    }
+    });
 
     function handleApply(e) {
         let newRating = parseInt(e.detail.item.value);
@@ -50,7 +52,7 @@
             {$_("text.rate")}
         </sl-button>
 
-        <sl-menu on:sl-select={handleApply}>
+        <sl-menu onsl-select={handleApply}>
             <sl-menu-item value="5">
                 {$_("text.ratingCount", { values: { count: 5 } })}
             </sl-menu-item>

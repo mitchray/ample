@@ -7,9 +7,9 @@
     import { errorHandler } from "~/logic/helper.js";
     import { _ } from "svelte-i18n";
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["smartlists"],
         queryFn: async () => {
             let result = await $API.smartlists();
@@ -24,10 +24,10 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: smartlists = $query.data?.playlist || [];
+    let smartlists = $derived($query.data?.playlist || []);
 </script>
 
 {#if $query.isLoading}

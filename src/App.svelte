@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import "@shoelace-style/shoelace/dist/themes/light.css";
     import "@shoelace-style/shoelace/dist/themes/dark.css";
     import "/src/css/normalize.css";
@@ -46,11 +48,11 @@
         $ShowLyrics = false;
     };
 
-    $: {
+    run(() => {
         if ($User.isLoggedIn) {
             loadSettings();
         }
-    }
+    });
 
     const queryClient = new QueryClient();
 

@@ -4,7 +4,8 @@
     import { getContext } from "svelte";
     import { errorHandler, getPlaylistIDFromUrl } from "~/logic/helper.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { dataDisplay, isEditMode, selectedCount } = getContext(contextKey);
 
@@ -45,7 +46,7 @@
 
 <sl-button
     disabled={$isEditMode || $selectedCount < 1}
-    on:click={handleRemove}
+    onclick={handleRemove}
     title={$_("text.remove")}
     variant="danger"
 >

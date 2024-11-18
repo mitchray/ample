@@ -7,7 +7,7 @@
 <div class="primary-controls">
     <sl-button
         disabled={$NowPlayingQueue.length === 0}
-        on:click={(e) => {
+        onclick={(e) => {
             $MediaPlayer.previous(e);
         }}
     >
@@ -17,14 +17,14 @@
     <sl-button
         class="play"
         disabled={$NowPlayingQueue.length === 0}
-        on:click={$MediaPlayer.playPause()}
+        onclick={$MediaPlayer.playPause()}
     >
         <MaterialSymbol name={$IsPlaying ? "pause" : "play_arrow"} />
     </sl-button>
 
     <sl-button
         disabled={$NowPlayingQueue.length === 0}
-        on:click={(e) => {
+        onclick={(e) => {
             $MediaPlayer.next(e);
         }}
     >

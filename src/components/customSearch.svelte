@@ -1,55 +1,44 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { onMount } from "svelte";
     import { API } from "~/stores/state";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let loading = false;
-    export let loadedTime;
-    export let results = [];
-    export let useSettings = null;
-    export let selectedObjectType = null;
-    export let immediateSearch = false;
+    /** @type {{loading?: boolean, loadedTime: any, results?: any, useSettings?: any, selectedObjectType?: any, immediateSearch?: boolean}} */
+    let {
+        loading = $bindable(false),
+        loadedTime = $bindable(),
+        results = $bindable([]),
+        useSettings = null,
+        selectedObjectType = $bindable(null),
+        immediateSearch = false
+    } = $props();
 
-    let loaded = false;
-    let rows = [];
+    let loaded = $state(false);
+    let rows = $state([]);
     let fieldsToShow;
-    let groupedFieldsToShow;
-    let rowCounter = 0;
-    let allUsers = [];
-    let allCatalogs = [];
-    let allPlaylists = [];
-    let allSmartlists = [];
-    let containerBind;
+    let groupedFieldsToShow = $state();
+    let rowCounter = $state(0);
+    let allUsers = $state([]);
+    let allCatalogs = $state([]);
+    let allPlaylists = $state([]);
+    let allSmartlists = $state([]);
+    let containerBind = $state();
 
     // set defaults
-    let settings = {
+    let settings = $state({
         type: "song",
         limit: "500",
         random: false,
         operator: "and",
-    };
+    });
 
-    // keep selectedObjectType in sync
-    $: selectedObjectType = settings.type;
 
-    // reset everything if object type changes
-    $: {
-        if (settings.type) {
-            populateFields();
-        }
-    }
 
-    // auto-add a row if all are removed
-    $: {
-        if (loaded && rows.length < 1) {
-            addNewRow();
-        }
-    }
 
-    // get highest existing id, or start at 1
-    $: rowCounter = rows.length ? Math.max(...rows.map((t) => t.id)) + 1 : 1;
 
     function parseParams() {
         if (useSettings) {
@@ -911,6 +900,26 @@
             inputType: "number",
         },
     ];
+    // keep selectedObjectType in sync
+    run(() => {
+        selectedObjectType = settings.type;
+    });
+    // reset everything if object type changes
+    run(() => {
+        if (settings.type) {
+            populateFields();
+        }
+    });
+    // auto-add a row if all are removed
+    run(() => {
+        if (loaded && rows.length < 1) {
+            addNewRow();
+        }
+    });
+    // get highest existing id, or start at 1
+    run(() => {
+        rowCounter = rows.length ? Math.max(...rows.map((t) => t.id)) + 1 : 1;
+    });
 </script>
 
 <div bind:this={containerBind} class="container">
@@ -918,7 +927,7 @@
         <div class="type">
             <sl-select
                 label={$_("text.searchFor")}
-                on:sl-change={(e) => {
+                onsl-change={(e) => {
                     settings.type = e.target.value;
                     clearAll();
                 }}
@@ -934,7 +943,7 @@
         <div class="maximum">
             <sl-select
                 label={$_("text.limit")}
-                on:sl-change={(e) => {
+                onsl-change={(e) => {
                     settings.limit = e.target.value;
                 }}
                 value={settings.limit}
@@ -953,7 +962,7 @@
 
         <div class="random">
             <sl-switch
-                on:sl-change={(e) => (settings.random = e.target.checked)}
+                onsl-change={(e) => (settings.random = e.target.checked)}
             >
                 {$_("text.random")}
             </sl-switch>
@@ -962,7 +971,7 @@
         <div class="match">
             <sl-switch
                 checked
-                on:sl-change={(e) => {
+                onsl-change={(e) => {
                     settings.operator = e.target.checked ? "and" : "or";
                 }}
             >
@@ -978,7 +987,7 @@
             <div class="row">
                 <sl-select
                     value={row.field}
-                    on:sl-change={(e) => {
+                    onsl-change={(e) => {
                         row.field = e.target.value;
                         row = setField(row, e);
                     }}
@@ -1007,7 +1016,7 @@
                 {#if row.operatorType === "string"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1049,7 +1058,7 @@
                 {#if row.operatorType === "number"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1079,7 +1088,7 @@
                 {#if row.operatorType === "relative"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1095,7 +1104,7 @@
                 {#if row.operatorType === "relative_x_days"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1115,7 +1124,7 @@
                 {#if row.operatorType === "rating_expanded"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1175,7 +1184,7 @@
                 {#if row.operatorType === "boolean_true"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1189,7 +1198,7 @@
                 {#if row.operatorType === "boolean_is"}
                     <sl-select
                         value={row.operator}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.operator = e.target.value;
                         }}
                     >
@@ -1205,7 +1214,7 @@
                 {#if row.inputType === "text"}
                     <sl-input
                         type="text"
-                        on:sl-change={(e) => (row.input = e.target.value)}
+                        onsl-change={(e) => (row.input = e.target.value)}
                         required
                     ></sl-input>
                 {/if}
@@ -1213,7 +1222,7 @@
                 {#if row.inputType === "number"}
                     <sl-input
                         type="number"
-                        on:sl-change={(e) => (row.input = e.target.value)}
+                        onsl-change={(e) => (row.input = e.target.value)}
                         required
                     ></sl-input>
                 {/if}
@@ -1221,7 +1230,7 @@
                 {#if row.inputType === "date"}
                     <sl-input
                         type="date"
-                        on:sl-change={(e) => (row.input = e.target.value)}
+                        onsl-change={(e) => (row.input = e.target.value)}
                         required
                     ></sl-input>
                 {/if}
@@ -1230,7 +1239,7 @@
                     <sl-select
                         value={row.input}
                         required
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.input = e.target.value;
                         }}
                     >
@@ -1259,7 +1268,7 @@
                     <sl-select
                         value={row.input}
                         required
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.input = e.target.value;
                         }}
                     >
@@ -1275,7 +1284,7 @@
                     <sl-select
                         value={row.input}
                         required
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.input = e.target.value;
                         }}
                     >
@@ -1291,7 +1300,7 @@
                     <sl-select
                         value={row.input}
                         required
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.input = e.target.value;
                         }}
                     >
@@ -1307,7 +1316,7 @@
                     <sl-select
                         value={row.input}
                         required
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             row.input = e.target.value;
                         }}
                     >
@@ -1329,7 +1338,7 @@
                 <sl-button
                     variant="danger"
                     circle
-                    on:click={() => {
+                    onclick={() => {
                         removeRow(row);
                     }}
                 >
@@ -1338,8 +1347,8 @@
             </div>
         {/each}
 
-        <sl-button on:click={addNewRow} variant="primary">
             <MaterialSymbol name="add" slot="prefix" />
+        <sl-button onclick={addNewRow} variant="primary">
             {$_("text.searchAddRule")}
         </sl-button>
     </div>
@@ -1347,7 +1356,7 @@
     <sl-divider></sl-divider>
 
     <div class="actions">
-        <sl-button on:click={search} variant="primary">
+        <sl-button onclick={search} variant="primary">
             {$_("text.search")}
         </sl-button>
     </div>

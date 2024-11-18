@@ -34,7 +34,7 @@
 
             <sl-button
                 variant="warning"
-                on:click={() => {
+                onclick={() => {
                     logout();
                 }}
                 class="logout"
@@ -45,7 +45,7 @@
             </sl-button>
 
             <sl-button
-                on:click={() => {
+                onclick={() => {
                     $ShowPreferences = !$ShowPreferences;
                 }}
             >

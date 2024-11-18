@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -8,12 +10,13 @@
     import { createQuery } from "@tanstack/svelte-query";
     import Visibility from "~/components/visibility.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
     // default to artists tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/genre/${params.id}/artists`);
-    }
+    });
 
     function changeTab(e) {
         replace(`#/genre/${params.id}/${e.detail.name}`);
@@ -25,7 +28,7 @@
         { id: "songs", label: $_("text.songs") },
     ];
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["genre", params.id],
         queryFn: async () => {
             let result = await $API.genre({ filter: params.id });
@@ -38,12 +41,14 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: genre = $query.data || {};
+    let genre = $derived($query.data || {});
 
-    $: $PageTitle = genre?.name || $_("text.genre");
+    run(() => {
+        $PageTitle = genre?.name || $_("text.genre");
+    });
 </script>
 
 {#if $query.isLoading}
@@ -62,7 +67,7 @@
                 </h1>
             </div>
 
-            <sl-tab-group on:sl-tab-show={changeTab}>
+            <sl-tab-group onsl-tab-show={changeTab}>
                 {#each tabs as tab}
                     <sl-tab
                         slot="nav"

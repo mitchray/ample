@@ -1,7 +1,8 @@
 <script>
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let genres;
+    /** @type {{genres: any}} */
+    let { genres } = $props();
 </script>
 
 {#if genres.length > 0}

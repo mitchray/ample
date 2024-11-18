@@ -6,7 +6,13 @@
     import { errorHandler } from "~/logic/helper.js";
     import { sharesPreset } from "~/components/lister/columns.js";
 
-    $: query = createQuery({
+
+    let title = $_("text.shares");
+    $PageTitle = title;
+
+    let tabulator = $state(null);
+
+    let query = $derived(createQuery({
         queryKey: ["shares"],
         queryFn: async () => {
             let result = await $API.shares();
@@ -21,15 +27,9 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
-
-    let title = $_("text.shares");
-    $PageTitle = title;
-
-    let tabulator = null;
-
+    }));
     // alias of returned data
-    $: shares = $query.data?.share || [];
+    let shares = $derived($query.data?.share || []);
 </script>
 
 <div class="page-header">

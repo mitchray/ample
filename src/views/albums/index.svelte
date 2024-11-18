@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -8,12 +10,13 @@
     import AlbumsByYear from "~/components/album/albumsByYear.svelte";
     import Visibility from "~/components/visibility.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
     // default to the newest tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/albums/newest`);
-    }
+    });
 
     // List of tab items with labels and values.
     const tabs = [
@@ -35,7 +38,7 @@
     <h1 class="page-title">{title}</h1>
 </div>
 
-<sl-tab-group on:sl-tab-show={changeTab}>
+<sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
         <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
             {tab.label}

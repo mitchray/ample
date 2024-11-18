@@ -7,12 +7,13 @@
     import { onMount } from "svelte";
 
     export const show = () => drawer.show();
-    export let songs;
+    /** @type {{songs: any}} */
+    let { songs } = $props();
 
-    let drawer, drawerEdit;
-    let newPlaylist = null;
-    let selectedPlaylists;
-    let ignoreDuplicates = false;
+    let drawer = $state(), drawerEdit = $state();
+    let newPlaylist = $state(null);
+    let selectedPlaylists = $state();
+    let ignoreDuplicates = $state(false);
 
     function handleSave() {
         if (newPlaylist) {
@@ -53,16 +54,16 @@
 <sl-drawer
     bind:this={drawer}
     label={$_("text.playlistAddTo")}
-    on:sl-request-close={keepDrawerOpen}
+    onsl-request-close={keepDrawerOpen}
 >
     <PlaylistSelector bind:selectedPlaylists multiple={true} type="playlists" />
 
-    <sl-checkbox checked={ignoreDuplicates} on:sl-change={toggleUniqueItems}>
+    <sl-checkbox checked={ignoreDuplicates} onsl-change={toggleUniqueItems}>
         {$_("text.skipDuplicates")}
     </sl-checkbox>
 
     <sl-button
-        on:click={() => drawerEdit.show()}
+        onclick={() => drawerEdit.show()}
         slot="footer"
         variant="primary"
     >
@@ -71,7 +72,7 @@
 
     <sl-button
         disabled={selectedPlaylists?.length < 1}
-        on:click={handleSave}
+        onclick={handleSave}
         slot="footer"
         variant="primary"
     >

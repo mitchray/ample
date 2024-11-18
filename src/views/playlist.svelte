@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { onDestroy, onMount } from "svelte";
     import { replace, location } from "svelte-spa-router";
@@ -23,20 +25,17 @@
     } from "~/components/lister/columns.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    let playlist;
-    let songs = [];
-    let loading = true;
-    let playlistType = "playlist";
-    let drawerEdit, drawerDelete;
-    let tabulator = null;
-    let columns = [];
+    let playlist = $state();
+    let songs = $state([]);
+    let loading = $state(true);
+    let playlistType = $state("playlist");
+    let drawerEdit = $state(), drawerDelete = $state();
+    let tabulator = $state(null);
+    let columns = $state([]);
 
-    $: songs = songs;
-    $: playlist = playlist;
-    $: $PageTitle = playlist?.name || $_("text.playlist");
-    $: tabulator, setupEvents();
 
     function afterDelete(e) {
         if (playlist?.id === e.detail.id) {
@@ -139,6 +138,18 @@
         tabulator?.off("dataSorting");
         tabulator?.off("rowMoved");
     });
+    run(() => {
+        songs = songs;
+    });
+    run(() => {
+        playlist = playlist;
+    });
+    run(() => {
+        $PageTitle = playlist?.name || $_("text.playlist");
+    });
+    run(() => {
+        tabulator, setupEvents();
+    });
 </script>
 
 {#if loading}
@@ -218,7 +229,7 @@
                         <div class="playlist-actions">
                             <sl-button
                                 variant="primary"
-                                on:click={() => drawerEdit.show()}
+                                onclick={() => drawerEdit.show()}
                                 title={$_("text.edit")}
                             >
                                 <MaterialSymbol name="edit" slot="prefix" />
@@ -227,7 +238,7 @@
 
                             <sl-button
                                 variant="neutral"
-                                on:click={() => drawerDelete.show()}
+                                onclick={() => drawerDelete.show()}
                                 title={$_("text.delete")}
                             >
                                 <MaterialSymbol name="delete" slot="prefix" />

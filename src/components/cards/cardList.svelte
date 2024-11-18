@@ -1,39 +1,48 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { onDestroy, onMount } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let card; /* the card component to render */
-    export let type;
-    export let initialData = [];
-    export let refresh = false;
-    export let limit = null;
-    export let heading = null;
-    export let showOnlyThese = false;
-    export let dataProvider = null; /* the API call to make, if any */
-    export let viewAllURL = null; /* link to see all items */
-    export let genericOverride = false; /* should be true when using generic cards */
-    export let autoRefreshInterval = null; /* auto-refresh every X seconds */
 
-    /** @type {'grid' | 'scroll'} */
-    export let layout; /* layout to use for the card container */
+    
+    /** @type {{card: any, type: any, initialData?: any, refresh?: boolean, limit?: any, heading?: any, showOnlyThese?: boolean, dataProvider?: any, viewAllURL?: any, genericOverride?: boolean, autoRefreshInterval?: any, layout: 'grid' | 'scroll'}} */
+    let {
+        card,
+        type,
+        initialData = [],
+        refresh = false,
+        limit = $bindable(null),
+        heading = null,
+        showOnlyThese = false,
+        dataProvider = null,
+        viewAllURL = null,
+        genericOverride = false,
+        autoRefreshInterval = null,
+        layout
+    } = $props();
 
-    let data = [];
-    let newBatch = [];
-    let loadCount = 0;
-    let loading = true;
+    let data = $state([]);
+    let newBatch = $state([]);
+    let loadCount = $state(0);
+    let loading = $state(true);
     let refreshLoop;
 
-    let isScroll = false;
-    let containerBind;
-    let containerScrollX;
+    let isScroll = $state(false);
+    let containerBind = $state();
+    let containerScrollX = $state();
     let observer;
 
-    $: data = [...data, ...newBatch];
+    run(() => {
+        data = [...data, ...newBatch];
+    });
 
-    $: limit = limit;
+    run(() => {
+        limit = limit;
+    });
 
     // Load initial data
     onMount(async () => {
@@ -173,8 +182,8 @@
     {/if}
 
     {#if refresh}
-        <sl-button on:click={refreshItems} size="small">
             <MaterialSymbol name="refresh" slot="prefix" />
+        <sl-button onclick={refreshItems} size="small">
             {$_("text.refresh")}
         </sl-button>
     {/if}
@@ -190,7 +199,7 @@
             <sl-button
                 variant="text"
                 size="small"
-                on:click={() => {
+                onclick={() => {
                     scroll("start");
                 }}
                 disabled={containerScrollX < 1}
@@ -200,7 +209,7 @@
             <sl-button
                 variant="text"
                 size="small"
-                on:click={() => {
+                onclick={() => {
                     scroll("end");
                 }}
                 disabled={containerScrollX >
@@ -217,26 +226,28 @@
 <ul
     bind:this={containerBind}
     class="cardlist-{layout} {genericOverride ? 'generic' : type}-{layout}"
-    on:scroll={parseScroll}
+    onscroll={parseScroll}
 >
     {#if loading && (loadCount < 1 || refresh) && limit}
         {#each Array(parseInt(limit)) as placeholder}
+            {@const SvelteComponent = card}
             <li>
-                <svelte:component this={card} {type} />
+                <SvelteComponent {type} />
             </li>
         {/each}
     {:else if data.length > 0}
         {#each data as dataSingle}
+            {@const SvelteComponent_1 = card}
             {#key dataSingle}
                 <li>
-                    <svelte:component this={card} data={dataSingle} {type} />
+                    <SvelteComponent_1 data={dataSingle} {type} />
                 </li>
             {/key}
         {/each}
         {#if !refresh && !showOnlyThese}
             <li>
                 <sl-button
-                    on:click={loadMoreAndScroll}
+                    onclick={loadMoreAndScroll}
                     hidden={newBatch.length < limit}
                     class="load-more-button"
                 >

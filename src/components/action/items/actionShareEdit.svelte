@@ -6,12 +6,13 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ticks } from "~/logic/ui.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _item, _displayMode } = getContext(contextKey);
 
-    let drawerEdit;
-    let loaded = false;
+    let drawerEdit = $state();
+    let loaded = $state(false);
 
     async function handleAction() {
         loaded = true;
@@ -21,7 +22,7 @@
 </script>
 
 <sl-button
-    on:click={handleAction}
+    onclick={handleAction}
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.shareEdit")}
 >

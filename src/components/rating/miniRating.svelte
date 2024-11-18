@@ -1,7 +1,8 @@
 <script>
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let data = {};
+    /** @type {{data?: any}} */
+    let { data = {} } = $props();
 </script>
 
 <span class="c-mini-rating container">

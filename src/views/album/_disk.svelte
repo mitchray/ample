@@ -4,12 +4,15 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
 
-    export let albumID;
-    export let disks;
-    export let disk;
-    export let tracks;
+    /** @type {{albumID: any, disks: any, disk: any, tracks: any}} */
+    let {
+        albumID,
+        disks,
+        disk,
+        tracks
+    } = $props();
 
-    let tabulator = null;
+    let tabulator = $state(null);
 </script>
 
 {#if disks.length > 1}

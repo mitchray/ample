@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { onDestroy, onMount } from "svelte";
     import {
         autoUpdate,
@@ -14,21 +16,10 @@
 
     let timeout;
     let autoTimeout;
-    let freshNotifications = [];
-    let listBind;
+    let freshNotifications = $state([]);
+    let listBind = $state();
     let autoUpdateCleanup;
 
-    $: {
-        if ($Notifications) {
-            freshNotifications = $Notifications.filter(
-                (e) => e.fresh === true && !e.isSilent,
-            );
-        }
-
-        if (freshNotifications.length > 0) {
-            start();
-        }
-    }
 
     function start() {
         clearTimeout(autoTimeout);
@@ -104,13 +95,24 @@
         // floating-ui
         autoUpdateCleanup();
     });
+    run(() => {
+        if ($Notifications) {
+            freshNotifications = $Notifications.filter(
+                (e) => e.fresh === true && !e.isSilent,
+            );
+        }
+
+        if (freshNotifications.length > 0) {
+            start();
+        }
+    });
 </script>
 
 <div bind:this={listBind} class="site-notifications">
     <div
         class="container"
-        on:mouseenter={() => handleEnter()}
-        on:mouseleave={() => handleLeave()}
+        onmouseenter={() => handleEnter()}
+        onmouseleave={() => handleLeave()}
     >
         {#if freshNotifications.length > 0}
             <sl-card

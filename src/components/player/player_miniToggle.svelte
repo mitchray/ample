@@ -10,7 +10,7 @@
 </script>
 
 <sl-tooltip content={$PlayerIsMini ? "Show waveform" : "Hide waveform"}>
-    <sl-button on:click={handlePlayerMiniToggle} variant="text">
+    <sl-button onclick={handlePlayerMiniToggle} variant="text">
         <MaterialSymbol name={$PlayerIsMini ? "unfold_more" : "unfold_less"} />
     </sl-button>
 </sl-tooltip>

@@ -1,4 +1,6 @@
 <script>
+    import { preventDefault } from 'svelte/legacy';
+
     import { onMount } from "svelte";
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
@@ -15,14 +17,16 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import localforage from "localforage";
 
-    $: username = "";
-    $: password = "";
-    let versionCheck;
-    let apiKey = "";
-    let result;
+    let username = $state("");
+    
+    let password = $state("");
+    
+    let versionCheck = $derived($Server.version?.charAt(0));
+    let apiKey = $state("");
+    let result = $state();
     let lastUsedTab;
-    let currentTab;
-    let loaded = false;
+    let currentTab = $state();
+    let loaded = $state(false);
 
     // List of tab items with labels and values.
     let tabs = [
@@ -30,12 +34,12 @@
         { id: "apikey", label: $_("text.apiKey") },
     ];
 
-    let fatalError = false;
+    let fatalError = $state(false);
 
     let title = $_("text.login");
     $PageTitle = title;
 
-    $: versionCheck = $Server.version?.charAt(0);
+    
 
     function changeTab(e) {
         currentTab = e.detail.name;
@@ -125,7 +129,7 @@
         {/if}
 
         {#if loaded}
-            <sl-tab-group on:sl-tab-show={changeTab}>
+            <sl-tab-group onsl-tab-show={changeTab}>
                 {#each tabs as tab}
                     <sl-tab
                         slot="nav"
@@ -137,13 +141,13 @@
                 {/each}
 
                 <sl-tab-panel name="username">
-                    <form on:submit|preventDefault={handleSubmit}>
+                    <form onsubmit={preventDefault(handleSubmit)}>
                         <p>
                             <sl-input
                                 label={$_("text.username")}
-                                on:paste={handleUsername}
-                                on:sl-change={handleUsername}
-                                on:sl-input={handleUsername}
+                                onpaste={handleUsername}
+                                onsl-change={handleUsername}
+                                onsl-input={handleUsername}
                                 type="text"
                                 value={username}
                             ></sl-input>
@@ -158,9 +162,9 @@
                         <p>
                             <sl-input
                                 label={$_("text.password")}
-                                on:paste={handlePassword}
-                                on:sl-change={handlePassword}
-                                on:sl-input={handlePassword}
+                                onpaste={handlePassword}
+                                onsl-change={handlePassword}
+                                onsl-input={handlePassword}
                                 type="password"
                                 value={password}
                             ></sl-input>
@@ -185,13 +189,13 @@
                 </sl-tab-panel>
 
                 <sl-tab-panel name="apikey">
-                    <form on:submit|preventDefault={handleSubmit}>
+                    <form onsubmit={preventDefault(handleSubmit)}>
                         <p>
                             <sl-input
                                 label={$_("text.apiKey")}
-                                on:paste={handleAPIkey}
-                                on:sl-change={handleAPIkey}
-                                on:sl-input={handleAPIkey}
+                                onpaste={handleAPIkey}
+                                onsl-change={handleAPIkey}
+                                onsl-input={handleAPIkey}
                                 type="password"
                                 value={apiKey}
                             ></sl-input>

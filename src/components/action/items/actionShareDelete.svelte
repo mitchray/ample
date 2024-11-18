@@ -6,12 +6,13 @@
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { _item, _displayMode } = getContext(contextKey);
 
-    let drawerDelete;
-    let loaded = false;
+    let drawerDelete = $state();
+    let loaded = $state(false);
 
     async function handleAction() {
         loaded = true;
@@ -21,7 +22,7 @@
 </script>
 
 <sl-button
-    on:click={handleAction}
+    onclick={handleAction}
     size={$_displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.shareDelete")}
 >

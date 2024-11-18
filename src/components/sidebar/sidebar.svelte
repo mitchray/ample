@@ -16,7 +16,7 @@
     class:is-list={$IsMobile || $SidebarIsOpen}
     class:is-mini={!$SidebarIsOpen && !$IsMobile}
     class:is-open={$SidebarIsOpen}
-    on:clickedOutside={handleClickOutside}
+    onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#sidebar-button",
     }}

@@ -4,10 +4,13 @@
     import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    export let href;
-    export let activePath;
-    export let icon;
-    export let label;
+    /** @type {{href: any, activePath: any, icon: any, label: any}} */
+    let {
+        href,
+        activePath,
+        icon,
+        label
+    } = $props();
 </script>
 
 <sl-tooltip

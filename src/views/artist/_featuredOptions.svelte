@@ -28,7 +28,7 @@
         <sl-radio-group
             label="Display of songs by other artists"
             name="display"
-            on:sl-change={(e) => {
+            onsl-change={(e) => {
                 handleShowSongs(e);
             }}
             value={$ShowSongsByOtherArtists}
@@ -45,7 +45,7 @@
         <sl-radio-group
             label="Playback of songs by other artists"
             name="playback"
-            on:sl-change={(e) => {
+            onsl-change={(e) => {
                 handlePlaySongs(e);
             }}
             value={$PlaySongsByOtherArtists}

@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
@@ -10,12 +12,25 @@
     import { errorHandler } from "~/logic/helper.js";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
-    let episodes = [];
-    let tabulator = null;
+    let episodes = $state([]);
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+
+
+
+
+    async function processData() {
+        if (!$query.data?.id) return;
+
+        episodes = [];
+        episodes = await $API.podcastEpisodes({ filter: params.id, limit: 10 });
+
+        console.debug(episodes, "episodes");
+    }
+    let query = $derived(createQuery({
         queryKey: ["podcast", params.id],
         queryFn: async () => {
             let result = await $API.podcast({
@@ -31,24 +46,16 @@
             return result;
         },
         enabled: $User.isLoggedIn,
-    });
-
+    }));
     // alias of returned data
-    $: podcast = $query.data || {};
-
-    $: $PageTitle = podcast?.name || $_("text.podcast");
-
+    let podcast = $derived($query.data || {});
+    run(() => {
+        $PageTitle = podcast?.name || $_("text.podcast");
+    });
     // grab discs once we load the album
-    $: $query.data, processData();
-
-    async function processData() {
-        if (!$query.data?.id) return;
-
-        episodes = [];
-        episodes = await $API.podcastEpisodes({ filter: params.id, limit: 10 });
-
-        console.debug(episodes, "episodes");
-    }
+    run(() => {
+        $query.data, processData();
+    });
 </script>
 
 {#if $query.isLoading}
@@ -72,7 +79,7 @@
             />
 
             <sl-button
-                on:click={() => {
+                onclick={() => {
                     $API.updatePodcast({ filter: podcast.id });
                 }}
             >

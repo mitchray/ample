@@ -1,4 +1,7 @@
 <script>
+    import { run, stopPropagation, createBubbler } from 'svelte/legacy';
+
+    const bubble = createBubbler();
     import {
         CurrentMedia,
         NowPlayingIndex,
@@ -17,16 +20,11 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import MiniRating from "~/components/rating/miniRating.svelte";
 
-    export let media;
+    /** @type {{media: any}} */
+    let { media = $bindable() } = $props();
 
-    let matchesRating;
+    let matchesRating = $state();
 
-    $: {
-        media, retest();
-        $SkipBelow, retest();
-        $SkipBelowRating, retest();
-        $SkipBelowAllowZero, retest();
-    }
 
     function retest() {
         matchesRating = !$MediaPlayer.isEligibleToPlay(media);
@@ -52,6 +50,12 @@
 
         await updateQueue();
     }
+    run(() => {
+        media, retest();
+        $SkipBelow, retest();
+        $SkipBelowRating, retest();
+        $SkipBelowAllowZero, retest();
+    });
 </script>
 
 <div
@@ -61,7 +65,7 @@
 >
     <sl-button
         class="remove"
-        on:click|stopPropagation={handleRemoveItem(media._id)}
+        onclick={stopPropagation(handleRemoveItem(media._id))}
         variant="text"
     >
         <MaterialSymbol name="close" />
@@ -114,8 +118,8 @@
 
     <sl-dropdown
         class="more"
-        on:click|stopPropagation
-        on:sl-show={async () => {
+        onclick={stopPropagation(bubble('click'))}
+        onsl-show={async () => {
             media.isActionsLoaded = true;
             await ticks(2);
         }}

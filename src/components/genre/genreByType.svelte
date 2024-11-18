@@ -12,12 +12,12 @@
     } from "~/components/lister/columns.js";
     import { _ } from "svelte-i18n";
 
-    export let id;
-    export let type;
+    /** @type {{id: any, type: any}} */
+    let { id, type } = $props();
 
-    let tabulator = null;
+    let tabulator = $state(null);
 
-    $: query = createQuery({
+    let query = $derived(createQuery({
         queryKey: ["genre", id, type],
         queryFn: async () => {
             let result = {};
@@ -47,10 +47,10 @@
             return result[type];
         },
         enabled: $User.isLoggedIn,
-    });
+    }));
 
     // alias of returned data
-    $: items = $query.data || {};
+    let items = $derived($query.data || {});
 </script>
 
 {#if $query.isLoading}

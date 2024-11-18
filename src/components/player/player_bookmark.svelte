@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { API, CurrentMedia } from "~/stores/state.js";
@@ -6,11 +8,9 @@
     import { errorHandler } from "~/logic/helper.js";
     import Portal from "~/components/portal.svelte";
 
-    let bookmarks = [];
+    let bookmarks = $state([]);
     let clickTimeout;
 
-    $: $CurrentMedia, getBookmarks();
-    $: bookmarks = bookmarks;
 
     function addBookmark() {
         if (!$CurrentMedia) return;
@@ -76,11 +76,17 @@
             bookmarks = bookmarks.filter((b) => b.id !== bookmark.id);
         });
     }
+    run(() => {
+        $CurrentMedia, getBookmarks();
+    });
+    run(() => {
+        bookmarks = bookmarks;
+    });
 </script>
 
 <sl-button
     disabled={!$CurrentMedia}
-    on:click={addBookmark}
+    onclick={addBookmark}
     title={$_("text.bookmark")}
     variant="text"
 >
@@ -91,7 +97,7 @@
     {#each bookmarks as bookmark}
         <div
             class="bookmark"
-            on:click={(e) => clickBookmark(e, bookmark)}
+            onclick={(e) => clickBookmark(e, bookmark)}
             style:left={(bookmark.position / $CurrentMedia?.time) * 100 + "%"}
         ></div>
     {/each}

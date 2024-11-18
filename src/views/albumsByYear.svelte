@@ -3,7 +3,8 @@
     import { PageTitle } from "~/stores/state.js";
     import AlbumsByYear from "~/components/album/albumsByYear.svelte";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
     let title = $_("text.albumsByYear");
     $PageTitle = title;

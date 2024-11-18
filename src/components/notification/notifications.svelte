@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { get } from "svelte/store";
     import { _ } from "svelte-i18n";
     import { Notifications } from "~/stores/message.js";
@@ -14,9 +16,11 @@
     import NotificationList from "~/components/notification/_notificationList.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let dialog;
+    let dialog = $state();
 
-    $: $Notifications = $Notifications;
+    run(() => {
+        $Notifications = $Notifications;
+    });
 
     function handleClearNotifications() {
         $Notifications = [];
@@ -55,7 +59,7 @@
             <sl-button
                 circle
                 class="clear-notifications"
-                on:click={handleClearNotifications}
+                onclick={handleClearNotifications}
                 size="small"
                 title={$_("text.clearAll")}
                 variant="danger"
@@ -63,7 +67,7 @@
                 <MaterialSymbol name="delete" />
             </sl-button>
 
-            <sl-button class="settings" on:click={() => dialog.show()}>
+            <sl-button class="settings" onclick={() => dialog.show()}>
                 <MaterialSymbol name="settings" />
             </sl-button>
         </div>
@@ -96,7 +100,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationAlternateVersions.isEnabled}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isEnabled",
                                 val: e.target.checked,
@@ -109,7 +113,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationAlternateVersions.isSilent}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isSilent",
                                 val: e.target.checked,
@@ -136,7 +140,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationGainTagsMissing.isEnabled}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isEnabled",
                                 val: e.target.checked,
@@ -149,7 +153,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationGainTagsMissing.isSilent}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isSilent",
                                 val: e.target.checked,
@@ -176,7 +180,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationRatingMissing.isEnabled}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isEnabled",
                                 val: e.target.checked,
@@ -189,7 +193,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationRatingMissing.isSilent}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isSilent",
                                 val: e.target.checked,
@@ -216,7 +220,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationLyricsMissing.isEnabled}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isEnabled",
                                 val: e.target.checked,
@@ -229,7 +233,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationLyricsMissing.isSilent}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isSilent",
                                 val: e.target.checked,
@@ -256,7 +260,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationLyricsNotTimestamped.isEnabled}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isEnabled",
                                 val: e.target.checked,
@@ -269,7 +273,7 @@
                 <div class="checkbox">
                     <sl-switch
                         checked={$NotificationLyricsNotTimestamped.isSilent}
-                        on:sl-change={(e) => {
+                        onsl-change={(e) => {
                             handleChange({
                                 prop: "isSilent",
                                 val: e.target.checked,
@@ -288,7 +292,7 @@
         </sl-alert>
 
         <sl-button
-            on:click={() => dialog.hide()}
+            onclick={() => dialog.hide()}
             slot="footer"
             variant="primary"
         >

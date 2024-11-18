@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { getContext } from "svelte";
     import { ShowSongsByOtherArtists } from "~/stores/settings.js";
     import { CurrentMedia, User } from "~/stores/state.js";
@@ -13,25 +15,18 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { getAlbumDisks } from "~/logic/album.js";
 
-    export let contextKey;
+    /** @type {{contextKey: any}} */
+    let { contextKey } = $props();
 
     const { getAlbum, getType } = getContext(contextKey);
 
     let album = getAlbum();
     let type = getType();
-    let tabulator = null;
+    let tabulator = $state(null);
     let filterToArtistID = getContext("filterToArtistID");
-    let disks = [];
+    let disks = $state([]);
 
-    $: query = createQuery({
-        queryKey: ["albumDisks", album.id],
-        queryFn: async () => {
-            return await getAlbumDisks(album.id);
-        },
-        enabled: $User.isLoggedIn,
-    });
 
-    $: $query.data, processData();
 
     function processData() {
         disks = [];
@@ -58,6 +53,16 @@
 
         return disks;
     }
+    let query = $derived(createQuery({
+        queryKey: ["albumDisks", album.id],
+        queryFn: async () => {
+            return await getAlbumDisks(album.id);
+        },
+        enabled: $User.isLoggedIn,
+    }));
+    run(() => {
+        $query.data, processData();
+    });
 </script>
 
 {#if $query.isLoading}

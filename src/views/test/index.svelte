@@ -1,4 +1,6 @@
 <script>
+    import { run } from 'svelte/legacy';
+
     import { _ } from "svelte-i18n";
     import { replace } from "svelte-spa-router";
     import { onMount } from "svelte";
@@ -11,14 +13,15 @@
     import Wavesurfer from "~/views/test/wavesurfer.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    export let params = {};
+    /** @type {{params?: any}} */
+    let { params = {} } = $props();
 
     let data = {};
 
     // default to releases tab
-    $: {
+    run(() => {
         if (!params.section) replace(`#/test/general`);
-    }
+    });
 
     const tabs = [
         { id: "general", label: "General" },
@@ -49,7 +52,7 @@
     <h1 class="page-title">{title}</h1>
 </div>
 
-<sl-tab-group on:sl-tab-show={changeTab}>
+<sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
         <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
             {tab.label}
