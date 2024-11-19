@@ -1,5 +1,5 @@
 <script>
-    import { SidebarIsOpen } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
@@ -9,7 +9,7 @@
 
 <sl-tooltip
     content={label}
-    disabled={$IsMobile || $SidebarIsOpen}
+    disabled={$IsMobile || $Settings.SidebarIsOpen}
     hoist
     placement="right"
 >

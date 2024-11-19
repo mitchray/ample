@@ -1,55 +1,50 @@
 <script>
     import { _ } from "svelte-i18n";
     import { tick } from "svelte";
-    import {
-        Saved,
-        SkipBelow,
-        SkipBelowAllowZero,
-        SkipBelowRating,
-    } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     async function handleSkipBelow(e) {
         await tick();
         let newValue = e.target.checked;
-        $Saved.setItem("SkipBelow", newValue);
-        SkipBelow.set(newValue);
+        $Settings.SkipBelow.enabled = newValue;
     }
 
     async function handleSkipBelowRating(e) {
         await tick();
         let newValue = e.target.value;
-        $Saved.setItem("SkipBelowRating", newValue);
-        SkipBelowRating.set(newValue);
+        $Settings.SkipBelow.rating = newValue;
     }
 
     async function handleAllowZero(e) {
         await tick();
         let newValue = e.target.checked;
-        $Saved.setItem("SkipBelowAllowZero", newValue);
-        SkipBelowAllowZero.set(newValue);
+        $Settings.SkipBelow.allowZero = newValue;
     }
 </script>
 
 <sl-dropdown hoist placement="bottom">
     <sl-button
         class="rating-filter"
-        class:is-enabled={$SkipBelow}
+        class:is-enabled={$Settings.SkipBelow.enabled}
         size="small"
         slot="trigger"
         title={$_("text.skipBelow")}
     >
-        <MaterialSymbol fill={$SkipBelow} name="star" />
+        <MaterialSymbol fill={$Settings.SkipBelow.enabled} name="star" />
     </sl-button>
 
     <sl-card>
-        <sl-switch checked={$SkipBelow} onsl-change={handleSkipBelow}>
+        <sl-switch
+            checked={$Settings.SkipBelow.enabled}
+            onsl-change={handleSkipBelow}
+        >
             {$_("text.skipBelow")}:
         </sl-switch>
 
         <sl-select
             onsl-change={handleSkipBelowRating}
-            value={$SkipBelowRating}
+            value={$Settings.SkipBelow.rating}
         >
             <sl-option value="5">
                 {$_("text.ratingCount", { values: { count: 5 } })}
@@ -65,7 +60,10 @@
             </sl-option>
         </sl-select>
 
-        <sl-switch checked={$SkipBelowAllowZero} onsl-change={handleAllowZero}>
+        <sl-switch
+            checked={$Settings.SkipBelow.allowZero}
+            onsl-change={handleAllowZero}
+        >
             {$_("text.allowUnrated")}
         </sl-switch>
     </sl-card>

@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { Saved, SidebarIsOpen } from "~/stores/settings";
+    import { Settings } from "~/stores/settings";
     import { SearchQuery, ShowSearch } from "~/stores/state.js";
     import Search from "~/components/search.svelte";
     import UserMenu from "~/components/userMenu.svelte";
@@ -35,9 +35,8 @@
     }
 
     function handleSidebarToggle() {
-        let inverted = !$SidebarIsOpen;
-        $Saved.setItem("SidebarIsOpen", inverted);
-        SidebarIsOpen.set(inverted);
+        let inverted = !$Settings.SidebarIsOpen;
+        $Settings.SidebarIsOpen = inverted;
     }
 </script>
 

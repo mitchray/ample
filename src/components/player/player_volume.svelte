@@ -1,11 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import {
-        DynamicsCompressorEnabled,
-        PlayerVolume,
-        Saved,
-        VolumeNormalizationEnabled,
-    } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import {
         CurrentMedia,
@@ -29,15 +24,13 @@
 
     function handleVolumeNormalize(e) {
         let setting = e.target.checked;
-        $Saved.setItem("VolumeNormalizationEnabled", setting);
-        VolumeNormalizationEnabled.set(setting);
+        $Settings.VolumeNormalizationEnabled = setting;
         $MediaPlayer.updateFilters();
     }
 
     function handleDynamicsCompressor(e) {
         let setting = e.target.checked;
-        $Saved.setItem("DynamicsCompressorEnabled", setting);
-        DynamicsCompressorEnabled.set(setting);
+        $Settings.DynamicsCompressorEnabled = setting;
         $MediaPlayer.updateFilters();
     }
 
@@ -50,8 +43,7 @@
         volumeWidth = volumeWidth > 100 ? 100 : volumeWidth;
         volumeWidth = volumeWidth < 0 ? 0 : volumeWidth;
 
-        PlayerVolume.set(volumeWidth);
-        $Saved.setItem("PlayerVolume", volumeWidth);
+        $Settings.PlayerVolume = volumeWidth;
     }
 
     function handleVolumeMouseDown() {
@@ -95,7 +87,7 @@
     }
 
     onMount(async () => {
-        volumeWidth = (await $Saved.getItem("PlayerVolume")) || 50;
+        volumeWidth = $Settings.PlayerVolume || 50;
     });
 </script>
 
@@ -134,7 +126,7 @@
         </div>
 
         <sl-checkbox
-            checked={$VolumeNormalizationEnabled}
+            checked={$Settings.VolumeNormalizationEnabled}
             on:sl-change={handleVolumeNormalize}
         >
             {$_("text.volumeNormalize")}
@@ -179,7 +171,7 @@
         <sl-divider></sl-divider>
 
         <sl-checkbox
-            checked={$DynamicsCompressorEnabled}
+            checked={$Settings.DynamicsCompressorEnabled}
             on:sl-change={handleDynamicsCompressor}
         >
             {$_("text.volumeNightMode")}

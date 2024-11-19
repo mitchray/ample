@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
@@ -9,8 +9,7 @@
     import MusicBrainz from "~/logic/musicbrainz";
     import Art from "~/components/art.svelte";
     import Portal from "~/components/portal.svelte";
-    import { Saved } from "~/stores/settings.js";
-    import { onMount } from "svelte";
+    import { Settings } from "~/stores/settings.js";
 
     /** @type {{data: any}} */
     let { data } = $props();
@@ -36,20 +35,12 @@
         flagged: 0,
         missing: 0,
     });
-    let filters = $state({});
     let dialog = $state();
-
-    onMount(async () => {
-        filters = (await $Saved.getItem("MusicBrainzFilters")) || {};
-    });
 
     run(() => {
         queryURL = `https://musicbrainz.org/ws/2/recording/?artist=${
             data.mbid
         }&limit=${limit}&offset=${loadCount * limit}`;
-
-        // save filters
-        $Saved.setItem("MusicBrainzFilters", filters);
 
         if (loaded) {
             filteredRecordings = combinedSources;
@@ -76,31 +67,31 @@
             }, 0);
 
             // do filtering
-            if (filters.hideMatches) {
+            if ($Settings.MusicBrainzFilters.hideMatches) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return item.status !== "exact";
                 });
             }
 
-            if (filters.hideDuplicates) {
+            if ($Settings.MusicBrainzFilters.hideDuplicates) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return item.status !== "duplicate";
                 });
             }
 
-            if (filters.hideIssues) {
+            if ($Settings.MusicBrainzFilters.hideIssues) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return item.status !== "issue";
                 });
             }
 
-            if (filters.hideInfos) {
+            if ($Settings.MusicBrainzFilters.hideInfos) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return item.status !== "info";
                 });
             }
 
-            if (filters.hideMissing) {
+            if ($Settings.MusicBrainzFilters.hideMissing) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return item.status !== "missing";
                 });
@@ -108,7 +99,7 @@
 
             // custom filters
 
-            if (filters.hideVideos) {
+            if ($Settings.MusicBrainzFilters.hideVideos) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.video === true;
                 });
@@ -122,7 +113,7 @@
                 });
             }
 
-            if (filters.hideRemixes) {
+            if ($Settings.MusicBrainzFilters.hideRemixes) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.disambiguation.match(/remix/i);
                 });
@@ -132,7 +123,7 @@
                 });
             }
 
-            if (filters.hideLive) {
+            if ($Settings.MusicBrainzFilters.hideLive) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.disambiguation.match(/live/i);
                 });
@@ -142,7 +133,7 @@
                 });
             }
 
-            if (filters.hideInstrumentals) {
+            if ($Settings.MusicBrainzFilters.hideInstrumentals) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.disambiguation.match(
                         /(instrumentals?|a\s?capellas?)/i,
@@ -156,7 +147,7 @@
                 });
             }
 
-            if (filters.hideDemos) {
+            if ($Settings.MusicBrainzFilters.hideDemos) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.disambiguation.match(/demo/i);
                 });
@@ -166,7 +157,7 @@
                 });
             }
 
-            if (filters.hideInterviews) {
+            if ($Settings.MusicBrainzFilters.hideInterviews) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.title.match(/(interview|commentary)/i);
                 });
@@ -178,19 +169,19 @@
                 });
             }
 
-            if (filters.hideZeroTimes) {
+            if ($Settings.MusicBrainzFilters.hideZeroTimes) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.time === false;
                 });
             }
 
-            if (filters.hideShortSongs) {
+            if ($Settings.MusicBrainzFilters.hideShortSongs) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return item.time > 60;
                 });
             }
 
-            if (filters.hideRadioEdits) {
+            if ($Settings.MusicBrainzFilters.hideRadioEdits) {
                 filteredRecordings = filteredRecordings.filter(function (item) {
                     return !item.disambiguation.match(/\(radio edit\)/i);
                 });
@@ -477,41 +468,46 @@
                 <h4>{$_("text.mbHideByStatus")}</h4>
 
                 <sl-checkbox
-                    checked={filters.hideMatches}
+                    checked={$Settings.MusicBrainzFilters.hideMatches}
                     onsl-change={(e) =>
-                        (filters.hideMatches = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideMatches =
+                            e.target.checked)}
                 >
                     {$_("text.mbExactMatches")} ({counts.matches})
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideDuplicates}
+                    checked={$Settings.MusicBrainzFilters.hideDuplicates}
                     onsl-change={(e) =>
-                        (filters.hideDuplicates = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideDuplicates =
+                            e.target.checked)}
                 >
                     {$_("text.mbDuplicates")} ({counts.duplicates})
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideIssues}
+                    checked={$Settings.MusicBrainzFilters.hideIssues}
                     onsl-change={(e) =>
-                        (filters.hideIssues = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideIssues =
+                            e.target.checked)}
                 >
                     {$_("text.mbIssues")} ({counts.issues})
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideFlagged}
+                    checked={$Settings.MusicBrainzFilters.hideFlagged}
                     onsl-change={(e) =>
-                        (filters.hideFlagged = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideFlagged =
+                            e.target.checked)}
                 >
                     {$_("text.mbFlagged")} ({counts.flagged})
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideMissing}
+                    checked={$Settings.MusicBrainzFilters.hideMissing}
                     onsl-change={(e) =>
-                        (filters.hideMissing = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideMissing =
+                            e.target.checked)}
                 >
                     {$_("text.mbMissing")} ({counts.missing})
                 </sl-checkbox>
@@ -521,9 +517,10 @@
                 <h4>{$_("text.mbHideByType")}</h4>
 
                 <sl-checkbox
-                    checked={filters.hideRemixes}
+                    checked={$Settings.MusicBrainzFilters.hideRemixes}
                     onsl-change={(e) =>
-                        (filters.hideRemixes = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideRemixes =
+                            e.target.checked)}
                 >
                     {$_("text.mbRemixes")}
 
@@ -540,9 +537,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideInstrumentals}
+                    checked={$Settings.MusicBrainzFilters.hideInstrumentals}
                     onsl-change={(e) =>
-                        (filters.hideInstrumentals = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideInstrumentals =
+                            e.target.checked)}
                 >
                     {$_("text.mbInstrumentals")}
 
@@ -564,9 +562,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideRadioEdits}
+                    checked={$Settings.MusicBrainzFilters.hideRadioEdits}
                     onsl-change={(e) =>
-                        (filters.hideRadioEdits = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideRadioEdits =
+                            e.target.checked)}
                 >
                     {$_("text.mbRadioEdits")}
 
@@ -583,8 +582,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideLive}
-                    onsl-change={(e) => (filters.hideLive = e.target.checked)}
+                    checked={$Settings.MusicBrainzFilters.hideLive}
+                    onsl-change={(e) =>
+                        ($Settings.MusicBrainzFilters.hideLive =
+                            e.target.checked)}
                 >
                     {$_("text.mbLive")}
 
@@ -601,9 +602,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideShortSongs}
+                    checked={$Settings.MusicBrainzFilters.hideShortSongs}
                     onsl-change={(e) =>
-                        (filters.hideShortSongs = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideShortSongs =
+                            e.target.checked)}
                 >
                     {$_("text.mbShort")}
 
@@ -619,8 +621,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideDemos}
-                    onsl-change={(e) => (filters.hideDemos = e.target.checked)}
+                    checked={$Settings.MusicBrainzFilters.hideDemos}
+                    onsl-change={(e) =>
+                        ($Settings.MusicBrainzFilters.hideDemos =
+                            e.target.checked)}
                 >
                     {$_("text.mbDemos")}
 
@@ -637,9 +641,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideInterviews}
+                    checked={$Settings.MusicBrainzFilters.hideInterviews}
                     onsl-change={(e) =>
-                        (filters.hideInterviews = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideInterviews =
+                            e.target.checked)}
                 >
                     {$_("text.mbInterviews")}
 
@@ -661,9 +666,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideZeroTimes}
+                    checked={$Settings.MusicBrainzFilters.hideZeroTimes}
                     onsl-change={(e) =>
-                        (filters.hideZeroTimes = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideZeroTimes =
+                            e.target.checked)}
                 >
                     {$_("text.mbZeroLength")}
 
@@ -679,9 +685,10 @@
                 </sl-checkbox>
 
                 <sl-checkbox
-                    checked={filters.hideVideos}
+                    checked={$Settings.MusicBrainzFilters.hideVideos}
                     onsl-change={(e) =>
-                        (filters.hideVideos = e.target.checked)}
+                        ($Settings.MusicBrainzFilters.hideVideos =
+                            e.target.checked)}
                 >
                     {$_("text.mbVideos")}
 

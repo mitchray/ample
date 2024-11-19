@@ -1,13 +1,12 @@
 <script>
-    import { QueueIsOpen, Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { showQueueItemAtIndex } from "~/logic/ui.js";
     import { NowPlayingIndex, ShowVisualizer } from "~/stores/state.js";
 
     function handleQueueToggle() {
-        let inverted = !$QueueIsOpen;
-        $Saved.setItem("QueueIsOpen", inverted);
-        QueueIsOpen.set(inverted);
+        let inverted = !$Settings.QueueIsOpen;
+        $Settings.QueueIsOpen = inverted;
 
         if (inverted === true) {
             showQueueItemAtIndex($NowPlayingIndex);
@@ -15,7 +14,7 @@
     }
 </script>
 
-<sl-tooltip content={$QueueIsOpen ? "Hide Queue" : "Show Queue"}>
+<sl-tooltip content={$Settings.QueueIsOpen ? "Hide Queue" : "Show Queue"}>
     <sl-button
         circle
         id="queue-button"

@@ -40,7 +40,7 @@
     import ActionShareDelete from "./items/actionShareDelete.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Portal from "~/components/portal.svelte";
-    import { PlaySongsByOtherArtists } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
 
     // interface Props {
     //     item?: any;
@@ -229,7 +229,7 @@
         // filter out songs not by artist if that is set, but allow a single item through with the assumption its the only one we want to play
         if (
             result.length > 1 &&
-            $PlaySongsByOtherArtists === "exclude" &&
+            $Settings.PlaySongsByOtherArtists === "exclude" &&
             filterToArtistID
         ) {
             result = result.filter((item) =>

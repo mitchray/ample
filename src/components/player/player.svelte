@@ -1,11 +1,7 @@
 <script>
     import { onDestroy, onMount } from "svelte";
     import WavesurferConnector from "~/logic/player.js";
-    import {
-        PlayerIsMini,
-        PlayerIsOpen,
-        QueueIsOpen,
-    } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
     import { ShowVisualizer } from "~/stores/state.js";
     import OpenToggle from "~/components/player/player_openToggle.svelte";
@@ -45,12 +41,12 @@
     bind:clientHeight={currentHeight}
     bind:this={$SitePlayerBind}
     class="site-player"
-    class:is-expanded={!$PlayerIsMini}
-    class:is-open={$PlayerIsOpen}
+    class:is-expanded={!$Settings.PlayerIsMini}
+    class:is-open={$Settings.PlayerIsOpen}
     class:sl-theme-dark={$ShowVisualizer}
     class:visualizer-open={$ShowVisualizer}
-    class:queue-open={$QueueIsOpen}
-    style:height={$PlayerIsOpen ? "auto" : "0"}
+    class:queue-open={$Settings.QueueIsOpen}
+    style:height={$Settings.PlayerIsOpen ? "auto" : "0"}
 >
     <OpenToggle />
     <QueueToggle />

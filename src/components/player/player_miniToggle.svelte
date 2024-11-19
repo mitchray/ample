@@ -1,16 +1,19 @@
 <script>
-    import { PlayerIsMini, Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function handlePlayerMiniToggle() {
-        let inverted = !$PlayerIsMini;
-        $Saved.setItem("PlayerIsMini", inverted);
-        PlayerIsMini.set(inverted);
+        let inverted = !$Settings.PlayerIsMini;
+        $Settings.PlayerIsMini = inverted;
     }
 </script>
 
-<sl-tooltip content={$PlayerIsMini ? "Show waveform" : "Hide waveform"}>
+<sl-tooltip
+    content={$Settings.PlayerIsMini ? "Show waveform" : "Hide waveform"}
+>
     <sl-button onclick={handlePlayerMiniToggle} variant="text">
-        <MaterialSymbol name={$PlayerIsMini ? "unfold_more" : "unfold_less"} />
+        <MaterialSymbol
+            name={$Settings.PlayerIsMini ? "unfold_more" : "unfold_less"}
+        />
     </sl-button>
 </sl-tooltip>

@@ -1,21 +1,16 @@
 <script>
     import active from "svelte-spa-router/active";
-    import { SidebarIsOpen } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     /** @type {{href: any, activePath: any, icon: any, label: any}} */
-    let {
-        href,
-        activePath,
-        icon,
-        label
-    } = $props();
+    let { href, activePath, icon, label } = $props();
 </script>
 
 <sl-tooltip
     content={label}
-    disabled={$IsMobile || $SidebarIsOpen}
+    disabled={$IsMobile || $Settings.SidebarIsOpen}
     hoist
     placement="right"
 >

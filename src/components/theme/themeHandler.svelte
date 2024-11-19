@@ -1,30 +1,23 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
-    import { Saved, Theme } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
-
-
     function handleChange() {
-        // $Saved won't be available until we're logged in
-        $Saved?.setItem("Theme", { ...$Theme });
-
         // update waveform colors when theme is toggled
         $MediaPlayer?.setWaveColors();
     }
     run(() => {
-        if (!$Theme.mode) {
+        if (!$Settings.Theme.mode) {
             if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                $Theme.mode = "dark";
+                $Settings.Theme.mode = "dark";
             } else {
-                $Theme.mode = "light";
+                $Settings.Theme.mode = "light";
             }
-
-            $Theme = $Theme;
         }
 
-        if ($Theme.mode === "dark") {
+        if ($Settings.Theme.mode === "dark") {
             document.documentElement.classList.add("sl-theme-dark");
             document.documentElement.classList.remove("sl-theme-light");
         } else {
@@ -33,20 +26,20 @@
         }
     });
     run(() => {
-        $Theme, handleChange();
+        $Settings.Theme, handleChange();
     });
 </script>
 
 {@html `<style>
 :root {
-    --user-hue-background: ${$Theme.hueBackground};
-    --user-hue-accent-1: ${$Theme.hue1};
-    --user-hue-accent-2: ${$Theme.hue2};
-    --user-color-waveform: ${$Theme.colorWave};
+    --user-hue-background: ${$Settings.Theme.hueBackground};
+    --user-hue-accent-1: ${$Settings.Theme.hue1};
+    --user-hue-accent-2: ${$Settings.Theme.hue2};
+    --user-color-waveform: ${$Settings.Theme.colorWave};
 }
 </style>`}
 
-{#if $Theme.isGray}
+{#if $Settings.Theme.isGray}
     {@html `<style>
 :root {
     --chroma-override: 0.008;

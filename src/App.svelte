@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import "@shoelace-style/shoelace/dist/themes/light.css";
     import "@shoelace-style/shoelace/dist/themes/dark.css";
@@ -9,7 +9,7 @@
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
     import { ShowLyrics, ShowSearch, User } from "~/stores/state.js";
-    import { loadSettings, Theme } from "~/stores/settings";
+    import { loadSettings, Settings } from "~/stores/settings";
     import { extendSession, validateSession } from "~/logic/user.js";
     import { loadFromConfig } from "~/logic/ample.js";
     import { isLoading as i18nIsLoading } from "svelte-i18n";
@@ -63,7 +63,7 @@
         // remove the starting sl-theme-dark
         document.documentElement.classList.remove("sl-theme-dark");
 
-        if ($Theme.mode === "light") {
+        if ($Settings.Theme.mode === "light") {
             document.documentElement.classList.add("sl-theme-light");
         } else {
             document.documentElement.classList.add("sl-theme-dark");

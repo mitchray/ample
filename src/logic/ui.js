@@ -1,5 +1,5 @@
-import { Saved, SidebarIsOpen } from "~/stores/settings.js";
-import { IsMobile, NowPlayingIndex, NowPlayingQueue } from "~/stores/state.js";
+import { Settings } from "~/stores/settings.js";
+import { IsMobile, NowPlayingQueue } from "~/stores/state.js";
 import { get } from "svelte/store";
 import { tick } from "svelte";
 import { QueueVirtualListBind } from "~/stores/elements.js";
@@ -10,8 +10,10 @@ import { QueueVirtualListBind } from "~/stores/elements.js";
 export async function closeSidebar() {
     if (get(IsMobile)) {
         let status = false;
-        get(Saved).setItem("SidebarIsOpen", status);
-        SidebarIsOpen.set(status);
+        Settings.update((x) => ({
+            ...x,
+            SidebarIsOpen: status,
+        }));
     }
 }
 

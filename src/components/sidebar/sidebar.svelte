@@ -1,7 +1,7 @@
 <script>
     import { closeSidebar } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
-    import { SidebarIsOpen } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { IsMobile } from "~/stores/state.js";
     import SidebarContent from "~/components/sidebar/sidebar_content.svelte";
 
@@ -13,9 +13,9 @@
 <div
     class="site-sidebar"
     class:is-drawer={$IsMobile}
-    class:is-list={$IsMobile || $SidebarIsOpen}
-    class:is-mini={!$SidebarIsOpen && !$IsMobile}
-    class:is-open={$SidebarIsOpen}
+    class:is-list={$IsMobile || $Settings.SidebarIsOpen}
+    class:is-mini={!$Settings.SidebarIsOpen && !$IsMobile}
+    class:is-open={$Settings.SidebarIsOpen}
     onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#sidebar-button",

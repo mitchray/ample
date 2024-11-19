@@ -1,11 +1,11 @@
 <script>
-    import { run, stopPropagation } from 'svelte/legacy';
+    import { run, stopPropagation } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { createVirtualizer } from "@tanstack/svelte-virtual";
     import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
-    import { QueueIsOpen, QueueIsPinned, Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import {
         IsMobile,
         NowPlayingIndex,
@@ -35,29 +35,26 @@
     }
 
     function togglePinned() {
-        let inverted = !$QueueIsPinned;
-        $Saved.setItem("QueueIsPinned", inverted);
-        QueueIsPinned.set(inverted);
+        let inverted = !$Settings.QueueIsPinned;
+        $Settings.QueueIsPinned = inverted;
     }
 
     function handleClickOutside() {
         if (siteQueueBind?.classList.contains("is-drawer")) {
             let status = false;
-            $Saved.setItem("QueueIsOpen", status);
-            QueueIsOpen.set(status);
+            $Settings.QueueIsOpen = status;
         }
     }
 
-
-
-
     let virtualListEl = $state();
-    let virtualizer = $derived(createVirtualizer({
-        count: $NowPlayingQueue.length,
-        getScrollElement: () => virtualListEl,
-        estimateSize: () => 46,
-        overscan: 10,
-    }));
+    let virtualizer = $derived(
+        createVirtualizer({
+            count: $NowPlayingQueue.length,
+            getScrollElement: () => virtualListEl,
+            estimateSize: () => 46,
+            overscan: 10,
+        }),
+    );
     let items = $derived($virtualizer.getVirtualItems());
     run(() => {
         $QueueVirtualListBind = $virtualizer;
@@ -67,8 +64,8 @@
 <div
     bind:this={siteQueueBind}
     class="site-queue"
-    class:is-drawer={$IsMobile || !$QueueIsPinned}
-    class:is-open={$QueueIsOpen}
+    class:is-drawer={$IsMobile || !$Settings.QueueIsPinned}
+    class:is-open={$Settings.QueueIsOpen}
     onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#queue-button",
@@ -103,7 +100,7 @@
                             <sl-menu-item
                                 onclick={stopPropagation(togglePinned)}
                             >
-                                {#if $QueueIsPinned}
+                                {#if $Settings.QueueIsPinned}
                                     {$_("text.queueUnpin")}
                                 {:else}
                                     {$_("text.queuePin")}

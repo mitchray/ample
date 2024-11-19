@@ -3,13 +3,7 @@ import { get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import { API } from "~/stores/state";
 import { Notifications } from "~/stores/message";
-import {
-    NotificationAlternateVersions,
-    NotificationGainTagsMissing,
-    NotificationLyricsMissing,
-    NotificationLyricsNotTimestamped,
-    NotificationRatingMissing,
-} from "~/stores/settings";
+import { Settings } from "~/stores/settings";
 
 export function addNotification(settings) {
     settings.id = uuidv4();
@@ -33,7 +27,7 @@ export function removeNotification(id) {
 }
 
 export function addGainTagsMissingNotification(data) {
-    if (!get(NotificationGainTagsMissing).isEnabled || !data) {
+    if (!get(Settings).Notifications.GainTagsMissing.isEnabled || !data) {
         return;
     }
 
@@ -42,14 +36,14 @@ export function addGainTagsMissingNotification(data) {
         type: "gainTagsMissing",
         style: "warning",
         data: data,
-        isSilent: get(NotificationGainTagsMissing).isSilent,
+        isSilent: get(Settings).Notifications.GainTagsMissing.isSilent,
     };
 
     addNotification(settings);
 }
 
 export function addRatingMissingNotification(data) {
-    if (!get(NotificationRatingMissing).isEnabled || !data) {
+    if (!get(Settings).Notifications.RatingMissing.isEnabled || !data) {
         return;
     }
 
@@ -58,7 +52,7 @@ export function addRatingMissingNotification(data) {
         type: "ratingMissing",
         style: "warning",
         data: data,
-        isSilent: get(NotificationRatingMissing).isSilent,
+        isSilent: get(Settings).Notifications.RatingMissing.isSilent,
     };
 
     get(API)
@@ -71,7 +65,7 @@ export function addRatingMissingNotification(data) {
 }
 
 export function addAlternateVersionsNotification(data) {
-    if (!get(NotificationAlternateVersions).isEnabled || !data) {
+    if (!get(Settings).Notifications.AlternateVersions.isEnabled || !data) {
         return;
     }
 
@@ -82,14 +76,14 @@ export function addAlternateVersionsNotification(data) {
         type: "alternateVersions",
         style: "info",
         data: data,
-        isSilent: get(NotificationAlternateVersions).isSilent,
+        isSilent: get(Settings).Notifications.AlternateVersions.isSilent,
     };
 
     addNotification(settings);
 }
 
 export function addLyricsMissingNotification(data) {
-    if (!get(NotificationLyricsMissing).isEnabled || !data) {
+    if (!get(Settings).Notifications.LyricsMissing.isEnabled || !data) {
         return;
     }
 
@@ -98,14 +92,14 @@ export function addLyricsMissingNotification(data) {
         type: "lyricsMissing",
         style: "warning",
         data: data,
-        isSilent: get(NotificationLyricsMissing).isSilent,
+        isSilent: get(Settings).Notifications.LyricsMissing.isSilent,
     };
 
     addNotification(settings);
 }
 
 export function addLyricsNotTimestampedNotification(data) {
-    if (!get(NotificationLyricsNotTimestamped).isEnabled || !data) {
+    if (!get(Settings).Notifications.LyricsNotTimestamped.isEnabled || !data) {
         return;
     }
 
@@ -114,7 +108,7 @@ export function addLyricsNotTimestampedNotification(data) {
         type: "lyricsMissingTimestamps",
         style: "warning",
         data: data,
-        isSilent: get(NotificationLyricsNotTimestamped).isSilent,
+        isSilent: get(Settings).Notifications.LyricsNotTimestamped.isSilent,
     };
 
     addNotification(settings);

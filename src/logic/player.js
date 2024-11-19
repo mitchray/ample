@@ -15,16 +15,7 @@ import {
     shuffleArray,
     truncateDecimals,
 } from "~/logic/helper";
-import {
-    DynamicsCompressorEnabled,
-    PlayerVolume,
-    RepeatState,
-    Saved,
-    SkipBelow,
-    SkipBelowAllowZero,
-    SkipBelowRating,
-    VolumeNormalizationEnabled,
-} from "~/stores/settings";
+import { Settings } from "~/stores/settings";
 import {
     CurrentMedia,
     CurrentMediaGainInfo,
@@ -85,10 +76,19 @@ class Player {
             normalize: true,
         });
 
-        // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
-        PlayerVolume.subscribe((value) => {
-            this.globalVolume = this.#logVolume(value);
+        Settings.subscribe((s) => {
+            // PlayerVolume
+            this.globalVolume = this.#logVolume(s.PlayerVolume); // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
             this.wavesurfer.setVolume(this.globalVolume);
+
+            // RepeatState
+            this.repeatState = s.RepeatState;
+
+            // VolumeNormalizationEnabled
+            this.volumeNormalizationEnabled = s.VolumeNormalizationEnabled;
+
+            // DynamicsCompressorEnabled
+            this.dynamicsCompressorEnabled = s.DynamicsCompressorEnabled;
         });
 
         NowPlayingQueue.subscribe((value) => {
@@ -99,7 +99,7 @@ class Player {
         IsMobile.subscribe((value) => {
             this.globalVolume = value
                 ? 1.0
-                : this.#logVolume(get(PlayerVolume));
+                : this.#logVolume(get(Settings).PlayerVolume);
             this.wavesurfer.setVolume(this.globalVolume);
         });
 
@@ -115,20 +115,8 @@ class Player {
             this.isPlaying = value;
         });
 
-        VolumeNormalizationEnabled.subscribe((value) => {
-            this.volumeNormalizationEnabled = value;
-        });
-
-        DynamicsCompressorEnabled.subscribe((value) => {
-            this.dynamicsCompressorEnabled = value;
-        });
-
         CurrentMedia.subscribe((value) => {
             this.currentMedia = value;
-        });
-
-        RepeatState.subscribe((value) => {
-            this.repeatState = value;
         });
 
         this.#init();
@@ -354,13 +342,15 @@ class Player {
 
         return (
             // SkipBelow is not enabled
-            !get(SkipBelow) ||
+            !get(Settings).SkipBelow.enabled ||
             // Item does not have a rating property
             !item.hasOwnProperty("rating") ||
-            // Item is unrated but SkipBelowAllowZero is true
-            (get(SkipBelow) && get(SkipBelowAllowZero) && !item.rating) ||
+            // Item is unrated but SkipBelow.allowZero is true
+            (get(Settings).SkipBelow.enabled &&
+                get(Settings).SkipBelow.allowZero &&
+                !item.rating) ||
             // Item rating is above the threshold
-            item.rating >= get(SkipBelowRating)
+            item.rating >= get(Settings).SkipBelow.rating
         );
     }
 
@@ -401,8 +391,10 @@ class Player {
         } else {
             newState = "disabled";
         }
-        get(Saved).setItem("RepeatState", newState);
-        RepeatState.set(newState);
+        Settings.update((x) => ({
+            ...x,
+            RepeatState: newState,
+        }));
         debugHelper("repeat: " + newState);
     }
 

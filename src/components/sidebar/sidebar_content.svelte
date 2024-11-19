@@ -3,7 +3,7 @@
     import SidebarHeading from "~/components/sidebar/sidebar_heading.svelte";
     import SidebarLink from "~/components/sidebar/sidebar_link.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { onMount } from "svelte";
     import { userPreference } from "~/logic/preferences.js";
 
@@ -16,7 +16,10 @@
         if (event.target === event.currentTarget) {
             let id = event.target.dataset.id;
             savedStatuses[id] = true;
-            $Saved.setItem(`SidebarStatuses`, savedStatuses);
+            Settings.update((x) => ({
+                ...x,
+                SidebarStatuses: savedStatuses,
+            }));
         }
     }
 
@@ -25,12 +28,15 @@
         if (event.target === event.currentTarget) {
             let id = event.target.dataset.id;
             savedStatuses[id] = false;
-            $Saved.setItem(`SidebarStatuses`, savedStatuses);
+            Settings.update((x) => ({
+                ...x,
+                SidebarStatuses: savedStatuses,
+            }));
         }
     }
 
     onMount(async () => {
-        savedStatuses = (await $Saved.getItem(`SidebarStatuses`)) || {};
+        savedStatuses = $Settings.SidebarStatuses || {};
     });
 </script>
 

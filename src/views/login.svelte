@@ -1,5 +1,5 @@
 <script>
-    import { preventDefault } from 'svelte/legacy';
+    import { preventDefault } from "svelte/legacy";
 
     import { onMount } from "svelte";
     import { _ } from "svelte-i18n";
@@ -12,15 +12,14 @@
         PageTitle,
         Server,
     } from "~/stores/state.js";
+    import { Settings } from "~/stores/settings.js";
     import { attemptLogin } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import localforage from "localforage";
 
     let username = $state("");
-    
     let password = $state("");
-    
+
     let versionCheck = $derived($Server.version?.charAt(0));
     let apiKey = $state("");
     let result = $state();
@@ -39,8 +38,6 @@
     let title = $_("text.login");
     $PageTitle = title;
 
-    
-
     function changeTab(e) {
         currentTab = e.detail.name;
     }
@@ -58,7 +55,7 @@
                 });
             }
 
-            await localforage.setItem("AmpleLastLoginMethod", currentTab);
+            $Settings.LastLoginMethod = currentTab;
         } catch (e) {
             fatalError = true;
         }
@@ -86,7 +83,7 @@
     }
 
     onMount(async () => {
-        lastUsedTab = await localforage.getItem("AmpleLastLoginMethod");
+        lastUsedTab = $Settings.LastLoginMethod;
         currentTab = lastUsedTab || "username";
         loaded = true;
     });

@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import ThemePreview from "~/components/theme/themePreview.svelte";
-    import { Theme } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
 
     function parseHue(cssHSL) {
         const match = cssHSL.match(/hsl\((\d+),/);
@@ -15,7 +15,7 @@
         e.target.style.setProperty("--the-hue", theVal);
 
         // actual theme color
-        $Theme = { ...$Theme, [name]: theVal };
+        $Settings.Theme = { ...$Settings.Theme, [name]: theVal };
     }
 </script>
 
@@ -26,15 +26,15 @@
         onsl-input={(e) => {
             setHue(e, "hueBackground");
         }}
-        style="--the-hue: {$Theme.hueBackground};"
+        style="--the-hue: {$Settings.Theme.hueBackground};"
         value="hsl(--the-hue, 70%, 50%)"
     ></sl-color-picker>
     {$_("text.colorBackground")}
 
     <sl-switch
-        checked={$Theme.isGray}
+        checked={$Settings.Theme.isGray}
         onsl-change={(e) => {
-            $Theme = { ...$Theme, isGray: e.target.checked };
+            $Settings.Theme = { ...$Settings.Theme, isGray: e.target.checked };
         }}
     >
         {$_("text.colorGray")}
@@ -48,7 +48,7 @@
         onsl-input={(e) => {
             setHue(e, "hue1");
         }}
-        style="--the-hue: {$Theme.hue1};"
+        style="--the-hue: {$Settings.Theme.hue1};"
         value="hsl(var(--the-hue), 70%, 50%)"
     ></sl-color-picker>
     {$_("text.colorAccent1")}
@@ -61,7 +61,7 @@
         onsl-input={(e) => {
             setHue(e, "hue2");
         }}
-        style="--the-hue: {$Theme.hue2};"
+        style="--the-hue: {$Settings.Theme.hue2};"
         value="hsl(var(--the-hue), 70%, 50%)"
     ></sl-color-picker>
     {$_("text.colorAccent2")}
@@ -70,9 +70,9 @@
 <div>
     <sl-color-picker
         onsl-input={(e) => {
-            $Theme = { ...$Theme, colorWave: e.target.value };
+            $Settings.Theme = { ...$Settings.Theme, colorWave: e.target.value };
         }}
-        value={$Theme.colorWave}
+        value={$Settings.Theme.colorWave}
     ></sl-color-picker>
     {$_("text.colorWaveform")}
 </div>

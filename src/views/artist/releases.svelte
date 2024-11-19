@@ -1,12 +1,11 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
-    import { writable } from "svelte/store";
     import { createQuery } from "@tanstack/svelte-query";
     import { groupBy, partition, sortBy } from "lodash-es";
     import { API, User } from "~/stores/state";
-    import { Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { formatReleaseType } from "~/logic/formatters.js";
     import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -22,34 +21,17 @@
     let appearances = $state([]);
     let releases = $state([]);
 
-
-    let defaultOptions = {
-        view: "expanded_columns",
-        sort: "year",
-        group: "release_type",
-        sortReversed: false,
-    };
-
-    let loadedOptions = writable({});
-    let state = writable(defaultOptions);
-
-
-    onMount(async () => {
-        $loadedOptions = (await $Saved.getItem("ArtistReleases")) || {}; // load saved settings from localstorage
-        $state = Object.assign({}, defaultOptions, $loadedOptions); // merge table defaults, localstorage, passed component props
-    });
-
     async function processData() {
         // sort entire array together
-        let sorted = sortBy($query.data, [$state.sort]);
+        let sorted = sortBy($query.data, [$Settings.ArtistReleases.sort]);
 
-        if ($state.sortReversed) {
+        if ($Settings.ArtistReleases.sortReversed) {
             sorted.reverse();
         }
 
         let groupMethod;
 
-        switch ($state.group) {
+        switch ($Settings.ArtistReleases.group) {
             case "name":
                 groupMethod = (item) => item.name.charAt(0);
                 break;
@@ -77,7 +59,7 @@
         });
 
         // reorder the groups to match the order set in preference
-        if ($state.group === "release_type") {
+        if ($Settings.ArtistReleases.group === "release_type") {
             let arr = $releaseTypesOrder.split(",");
 
             grouped.sort(function (a, b) {
@@ -94,39 +76,44 @@
 
         releases = grouped;
     }
-    let query = $derived(createQuery({
-        queryKey: ["artistAlbums", artistID],
-        queryFn: async () => {
-            let result = await $API.artistAlbums({ filter: artistID });
+    let query = $derived(
+        createQuery({
+            queryKey: ["artistAlbums", artistID],
+            queryFn: async () => {
+                let result = await $API.artistAlbums({ filter: artistID });
 
-            if (result.error) {
-                errorHandler("getting artist albums", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting artist albums", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-        select: (data) => {
-            let divide = partition(
-                data.album,
-                (item) => item.artist?.id === artistID,
-            );
-            let byArtist = divide[0];
-            appearances = divide[1];
-            return byArtist;
-        },
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+            select: (data) => {
+                let divide = partition(
+                    data.album,
+                    (item) => item.artist?.id === artistID,
+                );
+                let byArtist = divide[0];
+                appearances = divide[1];
+                return byArtist;
+            },
+        }),
+    );
     // run processData whenever $query.data or displayOptions change
     run(() => {
         $query.data, processData();
     });
     run(() => {
-        $state, processData();
+        $Settings.ArtistReleases, processData();
     });
-    run(() => {
-        $state, $Saved.setItem("ArtistReleases", $state);
-    }); // write to localstorage whenever state changes
+
+    onMount(() => {
+        if (!$Settings.ArtistReleases) {
+            $Settings.ArtistReleases.reset();
+        }
+    });
 </script>
 
 <sl-dropdown style="position: relative; z-index: 3000; ">
@@ -136,8 +123,9 @@
         <div class="display-options">
             <sl-select
                 label="Display"
-                onsl-change={(e) => ($state.view = e.target.value)}
-                value={$state.view}
+                onsl-change={(e) =>
+                    ($Settings.ArtistReleases.view = e.target.value)}
+                value={$Settings.ArtistReleases.view}
             >
                 <MaterialSymbol name="visibility" slot="prefix" />
                 <sl-option value="table">Table</sl-option>
@@ -151,9 +139,10 @@
                 <sl-select
                     clearable
                     label="Sort"
-                    onsl-change={(e) => ($state.sort = e.target.value)}
+                    onsl-change={(e) =>
+                        ($Settings.ArtistReleases.sort = e.target.value)}
                     placeholder="None"
-                    value={$state.sort}
+                    value={$Settings.ArtistReleases.sort}
                 >
                     <MaterialSymbol name="sort" slot="prefix" />
                     <sl-option value="name">Name</sl-option>
@@ -165,9 +154,10 @@
                 <sl-tooltip content="Direction">
                     <sl-button
                         onclick={() =>
-                            ($state.sortReversed = !$state.sortReversed)}
+                            ($Settings.ArtistReleases.sortReversed =
+                                !$Settings.ArtistReleases.sortReversed)}
                     >
-                        {#if $state.sortReversed}
+                        {#if $Settings.ArtistReleases.sortReversed}
                             <MaterialSymbol name="arrow_downward" />
                         {:else}
                             <MaterialSymbol name="arrow_upward" />
@@ -179,9 +169,10 @@
             <sl-select
                 clearable
                 label="Grouping"
-                onsl-change={(e) => ($state.group = e.target.value)}
+                onsl-change={(e) =>
+                    ($Settings.ArtistReleases.group = e.target.value)}
                 placeholder="None"
-                value={$state.group}
+                value={$Settings.ArtistReleases.group}
             >
                 <MaterialSymbol name="category" slot="prefix" />
                 <sl-option value="name">Name</sl-option>
@@ -206,7 +197,10 @@
                         <h3 class="group-title">{group}</h3>
                     {/if}
 
-                    <RenderReleases view={$state.view} {items} />
+                    <RenderReleases
+                        view={$Settings.ArtistReleases.view}
+                        {items}
+                    />
                 </div>
             {/each}
         {/if}
@@ -220,7 +214,7 @@
                 </h3>
 
                 <RenderReleases
-                    view={$state.view}
+                    view={$Settings.ArtistReleases.view}
                     items={appearances}
                     filterToArtistID={artistID}
                 />

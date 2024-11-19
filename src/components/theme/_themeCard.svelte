@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { Theme } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
 
     /** @type {{mode: any, contextKey: any}} */
     let { mode, contextKey } = $props();
@@ -14,8 +14,8 @@
     class="container c-theme-card sl-theme-{mode}"
     data-uid={contextKey}
     onclick={() => {
-        $Theme = {
-            ...$Theme,
+        $Settings.Theme = {
+            ...$Settings.Theme,
             mode: mode,
             colorWave: colors.wave,
             hue1: colors.hue1,

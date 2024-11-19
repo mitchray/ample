@@ -1,7 +1,7 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
-    import { QueueIsOpen, Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ShowVisualizer, IsPlaying } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
@@ -21,11 +21,9 @@
     let transitionDuration = $state(3);
     let cycleTimer = $state();
 
-
     function handleQueueToggle() {
-        let inverted = !$QueueIsOpen;
-        $Saved.setItem("QueueIsOpen", inverted);
-        QueueIsOpen.set(inverted);
+        let inverted = !$Settings.QueueIsOpen;
+        $Settings.QueueIsOpen = inverted;
     }
 
     function cycleHandler() {

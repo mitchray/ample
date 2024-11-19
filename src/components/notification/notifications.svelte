@@ -1,17 +1,9 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
-    import { get } from "svelte/store";
     import { _ } from "svelte-i18n";
     import { Notifications } from "~/stores/message.js";
-    import {
-        NotificationAlternateVersions,
-        NotificationGainTagsMissing,
-        NotificationLyricsMissing,
-        NotificationLyricsNotTimestamped,
-        NotificationRatingMissing,
-        Saved,
-    } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import Portal from "~/components/portal.svelte";
     import NotificationList from "~/components/notification/_notificationList.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -24,12 +16,6 @@
 
     function handleClearNotifications() {
         $Notifications = [];
-    }
-
-    function handleChange({ prop, val, store, key }) {
-        let newObject = { ...get(store), [prop]: val };
-        $Saved.setItem(key, newObject);
-        store.set(newObject);
     }
 </script>
 
@@ -99,27 +85,21 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationAlternateVersions.isEnabled}
+                        checked={$Settings.Notifications.AlternateVersions
+                            .isEnabled}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isEnabled",
-                                val: e.target.checked,
-                                store: NotificationAlternateVersions,
-                                key: "NotificationAlternateVersions",
-                            });
+                            $Settings.Notifications.AlternateVersions.isEnabled =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationAlternateVersions.isSilent}
+                        checked={$Settings.Notifications.AlternateVersions
+                            .isSilent}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isSilent",
-                                val: e.target.checked,
-                                store: NotificationAlternateVersions,
-                                key: "NotificationAlternateVersions",
-                            });
+                            $Settings.Notifications.AlternateVersions.isSilent =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
@@ -139,27 +119,21 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationGainTagsMissing.isEnabled}
+                        checked={$Settings.Notifications.GainTagsMissing
+                            .isEnabled}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isEnabled",
-                                val: e.target.checked,
-                                store: NotificationGainTagsMissing,
-                                key: "NotificationGainTagsMissing",
-                            });
+                            $Settings.Notifications.GainTagsMissing.isEnabled =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationGainTagsMissing.isSilent}
+                        checked={$Settings.Notifications.GainTagsMissing
+                            .isSilent}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isSilent",
-                                val: e.target.checked,
-                                store: NotificationGainTagsMissing,
-                                key: "NotificationGainTagsMissing",
-                            });
+                            $Settings.Notifications.GainTagsMissing.isSilent =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
@@ -179,27 +153,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationRatingMissing.isEnabled}
+                        checked={$Settings.Notifications.RatingMissing
+                            .isEnabled}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isEnabled",
-                                val: e.target.checked,
-                                store: NotificationRatingMissing,
-                                key: "NotificationRatingMissing",
-                            });
+                            $Settings.Notifications.RatingMissing.isEnabled =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationRatingMissing.isSilent}
+                        checked={$Settings.Notifications.RatingMissing.isSilent}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isSilent",
-                                val: e.target.checked,
-                                store: NotificationRatingMissing,
-                                key: "NotificationRatingMissing",
-                            });
+                            $Settings.Notifications.RatingMissing.isSilent =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
@@ -219,27 +186,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationLyricsMissing.isEnabled}
+                        checked={$Settings.Notifications.LyricsMissing
+                            .isEnabled}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isEnabled",
-                                val: e.target.checked,
-                                store: NotificationLyricsMissing,
-                                key: "NotificationLyricsMissing",
-                            });
+                            $Settings.Notifications.LyricsMissing.isEnabled =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationLyricsMissing.isSilent}
+                        checked={$Settings.Notifications.LyricsMissing.isSilent}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isSilent",
-                                val: e.target.checked,
-                                store: NotificationLyricsMissing,
-                                key: "NotificationLyricsMissing",
-                            });
+                            $Settings.Notifications.LyricsMissing.isSilent =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
@@ -259,27 +219,21 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationLyricsNotTimestamped.isEnabled}
+                        checked={$Settings.Notifications.LyricsNotTimestamped
+                            .isEnabled}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isEnabled",
-                                val: e.target.checked,
-                                store: NotificationLyricsNotTimestamped,
-                                key: "NotificationLyricsNotTimestamped",
-                            });
+                            $Settings.Notifications.LyricsNotTimestamped.isEnabled =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$NotificationLyricsNotTimestamped.isSilent}
+                        checked={$Settings.Notifications.LyricsNotTimestamped
+                            .isSilent}
                         onsl-change={(e) => {
-                            handleChange({
-                                prop: "isSilent",
-                                val: e.target.checked,
-                                store: NotificationLyricsNotTimestamped,
-                                key: "NotificationLyricsNotTimestamped",
-                            });
+                            $Settings.Notifications.LyricsNotTimestamped.isSilent =
+                                e.target.checked;
                         }}
                     ></sl-switch>
                 </div>

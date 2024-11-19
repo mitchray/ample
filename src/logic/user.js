@@ -1,20 +1,13 @@
 import { get } from "svelte/store";
 import AmpacheAPI from "javascript-ampache";
-import localforage from "localforage";
 import { MediaPlayer } from "~/stores/elements.js";
 import { API, APIVersion, debugMode, Server, User } from "~/stores/state.js";
-import { Saved } from "~/stores/settings.js";
+import { Settings } from "~/stores/settings.js";
 
 export async function login({ auth }) {
     get(API).setSessionKey(auth);
 
     let currentUser = await get(API).user();
-
-    Saved.set(
-        localforage.createInstance({
-            name: `AmpleUser${currentUser.id}`,
-        }),
-    );
 
     User.set({
         ...get(User),
@@ -23,18 +16,24 @@ export async function login({ auth }) {
         isLoggedIn: true,
     });
 
-    await localforage.setItem("AmpleLastSession", {
-        token: auth,
-        time: Date.now(),
-        rememberMe: false,
-    });
+    Settings.update((x) => ({
+        ...x,
+        LastSession: {
+            token: auth,
+            time: Date.now(),
+            rememberMe: false,
+        },
+    }));
 }
 
 export function logout() {
     // destroy the session
     get(API).goodbye({ auth: get(User).token });
 
-    localforage.removeItem("AmpleLastSession");
+    Settings.update((x) => ({
+        ...x,
+        LastSession: null,
+    }));
 
     User.set({ ...get(User), isLoggedIn: false });
 
@@ -49,7 +48,7 @@ export async function validateSession() {
     }
 
     let guestUserAPIKey = get(Server).guestUserAPIKey;
-    let ampleLastSession = await localforage.getItem("AmpleLastSession");
+    let ampleLastSession = get(Settings).LastSession;
 
     try {
         API.set(

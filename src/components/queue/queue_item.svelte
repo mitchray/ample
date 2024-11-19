@@ -1,5 +1,5 @@
 <script>
-    import { run, stopPropagation, createBubbler } from 'svelte/legacy';
+    import { run, stopPropagation, createBubbler } from "svelte/legacy";
 
     const bubble = createBubbler();
     import {
@@ -7,11 +7,7 @@
         NowPlayingIndex,
         NowPlayingQueue,
     } from "~/stores/state";
-    import {
-        SkipBelow,
-        SkipBelowAllowZero,
-        SkipBelowRating,
-    } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { ticks, updateQueue } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
@@ -24,7 +20,6 @@
     let { media = $bindable() } = $props();
 
     let matchesRating = $state();
-
 
     function retest() {
         matchesRating = !$MediaPlayer.isEligibleToPlay(media);
@@ -52,9 +47,9 @@
     }
     run(() => {
         media, retest();
-        $SkipBelow, retest();
-        $SkipBelowRating, retest();
-        $SkipBelowAllowZero, retest();
+        $Settings.SkipBelow.enabled, retest();
+        $Settings.SkipBelow.rating, retest();
+        $Settings.SkipBelow.allowZero, retest();
     });
 </script>
 
@@ -118,7 +113,7 @@
 
     <sl-dropdown
         class="more"
-        onclick={stopPropagation(bubble('click'))}
+        onclick={stopPropagation(bubble("click"))}
         onsl-show={async () => {
             media.isActionsLoaded = true;
             await ticks(2);

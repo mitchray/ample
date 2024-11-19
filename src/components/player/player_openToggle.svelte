@@ -1,17 +1,16 @@
 <script>
-    import { PlayerIsOpen, Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function handlePlayerOpenToggle() {
-        let inverted = !$PlayerIsOpen;
-        $Saved.setItem("PlayerIsOpen", inverted);
-        PlayerIsOpen.set(inverted);
+        let inverted = !$Settings.PlayerIsOpen;
+        $Settings.PlayerIsOpen = inverted;
     }
 </script>
 
-<sl-tooltip content={$PlayerIsOpen ? "Hide player" : "Show player"}>
+<sl-tooltip content={$Settings.PlayerIsOpen ? "Hide player" : "Show player"}>
     <sl-button circle onclick={handlePlayerOpenToggle} variant="neutral">
-        {#if $PlayerIsOpen}
+        {#if $Settings.PlayerIsOpen}
             <MaterialSymbol name="expand_more" />
         {:else}
             <MaterialSymbol name="expand_less" />

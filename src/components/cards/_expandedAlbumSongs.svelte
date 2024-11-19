@@ -1,8 +1,8 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { getContext } from "svelte";
-    import { ShowSongsByOtherArtists } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import { CurrentMedia, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
@@ -25,8 +25,6 @@
     let tabulator = $state(null);
     let filterToArtistID = getContext("filterToArtistID");
     let disks = $state([]);
-
-
 
     function processData() {
         disks = [];
@@ -53,13 +51,15 @@
 
         return disks;
     }
-    let query = $derived(createQuery({
-        queryKey: ["albumDisks", album.id],
-        queryFn: async () => {
-            return await getAlbumDisks(album.id);
-        },
-        enabled: $User.isLoggedIn,
-    }));
+    let query = $derived(
+        createQuery({
+            queryKey: ["albumDisks", album.id],
+            queryFn: async () => {
+                return await getAlbumDisks(album.id);
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
     run(() => {
         $query.data, processData();
     });
@@ -71,7 +71,7 @@
     <p>Error: {$query.error.message}</p>
 {:else if $query.isSuccess}
     {#each disks as disk}
-        {#if $ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
+        {#if $Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
             <!-- Hide this disk-->
         {:else}
             <div class="disk">
@@ -85,9 +85,11 @@
                             <li
                                 class:not-by-artist={song.doesNotContainArtist}
                                 class:hide={filterToArtistID &&
-                                    $ShowSongsByOtherArtists === "hide"}
+                                    $Settings.ShowSongsByOtherArtists ===
+                                        "hide"}
                                 class:highlight={filterToArtistID &&
-                                    $ShowSongsByOtherArtists === "highlight"}
+                                    $Settings.ShowSongsByOtherArtists ===
+                                        "highlight"}
                             >
                                 <div class="top">
                                     <span class="secondary-info">
@@ -136,7 +138,7 @@
                     </ul>
                 {:else}
                     <div class="lister-tabulator">
-                        {#key $ShowSongsByOtherArtists || 0}
+                        {#key $Settings.ShowSongsByOtherArtists || 0}
                             <div class="lister-tabulator__actions">
                                 {#if disks.length > 1}
                                     <Actions
@@ -153,15 +155,15 @@
 
                             <Tabulator
                                 bind:tabulator
-                                data={$ShowSongsByOtherArtists === "hide" &&
-                                filterToArtistID
+                                data={$Settings.ShowSongsByOtherArtists ===
+                                    "hide" && filterToArtistID
                                     ? disk.songsByArtist
                                     : disk.songs}
                                 columns={albumPreset}
                                 options={{
                                     rowFormatter: function (row) {
                                         if (
-                                            $ShowSongsByOtherArtists ===
+                                            $Settings.ShowSongsByOtherArtists ===
                                                 "highlight" &&
                                             filterToArtistID &&
                                             row.getData().doesNotContainArtist

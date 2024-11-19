@@ -1,8 +1,8 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
-    import { QueueRefill, Saved } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
     import { API, NowPlayingIndex, NowPlayingQueue } from "~/stores/state.js";
@@ -16,9 +16,6 @@
     let isFetching = $state(false);
     let timeout = $state();
 
-
-
-
     async function startFetching() {
         isFetching = true;
         timeout = setTimeout(async () => {
@@ -27,18 +24,20 @@
         }, 10000);
     }
 
-
     function fetchItems() {
         return new Promise((resolve, reject) => {
             try {
                 let apiCall;
 
-                if ($QueueRefill.mode === "smartlist" && selectedPlaylist) {
+                if (
+                    $Settings.QueueRefill.mode === "smartlist" &&
+                    selectedPlaylist
+                ) {
                     apiCall = $API.playlistSongs({
                         filter: selectedPlaylist,
                         limit: 100,
                     });
-                } else if ($QueueRefill.mode === "mix") {
+                } else if ($Settings.QueueRefill.mode === "mix") {
                     let lastItem =
                         $NowPlayingQueue[$NowPlayingQueue.length - 1];
                     let artistID = lastItem.artist?.id;
@@ -98,31 +97,33 @@
     }
 
     function toggleEnabled() {
-        let inverted = !$QueueRefill.enabled;
-        QueueRefill.set({ ...$QueueRefill, enabled: inverted });
-        $Saved.setItem("QueueRefill", $QueueRefill);
+        let inverted = !$Settings.QueueRefill.enabled;
+        $Settings.QueueRefill = { ...$Settings.QueueRefill, enabled: inverted };
     }
 
     function handleMode(e) {
-        QueueRefill.set({ ...$QueueRefill, mode: e.target.value });
-        $Saved.setItem("QueueRefill", $QueueRefill);
+        $Settings.QueueRefill = {
+            ...$Settings.QueueRefill,
+            mode: e.target.value,
+        };
     }
 
     function handleSelectedPlaylist() {
         selectedPlaylist = playlistsArray[0];
-        QueueRefill.set({ ...$QueueRefill, smartlist: selectedPlaylist });
-        $Saved.setItem("QueueRefill", $QueueRefill);
+        $Settings.QueueRefill = {
+            ...$Settings.QueueRefill,
+            smartlist: selectedPlaylist,
+        };
     }
 
     function handleClearedPlaylist() {
-        QueueRefill.set({ ...$QueueRefill, smartlist: null });
-        $Saved.setItem("QueueRefill", $QueueRefill);
+        $Settings.QueueRefill = { ...$Settings.QueueRefill, smartlist: null };
     }
     run(() => {
         // test the saved smartlist does exist
-        if ($QueueRefill.smartlist) {
+        if ($Settings.QueueRefill.smartlist) {
             $API.playlist({
-                filter: $QueueRefill.smartlist,
+                filter: $Settings.QueueRefill.smartlist,
             }).then((result) => {
                 if (result.error) {
                     errorHandler("getting playlists", result.error);
@@ -137,11 +138,13 @@
     run(() => {
         selectedPlaylist, (playlistsArray = [selectedPlaylist]);
     });
-    let shouldAdd =
-        $derived($QueueRefill.enabled &&
-        $NowPlayingQueue.length > 0 &&
-        $NowPlayingIndex > $NowPlayingQueue.length - 10 &&
-        !isFetching);
+    let shouldAdd = $derived(
+        $Settings.QueueRefill.enabled &&
+            $NowPlayingQueue.length > 0 &&
+            $NowPlayingIndex > $NowPlayingQueue.length - 10 &&
+            !isFetching,
+    );
+
     run(() => {
         if (shouldAdd) {
             clearTimeout(timeout);
@@ -153,13 +156,13 @@
 <sl-dropdown hoist placement="bottom">
     <sl-button
         class="rating-filter"
-        class:is-enabled={$QueueRefill.enabled}
+        class:is-enabled={$Settings.QueueRefill.enabled}
         size="small"
         slot="trigger"
         title={$_("text.queueRefill")}
     >
         <MaterialSymbol
-            fill={$QueueRefill.enabled}
+            fill={$Settings.QueueRefill.enabled}
             name="play_circle"
             size="13px"
         />
@@ -170,7 +173,7 @@
             {$_("text.queueRefill")}
 
             <sl-switch
-                checked={$QueueRefill.enabled}
+                checked={$Settings.QueueRefill.enabled}
                 onsl-change={toggleEnabled}
             ></sl-switch>
         </div>
@@ -178,7 +181,7 @@
         <sl-radio-group
             name="mode"
             onsl-change={handleMode}
-            value={$QueueRefill.mode}
+            value={$Settings.QueueRefill.mode}
         >
             <sl-radio-button value="smartlist">
                 <MaterialSymbol name="electric_bolt" slot="prefix" />
@@ -190,7 +193,7 @@
             </sl-radio-button>
         </sl-radio-group>
 
-        {#if $QueueRefill.mode === "smartlist"}
+        {#if $Settings.QueueRefill.mode === "smartlist"}
             <div class="secondary-info">{$_("text.queueRefillSmartlist")}</div>
 
             <sl-divider></sl-divider>
