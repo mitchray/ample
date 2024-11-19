@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { playlistsPreset } from "~/components/lister/columns.js";
@@ -11,22 +11,24 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["myPlaylists"],
-        queryFn: async () => {
-            let result = await $API.userPlaylists();
+    let query = $derived(
+        createQuery({
+            queryKey: ["myPlaylists"],
+            queryFn: async () => {
+                let result = await $API.userPlaylists();
 
-            if (result.error) {
-                errorHandler("getting my playlists", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting my playlists", result.error);
+                    return [];
+                }
 
-            tabulator?.setData(result.playlist);
+                tabulator?.setData(result.playlist);
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let playlists;

@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import Fuse from "fuse.js";

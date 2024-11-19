@@ -11,22 +11,24 @@
     let title = $_("text.genres");
     $PageTitle = title;
 
-    let query = $derived(createQuery({
-        queryKey: ["genres"],
-        queryFn: async () => {
-            let result = await $API.genres({ sort: "name,ASC" });
+    let query = $derived(
+        createQuery({
+            queryKey: ["genres"],
+            queryFn: async () => {
+                let result = await $API.genres({ sort: "name,ASC" });
 
-            if (result.error) {
-                errorHandler("getting genres", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting genres", result.error);
+                    return [];
+                }
 
-            tabulator?.setData(result.genre);
+                tabulator?.setData(result.genre);
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let genres = $derived($query.data?.genre || {});

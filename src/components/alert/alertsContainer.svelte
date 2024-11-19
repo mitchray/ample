@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { onDestroy, onMount } from "svelte";
     import {
@@ -19,7 +19,6 @@
     let freshAlerts = $state([]);
     let listBind = $state();
     let autoUpdateCleanup;
-
 
     function handleEnter(e) {
         if (freshAlerts[0] && e.target.dataset.id === freshAlerts[0].id) {

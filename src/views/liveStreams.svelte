@@ -6,20 +6,22 @@
     import { errorHandler } from "~/logic/helper.js";
     import { liveStreamsPreset } from "~/components/lister/columns.js";
 
-    let query = $derived(createQuery({
-        queryKey: ["liveStreams"],
-        queryFn: async () => {
-            let result = await $API.liveStreams();
+    let query = $derived(
+        createQuery({
+            queryKey: ["liveStreams"],
+            queryFn: async () => {
+                let result = await $API.liveStreams();
 
-            if (result.error) {
-                errorHandler("getting artist", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting artist", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let liveStreams = $derived($query.data || {});

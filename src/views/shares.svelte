@@ -6,28 +6,29 @@
     import { errorHandler } from "~/logic/helper.js";
     import { sharesPreset } from "~/components/lister/columns.js";
 
-
     let title = $_("text.shares");
     $PageTitle = title;
 
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["shares"],
-        queryFn: async () => {
-            let result = await $API.shares();
+    let query = $derived(
+        createQuery({
+            queryKey: ["shares"],
+            queryFn: async () => {
+                let result = await $API.shares();
 
-            if (result.error) {
-                errorHandler("getting shares", result.error);
-                return {};
-            }
+                if (result.error) {
+                    errorHandler("getting shares", result.error);
+                    return {};
+                }
 
-            tabulator?.setData(result.share);
+                tabulator?.setData(result.share);
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
     // alias of returned data
     let shares = $derived($query.data?.share || []);
 </script>

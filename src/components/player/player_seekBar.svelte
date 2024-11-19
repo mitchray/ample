@@ -1,5 +1,5 @@
 <script>
-    import { run, passive } from 'svelte/legacy';
+    import { run, passive } from "svelte/legacy";
 
     import { onMount } from "svelte";
     import { CurrentMedia } from "~/stores/state.js";
@@ -10,7 +10,6 @@
     let isPressed = false;
     let progressSlider = $state();
     let endTime;
-
 
     function updateProgress() {
         if (!$MediaPlayer) return;
@@ -91,7 +90,7 @@
         onmousedown={handleSeekMouseDown}
         ontouchstart={handleSeekTouchDown}
         onmousemove={handleSeekDrag}
-        use:passive={['touchmove', () => handleSeekDrag]}
+        use:passive={["touchmove", () => handleSeekDrag]}
     >
         <span
             class="progress"

@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { smartlistsPreset } from "~/components/lister/columns.js";
@@ -11,22 +11,24 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["mySmartlists"],
-        queryFn: async () => {
-            let result = await $API.userSmartlists();
+    let query = $derived(
+        createQuery({
+            queryKey: ["mySmartlists"],
+            queryFn: async () => {
+                let result = await $API.userSmartlists();
 
-            if (result.error) {
-                errorHandler("getting my smartlists", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting my smartlists", result.error);
+                    return [];
+                }
 
-            tabulator?.setData(result.playlist);
+                tabulator?.setData(result.playlist);
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let smartlists;

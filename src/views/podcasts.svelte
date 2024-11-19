@@ -7,20 +7,22 @@
     import { errorHandler } from "~/logic/helper.js";
     import { podcastsPreset } from "~/components/lister/columns.js";
 
-    let query = $derived(createQuery({
-        queryKey: ["podcasts"],
-        queryFn: async () => {
-            let result = await $API.podcasts();
+    let query = $derived(
+        createQuery({
+            queryKey: ["podcasts"],
+            queryFn: async () => {
+                let result = await $API.podcasts();
 
-            if (result.error) {
-                errorHandler("getting podcasts", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting podcasts", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let podcasts = $derived($query.data || {});

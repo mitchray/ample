@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";

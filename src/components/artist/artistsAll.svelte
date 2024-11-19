@@ -8,7 +8,6 @@
         remotePaginationDefaults,
     } from "~/components/lister/columns.js";
 
-    
     /** @type {{type: 'artist'|'album_artist'}} */
     let { type } = $props();
 

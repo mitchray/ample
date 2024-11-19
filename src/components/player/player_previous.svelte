@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { MediaPlayer } from "~/stores/elements.js";
     import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
@@ -9,7 +9,6 @@
     let dropdown = $state();
     let previousItem = $state();
     let timeout;
-
 
     function update() {
         previousItem = $MediaPlayer?.findViableItem("previous");

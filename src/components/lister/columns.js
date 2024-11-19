@@ -165,11 +165,11 @@ export let artist = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(ArtistList, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                },
+            });
         });
     },
     sorter: function (a, b, aRow, bRow, column, dir, sorterParams) {
@@ -283,11 +283,11 @@ export let releaseType = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             return mount(Badge, {
-                            target: cell.getElement(),
-                            props: {
-                                text: formatReleaseType(cell.getValue()),
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    text: formatReleaseType(cell.getValue()),
+                },
+            });
         });
     },
 };
@@ -342,12 +342,12 @@ export let genres = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(GenreList, {
-                            target: cell.getElement(),
-                            props: {
-                                items: cell.getData().genre,
-                                limit: 1,
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    items: cell.getData().genre,
+                    limit: 1,
+                },
+            });
         });
     },
 };
@@ -365,11 +365,11 @@ export let privacy = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Privacy, {
-                            target: cell.getElement(),
-                            props: {
-                                type: cell.getData().type,
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    type: cell.getData().type,
+                },
+            });
         });
     },
 };
@@ -419,11 +419,11 @@ export let published = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(RelativeDate, {
-                            target: cell.getElement(),
-                            props: {
-                                date: cell.getData().pubdate,
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    date: cell.getData().pubdate,
+                },
+            });
         });
     },
 };
@@ -435,11 +435,11 @@ export let creationDate = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(RelativeDate, {
-                            target: cell.getElement(),
-                            props: {
-                                date: cell.getValue() * 1000,
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    date: cell.getValue() * 1000,
+                },
+            });
         });
     },
 };
@@ -504,12 +504,12 @@ export let ratingSong = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Rating, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                                type: "song",
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "song",
+                },
+            });
         });
     },
 };
@@ -520,12 +520,12 @@ export let ratingAlbum = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Rating, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                                type: "album",
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "album",
+                },
+            });
         });
     },
 };
@@ -536,12 +536,12 @@ export let ratingArtist = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Rating, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                                type: "artist",
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "artist",
+                },
+            });
         });
     },
 };
@@ -552,12 +552,12 @@ export let ratingPlaylist = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Rating, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                                type: "playlist",
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "playlist",
+                },
+            });
         });
     },
 };
@@ -568,12 +568,12 @@ export let ratingPodcast = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Rating, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                                type: "podcast",
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "podcast",
+                },
+            });
         });
     },
 };
@@ -584,12 +584,12 @@ export let ratingPodcastEpisode = {
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
             mount(Rating, {
-                            target: cell.getElement(),
-                            props: {
-                                data: cell.getData(),
-                                type: "podcast_episode",
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    data: cell.getData(),
+                    type: "podcast_episode",
+                },
+            });
         });
     },
 };
@@ -614,11 +614,11 @@ export let lastVisitDate = {
         }
         onRendered(function () {
             mount(RelativeDate, {
-                            target: cell.getElement(),
-                            props: {
-                                date: value * 1000,
-                            },
-                        });
+                target: cell.getElement(),
+                props: {
+                    date: value * 1000,
+                },
+            });
         });
     },
 };
@@ -643,22 +643,22 @@ export let songsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "song",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        data: Object.create({
-                                            album: data.album ? data.album : null,
-                                            artists:
-                                                data.artists?.length > 0 ? data.artists : null,
-                                            albumArtist: data.albumartist
-                                                ? data.albumartist
-                                                : null,
-                                            playlist: null,
-                                        }),
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "song",
+                        displayMode: "miniButtons",
+                        item: data,
+                        data: Object.create({
+                            album: data.album ? data.album : null,
+                            artists:
+                                data.artists?.length > 0 ? data.artists : null,
+                            albumArtist: data.albumartist
+                                ? data.albumartist
+                                : null,
+                            playlist: null,
+                        }),
+                    },
+                });
             });
         },
     },
@@ -668,13 +668,13 @@ export let songsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Art, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "song",
-                                        size: "small",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                        size: "small",
+                    },
+                });
             });
         },
     },
@@ -683,12 +683,12 @@ export let songsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "song",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                    },
+                });
             });
         },
     },
@@ -711,22 +711,22 @@ export let albumPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "song",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        data: Object.create({
-                                            album: data.album ? data.album : null,
-                                            artists:
-                                                data.artists?.length > 0 ? data.artists : null,
-                                            albumArtist: data.albumartist
-                                                ? data.albumartist
-                                                : null,
-                                            playlist: null,
-                                        }),
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "song",
+                        displayMode: "miniButtons",
+                        item: data,
+                        data: Object.create({
+                            album: data.album ? data.album : null,
+                            artists:
+                                data.artists?.length > 0 ? data.artists : null,
+                            albumArtist: data.albumartist
+                                ? data.albumartist
+                                : null,
+                            playlist: null,
+                        }),
+                    },
+                });
             });
         },
     },
@@ -736,12 +736,12 @@ export let albumPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "song",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                    },
+                });
             });
         },
     },
@@ -762,23 +762,23 @@ export let albumsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "album",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        showShuffle: true,
-                                        data: Object.create({
-                                            album: data.album ? data.album : null,
-                                            artists:
-                                                data.artists?.length > 0 ? data.artists : null,
-                                            albumArtist: data.albumartist
-                                                ? data.albumartist
-                                                : null,
-                                            playlist: null,
-                                        }),
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "album",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({
+                            album: data.album ? data.album : null,
+                            artists:
+                                data.artists?.length > 0 ? data.artists : null,
+                            albumArtist: data.albumartist
+                                ? data.albumartist
+                                : null,
+                            playlist: null,
+                        }),
+                    },
+                });
             });
         },
     },
@@ -788,13 +788,13 @@ export let albumsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Art, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "song",
-                                        size: "small",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "song",
+                        size: "small",
+                    },
+                });
             });
         },
     },
@@ -803,12 +803,12 @@ export let albumsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "album",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "album",
+                    },
+                });
             });
         },
     },
@@ -830,15 +830,15 @@ export let artistsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "artist",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        showShuffle: true,
-                                        data: Object.create({}),
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "artist",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({}),
+                    },
+                });
             });
         },
     },
@@ -848,13 +848,13 @@ export let artistsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Art, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "artist",
-                                        size: "small",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "artist",
+                        size: "small",
+                    },
+                });
             });
         },
     },
@@ -863,12 +863,12 @@ export let artistsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "artist",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "artist",
+                    },
+                });
             });
         },
     },
@@ -888,17 +888,17 @@ export let playlistsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "playlist",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        showShuffle: true,
-                                        data: Object.create({
-                                            playlist: data,
-                                        }),
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "playlist",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({
+                            playlist: data,
+                        }),
+                    },
+                });
             });
         },
     },
@@ -907,12 +907,12 @@ export let playlistsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "playlist",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "playlist",
+                    },
+                });
             });
         },
     },
@@ -931,15 +931,15 @@ export let smartlistsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "playlist",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        showShuffle: true,
-                                        data: Object.create({}),
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "playlist",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                        data: Object.create({}),
+                    },
+                });
             });
         },
     },
@@ -948,12 +948,12 @@ export let smartlistsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "smartlist",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "smartlist",
+                    },
+                });
             });
         },
     },
@@ -971,14 +971,14 @@ export let genresPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "genre",
-                                        displayMode: "miniButtons",
-                                        data: { id: data.id },
-                                        showShuffle: true,
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "genre",
+                        displayMode: "miniButtons",
+                        data: { id: data.id },
+                        showShuffle: true,
+                    },
+                });
             });
         },
     },
@@ -987,12 +987,12 @@ export let genresPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "genre",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "genre",
+                    },
+                });
             });
         },
     },
@@ -1009,13 +1009,13 @@ export let liveStreamsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "live_stream",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "live_stream",
+                        displayMode: "miniButtons",
+                        item: data,
+                    },
+                });
             });
         },
     },
@@ -1024,12 +1024,12 @@ export let liveStreamsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "live_stream",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "live_stream",
+                    },
+                });
             });
         },
     },
@@ -1043,14 +1043,14 @@ export let podcastsPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "podcast",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        showShuffle: true,
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "podcast",
+                        displayMode: "miniButtons",
+                        item: data,
+                        showShuffle: true,
+                    },
+                });
             });
         },
     },
@@ -1059,12 +1059,12 @@ export let podcastsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "podcast",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "podcast",
+                    },
+                });
             });
         },
     },
@@ -1078,14 +1078,14 @@ export let podcastEpisodesPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "podcast_episode",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        hideDefaultActions: data.state !== "completed",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "podcast_episode",
+                        displayMode: "miniButtons",
+                        item: data,
+                        hideDefaultActions: data.state !== "completed",
+                    },
+                });
             });
         },
     },
@@ -1094,12 +1094,12 @@ export let podcastEpisodesPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "podcast_episode",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "podcast_episode",
+                    },
+                });
             });
         },
     },
@@ -1117,14 +1117,14 @@ export let sharesPreset = [
             onRendered(function () {
                 let data = cell.getData();
                 return mount(Actions, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        type: "share",
-                                        displayMode: "miniButtons",
-                                        item: data,
-                                        hideDefaultActions: true,
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        type: "share",
+                        displayMode: "miniButtons",
+                        item: data,
+                        hideDefaultActions: true,
+                    },
+                });
             });
         },
         minWidth: 80,
@@ -1134,12 +1134,12 @@ export let sharesPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 mount(Name, {
-                                    target: cell.getElement(),
-                                    props: {
-                                        data: cell.getData(),
-                                        type: "share",
-                                    },
-                                });
+                    target: cell.getElement(),
+                    props: {
+                        data: cell.getData(),
+                        type: "share",
+                    },
+                });
             });
         },
     },

@@ -9,22 +9,24 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["smartlists"],
-        queryFn: async () => {
-            let result = await $API.smartlists();
+    let query = $derived(
+        createQuery({
+            queryKey: ["smartlists"],
+            queryFn: async () => {
+                let result = await $API.smartlists();
 
-            if (result.error) {
-                errorHandler("getting smartlists", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting smartlists", result.error);
+                    return [];
+                }
 
-            tabulator?.setData(result.playlist);
+                tabulator?.setData(result.playlist);
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let smartlists = $derived($query.data?.playlist || []);

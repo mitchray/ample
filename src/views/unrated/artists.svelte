@@ -11,20 +11,22 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["unratedArtists"],
-        queryFn: async () => {
-            let result = await unratedArtists({ limit: 100 });
+    let query = $derived(
+        createQuery({
+            queryKey: ["unratedArtists"],
+            queryFn: async () => {
+                let result = await unratedArtists({ limit: 100 });
 
-            if (result.error) {
-                errorHandler("getting unrated artists", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting unrated artists", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let artists = $derived($query.data?.artist || {});

@@ -5,10 +5,12 @@
     import { errorHandler } from "~/logic/helper.js";
 
     let wavesurfer = $state();
-    let audioElement = $state(new Audio({
-        crossorigin: "anonymous",
-        crossOrigin: "anonymous",
-    }));
+    let audioElement = $state(
+        new Audio({
+            crossorigin: "anonymous",
+            crossOrigin: "anonymous",
+        }),
+    );
 
     onMount(async () => {
         wavesurfer = new WaveSurfer({

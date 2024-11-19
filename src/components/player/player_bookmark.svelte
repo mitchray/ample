@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -10,7 +10,6 @@
 
     let bookmarks = $state([]);
     let clickTimeout;
-
 
     function addBookmark() {
         if (!$CurrentMedia) return;

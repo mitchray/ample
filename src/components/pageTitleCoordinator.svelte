@@ -1,11 +1,10 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { CurrentMedia, IsPlaying, PageTitle } from "~/stores/state.js";
 
     window.addEventListener("blur", updateTitle);
     window.addEventListener("focus", updateTitle);
-
 
     function updateTitle() {
         if (document.hasFocus()) {

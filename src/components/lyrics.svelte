@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import Lyrics from "~/logic/lyrics";
@@ -13,8 +13,6 @@
     let loading = $state(true);
     let drawer = $state();
     let container = $state();
-
-
 
     function handleClose(event) {
         // ignore bubbled sl-hide events from other components

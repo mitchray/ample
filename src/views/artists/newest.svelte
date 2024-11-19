@@ -11,22 +11,24 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["newestArtists"],
-        queryFn: async () => {
-            let result = await newestArtists({ limit: 50 });
+    let query = $derived(
+        createQuery({
+            queryKey: ["newestArtists"],
+            queryFn: async () => {
+                let result = await newestArtists({ limit: 50 });
 
-            if (result.error) {
-                errorHandler("getting newest artists", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting newest artists", result.error);
+                    return [];
+                }
 
-            tabulator?.setData(result.artist);
+                tabulator?.setData(result.artist);
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let artists = $derived($query.data?.artist || {});

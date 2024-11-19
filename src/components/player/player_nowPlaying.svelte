@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { CurrentMedia } from "~/stores/state";
     import Art from "~/components/art.svelte";

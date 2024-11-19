@@ -5,9 +5,9 @@
     import { ShowVisualizer } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
-    let text = $derived($ShowVisualizer
-        ? $_("text.visualizerHide")
-        : $_("text.visualizerShow"));
+    let text = $derived(
+        $ShowVisualizer ? $_("text.visualizerHide") : $_("text.visualizerShow"),
+    );
 
     async function handleToggle() {
         let inverted = !$ShowVisualizer;
@@ -17,7 +17,7 @@
     }
 </script>
 
-    <MaterialSymbol name="auto_awesome" slot="prefix" />
+<MaterialSymbol name="auto_awesome" slot="prefix" />
 <sl-menu-item title={text} onclick={handleToggle}>
     {text}
 </sl-menu-item>
