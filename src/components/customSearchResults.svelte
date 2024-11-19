@@ -12,9 +12,14 @@
         songsPreset,
     } from "~/components/lister/columns.js";
 
-    let { loadedTime, loading, results = $bindable([]), type } = $props();
+    let {
+        loadedTime = $bindable(),
+        loading = $bindable(),
+        results = $bindable(),
+        type = $bindable(),
+    } = $props();
 
-    let tabulator = $state(null);
+    let tabulator;
 
     run(() => {
         // reset results if type changes

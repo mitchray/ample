@@ -8,11 +8,11 @@
     import { errorHandler } from "~/logic/helper.js";
 
     let {
-        loading = $bindable(false),
+        loading = $bindable(),
         loadedTime = $bindable(),
-        results = $bindable([]),
+        results = $bindable(),
+        selectedObjectType = $bindable(),
         useSettings = null,
-        selectedObjectType = $bindable(null),
         immediateSearch = false,
     } = $props();
 
@@ -987,7 +987,7 @@
                         rows[i] = setField(row, e);
                     }}
                 >
-                    {#each [...groupedFieldsToShow] as [key, value], i}
+                    {#each [...groupedFieldsToShow] as [key, value]}
                         {#if key.length > 0}
                             <sl-divider></sl-divider>
                             <small>{$_(key)}</small>
@@ -1342,8 +1342,8 @@
             </div>
         {/each}
 
-        <MaterialSymbol name="add" slot="prefix" />
         <sl-button onclick={addNewRow} variant="primary">
+            <MaterialSymbol name="add" slot="prefix" />
             {$_("text.searchAddRule")}
         </sl-button>
     </div>

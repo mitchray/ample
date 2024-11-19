@@ -8,11 +8,11 @@
     import { SiteContentBind } from "~/stores/elements.js";
 
     let {
-        data = undefined,
+        data = $bindable(),
         columns,
         options = {},
-        tabulator = $bindable(null),
-        tableElement = $bindable(null),
+        tabulator = $bindable(),
+        tableElement = $bindable(),
     } = $props();
 
     function centreOnTable() {
