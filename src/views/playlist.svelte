@@ -28,7 +28,7 @@
     let { params = {} } = $props();
 
     let playlist = $state();
-    let songs = $state([]);
+    let songs = [];
     let loading = $state(true);
     let playlistType = $state("playlist");
     let drawerEdit = $state(),

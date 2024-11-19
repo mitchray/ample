@@ -6,11 +6,11 @@
     import { createEventDispatcher } from "svelte";
     import { Tabulator } from "tabulator-tables";
 
-    let { playlist = null } = $props();
+    let { playlist = $bindable() } = $props();
     export const show = () => drawer.show();
 
     const dispatch = createEventDispatcher();
-    let drawer = $state();
+    let drawer;
 
     function handleDelete() {
         $API.playlistDelete({ filter: playlist.id }).then((result) => {
