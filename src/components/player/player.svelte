@@ -112,7 +112,7 @@
     </div>
 
     <VisualizerSettings />
-    <div class="canvas-container" onclick={$MediaPlayer.playPause()}>
+    <div class="canvas-container" onclick={() => $MediaPlayer.playPause()}>
         <canvas
             id="visualizer"
             class="viz-canvas"

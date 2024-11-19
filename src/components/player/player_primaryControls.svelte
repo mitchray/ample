@@ -17,7 +17,7 @@
     <sl-button
         class="play"
         disabled={$NowPlayingQueue.length === 0}
-        onclick={$MediaPlayer.playPause()}
+        onclick={() => $MediaPlayer.playPause()}
     >
         <MaterialSymbol name={$IsPlaying ? "pause" : "play_arrow"} />
     </sl-button>
