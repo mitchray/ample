@@ -978,13 +978,13 @@
     <sl-divider></sl-divider>
 
     <div class="rules">
-        {#each rows as row (row.id)}
+        {#each rows as row, i (row.id)}
             <div class="row">
                 <sl-select
                     value={row.field}
                     onsl-change={(e) => {
-                        row.field = e.target.value;
-                        row = setField(row, e);
+                        rows[i].field = e.target.value;
+                        rows[i] = setField(row, e);
                     }}
                 >
                     {#each [...groupedFieldsToShow] as [key, value], i}
