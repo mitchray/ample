@@ -6,7 +6,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { tabulator, type } = $props();
+    let { tabulator = $bindable(null), type } = $props();
 
     let selectedCount = $state(0);
 

@@ -12,9 +12,8 @@
         columns,
         options = {},
         tabulator = $bindable(null),
+        tableElement = $bindable(null),
     } = $props();
-
-    let tableElement = $state();
 
     function centreOnTable() {
         tableElement?.scrollIntoView({
