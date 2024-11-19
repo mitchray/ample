@@ -2,11 +2,9 @@
     import Rating from "~/components/rating/rating.svelte";
     import Art from "~/components/art.svelte";
 
-    /** @type {{data?: any, type?: any}} */
     let { data = null, type = undefined } = $props();
 
     let artist = $derived(data);
-    
 </script>
 
 <div class="artist-card card">

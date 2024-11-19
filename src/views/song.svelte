@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
@@ -18,35 +18,36 @@
     import { push } from "svelte-spa-router";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let parentItem = $state();
 
-    let query = $derived(createQuery({
-        queryKey: ["song", params.id],
-        queryFn: async () => {
-            let result = await $API.song({ filter: params.id });
+    let query = $derived(
+        createQuery({
+            queryKey: ["song", params.id],
+            queryFn: async () => {
+                let result = await $API.song({ filter: params.id });
 
-            if (result.error) {
-                if (parentItem?.id) {
-                    addAlert({
-                        title: $_("text.IDChanged"),
-                        style: "info",
-                    });
-                    await push(`/album/${parentItem.id}`);
+                if (result.error) {
+                    if (parentItem?.id) {
+                        addAlert({
+                            title: $_("text.IDChanged"),
+                            style: "info",
+                        });
+                        await push(`/album/${parentItem.id}`);
+                    }
+
+                    errorHandler("getting song", result.error);
+                    return [];
                 }
 
-                errorHandler("getting song", result.error);
-                return [];
-            }
+                parentItem = result.album || null;
 
-            parentItem = result.album || null;
-
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let song = $derived($query.data || {});

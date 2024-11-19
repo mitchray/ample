@@ -2,7 +2,6 @@
     import { removeAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{item: any}} */
     let { item } = $props();
 </script>
 

@@ -8,7 +8,6 @@
     import { API } from "~/stores/state.js";
     import { userPreference } from "~/logic/preferences.js";
 
-    /** @type {{contextKey: any, [key: string]: any}} */
     let { contextKey, ...rest } = $props();
 
     const { _item, _type } = getContext(contextKey);
@@ -32,11 +31,7 @@
 </script>
 
 {#if $sharePreference}
-    <sl-menu-item
-        {...rest}
-        onclick={handleAction}
-        title={$_("text.share")}
-    >
+    <sl-menu-item {...rest} onclick={handleAction} title={$_("text.share")}>
         <MaterialSymbol name="share" slot="prefix" />
         {$_("text.share")}&hellip;
     </sl-menu-item>

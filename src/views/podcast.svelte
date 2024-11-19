@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
@@ -12,15 +12,10 @@
     import { errorHandler } from "~/logic/helper.js";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let episodes = $state([]);
     let tabulator = $state(null);
-
-
-
-
 
     async function processData() {
         if (!$query.data?.id) return;
@@ -30,23 +25,25 @@
 
         console.debug(episodes, "episodes");
     }
-    let query = $derived(createQuery({
-        queryKey: ["podcast", params.id],
-        queryFn: async () => {
-            let result = await $API.podcast({
-                filter: params.id,
-                include: true,
-            });
+    let query = $derived(
+        createQuery({
+            queryKey: ["podcast", params.id],
+            queryFn: async () => {
+                let result = await $API.podcast({
+                    filter: params.id,
+                    include: true,
+                });
 
-            if (result.error) {
-                errorHandler("getting podcast", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting podcast", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
     // alias of returned data
     let podcast = $derived($query.data || {});
     run(() => {

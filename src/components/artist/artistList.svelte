@@ -1,19 +1,10 @@
 <script>
-
-    // only show 'featured' artists
-
-    // when no results, show a dash
-
-    // disable the links
-
-    // usually want this as default, but mixCard can wrap lines
-    /** @type {{data: any, featuredOnly?: boolean, showDash?: boolean, disabled?: boolean, truncate?: boolean}} */
     let {
         data,
-        featuredOnly = false,
-        showDash = false,
-        disabled = false,
-        truncate = true
+        featuredOnly = false, // only show 'featured' artists
+        showDash = false, // when no results, show a dash
+        disabled = false, // disable the links
+        truncate = true, // usually want this as default, but mixCard can wrap lines
     } = $props();
 
     let artists = $state(data.artists);
@@ -23,8 +14,6 @@
         artists = artists.filter(
             (artist) => artist.id !== data.albumartist?.id,
         );
-
-        // filter regular artist
     }
 </script>
 

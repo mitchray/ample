@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
@@ -10,7 +10,6 @@
     import AlbumsByYear from "~/components/album/albumsByYear.svelte";
     import Visibility from "~/components/visibility.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     // default to the newest tab

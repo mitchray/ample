@@ -7,12 +7,11 @@
     import { tabulatorStrings } from "~/logic/i18n.js";
     import { SiteContentBind } from "~/stores/elements.js";
 
-    /** @type {{data?: any, columns: any, options?: any, tabulator?: any}} */
     let {
         data = undefined,
         columns,
         options = {},
-        tabulator = $bindable(null)
+        tabulator = $bindable(null),
     } = $props();
 
     let tableElement = $state();

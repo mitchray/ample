@@ -1,12 +1,11 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{tabulator: any, playlistID: any, songs: any}} */
     let { tabulator, playlistID, songs = $bindable() } = $props();
 
     let selectedCount = $state(0);
@@ -68,7 +67,7 @@
                 <sl-button onclick={confirm.hide()} variant="text">
                     {$_("text.cancel")}
                 </sl-button>
-                    <MaterialSymbol name="cancel" slot="prefix" />
+                <MaterialSymbol name="cancel" slot="prefix" />
                 <sl-button onclick={handleApply} variant="danger">
                     {$_("text.remove")}
                 </sl-button>

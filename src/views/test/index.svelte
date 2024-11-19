@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { replace } from "svelte-spa-router";
@@ -13,7 +13,6 @@
     import Wavesurfer from "~/views/test/wavesurfer.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let data = {};

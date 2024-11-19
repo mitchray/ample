@@ -15,7 +15,6 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { getAlbumDisks } from "~/logic/album.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { getAlbum, getType } = getContext(contextKey);

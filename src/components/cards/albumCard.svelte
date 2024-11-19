@@ -5,11 +5,9 @@
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
 
-    /** @type {{data?: any, type?: any}} */
     let { data = null, type = undefined } = $props();
 
     let album = $derived(data);
-    
 </script>
 
 <div class="album-card card">

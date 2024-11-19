@@ -17,7 +17,7 @@
 </script>
 
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { API, NowPlayingQueue } from "~/stores/state.js";
@@ -25,11 +25,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import { updateQueue } from "~/logic/ui.js";
 
-    /** @type {{type?: any, data?: any}} */
-    let {
-        type = $bindable(null),
-        data = {}
-    } = $props();
+    let { type = $bindable(null), data = {} } = $props();
 
     let showAverageRatings = true;
     let ratingErrored = $state(false);
@@ -45,35 +41,38 @@
         // update the displayed rating immediately
         data.rating = newRating;
 
-        $API.rate({ type: type, id: data.id, rating: newRating }).then((result) => {
-            if (result.error) {
-                errorHandler("while rating", result.error);
-                ratingErrored = true;
+        $API.rate({ type: type, id: data.id, rating: newRating }).then(
+            (result) => {
+                if (result.error) {
+                    errorHandler("while rating", result.error);
+                    ratingErrored = true;
 
-                // revert the displayed rating
-                data.rating = originalRating;
-            }
+                    // revert the displayed rating
+                    data.rating = originalRating;
+                }
 
-            if (!result.error) {
-                recentRating.set({
-                    type: type,
-                    id: data.id,
-                    rating: newRating,
-                });
+                if (!result.error) {
+                    recentRating.set({
+                        type: type,
+                        id: data.id,
+                        rating: newRating,
+                    });
 
-                // now update any items in the queue with the new rating
-                let foundItems = $NowPlayingQueue.filter(
-                    (item) => item.id === data.id && item.object_type === type,
-                );
+                    // now update any items in the queue with the new rating
+                    let foundItems = $NowPlayingQueue.filter(
+                        (item) =>
+                            item.id === data.id && item.object_type === type,
+                    );
 
-                foundItems.forEach((item) => {
-                    item.rating = newRating;
-                });
+                    foundItems.forEach((item) => {
+                        item.rating = newRating;
+                    });
 
-                updateQueue();
-                refreshAverageRating();
-            }
-        });
+                    updateQueue();
+                    refreshAverageRating();
+                }
+            },
+        );
     }
 
     function handleFlag() {

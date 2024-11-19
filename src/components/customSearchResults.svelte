@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
@@ -12,13 +12,7 @@
         songsPreset,
     } from "~/components/lister/columns.js";
 
-    /** @type {{loadedTime: any, loading: any, results?: any, type: any}} */
-    let {
-        loadedTime,
-        loading,
-        results = $bindable([]),
-        type
-    } = $props();
+    let { loadedTime, loading, results = $bindable([]), type } = $props();
 
     let tabulator = $state(null);
 

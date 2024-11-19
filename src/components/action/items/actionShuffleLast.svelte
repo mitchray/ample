@@ -5,7 +5,6 @@
     import { shuffleArray } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { getSongs, _showShuffle } = getContext(contextKey);

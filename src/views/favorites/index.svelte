@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
@@ -9,7 +9,6 @@
     import Visibility from "~/components/visibility.svelte";
     import { replace } from "svelte-spa-router";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     // default to artists tab

@@ -5,27 +5,28 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{artistID: any}} */
     let { artistID } = $props();
 
-    let query = $derived(createQuery({
-        queryKey: ["similarArtists", artistID],
-        queryFn: async () => {
-            let result = $API.getSimilar({
-                type: "artist",
-                filter: artistID,
-                limit: 15,
-            });
+    let query = $derived(
+        createQuery({
+            queryKey: ["similarArtists", artistID],
+            queryFn: async () => {
+                let result = $API.getSimilar({
+                    type: "artist",
+                    filter: artistID,
+                    limit: 15,
+                });
 
-            if (result.error) {
-                errorHandler("getting similar artists", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting similar artists", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let artists = $derived($query.data?.artist || {});

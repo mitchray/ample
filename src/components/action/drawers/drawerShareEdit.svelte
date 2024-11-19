@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
@@ -8,7 +8,6 @@
     import { addAlert } from "~/logic/alert.js";
 
     export const show = () => drawer.show();
-    /** @type {{share?: any, isNew?: boolean}} */
     let { share = $bindable({}), isNew = false } = $props();
 
     let drawer = $state();

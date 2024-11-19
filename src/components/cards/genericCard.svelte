@@ -6,10 +6,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Actions from "~/components/action/actions.svelte";
 
-    
-
-    
-
     /** @type {{data?: any, type: 'album' | 'artist' | 'song' | 'playlist' | 'smartlist' | 'podcast' | 'podcast_episode' | 'live_stream', showActions?: boolean}} */
     let { data = {}, type, showActions = true } = $props();
 

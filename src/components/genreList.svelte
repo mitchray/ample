@@ -1,8 +1,4 @@
 <script>
-    
-
-    
-    /** @type {{items: any, limit?: any}} */
     let { items, limit = null } = $props();
 
     let genres = $state([]);

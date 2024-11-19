@@ -2,7 +2,6 @@
     import { getContext } from "svelte";
     import { Settings } from "~/stores/settings.js";
 
-    /** @type {{mode: any, contextKey: any}} */
     let { mode, contextKey } = $props();
 
     const { getIsGray, getColors } = getContext(contextKey);

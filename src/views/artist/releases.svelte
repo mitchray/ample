@@ -14,7 +14,6 @@
     import { errorHandler } from "~/logic/helper.js";
     import { onMount } from "svelte";
 
-    /** @type {{artistID: any}} */
     let { artistID } = $props();
 
     const releaseTypesOrder = userPreference("album_release_type_sort") || "";

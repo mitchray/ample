@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
@@ -10,7 +10,6 @@
     import { createQuery } from "@tanstack/svelte-query";
     import Visibility from "~/components/visibility.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     // default to artists tab
@@ -28,20 +27,22 @@
         { id: "songs", label: $_("text.songs") },
     ];
 
-    let query = $derived(createQuery({
-        queryKey: ["genre", params.id],
-        queryFn: async () => {
-            let result = await $API.genre({ filter: params.id });
+    let query = $derived(
+        createQuery({
+            queryKey: ["genre", params.id],
+            queryFn: async () => {
+                let result = await $API.genre({ filter: params.id });
 
-            if (result.error) {
-                errorHandler("getting genre", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting genre", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let genre = $derived($query.data || {});

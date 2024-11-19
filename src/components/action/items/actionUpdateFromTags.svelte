@@ -7,7 +7,6 @@
     import { useQueryClient } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { _type, _item } = getContext(contextKey);

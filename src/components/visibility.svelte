@@ -10,7 +10,7 @@
         right = 0,
         percentThreshold = 0,
         steps = 100,
-        children
+        children,
     } = $props();
 
     let element = $state();
@@ -55,7 +55,7 @@
 
 {#if percent > percentThreshold}
     <div class="dummy" use:unobserve>
-        {@render children?.({ percent, })}
+        {@render children?.({ percent })}
     </div>
 {/if}
 

@@ -5,8 +5,6 @@
     import Visibility from "~/components/visibility.svelte";
     import { v4 as uuidv4 } from "uuid";
 
-    
-    /** @type {{album?: any, zIndex?: number, type: "slim" | "full"}} */
     let { album = {}, zIndex = 1, type } = $props();
 
     let contextKey = uuidv4(); // unique key

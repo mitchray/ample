@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
@@ -10,7 +10,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Visibility from "~/components/visibility.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let loadedTime = $state();
@@ -42,10 +41,8 @@
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
 
-        <MaterialSymbol name="refresh" slot="prefix" />
-    <sl-button onclick={refreshItems} size="small">
-        Refresh
-    </sl-button>
+    <MaterialSymbol name="refresh" slot="prefix" />
+    <sl-button onclick={refreshItems} size="small">Refresh</sl-button>
 </div>
 
 {#key loadedTime || 0}

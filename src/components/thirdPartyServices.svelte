@@ -27,7 +27,6 @@
     import TidalLogo from "/src/assets/logos/tidal.svg";
     import YoutubeLogo from "/src/assets/logos/youtubemusic.svg";
 
-    /** @type {{data: any, type: any}} */
     let { data = $bindable(), type } = $props();
 
     let mb = new MusicBrainz();

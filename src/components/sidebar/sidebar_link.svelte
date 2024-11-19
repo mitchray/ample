@@ -4,7 +4,6 @@
     import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{href: any, activePath: any, icon: any, label: any}} */
     let { href, activePath, icon, label } = $props();
 </script>
 

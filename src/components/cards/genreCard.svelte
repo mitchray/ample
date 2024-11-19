@@ -1,11 +1,10 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { onMount } from "svelte";
     import Actions from "~/components/action/actions.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{data?: any, type?: any}} */
     let { data = null, type = undefined } = $props();
 
     let angle = $state(50);

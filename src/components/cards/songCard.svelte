@@ -5,11 +5,9 @@
     import Art from "~/components/art.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{data?: any, type?: any}} */
     let { data = null, type = undefined } = $props();
 
     let song = $derived(data);
-    
 </script>
 
 <div class="song-card card">

@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
@@ -10,27 +10,28 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import { songsPreset, track } from "~/components/lister/columns.js";
 
-    /** @type {{artistID: any}} */
     let { artistID } = $props();
 
     let songs = $state([]);
     let loading = false;
     let tabulator = $state(null);
 
-    let query = $derived(createQuery({
-        queryKey: ["allArtistSongs", artistID],
-        queryFn: async () => {
-            let result = await $API.artistSongs({ filter: artistID });
+    let query = $derived(
+        createQuery({
+            queryKey: ["allArtistSongs", artistID],
+            queryFn: async () => {
+                let result = await $API.artistSongs({ filter: artistID });
 
-            if (result.error) {
-                errorHandler("getting all songs for artist", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting all songs for artist", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     run(() => {

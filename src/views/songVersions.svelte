@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
@@ -11,7 +11,6 @@
     import { PageTitle, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let tabulator = $state(null);
@@ -26,23 +25,25 @@
             }) || $_("text.songVersions");
     });
 
-    let query = $derived(createQuery({
-        queryKey: ["songVersions", params.songTitle + params.artistName],
-        queryFn: async () => {
-            let result = await getSongVersions(
-                params.songTitle,
-                params.artistName,
-            );
+    let query = $derived(
+        createQuery({
+            queryKey: ["songVersions", params.songTitle + params.artistName],
+            queryFn: async () => {
+                let result = await getSongVersions(
+                    params.songTitle,
+                    params.artistName,
+                );
 
-            if (result.error) {
-                errorHandler("getting song versions", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting song versions", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let songs = $derived($query.data || {});

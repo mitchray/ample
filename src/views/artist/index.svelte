@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { push, replace } from "svelte-spa-router";
@@ -21,29 +21,30 @@
     import { errorHandler } from "~/logic/helper.js";
     import Visibility from "~/components/visibility.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
-    let query = $derived(createQuery({
-        queryKey: ["artist", params.id],
-        queryFn: async () => {
-            let result = await $API.artist({ filter: params.id });
+    let query = $derived(
+        createQuery({
+            queryKey: ["artist", params.id],
+            queryFn: async () => {
+                let result = await $API.artist({ filter: params.id });
 
-            if (result.error) {
-                addAlert({
-                    title: $_("text.IDChanged"),
-                    style: "info",
-                });
-                await push(`/artists/`);
+                if (result.error) {
+                    addAlert({
+                        title: $_("text.IDChanged"),
+                        style: "info",
+                    });
+                    await push(`/artists/`);
 
-                errorHandler("getting artist", result.error);
-                return [];
-            }
+                    errorHandler("getting artist", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let artist = $derived($query.data || {});

@@ -6,7 +6,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { _item } = getContext(contextKey);
@@ -58,7 +57,7 @@
 </script>
 
 {#if $downloadPreference}
-        <MaterialSymbol name="download" slot="prefix" />
+    <MaterialSymbol name="download" slot="prefix" />
     <sl-menu-item onclick={handleAction} title={$_("text.download")} {loading}>
         {$_("text.download")}
     </sl-menu-item>

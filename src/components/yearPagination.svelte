@@ -6,8 +6,11 @@
 
     const currentYear = new Date().getFullYear();
 
-    /** @type {{fromYear?: any, toYear?: any, showYear?: any}} */
-    let { fromYear = $bindable(currentYear), toYear = $bindable(currentYear), showYear = currentYear } = $props();
+    let {
+        fromYear = $bindable(currentYear),
+        toYear = $bindable(currentYear),
+        showYear = currentYear,
+    } = $props();
 
     let yearSlider = $state();
     let fromInterim = $state(showYear || currentYear - 10);

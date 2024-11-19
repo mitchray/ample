@@ -4,14 +4,10 @@
     import Rating from "~/components/rating/rating.svelte";
     import Art from "~/components/art.svelte";
 
-    /** @type {{data?: any, type?: any, isSmartlist?: boolean}} */
     let { data = null, type = undefined, isSmartlist = false } = $props();
 
     let playlist = $derived(data);
     let parentUrl = $derived(isSmartlist ? "smartlists" : "playlists");
-
-    
-    
 </script>
 
 <div class="playlist-card card">

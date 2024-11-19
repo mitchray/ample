@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
@@ -15,23 +15,24 @@
     import Badge from "~/components/badge.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
-    let query = $derived(createQuery({
-        queryKey: ["album", params.id],
-        queryFn: async () => {
-            let result = await $API.album({ filter: params.id });
+    let query = $derived(
+        createQuery({
+            queryKey: ["album", params.id],
+            queryFn: async () => {
+                let result = await $API.album({ filter: params.id });
 
-            if (result.error) {
-                errorHandler("getting album", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting album", result.error);
+                    return [];
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let album = $derived($query.data || {});

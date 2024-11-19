@@ -1,12 +1,15 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { createEventDispatcher, onMount } from "svelte";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{type: any, selectedPlaylists?: any, multiple?: boolean}} */
-    let { type, selectedPlaylists = $bindable([]), multiple = false } = $props();
+    let {
+        type,
+        selectedPlaylists = $bindable([]),
+        multiple = false,
+    } = $props();
 
     const dispatch = createEventDispatcher();
 

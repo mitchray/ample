@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { replace } from "svelte-spa-router";
@@ -9,7 +9,6 @@
     import Random from "~/views/artists/random.svelte";
     import Visibility from "~/components/visibility.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     // default to the newest tab

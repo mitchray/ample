@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { createEventDispatcher } from "svelte";
@@ -9,7 +9,6 @@
     import { errorHandler } from "~/logic/helper.js";
     import { Tabulator } from "tabulator-tables";
 
-    /** @type {{playlist?: any, isNew?: boolean, [key: string]: any}} */
     let { playlist = $bindable(null), isNew = false, ...rest } = $props();
 
     export const show = () => drawer.show();

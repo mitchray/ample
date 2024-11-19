@@ -4,7 +4,6 @@
     import { getContext } from "svelte";
     import { errorHandler, getPlaylistIDFromUrl } from "~/logic/helper.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { dataDisplay, isEditMode, selectedCount } = getContext(contextKey);

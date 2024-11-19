@@ -4,7 +4,6 @@
     import { MediaPlayer } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { getSongs, _displayMode } = getContext(contextKey);

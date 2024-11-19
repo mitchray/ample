@@ -7,7 +7,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler, prepareForQueue } from "~/logic/helper.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { _type, _item } = getContext(contextKey);

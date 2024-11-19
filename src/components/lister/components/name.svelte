@@ -2,10 +2,6 @@
     import { CurrentMedia } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    
-
-    
-    /** @type {{data: Object, type: "album" | "song" | "podcast_episode" | "artist" | "playlist" | "smartlist" | "radio_station"}} */
     let { data, type } = $props();
 </script>
 

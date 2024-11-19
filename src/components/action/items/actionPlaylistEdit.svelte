@@ -6,7 +6,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ticks } from "~/logic/ui.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { _data } = getContext(contextKey);
@@ -22,7 +21,7 @@
 </script>
 
 {#if $_data.playlist?.has_access}
-        <MaterialSymbol name="edit" slot="prefix" />
+    <MaterialSymbol name="edit" slot="prefix" />
     <sl-menu-item onclick={handleAction} title={$_("text.playlistEdit")}>
         {$_("text.playlistEdit")}
     </sl-menu-item>

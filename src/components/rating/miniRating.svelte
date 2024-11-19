@@ -1,7 +1,6 @@
 <script>
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{data?: any}} */
     let { data = {} } = $props();
 </script>
 

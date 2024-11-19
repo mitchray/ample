@@ -4,7 +4,6 @@
     import { getPlaylistIDFromUrl, setIndexes } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { dataDisplay } = getContext(contextKey);

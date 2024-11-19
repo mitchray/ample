@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
@@ -8,7 +8,6 @@
     import Random from "~/views/album-artists/random.svelte";
     import Visibility from "~/components/visibility.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     // default to random tab

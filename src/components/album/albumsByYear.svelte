@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { getAlbumsByYear } from "~/logic/album.js";
     import YearPagination from "~/components/yearPagination.svelte";
@@ -8,7 +8,6 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
 
-    /** @type {{showYear?: any}} */
     let { showYear = new Date().getFullYear() } = $props();
 
     let dataDisplay = $state([]);
@@ -16,7 +15,6 @@
     let toYear = $state(null);
     let loadedTime = $state(0);
     let tabulator = $state(null);
-
 
     async function getData() {
         let response = await getAlbumsByYear({

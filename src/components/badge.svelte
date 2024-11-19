@@ -1,5 +1,4 @@
 <script>
-    /** @type {{text: any}} */
     let { text } = $props();
 </script>
 

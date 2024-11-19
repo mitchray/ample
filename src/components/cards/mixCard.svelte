@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { User } from "~/stores/state.js";
@@ -10,7 +10,6 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { getSimilarArtistsWithGenreFallback } from "~/logic/artist.js";
 
-    /** @type {{data?: any, type?: any}} */
     let { data = null, type = undefined } = $props();
 
     let playlist = $state();
@@ -19,16 +18,20 @@
         playlist = data;
     });
 
-    let query = $derived(createQuery({
-        queryKey: ["playlistMix", playlist?.id],
-        staleTime: 60 * 1000 * 30, // 30 minutes
-        queryFn: async () => {
-            let result = await getSimilarArtistsWithGenreFallback(playlist.id);
+    let query = $derived(
+        createQuery({
+            queryKey: ["playlistMix", playlist?.id],
+            staleTime: 60 * 1000 * 30, // 30 minutes
+            queryFn: async () => {
+                let result = await getSimilarArtistsWithGenreFallback(
+                    playlist.id,
+                );
 
-            return sampleSize(result, 3);
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return sampleSize(result, 3);
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     // alias of returned data
     let artists = $derived($query.data || {});

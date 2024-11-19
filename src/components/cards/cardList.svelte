@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { onDestroy, onMount } from "svelte";
@@ -7,8 +7,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-
-    
     /** @type {{card: any, type: any, initialData?: any, refresh?: boolean, limit?: any, heading?: any, showOnlyThese?: boolean, dataProvider?: any, viewAllURL?: any, genericOverride?: boolean, autoRefreshInterval?: any, layout: 'grid' | 'scroll'}} */
     let {
         card,
@@ -22,7 +20,7 @@
         viewAllURL = null,
         genericOverride = false,
         autoRefreshInterval = null,
-        layout
+        layout,
     } = $props();
 
     let data = $state([]);
@@ -182,7 +180,7 @@
     {/if}
 
     {#if refresh}
-            <MaterialSymbol name="refresh" slot="prefix" />
+        <MaterialSymbol name="refresh" slot="prefix" />
         <sl-button onclick={refreshItems} size="small">
             {$_("text.refresh")}
         </sl-button>

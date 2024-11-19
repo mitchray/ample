@@ -9,31 +9,32 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{artistID: any}} */
     let { artistID } = $props();
 
-    let query = $derived(createQuery({
-        queryKey: ["topArtistSongs", artistID],
-        queryFn: async () => {
-            let result = await $API.artistSongs({
-                filter: artistID,
-                top50: 1,
-                limit: 20,
-            });
+    let query = $derived(
+        createQuery({
+            queryKey: ["topArtistSongs", artistID],
+            queryFn: async () => {
+                let result = await $API.artistSongs({
+                    filter: artistID,
+                    top50: 1,
+                    limit: 20,
+                });
 
-            if (result.error) {
-                errorHandler("getting top songs for artist", result.error);
-                return [];
-            }
+                if (result.error) {
+                    errorHandler("getting top songs for artist", result.error);
+                    return [];
+                }
 
-            for (let i = 0; i < result.length; i++) {
-                result[i].order = i + 1;
-            }
+                for (let i = 0; i < result.length; i++) {
+                    result[i].order = i + 1;
+                }
 
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-    }));
+                return result;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
     let tabulator = $state(null);
 

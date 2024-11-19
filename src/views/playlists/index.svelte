@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import Portal from "~/components/portal.svelte";
@@ -11,7 +11,6 @@
     import { replace } from "svelte-spa-router";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let drawerEdit = $state();

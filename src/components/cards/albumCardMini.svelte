@@ -3,11 +3,9 @@
     import Badge from "~/components/badge.svelte";
     import { formatReleaseType } from "~/logic/formatters.js";
 
-    /** @type {{data?: any, type?: any}} */
     let { data = null, type = undefined } = $props();
 
     let album = $derived(data);
-    
 </script>
 
 {#if album}

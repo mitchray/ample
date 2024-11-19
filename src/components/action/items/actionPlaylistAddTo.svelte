@@ -6,7 +6,6 @@
     import DrawerAddTo from "~/components/action/drawers/drawerPlaylistAddTo.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{contextKey: any, [key: string]: any}} */
     let { contextKey, ...rest } = $props();
 
     const { getSongs } = getContext(contextKey);
@@ -23,11 +22,7 @@
     }
 </script>
 
-<sl-menu-item
-    {...rest}
-    onclick={handleAction}
-    title={$_("text.playlistAddTo")}
->
+<sl-menu-item {...rest} onclick={handleAction} title={$_("text.playlistAddTo")}>
     <MaterialSymbol name="queue_music" slot="prefix" />
     {$_("text.playlistAddTo")}&hellip;
 </sl-menu-item>

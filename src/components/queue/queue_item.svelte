@@ -16,7 +16,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import MiniRating from "~/components/rating/miniRating.svelte";
 
-    /** @type {{media: any}} */
     let { media = $bindable() } = $props();
 
     let matchesRating = $state();

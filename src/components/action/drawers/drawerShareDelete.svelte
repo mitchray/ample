@@ -5,7 +5,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Tabulator } from "tabulator-tables";
 
-    /** @type {{share?: any}} */
     let { share = null } = $props();
     export const show = () => drawer.show();
 
@@ -46,7 +45,7 @@
         })}
     </div>
 
-        <MaterialSymbol name="delete" slot="prefix" />
+    <MaterialSymbol name="delete" slot="prefix" />
     <sl-button onclick={handleDelete} slot="footer" variant="danger">
         {$_("text.delete")}
     </sl-button>

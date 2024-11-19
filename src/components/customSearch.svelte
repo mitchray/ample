@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { onMount } from "svelte";
@@ -7,14 +7,13 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    /** @type {{loading?: boolean, loadedTime: any, results?: any, useSettings?: any, selectedObjectType?: any, immediateSearch?: boolean}} */
     let {
         loading = $bindable(false),
         loadedTime = $bindable(),
         results = $bindable([]),
         useSettings = null,
         selectedObjectType = $bindable(null),
-        immediateSearch = false
+        immediateSearch = false,
     } = $props();
 
     let loaded = $state(false);
@@ -35,10 +34,6 @@
         random: false,
         operator: "and",
     });
-
-
-
-
 
     function parseParams() {
         if (useSettings) {
@@ -1347,7 +1342,7 @@
             </div>
         {/each}
 
-            <MaterialSymbol name="add" slot="prefix" />
+        <MaterialSymbol name="add" slot="prefix" />
         <sl-button onclick={addNewRow} variant="primary">
             {$_("text.searchAddRule")}
         </sl-button>

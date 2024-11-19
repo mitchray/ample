@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { _ } from "svelte-i18n";
     import { onDestroy, onMount } from "svelte";
@@ -25,17 +25,16 @@
     } from "~/components/lister/columns.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{params?: any}} */
     let { params = {} } = $props();
 
     let playlist = $state();
     let songs = $state([]);
     let loading = $state(true);
     let playlistType = $state("playlist");
-    let drawerEdit = $state(), drawerDelete = $state();
+    let drawerEdit = $state(),
+        drawerDelete = $state();
     let tabulator = $state(null);
     let columns = $state([]);
-
 
     function afterDelete(e) {
         if (playlist?.id === e.detail.id) {

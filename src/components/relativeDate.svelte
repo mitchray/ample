@@ -1,5 +1,4 @@
 <script>
-    /** @type {{date: any}} */
     let { date } = $props();
 </script>
 

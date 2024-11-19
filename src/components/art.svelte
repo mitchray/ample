@@ -1,5 +1,5 @@
 <script>
-    import { run } from 'svelte/legacy';
+    import { run } from "svelte/legacy";
 
     import { onMount } from "svelte";
     import { API, Server } from "~/stores/state.js";
@@ -7,21 +7,8 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    
-
-    /** Type of object */
-    
-
-    
-
-    
     /** @type {{data: any, type: "song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream" | "mix", size?: "thumbnail" | "small" | "medium" | "large", radius?: string}} */
-    let {
-        data,
-        type,
-        size = "medium",
-        radius = "0px"
-    } = $props();
+    let { data, type, size = "medium", radius = "0px" } = $props();
 
     let dimension = $state(128);
     let thumb = $state(2);
@@ -52,7 +39,6 @@
             playlistSongs = result.slice(0, 4);
         }
     });
-
 
     async function processData() {
         // if ($query.data?.length < 1) return;

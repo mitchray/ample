@@ -6,7 +6,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ticks } from "~/logic/ui.js";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { _item, _displayMode } = getContext(contextKey);

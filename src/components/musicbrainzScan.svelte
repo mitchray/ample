@@ -11,7 +11,6 @@
     import Portal from "~/components/portal.svelte";
     import { Settings } from "~/stores/settings.js";
 
-    /** @type {{data: any}} */
     let { data } = $props();
 
     let mb = new MusicBrainz();

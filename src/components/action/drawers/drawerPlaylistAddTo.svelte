@@ -7,10 +7,10 @@
     import { onMount } from "svelte";
 
     export const show = () => drawer.show();
-    /** @type {{songs: any}} */
     let { songs } = $props();
 
-    let drawer = $state(), drawerEdit = $state();
+    let drawer = $state(),
+        drawerEdit = $state();
     let newPlaylist = $state(null);
     let selectedPlaylists = $state();
     let ignoreDuplicates = $state(false);

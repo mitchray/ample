@@ -6,7 +6,6 @@
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    /** @type {{contextKey: any}} */
     let { contextKey } = $props();
 
     const { _data } = getContext(contextKey);
