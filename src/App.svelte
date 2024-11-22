@@ -8,9 +8,15 @@
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import { onMount } from "svelte";
-    import { ShowLyrics, ShowSearch, User } from "~/stores/state.js";
+    import {
+        ampleVersion,
+        ShowLyrics,
+        ShowSearch,
+        User,
+    } from "~/stores/state.js";
     import { loadSettings, Settings } from "~/stores/settings";
     import { extendSession, validateSession } from "~/logic/user.js";
+    import { handleMigrations } from "~/logic/migrations.js";
     import { loadFromConfig } from "~/logic/ample.js";
     import { isLoading as i18nIsLoading } from "svelte-i18n";
     import { setupI18n } from "~/logic/i18n.js";
@@ -30,6 +36,8 @@
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
     import LoginPage from "~/views/login.svelte";
     import { hideLoadingOverlay } from "~/logic/ui.js";
+
+    handleMigrations($ampleVersion);
 
     overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
 
