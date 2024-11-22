@@ -1,12 +1,14 @@
+import { compareVersions } from "compare-versions";
+
 const migrations = [
     {
-        version: "3.5.0",
+        version: "3.5.0-alpha1",
         migrate: async () => {
             // migrate indexedDB AmpleUser1 (presumably the sole admin account in most cases)
 
             const DB_NAME = "AmpleUser1";
             const STORE_NAME = "keyvaluepairs";
-            const LOCAL_STORAGE_KEY = "ample-settings-test";
+            const LOCAL_STORAGE_KEY = "ample-settings";
 
             function readAllDataFromIndexedDB(dbName, storeName) {
                 return new Promise((resolve, reject) => {
@@ -82,8 +84,8 @@ const migrations = [
 
             consolidated = {
                 enabled: settings.SkipBelow || false,
-                allowZero: settings.SkipBelowAllowZero || false,
-                rating: settings.SkipBelowRating || 3,
+                allowZero: settings.SkipBelowAllowZero || true,
+                rating: settings.SkipBelowRating || "3",
             };
 
             // add new temp key
@@ -159,22 +161,11 @@ const migrations = [
     },
 ];
 
-function isVersionGreater(v1, v2) {
-    const [major1, minor1, patch1] = v1.split(".").map(Number);
-    const [major2, minor2, patch2] = v2.split(".").map(Number);
-
-    if (major1 > major2) return true;
-    if (major1 < major2) return false;
-    if (minor1 > minor2) return true;
-    if (minor1 < minor2) return false;
-    return patch1 > patch2;
-}
-
 export function handleMigrations(currentVersion) {
     const storedVersion = localStorage.getItem("ample-version") || "0.0.0";
 
     migrations.forEach(async ({ version, migrate }) => {
-        if (isVersionGreater(version, storedVersion)) {
+        if (compareVersions(version, storedVersion)) {
             console.log(`Applying migration for version ${version}`);
             await migrate();
 

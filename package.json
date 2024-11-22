@@ -1,6 +1,6 @@
 {
     "name": "ample-ampache-client",
-    "version": "3.1.1",
+    "version": "3.5.0-alpha1",
     "type": "module",
     "scripts": {
         "build": "vite build && npm run copy",
@@ -38,6 +38,7 @@
         "@tanstack/svelte-virtual": "^3.10.8",
         "butterchurn": "^2.6.7",
         "butterchurn-presets": "^2.4.7",
+        "compare-versions": "^6.1.1",
         "dompurify": "^3.1.6",
         "fuse.js": "^7.0.0",
         "javascript-ampache": "1.1.1",
