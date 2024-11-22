@@ -50,10 +50,10 @@
     </sl-button>
 
     <div
-        style="position: absolute; left: 50px; pointer-events: none; color: red; flex-direction: column; display: flex; display: none; "
+        style="position: absolute; left: 50px; pointer-events: none; color: red; flex-direction: column; display: flex; display: flex; "
     >
-        <span style="font-size: 1.3rem; ">BETA PREVIEW</span>
-        <span>Almost ready, final tweaks</span>
+        <span style="font-size: 1.3rem; ">3.5-alpha1</span>
+        <span>Updating to Svelte 5, not ready</span>
     </div>
 
     <sl-input
