@@ -7,14 +7,11 @@
         truncate = true, // usually want this as default, but mixCard can wrap lines
     } = $props();
 
-    let artists = $state(data.artists);
-
-    if (featuredOnly) {
-        // filter album artist
-        artists = artists.filter(
-            (artist) => artist.id !== data.albumartist?.id,
-        );
-    }
+    let artists = $derived(
+        data.artists.filter((artist) =>
+            featuredOnly ? artist.id !== data.albumartist?.id : artist,
+        ),
+    );
 </script>
 
 <span class="c-artists" class:disabled class:truncate>
