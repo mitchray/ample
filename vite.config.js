@@ -34,11 +34,11 @@ export default defineConfig({
             }),
             onwarn: (warning, handler) => {
                 // handled within shoelace components
-                if (warning.code === "a11y-no-static-element-interactions")
+                if (warning.code === "a11y_no_static_element_interactions")
                     return;
 
                 // handled within shoelace components
-                if (warning.code === "a11y-click-events-have-key-events")
+                if (warning.code === "a11y_click_events_have_key_events")
                     return;
 
                 // proceed with other warnings normally
