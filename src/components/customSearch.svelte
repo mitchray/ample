@@ -1,8 +1,5 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
-    import { onMount } from "svelte";
     import { API } from "~/stores/state";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
@@ -226,7 +223,7 @@
         loading = false;
     }
 
-    onMount(async () => {
+    $effect.pre(async () => {
         parseParams();
 
         allUsers = await $API.users();
@@ -896,23 +893,23 @@
         },
     ];
     // keep selectedObjectType in sync
-    run(() => {
+    $effect(() => {
         selectedObjectType = settings.type;
     });
     // reset everything if object type changes
-    run(() => {
+    $effect(() => {
         if (settings.type) {
             populateFields();
         }
     });
     // auto-add a row if all are removed
-    run(() => {
+    $effect(() => {
         if (loaded && rows.length < 1) {
             addNewRow();
         }
     });
     // get highest existing id, or start at 1
-    run(() => {
+    $effect(() => {
         rowCounter = rows.length ? Math.max(...rows.map((t) => t.id)) + 1 : 1;
     });
 </script>
