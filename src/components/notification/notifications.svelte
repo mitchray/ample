@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { Notifications } from "~/stores/message.js";
     import { Settings } from "~/stores/settings.js";
@@ -9,10 +7,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let dialog = $state();
-
-    run(() => {
-        $Notifications = $Notifications;
-    });
 
     function handleClearNotifications() {
         $Notifications = [];
