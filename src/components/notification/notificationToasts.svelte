@@ -1,7 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
-    import { onDestroy, onMount } from "svelte";
     import {
         autoUpdate,
         computePosition,
@@ -16,7 +13,9 @@
 
     let timeout;
     let autoTimeout;
-    let freshNotifications = $state([]);
+    let freshNotifications = $derived(
+        $Notifications.filter((e) => e.fresh === true && !e.isSilent),
+    );
     let listBind = $state();
     let autoUpdateCleanup;
 
@@ -30,8 +29,6 @@
         $Notifications.forEach((item) => {
             item.fresh = false;
         });
-
-        $Notifications = $Notifications;
     }
 
     function handleEnter() {
@@ -80,7 +77,7 @@
         });
     }
 
-    onMount(() => {
+    $effect(() => {
         updatePosition();
 
         autoUpdateCleanup = autoUpdate(
@@ -88,22 +85,15 @@
             listBind,
             updatePosition,
         );
-    });
-
-    onDestroy(() => {
-        // floating-ui
-        autoUpdateCleanup();
-    });
-    run(() => {
-        if ($Notifications) {
-            freshNotifications = $Notifications.filter(
-                (e) => e.fresh === true && !e.isSilent,
-            );
-        }
 
         if (freshNotifications.length > 0) {
             start();
         }
+
+        return () => {
+            // floating-ui
+            autoUpdateCleanup();
+        };
     });
 </script>
 
