@@ -1,8 +1,5 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
-    import { onDestroy, onMount } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
@@ -29,26 +26,15 @@
     let loading = $state(true);
     let refreshLoop;
 
-    let isScroll = $state(false);
     let containerBind = $state();
     let containerScrollX = $state();
     let observer;
 
-    run(() => {
-        data = [...data, ...newBatch];
-    });
-
-    run(() => {
-        limit = limit;
-    });
-
     // Load initial data
-    onMount(async () => {
-        isScroll = layout === "scroll";
-
+    $effect.root(async () => {
         // if starting off with preloaded data, kick off the loadCount
         if (initialData.length > 0) {
-            newBatch = initialData;
+            data.push(...initialData);
             loading = false;
             loadCount++;
         } else {
@@ -73,11 +59,11 @@
                 getLatestUpdate();
             }, 1000 * autoRefreshInterval);
         }
-    });
 
-    onDestroy(() => {
-        observer?.disconnect();
-        clearInterval(refreshLoop);
+        return () => {
+            observer?.disconnect();
+            clearInterval(refreshLoop);
+        };
     });
 
     async function getLatestUpdate() {
@@ -89,7 +75,7 @@
         if (latest.error) {
             errorHandler("getting latest update", latest.error);
         } else {
-            if (latest[0].id !== data[0].id) {
+            if (latest[0].id !== data[0]?.id) {
                 latest[0]._id = uuidv4(); // ensures unique key
                 data = [latest[0], ...data];
             }
@@ -112,6 +98,7 @@
             loadCount++;
         }
 
+        data.push(...newBatch);
         loading = false;
     }
 
@@ -127,8 +114,14 @@
     async function refreshItems() {
         loading = true;
         data = [];
-        newBatch = [];
         newBatch = await getAPIResponse({ limit: limit });
+
+        if (newBatch.error) {
+            errorHandler("loading more data", newBatch.error);
+            newBatch = [];
+        }
+
+        data.push(...newBatch);
         loading = false;
         parseScroll();
     }
@@ -192,7 +185,7 @@
         </sl-button>
     {/if}
 
-    {#if isScroll}
+    {#if layout === "scroll"}
         <div class="scroll-buttons">
             <sl-button
                 variant="text"
