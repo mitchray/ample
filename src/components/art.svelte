@@ -1,7 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
-    import { onMount } from "svelte";
     import { API, Server } from "~/stores/state.js";
     import { shuffle, uniqBy } from "lodash-es";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -10,74 +7,67 @@
     /** @type {{data: any, type: "song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream" | "mix", size?: "thumbnail" | "small" | "medium" | "large", radius?: string}} */
     let { data, type, size = "medium", radius = "0px" } = $props();
 
-    let dimension = $state(128);
-    let thumb = $state(2);
-    let images = $state([]);
+    let dimension = $derived.by(() => {
+        switch (size) {
+            case "thumbnail":
+                return 64; // 64 x 64 (128 x 128 true size)
+            case "small":
+                return 128; // 128 x 128 (256 x 256 true size)
+            case "large":
+                return 384; // 384 x 384 (768 x 768 true size)
+            case "medium":
+            default:
+                return "200"; // Ampache default value; 200 x 200 (400 x 400 true size)
+        }
+    });
 
-    let playlistSongs = $state([]);
+    let thumb = $derived.by(() => {
+        switch (size) {
+            case "thumbnail":
+                return 64; // 64 x 64 (128 x 128 true size)
+            case "small":
+                return 2; // 128 x 128 (256 x 256 true size)
+            case "large":
+                return 32; // 384 x 384 (768 x 768 true size)
+            case "medium":
+            default:
+                return "default"; // non-existent, will fall through to Ampache default value; 200 x 200 (400 x 400 true size)
+        }
+    });
 
-    onMount(async () => {
+    let images = $derived.by(() => {
+        let query = [];
         let result = [];
 
         if (type === "playlist" || type === "smartlist") {
-            result = await $API.playlistSongs({
+            query = $API.playlistSongs({
                 filter: data.id,
                 limit: 30,
             });
 
-            if (result.error) {
-                errorHandler("getting art", result.error);
+            if (query.error) {
+                errorHandler("getting art", query.error);
                 return [];
             }
 
-            result = uniqBy(result, "album.id");
+            query = uniqBy(query, "album.id");
 
             if (type === "smartlist") {
-                result = shuffle(result);
+                query = shuffle(query);
             }
 
-            playlistSongs = result.slice(0, 4);
+            query = query.slice(0, 4);
         }
-    });
 
-    async function processData() {
-        // if ($query.data?.length < 1) return;
-
-        images = [];
-
-        if (playlistSongs.length === 4) {
-            playlistSongs.forEach((song) => images.push(song.art));
-        } else if (playlistSongs.length > 0) {
-            images.push(playlistSongs[0].art);
+        if (query.length === 4) {
+            query.forEach((song) => result.push(song.art));
+        } else if (query.length > 0) {
+            result.push(query[0].art);
         } else {
-            images.push(data.art);
+            result.push(data.art);
         }
 
-        images = images;
-
-        switch (size) {
-            case "thumbnail":
-                thumb = 64; // 64 x 64 (128 x 128 true size)
-                dimension = 64;
-                break;
-            case "small":
-                thumb = 2; // 128 x 128 (256 x 256 true size)
-                dimension = 128;
-                break;
-            case "large":
-                thumb = 32; // 384 x 384 (768 x 768 true size)
-                dimension = 384;
-                break;
-            case "medium":
-            default:
-                thumb = "default"; // non-existent, will fall through to Ampache default value; 200 x 200 (400 x 400 true size)
-                dimension = 200;
-                break;
-        }
-    }
-    // process the art once we finish fetching
-    run(() => {
-        playlistSongs, processData();
+        return result;
     });
 </script>
 
