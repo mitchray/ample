@@ -1,7 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
-    import { onDestroy, onMount } from "svelte";
     import {
         autoUpdate,
         computePosition,
@@ -15,9 +12,9 @@
     import { AlertsList } from "~/stores/message.js";
     import AlertCard from "~/components/alert/alertCard.svelte";
 
-    let timeout = $state();
-    let freshAlerts = $state([]);
-    let listBind = $state();
+    let timeout = null;
+    let freshAlerts = $derived($AlertsList.filter((e) => e.fresh === true));
+    let listBind = null;
     let autoUpdateCleanup;
 
     function handleEnter(e) {
@@ -39,7 +36,6 @@
 
             if (freshAlerts[lastItem]) {
                 freshAlerts[lastItem].fresh = false;
-                freshAlerts = freshAlerts;
             }
         }, 3000);
     }
@@ -70,7 +66,7 @@
         });
     }
 
-    onMount(() => {
+    $effect(() => {
         updatePosition();
 
         autoUpdateCleanup = autoUpdate(
@@ -78,22 +74,17 @@
             listBind,
             updatePosition,
         );
-    });
-
-    onDestroy(() => {
-        // floating-ui
-        autoUpdateCleanup();
-    });
-    run(() => {
-        if ($AlertsList) {
-            freshAlerts = $AlertsList.filter((e) => e.fresh === true);
-        }
 
         if (freshAlerts.length > 0) {
             clearTimeout(timeout);
 
             startTimeout();
         }
+
+        return () => {
+            // floating-ui
+            autoUpdateCleanup();
+        };
     });
 </script>
 
