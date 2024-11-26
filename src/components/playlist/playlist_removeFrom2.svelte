@@ -38,11 +38,12 @@
 
             if (result.error) {
                 errorHandler("while remove from playlist", result.error);
-                return;
             }
 
-            //remove from tabulator
-            row.delete();
+            if (!result.error) {
+                //remove from tabulator
+                row.delete();
+            }
         });
 
         //send data back to tabulator
@@ -65,8 +66,9 @@
                 <sl-button onclick={confirm.hide()} variant="text">
                     {$_("text.cancel")}
                 </sl-button>
-                <MaterialSymbol name="cancel" slot="prefix" />
+
                 <sl-button onclick={handleApply} variant="danger">
+                    <MaterialSymbol name="cancel" slot="prefix" />
                     {$_("text.remove")}
                 </sl-button>
             </div>
