@@ -61,7 +61,6 @@
         hideDefaultActions = false,
         data = {},
     } = $props();
-    // TODO: need to pass the $props() (previously $$props) to Actions instances
 
     const contextKey = uuidv4(); // unique key for each instance of actions
 
@@ -415,7 +414,15 @@
                     >
                         &nbsp;
                     </sl-button>
-                    <Actions displayMode="menu" />
+                    <Actions
+                        displayMode="menu"
+                        {item}
+                        {type}
+                        {showShuffle}
+                        {showLinks}
+                        {hideDefaultActions}
+                        {data}
+                    />
                 </sl-dropdown>
 
                 <sl-button
@@ -443,7 +450,15 @@
                 dialogBind?.hide();
             }}
         >
-            <Actions displayMode="menu" />
+            <Actions
+                displayMode="menu"
+                {item}
+                {type}
+                {showShuffle}
+                {showLinks}
+                {hideDefaultActions}
+                {data}
+            />
 
             <sl-divider></sl-divider>
 
