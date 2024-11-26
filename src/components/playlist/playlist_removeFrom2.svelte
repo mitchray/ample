@@ -1,17 +1,15 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { tabulator, playlistID, songs = $bindable() } = $props();
+    let { tabulator = $bindable(), playlistID, songs = $bindable() } = $props();
 
     let selectedCount = $state(0);
     let confirm = $state(null);
 
-    run(() => {
+    $effect(() => {
         if (tabulator) {
             tabulator.on(
                 "rowSelectionChanged",
