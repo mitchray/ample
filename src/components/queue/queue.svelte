@@ -130,7 +130,7 @@
         <div class="queue-list">
             <div
                 bind:this={virtualListEl}
-                style="overflow-y: auto; position: absolute; top: 0; left: 0; right: 0; bottom: 0;"
+                style="overflow-y: auto; position: absolute; inset: 0;"
             >
                 <div style="height: {$virtualizer.getTotalSize()}px;">
                     {#each items as item (item)}
