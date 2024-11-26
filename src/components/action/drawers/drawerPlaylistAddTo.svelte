@@ -11,7 +11,7 @@
     let drawer = $state(),
         drawerEdit = $state();
     let newPlaylist = $state(null);
-    let selectedPlaylists = $state();
+    let selectedPlaylists = $state([]);
     let ignoreDuplicates = $state(false);
 
     function handleSave() {
