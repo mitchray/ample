@@ -5,11 +5,7 @@
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
-    let {
-        type,
-        selectedPlaylists = $bindable([]),
-        multiple = false,
-    } = $props();
+    let { type, selectedPlaylists = $bindable(), multiple = false } = $props();
 
     const dispatch = createEventDispatcher();
 
