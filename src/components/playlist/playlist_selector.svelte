@@ -1,7 +1,5 @@
 <script>
-    import { run } from "svelte/legacy";
-
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher } from "svelte";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
@@ -10,10 +8,6 @@
     const dispatch = createEventDispatcher();
 
     let playlistResponse = $state({});
-
-    run(() => {
-        playlistResponse = playlistResponse;
-    });
 
     function handleRadio(e) {
         selectedPlaylists = [e.target.value];
@@ -55,7 +49,7 @@
         }
     }
 
-    onMount(() => {
+    $effect.root(() => {
         loadData();
     });
 </script>
