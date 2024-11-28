@@ -132,6 +132,7 @@
                         slot="nav"
                         panel={tab.id}
                         active={tab.id === currentTab}
+                        aria-label={tab.id}
                     >
                         {tab.label}
                     </sl-tab>
@@ -195,6 +196,8 @@
                                 onsl-input={handleAPIkey}
                                 type="password"
                                 value={apiKey}
+                                role={"textbox"}
+                                aria-label="apikey_input"
                             ></sl-input>
                         </p>
 
@@ -203,6 +206,7 @@
                             disabled={!apiKey}
                             type="submit"
                             variant="primary"
+                            data-testid={"apikey_login"}
                         >
                             <MaterialSymbol name="login" slot="prefix" />
                             {$_("text.login")}
