@@ -4,3 +4,7 @@ public/build/
 dist/
 config/
 package-lock.json
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
