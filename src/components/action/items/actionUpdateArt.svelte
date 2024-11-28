@@ -41,10 +41,10 @@
     }
 </script>
 
-<MaterialSymbol
-    name={$_type === "artist" ? "portrait" : "image"}
-    slot="prefix"
-/>
 <sl-menu-item {loading} onclick={handleAction} title={label}>
+    <MaterialSymbol
+        name={$_type === "artist" ? "portrait" : "image"}
+        slot="prefix"
+    />
     {label}
 </sl-menu-item>
