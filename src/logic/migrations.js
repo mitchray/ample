@@ -10,6 +10,29 @@ const migrations = [
             const STORE_NAME = "keyvaluepairs";
             const LOCAL_STORAGE_KEY = "ample-settings";
 
+            if (!(await previousInstallExists())) return;
+
+            function previousInstallExists() {
+                return new Promise((resolve) => {
+                    const request = indexedDB.open(DB_NAME);
+
+                    request.onsuccess = (event) => {
+                        const db = event.target.result;
+                        const exists = db.objectStoreNames.contains(STORE_NAME);
+                        db.close(); // Always close the database when done
+                        resolve(exists);
+                    };
+
+                    request.onerror = () => {
+                        resolve(false); // Assume false if there's an error opening the database
+                    };
+
+                    request.onupgradeneeded = () => {
+                        resolve(false); // If upgrade is needed, store doesn't exist yet
+                    };
+                });
+            }
+
             function readAllDataFromIndexedDB(dbName, storeName) {
                 return new Promise((resolve, reject) => {
                     const request = indexedDB.open(dbName);
@@ -80,12 +103,13 @@ const migrations = [
             /**
              * Skip below options consolidated
              */
-            settings = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+            settings =
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
 
             consolidated = {
-                enabled: settings.SkipBelow || false,
-                allowZero: settings.SkipBelowAllowZero || true,
-                rating: settings.SkipBelowRating || "3",
+                enabled: settings?.SkipBelow || false,
+                allowZero: settings?.SkipBelowAllowZero || true,
+                rating: settings?.SkipBelowRating || "3",
             };
 
             // add new temp key
@@ -106,41 +130,44 @@ const migrations = [
             /**
              * Notifications consolidated
              */
-            settings = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY));
+            settings =
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
 
             consolidated = {
                 GainTagsMissing: {
                     isEnabled:
-                        settings.NotificationGainTagsMissing.isEnabled || false,
+                        settings?.NotificationGainTagsMissing?.isEnabled ||
+                        false,
                     isSilent:
-                        settings.NotificationGainTagsMissing.isSilent || false,
+                        settings?.NotificationGainTagsMissing?.isSilent ||
+                        false,
                 },
                 RatingMissing: {
                     isEnabled:
-                        settings.NotificationRatingMissing.isEnabled || false,
+                        settings?.NotificationRatingMissing?.isEnabled || false,
                     isSilent:
-                        settings.NotificationRatingMissing.isSilent || false,
+                        settings?.NotificationRatingMissing?.isSilent || false,
                 },
                 AlternateVersions: {
                     isEnabled:
-                        settings.NotificationAlternateVersions.isEnabled ||
+                        settings?.NotificationAlternateVersions?.isEnabled ||
                         false,
                     isSilent:
-                        settings.NotificationAlternateVersions.isSilent ||
+                        settings?.NotificationAlternateVersions?.isSilent ||
                         false,
                 },
                 LyricsMissing: {
                     isEnabled:
-                        settings.NotificationLyricsMissing.isEnabled || false,
+                        settings?.NotificationLyricsMissing?.isEnabled || false,
                     isSilent:
-                        settings.NotificationLyricsMissing.isSilent || false,
+                        settings?.NotificationLyricsMissing?.isSilent || false,
                 },
                 LyricsNotTimestamped: {
                     isEnabled:
-                        settings.NotificationLyricsNotTimestamped.isEnabled ||
+                        settings?.NotificationLyricsNotTimestamped?.isEnabled ||
                         false,
                     isSilent:
-                        settings.NotificationLyricsNotTimestamped.isSilent ||
+                        settings?.NotificationLyricsNotTimestamped?.isSilent ||
                         false,
                 },
             };
