@@ -167,7 +167,7 @@ export function replaceSpacesWithHyphens(input) {
  * @returns string
  */
 export function formatForGenius(input) {
-    input = input.replace(/[^a-zA-Z0-9 ]/g, "");
+    input = input?.replace(/[^a-zA-Z0-9 -]/g, "");
 
     return replaceSpacesWithHyphens(input);
 }
