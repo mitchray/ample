@@ -17,7 +17,7 @@
     }
 </script>
 
-<MaterialSymbol name="auto_awesome" slot="prefix" />
 <sl-menu-item title={text} onclick={handleToggle}>
+    <MaterialSymbol name="auto_awesome" slot="prefix" />
     {text}
 </sl-menu-item>

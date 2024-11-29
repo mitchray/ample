@@ -21,8 +21,8 @@
 </script>
 
 {#if $_data.playlist?.has_access}
-    <MaterialSymbol name="edit" slot="prefix" />
     <sl-menu-item onclick={handleAction} title={$_("text.playlistEdit")}>
+        <MaterialSymbol name="edit" slot="prefix" />
         {$_("text.playlistEdit")}
     </sl-menu-item>
 {/if}

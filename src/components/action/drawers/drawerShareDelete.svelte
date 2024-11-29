@@ -45,8 +45,8 @@
         })}
     </div>
 
-    <MaterialSymbol name="delete" slot="prefix" />
     <sl-button onclick={handleDelete} slot="footer" variant="danger">
+        <MaterialSymbol name="delete" slot="prefix" />
         {$_("text.delete")}
     </sl-button>
 </sl-drawer>

@@ -173,8 +173,8 @@
     {/if}
 
     {#if refresh}
-        <MaterialSymbol name="refresh" slot="prefix" />
         <sl-button onclick={refreshItems} size="small">
+            <MaterialSymbol name="refresh" slot="prefix" />
             {$_("text.refresh")}
         </sl-button>
     {/if}

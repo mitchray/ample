@@ -57,8 +57,8 @@
 </script>
 
 {#if $downloadPreference}
-    <MaterialSymbol name="download" slot="prefix" />
     <sl-menu-item onclick={handleAction} title={$_("text.download")} {loading}>
+        <MaterialSymbol name="download" slot="prefix" />
         {$_("text.download")}
     </sl-menu-item>
 {/if}
