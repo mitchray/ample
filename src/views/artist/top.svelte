@@ -26,8 +26,8 @@
                     return [];
                 }
 
-                for (let i = 0; i < result.length; i++) {
-                    result[i].order = i + 1;
+                for (let i = 0; i < result.song.length; i++) {
+                    result.song[i].order = i + 1;
                 }
 
                 return result;
