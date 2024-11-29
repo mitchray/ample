@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
@@ -11,9 +9,7 @@
     import { songsPreset, track } from "~/components/lister/columns.js";
 
     let { artistID } = $props();
-
-    let songs = $state([]);
-    let loading = false;
+    let loading = $state(false);
     let tabulator = $state(null);
 
     let query = $derived(
@@ -34,9 +30,7 @@
     );
 
     // alias of returned data
-    run(() => {
-        songs = $query.data?.song || {};
-    });
+    let songs = $derived($query.data?.song || {});
 </script>
 
 {#if !loading && songs && songs.length > 0}
