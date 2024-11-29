@@ -30,6 +30,12 @@ test("artists", async ({ page }) => {
     await page.goto("/#/artists");
     await expect(page).toHaveTitle(/Artists/);
     await expect(page.getByRole("heading", { name: "Artists" })).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Random' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'All' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("album artists", async ({ page }) => {
@@ -38,12 +44,24 @@ test("album artists", async ({ page }) => {
     await expect(
         page.getByRole("heading", { name: "Album Artists" }),
     ).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'All' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("albums", async ({ page }) => {
     await page.goto("/#/albums");
     await expect(page).toHaveTitle(/Albums/);
     await expect(page.getByRole("heading", { name: "Albums" })).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Random' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'By Year' }).locator('div').click(); 
+    await expect(page.getByRole('button', { name: /Search/ }).first()).toBeVisible();
+    await page.getByRole('tab', { name: 'All' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("genres", async ({ page }) => {
@@ -58,6 +76,13 @@ test("playlists", async ({ page }) => {
     await expect(
         page.getByRole("heading", { name: "Playlists" }),
     ).toBeVisible();
+
+    // test user might not have playlists, but assume there are at least some on the server overall
+    let emptyMessage = page.locator("sl-tab-panel[name='mine']").getByText("No items found");
+    await expect(emptyMessage.or(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first())).toBeVisible();
+
+    await page.getByRole('tab', { name: 'All' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("smartlists", async ({ page }) => {
@@ -66,6 +91,13 @@ test("smartlists", async ({ page }) => {
     await expect(
         page.getByRole("heading", { name: "Smartlists" }),
     ).toBeVisible();
+
+    // test user might not have smartlists, but assume there are at least some on the server overall
+    let emptyMessage = page.locator("sl-tab-panel[name='mine']").getByText("No items found");
+    await expect(emptyMessage.or(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first())).toBeVisible();
+
+    await page.getByRole('tab', { name: 'All' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("shares", async ({ page }) => {
@@ -80,12 +112,24 @@ test("favorites", async ({ page }) => {
     await expect(
         page.getByRole("heading", { name: "Favorites" }),
     ).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Albums' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Songs' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("trending", async ({ page }) => {
     await page.goto("/#/trending");
     await expect(page).toHaveTitle(/Trending/);
     await expect(page.getByRole("heading", { name: "Trending" })).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Albums' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Songs' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("top rated", async ({ page }) => {
@@ -94,6 +138,12 @@ test("top rated", async ({ page }) => {
     await expect(
         page.getByRole("heading", { name: "Top Rated" }),
     ).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Albums' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Songs' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("forgotten", async ({ page }) => {
@@ -102,22 +152,42 @@ test("forgotten", async ({ page }) => {
     await expect(
         page.getByRole("heading", { name: "Forgotten" }),
     ).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Albums' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Songs' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("random", async ({ page }) => {
     await page.goto("/#/random");
     await expect(page).toHaveTitle(/Random/);
     await expect(page.getByRole("heading", { name: "Random" })).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Albums' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Songs' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("unrated", async ({ page }) => {
     await page.goto("/#/unrated");
     await expect(page).toHaveTitle(/Unrated/);
     await expect(page.getByRole("heading", { name: "Unrated" })).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Albums' }).locator('div').click(); 
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
+    await page.getByRole('tab', { name: 'Songs' }).locator('div').click();
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
 
 test("newest", async ({ page }) => {
     await page.goto("/#/newest");
     await expect(page).toHaveTitle(/Newest/);
     await expect(page.getByRole("heading", { name: "Newest" })).toBeVisible();
+
+    await expect(page.getByRole('columnheader', { name: 'Actions' }).locator('div').first()).toBeVisible();
 });
