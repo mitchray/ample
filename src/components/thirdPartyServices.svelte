@@ -315,15 +315,15 @@
                         id: "spotify",
                         title: "Spotify",
                         icon: SpotifyLogo,
-                        artistURL: `https://open.spotify.com/search/artist:"${encodeURIComponent(
+                        artistURL: `https://open.spotify.com/search/"${encodeURIComponent(
                             data.name,
-                        )}"`,
-                        albumURL: `https://open.spotify.com/search/album:"${encodeURIComponent(
+                        )}"/artists`,
+                        albumURL: `https://open.spotify.com/search/"${encodeURIComponent(
                             data.name,
-                        )}" artist:"${encodeURIComponent(data.artist.name)}"`,
-                        songURL: `https://open.spotify.com/search/track:"${encodeURIComponent(
+                        )}" artist:"${encodeURIComponent(data.artist.name)}"/albums`,
+                        songURL: `https://open.spotify.com/search/"${encodeURIComponent(
                             data.name,
-                        )}" artist:"${encodeURIComponent(data.artist.name)}"`,
+                        )}" artist:"${encodeURIComponent(data.artist.name)}"/tracks`,
                     },
                     {
                         id: "tidal",
