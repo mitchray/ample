@@ -41,8 +41,9 @@
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
 
-    <MaterialSymbol name="refresh" slot="prefix" />
-    <sl-button onclick={refreshItems} size="small">Refresh</sl-button>
+    <sl-button onclick={refreshItems} size="small">
+        <MaterialSymbol name="refresh" slot="prefix" /> Refresh
+    </sl-button>
 </div>
 
 {#key loadedTime || 0}
