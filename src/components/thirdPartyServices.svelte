@@ -2,7 +2,7 @@
     import { _ } from "svelte-i18n";
     import { onMount } from "svelte";
     import { Server } from "~/stores/state.js";
-    import { replaceSpacesWithHyphens } from "~/logic/helper.js";
+    import { formatForGenius } from "~/logic/helper.js";
     import MusicBrainz from "~/logic/musicbrainz";
 
     import AmpacheLogo from "/src/assets/logos/ampache.svg";
@@ -84,17 +84,15 @@
                         title: "Genius",
                         icon: GeniusLogo,
                         artistURL: `https://genius.com/artists/${encodeURIComponent(
-                            replaceSpacesWithHyphens(data.name),
+                            formatForGenius(data.name),
                         )}`,
                         albumURL: `https://genius.com/albums/${encodeURIComponent(
-                            replaceSpacesWithHyphens(data.artist.name),
-                        )}/${encodeURIComponent(
-                            replaceSpacesWithHyphens(data.name),
-                        )}`,
+                            formatForGenius(data.artist.name),
+                        )}/${encodeURIComponent(formatForGenius(data.name))}`,
                         songURL: `https://genius.com/${encodeURIComponent(
-                            replaceSpacesWithHyphens(data.artist.name),
+                            formatForGenius(data.artist.name),
                         )}-${encodeURIComponent(
-                            replaceSpacesWithHyphens(data.name),
+                            formatForGenius(data.name),
                         )}-lyrics`,
                     },
                     {

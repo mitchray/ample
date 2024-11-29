@@ -161,6 +161,17 @@ export function replaceSpacesWithHyphens(input) {
     return input?.replace(/ /g, "-");
 }
 
+/**
+ * Prepare for Genius URL (spaces to hyphens and remove special chars)
+ * @param {string} input
+ * @returns string
+ */
+export function formatForGenius(input) {
+    input = input.replace(/[^a-zA-Z0-9 ]/g, "");
+
+    return replaceSpacesWithHyphens(input);
+}
+
 export function prepareForQueue(arr) {
     const propertiesToKeep = [
         //common
