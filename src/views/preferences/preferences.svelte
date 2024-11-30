@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";
     import { ShowPreferences } from "~/stores/state.js";
@@ -10,7 +8,7 @@
     let drawer = $state();
     let tabs = $state();
 
-    run(() => {
+    $effect(() => {
         $ShowPreferences ? drawer?.show() : drawer?.hide();
     });
 
