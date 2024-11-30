@@ -1,13 +1,10 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import "@shoelace-style/shoelace/dist/themes/light.css";
     import "@shoelace-style/shoelace/dist/themes/dark.css";
     import "/src/css/normalize.css";
     import "/src/css/global.css";
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-    import { onMount } from "svelte";
     import {
         ampleVersion,
         ShowLyrics,
@@ -56,15 +53,15 @@
         $ShowLyrics = false;
     };
 
-    run(() => {
+    const queryClient = new QueryClient();
+
+    $effect(() => {
         if ($User.isLoggedIn) {
             loadSettings();
         }
     });
 
-    const queryClient = new QueryClient();
-
-    onMount(async () => {
+    $effect(async () => {
         await loadFromConfig();
         await validateSession();
 
