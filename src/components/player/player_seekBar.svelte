@@ -1,7 +1,4 @@
 <script>
-    import { run, passive } from "svelte/legacy";
-
-    import { onMount } from "svelte";
     import { CurrentMedia } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
@@ -71,12 +68,8 @@
         $MediaPlayer.seekTo(seekFraction);
     }
 
-    onMount(() => {
+    $effect(() => {
         requestAnimationFrame(updateProgress);
-    });
-    // restart for each new media item
-    run(() => {
-        $CurrentMedia, requestAnimationFrame(updateProgress);
     });
 </script>
 
@@ -90,7 +83,7 @@
         onmousedown={handleSeekMouseDown}
         ontouchstart={handleSeekTouchDown}
         onmousemove={handleSeekDrag}
-        use:passive={["touchmove", () => handleSeekDrag]}
+        ontouchmove={handleSeekDrag}
     >
         <span
             class="progress"
