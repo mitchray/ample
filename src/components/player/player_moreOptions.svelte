@@ -29,7 +29,7 @@
     <sl-menu>
         <AddToPlaylist
             {contextKey}
-            disabled={$CurrentMedia?.object_type !== "song" || null}
+            disabled={$CurrentMedia?.object_type !== "song"}
         />
 
         {#if $CurrentMedia?.object_type === "song"}
@@ -38,10 +38,7 @@
 
         <Visualizer />
 
-        <Lyrics
-            {contextKey}
-            disabled={$CurrentMedia?.object_type !== "song" || null}
-        />
+        <Lyrics {contextKey} disabled={$CurrentMedia?.object_type !== "song"} />
 
         <PlaybackSpeed />
     </sl-menu>
