@@ -1,7 +1,4 @@
 <script>
-    import { run, stopPropagation, createBubbler } from "svelte/legacy";
-
-    const bubble = createBubbler();
     import {
         CurrentMedia,
         NowPlayingIndex,
@@ -44,7 +41,8 @@
 
         await updateQueue();
     }
-    run(() => {
+
+    $effect(() => {
         media, retest();
         $Settings.SkipBelow.enabled, retest();
         $Settings.SkipBelow.rating, retest();
@@ -59,7 +57,10 @@
 >
     <sl-button
         class="remove"
-        onclick={stopPropagation(handleRemoveItem(media._id))}
+        onclick={(e) => {
+            e.stopPropagation();
+            handleRemoveItem(media._id);
+        }}
         variant="text"
     >
         <MaterialSymbol name="close" />
@@ -112,7 +113,11 @@
 
     <sl-dropdown
         class="more"
-        onclick={stopPropagation(bubble("click"))}
+        onclick={(e) => {
+            // TODO: menu no longer appears
+            //bubble("click");
+            e.stopPropagation();
+        }}
         onsl-show={async () => {
             media.isActionsLoaded = true;
             await ticks(2);
