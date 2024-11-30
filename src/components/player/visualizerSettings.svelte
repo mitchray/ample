@@ -1,9 +1,6 @@
 <script>
-    import { run } from "svelte/legacy";
-
-    import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { ShowVisualizer, IsPlaying } from "~/stores/state.js";
+    import { IsPlaying, ShowVisualizer } from "~/stores/state.js";
     import { _ } from "svelte-i18n";
     import { keys } from "lodash-es";
     import { MediaPlayer } from "~/stores/elements.js";
@@ -21,11 +18,6 @@
     let transitionDuration = $state(3);
     let cycleTimer = $state();
 
-    function handleQueueToggle() {
-        let inverted = !$Settings.QueueIsOpen;
-        $Settings.QueueIsOpen = inverted;
-    }
-
     function cycleHandler() {
         if ($IsPlaying) {
             handleNextPreset();
@@ -37,8 +29,7 @@
     }
 
     function handlePresetChange(e) {
-        let index = e.target.value;
-        currentPresetIndex = index;
+        currentPresetIndex = e.target.value;
         $MediaPlayer?.loadVisualizerPreset(
             presets[presetKeys[currentPresetIndex]],
             transitionDuration,
@@ -102,8 +93,9 @@
     function handleTransitionDurationChange(e) {
         transitionDuration = e.target.value;
     }
+
     // Watch for changes in the cycle checkbox and interval
-    run(() => {
+    $effect(() => {
         if (isCycleEnabled) {
             clearInterval(cycleTimer);
             cycleTimer = setInterval(cycleHandler, cycleInterval * 1000);
