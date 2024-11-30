@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
@@ -28,7 +26,7 @@
     }
 
     // default to mine tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/playlists/mine`);
     });
 </script>
