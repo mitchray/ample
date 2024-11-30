@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { getContext } from "svelte";
     import { Settings } from "~/stores/settings.js";
     import { CurrentMedia, User } from "~/stores/state.js";
@@ -21,12 +19,11 @@
 
     let album = getAlbum();
     let type = getType();
-    let tabulator = $state(null);
+    let tabulator = $state();
     let filterToArtistID = getContext("filterToArtistID");
-    let disks = $state([]);
 
-    function processData() {
-        disks = [];
+    let disks = $derived.by(() => {
+        let arr = [];
 
         $query.data?.forEach(([disk, songs]) => {
             songs.forEach((song) => {
@@ -35,7 +32,7 @@
                 );
             });
 
-            disks.push({
+            arr.push({
                 index: disk,
                 songs: songs,
                 songsByArtist: songs.filter((song) =>
@@ -48,20 +45,20 @@
             });
         });
 
-        return disks;
-    }
+        return arr;
+    });
+
     let query = $derived(
         createQuery({
             queryKey: ["albumDisks", album.id],
             queryFn: async () => {
+                // let test = await getAlbumDisks(album.id);
+                // console.debug(test, "TEST");
                 return await getAlbumDisks(album.id);
             },
             enabled: $User.isLoggedIn,
         }),
     );
-    run(() => {
-        $query.data, processData();
-    });
 </script>
 
 {#if $query.isLoading}
