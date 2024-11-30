@@ -1,33 +1,33 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { CurrentMedia } from "~/stores/state";
     import Art from "~/components/art.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
 
-    let parentInfo = $state();
+    let parentInfo = $derived.by(() => {
+        let info = {};
 
-    run(() => {
         if ($CurrentMedia) {
             if ($CurrentMedia.object_type === "song") {
-                parentInfo.name =
+                info.name =
                     ($CurrentMedia.year ? `${$CurrentMedia.year} - ` : null) +
                     $CurrentMedia.album?.name;
-                parentInfo.url = `#/album/${$CurrentMedia.album?.id}`;
+                info.url = `#/album/${$CurrentMedia.album?.id}`;
             }
 
             if ($CurrentMedia.object_type === "podcast_episode") {
-                parentInfo.name = $CurrentMedia.podcast?.name;
-                parentInfo.url = `#/podcast/${$CurrentMedia.podcast?.id}`;
+                info.name = $CurrentMedia.podcast?.name;
+                info.url = `#/podcast/${$CurrentMedia.podcast?.id}`;
             }
 
             if ($CurrentMedia.object_type === "live_stream") {
-                parentInfo.name = $CurrentMedia.name;
-                parentInfo.url = `#/radio-station/${$CurrentMedia.id}`;
+                info.name = $CurrentMedia.name;
+                info.url = `#/radio-station/${$CurrentMedia.id}`;
             }
         } else {
-            parentInfo = {};
+            info = {};
         }
+
+        return info;
     });
 </script>
 
