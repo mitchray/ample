@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
     import {
@@ -52,7 +50,7 @@
     // alias of returned data
     let song = $derived($query.data || {});
 
-    run(() => {
+    $effect(() => {
         $PageTitle = song?.name || $_("text.song");
     });
 </script>
