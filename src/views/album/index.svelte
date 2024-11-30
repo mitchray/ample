@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -37,7 +35,7 @@
     // alias of returned data
     let album = $derived($query.data || {});
 
-    run(() => {
+    $effect(() => {
         $PageTitle = album?.name || $_("text.album");
     });
 </script>

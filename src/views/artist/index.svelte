@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { push, replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
@@ -49,12 +47,12 @@
     // alias of returned data
     let artist = $derived($query.data || {});
 
-    run(() => {
+    $effect(() => {
         $PageTitle = artist?.name || $_("text.artist");
     });
 
     // default to releases tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/artist/${params.id}/releases`);
     });
 

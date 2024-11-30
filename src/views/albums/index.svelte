@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -13,7 +11,7 @@
     let { params = {} } = $props();
 
     // default to the newest tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/albums/newest`);
     });
 
