@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
@@ -8,7 +6,8 @@
         // update waveform colors when theme is toggled
         $MediaPlayer?.setWaveColors();
     }
-    run(() => {
+
+    $effect(() => {
         if (!$Settings.Theme.mode) {
             if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
                 $Settings.Theme.mode = "dark";
@@ -25,7 +24,8 @@
             document.documentElement.classList.add("sl-theme-light");
         }
     });
-    run(() => {
+
+    $effect(() => {
         $Settings.Theme, handleChange();
     });
 </script>
