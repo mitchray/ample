@@ -196,6 +196,7 @@
             var(--content-padding)
             [full-end];
         grid-auto-rows: min-content;
+        z-index: 1; /* for some reason things became unclickable without this, even in 3.1.1... */
     }
 
     :global(.site-content-inner > *) {
