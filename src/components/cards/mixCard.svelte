@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { User } from "~/stores/state.js";
     import Actions from "~/components/action/actions.svelte";
@@ -11,12 +9,6 @@
     import { getSimilarArtistsWithGenreFallback } from "~/logic/artist.js";
 
     let { data = null, type = undefined } = $props();
-
-    let playlist = $state();
-
-    run(() => {
-        playlist = data;
-    });
 
     let query = $derived(
         createQuery({
@@ -35,6 +27,9 @@
 
     // alias of returned data
     let artists = $derived($query.data || {});
+
+    // alias of passed data
+    let playlist = $derived(data);
 </script>
 
 <div class="mix-card card">
