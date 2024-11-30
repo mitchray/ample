@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import Fuse from "fuse.js";
     import { SearchQuery, ShowSearch } from "~/stores/state.js";
@@ -138,11 +136,11 @@
         searching = false;
     }
 
-    run(() => {
+    $effect.pre(() => {
         $ShowSearch ? drawer?.show() : drawer?.hide();
     });
 
-    run(() => {
+    $effect.pre(() => {
         if ($SearchQuery?.length >= minimumChars) {
             resetResults();
             doSearch();
