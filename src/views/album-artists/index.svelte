@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
@@ -11,7 +9,7 @@
     let { params = {} } = $props();
 
     // default to random tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/album-artists/random`);
     });
 
