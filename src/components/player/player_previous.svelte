@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { MediaPlayer } from "~/stores/elements.js";
     import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -24,10 +22,9 @@
         clearTimeout(timeout);
         dropdown.hide();
     }
-    run(() => {
+
+    $effect(() => {
         $CurrentMedia, update();
-    });
-    run(() => {
         $NowPlayingQueue, update();
     });
 </script>
