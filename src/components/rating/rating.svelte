@@ -17,8 +17,6 @@
 </script>
 
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { API, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -30,6 +28,7 @@
     let showAverageRatings = true;
     let ratingErrored = $state(false);
     let flagErrored = $state(false);
+    let finalType = $derived(type === "playlist_songs" ? "song" : type); // override for playlist_songs
     const values = [1, 2, 3, 4, 5];
 
     function handleRating() {
@@ -41,7 +40,7 @@
         // update the displayed rating immediately
         data.rating = newRating;
 
-        $API.rate({ type: type, id: data.id, rating: newRating }).then(
+        $API.rate({ type: finalType, id: data.id, rating: newRating }).then(
             (result) => {
                 if (result.error) {
                     errorHandler("while rating", result.error);
@@ -53,7 +52,7 @@
 
                 if (!result.error) {
                     recentRating.set({
-                        type: type,
+                        type: finalType,
                         id: data.id,
                         rating: newRating,
                     });
@@ -61,7 +60,8 @@
                     // now update any items in the queue with the new rating
                     let foundItems = $NowPlayingQueue.filter(
                         (item) =>
-                            item.id === data.id && item.object_type === type,
+                            item.id === data.id &&
+                            item.object_type === finalType,
                     );
 
                     foundItems.forEach((item) => {
@@ -79,33 +79,37 @@
         flagErrored = false;
         let newFlag = data.flag ? 0 : 1;
 
-        $API.flag({ type: type, id: data.id, flag: newFlag }).then((result) => {
-            if (result.error) {
-                errorHandler("while flagging", result.error);
-                flagErrored = true;
-                return;
-            }
+        $API.flag({ type: finalType, id: data.id, flag: newFlag }).then(
+            (result) => {
+                if (result.error) {
+                    errorHandler("while flagging", result.error);
+                    flagErrored = true;
+                    return;
+                }
 
-            if (!result.error) {
-                data.flag = newFlag;
-                recentFlag.set({
-                    type: type,
-                    id: data.id,
-                    flag: newFlag,
-                });
+                if (!result.error) {
+                    data.flag = newFlag;
+                    recentFlag.set({
+                        type: finalType,
+                        id: data.id,
+                        flag: newFlag,
+                    });
 
-                // now update any items in the queue with the new fav
-                let foundItems = $NowPlayingQueue.filter(
-                    (item) => item.id === data.id && item.object_type === type,
-                );
+                    // now update any items in the queue with the new fav
+                    let foundItems = $NowPlayingQueue.filter(
+                        (item) =>
+                            item.id === data.id &&
+                            item.object_type === finalType,
+                    );
 
-                foundItems.forEach((item) => {
-                    item.flag = data.flag;
-                });
+                    foundItems.forEach((item) => {
+                        item.flag = data.flag;
+                    });
 
-                updateQueue();
-            }
-        });
+                    updateQueue();
+                }
+            },
+        );
     }
 
     function refreshAverageRating() {
@@ -117,8 +121,8 @@
             podcast: () => $API.podcast({ filter: data.id }),
         };
 
-        if (apiMap[type]) {
-            apiMap[type]().then((r) => {
+        if (apiMap[finalType]) {
+            apiMap[finalType]().then((r) => {
                 if (!r.error) {
                     data.averagerating = r.averagerating;
                 }
@@ -126,13 +130,9 @@
         }
     }
 
-    // override for playlist_songs
-    run(() => {
-        type = type === "playlist_songs" ? "song" : type;
-    });
-    run(() => {
+    $effect(() => {
         if (
-            $recentRating.type === type &&
+            $recentRating.type === finalType &&
             $recentRating.id === data.id &&
             $recentRating.rating !== data.rating
         ) {
@@ -141,7 +141,7 @@
         }
 
         if (
-            $recentFlag.type === type &&
+            $recentFlag.type === finalType &&
             $recentFlag.id === data.id &&
             $recentFlag.flag !== data.flag
         ) {
