@@ -1,6 +1,4 @@
 <script>
-    import { preventDefault } from "svelte/legacy";
-
     import { onMount } from "svelte";
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
@@ -139,7 +137,12 @@
                 {/each}
 
                 <sl-tab-panel name="username">
-                    <form onsubmit={preventDefault(handleSubmit)}>
+                    <form
+                        onsubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                        }}
+                    >
                         <p>
                             <sl-input
                                 label={$_("text.username")}
@@ -187,7 +190,12 @@
                 </sl-tab-panel>
 
                 <sl-tab-panel name="apikey">
-                    <form onsubmit={preventDefault(handleSubmit)}>
+                    <form
+                        onsubmit={(e) => {
+                            e.preventDefault();
+                            handleSubmit();
+                        }}
+                    >
                         <p>
                             <sl-input
                                 label={$_("text.apiKey")}
