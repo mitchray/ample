@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
@@ -25,6 +23,7 @@
 
         console.debug(episodes, "episodes");
     }
+
     let query = $derived(
         createQuery({
             queryKey: ["podcast", params.id],
@@ -46,11 +45,13 @@
     );
     // alias of returned data
     let podcast = $derived($query.data || {});
-    run(() => {
+
+    $effect(() => {
         $PageTitle = podcast?.name || $_("text.podcast");
     });
+
     // grab discs once we load the album
-    run(() => {
+    $effect(() => {
         $query.data, processData();
     });
 </script>
