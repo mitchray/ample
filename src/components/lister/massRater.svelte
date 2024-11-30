@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
@@ -10,7 +8,7 @@
 
     let selectedCount = $state(0);
 
-    run(() => {
+    $effect(() => {
         if (tabulator) {
             tabulator.on(
                 "rowSelectionChanged",
