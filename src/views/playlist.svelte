@@ -1,8 +1,6 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy } from "svelte";
     import { replace, location } from "svelte-spa-router";
     import { API, PageTitle } from "~/stores/state";
     import { getSongsFromPlaylist } from "~/logic/song";
@@ -75,7 +73,7 @@
         });
     }
 
-    onMount(async () => {
+    $effect(async () => {
         if ($location.startsWith("/mix")) {
             // artist mix
             playlistType = "mix";
@@ -137,16 +135,10 @@
         tabulator?.off("dataSorting");
         tabulator?.off("rowMoved");
     });
-    run(() => {
-        songs = songs;
-    });
-    run(() => {
-        playlist = playlist;
-    });
-    run(() => {
+    $effect(() => {
         $PageTitle = playlist?.name || $_("text.playlist");
     });
-    run(() => {
+    $effect.pre(() => {
         tabulator, setupEvents();
     });
 </script>
