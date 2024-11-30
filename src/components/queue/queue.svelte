@@ -1,6 +1,4 @@
 <script>
-    import { run, stopPropagation } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { createVirtualizer } from "@tanstack/svelte-virtual";
     import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
@@ -56,7 +54,8 @@
         }),
     );
     let items = $derived($virtualizer.getVirtualItems());
-    run(() => {
+
+    $effect(() => {
         $QueueVirtualListBind = $virtualizer;
     });
 </script>
@@ -98,7 +97,10 @@
                     <sl-menu>
                         {#if !$IsMobile}
                             <sl-menu-item
-                                onclick={stopPropagation(togglePinned)}
+                                onclick={(e) => {
+                                    e.stopPropagation();
+                                    togglePinned();
+                                }}
                             >
                                 {#if $Settings.QueueIsPinned}
                                     {$_("text.queueUnpin")}
