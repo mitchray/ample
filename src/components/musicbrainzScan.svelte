@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
     import { throttle } from "throttle-wait";
@@ -36,7 +34,7 @@
     });
     let dialog = $state();
 
-    run(() => {
+    $effect(() => {
         queryURL = `https://musicbrainz.org/ws/2/recording/?artist=${
             data.mbid
         }&limit=${limit}&offset=${loadCount * limit}`;
