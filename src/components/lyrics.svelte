@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import Lyrics from "~/logic/lyrics";
     import Portal from "~/components/portal.svelte";
@@ -57,7 +55,7 @@
             follow = true;
         }
     }
-    run(() => {
+    $effect(() => {
         if (lyrics && $CurrentMedia) {
             loading = true;
 
@@ -67,7 +65,7 @@
             loading = false;
         }
     });
-    run(() => {
+    $effect(() => {
         $ShowLyrics ? drawer?.show() : drawer?.hide();
     });
 </script>
