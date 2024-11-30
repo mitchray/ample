@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -15,7 +13,7 @@
     let loadedTime = $state();
 
     // default to artists tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/random/artists`);
     });
 

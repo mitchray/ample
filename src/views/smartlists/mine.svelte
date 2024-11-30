@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { smartlistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -22,6 +20,7 @@
                     return [];
                 }
 
+                // refresh data on subsequent loads
                 tabulator?.setData(result.playlist);
 
                 return result;
@@ -31,10 +30,7 @@
     );
 
     // alias of returned data
-    let smartlists;
-    run(() => {
-        smartlists = $query.data?.playlist || {};
-    });
+    let smartlists = $derived($query.data?.playlist || {});
 </script>
 
 {#if $query.isLoading}
@@ -52,7 +48,7 @@
 
             <Tabulator
                 bind:tabulator
-                bind:data={smartlists}
+                data={smartlists}
                 columns={smartlistsPreset}
                 options={{ id: "smartlists", persistenceID: "smartlists" }}
             ></Tabulator>

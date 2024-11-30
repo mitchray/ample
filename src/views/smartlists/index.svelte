@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -23,7 +21,7 @@
     }
 
     // default to mine tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/smartlists/mine`);
     });
 </script>

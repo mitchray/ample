@@ -1,9 +1,6 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { replace } from "svelte-spa-router";
-    import { onMount } from "svelte";
     import { API, PageTitle } from "~/stores/state.js";
     import General from "~/views/test/general.svelte";
     import Buttons from "~/views/test/buttons.svelte";
@@ -18,7 +15,7 @@
     let data = {};
 
     // default to releases tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/test/general`);
     });
 
@@ -38,7 +35,7 @@
         replace(`#/test/${e.detail.name}`);
     }
 
-    onMount(async () => {
+    $effect(async () => {
         data.playlist = await $API.playlist({ filter: 26 });
 
         if (data.playlist.error) {

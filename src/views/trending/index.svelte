@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import Artists from "~/views/trending/artists.svelte";
@@ -12,7 +10,7 @@
     let { params = {} } = $props();
 
     // default to artists tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/trending/artists`);
     });
 

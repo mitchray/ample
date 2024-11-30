@@ -20,7 +20,7 @@
                     return [];
                 }
 
-                // refresh data
+                // refresh data on subsequent loads
                 tabulator?.setData(result.playlist);
 
                 return result;
