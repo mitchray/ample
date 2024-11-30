@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { API, CurrentMedia } from "~/stores/state.js";
@@ -75,11 +73,9 @@
             bookmarks = bookmarks.filter((b) => b.id !== bookmark.id);
         });
     }
-    run(() => {
+
+    $effect.pre(() => {
         $CurrentMedia, getBookmarks();
-    });
-    run(() => {
-        bookmarks = bookmarks;
     });
 </script>
 
