@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { playlistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -9,7 +7,7 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
 
-    let tabulator = $state(null);
+    let tabulator = $state();
 
     let query = $derived(
         createQuery({
@@ -22,6 +20,7 @@
                     return [];
                 }
 
+                // refresh data
                 tabulator?.setData(result.playlist);
 
                 return result;
@@ -31,10 +30,7 @@
     );
 
     // alias of returned data
-    let playlists;
-    run(() => {
-        playlists = $query.data?.playlist || [];
-    });
+    let playlists = $derived($query.data?.playlist || []);
 </script>
 
 {#if $query.isLoading}
@@ -52,7 +48,7 @@
 
             <Tabulator
                 bind:tabulator
-                bind:data={playlists}
+                data={playlists}
                 columns={playlistsPreset}
                 options={{ id: "playlists", persistenceID: "playlists" }}
             ></Tabulator>
