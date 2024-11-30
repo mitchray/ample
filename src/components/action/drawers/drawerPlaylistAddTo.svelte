@@ -71,7 +71,7 @@
 
     <sl-button
         disabled={selectedPlaylists?.length < 1}
-        onclick={handleSave}
+        onclick={() => handleSave}
         slot="footer"
         variant="primary"
     >
@@ -83,7 +83,7 @@
         bind:this={drawerEdit}
         contained
         isNew={true}
-        on:created={handleSave}
+        eventPlayistSaved={() => handleSave}
     />
 </sl-drawer>
 

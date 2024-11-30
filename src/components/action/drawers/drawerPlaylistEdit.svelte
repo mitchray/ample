@@ -1,18 +1,19 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
-    import { createEventDispatcher } from "svelte";
     import { API } from "~/stores/state.js";
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
     import { Tabulator } from "tabulator-tables";
 
-    let { playlist = $bindable(null), isNew = false, ...rest } = $props();
+    let {
+        playlist = $bindable(null),
+        isNew = false,
+        eventPlaylistSaved,
+        ...rest
+    } = $props();
 
     export const show = () => drawer.show();
-    const dispatch = createEventDispatcher();
 
     let originalName = playlist?.name || null;
     let playlistName = $state(playlist?.name || "");
@@ -20,7 +21,8 @@
     let playlistTypeBoolean = $state(playlist?.type === "public");
     let drawer = $state();
 
-    run(() => {
+    // TODO: make derived
+    $effect(() => {
         playlistType = playlistTypeBoolean ? "public" : "private";
     });
 
@@ -103,7 +105,7 @@
         });
 
         // informs parent component
-        dispatch("created");
+        eventPlaylistSaved;
 
         drawer.hide();
         setDefaults();
