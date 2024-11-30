@@ -1,9 +1,7 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
-    import { groupBy, partition, sortBy } from "lodash-es";
+    import { cloneDeep, groupBy, partition, sortBy } from "lodash-es";
     import { API, User } from "~/stores/state";
     import { Settings } from "~/stores/settings.js";
     import { formatReleaseType } from "~/logic/formatters.js";
@@ -12,13 +10,13 @@
     import RenderReleases from "~/views/artist/_renderReleases.svelte";
     import FeaturedOptions from "~/views/artist/_featuredOptions.svelte";
     import { errorHandler } from "~/logic/helper.js";
-    import { onMount } from "svelte";
 
     let { artistID } = $props();
 
     const releaseTypesOrder = userPreference("album_release_type_sort") || "";
-    let appearances = $state([]);
+    let appearances = [];
     let releases = $state([]);
+    let finalAppearances = $derived(cloneDeep(appearances));
 
     async function processData() {
         // sort entire array together
@@ -75,6 +73,7 @@
 
         releases = grouped;
     }
+
     let query = $derived(
         createQuery({
             queryKey: ["artistAlbums", artistID],
@@ -100,15 +99,17 @@
             },
         }),
     );
-    // run processData whenever $query.data or displayOptions change
-    run(() => {
+
+    // run processData whenever $query.data or $Settings.ArtistReleases change
+    $effect.pre(() => {
         $query.data, processData();
     });
-    run(() => {
+
+    $effect.pre(() => {
         $Settings.ArtistReleases, processData();
     });
 
-    onMount(() => {
+    $effect(() => {
         if (!$Settings.ArtistReleases) {
             $Settings.ArtistReleases.reset();
         }
@@ -204,7 +205,7 @@
             {/each}
         {/if}
 
-        {#if appearances.length > 0}
+        {#if finalAppearances.length > 0}
             <div class="release-group appearances">
                 <h3 class="group-title appearances">
                     <span class="appearances-text">Appears On</span>
@@ -214,13 +215,13 @@
 
                 <RenderReleases
                     view={$Settings.ArtistReleases.view}
-                    items={appearances}
+                    items={finalAppearances}
                     filterToArtistID={artistID}
                 />
             </div>
         {/if}
 
-        {#if !releases && !appearances}
+        {#if !releases && !finalAppearances}
             <p>No items found</p>
         {/if}
     {/if}
