@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
@@ -21,7 +19,7 @@
 
     let tabulator;
 
-    run(() => {
+    $effect(() => {
         // reset results if type changes
         if (type) {
             results = [];
