@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -119,7 +117,8 @@
     function handleClearedPlaylist() {
         $Settings.QueueRefill = { ...$Settings.QueueRefill, smartlist: null };
     }
-    run(() => {
+
+    $effect(() => {
         // test the saved smartlist does exist
         if ($Settings.QueueRefill.smartlist) {
             $API.playlist({
@@ -134,10 +133,12 @@
             });
         }
     });
+
     // when selected playlist changes, pass it back up to the selector component
-    run(() => {
+    $effect(() => {
         selectedPlaylist, (playlistsArray = [selectedPlaylist]);
     });
+
     let shouldAdd = $derived(
         $Settings.QueueRefill.enabled &&
             $NowPlayingQueue.length > 0 &&
@@ -145,7 +146,7 @@
             !isFetching,
     );
 
-    run(() => {
+    $effect(() => {
         if (shouldAdd) {
             clearTimeout(timeout);
             startFetching();
