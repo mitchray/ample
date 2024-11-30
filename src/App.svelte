@@ -189,6 +189,7 @@
             var(--content-padding)
             [full-end];
         grid-auto-rows: min-content;
+        z-index: 1;
     }
 
     :global(.site-content-inner > *) {
