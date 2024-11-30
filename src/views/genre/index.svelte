@@ -1,6 +1,4 @@
 <script>
-    import { run } from "svelte/legacy";
-
     import { _ } from "svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
@@ -13,7 +11,7 @@
     let { params = {} } = $props();
 
     // default to artists tab
-    run(() => {
+    $effect(() => {
         if (!params.section) replace(`#/genre/${params.id}/artists`);
     });
 
@@ -47,7 +45,7 @@
     // alias of returned data
     let genre = $derived($query.data || {});
 
-    run(() => {
+    $effect(() => {
         $PageTitle = genre?.name || $_("text.genre");
     });
 </script>
