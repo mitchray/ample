@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.1.2] - 2024-11-30
+
+### Fixed
+-   Could no longer click things in any browser all of a sudden, but nothing changed...
+
 ## [3.1.1] - 2024-11-18
 
 ### Requires at least Ampache 6.6.0 (untested with 7.x yet)
