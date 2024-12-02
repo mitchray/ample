@@ -648,6 +648,7 @@ export let songsPreset = [
                         type: "song",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                         data: Object.create({
                             album: data.album ? data.album : null,
                             artists:
@@ -716,6 +717,7 @@ export let albumPreset = [
                         type: "song",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                         data: Object.create({
                             album: data.album ? data.album : null,
                             artists:
@@ -835,6 +837,7 @@ export let artistsPreset = [
                         type: "artist",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                         showShuffle: true,
                         data: Object.create({}),
                     },
@@ -893,6 +896,7 @@ export let playlistsPreset = [
                         type: "playlist",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                         showShuffle: true,
                         data: Object.create({
                             playlist: data,
@@ -936,6 +940,7 @@ export let smartlistsPreset = [
                         type: "playlist",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                         showShuffle: true,
                         data: Object.create({}),
                     },
@@ -977,6 +982,7 @@ export let genresPreset = [
                         displayMode: "miniButtons",
                         data: { id: data.id },
                         showShuffle: true,
+                        hoist: true,
                     },
                 });
             });
@@ -1014,6 +1020,7 @@ export let liveStreamsPreset = [
                         type: "live_stream",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                     },
                 });
             });
@@ -1049,6 +1056,7 @@ export let podcastsPreset = [
                         displayMode: "miniButtons",
                         item: data,
                         showShuffle: true,
+                        hoist: true,
                     },
                 });
             });
@@ -1083,6 +1091,7 @@ export let podcastEpisodesPreset = [
                         type: "podcast_episode",
                         displayMode: "miniButtons",
                         item: data,
+                        hoist: true,
                         hideDefaultActions: data.state !== "completed",
                     },
                 });
@@ -1123,6 +1132,7 @@ export let sharesPreset = [
                         displayMode: "miniButtons",
                         item: data,
                         hideDefaultActions: true,
+                        hoist: true,
                     },
                 });
             });

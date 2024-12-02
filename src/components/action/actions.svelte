@@ -59,6 +59,7 @@
         showShuffle = false,
         showLinks = false,
         hideDefaultActions = false,
+        hoist = false,
         data = {},
     } = $props();
 
@@ -403,7 +404,7 @@
             {/if}
 
             {#if type !== "share"}
-                <sl-dropdown hoist bind:this={dropdownBind}>
+                <sl-dropdown {hoist} bind:this={dropdownBind}>
                     <!-- button not shown, only used for positioning the dropdown -->
                     <sl-button
                         slot="trigger"
