@@ -114,27 +114,19 @@
     <sl-dropdown
         class="more"
         onclick={(e) => {
-            // TODO: menu no longer appears
-            //bubble("click");
             e.stopPropagation();
-        }}
-        onsl-show={async () => {
-            media.isActionsLoaded = true;
-            await ticks(2);
         }}
     >
         <sl-button slot="trigger" variant="text">
             <MaterialSymbol name="more_horiz" />
         </sl-button>
 
-        {#if media.isActionsLoaded}
-            <Actions
-                item={media}
-                showLinks={true}
-                type={media.object_type}
-                displayMode="menu"
-            />
-        {/if}
+        <Actions
+            item={media}
+            showLinks={true}
+            type={media.object_type}
+            displayMode="menu"
+        />
     </sl-dropdown>
 
     <div class="test">
