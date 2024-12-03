@@ -357,7 +357,7 @@
     });
 </script>
 
-<sl-dropdown hoist>
+<sl-dropdown>
     <sl-button caret size="small" slot="trigger">Links</sl-button>
 
     <sl-card>
