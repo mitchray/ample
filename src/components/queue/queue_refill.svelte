@@ -95,27 +95,20 @@
     }
 
     function toggleEnabled() {
-        let inverted = !$Settings.QueueRefill.enabled;
-        $Settings.QueueRefill = { ...$Settings.QueueRefill, enabled: inverted };
+        $Settings.QueueRefill.enabled = !$Settings.QueueRefill.enabled;
     }
 
     function handleMode(e) {
-        $Settings.QueueRefill = {
-            ...$Settings.QueueRefill,
-            mode: e.target.value,
-        };
+        $Settings.QueueRefill.mode = e.target.value;
     }
 
     function handleSelectedPlaylist() {
         selectedPlaylist = playlistsArray[0];
-        $Settings.QueueRefill = {
-            ...$Settings.QueueRefill,
-            smartlist: selectedPlaylist,
-        };
+        $Settings.QueueRefill.smartlist = selectedPlaylist;
     }
 
     function handleClearedPlaylist() {
-        $Settings.QueueRefill = { ...$Settings.QueueRefill, smartlist: null };
+        $Settings.QueueRefill.smartlist = null;
     }
 
     $effect(() => {
