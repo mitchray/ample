@@ -143,21 +143,15 @@ class Player {
 
         let item = this.#getCurrentQueueItem();
 
-        if (item) {
+        if (forcePlay || this.isEligibleToPlay(item)) {
             CurrentMedia.set(item);
+        } else if (!this.isEligibleToPlay(item)) {
+            self.next();
+            return;
         } else {
             debugHelper("No items could be found");
             this.#restartQueue();
             return;
-        }
-
-        if (forcePlay) {
-            // carry on
-        } else {
-            if (!this.isEligibleToPlay(item)) {
-                self.next();
-                return;
-            }
         }
 
         try {
