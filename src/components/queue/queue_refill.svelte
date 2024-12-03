@@ -135,12 +135,11 @@
     let shouldAdd = $derived(
         $Settings.QueueRefill.enabled &&
             $NowPlayingQueue.length > 0 &&
-            $NowPlayingIndex > $NowPlayingQueue.length - 10 &&
-            !isFetching,
+            $NowPlayingIndex > $NowPlayingQueue.length - 10,
     );
 
     $effect(() => {
-        if (shouldAdd) {
+        if (shouldAdd && !isFetching) {
             clearTimeout(timeout);
             startFetching();
         }
