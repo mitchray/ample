@@ -245,110 +245,92 @@
 {#if displayMode === "menu"}
     <sl-menu>
         {#if showLinks && item}
-            <sl-menu-item>
-                {$_("text.goTo")}
-                <sl-menu slot="submenu">
-                    {#if type === "live_stream"}
-                        <a href="#/radio-station/{item.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol name="radio" slot="prefix" />
-                                {item.name}
-                            </sl-menu-item>
-                        </a>
-                    {:else if type === "podcast_episode"}
-                        <a href="#/podcast-episode/{item.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol name="podcast" slot="prefix" />
-                                {item.name}
-                            </sl-menu-item>
-                        </a>
-                    {:else if type === "song"}
-                        <a href="#/song/{item.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol
-                                    name="music_note"
-                                    slot="prefix"
-                                />
-                                {item.name}
-                            </sl-menu-item>
-                        </a>
-                    {:else if type === "album"}
-                        <a href="#/album/{item.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol name="album" slot="prefix" />
-                                {item.name}
-                            </sl-menu-item>
-                        </a>
-                    {:else if type === "playlist"}
-                        <a href="#/playlist/{item.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol
-                                    name="queue_music"
-                                    slot="prefix"
-                                />
-                                {item.name}
-                            </sl-menu-item>
-                        </a>
-                    {:else if type === "artistMix"}
-                        <a href="#/mix/artist/{item.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol
-                                    name="queue_music"
-                                    slot="prefix"
-                                />
-                                {item.name}
-                            </sl-menu-item>
-                        </a>
-                    {/if}
+            {#if type === "live_stream"}
+                <a href="#/radio-station/{item.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="radio" slot="prefix" />
+                        {item.name}
+                    </sl-menu-item>
+                </a>
+            {:else if type === "podcast_episode"}
+                <a href="#/podcast-episode/{item.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="podcast" slot="prefix" />
+                        {item.name}
+                    </sl-menu-item>
+                </a>
+            {:else if type === "song"}
+                <a href="#/song/{item.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="music_note" slot="prefix" />
+                        {item.name}
+                    </sl-menu-item>
+                </a>
+            {:else if type === "album"}
+                <a href="#/album/{item.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="album" slot="prefix" />
+                        {item.name}
+                    </sl-menu-item>
+                </a>
+            {:else if type === "playlist"}
+                <a href="#/playlist/{item.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="queue_music" slot="prefix" />
+                        {item.name}
+                    </sl-menu-item>
+                </a>
+            {:else if type === "artistMix"}
+                <a href="#/mix/artist/{item.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="queue_music" slot="prefix" />
+                        {item.name}
+                    </sl-menu-item>
+                </a>
+            {/if}
 
-                    <!-- PARENT ITEMS -->
+            <!-- PARENT ITEMS -->
 
-                    {#if item.album?.id}
-                        <a href="#/album/{item.album.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol name="album" slot="prefix" />
-                                {item.album.name}
-                            </sl-menu-item>
-                        </a>
-                    {/if}
+            {#if item.album?.id}
+                <a href="#/album/{item.album.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="album" slot="prefix" />
+                        {item.album.name}
+                    </sl-menu-item>
+                </a>
+            {/if}
 
-                    {#if item.podcast?.id}
-                        <a href="#/podcast/{item.podcast.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol
-                                    name="swap_calls"
-                                    slot="prefix"
-                                />
-                                {item.podcast.name}
-                            </sl-menu-item>
-                        </a>
-                    {/if}
+            {#if item.podcast?.id}
+                <a href="#/podcast/{item.podcast.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="swap_calls" slot="prefix" />
+                        {item.podcast.name}
+                    </sl-menu-item>
+                </a>
+            {/if}
 
-                    {#if item.artists?.length > 0}
-                        {#each item.artists as artist}
-                            <a href="#/artist/{artist.id}">
-                                <sl-menu-item>
-                                    <MaterialSymbol
-                                        name="person"
-                                        slot="prefix"
-                                    />
-                                    {artist.name}
-                                </sl-menu-item>
-                            </a>
-                        {/each}
-                    {/if}
+            {#if item.artists?.length > 0}
+                {#each item.artists as artist}
+                    <a href="#/artist/{artist.id}">
+                        <sl-menu-item>
+                            <MaterialSymbol name="person" slot="prefix" />
+                            {artist.name}
+                        </sl-menu-item>
+                    </a>
+                {/each}
+            {/if}
 
-                    <!-- add album artist if not already in artists -->
-                    {#if item.albumArtist?.id && item.artists?.length > 0 && !item.artists.find((artist) => artist.id === item.albumArtist.id)}
-                        <a href="#/artist/{item.albumArtist.id}">
-                            <sl-menu-item>
-                                <MaterialSymbol name="person" slot="prefix" />
-                                {item.albumArtist.name}
-                            </sl-menu-item>
-                        </a>
-                    {/if}
-                </sl-menu>
-            </sl-menu-item>
+            <!-- add album artist if not already in artists -->
+            {#if item.albumArtist?.id && item.artists?.length > 0 && !item.artists.find((artist) => artist.id === item.albumArtist.id)}
+                <a href="#/artist/{item.albumArtist.id}">
+                    <sl-menu-item>
+                        <MaterialSymbol name="person" slot="prefix" />
+                        {item.albumArtist.name}
+                    </sl-menu-item>
+                </a>
+            {/if}
+
+            <sl-divider></sl-divider>
         {/if}
 
         {#if type === "playlist"}
