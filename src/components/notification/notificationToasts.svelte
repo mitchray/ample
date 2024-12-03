@@ -10,13 +10,14 @@
     import { SiteContentBind } from "~/stores/elements.js";
     import { Notifications } from "~/stores/message";
     import NotificationList from "~/components/notification/_notificationList.svelte";
+    import { onDestroy, onMount } from "svelte";
 
     let timeout;
     let autoTimeout;
     let freshNotifications = $derived(
-        $Notifications.filter((e) => e.fresh === true && !e.isSilent),
+        $Notifications.filter((e) => e.fresh === true && !e.isSilent) || [],
     );
-    let listBind = $state();
+    let listBind;
     let autoUpdateCleanup;
 
     function start() {
@@ -26,9 +27,9 @@
     }
 
     function finish() {
-        $Notifications.forEach((item) => {
-            item.fresh = false;
-        });
+        for (let i = 0; i < $Notifications.length; i++) {
+            $Notifications[i].fresh = false;
+        }
     }
 
     function handleEnter() {
@@ -78,6 +79,12 @@
     }
 
     $effect(() => {
+        if (freshNotifications.length > 0) {
+            start();
+        }
+    });
+
+    onMount(() => {
         updatePosition();
 
         autoUpdateCleanup = autoUpdate(
@@ -85,15 +92,11 @@
             listBind,
             updatePosition,
         );
+    });
 
-        if (freshNotifications.length > 0) {
-            start();
-        }
-
-        return () => {
-            // floating-ui
-            autoUpdateCleanup();
-        };
+    onDestroy(() => {
+        // floating-ui
+        autoUpdateCleanup();
     });
 </script>
 
