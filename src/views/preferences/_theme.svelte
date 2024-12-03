@@ -15,7 +15,7 @@
         e.target.style.setProperty("--the-hue", theVal);
 
         // actual theme color
-        $Settings.Theme = { ...$Settings.Theme, [name]: theVal };
+        $Settings.Theme[name] = theVal;
     }
 </script>
 
@@ -34,7 +34,7 @@
     <sl-switch
         checked={$Settings.Theme.isGray}
         onsl-change={(e) => {
-            $Settings.Theme = { ...$Settings.Theme, isGray: e.target.checked };
+            $Settings.Theme.isGray = e.target.checked;
         }}
     >
         {$_("text.colorGray")}
@@ -70,7 +70,7 @@
 <div>
     <sl-color-picker
         onsl-input={(e) => {
-            $Settings.Theme = { ...$Settings.Theme, colorWave: e.target.value };
+            $Settings.Theme.colorWave = e.target.value;
         }}
         value={$Settings.Theme.colorWave}
     ></sl-color-picker>

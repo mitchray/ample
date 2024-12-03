@@ -5,8 +5,8 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function toggleTheme() {
-        let mode = $Settings.Theme.mode === "dark" ? "light" : "dark";
-        $Settings.Theme = { ...$Settings.Theme, mode: mode };
+        $Settings.Theme.mode =
+            $Settings.Theme.mode === "dark" ? "light" : "dark";
     }
 
     let text = $derived(

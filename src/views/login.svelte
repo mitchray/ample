@@ -64,7 +64,7 @@
         $API = new AmpacheAPI({ url: $Server.ampacheURL, debug: $debugMode });
 
         $API.ping().then((result) => {
-            $Server = { ...$Server, version: result.version };
+            $Server.version = result.version;
         });
     }
 
