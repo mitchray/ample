@@ -205,8 +205,6 @@ class Player {
             this.wavesurfer
                 .play()
                 .then(async () => {
-                    // (re)set the playback speed
-                    this.setPlaybackRate(get(PlaybackSpeed));
                     this.#runChecks(item);
                 })
                 .catch((e) => {
@@ -669,6 +667,7 @@ class Player {
         this.wavesurfer.on("play", function () {
             debugHelper("Wavesurfer playing");
             IsPlaying.set(true);
+            self.setPlaybackRate(get(PlaybackSpeed));
         });
 
         this.wavesurfer.on("pause", function () {
