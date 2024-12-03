@@ -11,10 +11,13 @@
     import { SiteContentBind } from "~/stores/elements.js";
     import { AlertsList } from "~/stores/message.js";
     import AlertCard from "~/components/alert/alertCard.svelte";
+    import { onDestroy, onMount } from "svelte";
 
-    let timeout = null;
-    let freshAlerts = $derived($AlertsList.filter((e) => e.fresh === true));
-    let listBind = null;
+    let timeout;
+    let freshAlerts = $derived(
+        $AlertsList.filter((e) => e.fresh === true) || [],
+    );
+    let listBind;
     let autoUpdateCleanup;
 
     function handleEnter(e) {
@@ -31,11 +34,8 @@
 
     function startTimeout() {
         timeout = setTimeout(() => {
-            // just in case its gone before actioning
-            let lastItem = freshAlerts.length - 1;
-
-            if (freshAlerts[lastItem]) {
-                freshAlerts[lastItem].fresh = false;
+            for (let i = 0; i < $AlertsList.length; i++) {
+                $AlertsList[i].fresh = false;
             }
         }, 3000);
     }
@@ -66,7 +66,18 @@
         });
     }
 
+    function start() {
+        clearTimeout(timeout);
+        startTimeout();
+    }
+
     $effect(() => {
+        if (freshAlerts.length > 0) {
+            start();
+        }
+    });
+
+    onMount(() => {
         updatePosition();
 
         autoUpdateCleanup = autoUpdate(
@@ -74,17 +85,11 @@
             listBind,
             updatePosition,
         );
+    });
 
-        if (freshAlerts.length > 0) {
-            clearTimeout(timeout);
-
-            startTimeout();
-        }
-
-        return () => {
-            // floating-ui
-            autoUpdateCleanup();
-        };
+    onDestroy(() => {
+        // floating-ui
+        autoUpdateCleanup();
     });
 </script>
 
