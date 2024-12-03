@@ -9,6 +9,11 @@
         <sl-radio>That</sl-radio>
     </sl-radio-group>
 
+    <sl-radio-group name="mode">
+        <sl-radio-button value="one">One</sl-radio-button>
+        <sl-radio-button value="two">Two</sl-radio-button>
+    </sl-radio-group>
+
     <sl-input placeholder="Example" type="text"></sl-input>
 
     <sl-button>Button</sl-button>

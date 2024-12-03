@@ -687,6 +687,14 @@
 }
 
 /* --------------------------
+   Override Shoelace tokens
+   -------------------------- */
+:root {
+    --sl-color-primary-700: var(--swatch-primary-600);
+    --sl-color-primary-600: var(--swatch-primary-500);
+}
+
+/* --------------------------
    General style rules
    -------------------------- */
 
