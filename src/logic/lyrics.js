@@ -17,9 +17,7 @@ class Lyrics {
         this.API = get(API);
 
         CurrentMedia.subscribe(async (value) => {
-            this.currentMedia = value;
-
-            await this.setLyrics();
+            await this.setLyrics(value);
         });
 
         this._store = writable(this);
@@ -29,39 +27,39 @@ class Lyrics {
         return this._store.subscribe(subscriber);
     }
 
-    async getLyrics() {
-        if (this.currentMedia?.object_type !== "song") return null;
-        let song = await this.API.song({ filter: this.currentMedia?.id });
+    async getLyrics(item) {
+        if (item?.object_type !== "song") return null;
+        let song = await this.API.song({ filter: item?.id });
         return song?.lyrics;
     }
 
-    async setLyrics() {
-        if (this.currentMedia) {
-            this.lyricsRaw = await this.getLyrics();
+    async setLyrics(item) {
+        if (item) {
+            this.lyricsRaw = await this.getLyrics(item);
 
             this.lyricsFinal = [];
 
             this.currentLine = null;
             this._store.set(this);
 
-            this.parseLyrics();
+            this.parseLyrics(item);
         }
     }
 
-    parseLyrics() {
+    parseLyrics(item) {
         let tagRegex = /\[([a-z]+):(.*)].*/;
         let lrcAllRegex = /(\[[0-9.:\[\]]*])+(.*)/;
         let timeRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])/;
         let textRegex = /(?:\[(?:[0-9]+):(?:[0-9.]+)])?(.*)/;
 
         // only care about songs
-        if (this.currentMedia.object_type !== "song") {
+        if (item.object_type !== "song") {
             return;
         }
 
         // notify if missing lyrics
         if (!this.hasLyrics()) {
-            addLyricsMissingNotification(this.currentMedia);
+            addLyricsMissingNotification(item);
             return;
         }
 
@@ -114,7 +112,7 @@ class Lyrics {
 
         // notify if lyrics are not timestamped
         if (this.hasLyrics() && !lyricsAreTimestamped(this.lyricsRaw)) {
-            addLyricsNotTimestampedNotification(this.currentMedia);
+            addLyricsNotTimestampedNotification(item);
         }
 
         this.lyricsFinal.reverse();
