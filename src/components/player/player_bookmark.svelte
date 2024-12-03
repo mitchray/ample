@@ -103,7 +103,7 @@
         position: absolute;
         top: 50%;
         left: 0;
-        background-color: var(--color-waveform);
+        background-color: currentcolor;
         border: 2px solid var(--color-surface-container);
         border-radius: 999px;
         width: 5px;
