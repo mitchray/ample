@@ -5,6 +5,7 @@
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
     import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
     import { throttle } from "lodash-es";
+    import { untrack } from "svelte";
 
     let lyrics = new Lyrics(); // custom store
     let follow = $state(true);
@@ -55,16 +56,20 @@
             follow = true;
         }
     }
+
     $effect(() => {
         if (lyrics && $CurrentMedia) {
-            loading = true;
+            untrack(() => {
+                loading = true;
 
-            // reset any previous instance
-            resetEvents();
+                // reset any previous instance
+                resetEvents();
 
-            loading = false;
+                loading = false;
+            });
         }
     });
+
     $effect(() => {
         $ShowLyrics ? drawer?.show() : drawer?.hide();
     });
