@@ -5,13 +5,14 @@
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
     import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
     import { throttle } from "lodash-es";
-    import { untrack } from "svelte";
+    import { tick, untrack } from "svelte";
 
     let lyrics = new Lyrics(); // custom store
     let follow = $state(true);
     let loading = $state(true);
     let drawer = $state();
     let container = $state();
+    let currentLine = $state();
 
     function handleClose(event) {
         // ignore bubbled sl-hide events from other components
@@ -26,7 +27,7 @@
         $MediaPlayer.wavesurfer.un("timeupdate", throttledAction);
         $MediaPlayer.wavesurfer.on("timeupdate", throttledAction);
 
-        container.scrollTop = 0;
+        if (container) container.scrollTop = 0;
 
         follow = true; // just force it on, won't impact non-synced lyrics
     }
@@ -36,14 +37,16 @@
     }
 
     function scrollToLine() {
-        container.querySelector(".current")?.scrollIntoView({
+        currentLine?.scrollIntoView({
             block: "center",
             behavior: "smooth",
         });
     }
 
-    function changeLine() {
+    async function changeLine() {
         $lyrics.move($MediaPlayer.getCurrentTime());
+        await tick();
+        currentLine = container?.querySelector(".current");
 
         if (follow) {
             scrollToLine();
