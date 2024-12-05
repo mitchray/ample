@@ -27,7 +27,8 @@
         $MediaPlayer.wavesurfer.on("timeupdate", throttledAction);
 
         container.scrollTop = 0;
-        follow = $lyrics.isTimestamped;
+
+        follow = true; // just force it on, won't impact non-synced lyrics
     }
 
     function handleScroll() {
