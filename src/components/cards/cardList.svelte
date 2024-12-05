@@ -75,7 +75,7 @@
         if (latest.error) {
             errorHandler("getting latest update", latest.error);
         } else {
-            if (latest[0].id !== data[0]?.id) {
+            if (latest[0]?.id !== data[0]?.id) {
                 latest[0]._id = uuidv4(); // ensures unique key
                 data = [latest[0], ...data];
             }
