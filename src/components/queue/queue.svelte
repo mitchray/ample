@@ -78,7 +78,7 @@
             <sl-button-group>
                 <sl-button
                     class="show-current"
-                    onclick={showQueueItemAtIndex($NowPlayingIndex)}
+                    onclick={() => showQueueItemAtIndex($NowPlayingIndex)}
                     size="small"
                     title={$_("text.queueShowCurrent")}
                 >
