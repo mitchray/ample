@@ -1,24 +1,11 @@
-<script module>
-    import { writable } from "svelte/store";
-
-    // shared across component instances
-    let recentRating = writable({
-        type: null,
-        id: null,
-        rating: null,
-    });
-
-    // shared across component instances
-    let recentFlag = writable({
-        type: null,
-        id: null,
-        flag: null,
-    });
-</script>
-
 <script>
     import { _ } from "svelte-i18n";
-    import { API, NowPlayingQueue } from "~/stores/state.js";
+    import {
+        API,
+        NowPlayingQueue,
+        recentRating,
+        recentFlag,
+    } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { updateQueue } from "~/logic/ui.js";
@@ -68,6 +55,7 @@
                         item.rating = newRating;
                     });
 
+                    // TODO is this still required
                     updateQueue();
                     refreshAverageRating();
                 }

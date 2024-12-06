@@ -75,3 +75,16 @@ export const IsMobile = readable(false, function start(set) {
 
     return function stop() {};
 });
+
+export let recentRating = writable({
+    type: null,
+    id: null,
+    rating: null,
+});
+
+// shared across component instances
+export let recentFlag = writable({
+    type: null,
+    id: null,
+    flag: null,
+});
