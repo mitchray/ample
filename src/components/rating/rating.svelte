@@ -10,7 +10,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import { updateQueue } from "~/logic/ui.js";
 
-    let { type = $bindable(null), data = {} } = $props();
+    let { type = $bindable(null), data = $bindable({}) } = $props();
 
     let showAverageRatings = true;
     let ratingErrored = $state(false);

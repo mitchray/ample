@@ -6,7 +6,10 @@
 {#key $CurrentMedia || 0}
     {#if $CurrentMedia}
         {#if $CurrentMedia.object_type !== "live_stream"}
-            <Rating type={$CurrentMedia.object_type} data={$CurrentMedia} />
+            <Rating
+                type={$CurrentMedia.object_type}
+                bind:data={$CurrentMedia}
+            />
         {/if}
     {:else}
         <Rating type="song" />

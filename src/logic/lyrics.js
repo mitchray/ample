@@ -15,9 +15,15 @@ class Lyrics {
         this.lyricsFinal = [];
         this.isTimestamped = false;
         this.API = get(API);
+        this.previousID = null;
 
         CurrentMedia.subscribe(async (value) => {
-            await this.setLyrics(value);
+            let id = value?.id + value?.object_type;
+
+            if (id !== this.previousID) {
+                this.previousID = id;
+                await this.setLyrics(value);
+            }
         });
 
         this._store = writable(this);

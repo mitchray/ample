@@ -8,6 +8,7 @@
 
     let bookmarks = $state([]);
     let clickTimeout;
+    let previousID = null;
 
     function addBookmark() {
         if (!$CurrentMedia) return;
@@ -27,13 +28,13 @@
         });
     }
 
-    function getBookmarks() {
+    function getBookmarks(media) {
         bookmarks = [];
-        if (!$CurrentMedia) return;
+        if (!media) return;
 
         $API.getBookmark({
-            filter: $CurrentMedia.id,
-            type: $CurrentMedia.object_type,
+            filter: media.id,
+            type: media.object_type,
             all: 1,
         }).then((result) => {
             if (result.error) {
@@ -74,8 +75,13 @@
         });
     }
 
-    $effect.pre(() => {
-        $CurrentMedia, getBookmarks();
+    CurrentMedia.subscribe((value) => {
+        let id = value?.id + value?.object_type || null;
+
+        if (id !== previousID) {
+            getBookmarks(value);
+            previousID = id;
+        }
     });
 </script>
 
