@@ -5,7 +5,6 @@
     import { Tabulator } from "tabulator-tables";
     import { addAlert } from "~/logic/alert.js";
 
-    export const show = () => drawer.show();
     let { share = $bindable({}), isNew = false } = $props();
 
     let drawer = $state();
@@ -14,18 +13,17 @@
     let description = $state();
     let expiryDays = $state();
 
+    export const show = () => {
+        resetValues();
+        drawer.show();
+    };
+
     function resetValues() {
         canStream = share.allow_stream;
         canDownload = share.allow_download;
         description = share.description;
         expiryDays = share.expire_days;
     }
-
-    $effect.pre(() => {
-        if (share) {
-            resetValues();
-        }
-    });
 
     async function handleSave() {
         await $API.shareEdit({
