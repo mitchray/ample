@@ -23,7 +23,7 @@
             isGray: getIsGray(),
         };
     }}
-    style="--preview-chroma-override: {getIsGray() ? 0 : null}"
+    style={getIsGray() ? "--preview-chroma-override: 0" : false}
 >
     <div class="header">
         <sl-skeleton
