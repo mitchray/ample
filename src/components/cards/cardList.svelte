@@ -3,6 +3,7 @@
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { onMount } from "svelte";
 
     /** @type {{card: any, type: any, initialData?: any, refresh?: boolean, limit?: any, heading?: any, showOnlyThese?: boolean, dataProvider?: any, viewAllURL?: any, genericOverride?: boolean, autoRefreshInterval?: any, layout: 'grid' | 'scroll'}} */
     let {
@@ -31,7 +32,7 @@
     let observer;
 
     // Load initial data
-    $effect.root(async () => {
+    onMount(async () => {
         // if starting off with preloaded data, kick off the loadCount
         if (initialData.length > 0) {
             data.push(...initialData);

@@ -4,6 +4,7 @@
     import { API } from "~/stores/state.js";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
+    import { onMount } from "svelte";
 
     export const show = () => drawer.show();
     let { songs = $bindable() } = $props();
@@ -41,7 +42,7 @@
             ignoreDuplicates = parseInt(result.value) === 1;
         });
     }
-    $effect.root(async () => {
+    onMount(async () => {
         // not using store version due to updating locally
         let uniquePlaylistPref = await $API.userPreference({
             filter: "unique_playlist",

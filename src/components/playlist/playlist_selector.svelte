@@ -1,5 +1,5 @@
 <script>
-    import { createEventDispatcher } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
 
@@ -49,7 +49,7 @@
         }
     }
 
-    $effect.root(() => {
+    onMount(() => {
         loadData();
     });
 </script>
