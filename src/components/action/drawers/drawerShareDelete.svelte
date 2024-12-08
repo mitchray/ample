@@ -5,7 +5,8 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Tabulator } from "tabulator-tables";
 
-    let { share = null } = $props();
+    let { share = $bindable(null) } = $props();
+
     export const show = () => drawer.show();
 
     let drawer = $state();
