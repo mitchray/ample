@@ -1,6 +1,7 @@
 <script>
     import { getContext } from "svelte";
     import { Settings } from "~/stores/settings.js";
+    import { capitalize } from "lodash-es";
 
     let { mode, contextKey } = $props();
 
@@ -13,10 +14,9 @@
     class="container c-theme-card sl-theme-{mode}"
     data-uid={contextKey}
     onclick={() => {
-        $Settings.Theme = {
-            ...$Settings.Theme,
-            mode: mode,
-            colorWave: colors.wave,
+        $Settings.Theme.mode = mode;
+        $Settings.Theme[capitalize(mode)] = {
+            colorWave: colors.colorWave,
             hue1: colors.hue1,
             hue2: colors.hue2,
             hueBackground: colors.hueBackground,

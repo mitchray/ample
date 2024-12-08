@@ -15,7 +15,7 @@
 
 {@html `<style>
     .sl-theme-dark.container[data-uid="${contextKey}"]  {
-        --preview-color-waveform: ${colors.wave};
+        --preview-color-waveform: ${colors.colorWave};
         --preview-color-1: oklch(var(--lightness-600) var(--chroma-600) ${colors.hue1});
         --preview-color-2: oklch(var(--lightness-600) var(--chroma-600) ${colors.hue2});
         --preview-color-background: oklch(
@@ -34,7 +34,7 @@
 
     .sl-theme-light.container[data-uid="${contextKey}"] {
         /*--chroma-override: 0;*/
-        --preview-color-waveform: ${colors.wave};
+        --preview-color-waveform: ${colors.colorWave};
         --preview-color-1: oklch(var(--lightness-400) var(--chroma-400) ${colors.hue1});
         --preview-color-2: oklch(var(--lightness-400) var(--chroma-400) ${colors.hue2});
         --preview-color-background: oklch(

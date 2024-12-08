@@ -38,11 +38,20 @@ export let Settings = persisted("ample-settings", {
     },
     Theme: {
         mode: null,
-        hueBackground: 60,
-        hue1: 60,
-        hue2: 60,
-        colorWave: "hsl(30, 70%, 50%)",
-        isGray: true,
+        Dark: {
+            hueBackground: 60,
+            hue1: 60,
+            hue2: 60,
+            colorWave: "hsl(30, 70%, 50%)",
+            isGray: true,
+        },
+        Light: {
+            hueBackground: 250,
+            hue1: 250,
+            hue2: 250,
+            colorWave: "hsl(207, 88%, 54%)",
+            isGray: true,
+        },
     },
     Notifications: {
         GainTagsMissing: {

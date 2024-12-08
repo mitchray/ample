@@ -1,6 +1,10 @@
 <script>
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
+    import { capitalize } from "lodash-es";
+    import { derived } from "svelte/store";
+
+    let themeMode = $derived(capitalize($Settings.Theme.mode) || null);
 
     function handleChange() {
         // update waveform colors when theme is toggled
@@ -32,14 +36,14 @@
 
 {@html `<style>
 :root {
-    --user-hue-background: ${$Settings.Theme.hueBackground};
-    --user-hue-accent-1: ${$Settings.Theme.hue1};
-    --user-hue-accent-2: ${$Settings.Theme.hue2};
-    --user-color-waveform: ${$Settings.Theme.colorWave};
+    --user-hue-background: ${$Settings.Theme[themeMode]?.hueBackground};
+    --user-hue-accent-1: ${$Settings.Theme[themeMode]?.hue1};
+    --user-hue-accent-2: ${$Settings.Theme[themeMode]?.hue2};
+    --user-color-waveform: ${$Settings.Theme[themeMode]?.colorWave};
 }
 </style>`}
 
-{#if $Settings.Theme.isGray}
+{#if $Settings.Theme[themeMode]?.isGray}
     {@html `<style>
 :root {
     --chroma-override: 0.008;

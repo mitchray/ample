@@ -128,6 +128,39 @@ const migrations = [
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings));
 
             /**
+             * Separate light and dark theme
+             */
+            settings =
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
+
+            let darkSettings = {
+                colorWave: settings?.Theme?.colorWave || 60,
+                hue1: settings?.Theme?.hue1 || 60,
+                hue2: settings?.Theme?.hue2 || 60,
+                hueBackground: settings?.Theme?.hue2 || 60,
+                isGray: settings?.Theme?.isGray || true,
+            };
+
+            let lightSettings = {
+                colorWave: settings?.Theme?.colorWave || 250,
+                hue1: settings?.Theme?.hue1 || 250,
+                hue2: settings?.Theme?.hue2 || 250,
+                hueBackground: settings?.Theme?.hue2 || 250,
+                isGray: settings?.Theme?.isGray || true,
+            };
+
+            // add new temp keys
+            settings["Theme"]["Dark"] = darkSettings;
+            settings["Theme"]["Light"] = lightSettings;
+
+            // remove old
+            delete settings["Theme"]["colorWave"];
+            delete settings["Theme"]["hue1"];
+            delete settings["Theme"]["hue2"];
+            delete settings["Theme"]["hueBackground"];
+            delete settings["Theme"]["isGray"];
+
+            /**
              * Notifications consolidated
              */
             settings =

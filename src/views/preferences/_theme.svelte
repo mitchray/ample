@@ -2,6 +2,7 @@
     import { _ } from "svelte-i18n";
     import ThemePreview from "~/components/theme/themePreview.svelte";
     import { Settings } from "~/stores/settings.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function parseHue(cssHSL) {
         const match = cssHSL.match(/hsl\((\d+),/);
@@ -19,74 +20,177 @@
     }
 </script>
 
-<div>
-    <sl-color-picker
-        class="hue-only"
-        format="hsl"
-        onsl-input={(e) => {
-            setHue(e, "hueBackground");
-        }}
-        style="--the-hue: {$Settings.Theme.hueBackground};"
-        value="hsl(--the-hue, 70%, 50%)"
-    ></sl-color-picker>
-    {$_("text.colorBackground")}
+<div class="container">
+    <div class="theme dark">
+        <h2 class="heading">Dark Theme Colours</h2>
 
-    <sl-switch
-        checked={$Settings.Theme.isGray}
-        onsl-change={(e) => {
-            $Settings.Theme.isGray = e.target.checked;
-        }}
-    >
-        {$_("text.colorGray")}
-    </sl-switch>
+        <div>
+            <sl-color-picker
+                class="hue-only"
+                format="hsl"
+                onsl-input={(e) => {
+                    setHue(e, "hueBackground");
+                }}
+                style="--the-hue: {$Settings.Theme.Dark.hueBackground};"
+                value="hsl(--the-hue, 70%, 50%)"
+                disabled={$Settings.Theme.Dark.isGray}
+            ></sl-color-picker>
+            {$_("text.colorBackground")}
+
+            <sl-switch
+                style="margin-inline-start: 20px"
+                checked={$Settings.Theme.Dark.isGray}
+                onsl-change={(e) => {
+                    $Settings.Theme.Dark.isGray = e.target.checked;
+                }}
+            >
+                {$_("text.colorGray")}
+            </sl-switch>
+        </div>
+
+        <div>
+            <sl-color-picker
+                class="hue-only"
+                format="hsl"
+                onsl-input={(e) => {
+                    setHue(e, "hue1");
+                }}
+                style="--the-hue: {$Settings.Theme.Dark.hue1};"
+                value="hsl(var(--the-hue), 70%, 50%)"
+            ></sl-color-picker>
+            {$_("text.colorAccent1")}
+        </div>
+
+        <div>
+            <sl-color-picker
+                class="hue-only"
+                format="hsl"
+                onsl-input={(e) => {
+                    setHue(e, "hue2");
+                }}
+                style="--the-hue: {$Settings.Theme.Dark.hue2};"
+                value="hsl(var(--the-hue), 70%, 50%)"
+            ></sl-color-picker>
+            {$_("text.colorAccent2")}
+        </div>
+
+        <div>
+            <sl-color-picker
+                onsl-input={(e) => {
+                    $Settings.Theme.Dark.colorWave = e.target.value;
+                }}
+                value={$Settings.Theme.Dark.colorWave}
+            ></sl-color-picker>
+            {$_("text.colorWaveform")}
+        </div>
+
+        <sl-divider></sl-divider>
+
+        <sl-button
+            onclick={() => {
+                $Settings.Theme["Light"] = {
+                    colorWave: $Settings.Theme.Dark.colorWave,
+                    hue1: $Settings.Theme.Dark.hue1,
+                    hue2: $Settings.Theme.Dark.hue2,
+                    hueBackground: $Settings.Theme.Dark.hueBackground,
+                    isGray: $Settings.Theme.Dark.isGray,
+                };
+            }}
+        >
+            Copy to Light Theme
+            <MaterialSymbol slot="suffix" name="arrow_forward" />
+        </sl-button>
+    </div>
+
+    <div class="theme light">
+        <h2 class="heading">Light Theme Colours</h2>
+        <div>
+            <sl-color-picker
+                class="hue-only"
+                format="hsl"
+                onsl-input={(e) => {
+                    setHue(e, "hueBackground");
+                }}
+                style="--the-hue: {$Settings.Theme.Light.hueBackground};"
+                value="hsl(--the-hue, 70%, 50%)"
+                disabled={$Settings.Theme.Light.isGray}
+            ></sl-color-picker>
+            {$_("text.colorBackground")}
+
+            <sl-switch
+                style="margin-inline-start: 20px"
+                checked={$Settings.Theme.Light.isGray}
+                onsl-change={(e) => {
+                    $Settings.Theme.Light.isGray = e.target.checked;
+                }}
+            >
+                {$_("text.colorGray")}
+            </sl-switch>
+        </div>
+
+        <div>
+            <sl-color-picker
+                class="hue-only"
+                format="hsl"
+                onsl-input={(e) => {
+                    setHue(e, "hue1");
+                }}
+                style="--the-hue: {$Settings.Theme.Light.hue1};"
+                value="hsl(var(--the-hue), 70%, 50%)"
+            ></sl-color-picker>
+            {$_("text.colorAccent1")}
+        </div>
+
+        <div>
+            <sl-color-picker
+                class="hue-only"
+                format="hsl"
+                onsl-input={(e) => {
+                    setHue(e, "hue2");
+                }}
+                style="--the-hue: {$Settings.Theme.Light.hue2};"
+                value="hsl(var(--the-hue), 70%, 50%)"
+            ></sl-color-picker>
+            {$_("text.colorAccent2")}
+        </div>
+
+        <div>
+            <sl-color-picker
+                onsl-input={(e) => {
+                    $Settings.Theme.Light.colorWave = e.target.value;
+                }}
+                value={$Settings.Theme.Light.colorWave}
+            ></sl-color-picker>
+            {$_("text.colorWaveform")}
+        </div>
+
+        <sl-divider></sl-divider>
+
+        <sl-button
+            onclick={() => {
+                $Settings.Theme["Dark"] = {
+                    colorWave: $Settings.Theme.Light.colorWave,
+                    hue1: $Settings.Theme.Light.hue1,
+                    hue2: $Settings.Theme.Light.hue2,
+                    hueBackground: $Settings.Theme.Light.hueBackground,
+                    isGray: $Settings.Theme.Light.isGray,
+                };
+            }}
+        >
+            <MaterialSymbol slot="prefix" name="arrow_back" />
+            Copy to Dark Theme
+        </sl-button>
+    </div>
 </div>
-
-<div>
-    <sl-color-picker
-        class="hue-only"
-        format="hsl"
-        onsl-input={(e) => {
-            setHue(e, "hue1");
-        }}
-        style="--the-hue: {$Settings.Theme.hue1};"
-        value="hsl(var(--the-hue), 70%, 50%)"
-    ></sl-color-picker>
-    {$_("text.colorAccent1")}
-</div>
-
-<div>
-    <sl-color-picker
-        class="hue-only"
-        format="hsl"
-        onsl-input={(e) => {
-            setHue(e, "hue2");
-        }}
-        style="--the-hue: {$Settings.Theme.hue2};"
-        value="hsl(var(--the-hue), 70%, 50%)"
-    ></sl-color-picker>
-    {$_("text.colorAccent2")}
-</div>
-
-<div>
-    <sl-color-picker
-        onsl-input={(e) => {
-            $Settings.Theme.colorWave = e.target.value;
-        }}
-        value={$Settings.Theme.colorWave}
-    ></sl-color-picker>
-    {$_("text.colorWaveform")}
-</div>
-
-<sl-divider></sl-divider>
 
 <h2 class="heading">Presets</h2>
 
-<!-- wave base oklch(65% 0.17 HUE) -->
+<!-- colorWave base oklch(65% 0.17 HUE) -->
 
 <div class="presets">
     <ThemePreview
         colors={{
-            wave: "#ff9d00",
+            colorWave: "#ff9d00",
             hue1: 60,
             hue2: 60,
             hueBackground: 60,
@@ -97,7 +201,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(207, 88%, 54%)",
+            colorWave: "hsl(207, 88%, 54%)",
             hue1: 250,
             hue2: 250,
             hueBackground: 250,
@@ -108,7 +212,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(108, 49%, 44%)",
+            colorWave: "hsl(108, 49%, 44%)",
             hue1: 140,
             hue2: 100,
             hueBackground: 140,
@@ -119,7 +223,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(5, 94%, 58%)",
+            colorWave: "hsl(5, 94%, 58%)",
             hue1: 30,
             hue2: 30,
             hueBackground: 30,
@@ -130,7 +234,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(166, 100%, 33%)",
+            colorWave: "hsl(166, 100%, 33%)",
             hue1: 170,
             hue2: 350,
             hueBackground: 290,
@@ -141,7 +245,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(33, 100%, 41%)",
+            colorWave: "hsl(33, 100%, 41%)",
             hue1: 60,
             hue2: 120,
             hueBackground: 140,
@@ -152,7 +256,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(253, 100%, 72%)",
+            colorWave: "hsl(253, 100%, 72%)",
             hue1: 320,
             hue2: 320,
             hueBackground: 290,
@@ -163,7 +267,7 @@
 
     <ThemePreview
         colors={{
-            wave: "hsl(186, 100%, 35%)",
+            colorWave: "hsl(186, 100%, 35%)",
             hue1: 240,
             hue2: 210,
             hueBackground: 250,
@@ -174,6 +278,18 @@
 </div>
 
 <style>
+    .container {
+        display: flex;
+        gap: var(--spacing-md);
+        margin-block-end: var(--spacing-xl);
+    }
+
+    .theme {
+        background-color: var(--color-surface-container);
+        padding: var(--spacing-lg);
+        border-radius: var(--spacing-md);
+    }
+
     sl-color-picker.hue-only::part(swatches),
     sl-color-picker.hue-only::part(grid),
     sl-color-picker.hue-only::part(opacity-slider),
