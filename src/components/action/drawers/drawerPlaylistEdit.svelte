@@ -13,18 +13,19 @@
         ...rest
     } = $props();
 
-    export const show = () => drawer.show();
+    export const show = () => {
+        resetValues();
+        drawer.show();
+    };
+
+    let defaultName = "";
+    let defaultType = "private";
 
     let originalName = playlist?.name || null;
-    let playlistName = $state(playlist?.name || "");
+    let playlistName = $state(playlist?.name || defaultName);
     let playlistType = $state(playlist?.type || "private");
-    let playlistTypeBoolean = $state(playlist?.type === "public");
+    let playlistTypeBoolean = $derived(playlistType === "public");
     let drawer = $state();
-
-    // TODO: make derived
-    $effect(() => {
-        playlistType = playlistTypeBoolean ? "public" : "private";
-    });
 
     async function savePlaylist() {
         // do checks
@@ -108,16 +109,24 @@
         eventPlaylistSaved;
 
         drawer.hide();
-        setDefaults();
-    }
-
-    function setDefaults() {
-        playlistName = "";
-        playlistTypeBoolean = 0; // private
     }
 
     function handleName(e) {
         playlistName = e.target.value.trim();
+    }
+
+    function handleClose() {
+        resetValues();
+    }
+
+    function resetValues() {
+        if (isNew) {
+            playlistName = defaultName;
+            playlistType = defaultType;
+        } else {
+            playlistName = playlist?.name || null;
+            playlistType = playlist?.type || "private";
+        }
     }
 </script>
 
@@ -126,6 +135,7 @@
     bind:this={drawer}
     label={isNew ? $_("text.playlistNew") : $_("text.playlistEdit")}
     onsl-request-close={keepDrawerOpen}
+    onsl-hide={handleClose}
 >
     <sl-input
         onsl-input={handleName}
@@ -136,7 +146,8 @@
 
     <sl-switch
         checked={playlistTypeBoolean}
-        onsl-change={() => (playlistTypeBoolean = !playlistTypeBoolean)}
+        onsl-change={() =>
+            (playlistType = playlistType === "public" ? "private" : "public")}
     >
         Public
     </sl-switch>
