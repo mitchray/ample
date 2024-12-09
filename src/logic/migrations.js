@@ -150,6 +150,7 @@ const migrations = [
             };
 
             // add new temp keys
+            settings["Theme"]["mode"] = settings?.Theme?.mode || "dark";
             settings["Theme"]["Dark"] = darkSettings;
             settings["Theme"]["Light"] = lightSettings;
 
