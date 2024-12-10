@@ -31,15 +31,15 @@
                 onsl-input={(e) => {
                     setHue(e, "hueBackground");
                 }}
-                style="--the-hue: {$Settings.Theme.Dark.hueBackground};"
+                style="--the-hue: {$Settings?.Theme?.Dark?.hueBackground};"
                 value="hsl(--the-hue, 70%, 50%)"
-                disabled={$Settings.Theme.Dark.isGray}
+                disabled={$Settings?.Theme?.Dark?.isGray}
             ></sl-color-picker>
             {$_("text.colorBackground")}
 
             <sl-switch
                 style="margin-inline-start: 20px"
-                checked={$Settings.Theme.Dark.isGray}
+                checked={$Settings?.Theme?.Dark?.isGray}
                 onsl-change={(e) => {
                     $Settings.Theme.Dark.isGray = e.target.checked;
                 }}
@@ -55,7 +55,7 @@
                 onsl-input={(e) => {
                     setHue(e, "hue1");
                 }}
-                style="--the-hue: {$Settings.Theme.Dark.hue1};"
+                style="--the-hue: {$Settings?.Theme?.Dark?.hue1};"
                 value="hsl(var(--the-hue), 70%, 50%)"
             ></sl-color-picker>
             {$_("text.colorAccent1")}
@@ -68,7 +68,7 @@
                 onsl-input={(e) => {
                     setHue(e, "hue2");
                 }}
-                style="--the-hue: {$Settings.Theme.Dark.hue2};"
+                style="--the-hue: {$Settings?.Theme?.Dark?.hue2};"
                 value="hsl(var(--the-hue), 70%, 50%)"
             ></sl-color-picker>
             {$_("text.colorAccent2")}
@@ -79,7 +79,7 @@
                 onsl-input={(e) => {
                     $Settings.Theme.Dark.colorWave = e.target.value;
                 }}
-                value={$Settings.Theme.Dark.colorWave}
+                value={$Settings?.Theme?.Dark?.colorWave}
             ></sl-color-picker>
             {$_("text.colorWaveform")}
         </div>
@@ -89,11 +89,11 @@
         <sl-button
             onclick={() => {
                 $Settings.Theme["Light"] = {
-                    colorWave: $Settings.Theme.Dark.colorWave,
-                    hue1: $Settings.Theme.Dark.hue1,
-                    hue2: $Settings.Theme.Dark.hue2,
-                    hueBackground: $Settings.Theme.Dark.hueBackground,
-                    isGray: $Settings.Theme.Dark.isGray,
+                    colorWave: $Settings?.Theme?.Dark?.colorWave,
+                    hue1: $Settings?.Theme?.Dark?.hue1,
+                    hue2: $Settings?.Theme?.Dark?.hue2,
+                    hueBackground: $Settings?.Theme?.Dark?.hueBackground,
+                    isGray: $Settings?.Theme?.Dark?.isGray,
                 };
             }}
         >
@@ -111,15 +111,15 @@
                 onsl-input={(e) => {
                     setHue(e, "hueBackground");
                 }}
-                style="--the-hue: {$Settings.Theme.Light.hueBackground};"
+                style="--the-hue: {$Settings?.Theme?.Light?.hueBackground};"
                 value="hsl(--the-hue, 70%, 50%)"
-                disabled={$Settings.Theme.Light.isGray}
+                disabled={$Settings?.Theme?.Light?.isGray}
             ></sl-color-picker>
             {$_("text.colorBackground")}
 
             <sl-switch
                 style="margin-inline-start: 20px"
-                checked={$Settings.Theme.Light.isGray}
+                checked={$Settings?.Theme?.Light?.isGray}
                 onsl-change={(e) => {
                     $Settings.Theme.Light.isGray = e.target.checked;
                 }}
@@ -135,7 +135,7 @@
                 onsl-input={(e) => {
                     setHue(e, "hue1");
                 }}
-                style="--the-hue: {$Settings.Theme.Light.hue1};"
+                style="--the-hue: {$Settings?.Theme?.Light?.hue1};"
                 value="hsl(var(--the-hue), 70%, 50%)"
             ></sl-color-picker>
             {$_("text.colorAccent1")}
@@ -148,7 +148,7 @@
                 onsl-input={(e) => {
                     setHue(e, "hue2");
                 }}
-                style="--the-hue: {$Settings.Theme.Light.hue2};"
+                style="--the-hue: {$Settings?.Theme?.Light?.hue2};"
                 value="hsl(var(--the-hue), 70%, 50%)"
             ></sl-color-picker>
             {$_("text.colorAccent2")}
@@ -159,7 +159,7 @@
                 onsl-input={(e) => {
                     $Settings.Theme.Light.colorWave = e.target.value;
                 }}
-                value={$Settings.Theme.Light.colorWave}
+                value={$Settings?.Theme?.Light?.colorWave}
             ></sl-color-picker>
             {$_("text.colorWaveform")}
         </div>
@@ -169,11 +169,11 @@
         <sl-button
             onclick={() => {
                 $Settings.Theme["Dark"] = {
-                    colorWave: $Settings.Theme.Light.colorWave,
-                    hue1: $Settings.Theme.Light.hue1,
-                    hue2: $Settings.Theme.Light.hue2,
-                    hueBackground: $Settings.Theme.Light.hueBackground,
-                    isGray: $Settings.Theme.Light.isGray,
+                    colorWave: $Settings?.Theme?.Light?.colorWave,
+                    hue1: $Settings?.Theme?.Light?.hue1,
+                    hue2: $Settings?.Theme?.Light?.hue2,
+                    hueBackground: $Settings?.Theme?.Light?.hueBackground,
+                    isGray: $Settings?.Theme?.Light?.isGray,
                 };
             }}
         >

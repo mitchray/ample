@@ -161,6 +161,9 @@ const migrations = [
             delete settings["Theme"]["hueBackground"];
             delete settings["Theme"]["isGray"];
 
+            // save
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings));
+
             /**
              * Notifications consolidated
              */
