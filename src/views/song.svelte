@@ -101,7 +101,7 @@
                             </span>
                         {/if}
 
-                        {#if song.albumartist.name}
+                        {#if song.albumartist?.name}
                             <span class="field">
                                 {$_("text.albumArtist")}
                             </span>
@@ -112,7 +112,7 @@
                             </span>
                         {/if}
 
-                        {#if song.album.name}
+                        {#if song.album?.name}
                             <span class="field">{$_("text.album")}</span>
                             <span>
                                 <a href="#/album/{song.album.id}">
