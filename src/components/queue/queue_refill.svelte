@@ -8,11 +8,19 @@
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler, prepareForQueue } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
+    import { onMount, setContext } from "svelte";
+    import { writable } from "svelte/store";
 
-    let selectedPlaylist = $state();
-    let playlistsArray = $state([]);
+    let playlists = writable([]);
+    let selectedPlaylists = writable([]);
+    let activePlaylist = $state();
     let isFetching = $state(false);
     let timeout = $state();
+    let playlistResponse;
+    let contextKey = "smartlists";
+
+    // Provide the playlists store to selector
+    setContext(contextKey, { playlists, selectedPlaylists });
 
     async function startFetching() {
         isFetching = true;
@@ -29,10 +37,10 @@
 
                 if (
                     $Settings.QueueRefill.mode === "smartlist" &&
-                    selectedPlaylist
+                    activePlaylist
                 ) {
                     apiCall = $API.playlistSongs({
-                        filter: selectedPlaylist,
+                        filter: activePlaylist,
                         limit: 100,
                     });
                 } else if ($Settings.QueueRefill.mode === "mix") {
@@ -102,14 +110,12 @@
         $Settings.QueueRefill.mode = e.target.value;
     }
 
-    function handleSelectedPlaylist() {
-        selectedPlaylist = playlistsArray[0];
-        $Settings.QueueRefill.smartlist = selectedPlaylist;
-    }
-
-    function handleClearedPlaylist() {
-        $Settings.QueueRefill.smartlist = null;
-    }
+    $effect(() => {
+        // when selected playlist changes, save to store
+        if ($selectedPlaylists[0]?.id) {
+            $Settings.QueueRefill.smartlist = $selectedPlaylists[0].id;
+        }
+    });
 
     $effect(() => {
         // test the saved smartlist does exist
@@ -118,18 +124,16 @@
                 filter: $Settings.QueueRefill.smartlist,
             }).then((result) => {
                 if (result.error) {
-                    errorHandler("getting playlists", result.error);
-                    selectedPlaylist = null;
+                    errorHandler(
+                        "getting playlists for queue refill",
+                        result.error,
+                    );
+                    activePlaylist = null;
                 } else {
-                    selectedPlaylist = result.id;
+                    activePlaylist = result.id;
                 }
             });
         }
-    });
-
-    // when selected playlist changes, pass it back up to the selector component
-    $effect(() => {
-        selectedPlaylist, (playlistsArray = [selectedPlaylist]);
     });
 
     let shouldAdd = $derived(
@@ -142,6 +146,29 @@
         if (shouldAdd && !isFetching) {
             clearTimeout(timeout);
             startFetching();
+        }
+    });
+
+    onMount(async () => {
+        // get playlists
+        playlistResponse = await $API.smartlists();
+
+        if (playlistResponse.error) {
+            errorHandler(
+                `getting smartlists in queue refill`,
+                playlistResponse.error,
+            );
+            return;
+        }
+
+        playlists.set(playlistResponse.playlist);
+
+        let initialIndex = $playlists.findIndex(
+            (p) => p.id === $Settings.QueueRefill.smartlist,
+        );
+
+        if (initialIndex !== -1) {
+            selectedPlaylists.set([$playlists[initialIndex]]);
         }
     });
 </script>
@@ -191,12 +218,7 @@
 
             <sl-divider></sl-divider>
 
-            <PlaylistSelector
-                type="smartlists"
-                bind:selectedPlaylists={playlistsArray}
-                on:selected={handleSelectedPlaylist}
-                on:cleared={handleClearedPlaylist}
-            />
+            <PlaylistSelector {contextKey} />
         {:else}
             <div class="secondary-info">{$_("text.queueRefillMix")}</div>
         {/if}

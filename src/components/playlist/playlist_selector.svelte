@@ -1,91 +1,72 @@
 <script>
-    import { createEventDispatcher, onMount } from "svelte";
-    import { API } from "~/stores/state.js";
-    import { errorHandler } from "~/logic/helper.js";
+    import { getContext } from "svelte";
 
-    let { type, selectedPlaylists = $bindable(), multiple = false } = $props();
+    let { multiple = false, contextKey } = $props();
 
-    const dispatch = createEventDispatcher();
-
-    let playlistResponse = $state({});
+    let { playlists, selectedPlaylists } = getContext(contextKey); // prefix store $ when accessing
 
     function handleRadio(e) {
-        selectedPlaylists = [e.target.value];
+        let index = $playlists.findIndex((p) => p && p.id === e.target.value);
+        let tempArray = [];
 
-        announce();
+        // build temp array
+        for (let i = 0; i < $playlists.length; i++) {
+            tempArray[i] = $playlists[i];
+            tempArray[i].selected = i === index;
+        }
+
+        // commit temp array to playlists
+        playlists.set(tempArray);
+
+        refreshSelected();
     }
 
     function handleCheckbox(e) {
-        if (e.target.checked) {
-            selectedPlaylists.push(e.target.name);
-        } else {
-            selectedPlaylists = selectedPlaylists.filter(
-                (item) => item !== e.target.name,
-            );
-        }
+        let index = $playlists.findIndex(
+            (plist) => plist && plist.id === e.target.name,
+        );
 
-        selectedPlaylists = selectedPlaylists;
+        $playlists[index].selected = e.target.checked;
 
-        announce();
+        refreshSelected();
     }
 
-    async function announce() {
-        if (selectedPlaylists.length < 1) {
-            dispatch("cleared");
-        } else {
-            dispatch("selected");
-        }
+    function refreshSelected() {
+        selectedPlaylists.set(
+            $playlists.filter((p) => p && p.selected === true),
+        );
     }
-
-    async function loadData() {
-        try {
-            if (type === "smartlists") {
-                playlistResponse = await $API.smartlists();
-            } else {
-                playlistResponse = await $API.playlists({ hide_search: 1 });
-            }
-        } catch (error) {
-            errorHandler(`getting ${type}`, error);
-        }
-    }
-
-    onMount(() => {
-        loadData();
-    });
 </script>
 
 <div class="container">
     <ul class="playlists">
         {#if multiple}
-            {#if Array.isArray(playlistResponse.playlist)}
-                {#each playlistResponse.playlist as item}
-                    <li class="item">
-                        <span class="item-inner truncate" title={item.name}>
-                            <sl-checkbox
-                                name={item.id}
-                                onsl-change={handleCheckbox}
-                            >
-                                {item.name}
-                            </sl-checkbox>
-                        </span>
-                    </li>
-                {/each}
-            {/if}
+            {#each $playlists as item (item.id)}
+                <li class="item">
+                    <span class="item-inner truncate" title={item.name}>
+                        <sl-checkbox
+                            name={item.id}
+                            checked={item.selected}
+                            onsl-change={handleCheckbox}
+                        >
+                            {item.name}
+                        </sl-checkbox>
+                    </span>
+                </li>
+            {/each}
         {:else}
             <sl-radio-group
                 name="selected"
-                value={selectedPlaylists[0]}
+                value={$selectedPlaylists[0]?.id}
                 onsl-change={handleRadio}
             >
-                {#if Array.isArray(playlistResponse.playlist)}
-                    {#each playlistResponse.playlist as item}
-                        <li class="item">
-                            <span class="item-inner truncate" title={item.name}>
-                                <sl-radio value={item.id}>{item.name}</sl-radio>
-                            </span>
-                        </li>
-                    {/each}
-                {/if}
+                {#each $playlists as item (item.id)}
+                    <li class="item">
+                        <span class="item-inner truncate" title={item.name}>
+                            <sl-radio value={item.id}>{item.name}</sl-radio>
+                        </span>
+                    </li>
+                {/each}
             </sl-radio-group>
         {/if}
     </ul>

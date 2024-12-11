@@ -6,12 +6,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import { Tabulator } from "tabulator-tables";
 
-    let {
-        playlist = $bindable(null),
-        isNew = false,
-        eventPlaylistSaved,
-        ...rest
-    } = $props();
+    let { playlist = $bindable(null), isNew = false, ...rest } = $props();
 
     export const show = () => {
         resetValues();
@@ -72,6 +67,7 @@
         }
 
         if (isNew) {
+            result.selected = true;
             playlist = result;
         }
 
@@ -104,9 +100,6 @@
             title: $_("text.playlistSaved"),
             style: "success",
         });
-
-        // informs parent component
-        eventPlaylistSaved;
 
         drawer.hide();
     }

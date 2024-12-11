@@ -4,7 +4,9 @@
     import { API } from "~/stores/state.js";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
-    import { onMount } from "svelte";
+    import { onMount, setContext } from "svelte";
+    import { errorHandler } from "~/logic/helper.js";
+    import { writable } from "svelte/store";
 
     export const show = () => drawer.show();
     let { songs = $bindable() } = $props();
@@ -12,25 +14,32 @@
     let drawer = $state(),
         drawerEdit = $state();
     let newPlaylist = $state(null);
-    let selectedPlaylists = $state([]);
+    let playlists = writable([]);
+    let selectedPlaylists = writable([]);
     let ignoreDuplicates = $state(false);
+    let playlistResponse;
+    let contextKey = "playlists";
+
+    // Provide the playlists store to selector
+    setContext(contextKey, { playlists, selectedPlaylists });
+
+    $effect(() => {
+        if (newPlaylist) {
+            playlists.update((arr) => [newPlaylist, ...arr]);
+        }
+    });
 
     function handleSave() {
-        if (newPlaylist) {
-            selectedPlaylists = [newPlaylist.id];
-        }
-
-        selectedPlaylists.forEach((playlistID) => {
+        $selectedPlaylists.forEach((playlist) => {
             songs.forEach((element) => {
                 $API.playlistAdd({
-                    filter: playlistID,
+                    filter: playlist.id,
                     id: element.id,
                     type: "song",
                 });
             });
         });
 
-        selectedPlaylists = [];
         drawer.hide();
     }
 
@@ -42,12 +51,26 @@
             ignoreDuplicates = parseInt(result.value) === 1;
         });
     }
+
     onMount(async () => {
         // not using store version due to updating locally
         let uniquePlaylistPref = await $API.userPreference({
             filter: "unique_playlist",
         });
         ignoreDuplicates = parseInt(uniquePlaylistPref.value) === 1;
+
+        // get playlists
+        playlistResponse = await $API.playlists({ hide_search: 1 });
+
+        if (playlistResponse.error) {
+            errorHandler(
+                `getting playlists in playlist add to`,
+                playlistResponse.error,
+            );
+            return;
+        }
+
+        playlists.set(playlistResponse.playlist);
     });
 </script>
 
@@ -56,7 +79,7 @@
     label={$_("text.playlistAddTo")}
     onsl-request-close={keepDrawerOpen}
 >
-    <PlaylistSelector bind:selectedPlaylists multiple={true} type="playlists" />
+    <PlaylistSelector multiple={true} {contextKey} />
 
     <sl-checkbox checked={ignoreDuplicates} onsl-change={toggleUniqueItems}>
         {$_("text.skipDuplicates")}
@@ -72,7 +95,7 @@
 
     <sl-button
         disabled={selectedPlaylists?.length < 1}
-        onclick={() => handleSave}
+        onclick={handleSave}
         slot="footer"
         variant="primary"
     >
@@ -84,7 +107,6 @@
         bind:this={drawerEdit}
         contained
         isNew={true}
-        eventPlayistSaved={() => handleSave}
     />
 </sl-drawer>
 
