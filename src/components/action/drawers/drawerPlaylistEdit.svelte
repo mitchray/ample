@@ -35,7 +35,7 @@
             hide_search: 1,
         });
 
-        if (existingPlaylist.length > 0) {
+        if (existingPlaylist.total_count > 0) {
             if (isNew || playlistName !== originalName) {
                 addAlert({
                     title: $_("text.playlistExists", {
