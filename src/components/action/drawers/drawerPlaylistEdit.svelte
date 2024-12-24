@@ -62,7 +62,7 @@
         }
 
         // 'Bad Request' can mean there were no changes... so only log if its not that
-        if (result.error?.errorMessage !== "Bad Request") {
+        if (result.error && result.error.errorMessage !== "Bad Request") {
             errorHandler("saving playlist", result);
             return;
         }
