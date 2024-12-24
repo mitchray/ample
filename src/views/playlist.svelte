@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import { onDestroy } from "svelte";
-    import { replace, location } from "svelte-spa-router";
+    import { location } from "svelte-spa-router";
     import { API, PageTitle } from "~/stores/state";
     import { getSongsFromPlaylist } from "~/logic/song";
     import Rating from "~/components/rating/rating.svelte";
@@ -33,12 +33,6 @@
         drawerDelete = $state();
     let tabulator = $state(null);
     let columns = $state([]);
-
-    function afterDelete(e) {
-        if (playlist?.id === e.detail.id) {
-            replace("#/playlists");
-        }
-    }
 
     function setupEvents() {
         if (!tabulator || playlistType !== "playlist") return;
@@ -282,11 +276,7 @@
     </Portal>
 
     <Portal>
-        <DrawerDelete
-            bind:this={drawerDelete}
-            bind:playlist
-            on:playlistDeleted={afterDelete}
-        />
+        <DrawerDelete bind:this={drawerDelete} bind:playlist />
     </Portal>
 {/if}
 

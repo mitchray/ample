@@ -3,13 +3,12 @@
     import { API } from "~/stores/state.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { createEventDispatcher } from "svelte";
     import { Tabulator } from "tabulator-tables";
+    import { location, push } from "svelte-spa-router";
 
     let { playlist = $bindable() } = $props();
     export const show = () => drawer.show();
 
-    const dispatch = createEventDispatcher();
     let drawer;
 
     function handleDelete() {
@@ -25,7 +24,12 @@
                     });
                 }
 
-                dispatch("playlistDeleted", { id: playlist.id });
+                // go back to playlists if on the playlist being deleted
+                const match = $location.match(/^\/playlist\/(\d+)$/);
+
+                if (match && match[1] === playlist.id) {
+                    replace("/playlists/");
+                }
 
                 addAlert({
                     title: $_("text.playlistDeleted"),
