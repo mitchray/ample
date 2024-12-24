@@ -1,11 +1,28 @@
 # Changelog
 
+## [3.5.0] - 2025-xx-xx
+
+### Requires at least Ampache 6.6.0
+
+### Changed
+
+-   Updated Svelte 4 to 5 (majority of changes are centred around this)
+-   Separate dark and light theme colors
+-   Persist playback speed across media changes
+
+### Added
+-   Migration system so settings won't be lost across updates if things change
+
+## [3.1.2] - 2024-11-30
+
+### Fixed
+-   Could no longer click things in any browser all of a sudden, but nothing changed...
+
 ## [3.1.1] - 2024-11-18
 
 ### Requires at least Ampache 6.6.0 (untested with 7.x yet)
 
 ### Fixed
-
 -   Handle rare visualizer initialization failure due to GPU error
 
 ## [3.1.0] - 2024-11-12
