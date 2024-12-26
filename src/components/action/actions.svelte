@@ -482,4 +482,8 @@
     sl-button-group::part(base) {
         flex-wrap: wrap;
     }
+
+    sl-menu-item {
+        max-width: 250px;
+    }
 </style>
