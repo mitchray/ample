@@ -48,6 +48,10 @@
 
                 return icon;
             },
+            maxHeight:
+                $SiteContentBind?.clientHeight > 0
+                    ? $SiteContentBind.clientHeight
+                    : "800",
             locale: true,
             langs: tabulatorStrings,
             persistence: {
@@ -78,13 +82,7 @@
     });
 </script>
 
-<div
-    bind:this={tableElement}
-    data-id={options.id || null}
-    style="max-height: {$SiteContentBind?.clientHeight > 200
-        ? $SiteContentBind.clientHeight + 'px'
-        : '800px'}"
-></div>
+<div bind:this={tableElement} data-id={options.id || null}></div>
 
 <style>
     :global(.lister-tabulator) {

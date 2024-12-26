@@ -1,56 +1,84 @@
 <script>
     import { _ } from "svelte-i18n";
     import { API } from "~/stores/state.js";
-    import { getContext } from "svelte";
-    import { errorHandler, getPlaylistIDFromUrl } from "~/logic/helper.js";
+    import { errorHandler } from "~/logic/helper.js";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey } = $props();
+    let { tabulator = $bindable(), playlistID, songs = $bindable() } = $props();
 
-    const { dataDisplay, isEditMode, selectedCount } = getContext(contextKey);
+    let selectedCount = $state(0);
+    let confirm = $state(null);
 
-    let playlistID = getPlaylistIDFromUrl();
+    $effect(() => {
+        if (tabulator) {
+            tabulator.on(
+                "rowSelectionChanged",
+                function (data, rows, selected, deselected) {
+                    selectedCount = data.length;
+                },
+            );
+        }
+    });
 
-    function handleRemove() {
-        $dataDisplay.forEach((item, index) => {
-            if (item.selected === true && !item.isDeleted) {
-                $API.playlistRemoveSong({
-                    filter: playlistID,
-                    song: item.id,
-                }).then((result) => {
-                    if (result.error) {
-                        errorHandler("removing playlist song", result.error);
-                        return;
-                    }
+    function handleApply(e) {
+        // close confirmation and reset selectedCount
+        confirm.hide();
+        selectedCount = 0;
 
-                    if (result.success) {
-                        item.selected === false;
-                        $selectedCount--;
-                        item.isDeleted = true;
-                        $dataDisplay[index] = item;
+        let selected = tabulator.getSelectedRows();
 
-                        // get all proceeding items
-                        let proceedingItems = $dataDisplay.filter(
-                            (e) => e.initialOrder > item.initialOrder,
-                        );
+        selected.forEach(async (row) => {
+            let itemData = row.getData();
 
-                        proceedingItems.forEach((p) => {
-                            p.initialOrder--;
-                        });
-                    }
-                });
+            // remove on the backend
+            let result = await $API.playlistRemoveSong({
+                filter: playlistID,
+                track: itemData.playlisttrack,
+            });
+
+            if (result.error) {
+                errorHandler("while remove from playlist", result.error);
+            }
+
+            if (!result.error) {
+                //remove from tabulator
+                row.delete();
             }
         });
+
+        //send data back to tabulator
+        songs = tabulator.getData();
     }
 </script>
 
-<sl-button
-    disabled={$isEditMode || $selectedCount < 1}
-    onclick={handleRemove}
-    title={$_("text.remove")}
-    variant="danger"
->
-    {$_("text.remove")}
-</sl-button>
+{#if selectedCount > 0}
+    <sl-dropdown bind:this={confirm}>
+        <sl-button slot="trigger">
+            <MaterialSymbol name="cancel" slot="prefix" />
+            {$_("text.remove")}
+        </sl-button>
+        <sl-card>
+            <div slot="header">
+                {$_("text.confirmRemove")}
+            </div>
+
+            <div class="options">
+                <sl-button onclick={confirm.hide()} variant="text">
+                    {$_("text.cancel")}
+                </sl-button>
+
+                <sl-button onclick={handleApply} variant="danger">
+                    <MaterialSymbol name="cancel" slot="prefix" />
+                    {$_("text.remove")}
+                </sl-button>
+            </div>
+        </sl-card>
+    </sl-dropdown>
+{/if}
 
 <style>
+    .options {
+        display: flex;
+        gap: var(--spacing-lg);
+    }
 </style>
