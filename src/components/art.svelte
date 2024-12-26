@@ -3,6 +3,7 @@
     import { shuffle, uniqBy } from "lodash-es";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { untrack } from "svelte";
 
     /** @type {{data: any, type: "song" | "album" | "artist" | "playlist" | "podcast_episode" | "live_stream" | "mix", size?: "thumbnail" | "small" | "medium" | "large", radius?: string}} */
     let { data, type, size = "medium", radius = "0px" } = $props();
@@ -35,39 +36,40 @@
         }
     });
 
-    let images = $derived.by(() => {
-        let query = [];
-        let result = [];
+    let images = $state([]);
 
-        if (type === "playlist" || type === "smartlist") {
-            query = $API.playlistSongs({
-                filter: data.id,
-                limit: 30,
-            });
+    $effect(() => {
+        untrack(async () => {
+            let query = [];
 
-            if (query.error) {
-                errorHandler("getting art", query.error);
-                return [];
+            if (type === "playlist" || type === "smartlist") {
+                query = await $API.playlistSongs({
+                    filter: data.id,
+                    limit: 30,
+                });
+
+                if (query.error) {
+                    errorHandler("getting art", query.error);
+                    return [];
+                }
+
+                query = uniqBy(query.song, "album.id");
+
+                if (type === "smartlist") {
+                    query = shuffle(query);
+                }
+
+                query = query.slice(0, 4);
             }
 
-            query = uniqBy(query, "album.id");
-
-            if (type === "smartlist") {
-                query = shuffle(query);
+            if (query.length === 4) {
+                query.forEach((song) => images.push(song.art));
+            } else if (query.length > 0) {
+                images.push(query[0].art);
+            } else {
+                images.push(data.art);
             }
-
-            query = query.slice(0, 4);
-        }
-
-        if (query.length === 4) {
-            query.forEach((song) => result.push(song.art));
-        } else if (query.length > 0) {
-            result.push(query[0].art);
-        } else {
-            result.push(data.art);
-        }
-
-        return result;
+        });
     });
 </script>
 
