@@ -131,21 +131,15 @@
         flex-shrink: 0;
         font-size: 0; /* hide the alt text */
         position: relative;
+        background-color: oklch(50% 0 0 / 20%);
     }
 
     /* :after reserved for the inset border/shadow to stand out against background */
     .container:after {
         content: "";
         position: absolute;
-        top: 0px;
-        left: 0px;
-        right: 0px;
-        bottom: 0px;
+        inset: 0;
         z-index: 1;
-        /*pointer-events: none;*/
-        /*background-color: lime;*/
-        /*padding: 0;*/
-        /*display: block;*/
         border: 1px solid transparent;
         border-radius: inherit;
     }
@@ -163,7 +157,6 @@
     img {
         object-fit: cover;
         grid-column: span 2;
-        width: 100%;
     }
 
     .grid img {
