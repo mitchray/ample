@@ -770,6 +770,7 @@ export let albumsPreset = [
                         displayMode: "miniButtons",
                         item: data,
                         showShuffle: true,
+                        hoist: true,
                         data: Object.create({
                             album: data.album ? data.album : null,
                             artists:
