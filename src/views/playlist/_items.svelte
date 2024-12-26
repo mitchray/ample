@@ -27,7 +27,6 @@
     let query = $derived(
         createQuery({
             queryKey: ["playlist_items", playlist.id],
-            refetchOnWindowFocus: false,
             queryFn: async () => {
                 let response = await getSongsFromPlaylist({
                     id: playlist.id,

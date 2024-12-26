@@ -53,7 +53,13 @@
         $ShowLyrics = false;
     };
 
-    const queryClient = new QueryClient();
+    const queryClient = new QueryClient({
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false, // default: true
+            },
+        },
+    });
 
     $effect(() => {
         if ($User.isLoggedIn) {
