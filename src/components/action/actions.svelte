@@ -1,6 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { getContext, onMount, setContext } from "svelte";
+    import { getContext, setContext } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import { API } from "~/stores/state.js";
     import { sampleSize } from "lodash-es";
@@ -39,18 +39,7 @@
     import ActionShareEdit from "./items/actionShareEdit.svelte";
     import ActionShareDelete from "./items/actionShareDelete.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import Portal from "~/components/portal.svelte";
     import { Settings } from "~/stores/settings.js";
-
-    // interface Props {
-    //     item?: any;
-    //     type: any; // artist, album, playlist, song etc
-    //     displayMode: any; // menu, miniButtons or fullButtons; the UI elements to be rendered
-    //     showShuffle?: boolean;
-    //     showLinks?: boolean;
-    //     hideDefaultActions?: boolean;
-    //     data?: any; // any extra data needed, passed as an object key e.g. data.playlists
-    // }
 
     let {
         item = null,
@@ -67,8 +56,7 @@
 
     let playLimit = 5000;
     let actionsBind = $state();
-    let dialogBind = $state();
-    let dropdownBind = $state();
+    let moreButtonActivated = $state(false);
 
     // underscore prefixed items are accessor aliases of exported params
     let _item = writable(item);
@@ -386,92 +374,46 @@
             {/if}
 
             {#if type !== "share"}
-                <sl-dropdown {hoist} bind:this={dropdownBind}>
-                    <!-- button not shown, only used for positioning the dropdown -->
+                {#if !moreButtonActivated}
                     <sl-button
-                        slot="trigger"
                         size={displayMode === "miniButtons"
                             ? "small"
                             : "medium"}
-                        style="visibility: hidden; pointer-events: none; width: 0;"
+                        onclick={(e) => {
+                            moreButtonActivated = true;
+                        }}
                     >
-                        &nbsp;
+                        <MaterialSymbol name="more_horiz" />
                     </sl-button>
-                    <Actions
-                        displayMode="menu"
-                        {item}
-                        {type}
-                        {showShuffle}
-                        {showLinks}
-                        {hideDefaultActions}
-                        {data}
-                    />
-                </sl-dropdown>
+                {/if}
 
-                <sl-button
-                    size={displayMode === "miniButtons" ? "small" : "medium"}
-                    onclick={(e) => {
-                        let tabulator = actionsBind?.closest(".tabulator");
-                        if (tabulator?.offsetHeight < 250) {
-                            dialogBind?.show();
-                        } else {
-                            dropdownBind?.show();
-                        }
-                    }}
-                >
-                    <MaterialSymbol name="more_horiz" />
-                </sl-button>
+                {#if moreButtonActivated}
+                    {@render createDropdown()}
+                {/if}
             {/if}
         </sl-button-group>
     </div>
-
-    <!-- used when Tabulator is too short to show dropdown -->
-    <Portal>
-        <sl-dialog
-            bind:this={dialogBind}
-            onclick={() => {
-                dialogBind?.hide();
-            }}
-        >
-            <Actions
-                displayMode="menu"
-                {item}
-                {type}
-                {showShuffle}
-                {showLinks}
-                {hideDefaultActions}
-                {data}
-            />
-
-            <sl-divider></sl-divider>
-
-            <sl-alert open>
-                <MaterialSymbol name="help" slot="icon" />
-                <strong>Why was this not a dropdown menu?</strong>
-                <p>
-                    There was not enough room to display the dropdown, due to
-                    technical reasons (CSS containing block) nothing can appear
-                    outside of the table area.
-                </p>
-
-                <p>
-                    This is a temporary workaround until the UI library can
-                    implement the new Popover API.
-                </p>
-            </sl-alert>
-
-            <sl-button
-                slot="footer"
-                variant="primary"
-                onclick={() => {
-                    dialogBind?.hide();
-                }}
-            >
-                Close
-            </sl-button>
-        </sl-dialog>
-    </Portal>
 {/if}
+
+{#snippet createDropdown()}
+    <sl-dropdown open {hoist}>
+        <sl-button
+            slot="trigger"
+            size={displayMode === "miniButtons" ? "small" : "medium"}
+        >
+            <MaterialSymbol name="more_horiz" />
+        </sl-button>
+        <Actions
+            displayMode="menu"
+            {item}
+            {type}
+            {showShuffle}
+            {showLinks}
+            {hideDefaultActions}
+            {data}
+        />
+    </sl-dropdown>
+{/snippet}
 
 <style>
     /* Hide the label when miniButtons */

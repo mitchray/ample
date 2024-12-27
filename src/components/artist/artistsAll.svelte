@@ -2,16 +2,58 @@
     import { API, User } from "~/stores/state";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
-    import {
-        artistsPreset,
-        normalizeResponse,
-        remotePaginationDefaults,
-    } from "~/components/lister/columns.js";
+    import { artistsPreset } from "~/components/lister/columns.js";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     /** @type {{type: 'artist'|'album_artist'}} */
     let { type } = $props();
 
     let tabulator = $state(null);
+    let limit = 1000;
+    let total = $state(0);
+
+    const query = $derived(
+        createInfiniteQuery({
+            queryKey: ["artists", type],
+            initialPageParam: 0,
+            getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+                let offsetTotal = lastPageParam + limit;
+                return offsetTotal <= total ? offsetTotal : undefined;
+            },
+            // pageParam is based on offset total
+            queryFn: async ({ pageParam }) => {
+                let response = await $API.artists({
+                    album_artist: type === "album_artist" ? 1 : 0,
+                    sort: "basename,ASC",
+                    limit: limit,
+                    offset: pageParam,
+                });
+
+                if (response.error) {
+                    errorHandler("getting all artists", response.error);
+                    return [];
+                }
+
+                total = response.total_count;
+
+                // refresh data on subsequent loads
+                tabulator?.addData(response.artist);
+
+                return response.artist;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
+
+    // alias of returned data
+    let artists = $derived($query.data?.pages || []);
+
+    $effect(() => {
+        if (artists && $query.hasNextPage) {
+            $query.fetchNextPage();
+        }
+    });
 </script>
 
 <div class="lister-tabulator">
@@ -21,31 +63,9 @@
 
     <Tabulator
         bind:tabulator
+        data={[]}
         columns={artistsPreset}
         options={{
-            ...remotePaginationDefaults,
-            ajaxConfig: {
-                mode: "cors",
-                method: "GET",
-                headers: {
-                    Authorization: "Bearer " + $User.token,
-                },
-            },
-            ajaxURLGenerator: function (url, config, params) {
-                if (params.size === true) {
-                    params.size = 0;
-                }
-
-                return $API.rawURL("artists", {
-                    album_artist: type === "album_artist" ? 1 : 0,
-                    sort: "basename,ASC",
-                    limit: params.size,
-                    offset: (params.page - 1) * params.size,
-                });
-            },
-            ajaxResponse: function (url, params, response) {
-                return normalizeResponse("artist", url, params, response);
-            },
             persistenceID: "artists",
         }}
     ></Tabulator>

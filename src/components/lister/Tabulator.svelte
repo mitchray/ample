@@ -48,6 +48,7 @@
 
                 return icon;
             },
+            minHeight: 250,
             maxHeight:
                 $SiteContentBind?.clientHeight > 0
                     ? $SiteContentBind.clientHeight
@@ -79,6 +80,8 @@
     onDestroy(() => {
         tabulator?.off("scrollVertical");
         tabulator?.off("columnResized");
+        tabulator?.setData([]);
+        tabulator = null;
     });
 </script>
 

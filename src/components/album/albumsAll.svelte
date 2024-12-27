@@ -1,14 +1,56 @@
 <script>
     import { User, API } from "~/stores/state";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import {
-        albumsPreset,
-        remotePaginationDefaults,
-        normalizeResponse,
-    } from "~/components/lister/columns.js";
+    import { albumsPreset } from "~/components/lister/columns.js";
     import MassRater from "~/components/lister/massRater.svelte";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
+    // pageParam is based on offset total
     let tabulator = $state(null);
+    let limit = 1000;
+    let total = $state(0);
+
+    let query = $derived(
+        createInfiniteQuery({
+            queryKey: ["albums"],
+            initialPageParam: 0,
+            getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+                let offsetTotal = lastPageParam + limit;
+                return offsetTotal <= total ? offsetTotal : undefined;
+            },
+            // pageParam is based on offset total
+            queryFn: async ({ pageParam }) => {
+                let response = await $API.albums({
+                    sort: "basename,ASC",
+                    limit: limit,
+                    offset: pageParam,
+                });
+
+                if (response.error) {
+                    errorHandler("getting all albums", response.error);
+                    return [];
+                }
+
+                total = response.total_count;
+
+                // refresh data on subsequent loads
+                tabulator?.addData(response.album);
+
+                return response.album;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
+
+    // alias of returned data
+    let albums = $derived($query.data?.pages || []);
+
+    $effect(() => {
+        if (albums && $query.hasNextPage) {
+            $query.fetchNextPage();
+        }
+    });
 </script>
 
 <div class="lister-tabulator">
@@ -18,30 +60,9 @@
 
     <Tabulator
         bind:tabulator
+        data={[]}
         columns={albumsPreset}
         options={{
-            ...remotePaginationDefaults,
-            ajaxConfig: {
-                mode: "cors",
-                method: "GET",
-                headers: {
-                    Authorization: "Bearer " + $User.token,
-                },
-            },
-            ajaxURLGenerator: function (url, config, params) {
-                if (params.size === true) {
-                    params.size = 0;
-                }
-
-                return $API.rawURL("albums", {
-                    sort: "basename,ASC",
-                    limit: params.size,
-                    offset: (params.page - 1) * params.size,
-                });
-            },
-            ajaxResponse: function (url, params, response) {
-                return normalizeResponse("album", url, params, response);
-            },
             persistenceID: "albums",
         }}
     ></Tabulator>

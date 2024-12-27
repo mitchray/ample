@@ -154,6 +154,10 @@
         mix-blend-mode: darken;
     }
 
+    .container > img {
+        width: 100%;
+    }
+
     img {
         object-fit: cover;
         grid-column: span 2;
