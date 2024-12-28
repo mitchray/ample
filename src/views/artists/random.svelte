@@ -47,7 +47,7 @@
                 <Actions
                     type="artists"
                     displayMode="fullButtons"
-                    showShuffle={artists.length > 1}
+                    showShuffle={true}
                     data={{ artists: artists }}
                 />
 

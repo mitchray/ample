@@ -1,14 +1,56 @@
 <script>
-    import {
-        normalizeResponse,
-        playlistsPreset,
-        remotePaginationDefaults,
-    } from "~/components/lister/columns.js";
+    import { playlistsPreset } from "~/components/lister/columns.js";
     import { API, User } from "~/stores/state.js";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
 
     let tabulator = $state(null);
+    let limit = 500;
+    let total = $state(0);
+
+    let query = $derived(
+        createInfiniteQuery({
+            queryKey: ["playlistsAll"],
+            initialPageParam: 0,
+            getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+                let offsetTotal = lastPageParam + limit;
+                return offsetTotal <= total ? offsetTotal : undefined;
+            },
+            // pageParam is based on offset total
+            queryFn: async ({ pageParam }) => {
+                let response = await $API.playlists({
+                    hide_search: 1,
+                    sort: "name,ASC",
+                    limit: limit,
+                    offset: pageParam,
+                });
+
+                if (response.error) {
+                    errorHandler("getting all playlists", response.error);
+                    return [];
+                }
+
+                total = response.total_count;
+
+                // refresh data on subsequent loads
+                tabulator?.addData(response.playlist);
+
+                return response.playlist;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
+
+    // alias of returned data
+    let playlists = $derived($query.data?.pages || []);
+
+    $effect(() => {
+        if (playlists && $query.hasNextPage) {
+            $query.fetchNextPage();
+        }
+    });
 </script>
 
 <div class="lister-tabulator">
@@ -18,32 +60,9 @@
 
     <Tabulator
         bind:tabulator
+        data={[]}
         columns={playlistsPreset}
         options={{
-            ...remotePaginationDefaults,
-            id: "playlists",
-            ajaxConfig: {
-                mode: "cors",
-                method: "GET",
-                headers: {
-                    Authorization: "Bearer " + $User.token,
-                },
-            },
-            ajaxURLGenerator: function (url, config, params) {
-                if (params.size === true) {
-                    params.size = 5000;
-                }
-
-                return $API.rawURL("playlists", {
-                    hide_search: 1,
-                    sort: "name,ASC",
-                    limit: params.size,
-                    offset: (params.page - 1) * params.size,
-                });
-            },
-            ajaxResponse: function (url, params, response) {
-                return normalizeResponse("playlist", url, params, response);
-            },
             persistenceID: "playlists",
         }}
     ></Tabulator>

@@ -111,7 +111,7 @@
                 response = await getSongsFromAlbums(
                     sampleSize(data.albums, 100),
                 );
-                final = response.song;
+                final = response; // no .song here
                 break;
             case "albumGenre":
                 response = await getSomeSongsFromAlbumsByGenre(data.id);

@@ -13,7 +13,7 @@
 
     let query = $derived(
         createQuery({
-            queryKey: ["unratedAlbums"],
+            queryKey: ["unratedAlbums", Date.now()],
             queryFn: async () => {
                 let result = await unratedAlbums({ limit: 100 });
 
@@ -22,42 +22,35 @@
                     return [];
                 }
 
-                return result;
+                // refresh data on subsequent loads
+                tabulator?.replaceData(result.album);
+
+                return result.album;
             },
             enabled: $User.isLoggedIn,
         }),
     );
 
     // alias of returned data
-    let albums = $derived($query.data?.album || {});
+    let albums = $derived($query.data || []);
 </script>
 
-{#if $query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if albums.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-                <Actions
-                    type="songs"
-                    displayMode="fullButtons"
-                    showShuffle={albums.length > 1}
-                    data={Object.create({ albums: albums })}
-                />
+<div class="lister-tabulator">
+    <div class="lister-tabulator__actions">
+        <Actions
+            type="albums"
+            displayMode="fullButtons"
+            showShuffle={true}
+            data={Object.create({ albums: albums })}
+        />
 
-                <MassRater bind:tabulator type="album" />
-            </div>
+        <MassRater bind:tabulator type="album" />
+    </div>
 
-            <Tabulator
-                bind:tabulator
-                data={albums}
-                columns={albumsPreset}
-                options={{ persistenceID: "albums" }}
-            ></Tabulator>
-        </div>
-    {/if}
-{/if}
+    <Tabulator
+        bind:tabulator
+        data={albums}
+        columns={albumsPreset}
+        options={{ persistenceID: "albums" }}
+    ></Tabulator>
+</div>

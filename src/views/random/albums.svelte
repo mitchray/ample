@@ -2,47 +2,58 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
     import { API, User } from "~/stores/state.js";
-    import {
-        albumsPreset,
-        normalizeResponse,
-        remotePaginationDefaults,
-    } from "~/components/lister/columns.js";
+    import { albumsPreset } from "~/components/lister/columns.js";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { errorHandler } from "~/logic/helper.js";
+    import Actions from "~/components/action/actions.svelte";
 
     let tabulator = $state(null);
+
+    let query = $derived(
+        createQuery({
+            queryKey: ["randomAlbums", Date.now()],
+            queryFn: async () => {
+                let response = await $API.stats({
+                    type: "album",
+                    filter: "random",
+                    limit: 100,
+                });
+
+                if (response.error) {
+                    errorHandler("getting random albums", response.error);
+                    return [];
+                }
+
+                // refresh data on subsequent loads
+                tabulator?.replaceData(response.album);
+
+                return response.album;
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
+
+    // alias of returned data
+    let albums = $derived($query.data || []);
 </script>
 
 <div class="lister-tabulator">
     <div class="lister-tabulator__actions">
+        <Actions
+            type="albums"
+            displayMode="fullButtons"
+            showShuffle={true}
+            data={Object.create({ albums: albums })}
+        />
+
         <MassRater bind:tabulator type="album" />
     </div>
 
     <Tabulator
         bind:tabulator
+        data={albums}
         columns={albumsPreset}
         options={{
-            ...remotePaginationDefaults,
-            ajaxConfig: {
-                mode: "cors",
-                method: "GET",
-                headers: {
-                    Authorization: "Bearer " + $User.token,
-                },
-            },
-            ajaxURLGenerator: function (url, config, params) {
-                if (params.size === true) {
-                    params.size = 5000;
-                }
-
-                return $API.rawURL("stats", {
-                    type: "album",
-                    filter: "random",
-                    limit: params.size,
-                    offset: (params.page - 1) * params.size,
-                });
-            },
-            ajaxResponse: function (url, params, response) {
-                return normalizeResponse("album", url, params, response);
-            },
             persistenceID: "albums",
         }}
     ></Tabulator>

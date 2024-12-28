@@ -10,7 +10,7 @@
     let { type } = $props();
 
     let tabulator = $state(null);
-    let limit = 1000;
+    let limit = 500;
     let total = $state(0);
 
     const query = $derived(

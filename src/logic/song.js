@@ -126,6 +126,8 @@ export async function getSongsFromAlbums(albums) {
 
     allResults = await Promise.all([...promises]);
 
+    allResults = allResults.map((group) => group.song);
+
     return allResults.flat();
 }
 

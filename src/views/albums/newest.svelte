@@ -47,7 +47,7 @@
                 <Actions
                     type="songs"
                     displayMode="fullButtons"
-                    showShuffle={albums.length > 1}
+                    showShuffle={true}
                     data={Object.create({ albums: albums })}
                 />
 

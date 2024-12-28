@@ -13,7 +13,7 @@
 
     let query = $derived(
         createQuery({
-            queryKey: ["unratedArtists"],
+            queryKey: ["unratedArtists", Date.now()],
             queryFn: async () => {
                 let result = await unratedArtists({ limit: 100 });
 
@@ -22,42 +22,35 @@
                     return [];
                 }
 
-                return result;
+                // refresh data on subsequent loads
+                tabulator?.replaceData(result.artist);
+
+                return result.artist;
             },
             enabled: $User.isLoggedIn,
         }),
     );
 
     // alias of returned data
-    let artists = $derived($query.data?.artist || {});
+    let artists = $derived($query.data || []);
 </script>
 
-{#if $query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if artists.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-                <Actions
-                    type="songs"
-                    displayMode="fullButtons"
-                    showShuffle={artists.length > 1}
-                    data={Object.create({ artists: artists })}
-                />
+<div class="lister-tabulator">
+    <div class="lister-tabulator__actions">
+        <Actions
+            type="artists"
+            displayMode="fullButtons"
+            showShuffle={true}
+            data={Object.create({ artists: artists })}
+        />
 
-                <MassRater bind:tabulator type="artist" />
-            </div>
+        <MassRater bind:tabulator type="artist" />
+    </div>
 
-            <Tabulator
-                bind:tabulator
-                data={artists}
-                columns={artistsPreset}
-                options={{ persistenceID: "artists" }}
-            ></Tabulator>
-        </div>
-    {/if}
-{/if}
+    <Tabulator
+        bind:tabulator
+        data={artists}
+        columns={artistsPreset}
+        options={{ persistenceID: "artists" }}
+    ></Tabulator>
+</div>

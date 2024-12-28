@@ -8,7 +8,7 @@
 
     // pageParam is based on offset total
     let tabulator = $state(null);
-    let limit = 1000;
+    let limit = 500;
     let total = $state(0);
 
     let query = $derived(
