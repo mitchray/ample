@@ -6,6 +6,7 @@
     import Songs from "~/views/forgotten/songs.svelte";
     import { replace } from "svelte-spa-router";
     import Visibility from "~/components/visibility.svelte";
+    import StatsLinks from "~/components/statsLinks.svelte";
 
     let { params = {} } = $props();
 
@@ -28,6 +29,8 @@
     let title = $_("text.forgotten");
     $PageTitle = title;
 </script>
+
+<StatsLinks />
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>

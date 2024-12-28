@@ -6,6 +6,7 @@
     import Songs from "~/views/favorites/songs.svelte";
     import Visibility from "~/components/visibility.svelte";
     import { replace } from "svelte-spa-router";
+    import StatsLinks from "~/components/statsLinks.svelte";
 
     let { params = {} } = $props();
 
@@ -27,6 +28,8 @@
         { id: "songs", label: $_("text.songs") },
     ];
 </script>
+
+<StatsLinks />
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>

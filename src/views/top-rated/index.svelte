@@ -6,6 +6,7 @@
     import Songs from "~/views/top-rated/songs.svelte";
     import Artists from "~/views/top-rated/artists.svelte";
     import Visibility from "~/components/visibility.svelte";
+    import StatsLinks from "~/components/statsLinks.svelte";
 
     let { params = {} } = $props();
 
@@ -27,6 +28,8 @@
     let title = $_("text.topRated");
     $PageTitle = title;
 </script>
+
+<StatsLinks />
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
