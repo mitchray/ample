@@ -9,9 +9,11 @@
 -   Updated Svelte 4 to 5 (majority of changes are centred around this)
 -   Separate dark and light theme colors
 -   Persist playback speed across media changes
+-   Removed paginated pages, everything now lazy loads
 
 ### Added
 -   Migration system so settings won't be lost across updates if things change
+-   Play actions for all stats pages (trending, favorites etc), and links to other stats at top
 
 ## [3.1.2] - 2024-11-30
 
