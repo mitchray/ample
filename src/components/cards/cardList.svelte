@@ -3,7 +3,7 @@
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
-    import { onMount } from "svelte";
+    import { onDestroy, onMount } from "svelte";
 
     /** @type {{card: any, type: any, initialData?: any, refresh?: boolean, limit?: any, heading?: any, showOnlyThese?: boolean, dataProvider?: any, viewAllURL?: any, genericOverride?: boolean, autoRefreshInterval?: any, layout: 'grid' | 'scroll'}} */
     let {
@@ -60,11 +60,11 @@
                 getLatestUpdate();
             }, 1000 * autoRefreshInterval);
         }
+    });
 
-        return () => {
-            observer?.disconnect();
-            clearInterval(refreshLoop);
-        };
+    onDestroy(() => {
+        observer?.disconnect();
+        clearInterval(refreshLoop);
     });
 
     async function getLatestUpdate() {
