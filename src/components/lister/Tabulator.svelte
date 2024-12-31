@@ -1,5 +1,6 @@
 <script>
     import "tabulator-tables/dist/css/tabulator.min.css";
+    import { _ } from "svelte-i18n";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { onDestroy, onMount } from "svelte";
     import { throttle } from "lodash-es";
@@ -61,6 +62,7 @@
                     size: true,
                 },
             },
+            placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.noItemsFound")}</span>`,
             ...options,
         });
 
@@ -98,5 +100,9 @@
         display: flex;
         gap: var(--spacing-md);
         flex-wrap: wrap;
+    }
+
+    :global(.tabulator-placeholder) {
+        width: 100% !important;
     }
 </style>
