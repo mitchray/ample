@@ -111,7 +111,7 @@
 
     $effect(() => {
         if (!$Settings.ArtistReleases) {
-            $Settings.ArtistReleases.reset();
+            $Settings.ArtistReleases.reset(); // svelte-persisted-store reset to initial value
         }
     });
 </script>

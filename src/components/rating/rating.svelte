@@ -7,10 +7,13 @@
         recentFlag,
     } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { errorHandler } from "~/logic/helper.js";
+    import { debugHelper, errorHandler } from "~/logic/helper.js";
     import { updateQueue } from "~/logic/ui.js";
 
     let { type = $bindable(null), data = $bindable({}) } = $props();
+
+    // NOTE: 'data' is not reactive as a prop so cannot directly alter a property e.g. data.rating = 3,
+    // instead must reassign e.g. data = { ...data, rating: 3 };
 
     let showAverageRatings = true;
     let ratingErrored = $state(false);
@@ -25,7 +28,7 @@
         let newRating = parsedRating === data.rating ? 0 : parsedRating; // clear rating if it matches existing
 
         // update the displayed rating immediately
-        data.rating = newRating;
+        data = { ...data, rating: newRating };
 
         $API.rate({ type: finalType, id: data.id, rating: newRating }).then(
             (result) => {
@@ -34,10 +37,10 @@
                     ratingErrored = true;
 
                     // revert the displayed rating
-                    data.rating = originalRating;
+                    data = { ...data, rating: originalRating };
                 }
 
-                if (!result.error) {
+                if (result.success) {
                     recentRating.set({
                         type: finalType,
                         id: data.id,
@@ -75,8 +78,9 @@
                     return;
                 }
 
-                if (!result.error) {
-                    data.flag = newFlag;
+                if (result.success) {
+                    data = { ...data, flag: newFlag };
+
                     recentFlag.set({
                         type: finalType,
                         id: data.id,
@@ -101,6 +105,8 @@
     }
 
     function refreshAverageRating() {
+        debugHelper("refetch item to get average rating");
+
         const apiMap = {
             song: () => $API.song({ filter: data.id }),
             album: () => $API.album({ filter: data.id }),
@@ -112,28 +118,31 @@
         if (apiMap[finalType]) {
             apiMap[finalType]().then((r) => {
                 if (!r.error) {
-                    data.averagerating = r.averagerating;
+                    data = { ...data, averagerating: r.averagerating };
                 }
             });
         }
     }
 
+    // monitor global rating/flag stores to update multiple instances
     $effect(() => {
         if (
             $recentRating.type === finalType &&
             $recentRating.id === data.id &&
             $recentRating.rating !== data.rating
         ) {
-            data.rating = $recentRating.rating;
+            data = { ...data, rating: $recentRating.rating };
             refreshAverageRating();
         }
+    });
 
+    $effect(() => {
         if (
             $recentFlag.type === finalType &&
             $recentFlag.id === data.id &&
             $recentFlag.flag !== data.flag
         ) {
-            data.flag = $recentFlag.flag;
+            data = { ...data, flag: $recentFlag.flag };
         }
     });
 </script>
