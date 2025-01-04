@@ -1,7 +1,6 @@
 <script>
     import { unratedArtists } from "~/logic/artist.js";
     import { errorHandler } from "~/logic/helper.js";
-    import { _ } from "svelte-i18n";
     import { artistsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";

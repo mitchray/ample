@@ -55,6 +55,11 @@
             return [key, value];
         });
 
+        // also reverse the groups if needed
+        if ($Settings.ArtistReleases.sortReversed) {
+            grouped.reverse();
+        }
+
         // reorder the groups to match the order set in preference
         if ($Settings.ArtistReleases.group === "release_type") {
             let arr = $releaseTypesOrder.split(",");
@@ -222,7 +227,7 @@
         {/if}
 
         {#if !releases && !finalAppearances}
-            <p>No items found</p>
+            <p>{$_("text.noItemsFound")}</p>
         {/if}
     {/if}
 </div>
