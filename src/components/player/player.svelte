@@ -43,7 +43,6 @@
     class="site-player"
     class:is-expanded={!$Settings.PlayerIsMini}
     class:is-open={$Settings.PlayerIsOpen}
-    class:sl-theme-dark={$ShowVisualizer}
     class:visualizer-open={$ShowVisualizer}
     class:queue-open={$Settings.QueueIsOpen}
     style:height={$Settings.PlayerIsOpen ? "auto" : "0"}
