@@ -2,7 +2,7 @@ import { compareVersions } from "compare-versions";
 
 const migrations = [
     {
-        version: "3.5.0-alpha1",
+        version: "3.5.0-beta1",
         migrate: async () => {
             // migrate indexedDB AmpleUser1 (presumably the sole admin account in most cases)
 
