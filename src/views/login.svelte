@@ -11,9 +11,10 @@
         Server,
     } from "~/stores/state.js";
     import { Settings } from "~/stores/settings.js";
-    import { attemptLogin } from "~/logic/user";
+    import { attemptLogin, login, logout } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { pingWithTimeout } from "~/logic/user";
 
     let username = $state("");
     let password = $state("");
@@ -32,6 +33,7 @@
     ];
 
     let fatalError = $state(false);
+    let loginInProgress = $state(false);
 
     let title = $_("text.login");
     $PageTitle = title;
@@ -41,9 +43,12 @@
     }
 
     const handleSubmit = async () => {
-        setServerDetails();
+        fatalError = false;
+        loginInProgress = true;
 
         try {
+            await setServerDetails();
+
             if (currentTab === "apikey") {
                 result = await attemptLogin({ passphrase: apiKey });
             } else {
@@ -52,20 +57,26 @@
                     username: username,
                 });
             }
-
             $Settings.LastLoginMethod = currentTab;
         } catch (e) {
             fatalError = true;
+        } finally {
+            loginInProgress = false;
         }
     };
 
-    function setServerDetails() {
-        fatalError = false;
+    async function setServerDetails() {
         $API = new AmpacheAPI({ url: $Server.ampacheURL, debug: $debugMode });
 
-        $API.ping().then((result) => {
-            $Server.version = result.version;
-        });
+        try {
+            let result = await pingWithTimeout(5000);
+
+            if (result.version) {
+                $Server.version = result.version;
+            }
+        } catch (e) {
+            throw new Error("Failed to set server details");
+        }
     }
 
     function handleUsername(e) {
@@ -182,6 +193,7 @@
                             disabled={!username || !password}
                             type="submit"
                             variant="primary"
+                            loading={loginInProgress}
                         >
                             <MaterialSymbol name="login" slot="prefix" />
                             {$_("text.login")}
@@ -215,6 +227,7 @@
                             type="submit"
                             variant="primary"
                             data-testid={"apikey_login"}
+                            loading={loginInProgress}
                         >
                             <MaterialSymbol name="login" slot="prefix" />
                             {$_("text.login")}

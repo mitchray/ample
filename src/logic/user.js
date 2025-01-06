@@ -41,6 +41,23 @@ export function logout() {
     get(MediaPlayer)?.clearAll();
 }
 
+export async function pingWithTimeout(timeout = 5000) {
+    return Promise.race([
+        get(API).ping(),
+        new Promise((_, reject) =>
+            setTimeout(
+                () =>
+                    reject(
+                        new Error(
+                            "Request timed out, could not ping the server",
+                        ),
+                    ),
+                timeout,
+            ),
+        ),
+    ]);
+}
+
 export async function validateSession() {
     if (!get(Server).ampacheURL) {
         logout();
@@ -60,7 +77,7 @@ export async function validateSession() {
 
         get(API).setSessionKey(ampleLastSession?.token || guestUserAPIKey);
 
-        let result = await get(API).ping();
+        let result = await pingWithTimeout(10000);
 
         if (result.auth) {
             await login({
@@ -70,6 +87,7 @@ export async function validateSession() {
             logout();
         }
     } catch (e) {
+        console.warn("Unable to validate session", e);
         logout();
     }
 }
