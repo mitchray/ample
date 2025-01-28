@@ -1,6 +1,6 @@
 {
     "name": "ample-ampache-client",
-    "version": "3.5.0-beta1",
+    "version": "3.5.0",
     "type": "module",
     "scripts": {
         "build": "vite build && npm run copy",
