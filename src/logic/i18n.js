@@ -12,6 +12,8 @@ export function setupI18n() {
     register("fr", () => import("../../languages/fr.json"));
     register("pt", () => import("../../languages/pt.json"));
     register("es", () => import("../../languages/es.json"));
+    register("pt-BR", () => import("../../languages/pt-BR.json"));
+
 
     init({
         fallbackLocale: "en",

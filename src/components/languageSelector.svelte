@@ -28,6 +28,7 @@
     <sl-option value="pl" data-lang="Polish">Polski</sl-option>
     <sl-option value="fr" data-lang="French">Français</sl-option>
     <sl-option value="pt" data-lang="Portuguese">Português</sl-option>
+    <sl-option value="pt-BR" data-lang="Portuguese-brazil">Português Brasil</sl-option>
     <sl-option value="es" data-lang="Spanish">Español</sl-option>
 </sl-select>
 
