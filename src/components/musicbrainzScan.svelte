@@ -8,6 +8,7 @@
     import Art from "~/components/art.svelte";
     import Portal from "~/components/portal.svelte";
     import { Settings } from "~/stores/settings.js";
+    import { untrack } from "svelte";
 
     let { data } = $props();
 
@@ -38,10 +39,141 @@
         queryURL = `https://musicbrainz.org/ws/2/recording/?artist=${
             data.mbid
         }&limit=${limit}&offset=${loadCount * limit}`;
+    });
 
+    $effect(() => {
+        if (loaded && $Settings.MusicBrainzFilters) {
+            let filters = [
+                /* BY STATUS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideMatches,
+                    condition: (item) => item.status !== "exact",
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideDuplicates,
+                    condition: (item) => item.status !== "duplicate",
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideIssues,
+                    condition: (item) => item.status !== "issue",
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideInfos,
+                    condition: (item) => item.status !== "info",
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideMissing,
+                    condition: (item) => item.status !== "missing",
+                },
+                /* VIDEOS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideVideos,
+                    condition: (item) => item.video !== true,
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideVideos,
+                    condition: (item) => !item.disambiguation.match(/video/i),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideVideos,
+                    condition: (item) => !item.title.match(/\(video(\)|\s)/i),
+                },
+                /* REMIXES */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideRemixes,
+                    condition: (item) => !item.disambiguation.match(/remix/i),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideRemixes,
+                    condition: (item) =>
+                        !item.title.match(/(re)?mix(,|\)|\]|\s)/i),
+                },
+                /* LIVE */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideLive,
+                    condition: (item) => !item.disambiguation.match(/live/i),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideLive,
+                    condition: (item) =>
+                        !item.title.match(/(\[|\()live(,|\]|\)|\s)/i),
+                },
+                /* INSTRUMENTALS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideInstrumentals,
+                    condition: (item) =>
+                        !item.disambiguation.match(
+                            /(instrumentals?|a\s?capellas?)/i,
+                        ),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideInstrumentals,
+                    condition: (item) =>
+                        !item.title.match(
+                            /\((instrumentals?|acapellas?)(,|\)|\s)/i,
+                        ),
+                },
+                /* DEMOS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideDemos,
+                    condition: (item) => !item.disambiguation.match(/demo/i),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideDemos,
+                    condition: (item) => !item.title.match(/\(demo(,|\)|\s)/i),
+                },
+                /* INTERVIEWS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideInterviews,
+                    condition: (item) =>
+                        !item.title.match(/(interview|commentary)/i),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideInterviews,
+                    condition: (item) =>
+                        !item.disambiguation.match(/(interview|commentary)/i),
+                },
+                /* ZERO TIMES */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideZeroTimes,
+                    condition: (item) => !item.time === false,
+                },
+                /* SHORT SONGS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideShortSongs,
+                    condition: (item) => item.time > 60,
+                },
+                /* RADIO EDITS */
+                {
+                    flag: $Settings.MusicBrainzFilters.hideRadioEdits,
+                    condition: (item) =>
+                        !item.disambiguation.match(/\(radio edit\)/i),
+                },
+                {
+                    flag: $Settings.MusicBrainzFilters.hideRadioEdits,
+                    condition: (item) => !item.title.match(/\(radio edit\)/i),
+                },
+            ];
+
+            filteredRecordings = combinedSources.filter((item) =>
+                filters.every(
+                    (filter) => !filter.flag || filter.condition(item),
+                ),
+            );
+
+            untrack(() => {
+                // sort alphabetically
+                filteredRecordings = filteredRecordings.sort(
+                    function (obj1, obj2) {
+                        return obj1.title.localeCompare(obj2.title);
+                    },
+                );
+            });
+        }
+    });
+
+    $effect(() => {
         if (loaded) {
-            filteredRecordings = combinedSources;
-
             // get counts
             counts.matches = combinedSources.reduce(function (n, single) {
                 return n + (single.status === "exact");
@@ -62,136 +194,6 @@
             counts.missing = combinedSources.reduce(function (n, single) {
                 return n + (single.status === "missing");
             }, 0);
-
-            // do filtering
-            if ($Settings.MusicBrainzFilters.hideMatches) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return item.status !== "exact";
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideDuplicates) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return item.status !== "duplicate";
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideIssues) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return item.status !== "issue";
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideInfos) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return item.status !== "info";
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideMissing) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return item.status !== "missing";
-                });
-            }
-
-            // custom filters
-
-            if ($Settings.MusicBrainzFilters.hideVideos) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.video === true;
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(/video/i);
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(/\(video(\)|\s)/i);
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideRemixes) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(/remix/i);
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(/(re)?mix(,|\)|\]|\s)/i);
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideLive) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(/live/i);
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(/(\[|\()live(,|\]|\)|\s)/i);
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideInstrumentals) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(
-                        /(instrumentals?|a\s?capellas?)/i,
-                    );
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(
-                        /\((instrumentals?|acapellas?)(,|\)|\s)/i,
-                    );
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideDemos) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(/demo/i);
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(/\(demo(,|\)|\s)/i);
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideInterviews) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(/(interview|commentary)/i);
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(
-                        /(interview|commentary)/i,
-                    );
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideZeroTimes) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.time === false;
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideShortSongs) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return item.time > 60;
-                });
-            }
-
-            if ($Settings.MusicBrainzFilters.hideRadioEdits) {
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.disambiguation.match(/\(radio edit\)/i);
-                });
-
-                filteredRecordings = filteredRecordings.filter(function (item) {
-                    return !item.title.match(/\(radio edit\)/i);
-                });
-            }
-
-            // sort alphabetically
-            filteredRecordings = filteredRecordings.sort(function (obj1, obj2) {
-                return obj1.title.localeCompare(obj2.title);
-            });
         }
     });
 
@@ -284,8 +286,6 @@
             }
         }
 
-        songs = songs;
-
         combinedSources.push(...songs);
 
         // loop MB recordings
@@ -337,8 +337,6 @@
                 combinedSources.push(temp);
             }
         }
-
-        combinedSources = combinedSources;
 
         fetching = false;
         loaded = true;
