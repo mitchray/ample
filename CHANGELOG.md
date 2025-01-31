@@ -1,6 +1,18 @@
 # Changelog
 
-## [3.5.0] - 2025-xx-xx
+## [3.5.1] - 2025-01-31
+
+### Requires at least Ampache 6.6.0
+
+### Fixed
+-   Musicbrainz Scan was freezing
+
+### Added
+-   Brazilian Portuguese translation (thanks daviii-lopes)
+
+### Changed
+
+## [3.5.0] - 2025-01-28
 
 ### Requires at least Ampache 6.6.0
 
