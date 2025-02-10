@@ -8,14 +8,111 @@
         IsMobile,
         NowPlayingIndex,
         NowPlayingQueue,
+        CurrentMedia,
     } from "~/stores/state.js";
     import { MediaPlayer, QueueVirtualListBind } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import QueueItem from "~/components/queue/queue_item.svelte";
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
     import RefillButton from "~/components/queue/queue_refill.svelte";
+    import { Sortable } from "sortablejs";
+    import { onMount, tick } from "svelte";
 
     let siteQueueBind = $state();
+    let virtualListEl = $state();
+    let containerRef;
+    let indexFinalPosition = null;
+    let scrollPos = null;
+    let aborted = false;
+
+    let virtualizer = $derived(
+        createVirtualizer({
+            count: $NowPlayingQueue.length,
+            getScrollElement: () => virtualListEl,
+            estimateSize: () => 46,
+            overscan: 10,
+        }),
+    );
+
+    onMount(() => {
+        let sortable;
+
+        const unsubscribe = NowPlayingQueue.subscribe((currentItems) => {
+            if (sortable) {
+                sortable.destroy(); // Destroy previous sortable instance
+            }
+
+            sortable = new Sortable(containerRef, {
+                animation: 150,
+                handle: ".handle",
+                onStart: (event) => {
+                    aborted = false;
+                },
+                onMove: (event) => {
+                    if (!event.originalEvent?.ctrlKey) {
+                        aborted = true;
+                        event.preventDefault();
+                        return false;
+                    }
+
+                    indexFinalPosition = currentItems.findIndex(
+                        (x) => x._id === event.related.dataset.id,
+                    );
+
+                    console.debug(indexFinalPosition, "index");
+
+                    scrollPos = virtualListEl.scrollTop;
+                },
+                onEnd: async (event) => {
+                    if (aborted) return false;
+
+                    let selectedDOMItems =
+                        event.items?.length > 0 ? event.items : [event.item];
+
+                    // Find the IDs of the items
+                    let idsToMove = selectedDOMItems.map((x) => x.dataset.id);
+
+                    // Find the items in the target array that need to be moved
+                    const itemsToReinsert = currentItems.filter((item) =>
+                        idsToMove.includes(item._id),
+                    );
+
+                    // Remove the items from the target array
+                    const filteredTargetArray = currentItems.filter(
+                        (item) => !idsToMove.includes(item._id),
+                    );
+
+                    // Insert the removed items at the new index
+                    const newTargetArray = [
+                        ...filteredTargetArray.slice(0, indexFinalPosition),
+                        ...itemsToReinsert,
+                        ...filteredTargetArray.slice(indexFinalPosition),
+                    ];
+
+                    NowPlayingQueue.set(newTargetArray);
+
+                    await tick();
+
+                    //Reset playing index if needed
+                    let currentIndex = $NowPlayingQueue.findIndex(
+                        (item) => item._id === $CurrentMedia._id,
+                    );
+
+                    if (currentIndex !== -1) {
+                        NowPlayingIndex.set(currentIndex);
+                    }
+
+                    // scroll to the index we just moved to
+                    virtualListEl.scrollTop = scrollPos;
+                },
+            });
+        });
+
+        return () => {
+            sortable?.destroy();
+            unsubscribe();
+        };
+    });
 
     function handleAction(event, index) {
         $MediaPlayer.playSelected(index);
@@ -43,17 +140,6 @@
             $Settings.QueueIsOpen = status;
         }
     }
-
-    let virtualListEl = $state();
-    let virtualizer = $derived(
-        createVirtualizer({
-            count: $NowPlayingQueue.length,
-            getScrollElement: () => virtualListEl,
-            estimateSize: () => 46,
-            overscan: 10,
-        }),
-    );
-    let items = $derived($virtualizer.getVirtualItems());
 
     $effect(() => {
         $QueueVirtualListBind = $virtualizer;
@@ -134,16 +220,24 @@
                 bind:this={virtualListEl}
                 style="overflow-y: auto; position: absolute; inset: 0;"
             >
-                <div style="height: {$virtualizer.getTotalSize()}px;">
-                    {#each items as item (item)}
+                <div
+                    style="height: {$virtualizer.getTotalSize()}px;"
+                    bind:this={containerRef}
+                >
+                    {#each $virtualizer.getVirtualItems() as item (item.index)}
                         <div
                             onclick={(e) => {
                                 handleAction(e, item.index);
                             }}
                             style="top: {item.start}px; position: absolute; left: 0; width: 100%;"
                             data-index={item.index}
+                            data-id={$NowPlayingQueue[item.index]._id}
                         >
-                            <QueueItem media={$NowPlayingQueue[item.index]} />
+                            {#key $NowPlayingQueue[item.index]._id}
+                                <QueueItem
+                                    media={$NowPlayingQueue[item.index]}
+                                />
+                            {/key}
                         </div>
                     {/each}
                 </div>

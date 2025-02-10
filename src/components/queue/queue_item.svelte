@@ -66,7 +66,7 @@
         <MaterialSymbol name="close" />
     </sl-button>
 
-    <span class="thumb">
+    <span class="thumb handle">
         <Art
             data={media}
             radius="2px"
