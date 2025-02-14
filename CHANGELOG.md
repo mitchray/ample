@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.6.0] - 2025-xx-xx
+
+### Changed
+
+-   "Queue Refill" reworked into Jukebox; giving user added items priority
+
 ## [3.5.1] - 2025-01-31
 
 ### Requires at least Ampache 6.6.0
@@ -9,8 +15,6 @@
 
 ### Added
 -   Brazilian Portuguese translation (thanks daviii-lopes)
-
-### Changed
 
 ## [3.5.0] - 2025-01-28
 

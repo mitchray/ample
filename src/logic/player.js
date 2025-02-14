@@ -3,7 +3,7 @@ import { get } from "svelte/store";
 import butterchurn from "butterchurn";
 import WaveSurfer from "wavesurfer.js";
 import { getSongVersions } from "~/logic/song";
-import { showQueueItemAtIndex } from "~/logic/ui.js";
+import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
 import {
     addAlternateVersionsNotification,
     addGainTagsMissingNotification,
@@ -21,10 +21,10 @@ import {
     CurrentMediaGainInfo,
     IsMobile,
     IsPlaying,
+    JukeboxQueue,
     NowPlayingIndex,
     NowPlayingQueue,
     PlaybackSpeed,
-    QueueIsUpdating,
 } from "~/stores/state.js";
 import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 
@@ -418,7 +418,7 @@ class Player {
     }
 
     /**
-     * Add items to the end of the queue
+     * Add items to the end of the user queue
      * @param {object} items
      */
     playLast(items) {
@@ -431,6 +431,16 @@ class Player {
                 this.start();
             }
         });
+    }
+
+    /**
+     * Add items to the end of the jukebox queue
+     * @param {object} items
+     */
+    jukeboxPlayLast(items) {
+        let tempArray = get(JukeboxQueue);
+        tempArray.push(...items);
+        this.#setJukeboxQueueItems(tempArray);
     }
 
     /**
@@ -754,10 +764,13 @@ class Player {
 
     // keep this as purely a setting method
     async #setQueueItems(arr) {
-        QueueIsUpdating.set(true);
-        await tick();
         NowPlayingQueue.set(arr);
-        QueueIsUpdating.set(false);
+        await updateQueue();
+    }
+
+    // keep this as purely a setting method
+    async #setJukeboxQueueItems(arr) {
+        JukeboxQueue.set(arr);
     }
 
     #runChecks(item) {

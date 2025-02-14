@@ -3,17 +3,18 @@
         CurrentMedia,
         NowPlayingIndex,
         NowPlayingQueue,
+        JukeboxQueue,
     } from "~/stores/state";
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
-    import { ticks, updateQueue } from "~/logic/ui.js";
+    import { updateQueue } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import Art from "~/components/art.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import MiniRating from "~/components/rating/miniRating.svelte";
 
-    let { media = $bindable() } = $props();
+    let { media = $bindable(), queueType } = $props();
 
     let matchesRating = $state();
 
@@ -22,21 +23,27 @@
     }
 
     async function handleRemoveItem(uuid) {
-        let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
+        if (queueType === "user") {
+            let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
+            if (index === -1) return;
 
-        if (index === -1) return;
+            $NowPlayingQueue.splice(index, 1);
 
-        $NowPlayingQueue.splice(index, 1);
+            // If playing media is removed, load new media
+            if ($NowPlayingIndex === index) {
+                $MediaPlayer.stop();
+                $MediaPlayer.start();
+            }
 
-        // If playing media is removed, load new media
-        if ($NowPlayingIndex === index) {
-            $MediaPlayer.stop();
-            $MediaPlayer.start();
-        }
+            // account for removal of previous items affected NowPlayingIndex
+            if ($NowPlayingIndex > index) {
+                NowPlayingIndex.set($NowPlayingIndex - 1);
+            }
+        } else {
+            let index = $JukeboxQueue.findIndex((item) => item._id === uuid);
+            if (index === -1) return;
 
-        // account for removal of previous items affected NowPlayingIndex
-        if ($NowPlayingIndex > index) {
-            NowPlayingIndex.set($NowPlayingIndex - 1);
+            $JukeboxQueue.splice(index, 1);
         }
 
         await updateQueue();

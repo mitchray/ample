@@ -5,6 +5,7 @@
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
     import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
     import { throttle } from "lodash-es";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { onMount, tick, untrack } from "svelte";
 
     let lyrics = new Lyrics(); // custom store
@@ -99,6 +100,7 @@
                     hidden={!$lyrics.isTimestamped || follow}
                     onclick={() => (follow = true)}
                 >
+                    <MaterialSymbol name="footprint" slot="prefix" />
                     {$_("text.follow")}
                 </sl-button>
             </div>

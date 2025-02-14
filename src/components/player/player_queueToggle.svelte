@@ -1,20 +1,27 @@
 <script>
+    import { _ } from "svelte-i18n";
     import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { showQueueItemAtIndex } from "~/logic/ui.js";
     import { NowPlayingIndex, ShowVisualizer } from "~/stores/state.js";
+    import { tick } from "svelte";
 
-    function handleQueueToggle() {
+    async function handleQueueToggle() {
         let inverted = !$Settings.QueueIsOpen;
         $Settings.QueueIsOpen = inverted;
 
         if (inverted === true) {
-            showQueueItemAtIndex($NowPlayingIndex);
+            await tick();
+            await showQueueItemAtIndex($NowPlayingIndex, true);
         }
     }
 </script>
 
-<sl-tooltip content={$Settings.QueueIsOpen ? "Hide Queue" : "Show Queue"}>
+<sl-tooltip
+    content={$Settings.QueueIsOpen
+        ? $_("text.queueHide")
+        : $_("text.queueShow")}
+>
     <sl-button
         circle
         id="queue-button"

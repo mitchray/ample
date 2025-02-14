@@ -1,138 +1,13 @@
 <script>
-    import { _ } from "svelte-i18n";
-    import { createVirtualizer } from "@tanstack/svelte-virtual";
-    import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
     import { Settings } from "~/stores/settings.js";
-    import {
-        IsMobile,
-        NowPlayingIndex,
-        NowPlayingQueue,
-        CurrentMedia,
-    } from "~/stores/state.js";
-    import { MediaPlayer, QueueVirtualListBind } from "~/stores/elements.js";
-    import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import QueueItem from "~/components/queue/queue_item.svelte";
-    import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
-    import RefillButton from "~/components/queue/queue_refill.svelte";
-    import { Sortable } from "sortablejs";
-    import { onMount, tick } from "svelte";
+    import { IsMobile } from "~/stores/state.js";
+    import { QueuePanelBind } from "~/stores/elements.js";
+
+    import Jukebox from "~/components/queue/queue_jukebox.svelte";
+    import UserQueue from "~/components/queue/queue_user.svelte";
 
     let siteQueueBind = $state();
-    let virtualListEl = $state();
-    let containerRef;
-    let indexFinalPosition = null;
-    let scrollPos = null;
-    let aborted = false;
-
-    let virtualizer = $derived(
-        createVirtualizer({
-            count: $NowPlayingQueue.length,
-            getScrollElement: () => virtualListEl,
-            estimateSize: () => 46,
-            overscan: 10,
-        }),
-    );
-
-    onMount(() => {
-        let sortable;
-
-        const unsubscribe = NowPlayingQueue.subscribe((currentItems) => {
-            if (sortable) {
-                sortable.destroy(); // Destroy previous sortable instance
-            }
-
-            sortable = new Sortable(containerRef, {
-                animation: 150,
-                handle: ".handle",
-                onStart: (event) => {
-                    aborted = false;
-                },
-                onMove: (event) => {
-                    if (!event.originalEvent?.ctrlKey) {
-                        aborted = true;
-                        event.preventDefault();
-                        return false;
-                    }
-
-                    indexFinalPosition = currentItems.findIndex(
-                        (x) => x._id === event.related.dataset.id,
-                    );
-
-                    console.debug(indexFinalPosition, "index");
-
-                    scrollPos = virtualListEl.scrollTop;
-                },
-                onEnd: async (event) => {
-                    if (aborted) return false;
-
-                    let selectedDOMItems =
-                        event.items?.length > 0 ? event.items : [event.item];
-
-                    // Find the IDs of the items
-                    let idsToMove = selectedDOMItems.map((x) => x.dataset.id);
-
-                    // Find the items in the target array that need to be moved
-                    const itemsToReinsert = currentItems.filter((item) =>
-                        idsToMove.includes(item._id),
-                    );
-
-                    // Remove the items from the target array
-                    const filteredTargetArray = currentItems.filter(
-                        (item) => !idsToMove.includes(item._id),
-                    );
-
-                    // Insert the removed items at the new index
-                    const newTargetArray = [
-                        ...filteredTargetArray.slice(0, indexFinalPosition),
-                        ...itemsToReinsert,
-                        ...filteredTargetArray.slice(indexFinalPosition),
-                    ];
-
-                    NowPlayingQueue.set(newTargetArray);
-
-                    await tick();
-
-                    //Reset playing index if needed
-                    let currentIndex = $NowPlayingQueue.findIndex(
-                        (item) => item._id === $CurrentMedia._id,
-                    );
-
-                    if (currentIndex !== -1) {
-                        NowPlayingIndex.set(currentIndex);
-                    }
-
-                    // scroll to the index we just moved to
-                    virtualListEl.scrollTop = scrollPos;
-                },
-            });
-        });
-
-        return () => {
-            sortable?.destroy();
-            unsubscribe();
-        };
-    });
-
-    function handleAction(event, index) {
-        $MediaPlayer.playSelected(index);
-    }
-
-    async function handleClearPrevious() {
-        $NowPlayingQueue.splice(0, $NowPlayingIndex);
-        await updateQueue();
-        $NowPlayingIndex = 0;
-        virtualListEl.scrollTop = 0;
-    }
-
-    function handleClearQueue() {
-        $MediaPlayer.clearQueue();
-    }
-
-    function togglePinned() {
-        let inverted = !$Settings.QueueIsPinned;
-        $Settings.QueueIsPinned = inverted;
-    }
 
     function handleClickOutside() {
         if (siteQueueBind?.classList.contains("is-drawer")) {
@@ -140,10 +15,6 @@
             $Settings.QueueIsOpen = status;
         }
     }
-
-    $effect(() => {
-        $QueueVirtualListBind = $virtualizer;
-    });
 </script>
 
 <div
@@ -158,91 +29,20 @@
     }}
 >
     <div class="site-queue-inner">
-        <div class="header panel-header">
-            <h4>{$_("text.queue")}</h4>
-
-            <sl-button-group>
-                <sl-button
-                    class="show-current"
-                    onclick={() => showQueueItemAtIndex($NowPlayingIndex)}
-                    size="small"
-                    title={$_("text.queueShowCurrent")}
-                >
-                    <MaterialSymbol name="visibility" />
-                </sl-button>
-
-                <SkipBelowButton />
-
-                <RefillButton />
-
-                <sl-dropdown>
-                    <sl-button size="small" slot="trigger">
-                        <MaterialSymbol name="more_horiz" />
-                    </sl-button>
-
-                    <sl-menu>
-                        {#if !$IsMobile}
-                            <sl-menu-item
-                                onclick={(e) => {
-                                    e.stopPropagation();
-                                    togglePinned();
-                                }}
-                            >
-                                {#if $Settings.QueueIsPinned}
-                                    {$_("text.queueUnpin")}
-                                {:else}
-                                    {$_("text.queuePin")}
-                                {/if}
-                            </sl-menu-item>
-                        {/if}
-
-                        <sl-menu-item onclick={handleClearPrevious}>
-                            {$_("text.queueClearPrevious")}
-                        </sl-menu-item>
-                    </sl-menu>
-                </sl-dropdown>
-            </sl-button-group>
-
-            <sl-button
-                circle
-                class="clear-all"
-                onclick={handleClearQueue}
-                size="small"
-                title={$_("text.clearAll")}
-                variant="danger"
-            >
-                <MaterialSymbol name="delete" />
-            </sl-button>
-        </div>
-
-        <div class="queue-list">
-            <div
-                bind:this={virtualListEl}
-                style="overflow-y: auto; position: absolute; inset: 0;"
-            >
-                <div
-                    style="height: {$virtualizer.getTotalSize()}px;"
-                    bind:this={containerRef}
-                >
-                    {#each $virtualizer.getVirtualItems() as item (item.index)}
-                        <div
-                            onclick={(e) => {
-                                handleAction(e, item.index);
-                            }}
-                            style="top: {item.start}px; position: absolute; left: 0; width: 100%;"
-                            data-index={item.index}
-                            data-id={$NowPlayingQueue[item.index]._id}
-                        >
-                            {#key $NowPlayingQueue[item.index]._id}
-                                <QueueItem
-                                    media={$NowPlayingQueue[item.index]}
-                                />
-                            {/key}
-                        </div>
-                    {/each}
-                </div>
+        <sl-split-panel
+            vertical
+            position="100"
+            style="--min: 55px; --max: calc(100% - 55px);"
+            bind:this={$QueuePanelBind}
+        >
+            <div class="user-queue panel-section" slot="start">
+                <UserQueue />
             </div>
-        </div>
+
+            <div class="jukebox-queue panel-section" slot="end">
+                <Jukebox />
+            </div>
+        </sl-split-panel>
     </div>
 </div>
 
@@ -309,7 +109,7 @@
     Items
     */
 
-    .header {
+    .site-queue :global(.header) {
         display: flex;
         flex-shrink: 0;
         align-items: center;
@@ -319,29 +119,25 @@
         height: 48px;
     }
 
-    .clear-all {
-        margin-inline-start: auto;
-    }
-
-    .queue-list {
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        flex: 1;
-        background-color: var(--color-background);
-        border-radius: 15px;
-        margin-block-end: var(--spacing-lg);
-        position: relative;
-    }
-
     :global(.queue-dragging) {
         background-color: var(--color-primary-container) !important;
         color: var(--color-on-primary-container);
         box-shadow: var(--shadow-lg);
     }
 
-    .show-current :global(.icon) {
+    sl-split-panel {
+        height: 100%;
+    }
+
+    .panel-section {
+        overflow-y: hidden;
+        display: flex;
+        flex-direction: column;
+        flex: 1;
         position: relative;
-        top: 1px;
+    }
+
+    .auto-queue {
+        /*padding-block-start: var(--spacing-sm);*/
     }
 </style>

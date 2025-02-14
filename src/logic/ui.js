@@ -1,8 +1,11 @@
 import { Settings } from "~/stores/settings.js";
-import { IsMobile, NowPlayingQueue } from "~/stores/state.js";
+import { IsMobile, JukeboxQueue, NowPlayingQueue } from "~/stores/state.js";
 import { get } from "svelte/store";
 import { tick } from "svelte";
-import { QueueVirtualListBind } from "~/stores/elements.js";
+import {
+    JukeboxVirtualListBind,
+    QueueVirtualListBind,
+} from "~/stores/elements.js";
 
 /**
  * Close sidebar
@@ -36,20 +39,26 @@ export async function ticks(count) {
     }
 }
 
-export async function showQueueItemAtIndex(index) {
+export async function showQueueItemAtIndex(index, immediate = false) {
     await tick();
     get(QueueVirtualListBind)?.scrollToIndex(index, {
-        behavior: "smooth",
+        behavior: immediate ? "auto" : "smooth",
         align: "start",
     });
 }
 
 export async function updateQueue() {
     // need to restore scroll offset as the list will reset
-    let offsetBefore = get(QueueVirtualListBind).scrollOffset;
+    let offsetBeforeQueue = get(QueueVirtualListBind).scrollOffset;
+    let offsetBeforeJukebox = get(JukeboxVirtualListBind).scrollOffset;
+
     NowPlayingQueue.set(get(NowPlayingQueue));
+    JukeboxQueue.set(get(JukeboxQueue));
+
     await tick();
-    get(QueueVirtualListBind).scrollToOffset(offsetBefore);
+
+    get(QueueVirtualListBind).scrollToOffset(offsetBeforeQueue);
+    get(JukeboxVirtualListBind).scrollToOffset(offsetBeforeJukebox);
 }
 
 export function hideLoadingOverlay() {

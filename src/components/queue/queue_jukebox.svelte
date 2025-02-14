@@ -3,13 +3,24 @@
     import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
-    import { API, NowPlayingIndex, NowPlayingQueue } from "~/stores/state.js";
-    import { MediaPlayer } from "~/stores/elements.js";
-    import { addAlert } from "~/logic/alert.js";
-    import { errorHandler, prepareForQueue } from "~/logic/helper.js";
+    import {
+        API,
+        NowPlayingIndex,
+        NowPlayingQueue,
+        JukeboxQueue,
+        CurrentMedia,
+    } from "~/stores/state.js";
+    import { MediaPlayer, QueuePanelBind } from "~/stores/elements.js";
+    import {
+        debugHelper,
+        errorHandler,
+        prepareForQueue,
+    } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
     import { onMount, setContext } from "svelte";
     import { writable } from "svelte/store";
+    import QueueList from "~/components/queue/queue_list.svelte";
+    import { updateQueue } from "~/logic/ui.js";
 
     let playlists = writable([]);
     let selectedPlaylists = writable([]);
@@ -69,18 +80,10 @@
 
                             let result = response.song || [response];
 
-                            if (result.length > 0 && shouldAdd) {
-                                $MediaPlayer.playLast(prepareForQueue(result));
-
-                                addAlert({
-                                    title: $_("text.queueRefill"),
-                                    message: $_("text.queueRefillAddedItems", {
-                                        values: {
-                                            n: result.length,
-                                        },
-                                    }),
-                                    style: "info",
-                                });
+                            if (result.length > 0 && shouldRefillJukebox) {
+                                $MediaPlayer.jukeboxPlayLast(
+                                    prepareForQueue(result),
+                                );
                             }
                             resolve();
                         })
@@ -110,10 +113,62 @@
         $Settings.QueueRefill.mode = e.target.value;
     }
 
+    async function handleRefresh() {
+        $JukeboxQueue = [];
+        await updateQueue();
+    }
+
+    async function clearQueue() {
+        $JukeboxQueue = [];
+        await updateQueue();
+    }
+
+    async function moveToQueue() {
+        const index = $JukeboxQueue.findIndex((item) =>
+            $MediaPlayer?.isEligibleToPlay(item),
+        );
+
+        if (index === -1) {
+            debugHelper("could not find an eligible item in jukebox");
+            return;
+        }
+
+        // remove ineligible items from array
+        $JukeboxQueue = $JukeboxQueue.slice(index);
+
+        let [item] = $JukeboxQueue.splice(0, 1); // first item is now eligible
+        $MediaPlayer.playLast([item]);
+        await updateQueue();
+    }
+
+    function expandPanel() {
+        $QueuePanelBind.position = 0;
+    }
+
+    let shouldAddToQueue = $derived(
+        $Settings.QueueRefill.enabled && // jukebox is enabled
+            $JukeboxQueue.length > 0 && // there are jukebox items to play
+            $CurrentMedia && // just to trigger reactivity
+            !$MediaPlayer?.findViableItem("next"), // need another eligible item
+    );
+
+    let shouldRefillJukebox = $derived(
+        $Settings.QueueRefill.enabled && // jukebox is enabled
+            $NowPlayingQueue.length > 0 && // items are in queue
+            $NowPlayingIndex > $NowPlayingQueue.length - 5 && // approaching end of queue
+            $JukeboxQueue.length < 10, // not many items in jukebox
+    );
+
     $effect(() => {
         // when selected playlist changes, save to store
         if ($selectedPlaylists[0]?.id) {
             $Settings.QueueRefill.smartlist = $selectedPlaylists[0].id;
+        }
+    });
+
+    $effect(() => {
+        if (!$Settings.QueueRefill.enabled || $Settings.QueueRefill.mode) {
+            clearQueue();
         }
     });
 
@@ -136,16 +191,16 @@
         }
     });
 
-    let shouldAdd = $derived(
-        $Settings.QueueRefill.enabled &&
-            $NowPlayingQueue.length > 0 &&
-            $NowPlayingIndex > $NowPlayingQueue.length - 10,
-    );
-
     $effect(() => {
-        if (shouldAdd && !isFetching) {
+        if (shouldRefillJukebox && !isFetching) {
             clearTimeout(timeout);
             startFetching();
+        }
+    });
+
+    $effect(() => {
+        if (shouldAddToQueue) {
+            moveToQueue();
         }
     });
 
@@ -173,57 +228,63 @@
     });
 </script>
 
-<sl-dropdown hoist placement="bottom">
-    <sl-button
-        class="rating-filter"
-        class:is-enabled={$Settings.QueueRefill.enabled}
-        size="small"
-        slot="trigger"
-        title={$_("text.queueRefill")}
-    >
-        <MaterialSymbol
-            fill={$Settings.QueueRefill.enabled}
-            name="play_circle"
-            size="13px"
-        />
-    </sl-button>
+<div class="header panel-header">
+    <h4 onclick={() => expandPanel()}>Jukebox</h4>
 
-    <sl-card>
-        <div slot="header">
-            {$_("text.queueRefill")}
+    <sl-switch
+        checked={$Settings.QueueRefill.enabled}
+        onsl-change={toggleEnabled}
+    ></sl-switch>
 
-            <sl-switch
-                checked={$Settings.QueueRefill.enabled}
-                onsl-change={toggleEnabled}
-            ></sl-switch>
-        </div>
+    <sl-button-group>
+        <sl-dropdown hoist placement="top">
+            <sl-button
+                size="small"
+                slot="trigger"
+                title={$_("text.queueRefill")}
+            >
+                <MaterialSymbol name="settings" size="13px" />
+            </sl-button>
 
-        <sl-radio-group
-            name="mode"
-            onsl-change={handleMode}
-            value={$Settings.QueueRefill.mode}
-        >
-            <sl-radio-button value="smartlist">
-                <MaterialSymbol name="electric_bolt" slot="prefix" />
-                {$_("text.smartlist")}
-            </sl-radio-button>
-            <sl-radio-button value="mix">
-                <MaterialSymbol name="person" slot="prefix" />
-                {$_("text.artistMix")}
-            </sl-radio-button>
-        </sl-radio-group>
+            <sl-card>
+                <sl-radio-group
+                    name="mode"
+                    onsl-change={handleMode}
+                    value={$Settings.QueueRefill.mode}
+                >
+                    <sl-radio-button value="smartlist">
+                        <MaterialSymbol name="electric_bolt" slot="prefix" />
+                        {$_("text.smartlist")}
+                    </sl-radio-button>
+                    <sl-radio-button value="mix">
+                        <MaterialSymbol name="person" slot="prefix" />
+                        {$_("text.artistMix")}
+                    </sl-radio-button>
+                </sl-radio-group>
 
-        {#if $Settings.QueueRefill.mode === "smartlist"}
-            <div class="secondary-info">{$_("text.queueRefillSmartlist")}</div>
+                {#if $Settings.QueueRefill.mode === "smartlist"}
+                    <div class="secondary-info">
+                        {$_("text.queueRefillSmartlist")}
+                    </div>
 
-            <sl-divider></sl-divider>
+                    <sl-divider></sl-divider>
 
-            <PlaylistSelector {contextKey} />
-        {:else}
-            <div class="secondary-info">{$_("text.queueRefillMix")}</div>
-        {/if}
-    </sl-card>
-</sl-dropdown>
+                    <PlaylistSelector {contextKey} />
+                {:else}
+                    <div class="secondary-info">
+                        {$_("text.queueRefillMix")}
+                    </div>
+                {/if}
+            </sl-card>
+        </sl-dropdown>
+
+        <sl-button onclick={() => handleRefresh()} size="small">
+            <MaterialSymbol name="refresh" size="13px" />
+        </sl-button>
+    </sl-button-group>
+</div>
+
+<QueueList queueType="jukebox" />
 
 <style>
     sl-card {
@@ -249,5 +310,9 @@
     sl-button :global(.icon) {
         position: relative;
         top: 2px;
+    }
+
+    .header h4 {
+        cursor: pointer;
     }
 </style>
