@@ -180,13 +180,25 @@ class Player {
                 this.audioElement.src = this.currentMedia.url;
                 this.wavesurfer.setMediaElement(this.audioElement);
             } else {
-                // Fetch the audio file with abort signal
-                const response = await fetch(item.url, { signal: abortSignal });
+                // Use cache first
+                const cache = await caches.open("audio-cache");
+                let response = await cache.match(item.url);
+
+                if (!response) {
+                    debugHelper("song was not in cache, do new fetch");
+                    // If not in cache, fetch the audio file with abort signal
+                    response = await fetch(item.url, { signal: abortSignal });
+                    if (response.ok) {
+                        await cache.put(item.url, response.clone()); // Clone response before caching
+                    }
+                } else {
+                    debugHelper("song was in cache!");
+                }
+
                 const blob = await response.blob();
-                const audioUrl = URL.createObjectURL(blob);
 
                 // Load the audio into WaveSurfer
-                this.wavesurfer.load(audioUrl);
+                this.wavesurfer.loadBlob(blob);
             }
 
             // set gain of this item
@@ -199,11 +211,24 @@ class Player {
             this.wavesurfer
                 .play()
                 .then(async () => {
+                    // start preloading next item
+                    let nextItem = await this.findViableItem("next");
+
+                    if (nextItem?.id) {
+                        debugHelper("loading next song into cache");
+                        const cache = await caches.open("audio-cache");
+                        const response = await fetch(nextItem.url);
+                        if (response.ok) {
+                            await cache.put(nextItem.url, response);
+                            debugHelper("cache successful");
+                        }
+                    }
+
                     this.#runChecks(item);
                 })
                 .catch((e) => {
                     // probably a race condition between quick succession load/play, ignore
-                    debugHelper("Wavesurfer race condition?");
+                    debugHelper(e, "Wavesurfer race condition?");
                 });
         } catch (e) {
             if (e.name === "AbortError") {

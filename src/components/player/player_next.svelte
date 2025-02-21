@@ -3,7 +3,6 @@
     import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
-    import { untrack } from "svelte";
 
     let dropdown = $state();
     let nextItem = $state();
@@ -25,9 +24,8 @@
     }
 
     $effect(() => {
-        if ($CurrentMedia || $NowPlayingQueue) {
-            untrack(() => update());
-        }
+        $CurrentMedia, update();
+        $NowPlayingQueue, update();
     });
 </script>
 
