@@ -83,7 +83,7 @@
                             (x) => x._id === event.related.dataset.id,
                         );
 
-                        console.debug(indexFinalPosition, "index");
+                        // console.debug(indexFinalPosition, "index");
 
                         scrollPos = virtualListEl.scrollTop;
                     },
@@ -119,7 +119,7 @@
 
                         items.set(newTargetArray);
 
-                        console.debug($items, "NEW ITEMS");
+                        // console.debug($items, "NEW ITEMS");
 
                         await tick();
 

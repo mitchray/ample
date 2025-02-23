@@ -150,6 +150,7 @@ const migrations = [
             };
 
             // add new temp keys
+            settings["Theme"] = settings["Theme"] || {};
             settings["Theme"]["mode"] = settings?.Theme?.mode || "dark";
             settings["Theme"]["Dark"] = darkSettings;
             settings["Theme"]["Light"] = lightSettings;
@@ -223,18 +224,44 @@ const migrations = [
             localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings));
         },
     },
+
+    {
+        version: "3.6.0-alpha",
+        migrate: async () => {
+            const LOCAL_STORAGE_KEY = "ample-settings";
+
+            let settings;
+
+            /**
+             * New crossfade options
+             */
+            settings =
+                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
+
+            // add new temp key
+            settings["Crossfade"] = {
+                mode: "disabled",
+                duration: 6,
+            };
+
+            // save
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings));
+        },
+    },
 ];
 
 export function handleMigrations(currentVersion) {
-    const storedVersion = localStorage.getItem("ample-version") || "0.0.0";
+    let storedVersion = localStorage.getItem("ample-version") || "0.0.0";
 
-    migrations.forEach(async ({ version, migrate }) => {
-        if (compareVersions(version, storedVersion)) {
-            console.log(`Applying migration for version ${version}`);
-            await migrate();
+    if (compareVersions(currentVersion, storedVersion)) {
+        migrations.forEach(async ({ version, migrate }) => {
+            if (compareVersions(version, storedVersion)) {
+                console.log(`Applying migration for version ${version}`);
+                await migrate();
 
-            // Update the stored version to this version
-            localStorage.setItem("ample-version", version);
-        }
-    });
+                // Update the stored version to this version
+                localStorage.setItem("ample-version", version);
+            }
+        });
+    }
 }

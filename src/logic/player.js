@@ -2,6 +2,7 @@ import { tick } from "svelte";
 import { get } from "svelte/store";
 import butterchurn from "butterchurn";
 import WaveSurfer from "wavesurfer.js";
+import EnvelopePlugin from "wavesurfer.js/dist/plugins/envelope.js";
 import { getSongVersions } from "~/logic/song";
 import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
 import {
@@ -19,7 +20,6 @@ import { Settings } from "~/stores/settings";
 import {
     CurrentMedia,
     CurrentMediaGainInfo,
-    IsMobile,
     IsPlaying,
     JukeboxQueue,
     NowPlayingIndex,
@@ -27,6 +27,60 @@ import {
     PlaybackSpeed,
 } from "~/stores/state.js";
 import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
+import { MediaPlayer } from "~/stores/elements.js";
+
+let wavesurferCommonOptions = {
+    autoplay: true,
+    backend: "MediaElement",
+    barAlign: "bottom",
+    barGap: 1,
+    barWidth: 2,
+    cursorWidth: 0,
+    fillParent: true,
+    height: "auto",
+    hideScrollbar: true,
+    normalize: true,
+};
+
+function createWavesurferInstance(containerSelector) {
+    // wavesurfer doesn't support streaming directly, but it can use an <Audio> element which does
+    const audioElement = new Audio();
+    audioElement.crossOrigin = "anonymous";
+    audioElement.preload = "auto";
+
+    const audioContext = new AudioContext();
+
+    const compressor = audioContext.createDynamicsCompressor();
+    compressor.threshold.value = 0;
+    compressor.knee.value = 10.0;
+    compressor.ratio.value = 2.0;
+    compressor.attack.value = 0.1; // 100ms
+    compressor.release.value = 0.3; // 300ms
+
+    const filters = {
+        tagGain: audioContext.createGain(),
+        compressor,
+        masterVolume: audioContext.createGain(),
+    };
+
+    const wavesurfer = new WaveSurfer({
+        ...wavesurferCommonOptions,
+        container: containerSelector,
+        media: audioElement,
+    });
+
+    const mediaNode = audioContext.createMediaElementSource(
+        wavesurfer.getMediaElement(),
+    );
+
+    return {
+        audioElement,
+        filters,
+        wavesurfer,
+        mediaNode,
+        audioContext,
+    };
+}
 
 /**
  * Interface with wavesurfer.js
@@ -36,24 +90,25 @@ class Player {
      * Initialize data
      */
     constructor() {
-        // wavesurfer doesn't support streaming directly, but it can use an <Audio> element which does
-        this.audioElement = new Audio();
-        this.audioElement.crossOrigin = "anonymous";
-        this.audioElement.preload = "auto";
-        this.audioContext = new AudioContext();
-        this.mediaNode = null;
+        // wavesurfer instances and accessors
+        this.playerA = createWavesurferInstance("#waveformA");
+        this.playerB = createWavesurferInstance("#waveformB");
+        this.players = {
+            playerA: this.playerA,
+            playerB: this.playerB,
+        };
+        // init with playerB to really start with playerA
+        this.currentPlayer = this.playerB;
+        this.currentPlayerID = "playerB";
 
-        // volume normalization
+        // volume
         this.targetVolume = parseInt(-14);
         this.masteredVolume = null;
         this.gainFactor = null;
         this.gainType = null;
 
-        // filter nodes
-        this.filters = [];
-        this.filterGain = null;
-        this.filterCompressor = null;
-        this.filterBiquad = null; //(for testing only)
+        // other
+        this.approachingEnd = false;
 
         // initial AbortController
         this.abortController = new AbortController();
@@ -61,25 +116,9 @@ class Player {
         // visualizer
         this.visualizer = null;
 
-        this.wavesurfer = new WaveSurfer({
-            autoplay: true,
-            backend: "MediaElement",
-            barAlign: "bottom",
-            barGap: 1,
-            barWidth: 2,
-            container: "#waveform",
-            cursorWidth: 0,
-            fillParent: true,
-            height: "auto",
-            hideScrollbar: true,
-            media: this.audioElement,
-            normalize: true,
-        });
-
         Settings.subscribe((s) => {
             // PlayerVolume
             this.globalVolume = this.#logVolume(s.PlayerVolume); // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
-            this.wavesurfer.setVolume(this.globalVolume);
 
             // RepeatState
             this.repeatState = s.RepeatState;
@@ -89,18 +128,17 @@ class Player {
 
             // DynamicsCompressorEnabled
             this.dynamicsCompressorEnabled = s.DynamicsCompressorEnabled;
+
+            // Crossfade
+            this.crossfadeDuration = s.Crossfade.duration;
+            this.crossfadeEnabled = s.Crossfade.mode === "crossfade";
+
+            // Gapless
+            this.gaplessEnabled = s.Crossfade.mode === "gapless";
         });
 
         NowPlayingQueue.subscribe((value) => {
             this.nowPlayingQueue = value;
-        });
-
-        // Set current wavesurfer volume to max if mobile
-        IsMobile.subscribe((value) => {
-            this.globalVolume = value
-                ? 1.0
-                : this.#logVolume(get(Settings).PlayerVolume);
-            this.wavesurfer.setVolume(this.globalVolume);
         });
 
         NowPlayingIndex.subscribe((value) => {
@@ -154,6 +192,8 @@ class Player {
             return;
         }
 
+        await this.#switchPlayers();
+
         try {
             // Load new item into media session
             if ("mediaSession" in navigator) {
@@ -177,8 +217,10 @@ class Player {
 
             // special handling for live_stream which has to go through <audio> element
             if (item.object_type === "live_stream") {
-                this.audioElement.src = this.currentMedia.url;
-                this.wavesurfer.setMediaElement(this.audioElement);
+                this.currentPlayer.audioElement.src = this.currentMedia.url;
+                this.currentPlayer.wavesurfer.setMediaElement(
+                    this.currentPlayer.audioElement,
+                );
             } else {
                 // Use cache first
                 const cache = await caches.open("audio-cache");
@@ -198,19 +240,85 @@ class Player {
                 const blob = await response.blob();
 
                 // Load the audio into WaveSurfer
-                this.wavesurfer.loadBlob(blob);
+                this.currentPlayer.wavesurfer.loadBlob(blob);
             }
 
             // set gain of this item
-            this.filterGain.gain.value = this.#calculateGain();
+            this.currentPlayer.filters.tagGain.gain.value =
+                this.#calculateGain();
             this.updateFilters();
 
             // update visualiser with this media
-            this.visualizer?.connectAudio(this.mediaNode);
+            this.#visualizerConnectAudio();
 
-            this.wavesurfer
+            this.currentPlayer.wavesurfer
                 .play()
                 .then(async () => {
+                    let duration = this.currentPlayer.wavesurfer.getDuration();
+
+                    // remove previous envelope
+                    this.currentPlayer.wavesurfer.envelopePlugin?.setPoints([]);
+                    this.currentPlayer.wavesurfer.envelopePlugin?.destroy();
+
+                    // attach Envelope plugin if crossfade enabled & enough time
+                    if (
+                        this.crossfadeEnabled &&
+                        this.crossfadeDuration * 2 < duration
+                    ) {
+                        // attach Envelope plugin to Wavesurfers
+                        let envelope =
+                            this.currentPlayer.wavesurfer.registerPlugin(
+                                EnvelopePlugin.create({
+                                    volume: 1.0,
+                                    lineColor: "rgba(255, 0, 0, 0.5)",
+                                    lineWidth: 4,
+                                    dragPointSize: 12,
+                                    dragLine: true,
+                                    dragPointFill: "rgba(0, 255, 255, 0.8)",
+                                    dragPointStroke: "rgba(0, 0, 0, 0.5)",
+                                    points: [
+                                        {
+                                            time: 0,
+                                            volume: 0.0,
+                                        },
+                                        {
+                                            time:
+                                                (this.crossfadeDuration / 2) *
+                                                0.66,
+                                            volume: 0.3,
+                                        },
+                                        {
+                                            time: this.crossfadeDuration / 2,
+                                            volume: 1.0,
+                                        },
+                                        //
+                                        {
+                                            time:
+                                                duration -
+                                                this.crossfadeDuration,
+                                            volume: 1.0,
+                                        },
+                                        {
+                                            time:
+                                                duration -
+                                                this.crossfadeDuration * 0.66,
+                                            volume: 0.3,
+                                        },
+                                        { time: duration - 0.1, volume: 0.0 },
+                                    ],
+                                }),
+                            );
+
+                        this.currentPlayer.wavesurfer.envelopePlugin = envelope;
+
+                        envelope.on("points-change", (points) => {
+                            // console.log("Envelope points changed", points);
+                        });
+                        envelope.on("volume-change", (vol) => {
+                            // console.log("Envelope volume changed", vol);
+                        });
+                    }
+
                     // start preloading next item
                     let nextItem = await this.findViableItem("next");
 
@@ -244,12 +352,19 @@ class Player {
      * Stop playback and destroy wavesurfer
      */
     stop() {
-        this.wavesurfer.pause();
         IsPlaying.set(false);
+        this.approachingEnd = false;
 
+        this.empty(this.players["playerA"]);
+        this.empty(this.players["playerB"]);
+    }
+
+    empty(player) {
+        player.wavesurfer.pause();
         // workaround for this.wavesurfer.empty() firefox console repeating
-        this.wavesurfer.load("./audio/silence.mp3", [[0]], 0.001);
-        this.wavesurfer.stop();
+        player.wavesurfer
+            .load("./audio/silence.mp3", [[0]], 0.001)
+            .then((r) => player.wavesurfer.stop());
     }
 
     /**
@@ -264,10 +379,20 @@ class Player {
             return;
         }
 
-        if (this.wavesurfer.isPlaying()) {
-            this.wavesurfer.pause();
+        // apply to all players
+        if (this.currentPlayer.wavesurfer.isPlaying()) {
+            Object.keys(this.players).forEach((key) => {
+                this.players[key].wavesurfer.pause();
+            });
+            IsPlaying.set(false);
         } else {
-            this.wavesurfer.play();
+            Object.keys(this.players).forEach((key) => {
+                // only resume players with in progress items
+                if (this.players[key].wavesurfer.getCurrentTime() > 0) {
+                    this.players[key].wavesurfer.play();
+                }
+            });
+            IsPlaying.set(true);
         }
     }
 
@@ -293,13 +418,21 @@ class Player {
     /**
      * Play next item
      */
-    next() {
+    next(clearAll = false) {
         debugHelper("next!");
+
+        if (this.repeatState === "repeat_one") {
+            this.start();
+            return;
+        }
 
         // Abort any in-progress loading
         this.abortController.abort();
 
-        this.stop();
+        if (clearAll) {
+            // stop all players
+            this.stop();
+        }
 
         let viableItem = this.findViableItem("next");
 
@@ -481,29 +614,31 @@ class Player {
     }
 
     getDuration() {
-        let result = this.wavesurfer?.getDuration();
+        let result = this.currentPlayer.wavesurfer?.getDuration();
         return Number.isFinite(result) ? result : 0;
     }
 
     getCurrentTime() {
-        let result = this.wavesurfer?.getCurrentTime();
+        let result = this.currentPlayer.wavesurfer.getCurrentTime();
         return Number.isFinite(result) ? result : 0;
     }
 
     goForward(seconds) {
-        this.wavesurfer?.skip(seconds);
+        this.currentPlayer.wavesurfer?.skip(seconds);
     }
 
     goBackward(seconds) {
-        this.wavesurfer?.skip(-seconds);
+        this.currentPlayer.wavesurfer?.skip(-seconds);
     }
 
     seekTo(percentage) {
-        this.wavesurfer.seekTo(percentage);
+        this.currentPlayer.wavesurfer.seekTo(percentage);
     }
 
     setMuted(bool) {
-        this.wavesurfer?.setMuted(bool);
+        Object.keys(this.players).forEach((key) => {
+            this.players[key].wavesurfer.setMuted(bool);
+        });
     }
 
     /**
@@ -519,18 +654,20 @@ class Player {
     }
 
     setWaveColors() {
-        let player = document.querySelector(".site-player");
+        let playerElement = document.querySelector(".site-player");
 
         tick().then(() => {
-            this.wavesurfer.setOptions({
-                // get from the player
-                waveColor: getComputedStyle(player).getPropertyValue(
-                    "--color-outline-variant",
-                ),
-                progressColor:
-                    getComputedStyle(player).getPropertyValue(
-                        "--color-waveform",
+            Object.keys(this.players).forEach((key) => {
+                this.players[key].wavesurfer.setOptions({
+                    // get from the player
+                    waveColor: getComputedStyle(playerElement).getPropertyValue(
+                        "--color-outline-variant",
                     ),
+                    progressColor:
+                        getComputedStyle(playerElement).getPropertyValue(
+                            "--color-waveform",
+                        ),
+                });
             });
         });
     }
@@ -546,30 +683,54 @@ class Player {
     }
 
     updateFilters() {
-        // reset active filters list
-        this.filters = [];
-
-        // 1. gain
+        // 1. tag gain on individual players
         if (this.volumeNormalizationEnabled && this.gainType !== "None") {
-            this.filters.push(this.filterGain);
+            this.currentPlayer.filters.tagGain.gain.value =
+                this.#calculateGain();
+        } else {
+            // neutral value
+            this.currentPlayer.filters.tagGain.gain.value = 1;
         }
 
-        // 2. dynamics compressor
-        if (this.dynamicsCompressorEnabled) {
-            this.filters.push(this.filterCompressor);
-        }
+        // every player
+        Object.keys(this.players).forEach((key) => {
+            // 2. dynamics compressor
+            if (this.dynamicsCompressorEnabled) {
+                this.players[key].filters.compressor.threshold.value = -30;
+            } else {
+                // neutral value
+                this.players[key].filters.compressor.threshold.value = 0;
+            }
 
-        // last. biquad (for testing only)
-        // this.filters.push(this.filterBiquad);
+            // 3. master volume, every player
+            this.players[key].filters.masterVolume.gain.value =
+                this.globalVolume;
+        });
 
-        debugHelper(this.filters, "Active filters");
+        debugHelper(this.currentPlayer.filters, "Active filters");
 
-        this.#setFilters();
-        this.audioContext.resume(); // Chrome isn't happy without this
+        // TODO: still needed?
+        this.currentPlayer.audioContext.resume(); // Chrome isn't happy without this
+    }
+
+    #setupFilters() {
+        // Connect each filter in turn
+        Object.keys(this.players).forEach((key) => {
+            const player = this.players[key];
+
+            Object.values(player.filters)
+                .reduce((prev, curr) => {
+                    prev.connect(curr);
+                    return curr;
+                }, player.mediaNode)
+                .connect(player.audioContext.destination);
+        });
     }
 
     setPlaybackRate(val) {
-        this.wavesurfer.setPlaybackRate(val);
+        Object.keys(this.players).forEach((key) => {
+            this.players[key].wavesurfer.setPlaybackRate(val);
+        });
     }
 
     loadVisualizerPreset(presetData, blendTime) {
@@ -580,41 +741,15 @@ class Player {
      #PRIVATE METHODS
      */
 
-    #disconnectFilters() {
-        if (this.filters) {
-            this.filters.forEach((filter) => {
-                filter && filter.disconnect();
-            });
-            this.filters = null;
+    async #switchPlayers() {
+        this.currentPlayerID =
+            this.currentPlayerID === "playerA" ? "playerB" : "playerA";
 
-            // Critical, otherwise filters don't reconnect in series
-            this.mediaNode.disconnect();
+        this.currentPlayer = this.players[this.currentPlayerID];
 
-            // Reconnect direct path
-            this.mediaNode.connect(this.audioContext.destination);
-        }
-    }
+        MediaPlayer.set(this);
 
-    #setFilters() {
-        let filters = this.filters;
-        // Remove existing filters
-        this.#disconnectFilters();
-
-        // Insert filters if filter array not empty
-        if (filters && filters.length) {
-            this.filters = filters;
-
-            // Disconnect direct path before inserting filters
-            this.mediaNode.disconnect();
-
-            // Connect each filter in turn
-            filters
-                .reduce((prev, curr) => {
-                    prev.connect(curr);
-                    return curr;
-                }, this.mediaNode)
-                .connect(this.audioContext.destination);
-        }
+        debugHelper("PLAYERS SWITCHED");
     }
 
     /**
@@ -624,10 +759,12 @@ class Player {
         const presets = getCuratedVisualizerPresets();
         const preset = presets["$$$ Royal - Mashup (197)"];
 
-        this.wavesurfer.setVolume(this.globalVolume);
+        Object.keys(this.players).forEach((key) => {
+            // set global volume
+            this.players[key].wavesurfer.setVolume(this.globalVolume);
+        });
 
-        // initialise filters
-        this.#initFilters();
+        this.#setupFilters();
 
         // respond to wavesurfer emitted events
         this.#initWavesurferEvents();
@@ -638,7 +775,7 @@ class Player {
         try {
             // set up visualizer
             this.visualizer = butterchurn.createVisualizer(
-                this.audioContext,
+                this.currentPlayer.audioContext,
                 document.querySelector("#visualizer"),
                 {
                     width: 1600,
@@ -648,12 +785,23 @@ class Player {
                 },
             );
 
-            this.visualizer?.connectAudio(this.mediaNode);
+            this.#visualizerConnectAudio();
             this.visualizer?.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
             this.#startRenderer();
         } catch (e) {
             errorHandler("initializing visualizer", e);
         }
+    }
+
+    #visualizerConnectAudio() {
+        try {
+            // disconnect any existing
+            this.visualizer?.disconnectAudio(this.playerA.mediaNode);
+            this.visualizer?.disconnectAudio(this.playerB.mediaNode);
+        } catch (e) {}
+
+        // TODO revisit visualizer
+        // this.visualizer?.connectAudio(this.currentPlayer.mediaNode);
     }
 
     #startRenderer() {
@@ -666,64 +814,91 @@ class Player {
         });
     }
 
-    #initFilters() {
-        this.filterGain = this.audioContext.createGain();
-        this.filterCompressor = this.audioContext.createDynamicsCompressor();
-        this.filterCompressor.threshold.value = -30;
-        this.filterCompressor.knee.value = 10.0;
-        this.filterCompressor.ratio.value = 2.0;
-        this.filterCompressor.attack.value = 0.1; // 100ms
-        this.filterCompressor.release.value = 0.3; // 300ms
-        this.filterBiquad = this.audioContext.createBiquadFilter();
-
-        // create a starting node with our current media
-        this.mediaNode = this.audioContext.createMediaElementSource(
-            this.wavesurfer.getMediaElement(),
-        );
-
-        this.updateFilters();
-    }
-
     #initWavesurferEvents() {
         let self = this;
 
-        this.wavesurfer.on("error", function (e) {
-            debugHelper(e, "Wavesurfer play error");
-            IsPlaying.set(false);
-            self.next();
-        });
-
-        this.wavesurfer.on("play", function () {
-            debugHelper("Wavesurfer playing");
-            IsPlaying.set(true);
-            self.setPlaybackRate(get(PlaybackSpeed));
-        });
-
-        this.wavesurfer.on("pause", function () {
-            debugHelper("Wavesurfer paused");
-            IsPlaying.set(false);
-        });
-
-        this.wavesurfer.on("finish", function () {
-            debugHelper("Wavesurfer finished");
-
-            if (self.repeatState === "repeat_one") {
-                self.start();
-            } else {
+        Object.keys(this.players).forEach((key) => {
+            this.players[key].wavesurfer.on("error", function (e) {
+                debugHelper(e, "Wavesurfer play error");
+                IsPlaying.set(false);
                 self.next();
-            }
+            });
+
+            this.players[key].wavesurfer.on("play", function () {
+                debugHelper("Wavesurfer playing");
+                IsPlaying.set(true);
+                self.setPlaybackRate(get(PlaybackSpeed));
+            });
+
+            this.players[key].wavesurfer.on("pause", function () {
+                debugHelper("Wavesurfer paused");
+                // IsPlaying.set(false);
+            });
+
+            this.players[key].wavesurfer.on("finish", function () {
+                debugHelper(key, "Wavesurfer finished");
+
+                // reset once the song ends on its own
+                self.approachingEnd = false;
+                self.empty(self.players[key]);
+
+                // TODO what did this achieve?
+                if (self.players[key] !== self.currentPlayer) {
+                    return;
+                }
+
+                self.next();
+            });
+
+            this.players[key].wavesurfer.on("ready", function () {
+                debugHelper("Wavesurfer ready");
+
+                self.setWaveColors();
+            });
+
+            this.players[key].wavesurfer.on(
+                "audioprocess",
+                function (currentTime) {
+                    // debugHelper("Wavesurfer audioprocess", currentTime);
+
+                    if (self.approachingEnd) {
+                        return;
+                    }
+
+                    let duration = self.currentPlayer.wavesurfer.getDuration();
+
+                    let thresholdDuration = self.crossfadeEnabled
+                        ? self.crossfadeDuration
+                        : 0.25;
+
+                    if (
+                        (self.crossfadeEnabled || self.gaplessEnabled) &&
+                        duration > 0 &&
+                        currentTime > duration - thresholdDuration &&
+                        currentTime < duration - 0.1
+                    ) {
+                        debugHelper("approaching end of song");
+                        self.approachingEnd = true;
+                        self.next();
+                    }
+
+                    // fall through to changing next song at end
+                    if (
+                        duration > 0 &&
+                        currentTime > 0 &&
+                        currentTime === duration
+                    ) {
+                        debugHelper("falling through to next item");
+                        self.next();
+                    }
+                },
+            );
+
+            // debug events
+            // ["ready", "interaction", "redraw", "redrawcomplete"].forEach((e) =>
+            //     this.players[key].wavesurfer.on(e, () => console.log(Date.now(), e)),
+            // );
         });
-
-        this.wavesurfer.on("ready", function () {
-            debugHelper("Wavesurfer ready");
-
-            self.setWaveColors();
-        });
-
-        // debug events
-        // ["ready", "interaction", "redraw", "redrawcomplete"].forEach((e) =>
-        //     this.wavesurfer.on(e, () => console.log(Date.now(), e)),
-        // );
     }
 
     #initKeyboardMediaKeys() {
@@ -775,7 +950,8 @@ class Player {
         NowPlayingIndex.set(0);
 
         // unload any currently loaded items
-        this.audioElement.src = null;
+        this.playerA.audioElement.src = null;
+        this.playerB.audioElement.src = null;
         CurrentMedia.set(null);
 
         if (this.repeatState === "enabled") {

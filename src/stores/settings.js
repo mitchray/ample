@@ -25,6 +25,10 @@ export let Settings = persisted("ample-settings", {
     PlaySongsByOtherArtists: "include",
     LastSession: {},
     LastLoginMethod: null,
+    Crossfade: {
+        mode: "disabled",
+        duration: 6,
+    },
     QueueRefill: {
         enabled: false,
         mode: "smartlist",

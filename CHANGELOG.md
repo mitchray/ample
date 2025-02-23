@@ -2,9 +2,13 @@
 
 ## [3.6.0] - 2025-xx-xx
 
-### Changed
+### Added
+-   Crossfade and gapless (simulated) playback
+-   Next song will be cached ahead of time for faster playback
 
+### Changed
 -   "Queue Refill" reworked into Jukebox; giving user added items priority
+-   Queue 'Show currently playing' (eye icon) reworked to be Queue 'Follow currently playing' (footsteps icon) which when activated will keep the currently playing item at the top of the list
 
 ## [3.5.1] - 2025-01-31
 

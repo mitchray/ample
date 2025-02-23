@@ -32,7 +32,7 @@
 <sl-dropdown bind:this={dropdown} onpointerleave={handleOut} placement="top">
     <sl-button
         disabled={!nextItem}
-        onclick={() => $MediaPlayer.next()}
+        onclick={() => $MediaPlayer.next(true)}
         onpointerover={handleOver}
         slot="trigger"
     >

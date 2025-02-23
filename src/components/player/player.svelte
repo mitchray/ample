@@ -52,7 +52,16 @@
 
     <div class="container">
         <div class="player__waveform">
-            <div id="waveform"></div>
+            <div
+                id="waveformA"
+                class="waveform"
+                class:active={$MediaPlayer?.currentPlayerID === "playerA"}
+            ></div>
+            <div
+                id="waveformB"
+                class="waveform"
+                class:active={$MediaPlayer?.currentPlayerID === "playerB"}
+            ></div>
         </div>
 
         <div class="player__seekbar">
@@ -289,11 +298,35 @@
         opacity: 0;
         pointer-events: none;
         cursor: pointer;
+        position: relative;
     }
 
-    #waveform {
+    .waveform {
         width: 100%;
-        height: 30px;
+        height: 100%;
+        position: absolute;
+        bottom: 0;
+        opacity: 0;
+        transition: opacity ease 0.3s;
+    }
+
+    .waveform.active {
+        opacity: 1;
+        transition-delay: 2s;
+    }
+
+    /* hide envelopes */
+    .waveform :global(::part(envelope)) {
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    #waveformA {
+        /*background-color: hsla(0, 100%, 50%, 0.5);*/
+    }
+
+    #waveformB {
+        /*background-color: hsla(240, 100%, 50%, 0.5);*/
     }
 
     .player__now-playing {
@@ -370,7 +403,7 @@
     }
 
     .site-player.is-expanded .player__waveform {
-        height: auto;
+        height: 30px;
         pointer-events: initial;
         opacity: 1;
     }
