@@ -1,4 +1,5 @@
 import { compareVersions } from "compare-versions";
+import { Settings } from "~/stores/settings.js";
 
 const migrations = [
     {
@@ -228,24 +229,13 @@ const migrations = [
     {
         version: "3.6.0-alpha",
         migrate: async () => {
-            const LOCAL_STORAGE_KEY = "ample-settings";
-
-            let settings;
-
-            /**
-             * New crossfade options
-             */
-            settings =
-                JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
-
-            // add new temp key
-            settings["Crossfade"] = {
-                mode: "disabled",
-                duration: 6,
-            };
-
-            // save
-            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(settings));
+            Settings.update((obj) => ({
+                ...obj,
+                Crossfade: {
+                    mode: "disabled",
+                    duration: 6,
+                },
+            }));
         },
     },
 ];
