@@ -317,8 +317,13 @@
 
     /* hide envelopes */
     .waveform :global(::part(envelope)) {
-        pointer-events: none;
         opacity: 0;
+    }
+
+    .waveform :global(::part(envelope)),
+    .waveform :global(::part(polyline)),
+    .waveform :global(::part(envelope-circle)) {
+        pointer-events: none !important;
     }
 
     #waveformA {
