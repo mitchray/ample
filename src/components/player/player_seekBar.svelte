@@ -60,7 +60,7 @@
 
         let seekElementWidth = event.target.offsetWidth;
         let seekClickLocation =
-            (event.clientX || event.targetTouches[0].screenX) -
+            (event.clientX || event.targetTouches[0]?.screenX) -
             event.target.getBoundingClientRect().left;
 
         let seekFraction = seekClickLocation / seekElementWidth;
