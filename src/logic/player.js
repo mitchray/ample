@@ -115,6 +115,7 @@ class Player {
 
         // visualizer
         this.visualizer = null;
+        this.visualizerAudioContextProxy = new AudioContext();
 
         Settings.subscribe((s) => {
             // PlayerVolume
@@ -781,7 +782,7 @@ class Player {
         try {
             // set up visualizer
             this.visualizer = butterchurn.createVisualizer(
-                this.currentPlayer.audioContext,
+                this.visualizerAudioContextProxy,
                 document.querySelector("#visualizer"),
                 {
                     width: 1600,
@@ -800,14 +801,11 @@ class Player {
     }
 
     #visualizerConnectAudio() {
-        try {
-            // disconnect any existing
-            this.visualizer?.disconnectAudio(this.playerA.mediaNode);
-            this.visualizer?.disconnectAudio(this.playerB.mediaNode);
-        } catch (e) {}
-
-        // TODO revisit visualizer
-        // this.visualizer?.connectAudio(this.currentPlayer.mediaNode);
+        let proxyMediaNode =
+            this.visualizerAudioContextProxy.createMediaElementSource(
+                this.currentPlayer.wavesurfer.getMediaElement(),
+            );
+        this.visualizer?.connectAudio(proxyMediaNode);
     }
 
     #startRenderer() {
