@@ -621,7 +621,9 @@ class Player {
     }
 
     getDuration() {
-        let result = this.currentPlayer.wavesurfer?.getDuration();
+        let result =
+            this.currentPlayer.duration ||
+            this.currentPlayer.wavesurfer?.getDuration();
         return Number.isFinite(result) ? result : 0;
     }
 
