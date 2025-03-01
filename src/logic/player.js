@@ -254,7 +254,8 @@ class Player {
             this.currentPlayer.wavesurfer
                 .play()
                 .then(async () => {
-                    let duration = this.currentPlayer.wavesurfer.getDuration();
+                    this.currentPlayer.duration =
+                        this.currentPlayer.wavesurfer.getDuration();
 
                     // remove previous envelope
                     this.currentPlayer.wavesurfer.envelopePlugin?.setPoints([]);
@@ -263,7 +264,7 @@ class Player {
                     // attach Envelope plugin if crossfade enabled & enough time
                     if (
                         this.crossfadeEnabled &&
-                        this.crossfadeDuration * 2 < duration
+                        this.crossfadeDuration * 2 < this.currentPlayer.duration
                     ) {
                         // attach Envelope plugin to Wavesurfers
                         let envelope =
@@ -294,17 +295,22 @@ class Player {
                                         //
                                         {
                                             time:
-                                                duration -
+                                                this.currentPlayer.duration -
                                                 this.crossfadeDuration,
                                             volume: 1.0,
                                         },
                                         {
                                             time:
-                                                duration -
+                                                this.currentPlayer.duration -
                                                 this.crossfadeDuration * 0.66,
                                             volume: 0.3,
                                         },
-                                        { time: duration - 0.1, volume: 0.0 },
+                                        {
+                                            time:
+                                                this.currentPlayer.duration -
+                                                0.1,
+                                            volume: 0.0,
+                                        },
                                     ],
                                 }),
                             );
@@ -865,7 +871,9 @@ class Player {
                         return;
                     }
 
-                    let duration = self.currentPlayer.wavesurfer.getDuration();
+                    let duration =
+                        self.currentPlayer.duration ||
+                        self.currentPlayer.wavesurfer.getDuration();
 
                     let thresholdDuration = self.crossfadeEnabled
                         ? self.crossfadeDuration
