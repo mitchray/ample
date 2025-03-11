@@ -1,5 +1,7 @@
 ## _Ample_: A web browser client for [Ampache](https://ampache.org/) v6+
 
+Note: This is a personal project, shared as-is in case it’s useful to others. I’m not actively supporting feature requests or troubleshooting issues, but I’ll consider minor pull requests. Feel free to fork and modify as needed.
+
 <img src="https://github.com/mitchray/ample/assets/5735900/194c98a2-db2b-4f6c-be3b-92c80342436a" width=800 alt="Ample screenshot" />
 
 ## Demo
