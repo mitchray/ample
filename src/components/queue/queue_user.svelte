@@ -67,7 +67,7 @@
             size="small"
             title={$_("text.queueShowCurrent")}
         >
-            <MaterialSymbol name="footprint" />
+            <MaterialSymbol name="footprint" fill={follow} />
         </sl-button>
 
         <SkipBelowButton />
