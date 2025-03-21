@@ -161,42 +161,42 @@
                             <span>{formatFilesize(song.size)}</span>
                         {/if}
 
-                        {#if song.replaygain_album_gain}
+                        {#if (song.replaygain_album_gain ?? null) !== null}
                             <span class="field">
                                 {$_("text.replaygainAlbumGain")}
                             </span>
                             <span>{song.replaygain_album_gain}</span>
                         {/if}
 
-                        {#if song.replaygain_album_peak}
+                        {#if (song.replaygain_album_peak ?? null) !== null}
                             <span class="field">
                                 {$_("text.replaygainAlbumPeak")}
                             </span>
                             <span>{song.replaygain_album_peak}</span>
                         {/if}
 
-                        {#if song.replaygain_track_gain}
+                        {#if (song.replaygain_track_gain ?? null) !== null}
                             <span class="field">
                                 {$_("text.replaygainTrackGain")}
                             </span>
                             <span>{song.replaygain_track_gain}</span>
                         {/if}
 
-                        {#if song.replaygain_track_peak}
+                        {#if (song.replaygain_track_peak ?? null) !== null}
                             <span class="field">
                                 {$_("text.replaygainTrackPeak")}
                             </span>
                             <span>{song.replaygain_track_peak}</span>
                         {/if}
 
-                        {#if song.r128_album_gain}
+                        {#if (song.r128_album_gain ?? null) !== null}
                             <span class="field">
                                 {$_("text.r128AlbumGain")}
                             </span>
                             <span>{song.r128_album_gain}</span>
                         {/if}
 
-                        {#if song.r128_track_gain}
+                        {#if (song.r128_track_gain ?? null) !== null}
                             <span class="field">
                                 {$_("text.r128TrackGain")}
                             </span>
