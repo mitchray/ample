@@ -11,7 +11,11 @@
     import QueueList from "~/components/queue/queue_list.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
-    import { MediaPlayer, QueuePanelBind } from "~/stores/elements.js";
+    import {
+        MediaPlayer,
+        QueuePanelBind,
+        QueueVirtualListBind,
+    } from "~/stores/elements.js";
     import { tick, untrack } from "svelte";
 
     let follow = $state(true);
@@ -20,7 +24,7 @@
         $NowPlayingQueue.splice(0, $NowPlayingIndex);
         await updateQueue();
         $NowPlayingIndex = 0;
-        virtualListEl.scrollTop = 0;
+        $QueueVirtualListBind.scrollTop = 0;
     }
 
     function handleClearQueue() {
