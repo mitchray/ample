@@ -1,7 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
     import { onDestroy, tick, untrack } from "svelte";
-    import { createVirtualizer } from "@tanstack/svelte-virtual";
     import { Sortable } from "sortablejs";
     import {
         CurrentMedia,
@@ -25,20 +24,9 @@
 
     let items = queueType === "user" ? NowPlayingQueue : JukeboxQueue;
 
-    let virtualizer = $derived(
-        createVirtualizer({
-            count: $items.length,
-            getScrollElement: () => virtualListEl,
-            estimateSize: () => 46,
-            overscan: 10,
-        }),
-    );
-
-    let virtualListEl = $state();
     let containerRef;
     let sortable;
     let indexFinalPosition = null;
-    let scrollPos = null;
     let aborted = false;
 
     async function handleAction(e, index) {
@@ -83,9 +71,9 @@
                             (x) => x._id === event.related.dataset.id,
                         );
 
-                        // console.debug(indexFinalPosition, "index");
-
-                        scrollPos = virtualListEl.scrollTop;
+                        // don't move preview any moves otherwise the index will be messed up
+                        event.preventDefault();
+                        return false;
                     },
                     onEnd: async (event) => {
                         if (aborted) return false;
@@ -119,8 +107,6 @@
 
                         items.set(newTargetArray);
 
-                        // console.debug($items, "NEW ITEMS");
-
                         await tick();
 
                         //Reset playing index if needed
@@ -131,9 +117,6 @@
                         if (currentIndex !== -1) {
                             NowPlayingIndex.set(currentIndex);
                         }
-
-                        // scroll to the index we just moved to
-                        virtualListEl.scrollTop = scrollPos;
                     },
                 });
             });
@@ -142,9 +125,9 @@
 
     $effect(() => {
         if (queueType === "user") {
-            $QueueVirtualListBind = $virtualizer;
+            $QueueVirtualListBind = containerRef;
         } else {
-            $JukeboxVirtualListBind = $virtualizer;
+            $JukeboxVirtualListBind = containerRef;
         }
     });
 
@@ -155,46 +138,40 @@
 
 <div
     class="container"
-    bind:this={virtualListEl}
+    bind:this={containerRef}
     ontouchstart={handleScroll}
     onwheel={handleScroll}
 >
-    <div
-        style="height: {$virtualizer.getTotalSize()}px;"
-        bind:this={containerRef}
-    >
-        {#each $virtualizer.getVirtualItems() as item (item.index)}
-            <div
-                onclick={(e) => {
-                    handleAction(e, item.index);
-                }}
-                class="item-container"
-                style="top: {item.start}px; position: absolute; left: 0; width: 100%;"
-                data-index={item.index}
-                data-id={$items[item.index]._id}
-            >
-                {#if queueType === "jukebox"}
-                    <div class="add-options">
-                        <sl-button
-                            onclick={(e) => handlePlayNext(e, item.index)}
-                            title={$_("text.playNext")}
-                        >
-                            <MaterialSymbol name="skip_next" slot="prefix" />
-                        </sl-button>
-                        <sl-button
-                            onclick={(e) => handlePlayLast(e, item.index)}
-                            title={$_("text.playLast")}
-                        >
-                            <MaterialSymbol name="add" slot="prefix" />
-                        </sl-button>
-                    </div>
-                {/if}
-                {#key $items[item.index]._id}
-                    <QueueItem media={$items[item.index]} {queueType} />
-                {/key}
-            </div>
-        {/each}
-    </div>
+    {#each $items as item, index}
+        <div
+            onclick={(e) => {
+                handleAction(e, index);
+            }}
+            class="item-container"
+            data-index={index}
+            data-id={item._id}
+        >
+            {#if queueType === "jukebox"}
+                <div class="add-options">
+                    <sl-button
+                        onclick={(e) => handlePlayNext(e, index)}
+                        title={$_("text.playNext")}
+                    >
+                        <MaterialSymbol name="skip_next" slot="prefix" />
+                    </sl-button>
+                    <sl-button
+                        onclick={(e) => handlePlayLast(e, index)}
+                        title={$_("text.playLast")}
+                    >
+                        <MaterialSymbol name="add" slot="prefix" />
+                    </sl-button>
+                </div>
+            {/if}
+            {#key item._id}
+                <QueueItem media={item} {queueType} />
+            {/key}
+        </div>
+    {/each}
 </div>
 
 <style>
@@ -205,6 +182,7 @@
         border-radius: 15px;
         margin-block-end: var(--spacing-lg);
         position: relative;
+        content-visibility: auto; /* free virtual list! */
     }
 
     .add-options {

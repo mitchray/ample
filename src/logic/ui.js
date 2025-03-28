@@ -41,9 +41,10 @@ export async function ticks(count) {
 
 export async function showQueueItemAtIndex(index, immediate = false) {
     await tick();
-    get(QueueVirtualListBind)?.scrollToIndex(index, {
+
+    const element = document.querySelector(".site-queue .currentlyPlaying");
+    element?.scrollIntoView({
         behavior: immediate ? "auto" : "smooth",
-        align: "start",
     });
 }
 
@@ -57,8 +58,15 @@ export async function updateQueue() {
 
     await tick();
 
-    get(QueueVirtualListBind).scrollToOffset(offsetBeforeQueue);
-    get(JukeboxVirtualListBind).scrollToOffset(offsetBeforeJukebox);
+    // TODO is this needed now its not proper virtualised
+    get(QueueVirtualListBind).scrollTo({
+        top: offsetBeforeQueue,
+        behavior: "instant",
+    });
+    get(JukeboxVirtualListBind).scrollTo({
+        top: offsetBeforeJukebox,
+        behavior: "instant",
+    });
 }
 
 export function hideLoadingOverlay() {
