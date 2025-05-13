@@ -227,7 +227,7 @@ const migrations = [
     },
 
     {
-        version: "3.6.0-alpha",
+        version: "3.6.0",
         migrate: async () => {
             Settings.update((obj) => ({
                 ...obj,

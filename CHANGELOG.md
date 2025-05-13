@@ -1,9 +1,9 @@
 # Changelog
 
-## [3.6.0] - 2025-xx-xx
+## [3.6.0] - 2025-05-13
 
 ### Added
--   Crossfade and gapless (simulated) playback
+-   Crossfade and gapless (simulated) playback, somewhat experimental
 -   Next song will be cached ahead of time for faster playback
 
 ### Changed
