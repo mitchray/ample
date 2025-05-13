@@ -14,6 +14,7 @@ import {
     debugHelper,
     errorHandler,
     shuffleArray,
+    trimCache,
     truncateDecimals,
 } from "~/logic/helper";
 import { Settings } from "~/stores/settings";
@@ -233,6 +234,8 @@ class Player {
                     response = await fetch(item.url, { signal: abortSignal });
                     if (response.ok) {
                         await cache.put(item.url, response.clone()); // Clone response before caching
+
+                        await trimCache();
                     }
                 } else {
                     debugHelper("song was in cache!");

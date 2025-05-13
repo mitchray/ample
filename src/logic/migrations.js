@@ -1,4 +1,5 @@
 import { compareVersions } from "compare-versions";
+import { clearCache } from "~/logic/helper.js";
 import { Settings } from "~/stores/settings.js";
 
 const migrations = [
@@ -254,4 +255,6 @@ export function handleMigrations(currentVersion) {
             }
         });
     }
+
+    clearCache();
 }

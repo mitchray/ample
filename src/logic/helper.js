@@ -231,3 +231,25 @@ export function prepareForQueue(arr) {
 
     return arr;
 }
+
+export async function trimCache() {
+    const maxItems = 20;
+
+    const cache = await caches.open("audio-cache");
+    const requests = await cache.keys();
+    if (requests.length > maxItems) {
+        for (let i = 0; i < requests.length - maxItems; i++) {
+            await cache.delete(requests[i]);
+        }
+    }
+}
+
+export function clearCache() {
+    caches.keys().then((keys) => {
+        for (const key of keys) {
+            if (key === "audio-cache") {
+                void caches.delete(key);
+            }
+        }
+    });
+}
