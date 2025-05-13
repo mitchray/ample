@@ -1,5 +1,10 @@
 # Changelog
 
+## [3.6.1] - 2025-05-13
+
+### Fixed
+-   Trim audio-cache manually, browser does not garbage collect automatically
+
 ## [3.6.0] - 2025-05-13
 
 ### Added
