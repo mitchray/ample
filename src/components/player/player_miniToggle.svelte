@@ -17,3 +17,9 @@
         />
     </sl-button>
 </sl-tooltip>
+
+<style>
+    sl-button {
+        z-index: 1000;
+    }
+</style>
