@@ -1,24 +1,10 @@
-import { Settings } from "~/stores/settings.js";
-import { IsMobile, JukeboxQueue, NowPlayingQueue } from "~/stores/state.js";
+import { JukeboxQueue, NowPlayingQueue } from "~/stores/state.js";
 import { get } from "svelte/store";
 import { tick } from "svelte";
 import {
     JukeboxVirtualListBind,
     QueueVirtualListBind,
 } from "~/stores/elements.js";
-
-/**
- * Close sidebar
- */
-export async function closeSidebar() {
-    if (get(IsMobile)) {
-        let status = false;
-        Settings.update((x) => ({
-            ...x,
-            SidebarIsOpen: status,
-        }));
-    }
-}
 
 /**
  * Callback to keep the sl-drawer open

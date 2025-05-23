@@ -45,7 +45,7 @@
     <SidebarLink
         activePath="/search"
         href="#/search"
-        icon="search"
+        icon="category_search"
         label={$_("text.advancedSearch")}
     />
 </div>

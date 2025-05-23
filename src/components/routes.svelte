@@ -2,7 +2,6 @@
     import { SiteContentBind } from "~/stores/elements.js";
     import Router from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
-    import { closeSidebar } from "~/logic/ui.js";
 
     const routes = {
         "/search": wrap({
@@ -105,18 +104,10 @@
             asyncComponent: () => import("~/views/notFound404.svelte"),
         }),
     };
-
-    function routeLoading(event) {
-        closeSidebar();
-    }
 </script>
 
 <div bind:this={$SiteContentBind} class="site-content">
     <div class="site-content-inner">
-        <Router
-            on:routeLoading={routeLoading}
-            restoreScrollState={true}
-            {routes}
-        />
+        <Router restoreScrollState={true} {routes} />
     </div>
 </div>

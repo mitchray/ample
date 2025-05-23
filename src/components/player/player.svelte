@@ -4,7 +4,6 @@
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
     import { ShowVisualizer } from "~/stores/state.js";
-    import OpenToggle from "~/components/player/player_openToggle.svelte";
     import QueueToggle from "~/components/player/player_queueToggle.svelte";
     import MiniToggle from "~/components/player/player_miniToggle.svelte";
     import NowPlaying from "~/components/player/player_nowPlaying.svelte";
@@ -42,12 +41,10 @@
     bind:this={$SitePlayerBind}
     class="site-player"
     class:is-expanded={!$Settings.PlayerIsMini}
-    class:is-open={$Settings.PlayerIsOpen}
     class:visualizer-open={$ShowVisualizer}
     class:queue-open={$Settings.QueueIsOpen}
-    style:height={$Settings.PlayerIsOpen ? "auto" : "0"}
+    style:height="auto"
 >
-    <OpenToggle />
     <QueueToggle />
 
     <div class="container">
@@ -169,11 +166,11 @@
         transform: translateX(calc(0.5 * var(--size-queue-width)));
     }
 
-    .is-open .viz-canvas {
+    .viz-canvas {
         transform: translateY(calc(-0.5 * var(--size-player-height)));
     }
 
-    .is-open.queue-open .viz-canvas {
+    .queue-open .viz-canvas {
         transform: translateX(calc(0.5 * var(--size-queue-width)))
             translateY(calc(-0.5 * var(--size-player-height)));
     }
@@ -194,17 +191,17 @@
         display: block;
     }
 
-    .is-open .behind {
+    .behind {
         height: 63px;
     }
 
-    .is-open.is-expanded .behind {
+    .is-expanded .behind {
         height: 103px;
     }
 
     /* COMMON */
     .site-player {
-        --main-area-height: 84px;
+        --main-area-height: 60px;
         height: var(--size-player-height);
         z-index: 100;
         position: relative;
@@ -222,18 +219,11 @@
         gap: 2px;
         align-items: center;
         grid-template-areas:
-                              "wave    wave    wave      wave       wave         wave         wave "
-                              "seekbar seekbar seekbar   seekbar    seekbar      seekbar      seekbar"
-                              ".       shuffle seek-back play-pause seek-forward bookmark     ."
-                              ".       repeat  previous  play-pause next         more-options .";
-        grid-template-columns: 1fr     32px    32px      auto       32px         32px         1fr;
-        grid-template-rows: auto 4px 42px 42px;
-    }
-
-    /* ensure container contents are hidden */
-    .site-player:not(.is-open) .container {
-        height: 0 !important;
-        overflow: hidden;
+            "wave    wave    wave    wave      wave     wave       wave    wave         wave     wave         wave"
+            "seekbar seekbar seekbar seekbar   seekbar  seekbar    seekbar seekbar      seekbar  seekbar      seekbar"
+            ".       repeat  shuffle seek-back previous play-pause next    seek-forward bookmark more-options .";
+        grid-template-columns: 1fr     32px    32px    32px      32px     auto       32px    32px         32px     32px         1fr;
+        grid-template-rows: auto 4px 60px;
     }
 
     /* reduce inline padding for all the buttons */
@@ -274,6 +264,13 @@
     .player__play-pause :global(*::part(base)) {
         height: calc(var(--main-area-height) - 18px);
         align-items: center;
+        font-size: 2.5rem; /* bigger play button */
+    }
+
+    .player__play-pause :global(sl-button::part(base)),
+    .player__next :global(sl-button::part(base)),
+    .player__previous :global(sl-button::part(base)) {
+        border-radius: 100%;
     }
 
     .player__next {
@@ -344,11 +341,10 @@
         margin-inline-end: var(--spacing-md);
     }
 
-    /* only position when player is open otherwise they will appear when closed */
-    .site-player.is-open .player__current-time,
-    .site-player.is-open .player__end-time,
-    .site-player.is-open .player__toggle,
-    .site-player.is-open .player__settings {
+    .player__current-time,
+    .player__end-time,
+    .player__toggle,
+    .player__settings {
         position: absolute;
     }
 
@@ -388,20 +384,6 @@
         display: none;
     }
 
-    .playback-control.secondary :global(*::part(base)) {
-        /*background-color: var(--color-background);*/
-        /*border: 1px solid currentColor;*/
-    }
-
-    .playback-control.secondary :global(*::part(base)):not(:hover) {
-        /*color: var(--color-highlight);*/
-    }
-
-    .playback-control.secondary :global(*::part(base)):disabled {
-        /*color: var(--color-outline-variant);*/
-        /*opacity: 1;*/
-    }
-
     /* ensure disabled buttons are not interactive */
     .site-player :global(*[disabled]) {
         pointer-events: none;
@@ -411,58 +393,6 @@
         height: 30px;
         pointer-events: initial;
         opacity: 1;
-    }
-
-    /* mobile only tweaks */
-    /* prettier-ignore */
-    @media (max-width: 389.99px) {
-        /* bigger play button */
-        .player__play-pause :global(*::part(base)) {
-            font-size: 3.5rem;
-        }
-
-        /* push down towards the centre */
-        .player__shuffle,
-        .player__seek-back,
-        .player__seek-forward,
-        .player__bookmark {
-            align-self: end;
-        }
-
-        /* push up towards the centre */
-        .player__repeat,
-        .player__previous,
-        .player__next,
-        .player__more-options {
-            align-self: start;
-        }
-    }
-
-    /* prettier-ignore */
-    @media (min-width: 390px) {
-        .site-player {
-            --main-area-height: 60px;
-        }
-
-        .container {
-            grid-template-areas:
-                                  "wave    wave    wave    wave      wave     wave       wave    wave         wave     wave         wave"
-                                  "seekbar seekbar seekbar seekbar   seekbar  seekbar    seekbar seekbar      seekbar  seekbar      seekbar"
-                                  ".       repeat  shuffle seek-back previous play-pause next    seek-forward bookmark more-options .";
-            grid-template-columns: 1fr     32px    32px    32px      32px     auto       32px    32px         32px     32px         1fr;
-            grid-template-rows: auto 4px 60px;
-        }
-
-        /* bigger play button */
-        .player__play-pause :global(*::part(base)) {
-            font-size: 2.5rem;
-        }
-
-        .player__play-pause :global(sl-button::part(base)),
-        .player__next :global(sl-button::part(base)),
-        .player__previous :global(sl-button::part(base)) {
-            border-radius: 100%;
-        }
     }
 
     /* prettier-ignore */

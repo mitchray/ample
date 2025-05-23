@@ -13,13 +13,9 @@
     }
 </script>
 
-<sl-dropdown hoist>
+<sl-dropdown hoist placement="top-end">
     <div slot="trigger">
-        <sl-button
-            class="main-button"
-            variant="text"
-            title={$_("text.notifications")}
-        >
+        <sl-button class="main-button" variant="text">
             <MaterialSymbol
                 name="notifications"
                 slot="prefix"

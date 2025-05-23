@@ -239,6 +239,18 @@ const migrations = [
             }));
         },
     },
+    {
+        version: "3.7.0",
+        migrate: async () => {
+            delete Settings.PlayerIsOpen;
+            delete Settings.SidebarIsOpen;
+
+            Settings.update((obj) => ({
+                ...obj,
+                SidebarIsExpanded: true,
+            }));
+        },
+    },
 ];
 
 export function handleMigrations(currentVersion) {

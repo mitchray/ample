@@ -2,36 +2,31 @@
     import { _ } from "svelte-i18n";
     import { logout } from "~/logic/user";
     import { ShowPreferences, User } from "~/stores/state.js";
+    import { Settings } from "~/stores/settings.js";
     import ThemeToggle from "~/components/theme/themeToggle.svelte";
     import LanguageSelector from "~/components/languageSelector.svelte";
     import MaterialSymbol from "~/components//materialSymbol.svelte";
 </script>
 
-<sl-dropdown>
+<sl-dropdown placement="top-start" hoist>
     <sl-button
-        class="userMenu-toggle"
+        class="user-details"
         slot="trigger"
         variant="text"
-        style="width: var(--size-header-height)"
+        title={$User.username}
     >
         <sl-avatar
             image={$User.has_art ? $User.art : null}
-            style="--size: calc(var(--size-header-height) - var(--spacing-md));"
+            slot="prefix"
         ></sl-avatar>
+
+        {#if $Settings.SidebarIsExpanded}
+            {$User.username}
+        {/if}
     </sl-button>
 
     <sl-card style="max-width: 250px">
         {#if $User.isLoggedIn}
-            <div class="user-details">
-                <sl-avatar image={$User.has_art ? $User.art : null}></sl-avatar>
-
-                <span class="truncate">
-                    {$User.username}
-                </span>
-            </div>
-
-            <sl-divider></sl-divider>
-
             <sl-button
                 variant="warning"
                 onclick={() => {
@@ -66,13 +61,27 @@
         gap: var(--spacing-md);
     }
 
-    .userMenu-toggle {
-        margin-inline-end: var(--spacing-sm);
+    .user-details {
+        margin: var(--spacing-sm);
+        margin-block-end: 0;
+        display: block;
     }
 
-    .user-details {
-        display: flex;
-        gap: var(--spacing-md);
-        align-items: center;
+    .user-details::part(base) {
+        justify-content: start;
+        align-items: baseline;
+        padding: 0;
+    }
+
+    .user-details::part(label) {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding-inline-end: var(--spacing-sm);
+    }
+
+    :global(.site-sidebar.is-mini) .user-details {
+        transform: translateX(-2px);
+        display: inline-flex;
     }
 </style>

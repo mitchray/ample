@@ -1,7 +1,6 @@
 <script>
     import active from "svelte-spa-router/active";
     import { Settings } from "~/stores/settings.js";
-    import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { href, activePath, icon, label } = $props();
@@ -9,7 +8,7 @@
 
 <sl-tooltip
     content={label}
-    disabled={$IsMobile || $Settings.SidebarIsOpen}
+    disabled={$Settings.SidebarIsExpanded}
     hoist
     placement="right"
 >

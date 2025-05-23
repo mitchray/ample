@@ -4,12 +4,13 @@
     import { SearchQuery, ShowSearch } from "~/stores/state.js";
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";
-    import { searchArtists } from "~/logic/artist";
-    import { searchAlbums } from "~/logic/album";
-    import { searchSongs } from "~/logic/song";
-    import { searchPlaylists, searchSmartlists } from "~/logic/playlist";
+    import { searchArtists } from "~/logic/artist.js";
+    import { searchAlbums } from "~/logic/album.js";
+    import { searchSongs } from "~/logic/song.js";
+    import { searchPlaylists, searchSmartlists } from "~/logic/playlist.js";
     import CardList from "~/components/cards/cardList.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
+    import SearchInput from "~/components/search/search_input.svelte";
 
     let drawer = $state();
     let results = $state({});
@@ -153,26 +154,28 @@
 {#if $SiteContentBind}
     <Portal target={$SiteContentBind}>
         <sl-drawer
-            placement="top"
+            placement="start"
             bind:this={drawer}
             onsl-hide={handleClose}
             onsl-initial-focus={(e) => e.preventDefault()}
             contained
         >
             <div slot="label">
-                {$_("text.search")}
+                <div class="header-inner">
+                    <SearchInput />
 
-                {#if $SearchQuery.length > 0 && $SearchQuery.length < minimumChars}
-                    &nbsp;
-                    <sl-badge variant="warning">
-                        {minimumChars} character minimum
-                    </sl-badge>
-                {/if}
+                    {#if $SearchQuery.length > 0 && $SearchQuery.length < minimumChars}
+                        &nbsp;
+                        <sl-badge variant="warning">
+                            {minimumChars} character minimum
+                        </sl-badge>
+                    {/if}
 
-                {#if searching}
-                    &nbsp;
-                    <sl-spinner></sl-spinner>
-                {/if}
+                    {#if searching}
+                        &nbsp;
+                        <sl-spinner></sl-spinner>
+                    {/if}
+                </div>
             </div>
 
             <div class="results">
@@ -371,6 +374,7 @@
 
     sl-drawer::part(panel) {
         min-height: 100%;
+        width: 100%;
     }
 
     /* always show the footer, though empty */
@@ -380,5 +384,11 @@
 
     section + section {
         margin-top: var(--spacing-xxl);
+    }
+
+    .header-inner {
+        display: flex;
+        gap: var(--spacing-sm);
+        align-items: center;
     }
 </style>

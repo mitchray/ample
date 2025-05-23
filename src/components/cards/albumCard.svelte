@@ -86,7 +86,7 @@
         grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
     }
 
-    /* allow thinner columns on mobile */
+    /* allow thinner columns in small space */
     @media (max-width: 650px) {
         :global(.album-grid) {
             grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));

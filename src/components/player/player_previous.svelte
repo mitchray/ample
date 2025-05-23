@@ -1,6 +1,6 @@
 <script>
     import { MediaPlayer } from "~/stores/elements.js";
-    import { CurrentMedia, IsMobile, NowPlayingQueue } from "~/stores/state.js";
+    import { CurrentMedia, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import GenericCard from "~/components/cards/genericCard.svelte";
 
@@ -39,7 +39,7 @@
         <MaterialSymbol name="skip_previous" />
     </sl-button>
 
-    {#if previousItem && !$IsMobile}
+    {#if previousItem}
         <sl-card>
             <GenericCard
                 type={previousItem.object_type}

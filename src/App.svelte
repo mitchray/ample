@@ -21,7 +21,6 @@
     // Use custom string as dnd-action ID
     import { overrideItemIdKeyNameBeforeInitialisingDndZones } from "svelte-dnd-action";
     import ThemeHandler from "~/components/theme/themeHandler.svelte";
-    import Header from "~/components/header.svelte";
     import Sidebar from "~/components/sidebar/sidebar.svelte";
     import Queue from "~/components/queue/queue.svelte";
     import Player from "~/components/player/player.svelte";
@@ -33,6 +32,7 @@
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
     import LoginPage from "~/views/login.svelte";
     import { hideLoadingOverlay } from "~/logic/ui.js";
+    import Search from "~/components/search/search.svelte";
 
     handleMigrations($ampleVersion);
 
@@ -92,12 +92,10 @@
         <LoginPage />
     {:else}
         <QueryClientProvider client={queryClient}>
-            <Header />
             <div class="site-inner">
                 <Sidebar />
-
+                <Search />
                 <Routes />
-
                 <Queue />
             </div>
             <Player />
@@ -175,7 +173,7 @@
         position: relative;
         flex: 1;
         z-index: -10;
-        border-radius: 15px;
+        border-radius: 0 0 15px 15px;
         overflow: hidden;
         margin-block-end: var(--spacing-lg);
     }

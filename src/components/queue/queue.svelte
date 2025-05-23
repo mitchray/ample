@@ -1,9 +1,7 @@
 <script>
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
     import { Settings } from "~/stores/settings.js";
-    import { IsMobile } from "~/stores/state.js";
     import { QueuePanelBind } from "~/stores/elements.js";
-
     import Jukebox from "~/components/queue/queue_jukebox.svelte";
     import UserQueue from "~/components/queue/queue_user.svelte";
 
@@ -20,7 +18,7 @@
 <div
     bind:this={siteQueueBind}
     class="site-queue"
-    class:is-drawer={$IsMobile || !$Settings.QueueIsPinned}
+    class:is-drawer={!$Settings.QueueIsPinned}
     class:is-open={$Settings.QueueIsOpen}
     onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
@@ -85,10 +83,9 @@
     /*
     Drawer mode
     */
-
     .site-queue.is-drawer {
         position: absolute;
-        inset-block-start: var(--size-header-height);
+        inset-block-start: 0;
         inset-block-end: var(--size-player-height);
         transition: transform 0.3s ease-out;
     }

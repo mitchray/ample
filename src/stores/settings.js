@@ -6,11 +6,10 @@ import { setTabulatorLang } from "~/logic/i18n.js";
 
 // our global svelte-persisted-store
 export let Settings = persisted("ample-settings", {
-    SidebarIsOpen: true,
+    SidebarIsExpanded: true,
     QueueIsOpen: true,
     QueueIsPinned: true,
     PlayerVolume: 50,
-    PlayerIsOpen: true,
     PlayerIsMini: false,
     RepeatState: "disabled",
     VolumeNormalizationEnabled: true,

@@ -5,7 +5,7 @@ import AmpacheAPI from "javascript-ampache";
 export let debugMode = writable(false);
 
 // Ample version
-export let ampleVersion = readable("3.6.0");
+export let ampleVersion = readable("3.7.0");
 
 // Ampache API version this app should use
 export let APIVersion = writable("6.6.0");
@@ -57,23 +57,6 @@ export let User = writable({
 export let Server = writable({
     url: null,
     version: null,
-});
-
-export const IsMobile = readable(false, function start(set) {
-    const mobile = window.matchMedia("(max-width: 679.99px)");
-
-    mobile.onchange = (e) => {
-        handleDeviceChange(e);
-    };
-
-    function handleDeviceChange(e) {
-        set(e.matches);
-    }
-
-    // Kick-off
-    handleDeviceChange(mobile);
-
-    return function stop() {};
 });
 
 export let recentRating = writable({

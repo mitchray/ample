@@ -3,7 +3,7 @@
     import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { showQueueItemAtIndex } from "~/logic/ui.js";
-    import { NowPlayingIndex, ShowVisualizer } from "~/stores/state.js";
+    import { NowPlayingIndex } from "~/stores/state.js";
     import { tick } from "svelte";
 
     async function handleQueueToggle() {
@@ -21,6 +21,7 @@
     content={$Settings.QueueIsOpen
         ? $_("text.queueHide")
         : $_("text.queueShow")}
+    placement="left"
 >
     <sl-button
         circle
@@ -35,14 +36,15 @@
 <style>
     sl-button {
         position: absolute;
-        inset-inline-end: var(--spacing-lg);
-        inset-block-end: calc(100% + var(--spacing-md));
+        inset-inline-end: var(--spacing-md);
+        inset-block-end: var(--spacing-md);
         z-index: 100;
+        scale: 0.9;
+        transform-origin: bottom right;
     }
 
     sl-button::part(base) {
         font-size: 20px;
-        box-shadow: var(--shadow-md);
     }
 
     sl-button :global(.icon) {

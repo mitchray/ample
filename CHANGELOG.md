@@ -1,5 +1,12 @@
 # Changelog
 
+## [3.7.0] - 2025-xx-xx
+
+### Changed
+-   Reclaimed some space by moving header items into sidebar
+-   Player always visible; moved Queue toggle into player area
+-   Removed any 'mobile' considerations, committing to desktop only
+
 ## [3.6.1] - 2025-05-13
 
 ### Fixed

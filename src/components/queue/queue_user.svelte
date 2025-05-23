@@ -1,7 +1,6 @@
 <script>
     import { _ } from "svelte-i18n";
     import {
-        IsMobile,
         NowPlayingIndex,
         NowPlayingQueue,
         CurrentMedia,
@@ -82,20 +81,18 @@
             </sl-button>
 
             <sl-menu>
-                {#if !$IsMobile}
-                    <sl-menu-item
-                        onclick={(e) => {
-                            e.stopPropagation();
-                            togglePinned();
-                        }}
-                    >
-                        {#if $Settings.QueueIsPinned}
-                            {$_("text.queueUnpin")}
-                        {:else}
-                            {$_("text.queuePin")}
-                        {/if}
-                    </sl-menu-item>
-                {/if}
+                <sl-menu-item
+                    onclick={(e) => {
+                        e.stopPropagation();
+                        togglePinned();
+                    }}
+                >
+                    {#if $Settings.QueueIsPinned}
+                        {$_("text.queueUnpin")}
+                    {:else}
+                        {$_("text.queuePin")}
+                    {/if}
+                </sl-menu-item>
 
                 <sl-menu-item onclick={handleClearPrevious}>
                     {$_("text.queueClearPrevious")}

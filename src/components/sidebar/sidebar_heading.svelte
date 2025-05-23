@@ -1,6 +1,5 @@
 <script>
     import { Settings } from "~/stores/settings.js";
-    import { IsMobile } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { icon = null, label } = $props();
@@ -8,7 +7,7 @@
 
 <sl-tooltip
     content={label}
-    disabled={$IsMobile || $Settings.SidebarIsOpen}
+    disabled={$Settings.SidebarIsExpanded}
     hoist
     placement="right"
 >

@@ -1,29 +1,27 @@
 <script>
-    import { closeSidebar } from "~/logic/ui.js";
-    import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
     import { Settings } from "~/stores/settings.js";
-    import { IsMobile } from "~/stores/state.js";
+    import SidebarTop from "~/components/sidebar/sidebar_top.svelte";
     import SidebarContent from "~/components/sidebar/sidebar_content.svelte";
-
-    function handleClickOutside() {
-        closeSidebar();
-    }
+    import SidebarBottom from "~/components/sidebar/sidebar_bottom.svelte";
 </script>
 
 <div
     class="site-sidebar"
-    class:is-drawer={$IsMobile}
-    class:is-list={$IsMobile || $Settings.SidebarIsOpen}
-    class:is-mini={!$Settings.SidebarIsOpen && !$IsMobile}
-    class:is-open={$Settings.SidebarIsOpen}
+    class:is-mini={!$Settings.SidebarIsExpanded}
     data-testid="sidebar"
-    onclickedOutside={handleClickOutside}
-    use:clickOutsideDetector={{
-        toggle: "#sidebar-button",
-    }}
 >
-    <div class="site-sidebar-inner">
-        <SidebarContent />
+    <div class="start">
+        <SidebarTop />
+    </div>
+
+    <div class="middle">
+        <div class="middle-inner">
+            <SidebarContent />
+        </div>
+    </div>
+
+    <div class="end">
+        <SidebarBottom />
     </div>
 </div>
 
@@ -39,17 +37,29 @@
         color: var(--color-tertiary);
         width: var(--size-sidebar-width);
         padding: 0;
+        padding-block-end: var(--spacing-lg);
         display: flex;
         flex-direction: column;
         position: relative;
-        transform: none;
         inset-inline-start: 0;
-        transition: transform 0.3s ease-out;
         z-index: 30;
-        will-change: transform;
     }
 
-    .site-sidebar-inner {
+    .start {
+        display: flex;
+        flex-direction: row;
+        padding: var(--spacing-sm);
+        padding-inline-start: 0;
+        justify-content: space-between;
+    }
+
+    .middle {
+        position: relative;
+        flex: 1;
+        border-block: 1px solid var(--color-background);
+    }
+
+    .middle-inner {
         position: absolute;
         inset-block-start: 0;
         inset-inline-start: 0;
@@ -60,10 +70,14 @@
         scrollbar-width: none;
         padding: var(--sidebar-padding) 0;
         padding-inline: var(--spacing-md);
-        padding-block-end: 36px; /* space for player toggle button */
     }
 
-    .site-sidebar.is-list :global(svg) {
+    .end {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .site-sidebar :global(svg) {
         position: relative;
         inset-block-end: 0.06em;
     }
@@ -83,35 +97,7 @@
         display: none;
     }
 
-    /*
-    Drawer mode
-    */
-    .site-sidebar.is-drawer {
-        position: absolute;
-        inset-block-start: var(--size-header-height);
-        inset-block-end: var(--size-player-height);
-        box-shadow: var(--shadow-xxl);
-    }
-
-    .site-sidebar.is-drawer:after {
-        content: "";
-        height: 100%;
-        width: 100vw;
-        display: block;
-        background-color: hsla(0, 0%, 30%, 0.5);
-        inset-inline-start: 100%;
-        position: absolute;
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-        pointer-events: none;
-    }
-
-    .site-sidebar.is-drawer.is-open:after {
-        opacity: 1;
-        pointer-events: auto;
-    }
-
-    .site-sidebar.is-drawer:not(.is-open) {
-        transform: translateX(-100%);
+    .site-sidebar.is-mini .start {
+        flex-direction: column;
     }
 </style>
