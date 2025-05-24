@@ -73,7 +73,6 @@
         bindSelector.value = currentPresetIndex.toString();
     }
 
-    // Function to handle the change of the randomize checkbox
     function handleRandomizeChange(e) {
         isRandomizeEnabled = e.target.checked;
     }

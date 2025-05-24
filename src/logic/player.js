@@ -26,6 +26,7 @@ import {
     NowPlayingIndex,
     NowPlayingQueue,
     PlaybackSpeed,
+    ShowVisualizer,
 } from "~/stores/state.js";
 import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 import { MediaPlayer } from "~/stores/elements.js";
@@ -117,6 +118,7 @@ class Player {
         // visualizer
         this.visualizer = null;
         this.visualizerAudioContextProxy = new AudioContext();
+        this.visualizerRenderLoopActive = false;
 
         Settings.subscribe((s) => {
             // PlayerVolume
@@ -157,6 +159,14 @@ class Player {
 
         CurrentMedia.subscribe((value) => {
             this.currentMedia = value;
+        });
+
+        ShowVisualizer.subscribe((show) => {
+            if (show) {
+                this.#initVisualizer();
+            } else {
+                this.#destroyVisualizer();
+            }
         });
 
         this.#init();
@@ -768,9 +778,6 @@ class Player {
      * More setup which doesn't belong in constructor
      */
     #init() {
-        const presets = getCuratedVisualizerPresets();
-        const preset = presets["$$$ Royal - Mashup (197)"];
-
         Object.keys(this.players).forEach((key) => {
             // set global volume
             this.players[key].wavesurfer.setVolume(this.globalVolume);
@@ -783,9 +790,13 @@ class Player {
 
         // set up keyboard media buttons
         this.#initKeyboardMediaKeys();
+    }
 
+    #initVisualizer() {
+        if (this.visualizer) return;
+        const presets = getCuratedVisualizerPresets();
+        const preset = presets["$$$ Royal - Mashup (197)"];
         try {
-            // set up visualizer
             this.visualizer = butterchurn.createVisualizer(
                 this.visualizerAudioContextProxy,
                 document.querySelector("#visualizer"),
@@ -799,25 +810,31 @@ class Player {
 
             this.#visualizerConnectAudio();
             this.visualizer?.loadPreset(preset, 5); // 2nd argument is the number of seconds to blend presets
+            this.visualizerRenderLoopActive = true;
             this.#startRenderer();
         } catch (e) {
             errorHandler("initializing visualizer", e);
         }
     }
 
-    #visualizerConnectAudio() {
-        let proxyMediaNode =
-            this.visualizerAudioContextProxy.createMediaElementSource(
-                this.currentPlayer.wavesurfer.getMediaElement(),
-            );
-        this.visualizer?.connectAudio(proxyMediaNode);
+    #destroyVisualizer() {
+        this.visualizerRenderLoopActive = false;
+        if (this.visualizer) {
+            // butterchurn has no destroy, but we can disconnect audio and null it
+            try {
+                this.visualizer.disconnectAudio &&
+                    this.visualizer.disconnectAudio();
+            } catch (e) {}
+            this.visualizer = null;
+        }
     }
 
     #startRenderer() {
+        if (!this.visualizerRenderLoopActive) return;
         requestAnimationFrame(() => {
-            if (this.isPlaying) {
-                // Check if media is playing
-                this.visualizer?.render();
+            if (!this.visualizerRenderLoopActive) return;
+            if (this.isPlaying && this.visualizer) {
+                this.visualizer.render();
             }
             this.#startRenderer();
         });
@@ -1060,6 +1077,14 @@ class Player {
         }
 
         return finalGainAmount;
+    }
+
+    #visualizerConnectAudio() {
+        let proxyMediaNode =
+            this.visualizerAudioContextProxy.createMediaElementSource(
+                this.currentPlayer.wavesurfer.getMediaElement(),
+            );
+        this.visualizer?.connectAudio(proxyMediaNode);
     }
 }
 
