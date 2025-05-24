@@ -8,7 +8,7 @@ export let debugMode = writable(false);
 export let ampleVersion = readable("3.7.0");
 
 // Ampache API version this app should use
-export let APIVersion = writable("6.6.0");
+export let APIVersion = writable("6.6.8");
 
 // our instance of javascript-ampache
 export let API = writable(new AmpacheAPI({ url: "" }));
