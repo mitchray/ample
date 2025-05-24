@@ -3,15 +3,9 @@
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
     import AmpacheAPI from "javascript-ampache";
-    import {
-        ampleVersion,
-        API,
-        debugMode,
-        PageTitle,
-        Server,
-    } from "~/stores/state.js";
+    import { API, debugMode, PageTitle, Server } from "~/stores/state.js";
     import { Settings } from "~/stores/settings.js";
-    import { attemptLogin, login, logout } from "~/logic/user";
+    import { attemptLogin } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { pingWithTimeout } from "~/logic/user";
@@ -251,13 +245,6 @@
     </div>
 </div>
 
-<div class="footer">
-    <div class="meta">
-        <span>Ample v{$ampleVersion}</span>
-        {#if $Server.version}- <span>Ampache v{$Server.version}</span>{/if}
-    </div>
-</div>
-
 <!-- override App overflow on this page -->
 {@html `<style>
     #app {
@@ -295,10 +282,6 @@
         display: flex;
         justify-content: end;
         padding: var(--spacing-md);
-    }
-
-    .meta {
-        opacity: 0.4;
     }
 
     sl-badge::part(base) {

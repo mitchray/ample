@@ -50,12 +50,12 @@ export let User = writable({
 /**
  * Hold info about the Ampache server
  * @typedef {Object} AmpleServer
- * @property {string|null} [url]
+ * @property {string|null} [ampacheURL]
  * @property {string|null} [version]
  */
 /** @type {import('svelte/store').Writable<AmpleServer>} */
 export let Server = writable({
-    url: null,
+    ampacheURL: null,
     version: null,
 });
 

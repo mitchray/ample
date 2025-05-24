@@ -1,7 +1,12 @@
 <script>
     import { _ } from "svelte-i18n";
     import { logout } from "~/logic/user";
-    import { ShowPreferences, User } from "~/stores/state.js";
+    import {
+        ampleVersion,
+        APIVersion,
+        ShowPreferences,
+        User,
+    } from "~/stores/state.js";
     import { Settings } from "~/stores/settings.js";
     import ThemeToggle from "~/components/theme/themeToggle.svelte";
     import LanguageSelector from "~/components/languageSelector.svelte";
@@ -51,6 +56,12 @@
         <ThemeToggle />
 
         <LanguageSelector />
+
+        <div class="meta">
+            <span>Ample {$ampleVersion}</span>
+            -
+            <span>Ampache API {$APIVersion}</span>
+        </div>
     </sl-card>
 </sl-dropdown>
 
@@ -83,5 +94,15 @@
     :global(.site-sidebar.is-mini) .user-details {
         transform: translateX(-2px);
         display: inline-flex;
+    }
+
+    .meta {
+        color: var(--color-on-surface);
+        opacity: 0.4;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        font-size: 11px;
+        gap: var(--spacing-sm);
     }
 </style>
