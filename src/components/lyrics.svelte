@@ -6,7 +6,7 @@
     import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
     import { throttle } from "lodash-es";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { onMount, tick, untrack } from "svelte";
+    import { tick, untrack } from "svelte";
 
     let lyrics = new Lyrics(); // custom store
     let follow = $state(true);
@@ -25,6 +25,10 @@
     const throttledAction = throttle(changeLine, 0.25 * 1000);
 
     function resetEvents() {
+        $MediaPlayer.playerA.wavesurfer.un("timeupdate", throttledAction);
+        $MediaPlayer.playerB.wavesurfer.un("timeupdate", throttledAction);
+        $MediaPlayer.currentPlayer.wavesurfer.on("timeupdate", throttledAction);
+
         if (container) container.scrollTop = 0;
 
         follow = true; // just force it on, won't impact non-synced lyrics
@@ -74,11 +78,6 @@
 
     $effect(() => {
         $ShowLyrics ? drawer?.show() : drawer?.hide();
-    });
-
-    onMount(() => {
-        $MediaPlayer.wavesurfer?.un("timeupdate", throttledAction);
-        $MediaPlayer.wavesurfer?.on("timeupdate", throttledAction);
     });
 </script>
 
