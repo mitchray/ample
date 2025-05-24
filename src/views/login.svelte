@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
     import AmpacheAPI from "javascript-ampache";
@@ -9,6 +9,7 @@
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { pingWithTimeout } from "~/logic/user";
+    import { hideLoadingOverlay } from "~/logic/ui.js";
 
     let username = $state("");
     let password = $state("");
@@ -18,7 +19,6 @@
     let result = $state();
     let lastUsedTab;
     let currentTab = $state();
-    let loaded = $state(false);
 
     // List of tab items with labels and values.
     let tabs = [
@@ -88,47 +88,48 @@
     onMount(async () => {
         lastUsedTab = $Settings.LastLoginMethod;
         currentTab = lastUsedTab || "username";
-        loaded = true;
+        await tick();
+        hideLoadingOverlay();
     });
 </script>
 
-<div class="header">
-    <UserMenu />
-</div>
+<div class="container" transition:fade>
+    <div class="header">
+        <UserMenu />
+    </div>
 
-<div class="inner">
-    <div class="form" in:fade out:fade>
-        <div class="logo">
-            {#if $Server.logo}
-                <img src={$Server.logo} alt="" />
-            {:else}
-                <div class="ample"></div>
+    <div class="inner">
+        <div class="form">
+            <div class="logo">
+                {#if $Server.logo}
+                    <img src={$Server.logo} alt="" />
+                {:else}
+                    <div class="ample"></div>
+                {/if}
+            </div>
+
+            {#if versionCheck && versionCheck < 6}
+                <sl-badge class="server-message" variant="danger" in:fade>
+                    {$_("versionWarning", {
+                        values: { serverVersion: $Server.version },
+                    })}
+                </sl-badge>
             {/if}
-        </div>
 
-        {#if versionCheck && versionCheck < 6}
-            <sl-badge class="server-message" variant="danger" in:fade>
-                {$_("versionWarning", {
-                    values: { serverVersion: $Server.version },
-                })}
-            </sl-badge>
-        {/if}
+            {#if !$Server.ampacheURL}
+                <sl-alert variant="danger" open>
+                    {$_("text.errorNoURL")}
+                </sl-alert>
+                <sl-divider></sl-divider>
+            {/if}
 
-        {#if !$Server.ampacheURL}
-            <sl-alert variant="danger" open>
-                {$_("text.errorNoURL")}
-            </sl-alert>
-            <sl-divider></sl-divider>
-        {/if}
+            {#if $Server.loginMessage}
+                <sl-alert open>
+                    {@html $Server.loginMessage}
+                </sl-alert>
+                <sl-divider></sl-divider>
+            {/if}
 
-        {#if $Server.loginMessage}
-            <sl-alert open>
-                {@html $Server.loginMessage}
-            </sl-alert>
-            <sl-divider></sl-divider>
-        {/if}
-
-        {#if loaded}
             <sl-tab-group onsl-tab-show={changeTab}>
                 {#each tabs as tab}
                     <sl-tab
@@ -229,36 +230,45 @@
                     </form>
                 </sl-tab-panel>
             </sl-tab-group>
-        {/if}
 
-        {#if result?.error?.errorMessage}
-            <sl-badge class="login-message" variant="warning" in:fade>
-                {result.error.errorMessage}
-            </sl-badge>
-        {/if}
+            {#if result?.error?.errorMessage}
+                <sl-badge class="login-message" variant="warning" in:fade>
+                    {result.error.errorMessage}
+                </sl-badge>
+            {/if}
 
-        {#if fatalError}
-            <sl-badge class="login-message" variant="danger" in:fade>
-                {$_("text.errorFatal")}
-            </sl-badge>
-        {/if}
+            {#if fatalError}
+                <sl-badge class="login-message" variant="danger" in:fade>
+                    {$_("text.errorFatal")}
+                </sl-badge>
+            {/if}
+        </div>
     </div>
 </div>
 
-<!-- override App overflow on this page -->
-{@html `<style>
-    #app {
+<style>
+    .container {
+        --login-header-height: 100px;
         overflow: auto;
         background-color: var(--color-surface-container-lowest);
+        height: 100vh;
+        width: 100vw;
+        position: fixed;
+        z-index: 1000;
+        display: flex;
+        flex-direction: column;
     }
-</style>`}
 
-<style>
+    .header {
+        height: var(--login-header-height);
+    }
+
     .inner {
         display: flex;
         flex: 1;
         justify-content: center;
         align-items: center;
+        padding-block-end: var(--login-header-height);
     }
 
     .form {

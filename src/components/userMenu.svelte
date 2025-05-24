@@ -20,13 +20,17 @@
         variant="text"
         title={$User.username}
     >
-        <sl-avatar
-            image={$User.has_art ? $User.art : null}
-            slot="prefix"
-        ></sl-avatar>
+        {#if $User.isLoggedIn}
+            <sl-avatar
+                image={$User.has_art ? $User.art : null}
+                slot="prefix"
+            ></sl-avatar>
 
-        {#if $Settings.SidebarIsExpanded}
-            {$User.username}
+            {#if $Settings.SidebarIsExpanded}
+                {$User.username}
+            {/if}
+        {:else}
+            <sl-avatar image={null} slot="prefix"></sl-avatar>
         {/if}
     </sl-button>
 
@@ -36,6 +40,7 @@
                 variant="warning"
                 onclick={() => {
                     logout();
+                    window.location.href = "#/";
                 }}
                 class="logout"
                 title={$_("text.logOut")}

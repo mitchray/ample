@@ -1,7 +1,7 @@
-import App from "./App.svelte";
+import Root from "./Root.svelte";
 import { mount } from "svelte";
 
-let app = mount(App, {
+let app = mount(Root, {
     target: document.getElementById("app"),
 });
 

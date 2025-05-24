@@ -1,7 +1,7 @@
 <script>
     import { _ } from "svelte-i18n";
     import Fuse from "fuse.js";
-    import { SearchQuery, ShowSearch } from "~/stores/state.js";
+    import { SearchQuery, ShowSearch, User } from "~/stores/state.js";
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";
     import { searchArtists } from "~/logic/artist.js";
@@ -52,89 +52,91 @@
     }
 
     async function doSearch() {
-        searching = true;
+        if ($User.isLoggedIn) {
+            searching = true;
 
-        let sArtists = [];
-        let sAlbums = [];
-        let sSongs = [];
-        let sPlaylists = [];
-        let sSmartlists = [];
+            let sArtists = [];
+            let sAlbums = [];
+            let sSongs = [];
+            let sPlaylists = [];
+            let sSmartlists = [];
 
-        sArtists = searchArtists({
-            query: $SearchQuery,
-            page: 0,
-            limit: 50,
-        }).then((response) => {
-            return response.artist;
-        });
-        sAlbums = searchAlbums({
-            query: $SearchQuery,
-            page: 0,
-            limit: 50,
-        }).then((response) => {
-            return response.album;
-        });
-        sSongs = searchSongs({
-            query: $SearchQuery,
-            page: 0,
-            limit: 100,
-        }).then((response) => {
-            return response.song;
-        });
-        sPlaylists = searchPlaylists({
-            query: $SearchQuery,
-            page: 0,
-            limit: 50,
-        }).then((response) => {
-            return response.playlist;
-        });
-        sSmartlists = searchSmartlists({
-            query: $SearchQuery,
-            page: 0,
-            limit: 50,
-        }).then((response) => {
-            return response.playlist;
-        });
+            sArtists = searchArtists({
+                query: $SearchQuery,
+                page: 0,
+                limit: 50,
+            }).then((response) => {
+                return response.artist;
+            });
+            sAlbums = searchAlbums({
+                query: $SearchQuery,
+                page: 0,
+                limit: 50,
+            }).then((response) => {
+                return response.album;
+            });
+            sSongs = searchSongs({
+                query: $SearchQuery,
+                page: 0,
+                limit: 100,
+            }).then((response) => {
+                return response.song;
+            });
+            sPlaylists = searchPlaylists({
+                query: $SearchQuery,
+                page: 0,
+                limit: 50,
+            }).then((response) => {
+                return response.playlist;
+            });
+            sSmartlists = searchSmartlists({
+                query: $SearchQuery,
+                page: 0,
+                limit: 50,
+            }).then((response) => {
+                return response.playlist;
+            });
 
-        [
-            results.artists,
-            results.albums,
-            results.songs,
-            results.playlists,
-            results.smartlists,
-        ] = await Promise.all([
-            sArtists,
-            sAlbums,
-            sSongs,
-            sPlaylists,
-            sSmartlists,
-        ]);
+            [
+                results.artists,
+                results.albums,
+                results.songs,
+                results.playlists,
+                results.smartlists,
+            ] = await Promise.all([
+                sArtists,
+                sAlbums,
+                sSongs,
+                sPlaylists,
+                sSmartlists,
+            ]);
 
-        const fuseOptions = {
-            keys: ["name", "title"],
-        };
+            const fuseOptions = {
+                keys: ["name", "title"],
+            };
 
-        results.songs = new Fuse(results.songs, fuseOptions)
-            .search($SearchQuery)
-            .map((obj) => obj.item);
+            results.songs = new Fuse(results.songs, fuseOptions)
+                .search($SearchQuery)
+                .map((obj) => obj.item);
 
-        results.albums = new Fuse(results.albums, fuseOptions)
-            .search($SearchQuery)
-            .map((obj) => obj.item);
+            results.albums = new Fuse(results.albums, fuseOptions)
+                .search($SearchQuery)
+                .map((obj) => obj.item);
 
-        results.artists = new Fuse(results.artists, fuseOptions)
-            .search($SearchQuery)
-            .map((obj) => obj.item);
+            results.artists = new Fuse(results.artists, fuseOptions)
+                .search($SearchQuery)
+                .map((obj) => obj.item);
 
-        results.playlists = new Fuse(results.playlists, fuseOptions)
-            .search($SearchQuery)
-            .map((obj) => obj.item);
+            results.playlists = new Fuse(results.playlists, fuseOptions)
+                .search($SearchQuery)
+                .map((obj) => obj.item);
 
-        results.smartlists = new Fuse(results.smartlists, fuseOptions)
-            .search($SearchQuery)
-            .map((obj) => obj.item);
+            results.smartlists = new Fuse(results.smartlists, fuseOptions)
+                .search($SearchQuery)
+                .map((obj) => obj.item);
 
-        searching = false;
+            searching = false;
+        }
     }
 
     $effect.pre(() => {

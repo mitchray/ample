@@ -1,9 +1,4 @@
 <script>
-    import "@shoelace-style/shoelace/dist/themes/light.css";
-    import "@shoelace-style/shoelace/dist/themes/dark.css";
-    import "/src/css/normalize.css";
-    import "/src/css/global.css";
-    import "@shoelace-style/shoelace/dist/shoelace.js";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import {
         ampleVersion,
@@ -11,16 +6,12 @@
         ShowSearch,
         User,
     } from "~/stores/state.js";
-    import { loadSettings, Settings } from "~/stores/settings";
-    import { extendSession, validateSession } from "~/logic/user.js";
+    import { loadSettings } from "~/stores/settings";
+    import { extendSession } from "~/logic/user.js";
     import { handleMigrations } from "~/logic/migrations.js";
-    import { loadFromConfig } from "~/logic/ample.js";
-    import { isLoading as i18nIsLoading } from "svelte-i18n";
-    import { setupI18n } from "~/logic/i18n.js";
 
     // Use custom string as dnd-action ID
     import { overrideItemIdKeyNameBeforeInitialisingDndZones } from "svelte-dnd-action";
-    import ThemeHandler from "~/components/theme/themeHandler.svelte";
     import Sidebar from "~/components/sidebar/sidebar.svelte";
     import Queue from "~/components/queue/queue.svelte";
     import Player from "~/components/player/player.svelte";
@@ -28,17 +19,14 @@
     import Lyrics from "~/components/lyrics.svelte";
     import Preferences from "~/views/preferences/preferences.svelte";
     import Routes from "~/components/routes.svelte";
-    import PageTitleCoordinator from "~/components/pageTitleCoordinator.svelte";
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
-    import LoginPage from "~/views/login.svelte";
-    import { hideLoadingOverlay } from "~/logic/ui.js";
     import Search from "~/components/search/search.svelte";
+    import { tick } from "svelte";
+    import { hideLoadingOverlay } from "~/logic/ui.js";
 
     handleMigrations($ampleVersion);
 
     overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
-
-    setupI18n();
 
     window.setInterval(
         function () {
@@ -61,51 +49,28 @@
         },
     });
 
-    $effect(() => {
-        if ($User.isLoggedIn) {
-            loadSettings();
-        }
-    });
-
     $effect(async () => {
-        await loadFromConfig();
-        await validateSession();
-
-        // remove the starting sl-theme-dark
-        document.documentElement.classList.remove("sl-theme-dark");
-
-        if ($Settings.Theme.mode === "light") {
-            document.documentElement.classList.add("sl-theme-light");
-        } else {
-            document.documentElement.classList.add("sl-theme-dark");
+        if ($User.isLoggedIn) {
+            await loadSettings();
+            await tick();
+            hideLoadingOverlay();
         }
-
-        hideLoadingOverlay();
     });
 </script>
 
-<ThemeHandler />
-
-{#if !$i18nIsLoading}
-    <PageTitleCoordinator />
-    {#if !$User.isLoggedIn}
-        <LoginPage />
-    {:else}
-        <QueryClientProvider client={queryClient}>
-            <div class="site-inner">
-                <Sidebar />
-                <Search />
-                <Routes />
-                <Queue />
-            </div>
-            <Player />
-            <Lyrics />
-            <Preferences />
-            <NotificationToasts />
-            <Alerts />
-        </QueryClientProvider>
-    {/if}
-{/if}
+<QueryClientProvider client={queryClient}>
+    <div class="site-inner">
+        <Sidebar />
+        <Search />
+        <Routes />
+        <Queue />
+    </div>
+    <Player />
+    <Lyrics />
+    <Preferences />
+    <NotificationToasts />
+    <Alerts />
+</QueryClientProvider>
 
 <svg width="0" height="0">
     <filter

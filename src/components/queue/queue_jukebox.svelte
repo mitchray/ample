@@ -9,6 +9,7 @@
         NowPlayingQueue,
         JukeboxQueue,
         CurrentMedia,
+        User,
     } from "~/stores/state.js";
     import { MediaPlayer, QueuePanelBind } from "~/stores/elements.js";
     import {
@@ -174,7 +175,7 @@
 
     $effect(() => {
         // test the saved smartlist does exist
-        if ($Settings.QueueRefill.smartlist) {
+        if ($User.isLoggedIn && $Settings.QueueRefill.smartlist) {
             $API.playlist({
                 filter: $Settings.QueueRefill.smartlist,
             }).then((result) => {
@@ -204,7 +205,13 @@
         }
     });
 
-    onMount(async () => {
+    $effect.pre(() => {
+        if ($User.isLoggedIn) {
+            init();
+        }
+    });
+
+    async function init() {
         // get playlists
         playlistResponse = await $API.smartlists();
 
@@ -225,7 +232,7 @@
         if (initialIndex !== -1) {
             selectedPlaylists.set([$playlists[initialIndex]]);
         }
-    });
+    }
 </script>
 
 <div class="header panel-header">

@@ -1,8 +1,9 @@
 <script>
     import { _ } from "svelte-i18n";
-    import { API } from "~/stores/state";
+    import { API, User } from "~/stores/state";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import { untrack } from "svelte";
 
     let {
         loading = $bindable(),
@@ -223,33 +224,37 @@
         loading = false;
     }
 
-    $effect.pre(async () => {
-        parseParams();
+    $effect.pre(() => {
+        if ($User.isLoggedIn) {
+            untrack(async () => {
+                parseParams();
 
-        allUsers = await $API.users();
-        if (allUsers.error) {
-            errorHandler("getting users", allUsers.error);
-        }
+                allUsers = await $API.users();
+                if (allUsers.error) {
+                    errorHandler("getting users", allUsers.error);
+                }
 
-        allCatalogs = await $API.catalogs();
-        if (allCatalogs.error) {
-            errorHandler("getting catalogs", allCatalogs.error);
-        }
+                allCatalogs = await $API.catalogs();
+                if (allCatalogs.error) {
+                    errorHandler("getting catalogs", allCatalogs.error);
+                }
 
-        allPlaylists = await $API.playlists({ hide_search: 1 });
-        if (allPlaylists.error) {
-            errorHandler("getting playlists", allPlaylists.error);
-        }
+                allPlaylists = await $API.playlists({ hide_search: 1 });
+                if (allPlaylists.error) {
+                    errorHandler("getting playlists", allPlaylists.error);
+                }
 
-        allSmartlists = await $API.smartlists();
-        if (allSmartlists.error) {
-            errorHandler("getting smartlists", allSmartlists.error);
-        }
+                allSmartlists = await $API.smartlists();
+                if (allSmartlists.error) {
+                    errorHandler("getting smartlists", allSmartlists.error);
+                }
 
-        loaded = true;
+                loaded = true;
 
-        if (immediateSearch) {
-            await search();
+                if (immediateSearch) {
+                    await search();
+                }
+            });
         }
     });
 

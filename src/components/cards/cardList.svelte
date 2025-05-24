@@ -3,7 +3,8 @@
     import { v4 as uuidv4 } from "uuid";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
-    import { onDestroy, onMount } from "svelte";
+    import { User } from "~/stores/state.js";
+    import { onDestroy, untrack } from "svelte";
 
     /** @type {{card: any, type: any, initialData?: any, refresh?: boolean, limit?: any, heading?: any, showOnlyThese?: boolean, dataProvider?: any, viewAllURL?: any, genericOverride?: boolean, autoRefreshInterval?: any, layout: 'grid' | 'scroll'}} */
     let {
@@ -31,8 +32,13 @@
     let containerScrollX = $state();
     let observer;
 
-    // Load initial data
-    onMount(async () => {
+    $effect(() => {
+        if ($User.isLoggedIn) {
+            untrack(() => init());
+        }
+    });
+
+    async function init() {
         // if starting off with preloaded data, kick off the loadCount
         if (initialData.length > 0) {
             data.push(...initialData);
@@ -57,10 +63,12 @@
         // recent_songs has its own interval to check for fresh songs
         if (autoRefreshInterval) {
             refreshLoop = window.setInterval(function () {
-                getLatestUpdate();
+                if ($User.isLoggedIn) {
+                    getLatestUpdate();
+                }
             }, 1000 * autoRefreshInterval);
         }
-    });
+    }
 
     onDestroy(() => {
         observer?.disconnect();
