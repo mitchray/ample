@@ -43,8 +43,8 @@
 <div class="items">
     <SidebarLink activePath="/" href="#/" icon="home" label={$_("text.home")} />
     <SidebarLink
-        activePath="/search"
-        href="#/search"
+        activePath="/advanced-search"
+        href="#/advanced-search"
         icon="category_search"
         label={$_("text.advancedSearch")}
     />

@@ -4,7 +4,7 @@
     import { wrap } from "svelte-spa-router/wrap";
 
     const routes = {
-        "/search": wrap({
+        "/advanced-search": wrap({
             asyncComponent: () => import("~/views/advancedSearch.svelte"),
         }),
         "/versions/:songTitle/:artistName": wrap({
