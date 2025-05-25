@@ -3,6 +3,12 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { data, type } = $props();
+
+    if (type === "share" && data.object_type === "search") {
+        // temporarily patch 'search' to 'smartlist'
+        data.object_type = "smartlist";
+        data.object_id = "smart_" + data.object_id.replace(/^smart_/, "");
+    }
 </script>
 
 <div class="container truncate">
