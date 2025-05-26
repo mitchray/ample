@@ -370,6 +370,7 @@ class Player {
         let response = await cache.match(fakeURL);
 
         if (!response) {
+            // item was not in cache
             debugHelper("song was not in cache, do new fetch");
 
             if (method === "download") {
@@ -397,8 +398,19 @@ class Player {
                 return null;
             }
         } else {
+            // item was in cache
             blob = await response.blob();
             debugHelper("song was in cache! method: " + method, item);
+
+            // need to manually let server know we are playing this
+            if (method === "stream") {
+                await get(API).player({
+                    filter: item.id,
+                    type: item.object_type,
+                    state: "play",
+                    client: "Ample",
+                });
+            }
         }
 
         if (method === "stream") {
