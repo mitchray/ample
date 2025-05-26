@@ -264,9 +264,9 @@ export function handleMigrations(currentVersion) {
 
                 // Update the stored version to this version
                 localStorage.setItem("ample-version", version);
+
+                clearCache();
             }
         });
     }
-
-    clearCache();
 }

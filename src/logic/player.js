@@ -19,6 +19,7 @@ import {
 } from "~/logic/helper";
 import { Settings } from "~/stores/settings";
 import {
+    API,
     CurrentMedia,
     CurrentMediaGainInfo,
     IsPlaying,
@@ -234,24 +235,7 @@ class Player {
                     this.currentPlayer.audioElement,
                 );
             } else {
-                // Use cache first
-                const cache = await caches.open("audio-cache");
-                let response = await cache.match(item.url);
-
-                if (!response) {
-                    debugHelper("song was not in cache, do new fetch");
-                    // If not in cache, fetch the audio file with abort signal
-                    response = await fetch(item.url, { signal: abortSignal });
-                    if (response.ok) {
-                        await cache.put(item.url, response.clone()); // Clone response before caching
-
-                        await trimCache();
-                    }
-                } else {
-                    debugHelper("song was in cache!");
-                }
-
-                const blob = await response.blob();
+                let blob = await this.cacheHandler(item, "stream");
 
                 // Load the audio into WaveSurfer
                 this.currentPlayer.wavesurfer.loadBlob(blob);
@@ -344,12 +328,7 @@ class Player {
 
                     if (nextItem?.id) {
                         debugHelper("loading next song into cache");
-                        const cache = await caches.open("audio-cache");
-                        const response = await fetch(nextItem.url);
-                        if (response.ok) {
-                            await cache.put(nextItem.url, response);
-                            debugHelper("cache successful");
-                        }
+                        await this.cacheHandler(nextItem, "download");
                     }
 
                     this.#runChecks(item);
@@ -365,6 +344,65 @@ class Player {
                 console.warn("Something went wrong during start", e);
                 self.next();
             }
+        }
+    }
+
+    /**
+     * Retrieve an audio blob from cache, filling cache if needed
+     * @param item Item being referenced
+     * @param method {'stream' | 'download'}
+     */
+    async cacheHandler(item, method) {
+        let blob;
+
+        // shared between stream() and download()
+        let fetchParams = {
+            id: item.id,
+            type: item.object_type,
+        };
+
+        const fakeURL =
+            "fake-cache-endpoint?" +
+            new URLSearchParams(fetchParams).toString();
+
+        // check cache first
+        const cache = await caches.open("audio-cache");
+        let response = await cache.match(fakeURL);
+
+        if (!response) {
+            debugHelper("song was not in cache, do new fetch");
+
+            if (method === "download") {
+                blob = await get(API).download(fetchParams);
+            } else {
+                blob = await get(API).stream(fetchParams);
+            }
+
+            if (blob instanceof Blob) {
+                const responseToCache = new Response(blob, {
+                    status: 200,
+                });
+
+                await trimCache();
+
+                await cache.put(fakeURL, responseToCache);
+
+                if (method === "stream") {
+                    debugHelper("saving this stream to cache", item);
+                } else {
+                    debugHelper("downloaded next item to cache", item);
+                }
+            } else {
+                debugHelper("response was not a blob (i.e. failure)");
+                return null;
+            }
+        } else {
+            blob = await response.blob();
+            debugHelper("song was in cache! method: " + method, item);
+        }
+
+        if (method === "stream") {
+            return blob;
         }
     }
 
