@@ -3,6 +3,7 @@
     import { replace } from "svelte-spa-router";
     import { API, PageTitle } from "~/stores/state.js";
     import General from "~/views/test/general.svelte";
+    import Image from "~/views/test/image.svelte";
     import Buttons from "~/views/test/buttons.svelte";
     import Menus from "~/views/test/menus.svelte";
     import Actions from "~/views/test/actions.svelte";
@@ -21,6 +22,7 @@
 
     const tabs = [
         { id: "general", label: "General" },
+        { id: "image", label: "Image" },
         { id: "buttons", label: "Buttons" },
         { id: "menus", label: "Menus" },
         { id: "actions", label: "Actions" },
@@ -59,6 +61,10 @@
         <General />
     </sl-tab-panel>
 
+    <sl-tab-panel name="image">
+        <Image />
+    </sl-tab-panel>
+
     <sl-tab-panel name="buttons">
         <Buttons />
     </sl-tab-panel>
@@ -76,6 +82,6 @@
     </sl-tab-panel>
 
     <sl-tab-panel name="wavesurfer">
-        <Wavesurfer />
+        <!--        <Wavesurfer />-->
     </sl-tab-panel>
 </sl-tab-group>
