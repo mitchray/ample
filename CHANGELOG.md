@@ -2,8 +2,19 @@
 
 ## [3.7.0] - 2025-xx-xx
 
+### Requires at least Ampache 7.4.2
+
+### Added
+-   Route transition effect
+
+### Fixed
+-   Syncronised lyrics follow-along take into account the dual-players
+-   Improved cold-start time
+-   Only render visualiser when its visible
+-   Implement the proper stream() and download() methods instead of using item.url to play
+
 ### Changed
--   Reclaimed some space by moving header items into sidebar
+-   Reclaimed some UI space by moving header items into sidebar
 -   Player always visible; moved Queue toggle into player area
 -   Removed any 'mobile' considerations, committing to desktop only
 
