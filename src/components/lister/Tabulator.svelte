@@ -2,7 +2,7 @@
     import "tabulator-tables/dist/css/tabulator.min.css";
     import { _ } from "svelte-i18n";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
-    import { onDestroy, onMount } from "svelte";
+    import { onDestroy, onMount, tick } from "svelte";
     import { throttle } from "lodash-es";
     import { ColumnDefaults } from "~/components/lister/columns.js";
     import { tabulatorStrings } from "~/logic/i18n.js";
@@ -24,7 +24,8 @@
         });
     }
 
-    onMount(() => {
+    onMount(async () => {
+        await tick();
         tabulator = new Tabulator(tableElement, {
             columnDefaults: ColumnDefaults,
             data: data, //link data to table

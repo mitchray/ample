@@ -17,7 +17,7 @@
         type = $bindable(),
     } = $props();
 
-    let tabulator;
+    let tabulator = $state();
 
     $effect(() => {
         // reset results if type changes
