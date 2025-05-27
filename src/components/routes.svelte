@@ -2,6 +2,7 @@
     import { SiteContentBind } from "~/stores/elements.js";
     import Router from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
+    import { fade } from "svelte/transition";
 
     const routes = {
         "/advanced-search": wrap({
@@ -104,10 +105,26 @@
             asyncComponent: () => import("~/views/notFound404.svelte"),
         }),
     };
+
+    let thisRoute = "";
 </script>
 
 <div bind:this={$SiteContentBind} class="site-content">
-    <div class="site-content-inner">
-        <Router restoreScrollState={true} {routes} />
-    </div>
+    {#key thisRoute}
+        <div class="site-content-inner" in:fade>
+            <Router
+                restoreScrollState={true}
+                {routes}
+                on:routeLoaded={(e) => {
+                    thisRoute =
+                        e.detail.route +
+                        new URLSearchParams(
+                            (({ section, ...rest }) => rest)(
+                                e.detail.params || {},
+                            ),
+                        ).toString();
+                }}
+            />
+        </div>
+    {/key}
 </div>

@@ -2,7 +2,6 @@
     import { _ } from "svelte-i18n";
     import { push, replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
-    import { fade } from "svelte/transition";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
@@ -78,7 +77,7 @@
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         {#key $query.data.id}
-            <div class="header" in:fade>
+            <div class="header">
                 <h1 class="title">{artist.name}</h1>
                 <div class="profile">
                     <div class="art-container">

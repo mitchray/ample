@@ -82,7 +82,7 @@
     onDestroy(() => {
         tabulator?.off("scrollVertical");
         tabulator?.off("columnResized");
-        tabulator?.setData([]);
+        // tabulator?.setData([]);
         tabulator = null;
     });
 </script>
