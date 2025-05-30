@@ -89,7 +89,7 @@ export async function validateSession() {
 
         if (result.auth) {
             await login({
-                auth: result.auth,
+                auth: ampleLastSession?.token, // result.auth is bugged somehow... returns md5 of username in response
             });
         } else {
             logout();
