@@ -3,7 +3,13 @@
     import { _ } from "svelte-i18n";
     import { fade } from "svelte/transition";
     import AmpacheAPI from "javascript-ampache";
-    import { API, debugMode, PageTitle, Server } from "~/stores/state.js";
+    import {
+        API,
+        debugMode,
+        PageTitle,
+        Server,
+        useBearerToken,
+    } from "~/stores/state.js";
     import { Settings } from "~/stores/settings.js";
     import { attemptLogin } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
@@ -60,7 +66,11 @@
     };
 
     async function setServerDetails() {
-        $API = new AmpacheAPI({ url: $Server.ampacheURL, debug: $debugMode });
+        $API = new AmpacheAPI({
+            url: $Server.ampacheURL,
+            useBearerToken: $useBearerToken,
+            debug: $debugMode,
+        });
 
         try {
             let result = await pingWithTimeout(5000);

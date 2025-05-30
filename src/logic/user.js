@@ -1,7 +1,14 @@
 import { get } from "svelte/store";
 import AmpacheAPI from "javascript-ampache";
 import { MediaPlayer } from "~/stores/elements.js";
-import { API, APIVersion, debugMode, Server, User } from "~/stores/state.js";
+import {
+    API,
+    APIVersion,
+    debugMode,
+    Server,
+    useBearerToken,
+    User,
+} from "~/stores/state.js";
 import { Settings } from "~/stores/settings.js";
 
 export async function login({ auth }) {
@@ -71,6 +78,7 @@ export async function validateSession() {
         API.set(
             new AmpacheAPI({
                 url: get(Server).ampacheURL,
+                useBearerToken: get(useBearerToken),
                 debug: get(debugMode),
             }),
         );
