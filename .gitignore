@@ -10,3 +10,4 @@ package-lock.json
 /playwright/.cache/
 e2e/auth.json
 .env
+bruno-api/
