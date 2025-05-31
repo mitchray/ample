@@ -83,13 +83,14 @@ export async function validateSession() {
             }),
         );
 
-        get(API).setSessionKey(ampleLastSession?.token || guestUserAPIKey);
+        let finalToken = ampleLastSession?.token || guestUserAPIKey;
+        get(API).setSessionKey(finalToken);
 
         let result = await pingWithTimeout(10000);
 
         if (result.auth) {
             await login({
-                auth: ampleLastSession?.token, // result.auth is bugged somehow... returns md5 of username in response
+                auth: finalToken, // use our original token
             });
         } else {
             logout();
