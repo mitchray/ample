@@ -30,7 +30,9 @@
 
     window.setInterval(
         function () {
-            extendSession();
+            if ($User.isLoggedIn) {
+                extendSession();
+            }
         },
         1000 * 60 * 15,
     );
