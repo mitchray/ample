@@ -39,6 +39,7 @@
 
             // recent_songs has its own interval to check for fresh songs
             if (autoRefreshInterval) {
+                clearInterval(refreshLoop);
                 refreshLoop = window.setInterval(function () {
                     if ($User.isLoggedIn) {
                         getLatestUpdate();
