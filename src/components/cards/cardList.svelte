@@ -32,9 +32,19 @@
     let containerScrollX = $state();
     let observer;
 
-    $effect(() => {
-        if ($User.isLoggedIn) {
-            untrack(() => init());
+    const unsubscribe = User.subscribe((user) => {
+        if (user.isLoggedIn && !refreshLoop) {
+            console.log("[User] logged in, starting interval");
+            init();
+
+            // recent_songs has its own interval to check for fresh songs
+            if (autoRefreshInterval) {
+                refreshLoop = window.setInterval(function () {
+                    if ($User.isLoggedIn) {
+                        getLatestUpdate();
+                    }
+                }, 1000 * autoRefreshInterval);
+            }
         }
     });
 
@@ -59,20 +69,12 @@
         if (containerBind) {
             observer.observe(containerBind);
         }
-
-        // recent_songs has its own interval to check for fresh songs
-        if (autoRefreshInterval) {
-            refreshLoop = window.setInterval(function () {
-                if ($User.isLoggedIn) {
-                    getLatestUpdate();
-                }
-            }, 1000 * autoRefreshInterval);
-        }
     }
 
     onDestroy(() => {
         observer?.disconnect();
         clearInterval(refreshLoop);
+        unsubscribe();
     });
 
     async function getLatestUpdate() {
