@@ -10,7 +10,7 @@
         artistsPreset,
         songsPreset,
     } from "~/components/lister/columns.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
 
     let { id, type } = $props();
 

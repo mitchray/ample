@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import CustomSearch from "~/components/customSearch.svelte";
     import CustomSearchResults from "~/components/customSearchResults.svelte";
     import { PageTitle } from "~/stores/state.js";

@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
     import { API, User } from "~/stores/state";

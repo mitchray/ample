@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { onMount } from "svelte";
     import { Server } from "~/stores/state.js";
     import { formatForGenius } from "~/logic/helper.js";

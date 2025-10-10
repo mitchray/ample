@@ -1,4 +1,4 @@
-import { _ } from "svelte-i18n";
+import { _ } from "@rgglez/svelte-i18n";
 import { get } from "svelte/store";
 import { v4 as uuidv4 } from "uuid";
 import { API } from "~/stores/state";

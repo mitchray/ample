@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { createQuery } from "@tanstack/svelte-query";
     import { cloneDeep, groupBy, partition, sortBy } from "lodash-es";
     import { API, User } from "~/stores/state";
@@ -107,11 +107,11 @@
 
     // run processData whenever $query.data or $Settings.ArtistReleases change
     $effect.pre(() => {
-        $query.data, processData();
+        ($query.data, processData());
     });
 
     $effect.pre(() => {
-        $Settings.ArtistReleases, processData();
+        ($Settings.ArtistReleases, processData());
     });
 
     $effect(() => {

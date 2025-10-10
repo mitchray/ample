@@ -1,6 +1,6 @@
 <script>
     import { Settings } from "~/stores/settings.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import {
         CurrentMedia,
         CurrentMediaGainInfo,

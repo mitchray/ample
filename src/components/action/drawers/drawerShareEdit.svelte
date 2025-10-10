@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { API } from "~/stores/state.js";
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { Tabulator } from "tabulator-tables";

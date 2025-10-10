@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { Notifications } from "~/stores/message.js";
     import { Settings } from "~/stores/settings.js";
     import Portal from "~/components/portal.svelte";

@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";

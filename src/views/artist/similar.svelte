@@ -1,6 +1,6 @@
 <script>
     import { API, User } from "~/stores/state.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import ArtistCard from "~/components/cards/artistCard.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";

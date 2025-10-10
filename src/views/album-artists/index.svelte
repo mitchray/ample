@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import { replace } from "svelte-spa-router";

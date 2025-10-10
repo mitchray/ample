@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { IsMuted, NowPlayingQueue } from "~/stores/state.js";

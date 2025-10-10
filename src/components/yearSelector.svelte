@@ -1,7 +1,7 @@
 <script>
     import "nouislider/dist/nouislider.css";
     import noUiSlider from "nouislider";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { onMount } from "svelte";
 
     const currentYear = new Date().getFullYear();

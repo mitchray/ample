@@ -1,7 +1,7 @@
 <script>
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { IsPlaying, ShowVisualizer } from "~/stores/state.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { keys } from "lodash-es";
     import { MediaPlayer } from "~/stores/elements.js";
     import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";

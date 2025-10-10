@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import OptionsVolume from "~/components/player/player_optionsVolume.svelte";
     import OptionsCrossfade from "~/components/player/player_optionsCrossfade.svelte";

@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { User } from "~/stores/state.js";
     import Actions from "~/components/action/actions.svelte";
     import { sampleSize } from "lodash-es";

@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { getContext, setContext } from "svelte";
     import { v4 as uuidv4 } from "uuid";
     import { API } from "~/stores/state.js";

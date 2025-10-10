@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { item } = $props();

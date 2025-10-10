@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Fuse from "fuse.js";
     import { SearchQuery, ShowSearch, User } from "~/stores/state.js";
     import Portal from "~/components/portal.svelte";

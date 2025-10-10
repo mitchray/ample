@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { getAlbumDisks } from "~/logic/album.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";

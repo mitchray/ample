@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
     import GenreByType from "~/components/genre/genreByType.svelte";

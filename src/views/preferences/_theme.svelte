@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import ThemePreview from "~/components/theme/themePreview.svelte";
     import { Settings } from "~/stores/settings.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";

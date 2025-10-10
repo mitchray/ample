@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { quintOut } from "svelte/easing";
     import { fade } from "svelte/transition";
     import { flip } from "svelte/animate";

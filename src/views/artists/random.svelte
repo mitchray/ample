@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { randomArtists } from "~/logic/artist";
     import { errorHandler } from "~/logic/helper.js";
     import { createQuery } from "@tanstack/svelte-query";

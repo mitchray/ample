@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { songsPreset } from "~/components/lister/columns.js";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";

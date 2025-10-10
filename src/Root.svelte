@@ -6,7 +6,7 @@
     import "@shoelace-style/shoelace/dist/shoelace.js";
     import { setupI18n } from "~/logic/i18n.js";
     import { hideLoadingOverlay } from "~/logic/ui.js";
-    import { isLoading as i18nIsLoading } from "svelte-i18n";
+    import { isLoading as i18nIsLoading } from "@rgglez/svelte-i18n";
     import { loadFromConfig } from "~/logic/ample.js";
     import { validateSession } from "~/logic/user.js";
     import { Settings } from "~/stores/settings.js";

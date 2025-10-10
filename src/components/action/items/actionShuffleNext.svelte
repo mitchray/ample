@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { getContext } from "svelte";
     import { MediaPlayer } from "~/stores/elements.js";
     import { shuffleArray } from "~/logic/helper.js";

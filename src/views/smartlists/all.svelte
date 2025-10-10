@@ -5,7 +5,7 @@
     import MassRater from "~/components/lister/massRater.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
 
     let tabulator = $state(null);
 

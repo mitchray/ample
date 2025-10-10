@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import CardList from "~/components/cards/cardList.svelte";
     import AlbumCard from "~/components/cards/albumCard.svelte";
     import SongCard from "~/components/cards/songCard.svelte";

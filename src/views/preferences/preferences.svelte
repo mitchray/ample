@@ -2,7 +2,7 @@
     import Portal from "~/components/portal.svelte";
     import { SiteContentBind } from "~/stores/elements.js";
     import { ShowPreferences } from "~/stores/state.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Theme from "~/views/preferences/_theme.svelte";
 
     let drawer = $state();

@@ -1,6 +1,6 @@
 <script>
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { Settings } from "~/stores/settings.js";
     import { ShowSearch } from "~/stores/state.js";
     import { fly } from "svelte/transition";

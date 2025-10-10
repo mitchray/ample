@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { SearchQuery, ShowSearch } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ticks } from "~/logic/ui.js";

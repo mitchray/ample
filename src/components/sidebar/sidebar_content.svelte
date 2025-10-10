@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import SidebarHeading from "~/components/sidebar/sidebar_heading.svelte";
     import SidebarLink from "~/components/sidebar/sidebar_link.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";

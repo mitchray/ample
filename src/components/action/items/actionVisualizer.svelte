@@ -1,6 +1,6 @@
 <script>
     import { tick } from "svelte";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ShowVisualizer } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";

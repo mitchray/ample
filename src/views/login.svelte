@@ -1,6 +1,6 @@
 <script>
     import { onMount, tick } from "svelte";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { fade } from "svelte/transition";
     import AmpacheAPI from "javascript-ampache";
     import {

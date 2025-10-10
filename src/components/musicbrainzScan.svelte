@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { fade } from "svelte/transition";
     import { throttle } from "throttle-wait";
     import { formatTotalTime } from "~/logic/formatters.js";

@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Lyrics from "~/logic/lyrics";
     import Portal from "~/components/portal.svelte";
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";

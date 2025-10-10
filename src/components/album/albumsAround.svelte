@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { fade } from "svelte/transition";
     import { API, User } from "~/stores/state.js";
     import { groupAlbumsByReleaseType } from "~/logic/album.js";

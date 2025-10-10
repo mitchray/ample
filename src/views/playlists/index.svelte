@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
     import Mine from "./mine.svelte";

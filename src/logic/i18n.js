@@ -1,4 +1,4 @@
-import { getLocaleFromNavigator, init, register } from "svelte-i18n";
+import { getLocaleFromNavigator, init, register } from "@rgglez/svelte-i18n";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
 export function setupI18n() {
@@ -13,7 +13,6 @@ export function setupI18n() {
     register("pt", () => import("../../languages/pt.json"));
     register("es", () => import("../../languages/es.json"));
     register("pt-BR", () => import("../../languages/pt-BR.json"));
-
 
     init({
         fallbackLocale: "en",

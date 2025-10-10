@@ -50,7 +50,7 @@
         "nouislider": "^15.8.1",
         "sortablejs": "^1.15.6",
         "svelte-dnd-action": "^0.9.50",
-        "svelte-i18n": "^4.0.1",
+        "@rgglez/svelte-i18n": "^5.0.0",
         "svelte-persisted-store": "^0.12.0",
         "svelte-portal": "^2.2.1",
         "svelte-spa-router": "^4.0.1",

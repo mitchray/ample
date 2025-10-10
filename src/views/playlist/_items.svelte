@@ -13,7 +13,7 @@
         songsPreset,
     } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
 
     let { type, playlist } = $props();
 

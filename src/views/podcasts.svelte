@@ -1,7 +1,7 @@
 <script>
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
     import { errorHandler } from "~/logic/helper.js";

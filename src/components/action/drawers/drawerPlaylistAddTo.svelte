@@ -1,5 +1,5 @@
 <script>
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import { keepDrawerOpen } from "~/logic/ui.js";
     import { API } from "~/stores/state.js";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";

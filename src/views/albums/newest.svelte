@@ -1,6 +1,6 @@
 <script>
     import { newestAlbums } from "~/logic/album.js";
-    import { _ } from "svelte-i18n";
+    import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
     import MassRater from "~/components/lister/massRater.svelte";
