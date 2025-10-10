@@ -57,6 +57,6 @@
         "tabulator-tables": "^6.3.0",
         "throttle-wait": "^0.0.5",
         "uuid": "^10.0.0",
-        "wavesurfer.js": "7.9.1"
+        "wavesurfer.js": "7.11.0"
     }
 }
