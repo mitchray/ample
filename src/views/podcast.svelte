@@ -16,7 +16,7 @@
     let tabulator = $state(null);
 
     async function processData() {
-        if (!$query.data?.id) return;
+        if (!query.data?.id) return;
 
         episodes = [];
         episodes = await $API.podcastEpisodes({ filter: params.id, limit: 10 });
@@ -24,27 +24,25 @@
         console.debug(episodes, "episodes");
     }
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["podcast", params.id],
-            queryFn: async () => {
-                let result = await $API.podcast({
-                    filter: params.id,
-                    include: true,
-                });
+    const query = createQuery(() => ({
+        queryKey: ["podcast", params.id],
+        queryFn: async () => {
+            let result = await $API.podcast({
+                filter: params.id,
+                include: true,
+            });
 
-                if (result.error) {
-                    errorHandler("getting podcast", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting podcast", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
     // alias of returned data
-    let podcast = $derived($query.data || {});
+    let podcast = $derived(query.data || {});
 
     $effect(() => {
         $PageTitle = podcast?.name || $_("text.podcast");
@@ -52,19 +50,19 @@
 
     // grab discs once we load the album
     $effect(() => {
-        ($query.data, processData());
+        (query.data, processData());
     });
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if !$query.data.id}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if !query.data.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key $query.data.id}
+        {#key query.data.id}
             <h1>{podcast.name}</h1>
             <p>{@html podcast.description}</p>
             <Rating type="podcast" data={podcast} />

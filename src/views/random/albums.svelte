@@ -9,32 +9,30 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["randomAlbums", Date.now()],
-            queryFn: async () => {
-                let response = await $API.stats({
-                    type: "album",
-                    filter: "random",
-                    limit: 100,
-                });
+    const query = createQuery(() => ({
+        queryKey: ["randomAlbums", Date.now()],
+        queryFn: async () => {
+            let response = await $API.stats({
+                type: "album",
+                filter: "random",
+                limit: 100,
+            });
 
-                if (response.error) {
-                    errorHandler("getting random albums", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting random albums", response.error);
+                return [];
+            }
 
-                // refresh data on subsequent loads
-                tabulator?.replaceData(response.album);
+            // refresh data on subsequent loads
+            tabulator?.replaceData(response.album);
 
-                return response.album;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response.album;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let albums = $derived($query.data || []);
+    let albums = $derived(query.data || []);
 </script>
 
 <div class="lister-tabulator">

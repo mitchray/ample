@@ -10,26 +10,22 @@
 
     let { data = null, type = undefined } = $props();
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["playlistMix", playlist?.id],
-            staleTime: 60 * 1000 * 30, // 30 minutes
-            queryFn: async () => {
-                let result = await getSimilarArtistsWithGenreFallback(
-                    playlist.id,
-                );
-
-                return sampleSize(result, 3);
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
-
     // alias of returned data
-    let artists = $derived($query.data || {});
+    let artists = $derived(query.data || {});
 
     // alias of passed data
     let playlist = $derived(data);
+
+    const query = createQuery(() => ({
+        queryKey: ["playlistMix", playlist?.id],
+        staleTime: 60 * 1000 * 30, // 30 minutes
+        queryFn: async () => {
+            let result = await getSimilarArtistsWithGenreFallback(playlist.id);
+
+            return sampleSize(result, 3);
+        },
+        enabled: $User.isLoggedIn,
+    }));
 </script>
 
 <div class="mix-card card">
@@ -46,12 +42,12 @@
 
         <div class="details">
             <div class="similar">
-                {#if $query.isLoading}
+                {#if query.isLoading}
                     <p>{$_("text.loading")}</p>
                     <br />
-                {:else if $query.isError}
-                    <p>Error: {$query.error.message}</p>
-                {:else if $query.isSuccess}
+                {:else if query.isError}
+                    <p>Error: {query.error.message}</p>
+                {:else if query.isSuccess}
                     {#if artists.length > 0}
                         <ArtistList
                             data={Object.create({ artists: artists })}

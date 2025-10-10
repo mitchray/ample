@@ -20,31 +20,29 @@
 
     let { params = {} } = $props();
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["artist", params.id],
-            queryFn: async () => {
-                let result = await $API.artist({ filter: params.id });
+    const query = createQuery(() => ({
+        queryKey: ["artist", params.id],
+        queryFn: async () => {
+            let result = await $API.artist({ filter: params.id });
 
-                if (result.error) {
-                    addAlert({
-                        title: $_("text.IDChanged"),
-                        style: "info",
-                    });
-                    await push(`/artists/`);
+            if (result.error) {
+                addAlert({
+                    title: $_("text.IDChanged"),
+                    style: "info",
+                });
+                await push(`/artists/`);
 
-                    errorHandler("getting artist", result.error);
-                    return [];
-                }
+                errorHandler("getting artist", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let artist = $derived($query.data || {});
+    let artist = $derived(query.data || {});
 
     $effect(() => {
         $PageTitle = artist?.name || $_("text.artist");
@@ -68,15 +66,15 @@
     }
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if !$query.data.id}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if !query.data.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key $query.data.id}
+        {#key query.data.id}
             <div class="header">
                 <h1 class="title">{artist.name}</h1>
                 <div class="profile">

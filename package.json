@@ -37,7 +37,7 @@
     "dependencies": {
         "@floating-ui/dom": "^1.6.11",
         "@shoelace-style/shoelace": "2.20.1",
-        "@tanstack/svelte-query": "^5.56.2",
+        "@tanstack/svelte-query": "^6.0.0",
         "butterchurn": "^2.6.7",
         "butterchurn-presets": "^2.4.7",
         "compare-versions": "^6.1.1",

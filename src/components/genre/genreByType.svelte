@@ -16,55 +16,53 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["genre", id, type],
-            queryFn: async () => {
-                let result = {};
+    const query = createQuery(() => ({
+        queryKey: ["genre", id, type],
+        queryFn: async () => {
+            let result = {};
 
-                switch (type) {
-                    case "artist":
-                        result = await $API.genreArtists({
-                            filter: id,
-                            limit: 100,
-                        });
-                        break;
-                    case "album":
-                        result = await $API.genreAlbums({
-                            filter: id,
-                            limit: 100,
-                        });
-                        break;
-                    case "song":
-                        result = await $API.genreSongs({
-                            filter: id,
-                            limit: 100,
-                        });
-                        break;
-                    default:
-                        break;
-                }
+            switch (type) {
+                case "artist":
+                    result = await $API.genreArtists({
+                        filter: id,
+                        limit: 100,
+                    });
+                    break;
+                case "album":
+                    result = await $API.genreAlbums({
+                        filter: id,
+                        limit: 100,
+                    });
+                    break;
+                case "song":
+                    result = await $API.genreSongs({
+                        filter: id,
+                        limit: 100,
+                    });
+                    break;
+                default:
+                    break;
+            }
 
-                if (result.error) {
-                    errorHandler("getting genre type " + type, result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting genre type " + type, result.error);
+                return [];
+            }
 
-                return result[type];
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result[type];
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let items = $derived($query.data || {});
+    let items = $derived(query.data || {});
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
     {#if items?.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}

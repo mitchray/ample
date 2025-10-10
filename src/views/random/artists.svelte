@@ -9,32 +9,30 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["randomArtists", Date.now()],
-            queryFn: async () => {
-                let response = await $API.stats({
-                    type: "artist",
-                    filter: "random",
-                    limit: 100,
-                });
+    const query = createQuery(() => ({
+        queryKey: ["randomArtists", Date.now()],
+        queryFn: async () => {
+            let response = await $API.stats({
+                type: "artist",
+                filter: "random",
+                limit: 100,
+            });
 
-                if (response.error) {
-                    errorHandler("getting random artists", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting random artists", response.error);
+                return [];
+            }
 
-                // refresh data on subsequent loads
-                tabulator?.replaceData(response.artist);
+            // refresh data on subsequent loads
+            tabulator?.replaceData(response.artist);
 
-                return response.artist;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response.artist;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let artists = $derived($query.data || []);
+    let artists = $derived(query.data || []);
 </script>
 
 <div class="lister-tabulator">

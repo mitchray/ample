@@ -9,36 +9,34 @@
 
     let tabulator = $state();
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["myPlaylists"],
-            queryFn: async () => {
-                let result = await $API.userPlaylists();
+    const query = createQuery(() => ({
+        queryKey: ["myPlaylists"],
+        queryFn: async () => {
+            let result = await $API.userPlaylists();
 
-                if (result.error) {
-                    errorHandler("getting my playlists", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting my playlists", result.error);
+                return [];
+            }
 
-                // refresh data on subsequent loads
-                tabulator?.setData(result.playlist);
+            // refresh data on subsequent loads
+            tabulator?.setData(result.playlist);
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let playlists = $derived($query.data?.playlist || []);
+    let playlists = $derived(query.data?.playlist || []);
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if $query.data?.total_count === 0}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">

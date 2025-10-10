@@ -11,35 +11,33 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["newestAlbums"],
-            queryFn: async () => {
-                let result = await newestAlbums({ limit: 50 });
+    const query = createQuery(() => ({
+        queryKey: ["newestAlbums"],
+        queryFn: async () => {
+            let result = await newestAlbums({ limit: 50 });
 
-                if (result.error) {
-                    errorHandler("getting newest albums", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting newest albums", result.error);
+                return [];
+            }
 
-                tabulator?.setData(result.album);
+            tabulator?.setData(result.album);
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let albums = $derived($query.data?.album || {});
+    let albums = $derived(query.data?.album || {});
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if $query.data?.total_count === 0}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">

@@ -20,50 +20,48 @@
 
     let parentItem = $state();
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["song", params.id],
-            queryFn: async () => {
-                let result = await $API.song({ filter: params.id });
+    // alias of returned data
+    let song = $derived(query.data || {});
 
-                if (result.error) {
-                    if (parentItem?.id) {
-                        addAlert({
-                            title: $_("text.IDChanged"),
-                            style: "info",
-                        });
-                        await push(`/album/${parentItem.id}`);
-                    }
+    const query = createQuery(() => ({
+        queryKey: ["song", params.id],
+        queryFn: async () => {
+            let result = await $API.song({ filter: params.id });
 
-                    errorHandler("getting song", result.error);
-                    return [];
+            if (result.error) {
+                if (parentItem?.id) {
+                    addAlert({
+                        title: $_("text.IDChanged"),
+                        style: "info",
+                    });
+                    await push(`/album/${parentItem.id}`);
                 }
 
-                parentItem = result.album || null;
+                errorHandler("getting song", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            parentItem = result.album || null;
 
-    // alias of returned data
-    let song = $derived($query.data || {});
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     $effect(() => {
         $PageTitle = song?.name || $_("text.song");
     });
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if !$query.data.id}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if !query.data.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key $query.data.id}
+        {#key query.data.id}
             <div class="info">
                 <h1 class="title">{song.title}</h1>
 
@@ -215,7 +213,7 @@
                             <span>
                                 <a
                                     target="_blank"
-                                    href="https://musicbrainz.org/recording/{$query
+                                    href="https://musicbrainz.org/recording/{query
                                         .data.mbid}"
                                 >
                                     {song.mbid}

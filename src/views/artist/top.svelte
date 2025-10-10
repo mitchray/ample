@@ -11,42 +11,40 @@
 
     let { artistID } = $props();
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["topArtistSongs", artistID],
-            queryFn: async () => {
-                let result = await $API.artistSongs({
-                    filter: artistID,
-                    top50: 1,
-                    limit: 20,
-                });
+    const query = createQuery(() => ({
+        queryKey: ["topArtistSongs", artistID],
+        queryFn: async () => {
+            let result = await $API.artistSongs({
+                filter: artistID,
+                top50: 1,
+                limit: 20,
+            });
 
-                if (result.error) {
-                    errorHandler("getting top songs for artist", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting top songs for artist", result.error);
+                return [];
+            }
 
-                for (let i = 0; i < result.song.length; i++) {
-                    result.song[i].order = i + 1;
-                }
+            for (let i = 0; i < result.song.length; i++) {
+                result.song[i].order = i + 1;
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     let tabulator = $state(null);
 
     // alias of returned data
-    let songs = $derived($query.data?.song || {});
+    let songs = $derived(query.data?.song || {});
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
     {#if songs.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}

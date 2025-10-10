@@ -11,45 +11,43 @@
     let limit = 500;
     let total = $state(0);
 
-    let query = $derived(
-        createInfiniteQuery({
-            queryKey: ["forgottenArtists"],
-            initialPageParam: 0,
-            getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-                let offsetTotal = lastPageParam + limit;
-                return offsetTotal <= total ? offsetTotal : undefined;
-            },
-            // pageParam is based on offset total
-            queryFn: async ({ pageParam }) => {
-                let response = await $API.stats({
-                    type: "artist",
-                    filter: "forgotten",
-                    limit: limit,
-                    offset: pageParam,
-                });
+    const query = createInfiniteQuery(() => ({
+        queryKey: ["forgottenArtists"],
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            let offsetTotal = lastPageParam + limit;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        // pageParam is based on offset total
+        queryFn: async ({ pageParam }) => {
+            let response = await $API.stats({
+                type: "artist",
+                filter: "forgotten",
+                limit: limit,
+                offset: pageParam,
+            });
 
-                if (response.error) {
-                    errorHandler("getting forgotten artists", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting forgotten artists", response.error);
+                return [];
+            }
 
-                total = response.total_count;
+            total = response.total_count;
 
-                // refresh data on subsequent loads
-                tabulator?.addData(response.artist);
+            // refresh data on subsequent loads
+            tabulator?.addData(response.artist);
 
-                return response.artist;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response.artist;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let artists = $derived($query.data?.pages.flat() || []);
+    let artists = $derived(query.data?.pages.flat() || []);
 
     $effect(() => {
-        if (artists && $query.hasNextPage) {
-            $query.fetchNextPage();
+        if (artists && query.hasNextPage) {
+            query.fetchNextPage();
         }
     });
 </script>

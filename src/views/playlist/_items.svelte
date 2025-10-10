@@ -24,35 +24,33 @@
             : songsPreset,
     );
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["playlist_items", playlist.id],
-            queryFn: async () => {
-                let response = await getSongsFromPlaylist({
-                    id: playlist.id,
-                    type: type === "mix" ? "artist_mix" : "playlist",
-                });
+    const query = createQuery(() => ({
+        queryKey: ["playlist_items", playlist.id],
+        queryFn: async () => {
+            let response = await getSongsFromPlaylist({
+                id: playlist.id,
+                type: type === "mix" ? "artist_mix" : "playlist",
+            });
 
-                if (response.error) {
-                    errorHandler("getting items from playlist", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting items from playlist", response.error);
+                return [];
+            }
 
-                // TODO maybe don't refetch playlists on tab change in case it messes up sort order
-                // or only refetch if not in edit mode
+            // TODO maybe don't refetch playlists on tab change in case it messes up sort order
+            // or only refetch if not in edit mode
 
-                // refresh data on subsequent loads
-                tabulator?.setData(response.song);
+            // refresh data on subsequent loads
+            tabulator?.setData(response.song);
 
-                // TODO return correct object type when playlists eventually have mixed content
-                return response.song;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            // TODO return correct object type when playlists eventually have mixed content
+            return response.song;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let items = $derived($query.data || []);
+    let items = $derived(query.data || []);
 
     function setupEvents() {
         if (!tabulator || type !== "playlist") return;
@@ -99,11 +97,11 @@
     });
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
     {#key playlist.id}
         <div class="lister-tabulator">
             <div class="lister-tabulator__actions">

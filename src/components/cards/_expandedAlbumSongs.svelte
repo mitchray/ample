@@ -25,7 +25,7 @@
     let disks = $derived.by(() => {
         let arr = [];
 
-        $query.data?.forEach(([disk, songs]) => {
+        query.data?.forEach(([disk, songs]) => {
             songs.forEach((song) => {
                 song.doesNotContainArtist = !song.artists.find(
                     (a) => a.id === filterToArtistID,
@@ -48,24 +48,22 @@
         return arr;
     });
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["albumDisks", album.id],
-            queryFn: async () => {
-                // let test = await getAlbumDisks(album.id);
-                // console.debug(test, "TEST");
-                return await getAlbumDisks(album.id);
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+    const query = createQuery(() => ({
+        queryKey: ["albumDisks", album.id],
+        queryFn: async () => {
+            // let test = await getAlbumDisks(album.id);
+            // console.debug(test, "TEST");
+            return await getAlbumDisks(album.id);
+        },
+        enabled: $User.isLoggedIn,
+    }));
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <sl-spinner style="font-size: 2rem;"></sl-spinner>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
     {#each disks as disk}
         {#if $Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
             <!-- Hide this disk-->

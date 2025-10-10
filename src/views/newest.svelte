@@ -13,36 +13,34 @@
     $PageTitle = title;
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["newestAlbums"],
-            queryFn: async () => {
-                let result = await newestAlbums({ limit: 100 });
+    const query = createQuery(() => ({
+        queryKey: ["newestAlbums"],
+        queryFn: async () => {
+            let result = await newestAlbums({ limit: 100 });
 
-                if (result.error) {
-                    errorHandler("getting newest albums", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting newest albums", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let albums = $derived($query.data?.album || {});
+    let albums = $derived(query.data?.album || {});
 </script>
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
 </div>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
     {#if albums.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}

@@ -12,25 +12,23 @@
     let loading = $state(false);
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["allArtistSongs", artistID],
-            queryFn: async () => {
-                let result = await $API.artistSongs({ filter: artistID });
+    const query = createQuery(() => ({
+        queryKey: ["allArtistSongs", artistID],
+        queryFn: async () => {
+            let result = await $API.artistSongs({ filter: artistID });
 
-                if (result.error) {
-                    errorHandler("getting all songs for artist", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting all songs for artist", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let songs = $derived($query.data?.song || {});
+    let songs = $derived(query.data?.song || {});
 </script>
 
 {#if !loading && songs && songs.length > 0}

@@ -31,46 +31,44 @@
         return result;
     });
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["playlist", params.id],
-            queryFn: async () => {
-                let response;
+    const query = createQuery(() => ({
+        queryKey: ["playlist", params.id],
+        queryFn: async () => {
+            let response;
 
-                if (type === "mix") {
-                    response = await $API.artist({ filter: params.id });
-                } else {
-                    response = await $API.playlist({ filter: params.id });
-                }
+            if (type === "mix") {
+                response = await $API.artist({ filter: params.id });
+            } else {
+                response = await $API.playlist({ filter: params.id });
+            }
 
-                if (response.error) {
-                    errorHandler("getting playlist core", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting playlist core", response.error);
+                return [];
+            }
 
-                return response;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let playlist = $derived($query.data || {});
+    let playlist = $derived(query.data || {});
 
     $effect(() => {
         $PageTitle = playlist?.name || $_("text.playlist");
     });
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if !$query.data.id}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if !query.data.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key $query.data.id}
+        {#key query.data.id}
             <div class="page-wrapper">
                 <div class="details-container">
                     <div class="details">

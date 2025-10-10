@@ -11,46 +11,44 @@
     let limit = 500;
     let total = $state(0);
 
-    let query = $derived(
-        createInfiniteQuery({
-            queryKey: ["favoriteSongs"],
-            initialPageParam: 0,
-            getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-                let offsetTotal = lastPageParam + limit;
-                return offsetTotal <= total ? offsetTotal : undefined;
-            },
-            // pageParam is based on offset total
-            queryFn: async ({ pageParam }) => {
-                let response = await $API.stats({
-                    type: "song",
-                    filter: "flagged",
-                    sort: "user_flag_rating,DESC",
-                    limit: limit,
-                    offset: pageParam,
-                });
+    const query = createInfiniteQuery(() => ({
+        queryKey: ["favoriteSongs"],
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            let offsetTotal = lastPageParam + limit;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        // pageParam is based on offset total
+        queryFn: async ({ pageParam }) => {
+            let response = await $API.stats({
+                type: "song",
+                filter: "flagged",
+                sort: "user_flag_rating,DESC",
+                limit: limit,
+                offset: pageParam,
+            });
 
-                if (response.error) {
-                    errorHandler("getting favorite songs", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting favorite songs", response.error);
+                return [];
+            }
 
-                total = response.total_count;
+            total = response.total_count;
 
-                // refresh data on subsequent loads
-                tabulator?.addData(response.song);
+            // refresh data on subsequent loads
+            tabulator?.addData(response.song);
 
-                return response.song;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response.song;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let songs = $derived($query.data?.pages.flat() || []);
+    let songs = $derived(query.data?.pages.flat() || []);
 
     $effect(() => {
-        if (songs && $query.hasNextPage) {
-            $query.fetchNextPage();
+        if (songs && query.hasNextPage) {
+            query.fetchNextPage();
         }
     });
 </script>

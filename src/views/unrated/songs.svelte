@@ -11,28 +11,26 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["unratedSongs", Date.now()],
-            queryFn: async () => {
-                let result = await unratedSongs({ limit: 100 });
+    const query = createQuery(() => ({
+        queryKey: ["unratedSongs", Date.now()],
+        queryFn: async () => {
+            let result = await unratedSongs({ limit: 100 });
 
-                if (result.error) {
-                    errorHandler("getting unrated songs", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting unrated songs", result.error);
+                return [];
+            }
 
-                // refresh data on subsequent loads
-                tabulator?.replaceData(result.song);
+            // refresh data on subsequent loads
+            tabulator?.replaceData(result.song);
 
-                return result.song;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result.song;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let songs = $derived($query.data || []);
+    let songs = $derived(query.data || []);
 </script>
 
 <div class="lister-tabulator">

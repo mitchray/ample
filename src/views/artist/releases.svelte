@@ -20,7 +20,7 @@
 
     async function processData() {
         // sort entire array together
-        let sorted = sortBy($query.data, [$Settings.ArtistReleases.sort]);
+        let sorted = sortBy(query.data, [$Settings.ArtistReleases.sort]);
 
         if ($Settings.ArtistReleases.sortReversed) {
             sorted.reverse();
@@ -79,35 +79,33 @@
         releases = grouped;
     }
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["artistAlbums", artistID],
-            queryFn: async () => {
-                let result = await $API.artistAlbums({ filter: artistID });
+    const query = createQuery(() => ({
+        queryKey: ["artistAlbums", artistID],
+        queryFn: async () => {
+            let result = await $API.artistAlbums({ filter: artistID });
 
-                if (result.error) {
-                    errorHandler("getting artist albums", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting artist albums", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-            select: (data) => {
-                let divide = partition(
-                    data.album,
-                    (item) => item.artist?.id === artistID,
-                );
-                let byArtist = divide[0];
-                appearances = divide[1];
-                return byArtist;
-            },
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+        select: (data) => {
+            let divide = partition(
+                data.album,
+                (item) => item.artist?.id === artistID,
+            );
+            let byArtist = divide[0];
+            appearances = divide[1];
+            return byArtist;
+        },
+    }));
 
-    // run processData whenever $query.data or $Settings.ArtistReleases change
+    // run processData whenever query.data or $Settings.ArtistReleases change
     $effect.pre(() => {
-        ($query.data, processData());
+        (query.data, processData());
     });
 
     $effect.pre(() => {
@@ -190,11 +188,11 @@
 </sl-dropdown>
 
 <div class="releases">
-    {#if $query.isLoading}
+    {#if query.isLoading}
         <p>Loading...</p>
-    {:else if $query.isError}
-        <p>Error: {$query.error.message}</p>
-    {:else if $query.isSuccess}
+    {:else if query.isError}
+        <p>Error: {query.error.message}</p>
+    {:else if query.isSuccess}
         {#if releases.length > 0}
             {#each releases as [group, items]}
                 <div class="release-group">

@@ -15,40 +15,38 @@
 
     let { params = {} } = $props();
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["album", params.id],
-            queryFn: async () => {
-                let result = await $API.album({ filter: params.id });
+    const query = createQuery(() => ({
+        queryKey: ["album", params.id],
+        queryFn: async () => {
+            let result = await $API.album({ filter: params.id });
 
-                if (result.error) {
-                    errorHandler("getting album", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting album", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let album = $derived($query.data || {});
+    let album = $derived(query.data || {});
 
     $effect(() => {
         $PageTitle = album?.name || $_("text.album");
     });
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if !$query.data.id}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if !query.data.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key $query.data.id}
+        {#key query.data.id}
             <div class="details">
                 <div class="cover-rating">
                     <div class="art-container">

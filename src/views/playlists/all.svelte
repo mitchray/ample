@@ -10,45 +10,43 @@
     let limit = 500;
     let total = $state(0);
 
-    let query = $derived(
-        createInfiniteQuery({
-            queryKey: ["playlistsAll"],
-            initialPageParam: 0,
-            getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-                let offsetTotal = lastPageParam + limit;
-                return offsetTotal <= total ? offsetTotal : undefined;
-            },
-            // pageParam is based on offset total
-            queryFn: async ({ pageParam }) => {
-                let response = await $API.playlists({
-                    hide_search: 1,
-                    sort: "name,ASC",
-                    limit: limit,
-                    offset: pageParam,
-                });
+    const query = createInfiniteQuery(() => ({
+        queryKey: ["playlistsAll"],
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            let offsetTotal = lastPageParam + limit;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        // pageParam is based on offset total
+        queryFn: async ({ pageParam }) => {
+            let response = await $API.playlists({
+                hide_search: 1,
+                sort: "name,ASC",
+                limit: limit,
+                offset: pageParam,
+            });
 
-                if (response.error) {
-                    errorHandler("getting all playlists", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting all playlists", response.error);
+                return [];
+            }
 
-                total = response.total_count;
+            total = response.total_count;
 
-                // refresh data on subsequent loads
-                tabulator?.addData(response.playlist);
+            // refresh data on subsequent loads
+            tabulator?.addData(response.playlist);
 
-                return response.playlist;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response.playlist;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let playlists = $derived($query.data?.pages || []);
+    let playlists = $derived(query.data?.pages || []);
 
     $effect(() => {
-        if (playlists && $query.hasNextPage) {
-            $query.fetchNextPage();
+        if (playlists && query.hasNextPage) {
+            query.fetchNextPage();
         }
     });
 </script>

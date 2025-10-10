@@ -9,32 +9,30 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["randomSongs", Date.now()],
-            queryFn: async () => {
-                let response = await $API.stats({
-                    type: "song",
-                    filter: "random",
-                    limit: 100,
-                });
+    const query = createQuery(() => ({
+        queryKey: ["randomSongs", Date.now()],
+        queryFn: async () => {
+            let response = await $API.stats({
+                type: "song",
+                filter: "random",
+                limit: 100,
+            });
 
-                if (response.error) {
-                    errorHandler("getting random songs", response.error);
-                    return [];
-                }
+            if (response.error) {
+                errorHandler("getting random songs", response.error);
+                return [];
+            }
 
-                // refresh data on subsequent loads
-                tabulator?.replaceData(response.song);
+            // refresh data on subsequent loads
+            tabulator?.replaceData(response.song);
 
-                return response.song;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return response.song;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let songs = $derived($query.data || []);
+    let songs = $derived(query.data || []);
 </script>
 
 <div class="lister-tabulator">

@@ -23,28 +23,26 @@
             }) || $_("text.songVersions");
     });
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["songVersions", params.songTitle + params.artistName],
-            queryFn: async () => {
-                let result = await getSongVersions(
-                    params.songTitle,
-                    params.artistName,
-                );
+    const query = createQuery(() => ({
+        queryKey: ["songVersions", params.songTitle + params.artistName],
+        queryFn: async () => {
+            let result = await getSongVersions(
+                params.songTitle,
+                params.artistName,
+            );
 
-                if (result.error) {
-                    errorHandler("getting song versions", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting song versions", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let songs = $derived($query.data || {});
+    let songs = $derived(query.data || {});
 </script>
 
 <div class="page-header">
@@ -53,11 +51,11 @@
     </h1>
 </div>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
     {#if songs.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}

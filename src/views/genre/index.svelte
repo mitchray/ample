@@ -25,40 +25,38 @@
         { id: "songs", label: $_("text.songs") },
     ];
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["genre", params.id],
-            queryFn: async () => {
-                let result = await $API.genre({ filter: params.id });
+    const query = createQuery(() => ({
+        queryKey: ["genre", params.id],
+        queryFn: async () => {
+            let result = await $API.genre({ filter: params.id });
 
-                if (result.error) {
-                    errorHandler("getting genre", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting genre", result.error);
+                return [];
+            }
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let genre = $derived($query.data || {});
+    let genre = $derived(query.data || {});
 
     $effect(() => {
         $PageTitle = genre?.name || $_("text.genre");
     });
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if !$query.data.id}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if !query.data.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key $query.data.id}
+        {#key query.data.id}
             <div class="page-header">
                 <h1 class="page-title">
                     <MaterialSymbol name="label" />

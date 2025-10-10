@@ -9,35 +9,33 @@
 
     let tabulator = $state(null);
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["smartlists"],
-            queryFn: async () => {
-                let result = await $API.smartlists();
+    const query = createQuery(() => ({
+        queryKey: ["smartlists"],
+        queryFn: async () => {
+            let result = await $API.smartlists();
 
-                if (result.error) {
-                    errorHandler("getting smartlists", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting smartlists", result.error);
+                return [];
+            }
 
-                tabulator?.setData(result.playlist);
+            tabulator?.setData(result.playlist);
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let smartlists = $derived($query.data?.playlist || []);
+    let smartlists = $derived(query.data?.playlist || []);
 </script>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if $query.data?.total_count === 0}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">

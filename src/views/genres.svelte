@@ -11,39 +11,37 @@
     let title = $_("text.genres");
     $PageTitle = title;
 
-    let query = $derived(
-        createQuery({
-            queryKey: ["genres"],
-            queryFn: async () => {
-                let result = await $API.genres({ sort: "name,ASC" });
+    const query = createQuery(() => ({
+        queryKey: ["genres"],
+        queryFn: async () => {
+            let result = await $API.genres({ sort: "name,ASC" });
 
-                if (result.error) {
-                    errorHandler("getting genres", result.error);
-                    return [];
-                }
+            if (result.error) {
+                errorHandler("getting genres", result.error);
+                return [];
+            }
 
-                tabulator?.setData(result.genre);
+            tabulator?.setData(result.genre);
 
-                return result;
-            },
-            enabled: $User.isLoggedIn,
-        }),
-    );
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
 
     // alias of returned data
-    let genres = $derived($query.data?.genre || {});
+    let genres = $derived(query.data?.genre || {});
 </script>
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
 </div>
 
-{#if $query.isLoading}
+{#if query.isLoading}
     <p>{$_("text.loading")}</p>
-{:else if $query.isError}
-    <p>Error: {$query.error.message}</p>
-{:else if $query.isSuccess}
-    {#if $query.data?.total_count === 0}
+{:else if query.isError}
+    <p>Error: {query.error.message}</p>
+{:else if query.isSuccess}
+    {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
