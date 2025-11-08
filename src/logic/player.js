@@ -365,9 +365,16 @@ class Player {
             "fake-cache-endpoint?" +
             new URLSearchParams(fetchParams).toString();
 
+        let cache, response;
+
+        // Check if Cache API is available
+        const hasCacheAPI = typeof caches !== "undefined";
+
         // check cache first
-        const cache = await caches.open("audio-cache");
-        let response = await cache.match(fakeURL);
+        if (hasCacheAPI) {
+            cache = await caches.open("audio-cache");
+            response = await cache.match(fakeURL);
+        }
 
         if (!response) {
             // item was not in cache
@@ -380,13 +387,11 @@ class Player {
             }
 
             if (blob instanceof Blob) {
-                const responseToCache = new Response(blob, {
-                    status: 200,
-                });
-
-                await trimCache();
-
-                await cache.put(fakeURL, responseToCache);
+                if (hasCacheAPI) {
+                    const responseToCache = new Response(blob, { status: 200 });
+                    await trimCache();
+                    await cache.put(fakeURL, responseToCache);
+                }
 
                 if (method === "stream") {
                     debugHelper("saving this stream to cache", item);
