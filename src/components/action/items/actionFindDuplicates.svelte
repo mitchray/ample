@@ -5,7 +5,11 @@
     let { item } = $props();
 </script>
 
-<a href="#/versions/{item?.name}/{item?.artist?.name}">
+<a
+    href="#/versions/{encodeURIComponent(item?.name)}/{encodeURIComponent(
+        item?.artist?.name,
+    )}"
+>
     <sl-menu-item title={$_("text.findDuplicates")}>
         <MaterialSymbol name="dynamic_feed" slot="prefix" />
         {$_("text.findDuplicates")}

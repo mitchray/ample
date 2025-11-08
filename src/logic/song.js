@@ -103,12 +103,9 @@ export async function getSongVersions(songTitle, artistName) {
         return false;
     }
 
-    let theRegex = "^" + cleanedTitle + "$";
-    let re = new RegExp(theRegex, "gi");
-    let filtered = response?.song?.filter((e) => parseTitle(e.title).match(re));
+    debugHelper(response, "getSongVersions");
 
-    debugHelper(filtered, "getSongVersions after filtering");
-    return filtered;
+    return response?.song;
 }
 
 /**
