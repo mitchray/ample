@@ -593,10 +593,10 @@ class Player {
      * Shuffle all existing items in queue
      */
     shuffle() {
-        this.clearAll();
-
         let tempArray = get(NowPlayingQueue);
         tempArray = shuffleArray(tempArray);
+        this.clearAll();
+
         this.#setQueueItems(tempArray).then(() => {
             NowPlayingIndex.set(0);
             this.start();
