@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.7.0] - 2025-xx-xx
+## [3.7.0] - 2025-11-08
 
 ### Requires at least Ampache 7.4.2
 
@@ -8,10 +8,12 @@
 -   Route transition effect
 
 ### Fixed
--   Syncronised lyrics follow-along take into account the dual-players
+-   Synchronised lyrics follow-along take into account the dual-players
 -   Improved cold-start time
 -   Only render visualiser when its visible
 -   Implement the proper stream() and download() methods instead of using item.url to play
+-   Handle browser Cache API only available in secure contexts
+-   [fr] string updates - thanks QuentinRdl
 
 ### Changed
 -   Reclaimed some UI space by moving header items into sidebar
