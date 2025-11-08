@@ -15,7 +15,7 @@
 
     const releaseTypesOrder = userPreference("album_release_type_sort") || "";
     let appearances = [];
-    let releases = $state([]);
+    let releases = [];
     let finalAppearances = $derived(cloneDeep(appearances));
 
     async function processData() {
