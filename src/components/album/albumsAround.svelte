@@ -21,6 +21,7 @@
 
             let result = await $API.artistAlbums({
                 filter: album.artist.id,
+                sort: "year",
             });
 
             if (result.error) {
