@@ -37,28 +37,19 @@
             albums = albums.filter((a) => a.id !== album.id);
 
             final.same = albums.filter((a) => a.year === album.year);
-            final.same = await groupAlbumsByReleaseType(
-                final.same,
-                album.artist.id,
-            );
+            final.same = await groupAlbumsByReleaseType(final.same);
 
             final.previous = albums.filter((a) => a.year < album.year);
             let closestPrevious = final.previous[final.previous.length - 1];
             final.previous = final.previous.filter(
                 (a) => a.year === closestPrevious.year,
             );
-            final.previous = await groupAlbumsByReleaseType(
-                final.previous,
-                album.artist.id,
-            );
+            final.previous = await groupAlbumsByReleaseType(final.previous);
 
             final.next = albums.filter((a) => a.year > album.year);
             let closestNext = final.next[0];
             final.next = final.next.filter((a) => a.year === closestNext.year);
-            final.next = await groupAlbumsByReleaseType(
-                final.next,
-                album.artist.id,
-            );
+            final.next = await groupAlbumsByReleaseType(final.next);
 
             return final;
         },
