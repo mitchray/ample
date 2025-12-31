@@ -16,14 +16,10 @@
 
     let loaded = $state(false);
     let rows = $state([]);
-    let fieldsToShow;
-    let groupedFieldsToShow = $state();
+    let groupedFieldsToShow = {};
     let rowCounter = $state(0);
-    let allUsers = $state([]);
-    let allCatalogs = $state([]);
-    let allPlaylists = $state([]);
-    let allSmartlists = $state([]);
     let containerBind = $state();
+    let rawSearchRules = $state([]);
 
     // set defaults
     let settings = $state({
@@ -58,7 +54,6 @@
                         };
 
                         newRow.operatorType = getOperatorType(newField);
-                        newRow.inputType = getInputType(newField);
 
                         rows = [...rows, newRow];
                     }
@@ -67,58 +62,55 @@
         }
     }
 
-    function getOperatorType(fieldName) {
-        return fields.find((field) => field.id === fieldName).operatorType;
-    }
-
-    function getInputType(fieldName) {
-        return fields.find((field) => field.id === fieldName).inputType;
-    }
-
     function addNewRow() {
+        // use title or name if they exist
+        const titleEntry = rawSearchRules.find(
+            (item) => item.name === "title" || item.name === "name",
+        );
+
+        // fallback to first item
+        let firstItem = titleEntry
+            ? titleEntry
+            : Array.from(groupedFieldsToShow.entries())[0][1][0];
+
         let newRow = {
             id: rowCounter,
-            field: "title",
+            field: firstItem.name,
             operator: "0",
             input: "",
+            type: firstItem.type,
+            widget: firstItem.widget,
         };
-
-        if (settings.type === "song") {
-            newRow.field = "anywhere";
-        }
-
-        newRow.operatorType = getOperatorType(newRow.field);
-        newRow.inputType = getInputType(newRow.field);
 
         rows = [...rows, newRow];
     }
 
-    function populateFields() {
-        let groups = new Map();
+    async function getSearchRules() {
+        loaded = false;
 
-        fieldsToShow = fields.filter((field) =>
-            field.object_types.find((type) => type.id === settings.type),
-        );
+        let result = await $API.searchRules({
+            filter: settings.type,
+        });
 
-        // setup categories based on initial order
-        for (let i = 0; i < fieldsToShow.length; i++) {
-            let item = fieldsToShow[i].object_types.find(
-                (type) => type.id === settings.type,
-            );
+        if (!result.rule || result.rule.length === 0) {
+            console.debug("no rules returned");
+        }
 
-            // apply any overrides while we're at it
-            fieldsToShow[i].label = item.label
-                ? item.label
-                : fieldsToShow[i].label;
-            fieldsToShow[i].category = item.category
-                ? item.category
-                : fieldsToShow[i].category;
+        rawSearchRules = result.rule;
 
-            if (!groups.get(fieldsToShow[i].category)) {
-                groups.set(fieldsToShow[i].category, []);
+        // filter out 'None' until clarified
+        rawSearchRules = rawSearchRules.filter((item) => item.name !== "none");
+
+        const groups = new Map();
+
+        for (const item of rawSearchRules) {
+            const key = item.title;
+
+            if (!groups.has(key)) {
+                groups.set(key, []);
             }
 
-            groups.get(fieldsToShow[i].category).push(fieldsToShow[i]);
+            groups.get(key).push(item);
         }
 
         // alphabetize each group
@@ -129,6 +121,9 @@
         });
 
         groupedFieldsToShow = groups;
+        //console.debug("groupedFieldsToShow", groupedFieldsToShow);
+
+        loaded = true;
     }
 
     function removeRow(row) {
@@ -137,18 +132,33 @@
 
     function clearAll() {
         rows = [];
+        results = [];
     }
 
-    function setField(row, event = null) {
-        // reset operator if type changes
+    function setField(row, event) {
+        // reset operator
         row.operator = "0";
 
-        // workaround to get first item from first group in map
-        let firstID = Array.from(groupedFieldsToShow.entries())[0][1][0].id;
+        row.field = event.target.value;
 
-        row.field = event ? event.target.value : firstID;
-        row.operatorType = getOperatorType(row.field);
-        row.inputType = getInputType(row.field);
+        // set type
+        row.type = rawSearchRules.find((item) => item.name === row.field).type;
+
+        // set widget
+        row.widget = rawSearchRules.find(
+            (item) => item.name === row.field,
+        ).widget;
+
+        if (row.widget[0] === "select") {
+            row.widget[1] = Object.entries(row.widget[1]).map(
+                ([value, label]) => ({
+                    value: Number(value),
+                    label,
+                }),
+            );
+        }
+
+        // console.debug("row", row);
 
         return row;
     }
@@ -171,46 +181,37 @@
             row.input,
         ]);
 
+        response = await $API.advancedSearch({
+            type: settings.type,
+            limit: settings.limit,
+            random: settings.random ? 1 : 0,
+            operator: settings.operator,
+            rules: simpleRows,
+        });
+
         switch (settings.type) {
             case "song":
-                response = await $API.advancedSearch({
-                    type: "song",
-                    limit: settings.limit,
-                    random: settings.random ? 1 : 0,
-                    operator: settings.operator,
-                    rules: simpleRows,
-                });
                 results = response.song;
                 break;
             case "album":
-                response = await $API.advancedSearch({
-                    type: "album",
-                    limit: settings.limit,
-                    random: settings.random ? 1 : 0,
-                    operator: settings.operator,
-                    rules: simpleRows,
-                });
                 results = response.album;
                 break;
             case "artist":
-                response = await $API.advancedSearch({
-                    type: "artist",
-                    limit: settings.limit,
-                    random: settings.random ? 1 : 0,
-                    operator: settings.operator,
-                    rules: simpleRows,
-                });
+            case "song_artist":
+            case "album_artist":
                 results = response.artist;
                 break;
             case "playlist":
-                response = await $API.advancedSearch({
-                    type: "playlist",
-                    limit: settings.limit,
-                    random: settings.random ? 1 : 0,
-                    operator: settings.operator,
-                    rules: simpleRows,
-                });
                 results = response.playlist;
+                break;
+            case "label":
+                results = response.label;
+                break;
+            case "genre":
+                results = response.genre;
+                break;
+            case "user":
+                results = response.user;
                 break;
             default:
                 break;
@@ -229,28 +230,6 @@
             untrack(async () => {
                 parseParams();
 
-                allUsers = await $API.users();
-                if (allUsers.error) {
-                    errorHandler("getting users", allUsers.error);
-                }
-
-                allCatalogs = await $API.catalogs();
-                if (allCatalogs.error) {
-                    errorHandler("getting catalogs", allCatalogs.error);
-                }
-
-                allPlaylists = await $API.playlists({ hide_search: 1 });
-                if (allPlaylists.error) {
-                    errorHandler("getting playlists", allPlaylists.error);
-                }
-
-                allSmartlists = await $API.smartlists();
-                if (allSmartlists.error) {
-                    errorHandler("getting smartlists", allSmartlists.error);
-                }
-
-                loaded = true;
-
                 if (immediateSearch) {
                     await search();
                 }
@@ -258,661 +237,11 @@
         }
     });
 
-    let fields = [
-        {
-            id: "anywhere",
-            label: "text.searchAnyText",
-            category: "",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "title",
-            label: "text.title",
-            category: "text.metadata",
-            object_types: [
-                { id: "song", category: "text.metadataSong" },
-                { id: "album", category: "text.metadataAlbum" },
-                {
-                    id: "artist",
-                    category: "text.metadataArtist",
-                    label: "text.name",
-                },
-                {
-                    id: "playlist",
-                    category: "text.metadataPlaylist",
-                    label: "text.name",
-                },
-            ],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "artist",
-            label: "text.artist",
-            category: "text.metadata",
-            object_types: [
-                {
-                    id: "song",
-                    category: "text.metadataSong",
-                    label: "text.songArtist",
-                },
-                {
-                    id: "album",
-                    category: "text.metadataAlbum",
-                    label: "text.albumArtist",
-                },
-            ],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "year",
-            label: "text.year",
-            category: "text.metadata",
-            object_types: [
-                { id: "song", category: "text.metadataSong" },
-                { id: "album", category: "text.metadataAlbum" },
-                { id: "artist", category: "text.metadataArtist" },
-            ],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "genre",
-            label: "text.genre",
-            category: "text.metadata",
-            object_types: [
-                { id: "song", category: "text.metadataSong" },
-                { id: "album", category: "text.metadataAlbum" },
-                { id: "artist", category: "text.metadataArtist" },
-            ],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "song_genre",
-            label: "text.songGenre",
-            category: "text.metadata",
-            object_types: [
-                { id: "album", category: "text.metadataAlbum" },
-                { id: "artist", category: "text.metadataArtist" },
-            ],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "album_genre",
-            label: "text.albumGenre",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "no_genre",
-            label: "text.noGenre",
-            category: "text.metadata",
-            object_types: [
-                { id: "song", category: "text.metadataSong" },
-                { id: "album", category: "text.metadataAlbum" },
-                { id: "artist", category: "text.metadataArtist" },
-            ],
-            operatorType: "boolean_true",
-            inputType: "",
-        },
-        {
-            id: "comment",
-            label: "text.comment",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "lyrics",
-            label: "text.lyrics",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "file",
-            label: "text.filename",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "bitrate",
-            label: "text.bitrate",
-            category: "text.fileData",
-            object_types: [{ id: "song" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "label",
-            label: "text.label",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "track",
-            label: "text.track",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "artist_genre",
-            label: "text.artistGenre",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "album",
-            label: "text.album",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "composer",
-            label: "text.composer",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "album_artist",
-            label: "text.albumArtist",
-            category: "text.metadataSong",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "orphaned_album",
-            label: "text.orphanedAlbum",
-            category: "text.fileData",
-            object_types: [{ id: "song" }],
-            operatorType: "boolean_true",
-            inputType: "",
-        },
-        {
-            id: "song_artist",
-            label: "text.songArtist",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "song_title",
-            label: "text.songTitle",
-            category: "text.metadata",
-            object_types: [
-                { id: "album", category: "text.metadataAlbum" },
-                { id: "artist", category: "text.metadataArtist" },
-            ],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "album_title",
-            label: "text.albumTitle",
-            category: "text.metadataArtist",
-            object_types: [{ id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "summary",
-            label: "text.summary",
-            category: "text.metadataArtist",
-            object_types: [{ id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "original_year",
-            label: "text.originalYear",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "song_count",
-            label: "text.songCount",
-            category: "text.metadata",
-            object_types: [
-                { id: "album", category: "text.metadataAlbum" },
-                { id: "artist", category: "text.metadataArtist" },
-            ],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "album_count",
-            label: "text.albumCount",
-            category: "text.metadataArtist",
-            object_types: [{ id: "artist" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "disk_count",
-            label: "text.diskCount",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "release_type",
-            label: "text.releaseType",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "release_status",
-            label: "text.releaseStatus",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "yearformed",
-            label: "text.yearFormed",
-            category: "text.metadataArtist",
-            object_types: [{ id: "artist" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "placeformed",
-            label: "text.placeFormed",
-            category: "text.metadataArtist",
-            object_types: [{ id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "barcode",
-            label: "text.barcode",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "catalog_number",
-            label: "text.catalogNumber",
-            category: "text.metadataAlbum",
-            object_types: [{ id: "album" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "myrating",
-            label: "text.myRating",
-            category: "text.rating",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "rating",
-        },
-        {
-            id: "rating",
-            label: "text.ratingAverage",
-            category: "text.rating",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "rating",
-        },
-        {
-            id: "songrating",
-            label: "text.myRatingSong",
-            category: "text.rating",
-            object_types: [{ id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "rating",
-        },
-        {
-            id: "albumrating",
-            label: "text.myRatingAlbum",
-            category: "text.rating",
-            object_types: [{ id: "song" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "rating",
-        },
-        {
-            id: "artistrating",
-            label: "text.myRatingArtist",
-            category: "text.rating",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "number",
-            inputType: "rating",
-        },
-        {
-            id: "favorite",
-            label: "text.favorites",
-            category: "text.rating",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "favorite_album",
-            label: "text.favoritesAlbum",
-            category: "text.rating",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "favorite_artist",
-            label: "text.favoritesArtist",
-            category: "text.rating",
-            object_types: [{ id: "song" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "played_times",
-            label: "text.playedTimes",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "skipped_times",
-            label: "text.skippedTimes",
-            category: "text.plays",
-            object_types: [{ id: "song" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "played_or_skipped_times",
-            label: "text.playedSkippedTimes",
-            category: "text.plays",
-            object_types: [{ id: "song" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "play_skip_ratio",
-            label: "text.playedSkippedRatio",
-            category: "text.plays",
-            object_types: [{ id: "song" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "recent_played",
-            label: "text.recentlyPlayed",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "limit",
-            inputType: "number",
-        },
-        {
-            id: "last_play",
-            label: "text.myLastPlay",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "relative_x_days",
-            inputType: "number",
-        },
-        {
-            id: "last_skip",
-            label: "text.myLastSkip",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "relative_x_days",
-            inputType: "number",
-        },
-        {
-            id: "last_play_or_skip",
-            label: "text.myLastPlaySkip",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "relative_x_days",
-            inputType: "number",
-        },
-        {
-            id: "played",
-            label: "text.played",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "boolean_true",
-            inputType: "",
-        },
-        {
-            id: "myplayed",
-            label: "text.playedByMe",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "boolean_true",
-            inputType: "",
-        },
-        {
-            id: "myplayedalbum",
-            label: "text.playedByMeAlbum",
-            category: "text.plays",
-            object_types: [{ id: "song" }],
-            operatorType: "boolean_true",
-            inputType: "",
-        },
-        {
-            id: "myplayedartist",
-            label: "text.playedByMeArtist",
-            category: "text.plays",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "boolean_true",
-            inputType: "",
-        },
-        {
-            id: "other_user",
-            label: "text.anotherUser",
-            category: "text.rating",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "rating_expanded",
-            inputType: "user",
-        },
-        {
-            id: "catalog",
-            label: "text.catalog",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "boolean_is",
-            inputType: "catalog",
-        },
-        {
-            id: "other_user_album",
-            label: "text.anotherUserAlbum",
-            category: "text.rating",
-            object_types: [{ id: "song" }],
-            operatorType: "rating_expanded",
-            inputType: "user",
-        },
-        {
-            id: "other_user_artist",
-            label: "text.anotherUserArtist",
-            category: "text.rating",
-            object_types: [{ id: "song" }],
-            operatorType: "rating_expanded",
-            inputType: "user",
-        },
-        {
-            id: "playlist",
-            label: "text.playlist",
-            category: "text.playlist",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "boolean_is",
-            inputType: "playlist",
-        },
-        {
-            id: "smartplaylist",
-            label: "text.smartlist",
-            category: "text.playlist",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "boolean_is",
-            inputType: "smartlist",
-        },
-        {
-            id: "playlist_name",
-            label: "text.playlistName",
-            category: "text.playlist",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "time",
-            label: "text.lengthInMinutes",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "added",
-            label: "text.added",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "relative",
-            inputType: "date",
-        },
-        {
-            id: "updated",
-            label: "text.updated",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "relative",
-            inputType: "date",
-        },
-        {
-            id: "recent_added",
-            label: "text.recentlyAdded",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "limit",
-            inputType: "number",
-        },
-        {
-            id: "recent_updated",
-            label: "text.recentlyUpdated",
-            category: "text.fileData",
-            object_types: [{ id: "song" }],
-            operatorType: "limit",
-            inputType: "number",
-        },
-        {
-            id: "mbid",
-            label: "text.musicbrainzID",
-            category: "text.musicbrainz",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "mbid_song",
-            label: "text.musicbrainzIDSong",
-            category: "text.musicbrainz",
-            object_types: [{ id: "album" }, { id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "mbid_album",
-            label: "text.musicbrainzIDAlbum",
-            category: "text.musicbrainz",
-            object_types: [{ id: "song" }, { id: "artist" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "mbid_artist",
-            label: "text.musicbrainzIDArtist",
-            category: "text.musicbrainz",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "string",
-            inputType: "text",
-        },
-        {
-            id: "possible_duplicate",
-            label: "text.possibleDuplicate",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }, { id: "artist" }],
-            operatorType: "true",
-            inputType: "",
-        },
-        {
-            id: "possible_duplicate_album",
-            label: "text.possibleDuplicateAlbum",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "artist" }],
-            operatorType: "true",
-            inputType: "",
-        },
-        {
-            id: "duplicate_tracks",
-            label: "text.duplicateAlbumTracks",
-            category: "text.fileData",
-            object_types: [{ id: "song" }, { id: "album" }],
-            operatorType: "true",
-            inputType: "",
-        },
-        {
-            id: "has_image",
-            label: "text.localImage",
-            category: "text.fileData",
-            object_types: [{ id: "album" }, { id: "artist" }],
-            operatorType: "true",
-            inputType: "",
-        },
-        {
-            id: "image_width",
-            label: "text.imageWidth",
-            category: "text.fileData",
-            object_types: [{ id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-        {
-            id: "image_height",
-            label: "text.imageHeight",
-            category: "text.fileData",
-            object_types: [{ id: "album" }, { id: "artist" }],
-            operatorType: "number",
-            inputType: "number",
-        },
-    ];
-    // keep selectedObjectType in sync
-    $effect(() => {
-        selectedObjectType = settings.type;
-    });
     // reset everything if object type changes
     $effect(() => {
         if (settings.type) {
-            populateFields();
+            selectedObjectType = settings.type;
+            getSearchRules();
         }
     });
     // auto-add a row if all are removed
@@ -941,7 +270,16 @@
                 <sl-option value="song">{$_("text.songs")}</sl-option>
                 <sl-option value="album">{$_("text.albums")}</sl-option>
                 <sl-option value="artist">{$_("text.artists")}</sl-option>
+                <sl-option value="song_artist">
+                    {$_("text.songArtists")}
+                </sl-option>
+                <sl-option value="album_artist">
+                    {$_("text.albumArtists")}
+                </sl-option>
                 <sl-option value="playlist">{$_("text.playlists")}</sl-option>
+                <!--<sl-option value="label">{$_("text.labels")}</sl-option>-->
+                <sl-option value="genre">{$_("text.genres")}</sl-option>
+                <!--<sl-option value="user">{$_("text.users")}</sl-option>-->
             </sl-select>
         </div>
 
@@ -993,7 +331,6 @@
                 <sl-select
                     value={row.field}
                     onsl-change={(e) => {
-                        rows[i].field = e.target.value;
                         rows[i] = setField(row, e);
                     }}
                 >
@@ -1002,13 +339,13 @@
                             <sl-divider></sl-divider>
                             <small>{$_(key)}</small>
                             {#each value as field}
-                                <sl-option value={field.id}>
+                                <sl-option value={field.name}>
                                     {$_(field.label)}
                                 </sl-option>
                             {/each}
                         {:else}
                             {#each value as field}
-                                <sl-option value={field.id}>
+                                <sl-option value={field.name}>
                                     {$_(field.label)}
                                 </sl-option>
                             {/each}
@@ -1018,7 +355,7 @@
 
                 <!-- operators -->
 
-                {#if row.operatorType === "string"}
+                {#if row.type === "text"}
                     <sl-select
                         value={row.operator}
                         onsl-change={(e) => {
@@ -1060,7 +397,7 @@
                     </sl-select>
                 {/if}
 
-                {#if row.operatorType === "number"}
+                {#if row.type === "numeric"}
                     <sl-select
                         value={row.operator}
                         onsl-change={(e) => {
@@ -1090,7 +427,7 @@
                     </sl-select>
                 {/if}
 
-                {#if row.operatorType === "relative"}
+                {#if row.type === "date"}
                     <sl-select
                         value={row.operator}
                         onsl-change={(e) => {
@@ -1106,7 +443,7 @@
                     </sl-select>
                 {/if}
 
-                {#if row.operatorType === "relative_x_days"}
+                {#if row.type === "days"}
                     <sl-select
                         value={row.operator}
                         onsl-change={(e) => {
@@ -1126,7 +463,7 @@
                     </sl-select>
                 {/if}
 
-                {#if row.operatorType === "rating_expanded"}
+                {#if row.type === "user_numeric"}
                     <sl-select
                         value={row.operator}
                         onsl-change={(e) => {
@@ -1158,7 +495,7 @@
                     </sl-select>
                 {/if}
 
-                {#if row.operatorType === "limit"}
+                {#if row.type.includes("recent_")}
                     <label style="text-align: end;">
                         <input
                             name="banana"
@@ -1172,7 +509,7 @@
                     </label>
                 {/if}
 
-                {#if row.operatorType === "true"}
+                {#if row.type === "is_true"}
                     <label>
                         <input
                             name="apple"
@@ -1186,6 +523,7 @@
                     </label>
                 {/if}
 
+                <!--
                 {#if row.operatorType === "boolean_true"}
                     <sl-select
                         value={row.operator}
@@ -1199,8 +537,9 @@
                         </sl-option>
                     </sl-select>
                 {/if}
+                -->
 
-                {#if row.operatorType === "boolean_is"}
+                {#if row.type.includes("boolean_")}
                     <sl-select
                         value={row.operator}
                         onsl-change={(e) => {
@@ -1216,31 +555,39 @@
 
                 <!-- inputs -->
 
-                {#if row.inputType === "text"}
-                    <sl-input
-                        type="text"
-                        onsl-change={(e) => (row.input = e.target.value)}
-                        required
-                    ></sl-input>
+                {#if row.widget?.[0] === "input"}
+                    {#if row.widget?.[1] === "text"}
+                        <sl-input
+                            type="text"
+                            onsl-change={(e) => (row.input = e.target.value)}
+                            required
+                        ></sl-input>
+                    {/if}
+
+                    {#if row.widget?.[1] === "number"}
+                        <sl-input
+                            type="number"
+                            onsl-change={(e) => (row.input = e.target.value)}
+                            required
+                        ></sl-input>
+                    {/if}
+
+                    {#if row.widget?.[1] === "datetime-local"}
+                        <sl-input
+                            type="datetime-local"
+                            onsl-change={(e) => (row.input = e.target.value)}
+                            required
+                        ></sl-input>
+                    {/if}
+
+                    {#if row.widget?.[1] === "hidden"}
+                        <span>
+                            <input type="hidden" bind:value={row.input} />
+                        </span>
+                    {/if}
                 {/if}
 
-                {#if row.inputType === "number"}
-                    <sl-input
-                        type="number"
-                        onsl-change={(e) => (row.input = e.target.value)}
-                        required
-                    ></sl-input>
-                {/if}
-
-                {#if row.inputType === "date"}
-                    <sl-input
-                        type="date"
-                        onsl-change={(e) => (row.input = e.target.value)}
-                        required
-                    ></sl-input>
-                {/if}
-
-                {#if row.inputType === "rating"}
+                {#if row.widget?.[0] === "select"}
                     <sl-select
                         value={row.input}
                         required
@@ -1248,95 +595,12 @@
                             row.input = e.target.value;
                         }}
                     >
-                        <sl-option value="5">
-                            {$_("text.ratingCount", { values: { count: 5 } })}
-                        </sl-option>
-                        <sl-option value="4">
-                            {$_("text.ratingCount", { values: { count: 4 } })}
-                        </sl-option>
-                        <sl-option value="3">
-                            {$_("text.ratingCount", { values: { count: 3 } })}
-                        </sl-option>
-                        <sl-option value="2">
-                            {$_("text.ratingCount", { values: { count: 2 } })}
-                        </sl-option>
-                        <sl-option value="1">
-                            {$_("text.ratingCount", { values: { count: 1 } })}
-                        </sl-option>
-                        <sl-option value="0">
-                            {$_("text.ratingCount", { values: { count: 0 } })}
-                        </sl-option>
-                    </sl-select>
-                {/if}
-
-                {#if row.inputType === "user"}
-                    <sl-select
-                        value={row.input}
-                        required
-                        onsl-change={(e) => {
-                            row.input = e.target.value;
-                        }}
-                    >
-                        {#each allUsers as user}
-                            <sl-option value={user.id}>
-                                {user.username}
+                        {#each row.widget?.[1] as item}
+                            <sl-option value={item.value}>
+                                {item.label}
                             </sl-option>
                         {/each}
                     </sl-select>
-                {/if}
-
-                {#if row.inputType === "catalog"}
-                    <sl-select
-                        value={row.input}
-                        required
-                        onsl-change={(e) => {
-                            row.input = e.target.value;
-                        }}
-                    >
-                        {#each allCatalogs as catalog}
-                            <sl-option value={catalog.id}>
-                                {catalog.name}
-                            </sl-option>
-                        {/each}
-                    </sl-select>
-                {/if}
-
-                {#if row.inputType === "playlist"}
-                    <sl-select
-                        value={row.input}
-                        required
-                        onsl-change={(e) => {
-                            row.input = e.target.value;
-                        }}
-                    >
-                        {#each allPlaylists as playlist}
-                            <sl-option value={playlist.id}>
-                                {playlist.name}
-                            </sl-option>
-                        {/each}
-                    </sl-select>
-                {/if}
-
-                {#if row.inputType === "smartlist"}
-                    <sl-select
-                        value={row.input}
-                        required
-                        onsl-change={(e) => {
-                            row.input = e.target.value;
-                        }}
-                    >
-                        {#each allSmartlists as smartlist}
-                            <sl-option value={smartlist.id}>
-                                {smartlist.name}
-                            </sl-option>
-                        {/each}
-                    </sl-select>
-                {/if}
-
-                {#if row.inputType === "" || row.inputType === null}
-                    <span>
-                        <input type="hidden" bind:value={row.input} />
-                    </span>
                 {/if}
 
                 <!-- remove row -->

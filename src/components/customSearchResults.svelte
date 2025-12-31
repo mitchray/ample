@@ -8,6 +8,7 @@
         artistsPreset,
         playlistsPreset,
         songsPreset,
+        genresPreset,
     } from "~/components/lister/columns.js";
 
     let {
@@ -80,7 +81,7 @@
             </div>
         {/if}
 
-        {#if type === "artist"}
+        {#if type.includes("artist")}
             <div class="lister-tabulator">
                 <div class="lister-tabulator__actions">
                     <Actions
@@ -123,6 +124,19 @@
                     columns={playlistsPreset}
                     options={{
                         persistenceID: "playlists",
+                    }}
+                ></Tabulator>
+            </div>
+        {/if}
+
+        {#if type === "genre"}
+            <div class="lister-tabulator">
+                <Tabulator
+                    bind:tabulator
+                    bind:data={results}
+                    columns={genresPreset}
+                    options={{
+                        layout: "fitDataFill",
                     }}
                 ></Tabulator>
             </div>
