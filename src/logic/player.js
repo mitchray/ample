@@ -23,6 +23,7 @@ import {
     CurrentMedia,
     CurrentMediaGainInfo,
     IsPlaying,
+    IsQueueLoading,
     JukeboxQueue,
     NowPlayingIndex,
     NowPlayingQueue,
@@ -1077,6 +1078,7 @@ class Player {
         }
 
         // Incremental loading logic
+        IsQueueLoading.set(true);
         this.queueRefillAbort = { abort: false };
         const currentRefill = this.queueRefillAbort;
         const chunkSize = 50;
@@ -1092,19 +1094,26 @@ class Player {
             await new Promise((resolve) => setTimeout(resolve, 2000));
 
             // Use larger chunks for background loading to reduce number of updates
-            const backgroundChunkSize = 200;
+            const backgroundChunkSize = 50;
 
             for (let i = chunkSize; i < arr.length; i += backgroundChunkSize) {
-                if (currentRefill.abort) return;
+                if (currentRefill.abort) {
+                    IsQueueLoading.set(false);
+                    return;
+                }
 
                 // Yield to UI thread to keep player responsive
-                await new Promise((resolve) => setTimeout(resolve, 200));
+                await new Promise((resolve) => setTimeout(resolve, 50));
 
-                if (currentRefill.abort) return;
+                if (currentRefill.abort) {
+                    IsQueueLoading.set(false);
+                    return;
+                }
 
                 const chunk = arr.slice(i, i + backgroundChunkSize);
                 NowPlayingQueue.update(q => [...q, ...chunk]);
             }
+            IsQueueLoading.set(false);
         })();
     }
 

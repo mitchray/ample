@@ -7,6 +7,7 @@
         NowPlayingIndex,
         NowPlayingQueue,
         JukeboxQueue,
+        IsQueueLoading,
     } from "~/stores/state.js";
     import {
         JukeboxVirtualListBind,
@@ -48,12 +49,8 @@
     }
 
     $effect(() => {
-        if ($items) {
+        if (containerRef && !sortable && !$IsQueueLoading) {
             untrack(() => {
-                if (sortable) {
-                    sortable.destroy(); // Destroy previous sortable instance
-                }
-
                 sortable = new Sortable(containerRef, {
                     animation: 150,
                     handle: ".handle",
@@ -67,7 +64,7 @@
                             return false;
                         }
 
-                        indexFinalPosition = $items.findIndex(
+                        indexFinalPosition = get(items).findIndex(
                             (x) => x._id === event.related.dataset.id,
                         );
 
@@ -88,13 +85,15 @@
                             (x) => x.dataset.id,
                         );
 
+                        let currentItems = get(items);
+
                         // Find the items in the target array that need to be moved
-                        const itemsToReinsert = $items.filter((item) =>
+                        const itemsToReinsert = currentItems.filter((item) =>
                             idsToMove.includes(item._id),
                         );
 
                         // Remove the items from the target array
-                        const filteredTargetArray = $items.filter(
+                        const filteredTargetArray = currentItems.filter(
                             (item) => !idsToMove.includes(item._id),
                         );
 
@@ -110,8 +109,8 @@
                         await tick();
 
                         //Reset playing index if needed
-                        let currentIndex = $items.findIndex(
-                            (item) => item._id === $CurrentMedia._id,
+                        let currentIndex = get(items).findIndex(
+                            (item) => item._id === get(CurrentMedia)._id,
                         );
 
                         if (currentIndex !== -1) {
@@ -120,6 +119,13 @@
                     },
                 });
             });
+        }
+    });
+
+    $effect(() => {
+        if ($IsQueueLoading && sortable) {
+             sortable.destroy();
+             sortable = null;
         }
     });
 
