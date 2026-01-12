@@ -32,7 +32,7 @@ export function sleep(ms) {
 }
 
 export async function shuffleArray(arr) {
-    console.time("shuffleArray");
+
     const chunkSize = 50; // Reduced from 500
     for (let i = 0; i < arr.length; i++) {
         const j = Math.floor(Math.random() * i);
@@ -44,7 +44,7 @@ export async function shuffleArray(arr) {
             await new Promise((resolve) => setTimeout(resolve, 0));
         }
     }
-    console.timeEnd("shuffleArray");
+
 
     return arr;
 }
@@ -181,7 +181,7 @@ export function formatForGenius(input) {
 }
 
 export async function prepareForQueue(arr) {
-    console.time("prepareForQueue");
+
     const propertiesToKeep = [
         //common
         "id",
@@ -239,7 +239,7 @@ export async function prepareForQueue(arr) {
         // yield to main thread
         await new Promise((resolve) => setTimeout(resolve, 0));
     }
-    console.timeEnd("prepareForQueue");
+
 
     return result;
 }

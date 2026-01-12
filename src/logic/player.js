@@ -604,18 +604,18 @@ class Player {
      * Shuffle all existing items in queue
      */
     async shuffle() {
-        console.time("Player.shuffle");
+
         let tempArray = get(NowPlayingQueue);
         tempArray = await shuffleArray(tempArray);
         this.clearAll();
 
-        console.time("Player.setQueueItems");
+
         this.#setQueueItems(tempArray, true).then(() => {
-            console.timeEnd("Player.setQueueItems");
+
             NowPlayingIndex.set(0);
             this.start();
             tick().then((r) => showQueueItemAtIndex(0));
-            console.timeEnd("Player.shuffle");
+
         });
     }
 
@@ -1068,28 +1068,27 @@ class Player {
             this.queueRefillAbort.abort = true;
         }
 
-        console.time("Player.setQueueItems (actual)");
+
 
         if (!incremental || arr.length <= 50) {
             NowPlayingQueue.set(arr);
             await updateQueue();
-            console.timeEnd("Player.setQueueItems (actual)");
+
             return;
         }
 
         // Incremental loading logic
-        console.log("DEBUG: Starting incremental load. Total items:", arr.length);
         IsQueueLoading.set(true);
         this.queueRefillAbort = { abort: false };
         const currentRefill = this.queueRefillAbort;
         const chunkSize = 50;
 
         // Set first chunk immediately and allow playback to start
-        console.time("DEBUG: Initial Set");
+
         NowPlayingQueue.set(arr.slice(0, chunkSize));
         await updateQueue();
-        console.timeEnd("DEBUG: Initial Set");
-        console.timeEnd("Player.setQueueItems (actual)");
+
+
 
         // Process the rest in background
         (async () => {
