@@ -1,3 +1,4 @@
 @echo off
 echo Pornire server Ample UI (cu Proxy)...
 python proxy_server.py
+pause

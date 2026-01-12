@@ -92,6 +92,12 @@ class ProxyHTTPRequestHandler(http.server.SimpleHTTPRequestHandler):
             pass
         except Exception as e:
             print(f"  Error: {e}")
+            try:
+                self.send_response(500)
+                self.end_headers()
+                self.wfile.write(f"Internal Server Error: {e}".encode())
+            except:
+                pass
 
 if __name__ == "__main__":
     # SERVE FROM DIST FOLDER
