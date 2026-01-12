@@ -82,11 +82,15 @@ function createWavesurferInstance(containerSelector) {
         mediaEl._source = mediaNode;
     }
 
+    const streamDest = audioContext.createMediaStreamDestination();
+    mediaNode.connect(streamDest);
+
     return {
         audioElement,
         filters,
         wavesurfer,
         mediaNode,
+        streamDest,
         audioContext,
     };
 }
@@ -1141,16 +1145,15 @@ class Player {
     }
 
     #visualizerConnectAudio() {
-        let proxyMediaNode;
-        const mediaEl = this.currentPlayer.wavesurfer.getMediaElement();
-
-        if (mediaEl._sourceProxy) {
-            proxyMediaNode = mediaEl._sourceProxy;
-        } else {
-            proxyMediaNode = this.visualizerAudioContextProxy.createMediaElementSource(mediaEl);
-            mediaEl._sourceProxy = proxyMediaNode;
+        if (this.currentVisualizerSource) {
+            try {
+                this.currentVisualizerSource.disconnect();
+            } catch (e) { }
         }
-        this.visualizer?.connectAudio(proxyMediaNode);
+
+        const stream = this.currentPlayer.streamDest.stream;
+        this.currentVisualizerSource = this.visualizerAudioContextProxy.createMediaStreamSource(stream);
+        this.visualizer?.connectAudio(this.currentVisualizerSource);
     }
 }
 
