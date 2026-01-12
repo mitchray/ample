@@ -77,6 +77,14 @@
                     </div>
                 {/if}
 
+                {#if $CurrentMedia.object_type === "song" && $CurrentMedia.album}
+                    <div class="truncate secondary-info">
+                        <a href="#/album/{$CurrentMedia.album.id}">
+                            {$CurrentMedia.album.name}
+                        </a>
+                    </div>
+                {/if}
+
                 {#if $CurrentMedia.artists?.length > 0}
                     <div class="truncate secondary-info">
                         <ArtistList data={$CurrentMedia} />
