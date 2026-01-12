@@ -1078,42 +1078,65 @@ class Player {
         }
 
         // Incremental loading logic
+        console.log("DEBUG: Starting incremental load. Total items:", arr.length);
         IsQueueLoading.set(true);
         this.queueRefillAbort = { abort: false };
         const currentRefill = this.queueRefillAbort;
         const chunkSize = 50;
 
         // Set first chunk immediately and allow playback to start
+        console.time("DEBUG: Initial Set");
         NowPlayingQueue.set(arr.slice(0, chunkSize));
         await updateQueue();
+        console.timeEnd("DEBUG: Initial Set");
         console.timeEnd("Player.setQueueItems (actual)");
 
         // Process the rest in background
         (async () => {
+            console.log("DEBUG: Starting background wait (2s)...");
             // Wait for playback to stabilize (2 seconds)
             await new Promise((resolve) => setTimeout(resolve, 2000));
+            console.log("DEBUG: Background wait done.");
 
-            // Use larger chunks for background loading to reduce number of updates
-            const backgroundChunkSize = 50;
+            // Process in temporary array to avoid triggering UI updates repeatedly
+            let remainingItems = [];
+
+            // We can process fast now because we are not touching the Store/UI
+            // But we still yield to allow interactions
+            const backgroundChunkSize = 100;
+            console.time("DEBUG: Background Loop");
 
             for (let i = chunkSize; i < arr.length; i += backgroundChunkSize) {
                 if (currentRefill.abort) {
-                    IsQueueLoading.set(false);
-                    return;
-                }
-
-                // Yield to UI thread to keep player responsive
-                await new Promise((resolve) => setTimeout(resolve, 50));
-
-                if (currentRefill.abort) {
+                    console.log("DEBUG: Aborted during loop");
                     IsQueueLoading.set(false);
                     return;
                 }
 
                 const chunk = arr.slice(i, i + backgroundChunkSize);
-                NowPlayingQueue.update(q => [...q, ...chunk]);
+                remainingItems.push(...chunk);
+
+                // Small yield to keep main thread completely free for clicks/hover
+                await new Promise((resolve) => setTimeout(resolve, 20));
             }
+            console.timeEnd("DEBUG: Background Loop");
+
+            if (currentRefill.abort) {
+                console.log("DEBUG: Aborted at end");
+                IsQueueLoading.set(false);
+                return;
+            }
+
+            // SINGLE update at the end
+            console.log("DEBUG: Committing full queue...", remainingItems.length + chunkSize);
+            console.time("DEBUG: Final Commit");
+            NowPlayingQueue.update(q => [...q, ...remainingItems]);
+
+            // Ensure IsQueueLoading is turned off AFTER the DOM update
+            await tick(); // Wait for Svelte
             IsQueueLoading.set(false);
+            console.timeEnd("DEBUG: Final Commit");
+            console.log("DEBUG: Queue load complete.");
         })();
     }
 

@@ -55,6 +55,7 @@
         $Settings.SkipBelow.rating, retest();
         $Settings.SkipBelow.allowZero, retest();
     });
+    let menuOpen = $state(false);
 </script>
 
 <div
@@ -62,6 +63,7 @@
     class:currentlyPlaying={$CurrentMedia?._id === media._id}
     class:matches-rating-threshold={matchesRating}
 >
+    <!-- ... existing code ... -->
     <sl-button
         class="remove"
         onclick={(e) => {
@@ -123,17 +125,20 @@
         onclick={(e) => {
             e.stopPropagation();
         }}
+        onsl-show={() => menuOpen = true}
     >
         <sl-button slot="trigger" variant="text">
             <MaterialSymbol name="more_horiz" />
         </sl-button>
 
-        <Actions
-            item={media}
-            showLinks={true}
-            type={media.object_type}
-            displayMode="menu"
-        />
+        {#if menuOpen}
+            <Actions
+                item={media}
+                showLinks={true}
+                type={media.object_type}
+                displayMode="menu"
+            />
+        {/if}
     </sl-dropdown>
 
     <div class="test">

@@ -148,7 +148,7 @@
     ontouchstart={handleScroll}
     onwheel={handleScroll}
 >
-    {#each $items as item, index}
+    {#each $items as item, index (item._id)}
         <div
             onclick={(e) => {
                 handleAction(e, index);
