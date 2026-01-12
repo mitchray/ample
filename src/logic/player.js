@@ -72,9 +72,15 @@ function createWavesurferInstance(containerSelector) {
         media: audioElement,
     });
 
-    const mediaNode = audioContext.createMediaElementSource(
-        wavesurfer.getMediaElement(),
-    );
+    let mediaNode;
+    const mediaEl = wavesurfer.getMediaElement();
+
+    if (mediaEl._source) {
+        mediaNode = mediaEl._source;
+    } else {
+        mediaNode = audioContext.createMediaElementSource(mediaEl);
+        mediaEl._source = mediaNode;
+    }
 
     return {
         audioElement,
@@ -879,7 +885,7 @@ class Player {
             try {
                 this.visualizer.disconnectAudio &&
                     this.visualizer.disconnectAudio();
-            } catch (e) {}
+            } catch (e) { }
             this.visualizer = null;
         }
     }
@@ -1135,10 +1141,15 @@ class Player {
     }
 
     #visualizerConnectAudio() {
-        let proxyMediaNode =
-            this.visualizerAudioContextProxy.createMediaElementSource(
-                this.currentPlayer.wavesurfer.getMediaElement(),
-            );
+        let proxyMediaNode;
+        const mediaEl = this.currentPlayer.wavesurfer.getMediaElement();
+
+        if (mediaEl._sourceProxy) {
+            proxyMediaNode = mediaEl._sourceProxy;
+        } else {
+            proxyMediaNode = this.visualizerAudioContextProxy.createMediaElementSource(mediaEl);
+            mediaEl._sourceProxy = proxyMediaNode;
+        }
         this.visualizer?.connectAudio(proxyMediaNode);
     }
 }
