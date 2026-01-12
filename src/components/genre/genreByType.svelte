@@ -73,7 +73,8 @@
                         type="artistGenre"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ id: id }}
+                        data={{ id: id, artists: items }}
+                        tabulator={tabulator}
                     />
 
                     <MassRater bind:tabulator type="artist" />
@@ -97,7 +98,8 @@
                         type="albumGenre"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ id: id }}
+                        data={{ id: id, albums: items }}
+                        tabulator={tabulator}
                     />
 
                     <MassRater bind:tabulator type="album" />
@@ -121,7 +123,8 @@
                         type="songGenre"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ id: id }}
+                        data={{ id: id, songs: items }}
+                        tabulator={tabulator}
                     />
 
                     <MassRater bind:tabulator type="song" />

@@ -41,6 +41,7 @@
             displayMode="fullButtons"
             showShuffle={true}
             data={{ from: fromYear, to: toYear }}
+            tabulator={tabulator}
         />
 
         <MassRater bind:tabulator type="album" />

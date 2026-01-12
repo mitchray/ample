@@ -50,6 +50,7 @@
         hideDefaultActions = false,
         hoist = false,
         data = {},
+        tabulator = null,
     } = $props();
 
     const contextKey = uuidv4(); // unique key for each instance of actions
@@ -76,6 +77,11 @@
 
     let filterToArtistID = getContext("filterToArtistID");
 
+    function getActiveData(prop) {
+        if (tabulator) return tabulator.getData("active");
+        return data[prop];
+    }
+
     /**
      * Determine which method should be used to get songs
      * @returns function
@@ -90,7 +96,7 @@
                 break;
             case "artists":
                 response = await getSongsFromArtists(
-                    sampleSize(data.artists, 100),
+                    sampleSize(getActiveData("artists"), 100),
                 );
                 final = response.song;
                 break;
@@ -100,8 +106,15 @@
                 break;
             case "artistGenre":
             case "genre":
-                response = await getSomeSongsFromArtistsByGenre(data.id);
-                final = response.song;
+                if (tabulator || data.artists) {
+                    response = await getSongsFromArtists(
+                        sampleSize(getActiveData("artists"), 100),
+                    );
+                    final = response.song;
+                } else {
+                    response = await getSomeSongsFromArtistsByGenre(data.id);
+                    final = response.song;
+                }
                 break;
             case "album":
                 response = await $API.albumSongs({ filter: item?.id });
@@ -109,13 +122,20 @@
                 break;
             case "albums":
                 response = await getSongsFromAlbums(
-                    sampleSize(data.albums, 100),
+                    sampleSize(getActiveData("albums"), 100),
                 );
                 final = response; // no .song here
                 break;
             case "albumGenre":
-                response = await getSomeSongsFromAlbumsByGenre(data.id);
-                final = response.song;
+                if (tabulator || data.albums) {
+                    response = await getSongsFromAlbums(
+                        sampleSize(getActiveData("albums"), 100),
+                    );
+                    final = response;
+                } else {
+                    response = await getSomeSongsFromAlbumsByGenre(data.id);
+                    final = response.song;
+                }
                 break;
             case "albumAlpha":
                 response = await getSongsFromAlbumsStartingWith(data.char);
@@ -151,12 +171,19 @@
                 final = response.song;
                 break;
             case "playlists":
-                response = await getSongsFromPlaylists(data.playlists);
+                response = await getSongsFromPlaylists(getActiveData("playlists"));
                 final = response.song;
                 break;
             case "year":
-                response = await getSongsByYear(data.from, data.to);
-                final = response.song;
+                if (tabulator || data.albums) {
+                    response = await getSongsFromAlbums(
+                        sampleSize(getActiveData("albums"), 100),
+                    );
+                    final = response;
+                } else {
+                    response = await getSongsByYear(data.from, data.to);
+                    final = response.song;
+                }
                 break;
             case "artistMix":
                 response = await getSongsFromPlaylist({
@@ -183,7 +210,6 @@
 
         return final;
     }
-
     /**
      * Gets the songs based on action type
      * @returns Promise<array>
@@ -191,15 +217,22 @@
     async function doFetch() {
         let songSubset = data.songs;
 
+        // If tabulator is available, use its current visible data (respects sort/filter)
+        if (tabulator) {
+            console.debug("Actions: Using Tabulator data for play/queue");
+            // getData("active") returns rows in current sort order and filtered state
+            songSubset = tabulator.getData("active");
+        }
+
         if (songSubset?.length > playLimit) {
             addAlert({
                 title: $_("text.limitedItems", { values: { n: playLimit } }),
                 style: "info",
             });
-            songSubset = sampleSize(data.songs, playLimit);
+            songSubset = sampleSize(tabulator ? songSubset : data.songs, playLimit);
         }
 
-        let result = data.songs ? songSubset : await determineFetchURL();
+        let result = (data.songs || tabulator) ? songSubset : await determineFetchURL();
 
         if (result.error) {
             errorHandler("determining fetch URL", result.error);
