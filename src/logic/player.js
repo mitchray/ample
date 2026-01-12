@@ -1088,14 +1088,21 @@ class Player {
 
         // Process the rest in background
         (async () => {
-            for (let i = chunkSize; i < arr.length; i += chunkSize) {
+            // Wait for playback to stabilize (2 seconds)
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            // Use larger chunks for background loading to reduce number of updates
+            const backgroundChunkSize = 200;
+
+            for (let i = chunkSize; i < arr.length; i += backgroundChunkSize) {
                 if (currentRefill.abort) return;
 
-                await new Promise((resolve) => setTimeout(resolve, 50)); // Yield to UI
+                // Yield to UI thread to keep player responsive
+                await new Promise((resolve) => setTimeout(resolve, 200));
 
                 if (currentRefill.abort) return;
 
-                const chunk = arr.slice(i, i + chunkSize);
+                const chunk = arr.slice(i, i + backgroundChunkSize);
                 NowPlayingQueue.update(q => [...q, ...chunk]);
             }
         })();
