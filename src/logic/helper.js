@@ -31,13 +31,20 @@ export function sleep(ms) {
     return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function shuffleArray(arr) {
+export async function shuffleArray(arr) {
+    console.time("shuffleArray");
+    const chunkSize = 50; // Reduced from 500
     for (let i = 0; i < arr.length; i++) {
         const j = Math.floor(Math.random() * i);
         const temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+
+        if (i % chunkSize === 0) {
+            await new Promise((resolve) => setTimeout(resolve, 0));
+        }
     }
+    console.timeEnd("shuffleArray");
 
     return arr;
 }
@@ -65,7 +72,7 @@ export async function placeholderArtCheck(url) {
     let results = [];
     let images = [
         get(Server).ampacheURL +
-            "/image.php?object_id=0&object_type=album&thumb=10",
+        "/image.php?object_id=0&object_type=album&thumb=10",
         url + "&thumb=10",
     ];
 
@@ -73,6 +80,7 @@ export async function placeholderArtCheck(url) {
         for (let i = 0; i < images.length; i++) {
             let img = new Image();
             img.setAttribute("crossOrigin", "anonymous");
+            img.src = images[i];
             img.src = images[i];
             await img.decode(); // this is key as it waits until the image is ready
 
@@ -172,7 +180,8 @@ export function formatForGenius(input) {
     return replaceSpacesWithHyphens(input);
 }
 
-export function prepareForQueue(arr) {
+export async function prepareForQueue(arr) {
+    console.time("prepareForQueue");
     const propertiesToKeep = [
         //common
         "id",
@@ -201,35 +210,38 @@ export function prepareForQueue(arr) {
         "site_url",
     ];
 
-    arr = arr.reduce((acc, obj) => {
-        const newObj = {};
-        propertiesToKeep.forEach((prop) => {
-            if (obj.hasOwnProperty(prop)) {
-                newObj[prop] = obj[prop];
-            }
+    let result = [];
+    const chunkSize = 20; // Reduced from 200
+
+    for (let i = 0; i < arr.length; i += chunkSize) {
+        const chunk = arr.slice(i, i + chunkSize);
+
+        const processedChunk = chunk.map(obj => {
+            const newObj = {};
+            propertiesToKeep.forEach((prop) => {
+                if (obj.hasOwnProperty(prop)) {
+                    newObj[prop] = obj[prop];
+                }
+            });
+
+            // assign object_type and _id
+            let objectType = "song";
+            if (obj.podcast?.id) objectType = "podcast_episode";
+            if (obj.site_url) objectType = "live_stream";
+            newObj.object_type = objectType;
+            newObj._id = uuidv4();
+
+            return newObj;
         });
-        acc.push(newObj);
-        return acc;
-    }, []);
 
-    // assign object_type and _id
-    for (let i = 0; i < arr.length; i++) {
-        let objectType = "song";
+        result.push(...processedChunk);
 
-        if (arr[i].podcast?.id) {
-            objectType = "podcast_episode";
-        }
-
-        if (arr[i].site_url) {
-            objectType = "live_stream";
-        }
-
-        arr[i].object_type = objectType;
-
-        arr[i]._id = uuidv4();
+        // yield to main thread
+        await new Promise((resolve) => setTimeout(resolve, 0));
     }
+    console.timeEnd("prepareForQueue");
 
-    return arr;
+    return result;
 }
 
 export async function trimCache() {

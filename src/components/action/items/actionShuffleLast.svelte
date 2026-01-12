@@ -14,7 +14,7 @@
     async function handleAction() {
         loading = true;
         let songs = await getSongs();
-        songs = shuffleArray(songs);
+        songs = await shuffleArray(songs);
         $MediaPlayer.playLast(songs);
         loading = false;
     }

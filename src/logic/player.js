@@ -602,15 +602,19 @@ class Player {
     /**
      * Shuffle all existing items in queue
      */
-    shuffle() {
+    async shuffle() {
+        console.time("Player.shuffle");
         let tempArray = get(NowPlayingQueue);
-        tempArray = shuffleArray(tempArray);
+        tempArray = await shuffleArray(tempArray);
         this.clearAll();
 
-        this.#setQueueItems(tempArray).then(() => {
+        console.time("Player.setQueueItems");
+        this.#setQueueItems(tempArray, true).then(() => {
+            console.timeEnd("Player.setQueueItems");
             NowPlayingIndex.set(0);
             this.start();
             tick().then((r) => showQueueItemAtIndex(0));
+            console.timeEnd("Player.shuffle");
         });
     }
 
@@ -639,7 +643,7 @@ class Player {
      */
     playNow(items) {
         this.clearAll();
-        this.#setQueueItems(items).then(() => {
+        this.#setQueueItems(items, true).then(() => {
             this.start();
         });
     }
@@ -1057,9 +1061,44 @@ class Player {
     }
 
     // keep this as purely a setting method
-    async #setQueueItems(arr) {
-        NowPlayingQueue.set(arr);
+    async #setQueueItems(arr, incremental = false) {
+        // Cancel any pending refill
+        if (this.queueRefillAbort) {
+            this.queueRefillAbort.abort = true;
+        }
+
+        console.time("Player.setQueueItems (actual)");
+
+        if (!incremental || arr.length <= 50) {
+            NowPlayingQueue.set(arr);
+            await updateQueue();
+            console.timeEnd("Player.setQueueItems (actual)");
+            return;
+        }
+
+        // Incremental loading logic
+        this.queueRefillAbort = { abort: false };
+        const currentRefill = this.queueRefillAbort;
+        const chunkSize = 50;
+
+        // Set first chunk immediately and allow playback to start
+        NowPlayingQueue.set(arr.slice(0, chunkSize));
         await updateQueue();
+        console.timeEnd("Player.setQueueItems (actual)");
+
+        // Process the rest in background
+        (async () => {
+            for (let i = chunkSize; i < arr.length; i += chunkSize) {
+                if (currentRefill.abort) return;
+
+                await new Promise((resolve) => setTimeout(resolve, 50)); // Yield to UI
+
+                if (currentRefill.abort) return;
+
+                const chunk = arr.slice(i, i + chunkSize);
+                NowPlayingQueue.update(q => [...q, ...chunk]);
+            }
+        })();
     }
 
     // keep this as purely a setting method

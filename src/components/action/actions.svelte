@@ -225,7 +225,7 @@
             );
         }
 
-        return prepareForQueue(result);
+        return await prepareForQueue(result);
     }
 </script>
 
