@@ -38,20 +38,28 @@
     import ActionShareCreate from "./items/actionShareCreate.svelte";
     import ActionShareEdit from "./items/actionShareEdit.svelte";
     import ActionShareDelete from "./items/actionShareDelete.svelte";
+    import ActionPlayFromHere from "./items/actionPlayFromHere.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Settings } from "~/stores/settings.js";
 
+    let props = $props();
     let {
         item = null,
         type,
         displayMode,
         showShuffle = false,
-        showLinks = false,
-        hideDefaultActions = false,
+        _showLinks: showLinks = false,
+        _hideDefaultActions: hideDefaultActions = false,
         hoist = false,
         data = {},
         tabulator = null,
-    } = $props();
+        cell = null,
+    } = props;
+    
+    // Create context helpers based on props
+    // Check top-level cell OR data._cell
+    let hasTabulator = () => !!props.tabulator || (props.cell && !!props.cell.getTable()) || (props.data?._cell && !!props.data._cell.getTable());
+    let _tabulator = () => props.tabulator || (props.cell ? props.cell.getTable() : null) || (props.data?._cell ? props.data._cell.getTable() : null);
 
     const contextKey = uuidv4(); // unique key for each instance of actions
 
@@ -61,6 +69,9 @@
 
     // underscore prefixed items are accessor aliases of exported params
     let _item = writable(item);
+    $effect(() => { 
+        _item.set(item); 
+    });
     let _type = writable(type);
     let _displayMode = writable(displayMode);
     let _showShuffle = writable(showShuffle);
@@ -73,6 +84,9 @@
         _data,
         _showShuffle,
         getSongs: () => doFetch(),
+        getSongList: () => doFetch(true),
+        _hasTabulator: hasTabulator,
+        _tabulator: _tabulator,
     });
 
     let filterToArtistID = getContext("filterToArtistID");
@@ -214,14 +228,32 @@
      * Gets the songs based on action type
      * @returns Promise<array>
      */
-    async function doFetch() {
+    async function doFetch(forceList = false) {
         let songSubset = data.songs;
+        // Use props directly to be safe
+        let table = props.tabulator;
+        let pCell = props.cell || props.data?._cell; // CHECK smuggled cell
+        
+        // If regular fetch and we have an item, ignore list context to preserve single-item actions
+        if (!forceList && item) {
+             songSubset = null;
+             table = null;
+        } else if (!table && pCell) {
+            try {
+                table = pCell.getTable();
+            } catch (e) { console.warn("Actions: cell.getTable failed", e); }
+            
+            if (!table) {
+                try {
+                     table = pCell.getRow().getTable();
+                } catch (e) { console.warn("Actions: cell.getRow().getTable failed", e); }
+            }
+        }
 
         // If tabulator is available, use its current visible data (respects sort/filter)
-        if (tabulator) {
-            console.debug("Actions: Using Tabulator data for play/queue");
-            // getData("active") returns rows in current sort order and filtered state
-            songSubset = tabulator.getData("active");
+        if (table) {
+            // console.log("Actions: Using Tabulator data. Rows:", table.getData("active").length);
+            songSubset = table.getData("active");
         }
 
         if (songSubset?.length > playLimit) {
@@ -229,10 +261,10 @@
                 title: $_("text.limitedItems", { values: { n: playLimit } }),
                 style: "info",
             });
-            songSubset = sampleSize(tabulator ? songSubset : data.songs, playLimit);
+            songSubset = sampleSize(table ? songSubset : data.songs, playLimit);
         }
 
-        let result = (data.songs || tabulator) ? songSubset : await determineFetchURL();
+        let result = (data.songs || table) ? songSubset : await determineFetchURL();
 
         if (result.error) {
             errorHandler("determining fetch URL", result.error);
@@ -369,6 +401,7 @@
 
         {#if type !== "share"}
             <ActionAddToPlaylist {contextKey} />
+            <ActionPlayFromHere {contextKey} />
             <ActionShuffleNext {contextKey} />
             <ActionShuffleLast {contextKey} />
         {/if}

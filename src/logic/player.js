@@ -1092,10 +1092,8 @@ class Player {
 
         // Process the rest in background
         (async () => {
-            console.log("DEBUG: Starting background wait (2s)...");
             // Wait for playback to stabilize (2 seconds)
             await new Promise((resolve) => setTimeout(resolve, 2000));
-            console.log("DEBUG: Background wait done.");
 
             // Process in temporary array to avoid triggering UI updates repeatedly
             let remainingItems = [];
@@ -1103,11 +1101,9 @@ class Player {
             // We can process fast now because we are not touching the Store/UI
             // But we still yield to allow interactions
             const backgroundChunkSize = 100;
-            console.time("DEBUG: Background Loop");
 
             for (let i = chunkSize; i < arr.length; i += backgroundChunkSize) {
                 if (currentRefill.abort) {
-                    console.log("DEBUG: Aborted during loop");
                     IsQueueLoading.set(false);
                     return;
                 }
@@ -1118,24 +1114,18 @@ class Player {
                 // Small yield to keep main thread completely free for clicks/hover
                 await new Promise((resolve) => setTimeout(resolve, 20));
             }
-            console.timeEnd("DEBUG: Background Loop");
 
             if (currentRefill.abort) {
-                console.log("DEBUG: Aborted at end");
                 IsQueueLoading.set(false);
                 return;
             }
 
             // SINGLE update at the end
-            console.log("DEBUG: Committing full queue...", remainingItems.length + chunkSize);
-            console.time("DEBUG: Final Commit");
             NowPlayingQueue.update(q => [...q, ...remainingItems]);
 
             // Ensure IsQueueLoading is turned off AFTER the DOM update
             await tick(); // Wait for Svelte
             IsQueueLoading.set(false);
-            console.timeEnd("DEBUG: Final Commit");
-            console.log("DEBUG: Queue load complete.");
         })();
     }
 

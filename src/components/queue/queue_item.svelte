@@ -137,6 +137,7 @@
                 showLinks={true}
                 type={media.object_type}
                 displayMode="menu"
+                data={{ songs: queueType === "user" ? $NowPlayingQueue : $JukeboxQueue }}
             />
         {/if}
     </sl-dropdown>
