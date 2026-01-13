@@ -401,7 +401,9 @@
 
         {#if type !== "share"}
             <ActionAddToPlaylist {contextKey} />
-            <ActionPlayFromHere {contextKey} />
+            {#if type === "song"}
+                <ActionPlayFromHere {contextKey} />
+            {/if}
             <ActionShuffleNext {contextKey} />
             <ActionShuffleLast {contextKey} />
         {/if}
