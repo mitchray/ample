@@ -17,7 +17,6 @@
     import Player from "~/components/player/player.svelte";
     import Alerts from "~/components/alert/alertsContainer.svelte";
     import Lyrics from "~/components/lyrics.svelte";
-    import Preferences from "~/views/preferences/preferences.svelte";
     import Routes from "~/components/routes.svelte";
     import NotificationToasts from "~/components/notification/notificationToasts.svelte";
     import Search from "~/components/search/search.svelte";
@@ -69,7 +68,6 @@
     </div>
     <Player />
     <Lyrics />
-    <Preferences />
     <NotificationToasts />
     <Alerts />
 </QueryClientProvider>

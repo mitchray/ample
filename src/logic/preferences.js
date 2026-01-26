@@ -2,7 +2,7 @@ import { get, derived } from "svelte/store";
 import { SystemPreferences, UserPreferences } from "~/stores/state.js";
 
 /**
- * Create a derived store for user preferences
+ * Create a derived store for user user-preferences
  * @param {string} name
  * @returns {import('svelte/store').Readable<any>}
  */
@@ -19,7 +19,7 @@ export function userPreference(name) {
 }
 
 /**
- * Create a derived store for system preferences
+ * Create a derived store for system user-preferences
  * @param {string} name
  * @returns {import('svelte/store').Readable<any>}
  */

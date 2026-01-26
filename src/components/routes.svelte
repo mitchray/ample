@@ -95,6 +95,10 @@
         "/unrated/:section?": wrap({
             asyncComponent: () => import("~/views/unrated/index.svelte"),
         }),
+        "/user-preferences/:section?": wrap({
+            asyncComponent: () =>
+                import("~/views/user-preferences/index.svelte"),
+        }),
         "/test/:section?": wrap({
             asyncComponent: () => import("~/views/test/index.svelte"),
         }),

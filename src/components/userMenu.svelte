@@ -1,19 +1,16 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { logout } from "~/logic/user";
-    import {
-        ampleVersion,
-        APIVersion,
-        ShowPreferences,
-        User,
-    } from "~/stores/state.js";
+    import { ampleVersion, APIVersion, User } from "~/stores/state.js";
     import { Settings } from "~/stores/settings.js";
     import ThemeToggle from "~/components/theme/themeToggle.svelte";
     import LanguageSelector from "~/components/languageSelector.svelte";
     import MaterialSymbol from "~/components//materialSymbol.svelte";
+
+    let dropdown;
 </script>
 
-<sl-dropdown placement="top-start" hoist>
+<sl-dropdown placement="top-start" hoist bind:this={dropdown}>
     <sl-button
         class="user-details"
         slot="trigger"
@@ -50,8 +47,9 @@
             </sl-button>
 
             <sl-button
+                href="#/user-preferences"
                 onclick={() => {
-                    $ShowPreferences = !$ShowPreferences;
+                    dropdown.hide();
                 }}
             >
                 {$_("text.preferences")}
