@@ -1,5 +1,19 @@
 # Changelog
 
+## [3.7.1] - 2026-01-26
+
+### Final release before v4 rewrite
+### Requires at least Ampache 7.6.0
+
+### Changed
+-   Advanced Search now uses ```search_rules``` to build the form dynamically based on Ampache server 7.6.0 (breaks translations but will address in future)
+-   Sortable table headers aligned right will show the sorting icon to the left
+
+### Fixed
+-   Shuffle clearing queue but not re-adding shuffled items
+-   Handle song versions with non-alphanumeric characters
+-   Artist releases table empty
+
 ## [3.7.0] - 2025-11-08
 
 ### Requires at least Ampache 7.4.2
