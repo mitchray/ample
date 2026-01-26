@@ -606,6 +606,9 @@ export let songsPreset = [
         formatter: (cell, formatterParams, onRendered) => {
             onRendered(function () {
                 let data = cell.getData();
+                // Try getting table via row if cell.getTable() failed or returned unexpected
+                let table = cell.getTable() || cell.getRow().getTable();
+
                 return mount(Actions, {
                     target: cell.getElement(),
                     props: {
@@ -613,7 +616,10 @@ export let songsPreset = [
                         displayMode: "miniButtons",
                         item: data,
                         hoist: true,
-                        data: Object.create({
+                        cell: cell,
+                        tabulator: table,
+                        data: {
+                            _cell: cell, // Smuggling cell in data
                             album: data.album ? data.album : null,
                             artists:
                                 data.artists?.length > 0 ? data.artists : null,
@@ -621,7 +627,7 @@ export let songsPreset = [
                                 ? data.albumartist
                                 : null,
                             playlist: null,
-                        }),
+                        },
                     },
                 });
             });

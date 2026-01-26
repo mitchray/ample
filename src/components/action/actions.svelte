@@ -38,19 +38,28 @@
     import ActionShareCreate from "./items/actionShareCreate.svelte";
     import ActionShareEdit from "./items/actionShareEdit.svelte";
     import ActionShareDelete from "./items/actionShareDelete.svelte";
+    import ActionPlayFromHere from "./items/actionPlayFromHere.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { Settings } from "~/stores/settings.js";
 
+    let props = $props();
     let {
         item = null,
         type,
         displayMode,
         showShuffle = false,
-        showLinks = false,
-        hideDefaultActions = false,
+        _showLinks: showLinks = false,
+        _hideDefaultActions: hideDefaultActions = false,
         hoist = false,
         data = {},
-    } = $props();
+        tabulator = null,
+        cell = null,
+    } = props;
+    
+    // Create context helpers based on props
+    // Check top-level cell OR data._cell
+    let hasTabulator = () => !!props.tabulator || (props.cell && !!props.cell.getTable()) || (props.data?._cell && !!props.data._cell.getTable());
+    let _tabulator = () => props.tabulator || (props.cell ? props.cell.getTable() : null) || (props.data?._cell ? props.data._cell.getTable() : null);
 
     const contextKey = uuidv4(); // unique key for each instance of actions
 
@@ -60,6 +69,9 @@
 
     // underscore prefixed items are accessor aliases of exported params
     let _item = writable(item);
+    $effect(() => { 
+        _item.set(item); 
+    });
     let _type = writable(type);
     let _displayMode = writable(displayMode);
     let _showShuffle = writable(showShuffle);
@@ -72,9 +84,17 @@
         _data,
         _showShuffle,
         getSongs: () => doFetch(),
+        getSongList: () => doFetch(true),
+        _hasTabulator: hasTabulator,
+        _tabulator: _tabulator,
     });
 
     let filterToArtistID = getContext("filterToArtistID");
+
+    function getActiveData(prop) {
+        if (tabulator) return tabulator.getData("active");
+        return data[prop];
+    }
 
     /**
      * Determine which method should be used to get songs
@@ -90,7 +110,7 @@
                 break;
             case "artists":
                 response = await getSongsFromArtists(
-                    sampleSize(data.artists, 100),
+                    sampleSize(getActiveData("artists"), 100),
                 );
                 final = response.song;
                 break;
@@ -100,8 +120,15 @@
                 break;
             case "artistGenre":
             case "genre":
-                response = await getSomeSongsFromArtistsByGenre(data.id);
-                final = response.song;
+                if (tabulator || data.artists) {
+                    response = await getSongsFromArtists(
+                        sampleSize(getActiveData("artists"), 100),
+                    );
+                    final = response.song;
+                } else {
+                    response = await getSomeSongsFromArtistsByGenre(data.id);
+                    final = response.song;
+                }
                 break;
             case "album":
                 response = await $API.albumSongs({ filter: item?.id });
@@ -109,13 +136,20 @@
                 break;
             case "albums":
                 response = await getSongsFromAlbums(
-                    sampleSize(data.albums, 100),
+                    sampleSize(getActiveData("albums"), 100),
                 );
                 final = response; // no .song here
                 break;
             case "albumGenre":
-                response = await getSomeSongsFromAlbumsByGenre(data.id);
-                final = response.song;
+                if (tabulator || data.albums) {
+                    response = await getSongsFromAlbums(
+                        sampleSize(getActiveData("albums"), 100),
+                    );
+                    final = response;
+                } else {
+                    response = await getSomeSongsFromAlbumsByGenre(data.id);
+                    final = response.song;
+                }
                 break;
             case "albumAlpha":
                 response = await getSongsFromAlbumsStartingWith(data.char);
@@ -151,12 +185,19 @@
                 final = response.song;
                 break;
             case "playlists":
-                response = await getSongsFromPlaylists(data.playlists);
+                response = await getSongsFromPlaylists(getActiveData("playlists"));
                 final = response.song;
                 break;
             case "year":
-                response = await getSongsByYear(data.from, data.to);
-                final = response.song;
+                if (tabulator || data.albums) {
+                    response = await getSongsFromAlbums(
+                        sampleSize(getActiveData("albums"), 100),
+                    );
+                    final = response;
+                } else {
+                    response = await getSongsByYear(data.from, data.to);
+                    final = response.song;
+                }
                 break;
             case "artistMix":
                 response = await getSongsFromPlaylist({
@@ -183,23 +224,47 @@
 
         return final;
     }
-
     /**
      * Gets the songs based on action type
      * @returns Promise<array>
      */
-    async function doFetch() {
+    async function doFetch(forceList = false) {
         let songSubset = data.songs;
+        // Use props directly to be safe
+        let table = props.tabulator;
+        let pCell = props.cell || props.data?._cell; // CHECK smuggled cell
+        
+        // If regular fetch and we have an item, ignore list context to preserve single-item actions
+        if (!forceList && item) {
+             songSubset = null;
+             table = null;
+        } else if (!table && pCell) {
+            try {
+                table = pCell.getTable();
+            } catch (e) { console.warn("Actions: cell.getTable failed", e); }
+            
+            if (!table) {
+                try {
+                     table = pCell.getRow().getTable();
+                } catch (e) { console.warn("Actions: cell.getRow().getTable failed", e); }
+            }
+        }
+
+        // If tabulator is available, use its current visible data (respects sort/filter)
+        if (table) {
+            // console.log("Actions: Using Tabulator data. Rows:", table.getData("active").length);
+            songSubset = table.getData("active");
+        }
 
         if (songSubset?.length > playLimit) {
             addAlert({
                 title: $_("text.limitedItems", { values: { n: playLimit } }),
                 style: "info",
             });
-            songSubset = sampleSize(data.songs, playLimit);
+            songSubset = sampleSize(table ? songSubset : data.songs, playLimit);
         }
 
-        let result = data.songs ? songSubset : await determineFetchURL();
+        let result = (data.songs || table) ? songSubset : await determineFetchURL();
 
         if (result.error) {
             errorHandler("determining fetch URL", result.error);
@@ -225,7 +290,7 @@
             );
         }
 
-        return prepareForQueue(result);
+        return await prepareForQueue(result);
     }
 </script>
 
@@ -336,6 +401,9 @@
 
         {#if type !== "share"}
             <ActionAddToPlaylist {contextKey} />
+            {#if type === "song"}
+                <ActionPlayFromHere {contextKey} />
+            {/if}
             <ActionShuffleNext {contextKey} />
             <ActionShuffleLast {contextKey} />
         {/if}

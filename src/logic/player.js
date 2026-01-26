@@ -23,6 +23,7 @@ import {
     CurrentMedia,
     CurrentMediaGainInfo,
     IsPlaying,
+    IsQueueLoading,
     JukeboxQueue,
     NowPlayingIndex,
     NowPlayingQueue,
@@ -72,15 +73,25 @@ function createWavesurferInstance(containerSelector) {
         media: audioElement,
     });
 
-    const mediaNode = audioContext.createMediaElementSource(
-        wavesurfer.getMediaElement(),
-    );
+    let mediaNode;
+    const mediaEl = wavesurfer.getMediaElement();
+
+    if (mediaEl._source) {
+        mediaNode = mediaEl._source;
+    } else {
+        mediaNode = audioContext.createMediaElementSource(mediaEl);
+        mediaEl._source = mediaNode;
+    }
+
+    const streamDest = audioContext.createMediaStreamDestination();
+    mediaNode.connect(streamDest);
 
     return {
         audioElement,
         filters,
         wavesurfer,
         mediaNode,
+        streamDest,
         audioContext,
     };
 }
@@ -592,15 +603,19 @@ class Player {
     /**
      * Shuffle all existing items in queue
      */
-    shuffle() {
+    async shuffle() {
+
         let tempArray = get(NowPlayingQueue);
-        tempArray = shuffleArray(tempArray);
+        tempArray = await shuffleArray(tempArray);
         this.clearAll();
 
-        this.#setQueueItems(tempArray).then(() => {
+
+        this.#setQueueItems(tempArray, true).then(() => {
+
             NowPlayingIndex.set(0);
             this.start();
             tick().then((r) => showQueueItemAtIndex(0));
+
         });
     }
 
@@ -629,7 +644,7 @@ class Player {
      */
     playNow(items) {
         this.clearAll();
-        this.#setQueueItems(items).then(() => {
+        this.#setQueueItems(items, true).then(() => {
             this.start();
         });
     }
@@ -879,7 +894,7 @@ class Player {
             try {
                 this.visualizer.disconnectAudio &&
                     this.visualizer.disconnectAudio();
-            } catch (e) {}
+            } catch (e) { }
             this.visualizer = null;
         }
     }
@@ -1047,9 +1062,71 @@ class Player {
     }
 
     // keep this as purely a setting method
-    async #setQueueItems(arr) {
-        NowPlayingQueue.set(arr);
+    async #setQueueItems(arr, incremental = false) {
+        // Cancel any pending refill
+        if (this.queueRefillAbort) {
+            this.queueRefillAbort.abort = true;
+        }
+
+
+
+        if (!incremental || arr.length <= 50) {
+            NowPlayingQueue.set(arr);
+            await updateQueue();
+
+            return;
+        }
+
+        // Incremental loading logic
+        IsQueueLoading.set(true);
+        this.queueRefillAbort = { abort: false };
+        const currentRefill = this.queueRefillAbort;
+        const chunkSize = 50;
+
+        // Set first chunk immediately and allow playback to start
+
+        NowPlayingQueue.set(arr.slice(0, chunkSize));
         await updateQueue();
+
+
+
+        // Process the rest in background
+        (async () => {
+            // Wait for playback to stabilize (2 seconds)
+            await new Promise((resolve) => setTimeout(resolve, 2000));
+
+            // Process in temporary array to avoid triggering UI updates repeatedly
+            let remainingItems = [];
+
+            // We can process fast now because we are not touching the Store/UI
+            // But we still yield to allow interactions
+            const backgroundChunkSize = 100;
+
+            for (let i = chunkSize; i < arr.length; i += backgroundChunkSize) {
+                if (currentRefill.abort) {
+                    IsQueueLoading.set(false);
+                    return;
+                }
+
+                const chunk = arr.slice(i, i + backgroundChunkSize);
+                remainingItems.push(...chunk);
+
+                // Small yield to keep main thread completely free for clicks/hover
+                await new Promise((resolve) => setTimeout(resolve, 20));
+            }
+
+            if (currentRefill.abort) {
+                IsQueueLoading.set(false);
+                return;
+            }
+
+            // SINGLE update at the end
+            NowPlayingQueue.update(q => [...q, ...remainingItems]);
+
+            // Ensure IsQueueLoading is turned off AFTER the DOM update
+            await tick(); // Wait for Svelte
+            IsQueueLoading.set(false);
+        })();
     }
 
     // keep this as purely a setting method
@@ -1135,11 +1212,15 @@ class Player {
     }
 
     #visualizerConnectAudio() {
-        let proxyMediaNode =
-            this.visualizerAudioContextProxy.createMediaElementSource(
-                this.currentPlayer.wavesurfer.getMediaElement(),
-            );
-        this.visualizer?.connectAudio(proxyMediaNode);
+        if (this.currentVisualizerSource) {
+            try {
+                this.currentVisualizerSource.disconnect();
+            } catch (e) { }
+        }
+
+        const stream = this.currentPlayer.streamDest.stream;
+        this.currentVisualizerSource = this.visualizerAudioContextProxy.createMediaStreamSource(stream);
+        this.visualizer?.connectAudio(this.currentVisualizerSource);
     }
 }
 

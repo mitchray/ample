@@ -110,6 +110,7 @@
                     displayMode="fullButtons"
                     showShuffle={items.length > 1}
                     data={{ songs: items }}
+                    tabulator={tabulator}
                 />
 
                 <MassRater bind:tabulator type="song" />
