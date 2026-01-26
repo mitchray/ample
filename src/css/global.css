@@ -1242,6 +1242,15 @@ sl-tab-panel[aria-hidden="true"] {
     display: flex;
 }
 
+/* swap icon and title if right aligned */
+#app .tabulator-col-title-holder:has(.tabulator-col-title[style*="right"]) {
+    flex-direction: row-reverse;
+}
+
+#app .tabulator-col-title[style*="right"] {
+    padding-right: 0 !important;
+}
+
 #app .tabulator-col-sorter {
     position: relative;
     color: inherit;
