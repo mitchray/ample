@@ -1,5 +1,6 @@
 <script>
     import { SiteContentBind } from "~/stores/elements.js";
+    import ContextualActionBar from "~/components/contextualActionBar.svelte";
     import Router from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
     import { fade } from "svelte/transition";
@@ -114,6 +115,7 @@
 </script>
 
 <div bind:this={$SiteContentBind} class="site-content">
+    <ContextualActionBar />
     {#key thisRoute}
         <div class="site-content-inner" in:fade>
             <Router

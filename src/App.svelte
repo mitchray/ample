@@ -141,17 +141,16 @@
         border-radius: 0 0 15px 15px;
         overflow: hidden;
         margin-block-end: var(--spacing-lg);
+        display: flex;
+        flex-direction: column;
     }
 
     :global(.site-content-inner) {
         --content-padding: var(--spacing-xxl);
         container-name: site-content-inner;
         container-type: size;
-        position: absolute;
-        inset-block-start: 0;
-        inset-inline-start: 0;
-        inset-inline-end: 0;
-        inset-block-end: 0;
+        flex: 1;
+        min-height: 0;
         overflow-y: auto;
         padding-block-start: var(--spacing-xl);
         padding-block-end: var(--spacing-xl);

@@ -2,6 +2,10 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
+    import {
+        setContextualActions,
+        clearContextualActions,
+    } from "~/stores/contextualActionBar.js";
     import Mine from "./mine.svelte";
     import All from "./all.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
@@ -28,6 +32,21 @@
     // default to mine tab
     $effect(() => {
         if (!params.section) replace(`#/playlists/mine`);
+    });
+
+    // register contextual bar actions for this page
+    $effect(() => {
+        if (!drawerEdit) return;
+        setContextualActions([
+            {
+                id: "new-playlist",
+                label: $_("text.new"),
+                icon: "add",
+                variant: "primary",
+                onClick: () => drawerEdit.show(),
+            },
+        ]);
+        return () => clearContextualActions();
     });
 </script>
 
