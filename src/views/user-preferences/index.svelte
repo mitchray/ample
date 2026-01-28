@@ -3,6 +3,11 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Theme from "~/views/user-preferences/_theme.svelte";
     import { replace } from "svelte-spa-router";
+    import {
+        updateContextualActions,
+        clearContextualActions,
+    } from "~/stores/contextualActionBar.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     let { params = {} } = $props();
 
@@ -13,6 +18,7 @@
     const amplePreferenceNames = new Set(["ajax_load"]);
     let rawPreferences = $state([]);
     let showAmpleOnly = $state(false);
+    let originalPreferences = $state(new Map()); // Store original values by preference name
 
     const filteredPrefsByCategory = $derived.by(() => {
         const list = showAmpleOnly
@@ -46,6 +52,114 @@
         return subcategoryMap;
     }
 
+    // Track if there are any changes
+    const hasChanges = $derived.by(() => {
+        for (const pref of rawPreferences) {
+            const original = originalPreferences.get(pref.name);
+            if (original === undefined) continue; // Not loaded yet
+
+            // Compare current value with original
+            if (pref.type === "boolean") {
+                const currentBool = parseInt(pref.value) === 1;
+                const originalBool = parseInt(original) === 1;
+                if (currentBool !== originalBool) return true;
+            } else {
+                if (String(pref.value) !== String(original)) return true;
+            }
+        }
+        return false;
+    });
+
+    // Update contextual action bar when changes occur
+    $effect(() => {
+        if (hasChanges) {
+            updateContextualActions([
+                {
+                    id: "save-preferences",
+                    label: $_("text.save"),
+                    icon: "save",
+                    variant: "primary",
+                    onClick: handleSavePreferences,
+                    visible: true,
+                },
+            ]);
+        } else {
+            updateContextualActions([
+                {
+                    id: "save-preferences",
+                    visible: false,
+                },
+            ]);
+        }
+    });
+
+    // Clean up contextual actions when component unmounts
+    $effect(() => {
+        return () => {
+            clearContextualActions();
+        };
+    });
+
+    async function handleSavePreferences() {
+        const changes = [];
+
+        // Collect all changed preferences
+        for (const pref of rawPreferences) {
+            const original = originalPreferences.get(pref.name);
+            if (original === undefined) continue;
+
+            let hasChanged = false;
+            let newValue = pref.value;
+
+            if (pref.type === "boolean") {
+                const currentBool = parseInt(pref.value) === 1;
+                const originalBool = parseInt(original) === 1;
+                hasChanged = currentBool !== originalBool;
+                newValue = currentBool ? "1" : "0";
+            } else {
+                hasChanged = String(pref.value) !== String(original);
+            }
+
+            if (hasChanged) {
+                changes.push({ name: pref.name, value: newValue });
+            }
+        }
+
+        if (changes.length === 0) return;
+
+        // Save all changes
+        try {
+            const promises = changes.map((change) =>
+                $API.preferenceEdit({
+                    filter: change.name,
+                    value: change.value,
+                }),
+            );
+
+            await Promise.all(promises);
+
+            // Update original preferences to reflect saved state
+            for (const change of changes) {
+                originalPreferences.set(change.name, change.value);
+                // Update the preference in rawPreferences to match saved value
+                const pref = rawPreferences.find((p) => p.name === change.name);
+                if (pref) {
+                    pref.value = change.value;
+                }
+            }
+
+            // Hide the save button
+            updateContextualActions([
+                {
+                    id: "save-preferences",
+                    visible: false,
+                },
+            ]);
+        } catch (error) {
+            errorHandler("while saving preferences", error);
+        }
+    }
+
     // default to interface tab
     $effect(() => {
         if (!params.section) replace(`#/user-preferences/interface`);
@@ -54,6 +168,12 @@
     $effect(async () => {
         const userPrefs = await $API.userPreferences();
         rawPreferences = userPrefs?.preference ?? [];
+
+        // Store original values
+        originalPreferences.clear();
+        for (const pref of rawPreferences) {
+            originalPreferences.set(pref.name, pref.value);
+        }
     });
 </script>
 
@@ -97,8 +217,13 @@
                             <!-- <label>{pref.name}</label> -->
                             {#if pref.type === "boolean"}
                                 <sl-checkbox
-                                    checked={pref.value}
+                                    checked={parseInt(pref.value) === 1}
                                     disabled={!pref.has_access || null}
+                                    onsl-change={(e) => {
+                                        pref.value = e.target.checked
+                                            ? "1"
+                                            : "0";
+                                    }}
                                 >
                                     {pref.description}
                                 </sl-checkbox>
@@ -107,6 +232,9 @@
                                     value={pref.value}
                                     label={pref.description}
                                     disabled={!pref.has_access || null}
+                                    onsl-input={(e) => {
+                                        pref.value = e.target.value;
+                                    }}
                                 ></sl-input>
                             {:else if pref.type === "integer"}
                                 <sl-input
@@ -114,12 +242,18 @@
                                     value={pref.value}
                                     label={pref.description}
                                     disabled={!pref.has_access || null}
+                                    onsl-input={(e) => {
+                                        pref.value = e.target.value;
+                                    }}
                                 ></sl-input>
                             {:else if pref.type === "special"}
                                 <sl-select
                                     value={pref.value}
                                     label={pref.description}
                                     disabled={!pref.has_access || null}
+                                    onsl-change={(e) => {
+                                        pref.value = e.target.value;
+                                    }}
                                 >
                                     {#if pref.values}
                                         {#each pref.values as optionValue}
