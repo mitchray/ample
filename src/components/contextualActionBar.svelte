@@ -25,6 +25,7 @@
                         : "default"}
                     size="small"
                     disabled={action.disabled === true}
+                    loading={action.loading === true}
                     onclick={() => handleClick(action)}
                 >
                     {#if action.icon}

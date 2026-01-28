@@ -8,6 +8,7 @@ import { writable } from "svelte/store";
  * @property {string} [icon] - Material Symbol name (e.g. 'add', 'play_arrow')
  * @property {() => void} onClick - Handler when the action is clicked
  * @property {boolean} [disabled=false] - Whether the button is disabled
+ * @property {boolean} [loading=false] - Whether the button shows a loading state
  * @property {'default'|'primary'} [variant='default'] - Button style variant
  * @property {boolean} [visible=true] - Whether this action is currently visible
  */
@@ -40,7 +41,7 @@ export function updateContextualActions(actionsToSet) {
         for (const a of actionsToSet || []) {
             const existing = byId.get(a.id) || {};
             // Merge into existing action so callers can "patch" properties
-            byId.set(a.id, { visible: true, ...existing, ...a });
+            byId.set(a.id, { visible: true, loading: false, ...existing, ...a });
         }
         return [...byId.values()];
     });

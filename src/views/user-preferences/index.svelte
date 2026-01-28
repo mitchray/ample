@@ -19,6 +19,7 @@
     let rawPreferences = $state([]);
     let showAmpleOnly = $state(false);
     let originalPreferences = $state(new Map()); // Store original values by preference name
+    let isSaving = $state(false);
 
     const filteredPrefsByCategory = $derived.by(() => {
         const list = showAmpleOnly
@@ -79,7 +80,8 @@
                 icon: "save",
                 variant: "primary",
                 onClick: handleSavePreferences,
-                disabled: !hasChanges,
+                disabled: !hasChanges || isSaving,
+                loading: isSaving,
                 visible: true,
             },
             {
@@ -131,6 +133,8 @@
 
         if (changes.length === 0) return;
 
+        isSaving = true;
+
         // Save all changes
         try {
             const promises = changes.map((change) =>
@@ -143,24 +147,20 @@
             await Promise.all(promises);
 
             // Update original preferences to reflect saved state
+            const updatedOriginals = new Map(originalPreferences);
             for (const change of changes) {
-                originalPreferences.set(change.name, change.value);
+                updatedOriginals.set(change.name, change.value);
                 // Update the preference in rawPreferences to match saved value
                 const pref = rawPreferences.find((p) => p.name === change.name);
                 if (pref) {
                     pref.value = change.value;
                 }
             }
-
-            // Ensure the save button remains visible but disabled after saving
-            updateContextualActions([
-                {
-                    id: "save-preferences",
-                    disabled: true,
-                },
-            ]);
+            originalPreferences = updatedOriginals;
         } catch (error) {
             errorHandler("while saving preferences", error);
+        } finally {
+            isSaving = false;
         }
     }
 
@@ -173,11 +173,12 @@
         const userPrefs = await $API.userPreferences();
         rawPreferences = userPrefs?.preference ?? [];
 
-        // Store original values
-        originalPreferences.clear();
+        // Store original values (create a new Map to trigger reactivity)
+        const initialOriginals = new Map();
         for (const pref of rawPreferences) {
-            originalPreferences.set(pref.name, pref.value);
+            initialOriginals.set(pref.name, pref.value);
         }
+        originalPreferences = initialOriginals;
     });
 </script>
 
