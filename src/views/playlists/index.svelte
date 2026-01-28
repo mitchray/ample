@@ -11,7 +11,6 @@
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import Visibility from "~/components/visibility.svelte";
     import { replace } from "svelte-spa-router";
-    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { params = {} } = $props();
 
@@ -40,7 +39,7 @@
         setContextualActions([
             {
                 id: "new-playlist",
-                label: $_("text.new"),
+                label: $_("text.newPlaylist"),
                 icon: "add",
                 variant: "primary",
                 onClick: () => drawerEdit.show(),
@@ -52,16 +51,6 @@
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
-
-    <sl-button
-        class="new-playlist-button"
-        onclick={() => drawerEdit.show()}
-        variant="primary"
-        size="small"
-    >
-        <MaterialSymbol name="add" slot="prefix" />
-        {$_("text.new")}
-    </sl-button>
 </div>
 
 <sl-tab-group onsl-tab-show={changeTab}>
