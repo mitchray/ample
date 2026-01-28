@@ -1,7 +1,6 @@
 <script>
     import { contextualActions } from "~/stores/contextualActionBar.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { fly } from "svelte/transition";
 
     const visibleActions = $derived(
         $contextualActions.filter((a) => a.visible !== false),
@@ -16,10 +15,7 @@
 </script>
 
 {#if hasActions}
-    <div
-        class="contextual-action-bar"
-        transition:fly={{ y: -8, duration: 150 }}
-    >
+    <div class="contextual-action-bar">
         <div class="contextual-action-bar__inner">
             {#each visibleActions as action (action.id)}
                 <sl-button
