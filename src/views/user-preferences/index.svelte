@@ -72,25 +72,29 @@
 
     // Update contextual action bar when changes occur
     $effect(() => {
-        if (hasChanges) {
-            updateContextualActions([
-                {
-                    id: "save-preferences",
-                    label: $_("text.save"),
-                    icon: "save",
-                    variant: "primary",
-                    onClick: handleSavePreferences,
-                    visible: true,
+        const actions = [
+            {
+                id: "save-preferences",
+                label: $_("text.save"),
+                icon: "save",
+                variant: "primary",
+                onClick: handleSavePreferences,
+                disabled: !hasChanges,
+                visible: true,
+            },
+            {
+                id: "toggle-ample-only",
+                label: showAmpleOnly
+                    ? "Show all settings"
+                    : "Hide unused settings",
+                onClick: () => {
+                    showAmpleOnly = !showAmpleOnly;
                 },
-            ]);
-        } else {
-            updateContextualActions([
-                {
-                    id: "save-preferences",
-                    visible: false,
-                },
-            ]);
-        }
+                visible: true,
+            },
+        ];
+
+        updateContextualActions(actions);
     });
 
     // Clean up contextual actions when component unmounts
@@ -148,11 +152,11 @@
                 }
             }
 
-            // Hide the save button
+            // Ensure the save button remains visible but disabled after saving
             updateContextualActions([
                 {
                     id: "save-preferences",
-                    visible: false,
+                    disabled: true,
                 },
             ]);
         } catch (error) {
@@ -179,15 +183,6 @@
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
-</div>
-
-<div class="filters-bar">
-    <sl-switch
-        checked={showAmpleOnly}
-        onsl-change={(event) => (showAmpleOnly = event.target.checked)}
-    >
-        Ample-specific preferences only
-    </sl-switch>
 </div>
 
 <sl-tab-group onsl-tab-show={changeTab}>
@@ -287,11 +282,6 @@
         display: flex;
         flex-direction: column;
         gap: var(--spacing-sm);
-    }
-
-    .filters-bar {
-        margin-block-end: var(--spacing-lg);
-        overflow-y: visible;
     }
 
     sl-input,

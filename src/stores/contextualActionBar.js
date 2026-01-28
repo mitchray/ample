@@ -38,7 +38,9 @@ export function updateContextualActions(actionsToSet) {
     contextualActions.update((current) => {
         const byId = new Map(current.map((a) => [a.id, a]));
         for (const a of actionsToSet || []) {
-            byId.set(a.id, { visible: true, ...a });
+            const existing = byId.get(a.id) || {};
+            // Merge into existing action so callers can "patch" properties
+            byId.set(a.id, { visible: true, ...existing, ...a });
         }
         return [...byId.values()];
     });
