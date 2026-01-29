@@ -1,4 +1,5 @@
 <script>
+    import "tabulator-tables/dist/css/tabulator.min.css";
     import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
     import {
         ampleVersion,

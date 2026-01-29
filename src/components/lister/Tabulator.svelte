@@ -1,5 +1,4 @@
 <script>
-    import "tabulator-tables/dist/css/tabulator.min.css";
     import { _ } from "@rgglez/svelte-i18n";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { onDestroy, onMount, tick } from "svelte";

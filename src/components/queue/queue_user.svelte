@@ -7,7 +7,7 @@
     } from "~/stores/state.js";
     import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
     import { Settings } from "~/stores/settings.js";
-    import QueueList from "~/components/queue/queue_list.svelte";
+    import QueueList from "~/components/queue/queue_list2.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
     import {

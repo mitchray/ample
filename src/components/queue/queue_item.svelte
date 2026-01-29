@@ -22,6 +22,15 @@
         matchesRating = !$MediaPlayer.isEligibleToPlay(media);
     }
 
+    async function handlePlay(uuid) {
+        if (queueType === "user") {
+            let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
+            if (index === -1) return;
+
+            $MediaPlayer.playSelected(index);
+        }
+    }
+
     async function handleRemoveItem(uuid) {
         if (queueType === "user") {
             let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
@@ -50,10 +59,10 @@
     }
 
     $effect(() => {
-        media, retest();
-        $Settings.SkipBelow.enabled, retest();
-        $Settings.SkipBelow.rating, retest();
-        $Settings.SkipBelow.allowZero, retest();
+        (media, retest());
+        ($Settings.SkipBelow.enabled, retest());
+        ($Settings.SkipBelow.rating, retest());
+        ($Settings.SkipBelow.allowZero, retest());
     });
 </script>
 
@@ -61,6 +70,10 @@
     class="queue-item"
     class:currentlyPlaying={$CurrentMedia?._id === media._id}
     class:matches-rating-threshold={matchesRating}
+    onclick={(e) => {
+        e.stopPropagation();
+        handlePlay(media._id);
+    }}
 >
     <sl-button
         class="remove"
@@ -73,7 +86,7 @@
         <MaterialSymbol name="close" />
     </sl-button>
 
-    <span class="thumb handle">
+    <span class="thumb">
         <Art
             data={media}
             radius="2px"
@@ -135,24 +148,9 @@
             displayMode="menu"
         />
     </sl-dropdown>
-
-    <div class="test">
-        <sl-rating value={media.rating}></sl-rating>
-    </div>
 </div>
 
 <style>
-    .test {
-        position: absolute;
-        pointer-events: none;
-        display: flex;
-        width: 100%;
-        justify-content: center;
-        /*background-color: red;*/
-        filter: grayscale(100%);
-        opacity: 0;
-    }
-
     .mini-rating {
         /*line-height: 3px;*/
         margin-block-start: 3px;
