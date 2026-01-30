@@ -29,12 +29,6 @@
     /** Skip next setData when update came from rowMoved to avoid redraw jank. */
     let skipNextSetData = false;
 
-    async function handleAction(e, index) {
-        if (queueType === "user") {
-            $MediaPlayer.playSelected(index);
-        }
-    }
-
     async function handlePlayNext(e, index) {
         let [item] = $JukeboxQueue.splice(index, 1);
         $MediaPlayer.playNext([item]);
