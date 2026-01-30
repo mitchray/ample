@@ -17,6 +17,7 @@
     import { onDestroy, onMount, tick, mount } from "svelte";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { throttle } from "lodash-es";
+    import { tabulatorStrings } from "~/logic/i18n.js";
 
     let { queueType, handleScroll } = $props();
 
@@ -63,6 +64,8 @@
             rowHeight: 46,
             movableRows: true,
             layout: "fitColumns",
+            locale: true,
+            langs: tabulatorStrings,
 
             rowFormatter: function (row) {
                 const element = row.getElement();
