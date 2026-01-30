@@ -1,4 +1,5 @@
 <script>
+    import { _ } from "@rgglez/svelte-i18n";
     import {
         CurrentMedia,
         NowPlayingIndex,
@@ -22,13 +23,31 @@
         matchesRating = !$MediaPlayer.isEligibleToPlay(media);
     }
 
-    async function handlePlay(uuid) {
+    async function handlePlayNow(uuid) {
         if (queueType === "user") {
             let index = $NowPlayingQueue.findIndex((item) => item._id === uuid);
             if (index === -1) return;
 
             $MediaPlayer.playSelected(index);
         }
+    }
+
+    async function handlePlayNext(uuid) {
+        let index = $JukeboxQueue.findIndex((item) => item._id === uuid);
+        if (index === -1) return;
+
+        let [item] = $JukeboxQueue.splice(index, 1);
+        $MediaPlayer.playNext([item]);
+        await updateQueue();
+    }
+
+    async function handlePlayLast(uuid) {
+        let index = $JukeboxQueue.findIndex((item) => item._id === uuid);
+        if (index === -1) return;
+
+        let [item] = $JukeboxQueue.splice(index, 1);
+        $MediaPlayer.playLast([item]);
+        await updateQueue();
     }
 
     async function handleRemoveItem(uuid) {
@@ -71,14 +90,31 @@
     class:currentlyPlaying={$CurrentMedia?._id === media._id}
     class:matches-rating-threshold={matchesRating}
     onclick={(e) => {
-        e.stopPropagation();
-        handlePlay(media._id);
+        handlePlayNow(media._id);
     }}
 >
+    {#if queueType === "jukebox"}
+        <div class="add-options">
+            <sl-button
+                onclick={(e) => {
+                    handlePlayNext(media._id);
+                }}
+                title={$_("text.playNext")}
+            >
+                <MaterialSymbol name="skip_next" slot="prefix" />
+            </sl-button>
+            <sl-button
+                onclick={(e) => handlePlayLast(media._id)}
+                title={$_("text.playLast")}
+            >
+                <MaterialSymbol name="add" slot="prefix" />
+            </sl-button>
+        </div>
+    {/if}
+
     <sl-button
         class="remove"
         onclick={(e) => {
-            e.stopPropagation();
             handleRemoveItem(media._id);
         }}
         variant="text"
@@ -215,5 +251,35 @@
         z-index: 1;
         opacity: 0.4;
         pointer-events: none;
+    }
+
+    .add-options {
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        gap: var(--spacing-md);
+        position: absolute;
+        inset: 0;
+        inset-inline-start: var(--spacing-xl);
+        inset-inline-end: var(--spacing-xxxl);
+        padding-inline-end: var(--spacing-md);
+        z-index: 10;
+        opacity: 0;
+        pointer-events: none;
+    }
+
+    .add-options:after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background-color: var(--color-background);
+        mask-image: linear-gradient(to right, transparent 30%, black 60%);
+        z-index: -1;
+    }
+
+    .queue-item:hover .add-options {
+        opacity: 1;
+        pointer-events: auto;
     }
 </style>
