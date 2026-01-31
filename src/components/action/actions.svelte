@@ -90,7 +90,7 @@
                 final = await getSongsFromArtist(item?.id);
                 break;
             case "artists":
-                response = await getSongsFromArtists(data.artists());
+                response = await getSongsFromArtists(data.getArtists());
                 final = response.song;
                 break;
             case "artistAlpha":
@@ -107,7 +107,7 @@
                 final = response.song;
                 break;
             case "albums":
-                response = await getSongsFromAlbums(data.albums());
+                response = await getSongsFromAlbums(data.getAlbums());
                 final = response; // no .song here
                 break;
             case "albumGenre":
@@ -127,7 +127,7 @@
                 break;
             case "songs":
             case "playlist_songs":
-                final = data.songs();
+                final = data.getSongs();
                 break;
             case "playlist":
             case "smartlist":
@@ -151,7 +151,7 @@
                 final = response.song;
                 break;
             case "playlists":
-                response = await getSongsFromPlaylists(data.playlists());
+                response = await getSongsFromPlaylists(data.getPlaylists());
                 final = response; // no .song here
                 break;
             case "year":

@@ -109,7 +109,7 @@
                     type="songs"
                     displayMode="fullButtons"
                     showShuffle={items.length > 1}
-                    data={{ songs: () => tabulator.getData("active") }}
+                    data={{ getSongs: () => tabulator.getData("active") }}
                 />
 
                 <MassRater bind:tabulator type="song" />

@@ -21,7 +21,7 @@
                 id={albumID}
                 displayMode="miniButtons"
                 showShuffle={tracks.length > 1}
-                data={{ songs: () => tabulator.getData("active") }}
+                data={{ getSongs: () => tabulator.getData("active") }}
             />
         {/if}
         <MassRater bind:tabulator type="song" />
