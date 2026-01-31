@@ -141,4 +141,9 @@
     .url sl-input {
         flex-grow: 1;
     }
+
+    sl-qr-code::part(base) {
+        padding: var(--spacing-md);
+        background-color: white;
+    }
 </style>
