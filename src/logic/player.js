@@ -13,6 +13,7 @@ import {
 import {
     debugHelper,
     errorHandler,
+    prepareForQueue,
     shuffleArray,
     trimCache,
     truncateDecimals,
@@ -628,6 +629,20 @@ class Player {
      * @param {object} items
      */
     playNow(items) {
+        items = prepareForQueue(items);
+        this.clearAll();
+        this.#setQueueItems(items).then(() => {
+            this.start();
+        });
+    }
+
+    /**
+     * Replace queue with selected items, shuffled
+     * @param {object} items
+     */
+    shuffleNow(items) {
+        items = prepareForQueue(items);
+        items = shuffleArray(items);
         this.clearAll();
         this.#setQueueItems(items).then(() => {
             this.start();
@@ -639,6 +654,7 @@ class Player {
      * @param {object} items
      */
     playNext(items) {
+        items = prepareForQueue(items);
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
         tempArray.splice(this.nowPlayingIndex + 1, 0, ...items);
@@ -655,6 +671,7 @@ class Player {
      * @param {object} items
      */
     playLast(items) {
+        items = prepareForQueue(items);
         let tempArray = get(NowPlayingQueue);
         let queueLength = tempArray.length;
         tempArray.push(...items);
@@ -671,6 +688,7 @@ class Player {
      * @param {object} items
      */
     jukeboxPlayLast(items) {
+        items = prepareForQueue(items);
         let tempArray = get(JukeboxQueue);
         tempArray.push(...items);
         this.#setJukeboxQueueItems(tempArray);

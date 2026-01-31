@@ -18,7 +18,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists,
     } from "~/logic/song.js";
-    import { errorHandler, prepareForQueue } from "~/logic/helper.js";
+    import { errorHandler } from "~/logic/helper.js";
     import { writable } from "svelte/store";
     import Actions from "~/components/action/actions.svelte";
     import ActionPlay from "./items/actionPlay.svelte";
@@ -89,9 +89,7 @@
                 final = await getSongsFromArtist(item?.id);
                 break;
             case "artists":
-                response = await getSongsFromArtists(
-                    sampleSize(data.artists, 100),
-                );
+                response = await getSongsFromArtists(data.artists());
                 final = response.song;
                 break;
             case "artistAlpha":
@@ -108,9 +106,7 @@
                 final = response.song;
                 break;
             case "albums":
-                response = await getSongsFromAlbums(
-                    sampleSize(data.albums, 100),
-                );
+                response = await getSongsFromAlbums(data.albums());
                 final = response; // no .song here
                 break;
             case "albumGenre":
@@ -122,12 +118,15 @@
                 final = response.song;
                 break;
             case "song":
-            case "playlist_songs":
                 final = await $API.song({ filter: item?.id });
                 break;
             case "songGenre":
                 response = await getSomeSongsByGenre(data.id);
                 final = response.song;
+                break;
+            case "songs":
+            case "playlist_songs":
+                final = data.songs();
                 break;
             case "playlist":
             case "smartlist":
@@ -151,8 +150,8 @@
                 final = response.song;
                 break;
             case "playlists":
-                response = await getSongsFromPlaylists(data.playlists);
-                final = response.song;
+                response = await getSongsFromPlaylists(data.playlists());
+                final = response; // no .song here
                 break;
             case "year":
                 response = await getSongsByYear(data.from, data.to);
@@ -189,17 +188,7 @@
      * @returns Promise<array>
      */
     async function doFetch() {
-        let songSubset = data.songs;
-
-        if (songSubset?.length > playLimit) {
-            addAlert({
-                title: $_("text.limitedItems", { values: { n: playLimit } }),
-                style: "info",
-            });
-            songSubset = sampleSize(data.songs, playLimit);
-        }
-
-        let result = data.songs ? songSubset : await determineFetchURL();
+        let result = await determineFetchURL();
 
         if (result.error) {
             errorHandler("determining fetch URL", result.error);
@@ -225,7 +214,7 @@
             );
         }
 
-        return prepareForQueue(result);
+        return result;
     }
 </script>
 

@@ -44,11 +44,10 @@
         position: sticky;
         top: 0;
         z-index: 2;
-        padding-block: var(--spacing-sm) var(--spacing-md);
-        padding-inline: var(--spacing-lg);
+        align-content: center;
+        padding-inline: var(--spacing-md);
         background: var(--color-surface-container);
-        border-block-end: 1px solid var(--color-outline-variant);
-        box-shadow: 0 2px 8px rgb(0 0 0 / 0.06);
+        height: 36px;
     }
 
     .contextual-action-bar__inner {

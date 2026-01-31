@@ -19,7 +19,7 @@
             <Actions
                 type="album"
                 id={albumID}
-                displayMode="fullButtons"
+                displayMode="miniButtons"
                 showShuffle={tracks.length > 1}
                 data={{ songs: tracks }}
             />

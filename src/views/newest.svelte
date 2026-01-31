@@ -47,10 +47,12 @@
         <div class="lister-tabulator">
             <div class="lister-tabulator__actions">
                 <Actions
-                    type="songs"
+                    type="albums"
                     displayMode="fullButtons"
                     showShuffle={albums.length > 1}
-                    data={Object.create({ albums: albums })}
+                    data={{
+                        albums: () => tabulator.getData("active"),
+                    }}
                 />
 
                 <MassRater bind:tabulator type="song" />

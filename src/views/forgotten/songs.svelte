@@ -58,7 +58,7 @@
             type="songs"
             displayMode="fullButtons"
             showShuffle={true}
-            data={Object.create({ songs: songs })}
+            data={{ songs: () => tabulator.getData("active") }}
         />
 
         <MassRater bind:tabulator type="song" />

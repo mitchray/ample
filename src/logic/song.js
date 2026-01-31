@@ -60,6 +60,8 @@ export async function getSongsFromPlaylists(playlists) {
 
     allResults = await Promise.all([...promises]);
 
+    allResults = allResults.map((group) => group.song);
+
     return allResults.flat();
 }
 

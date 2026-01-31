@@ -2,7 +2,6 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { getContext } from "svelte";
     import { MediaPlayer } from "~/stores/elements.js";
-    import { shuffleArray } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { contextKey } = $props();
@@ -14,8 +13,7 @@
     async function handleAction() {
         loading = true;
         let songs = await getSongs();
-        songs = shuffleArray(songs);
-        $MediaPlayer.playNow(songs);
+        $MediaPlayer.shuffleNow(songs);
         loading = false;
     }
 </script>

@@ -12,11 +12,7 @@
         User,
     } from "~/stores/state.js";
     import { MediaPlayer, QueuePanelBind } from "~/stores/elements.js";
-    import {
-        debugHelper,
-        errorHandler,
-        prepareForQueue,
-    } from "~/logic/helper.js";
+    import { debugHelper, errorHandler } from "~/logic/helper.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
@@ -82,9 +78,7 @@
                             let result = response.song || [response];
 
                             if (result.length > 0 && shouldRefillJukebox) {
-                                $MediaPlayer.jukeboxPlayLast(
-                                    prepareForQueue(result),
-                                );
+                                $MediaPlayer.jukeboxPlayLast(result);
                             }
                             resolve();
                         })

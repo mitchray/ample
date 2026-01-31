@@ -40,7 +40,7 @@
                         type="songs"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ songs: results }}
+                        data={{ songs: () => tabulator.getData("active") }}
                     />
 
                     <MassRater bind:tabulator type="song" />
@@ -64,7 +64,7 @@
                         type="albums"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ albums: results }}
+                        data={{ albums: () => tabulator.getData("active") }}
                     />
 
                     <MassRater bind:tabulator type="album" />
@@ -88,7 +88,7 @@
                         type="artists"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ artists: results }}
+                        data={{ artists: () => tabulator.getData("active") }}
                     />
 
                     <MassRater bind:tabulator type="artist" />
@@ -112,7 +112,7 @@
                         type="playlists"
                         displayMode="fullButtons"
                         showShuffle={true}
-                        data={{ playlists: results }}
+                        data={{ playlists: () => tabulator.getData("active") }}
                     />
 
                     <MassRater bind:tabulator type="playlist" />

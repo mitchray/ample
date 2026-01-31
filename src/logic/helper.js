@@ -5,6 +5,7 @@ import { debugMode, Server } from "~/stores/state.js";
 import { Settings } from "~/stores/settings";
 import { v4 as uuidv4 } from "uuid";
 import JsSHA from "jssha/dist/sha1";
+import { Tabulator } from "tabulator-tables";
 
 let debugEnabled = get(debugMode);
 
@@ -252,4 +253,14 @@ export function clearCache() {
             }
         }
     });
+}
+
+export function getAllTabulatorsData() {
+    let items = [];
+    let tabulators = Tabulator.findTable(".site-content .tabulator");
+    tabulators.forEach((tab) => {
+        let tabData = tab.getData("active");
+        items.push(...tabData);
+    });
+    return items;
 }
