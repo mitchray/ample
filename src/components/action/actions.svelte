@@ -24,6 +24,7 @@
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
     import ActionPlayLast from "./items/actionPlayLast.svelte";
+    import ActionPlayFromHere from "./items/actionPlayFromHere.svelte";
     import ActionShuffle from "./items/actionShuffle.svelte";
     import ActionShuffleNext from "./items/actionShuffleNext.svelte";
     import ActionShuffleLast from "./items/actionShuffleLast.svelte";
@@ -313,6 +314,10 @@
         {#if type === "playlist"}
             <ActionEditPlaylist {contextKey} />
             <ActionDeletePlaylist {contextKey} />
+        {/if}
+
+        {#if type === "song"}
+            <ActionPlayFromHere {contextKey} />
         {/if}
 
         {#if type === "song"}

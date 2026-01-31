@@ -17,11 +17,11 @@
     <div class="lister-tabulator__actions">
         {#if disks.length > 1}
             <Actions
-                type="album"
+                type="songs"
                 id={albumID}
                 displayMode="miniButtons"
                 showShuffle={tracks.length > 1}
-                data={{ songs: tracks }}
+                data={{ songs: () => tabulator.getData("active") }}
             />
         {/if}
         <MassRater bind:tabulator type="song" />

@@ -621,6 +621,7 @@ export let songsPreset = [
                                 ? data.albumartist
                                 : null,
                             playlist: null,
+                            allSongs: () => cell.getTable().getData("active"),
                         }),
                     },
                 });
@@ -690,6 +691,7 @@ export let albumPreset = [
                                 ? data.albumartist
                                 : null,
                             playlist: null,
+                            allSongs: () => cell.getTable().getData("active"),
                         }),
                     },
                 });
