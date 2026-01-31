@@ -70,7 +70,7 @@
 
                 if (apiCall) {
                     apiCall
-                        .then((response) => {
+                        .then(async (response) => {
                             if (response.error) {
                                 errorHandler(
                                     "getting items for queue refill",
@@ -82,9 +82,8 @@
                             let result = response.song || [response];
 
                             if (result.length > 0 && shouldRefillJukebox) {
-                                $MediaPlayer.jukeboxPlayLast(
-                                    prepareForQueue(result),
-                                );
+                                const prepared = await prepareForQueue(result);
+                                $MediaPlayer.jukeboxPlayLast(prepared);
                             }
                             resolve();
                         })

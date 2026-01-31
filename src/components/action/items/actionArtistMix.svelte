@@ -27,7 +27,7 @@
             type: "artist_mix",
         });
 
-        songs = prepareForQueue(songs);
+        songs = await prepareForQueue(songs);
 
         $MediaPlayer.playNow(songs);
         loading = false;

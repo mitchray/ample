@@ -141,6 +141,7 @@
                                         displayMode="fullButtons"
                                         showShuffle={disk.songs.length > 1}
                                         data={{ songs: disk.songs }}
+                                        tabulator={tabulator}
                                     />
                                 {/if}
 

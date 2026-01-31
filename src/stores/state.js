@@ -28,6 +28,7 @@ export let JukeboxQueue = writable([]);
 export let NowPlayingQueue = writable([]);
 export let NowPlayingIndex = writable(0);
 export let IsPlaying = writable(false);
+export let IsQueueLoading = writable(false);
 export let IsMuted = writable(false);
 export let TimeToggled = writable(false);
 export let PlaybackSpeed = writable(1.0);
