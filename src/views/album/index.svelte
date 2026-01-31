@@ -11,13 +11,7 @@
     import AlbumsAround from "~/components/album/albumsAround.svelte";
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
-    import { errorHandler, getAllTabulatorsData } from "~/logic/helper.js";
-    import {
-        setContextualActions,
-        clearContextualActions,
-        updateContextualActions,
-    } from "~/stores/contextualActionBar.js";
-    import { MediaPlayer } from "~/stores/elements.js";
+    import { errorHandler } from "~/logic/helper.js";
 
     let { params = {} } = $props();
 
@@ -41,67 +35,6 @@
 
     $effect(() => {
         $PageTitle = album?.name || $_("text.album");
-    });
-
-    // register contextual bar actions for this page
-    $effect(() => {
-        const actions = [
-            {
-                id: "play-album",
-                label: $_("text.play"),
-                icon: "play_arrow",
-                variant: "primary",
-                onClick: () => {
-                    let items = getAllTabulatorsData();
-                    $MediaPlayer.playNow(items);
-                },
-            },
-            {
-                id: "shuffle-album",
-                label: $_("text.shuffle"),
-                icon: "shuffle",
-                variant: "default",
-                visible: album?.songcount > 1,
-                onClick: () => {
-                    let items = getAllTabulatorsData();
-                    $MediaPlayer.shuffleNow(items);
-                },
-            },
-            {
-                id: "play-next-album",
-                label: $_("text.playNext"),
-                icon: "skip_next",
-                variant: "default",
-                onClick: () => {
-                    let items = getAllTabulatorsData();
-                    $MediaPlayer.playNext(items);
-                },
-            },
-            {
-                id: "play-last-album",
-                label: $_("text.playLast"),
-                icon: "add",
-                variant: "default",
-                onClick: () => {
-                    let items = getAllTabulatorsData();
-                    $MediaPlayer.playLast(items);
-                },
-            },
-            {
-                id: "more-options-album",
-                label: null,
-                icon: "more_horiz",
-                variant: "default",
-                onClick: () => {
-                    // TODO
-                    alert("todo");
-                },
-            },
-        ];
-
-        updateContextualActions(actions);
-
-        return () => clearContextualActions();
     });
 </script>
 

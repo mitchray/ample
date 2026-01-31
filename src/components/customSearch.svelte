@@ -4,10 +4,6 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { untrack } from "svelte";
-    import {
-        setContextualActions,
-        clearContextualActions,
-    } from "~/stores/contextualActionBar.js";
 
     let {
         loading = $bindable(),
@@ -257,34 +253,6 @@
     // get highest existing id, or start at 1
     $effect(() => {
         rowCounter = rows.length ? Math.max(...rows.map((t) => t.id)) + 1 : 1;
-    });
-
-    // Register actions in the contextual action bar
-    $effect(() => {
-        setContextualActions([
-            {
-                id: "advanced-search",
-                label: $_("text.search"),
-                icon: "search",
-                variant: "primary",
-                onClick: () => {
-                    search();
-                },
-            },
-            {
-                id: "advanced-search-add-rule",
-                label: $_("text.searchAddRule"),
-                icon: "add",
-                variant: "default",
-                onClick: () => {
-                    addNewRow();
-                },
-            },
-        ]);
-
-        return () => {
-            clearContextualActions();
-        };
     });
 </script>
 
@@ -647,9 +615,20 @@
                 </sl-button>
             </div>
         {/each}
+
+        <sl-button onclick={addNewRow} variant="primary">
+            <MaterialSymbol name="add" slot="prefix" />
+            {$_("text.searchAddRule")}
+        </sl-button>
     </div>
 
     <sl-divider></sl-divider>
+
+    <div class="actions">
+        <sl-button onclick={search} variant="primary">
+            {$_("text.search")}
+        </sl-button>
+    </div>
 </div>
 
 <style>

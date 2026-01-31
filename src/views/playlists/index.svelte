@@ -2,15 +2,12 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
-    import {
-        setContextualActions,
-        clearContextualActions,
-    } from "~/stores/contextualActionBar.js";
     import Mine from "./mine.svelte";
     import All from "./all.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import Visibility from "~/components/visibility.svelte";
     import { replace } from "svelte-spa-router";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { params = {} } = $props();
 
@@ -32,25 +29,20 @@
     $effect(() => {
         if (!params.section) replace(`#/playlists/mine`);
     });
-
-    // register contextual bar actions for this page
-    $effect(() => {
-        if (!drawerEdit) return;
-        setContextualActions([
-            {
-                id: "new-playlist",
-                label: $_("text.newPlaylist"),
-                icon: "add",
-                variant: "primary",
-                onClick: () => drawerEdit.show(),
-            },
-        ]);
-        return () => clearContextualActions();
-    });
 </script>
 
 <div class="page-header">
     <h1 class="page-title">{title}</h1>
+
+    <sl-button
+        class="new-playlist-button"
+        onclick={() => drawerEdit.show()}
+        variant="primary"
+        size="small"
+    >
+        <MaterialSymbol name="add" slot="prefix" />
+        {$_("text.new")}
+    </sl-button>
 </div>
 
 <sl-tab-group onsl-tab-show={changeTab}>
