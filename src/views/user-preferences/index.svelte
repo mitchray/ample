@@ -97,13 +97,8 @@
         ];
 
         updateContextualActions(actions);
-    });
 
-    // Clean up contextual actions when component unmounts
-    $effect(() => {
-        return () => {
-            clearContextualActions();
-        };
+        return () => clearContextualActions();
     });
 
     async function handleSavePreferences() {
