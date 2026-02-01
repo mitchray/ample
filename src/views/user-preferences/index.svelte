@@ -88,7 +88,7 @@
                 id: "toggle-ample-only",
                 label: showAmpleOnly
                     ? "Show all settings"
-                    : "Hide unused settings",
+                    : "Hide settings not used by Ample",
                 onClick: () => {
                     showAmpleOnly = !showAmpleOnly;
                 },
