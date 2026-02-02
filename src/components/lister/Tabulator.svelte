@@ -6,6 +6,11 @@
     import { ColumnDefaults } from "~/components/lister/columns.js";
     import { tabulatorStrings } from "~/logic/i18n.js";
     import { SiteContentBind } from "~/stores/elements.js";
+    import {
+        setTableSelection,
+        clearTableSelection,
+        clearSelectionTrigger,
+    } from "~/stores/selectedTabulatorRows.js";
 
     let {
         data = $bindable(),
@@ -15,6 +20,8 @@
         tableElement = $bindable(),
     } = $props();
 
+    let tableId;
+
     function centreOnTable() {
         tableElement?.scrollIntoView({
             block: "start",
@@ -23,7 +30,15 @@
         });
     }
 
+    // when triggered, select rows
+    $effect(() => {
+        if ($clearSelectionTrigger) {
+            tabulator?.deselectRow();
+        }
+    });
+
     onMount(async () => {
+        tableId = options?.id ?? `tabulator-${crypto.randomUUID()}`;
         await tick();
         tabulator = new Tabulator(tableElement, {
             columnDefaults: ColumnDefaults,
@@ -77,12 +92,25 @@
                 row.normalizeHeight();
             });
         });
+
+        tabulator.on("rowSelectionChanged", (data) => {
+            setTableSelection(tableId, data);
+        });
+
+        tabulator.on("rowDeleted", (row) => {
+            // simple deselect everything in the table
+            tabulator?.deselectRow();
+        });
     });
 
     onDestroy(() => {
         tabulator?.off("scrollVertical");
         tabulator?.off("columnResized");
-        // tabulator?.setData([]);
+        tabulator?.off("rowSelectionChanged");
+        tabulator?.off("rowDeleted");
+        if (tableId != null) {
+            clearTableSelection(tableId);
+        }
         tabulator = null;
     });
 </script>

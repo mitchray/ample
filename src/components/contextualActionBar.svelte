@@ -1,11 +1,19 @@
 <script>
+    import { _ } from "@rgglez/svelte-i18n";
     import { contextualActions } from "~/stores/contextualActionBar.js";
+    import {
+        selectedTabulatorRowsFlat,
+        getSelectedRows,
+        clearAllSelections,
+    } from "~/stores/selectedTabulatorRows.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import Actions from "~/components/action/actions.svelte";
 
     const visibleActions = $derived(
         $contextualActions.filter((a) => a.visible !== false),
     );
-    const hasActions = $derived(visibleActions.length > 0);
+    const selectedCount = $derived($selectedTabulatorRowsFlat.length);
+    const hasActions = $derived(visibleActions.length > 0 || selectedCount > 0);
 
     function handleClick(action) {
         if (!action.disabled && typeof action.onClick === "function") {
@@ -17,6 +25,20 @@
 {#if hasActions}
     <div class="contextual-action-bar">
         <div class="contextual-action-bar__inner">
+            {#if selectedCount > 0}
+                <span>{$_("text.selected")}:</span>
+
+                <Actions
+                    type="songs"
+                    displayMode="miniButtons"
+                    data={{ getSongs: () => getSelectedRows() }}
+                    showShuffle={selectedCount >= 2}
+                />
+
+                <sl-button size="small" onclick={clearAllSelections}>
+                    {$_("text.reset")}
+                </sl-button>
+            {/if}
             {#each visibleActions as action (action.id)}
                 <sl-button
                     class="contextual-action-bar__btn"

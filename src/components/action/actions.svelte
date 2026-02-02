@@ -66,6 +66,10 @@
     let _showShuffle = writable(showShuffle);
     let _data = writable(data);
 
+    $effect(() => {
+        _showShuffle.set(showShuffle);
+    });
+
     setContext(contextKey, {
         _item,
         _type,
