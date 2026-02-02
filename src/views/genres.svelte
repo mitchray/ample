@@ -49,6 +49,7 @@
                 bind:tabulator
                 data={genres}
                 columns={genresPreset}
+                type="genres"
                 options={{ layout: "fitDataFill", persistenceID: "genres" }}
             ></Tabulator>
         </div>

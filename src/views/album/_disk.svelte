@@ -31,6 +31,7 @@
         bind:tabulator
         data={tracks}
         columns={albumPreset}
+        type="songs"
         options={{
             persistenceID: "album",
         }}

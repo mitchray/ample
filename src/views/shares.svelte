@@ -48,6 +48,7 @@
                 bind:tabulator
                 data={shares}
                 columns={sharesPreset}
+                type="shares"
                 options={{ id: "shares", persistenceID: "shares" }}
             ></Tabulator>
         </div>

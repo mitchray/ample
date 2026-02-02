@@ -48,6 +48,7 @@
             bind:tabulator
             data={songs}
             columns={[track, ...songsPreset]}
+            type="songs"
             options={{ persistence: true, persistenceID: "SongsArtistAll" }}
         ></Tabulator>
     </div>

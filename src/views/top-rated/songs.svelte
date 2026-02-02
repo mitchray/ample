@@ -69,6 +69,7 @@
         bind:tabulator
         data={[]}
         columns={songsPreset}
+        type="songs"
         options={{
             persistenceID: "songs",
         }}

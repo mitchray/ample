@@ -47,6 +47,7 @@
                 bind:tabulator
                 data={liveStreams}
                 columns={liveStreamsPreset}
+                type="live_streams"
                 options={{ persistenceID: "livestreams" }}
             ></Tabulator>
         </div>

@@ -92,6 +92,7 @@
                         bind:tabulator
                         data={episodes}
                         columns={podcastEpisodesPreset}
+                        type="podcast_episodes"
                         options={{ persistenceID: "podcast" }}
                     ></Tabulator>
                 </div>

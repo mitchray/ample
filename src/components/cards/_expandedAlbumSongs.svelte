@@ -154,6 +154,7 @@
                                     ? disk.songsByArtist
                                     : disk.songs}
                                 columns={albumPreset}
+                                type="songs"
                                 options={{
                                     rowFormatter: function (row) {
                                         if (

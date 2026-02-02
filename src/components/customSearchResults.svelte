@@ -50,6 +50,7 @@
                     bind:tabulator
                     bind:data={results}
                     columns={songsPreset}
+                    type="songs"
                     options={{
                         persistenceID: "songs",
                     }}
@@ -74,6 +75,7 @@
                     bind:tabulator
                     bind:data={results}
                     columns={albumsPreset}
+                    type="albums"
                     options={{
                         persistenceID: "albums",
                     }}
@@ -100,6 +102,7 @@
                     bind:tabulator
                     bind:data={results}
                     columns={artistsPreset}
+                    type="artists"
                     options={{
                         persistenceID: "artists",
                     }}
@@ -126,6 +129,7 @@
                     bind:tabulator
                     bind:data={results}
                     columns={playlistsPreset}
+                    type="playlists"
                     options={{
                         persistenceID: "playlists",
                     }}
@@ -139,6 +143,7 @@
                     bind:tabulator
                     bind:data={results}
                     columns={genresPreset}
+                    type="genres"
                     options={{
                         layout: "fitDataFill",
                     }}

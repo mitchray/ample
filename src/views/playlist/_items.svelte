@@ -127,6 +127,7 @@
                 bind:tabulator
                 data={items}
                 {columns}
+                type="songs"
                 options={{
                     movableRows: true,
                     persistenceID: "playlist",

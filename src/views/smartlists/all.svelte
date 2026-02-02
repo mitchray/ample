@@ -47,6 +47,7 @@
                 bind:tabulator
                 data={smartlists}
                 columns={smartlistsPreset}
+                type="smartlists"
                 options={{ persistenceID: "smartlists" }}
             ></Tabulator>
         </div>

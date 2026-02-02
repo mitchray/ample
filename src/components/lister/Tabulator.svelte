@@ -16,6 +16,7 @@
         data = $bindable(),
         columns,
         options = {},
+        type,
         tabulator = $bindable(),
         tableElement = $bindable(),
     } = $props();
@@ -38,7 +39,7 @@
     });
 
     onMount(async () => {
-        tableId = options?.id ?? `tabulator-${crypto.randomUUID()}`;
+        tableId = options?.id ?? `tabulator-${crypto.randomUUID()}`; // TODO no crypto
         await tick();
         tabulator = new Tabulator(tableElement, {
             columnDefaults: ColumnDefaults,
@@ -94,6 +95,11 @@
         });
 
         tabulator.on("rowSelectionChanged", (data) => {
+            // before adding selected row, pass the object type so Context Actions know how to treat it
+            data = data.map((item) => ({
+                ...item,
+                _tabulatorType: type,
+            }));
             setTableSelection(tableId, data);
         });
 

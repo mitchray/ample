@@ -50,6 +50,7 @@
         bind:tabulator
         data={[]}
         columns={albumsPreset}
+        type="albums"
         options={{
             persistenceID: "albums",
         }}

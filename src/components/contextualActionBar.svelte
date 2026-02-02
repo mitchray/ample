@@ -14,6 +14,7 @@
     );
     const selectedCount = $derived($selectedTabulatorRowsFlat.length);
     const hasActions = $derived(visibleActions.length > 0 || selectedCount > 0);
+    const firstItem = $derived($selectedTabulatorRowsFlat[0] || {});
 
     function handleClick(action) {
         if (!action.disabled && typeof action.onClick === "function") {
@@ -29,15 +30,22 @@
                 <span>{$_("text.selected")}:</span>
 
                 <Actions
-                    type="songs"
+                    type={firstItem?._tabulatorType || "songs"}
                     displayMode="miniButtons"
-                    data={{ getSongs: () => getSelectedRows() }}
+                    data={{
+                        getSongs: () => getSelectedRows(),
+                        getArtists: () => getSelectedRows(),
+                        getAlbums: () => getSelectedRows(),
+                        getPlaylists: () => getSelectedRows(),
+                    }}
                     showShuffle={selectedCount >= 2}
                 />
 
                 <sl-button size="small" onclick={clearAllSelections}>
                     {$_("text.reset")}
                 </sl-button>
+
+                <sl-divider vertical></sl-divider>
             {/if}
             {#each visibleActions as action (action.id)}
                 <sl-button

@@ -83,6 +83,7 @@
                     bind:tabulator
                     data={items}
                     columns={artistsPreset}
+                    type="artists"
                     options={{
                         persistenceID: "artists",
                     }}
@@ -107,6 +108,7 @@
                     bind:tabulator
                     data={items}
                     columns={albumsPreset}
+                    type="albums"
                     options={{
                         persistenceID: "albums",
                     }}
@@ -131,6 +133,7 @@
                     bind:tabulator
                     data={items}
                     columns={songsPreset}
+                    type="songs"
                     options={{
                         persistenceID: "songs",
                     }}
