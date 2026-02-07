@@ -230,7 +230,20 @@
 </script>
 
 <div class="header panel-header">
-    <h4 onclick={() => expandPanel()}>Jukebox</h4>
+    <div
+        class="header-title"
+        role="button"
+        tabindex="0"
+        onclick={() => expandPanel()}
+        onkeydown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                expandPanel();
+            }
+        }}
+    >
+        <h4>Jukebox</h4>
+    </div>
 
     <sl-switch
         checked={$Settings.QueueRefill.enabled}
@@ -308,7 +321,12 @@
         top: 2px;
     }
 
-    .header h4 {
+    .header-title {
+        display: contents;
+        cursor: pointer;
+    }
+
+    .header-title h4 {
         cursor: pointer;
     }
 </style>

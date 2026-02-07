@@ -61,7 +61,20 @@
 </script>
 
 <div class="header panel-header">
-    <h4 onclick={() => expandPanel()}>{$_("text.queue")}</h4>
+    <div
+        class="header-title"
+        role="button"
+        tabindex="0"
+        onclick={() => expandPanel()}
+        onkeydown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                expandPanel();
+            }
+        }}
+    >
+        <h4>{$_("text.queue")}</h4>
+    </div>
 
     <sl-button-group>
         <sl-button
@@ -125,7 +138,12 @@
         top: 1px;
     }
 
-    .header h4 {
+    .header-title {
+        display: contents;
+        cursor: pointer;
+    }
+
+    .header-title h4 {
         cursor: pointer;
     }
 </style>
