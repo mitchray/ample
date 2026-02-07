@@ -42,7 +42,7 @@
                 />
 
                 <sl-button size="small" onclick={clearAllSelections}>
-                    {$_("text.reset")}
+                    {$_("text.clearAll")}
                 </sl-button>
 
                 <sl-divider vertical></sl-divider>

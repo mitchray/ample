@@ -320,15 +320,15 @@
             <ActionDeletePlaylist {contextKey} />
         {/if}
 
-        {#if type === "song"}
+        {#if type === "song" && item}
             <ActionPlayFromHere {contextKey} />
         {/if}
 
-        {#if type === "song"}
+        {#if type === "song" && item}
             <ActionArtistMix {contextKey} />
         {/if}
 
-        {#if type === "song" || type === "album" || type === "artist" || type === "playlist" || type === "podcast" || type === "podcast_episode" || type === "video"}
+        {#if item && (type === "song" || type === "album" || type === "artist" || type === "playlist" || type === "podcast" || type === "podcast_episode" || type === "video")}
             <ActionShareCreate {contextKey} />
         {/if}
 
@@ -350,7 +350,7 @@
             <ActionDownload {contextKey} />
         {/if}
 
-        {#if type === "song"}
+        {#if type === "song" && item}
             <ActionFindDuplicates {item} />
         {/if}
     </sl-menu>

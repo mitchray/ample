@@ -3,6 +3,7 @@
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { onDestroy, onMount, tick } from "svelte";
     import { throttle } from "lodash-es";
+    import { v4 as uuidv4 } from "uuid";
     import { ColumnDefaults } from "~/components/lister/columns.js";
     import { tabulatorStrings } from "~/logic/i18n.js";
     import { SiteContentBind } from "~/stores/elements.js";
@@ -39,7 +40,7 @@
     });
 
     onMount(async () => {
-        tableId = options?.id ?? `tabulator-${crypto.randomUUID()}`; // TODO no crypto
+        tableId = options?.id ?? `tabulator-${uuidv4()}`;
         await tick();
         tabulator = new Tabulator(tableElement, {
             columnDefaults: ColumnDefaults,
