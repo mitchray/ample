@@ -16,7 +16,7 @@
     import { getSongsFromPlaylist } from "~/logic/song.js";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
-    import QueueList from "~/components/queue/queue_list2.svelte";
+    import QueueList from "~/components/queue/queue_list.svelte";
     import { updateQueue } from "~/logic/ui.js";
 
     let playlists = writable([]);

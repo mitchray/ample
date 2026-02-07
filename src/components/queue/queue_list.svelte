@@ -1,178 +1,108 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { onDestroy, tick, untrack } from "svelte";
-    import { Sortable } from "sortablejs";
     import {
         CurrentMedia,
         NowPlayingIndex,
         NowPlayingQueue,
         JukeboxQueue,
     } from "~/stores/state.js";
-    import {
-        JukeboxVirtualListBind,
-        QueueVirtualListBind,
-    } from "~/stores/elements.js";
-    import { MediaPlayer } from "~/stores/elements.js";
+    import { QueueTabulatorBind } from "~/stores/elements.js";
     import { updateQueue } from "~/logic/ui.js";
     import QueueItem from "~/components/queue/queue_item.svelte";
-    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { onDestroy, onMount, tick, mount } from "svelte";
+    import { TabulatorFull as Tabulator } from "tabulator-tables";
+    import { tabulatorStrings } from "~/logic/i18n.js";
 
-    /**
-     * items must be a store
-     */
     let { queueType, handleScroll } = $props();
 
+    // items must be a store
     let items = queueType === "user" ? NowPlayingQueue : JukeboxQueue;
 
     let containerRef;
-    let sortable;
-    let indexFinalPosition = null;
-    let aborted = false;
+    let tabulator;
+    /** Skip next setData when update came from rowMoved to avoid redraw jank. */
+    let skipNextSetData = false;
 
-    async function handleAction(e, index) {
-        if (queueType === "user") {
-            $MediaPlayer.playSelected(index);
-        }
-    }
+    onMount(async () => {
+        await tick();
+        tabulator = new Tabulator(containerRef, {
+            data: $items,
+            index: "_id",
+            headerVisible: false,
+            height: "100%",
+            rowHeight: 46,
+            movableRows: true,
+            layout: "fitColumns",
+            locale: true,
+            langs: tabulatorStrings,
 
-    async function handlePlayNext(e, index) {
-        let [item] = $JukeboxQueue.splice(index, 1);
-        $MediaPlayer.playNext([item]);
-        await updateQueue();
-    }
+            rowFormatter: function (row) {
+                const element = row.getElement();
+                const data = row.getData();
 
-    async function handlePlayLast(e, index) {
-        let [item] = $JukeboxQueue.splice(index, 1);
-        $MediaPlayer.playLast([item]);
-        await updateQueue();
-    }
-
-    $effect(() => {
-        if ($items) {
-            untrack(() => {
-                if (sortable) {
-                    sortable.destroy(); // Destroy previous sortable instance
+                if (element._queueItemDestroy) {
+                    element._queueItemDestroy();
+                    element._queueItemDestroy = null;
                 }
 
-                sortable = new Sortable(containerRef, {
-                    animation: 150,
-                    handle: ".handle",
-                    onStart: (event) => {
-                        aborted = false;
-                    },
-                    onMove: (event) => {
-                        if (!event.originalEvent?.ctrlKey) {
-                            aborted = true;
-                            event.preventDefault();
-                            return false;
-                        }
-
-                        indexFinalPosition = $items.findIndex(
-                            (x) => x._id === event.related.dataset.id,
-                        );
-
-                        // don't move preview any moves otherwise the index will be messed up
-                        event.preventDefault();
-                        return false;
-                    },
-                    onEnd: async (event) => {
-                        if (aborted) return false;
-
-                        let selectedDOMItems =
-                            event.items?.length > 0
-                                ? event.items
-                                : [event.item];
-
-                        // Find the IDs of the items
-                        let idsToMove = selectedDOMItems.map(
-                            (x) => x.dataset.id,
-                        );
-
-                        // Find the items in the target array that need to be moved
-                        const itemsToReinsert = $items.filter((item) =>
-                            idsToMove.includes(item._id),
-                        );
-
-                        // Remove the items from the target array
-                        const filteredTargetArray = $items.filter(
-                            (item) => !idsToMove.includes(item._id),
-                        );
-
-                        // Insert the removed items at the new index
-                        const newTargetArray = [
-                            ...filteredTargetArray.slice(0, indexFinalPosition),
-                            ...itemsToReinsert,
-                            ...filteredTargetArray.slice(indexFinalPosition),
-                        ];
-
-                        items.set(newTargetArray);
-
-                        await tick();
-
-                        //Reset playing index if needed
-                        let currentIndex = $items.findIndex(
-                            (item) => item._id === $CurrentMedia._id,
-                        );
-
-                        if (currentIndex !== -1) {
-                            NowPlayingIndex.set(currentIndex);
-                        }
+                const instance = mount(QueueItem, {
+                    target: element,
+                    props: {
+                        media: data,
+                        queueType: queueType,
                     },
                 });
-            });
+                element._queueItemDestroy =
+                    instance?.destroy != null ? () => instance.destroy() : null;
+            },
+        });
+
+        tabulator.on("rowMoved", () => {
+            skipNextSetData = true;
+            const data = tabulator.getData();
+            items.set([...data]);
+            if (queueType === "user") {
+                const idx = data.findIndex(
+                    (item) => item._id === $CurrentMedia?._id,
+                );
+                if (idx !== -1) NowPlayingIndex.set(idx);
+            } else {
+                updateQueue();
+            }
+        });
+
+        // centre table in viewport on scroll
+        // tabulator.on("scrollVertical", handleScroll);
+
+        if (queueType === "user") {
+            QueueTabulatorBind.set(tabulator);
         }
     });
 
     $effect(() => {
-        if (queueType === "user") {
-            $QueueVirtualListBind = containerRef;
-        } else {
-            $JukeboxVirtualListBind = containerRef;
+        const data = $items; // proxy as using $items directly fails
+        if (skipNextSetData) {
+            skipNextSetData = false;
+            return;
         }
+        tabulator?.replaceData(data);
     });
 
     onDestroy(() => {
-        sortable?.destroy();
+        tabulator?.off("rowMoved");
+        // tabulator?.off("scrollVertical");
+        // tabulator?.setData([]);
+        tabulator = null;
     });
 </script>
 
 <div
     class="container"
     bind:this={containerRef}
+    data-id={queueType}
     ontouchstart={handleScroll}
     onwheel={handleScroll}
->
-    {#each $items as item, index}
-        <div
-            onclick={(e) => {
-                handleAction(e, index);
-            }}
-            class="item-container"
-            data-index={index}
-            data-id={item._id}
-        >
-            {#if queueType === "jukebox"}
-                <div class="add-options">
-                    <sl-button
-                        onclick={(e) => handlePlayNext(e, index)}
-                        title={$_("text.playNext")}
-                    >
-                        <MaterialSymbol name="skip_next" slot="prefix" />
-                    </sl-button>
-                    <sl-button
-                        onclick={(e) => handlePlayLast(e, index)}
-                        title={$_("text.playLast")}
-                    >
-                        <MaterialSymbol name="add" slot="prefix" />
-                    </sl-button>
-                </div>
-            {/if}
-            {#key item._id}
-                <QueueItem media={item} {queueType} />
-            {/key}
-        </div>
-    {/each}
-</div>
+></div>
 
 <style>
     .container {
@@ -182,36 +112,16 @@
         border-radius: 15px;
         margin-block-end: var(--spacing-lg);
         position: relative;
-        content-visibility: auto; /* free virtual list! */
+        /*content-visibility: auto; !* free virtual list! *!*/
     }
 
-    .add-options {
-        display: flex;
-        justify-content: end;
-        align-items: center;
-        gap: var(--spacing-md);
-        position: absolute;
-        inset: 0;
-        inset-inline-start: var(--spacing-xl);
-        inset-inline-end: var(--spacing-xxxl);
-        padding-inline-end: var(--spacing-md);
-        z-index: 10;
-        opacity: 0;
-        pointer-events: none;
+    .container :global(.tabulator-table) {
+        width: 100%;
     }
 
-    .add-options:after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        pointer-events: none;
-        background-color: var(--color-background);
-        mask-image: linear-gradient(to right, transparent 30%, black 60%);
-        z-index: -1;
-    }
-
-    .item-container:hover .add-options {
-        opacity: 1;
-        pointer-events: auto;
+    :global(#app) .container :global(.tabulator-row) {
+        border: 0;
+        width: 100%;
+        font-size: 13px;
     }
 </style>

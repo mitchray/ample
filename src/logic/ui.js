@@ -1,10 +1,7 @@
 import { JukeboxQueue, NowPlayingQueue } from "~/stores/state.js";
 import { get } from "svelte/store";
 import { tick } from "svelte";
-import {
-    JukeboxVirtualListBind,
-    QueueVirtualListBind,
-} from "~/stores/elements.js";
+import { QueueTabulatorBind } from "~/stores/elements.js";
 
 /**
  * Callback to keep the sl-drawer open
@@ -25,34 +22,21 @@ export async function ticks(count) {
     }
 }
 
-export async function showQueueItemAtIndex(index, immediate = false) {
+export async function showQueueItemAtIndex(index) {
     await tick();
-
-    const element = document.querySelector(".site-queue .currentlyPlaying");
-    element?.scrollIntoView({
-        behavior: immediate ? "auto" : "smooth",
-    });
+    const tabulator = get(QueueTabulatorBind);
+    const queue = get(NowPlayingQueue);
+    const item = queue[index];
+    if (item?._id) {
+        tabulator?.scrollToRow(item._id, "top");
+    }
 }
 
 export async function updateQueue() {
-    // need to restore scroll offset as the list will reset
-    let offsetBeforeQueue = get(QueueVirtualListBind).scrollOffset;
-    let offsetBeforeJukebox = get(JukeboxVirtualListBind).scrollOffset;
-
     NowPlayingQueue.set(get(NowPlayingQueue));
     JukeboxQueue.set(get(JukeboxQueue));
 
     await tick();
-
-    // TODO is this needed now its not proper virtualised
-    get(QueueVirtualListBind).scrollTo({
-        top: offsetBeforeQueue,
-        behavior: "instant",
-    });
-    get(JukeboxVirtualListBind).scrollTo({
-        top: offsetBeforeJukebox,
-        behavior: "instant",
-    });
 }
 
 export function hideLoadingOverlay() {

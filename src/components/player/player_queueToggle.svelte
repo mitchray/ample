@@ -12,7 +12,7 @@
 
         if (inverted === true) {
             await tick();
-            await showQueueItemAtIndex($NowPlayingIndex, true);
+            await showQueueItemAtIndex($NowPlayingIndex);
         }
     }
 </script>
