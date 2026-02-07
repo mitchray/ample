@@ -6,7 +6,6 @@
     import { User } from "~/stores/state.js";
     import { artistsPreset } from "~/components/lister/columns.js";
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
 
     let tabulator = $state(null);
@@ -51,7 +50,6 @@
                     }}
                 />
 
-                <MassRater bind:tabulator type="artist" />
             </div>
 
             <Tabulator

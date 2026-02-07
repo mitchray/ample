@@ -2,7 +2,6 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { artistsPreset } from "~/components/lister/columns.js";
     import { randomAlbumArtists } from "~/logic/artist.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -51,7 +50,6 @@
                     }}
                 />
 
-                <MassRater bind:tabulator type="artist" />
             </div>
 
             <Tabulator

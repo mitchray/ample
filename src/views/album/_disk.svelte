@@ -1,7 +1,6 @@
 <script>
     import { albumPreset } from "~/components/lister/columns.js";
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
 
     let { albumID, disks, disk, tracks } = $props();
@@ -24,7 +23,6 @@
                 data={{ getSongs: () => tabulator.getData("active") }}
             />
         {/if}
-        <MassRater bind:tabulator type="song" />
     </div>
 
     <Tabulator

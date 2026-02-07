@@ -5,7 +5,6 @@
     import { API, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
 
     let tabulator = $state(null);
 
@@ -41,7 +40,6 @@
     {:else}
         <div class="lister-tabulator">
             <div class="lister-tabulator__actions">
-                <MassRater bind:tabulator type="playlist" />
             </div>
 
             <Tabulator

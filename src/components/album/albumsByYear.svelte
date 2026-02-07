@@ -3,7 +3,6 @@
     import YearPagination from "~/components/yearSelector.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
 
     let { showYear = new Date().getFullYear() } = $props();
@@ -43,7 +42,6 @@
             data={{ from: fromYear, to: toYear }}
         />
 
-        <MassRater bind:tabulator type="album" />
     </div>
 
     <Tabulator

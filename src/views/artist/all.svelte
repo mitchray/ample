@@ -5,7 +5,6 @@
     import { API, User } from "~/stores/state";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { songsPreset, track } from "~/components/lister/columns.js";
 
     let { artistID } = $props();
@@ -41,7 +40,6 @@
                 data={{ getSongs: () => tabulator.getData("active") }}
             />
 
-            <MassRater bind:tabulator type="artist" />
         </div>
 
         <Tabulator

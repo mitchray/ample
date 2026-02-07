@@ -3,7 +3,6 @@
     import { newestArtists } from "~/logic/artist";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
@@ -51,7 +50,6 @@
                     }}
                 />
 
-                <MassRater bind:tabulator type="artist" />
             </div>
 
             <Tabulator

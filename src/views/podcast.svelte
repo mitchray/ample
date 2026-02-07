@@ -5,7 +5,6 @@
     import Rating from "~/components/rating/rating.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import Art from "~/components/art.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
@@ -85,7 +84,6 @@
             {#if episodes.length > 0}
                 <div class="lister-tabulator">
                     <div class="lister-tabulator__actions">
-                        <MassRater bind:tabulator type="podcast_episode" />
                     </div>
 
                     <Tabulator

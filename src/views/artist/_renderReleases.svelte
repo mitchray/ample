@@ -4,7 +4,6 @@
     import GenericCard from "~/components/cards/genericCard.svelte";
     import ExpandedAlbum from "~/components/cards/expandedAlbumCard.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
 
     let { view, items, filterToArtistID = null } = $props();
@@ -17,7 +16,6 @@
 {#if view === "table"}
     <div class="lister-tabulator">
         <div class="lister-tabulator__actions">
-            <MassRater bind:tabulator type="album" />
         </div>
 
         <Tabulator

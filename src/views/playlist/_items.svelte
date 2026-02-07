@@ -1,6 +1,5 @@
 <script>
     import Actions from "~/components/action/actions.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import PlaylistRemoveFrom from "~/components/playlist/playlist_removeFrom.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { API, User } from "~/stores/state.js";
@@ -112,7 +111,6 @@
                     data={{ getSongs: () => tabulator.getData("active") }}
                 />
 
-                <MassRater bind:tabulator type="song" />
 
                 {#if type === "playlist"}
                     <PlaylistRemoveFrom

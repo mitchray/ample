@@ -3,7 +3,6 @@
     import { API, PageTitle, User } from "~/stores/state.js";
     import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { podcastsPreset } from "~/components/lister/columns.js";
 
@@ -45,7 +44,6 @@
     {:else}
         <div class="lister-tabulator">
             <div class="lister-tabulator__actions">
-                <MassRater bind:tabulator type="podcast" />
             </div>
 
             <Tabulator

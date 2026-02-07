@@ -1,6 +1,5 @@
 <script>
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { API, User } from "~/stores/state.js";
     import { artistsPreset } from "~/components/lister/columns.js";
     import { createInfiniteQuery } from "@tanstack/svelte-query";
@@ -63,7 +62,6 @@
             }}
         />
 
-        <MassRater bind:tabulator type="artist" />
     </div>
 
     <Tabulator

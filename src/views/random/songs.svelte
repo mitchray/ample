@@ -1,6 +1,5 @@
 <script>
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { API, User } from "~/stores/state.js";
     import { songsPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -44,7 +43,6 @@
             data={{ getSongs: () => tabulator.getData("active") }}
         />
 
-        <MassRater bind:tabulator type="song" />
     </div>
 
     <Tabulator

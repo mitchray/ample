@@ -4,7 +4,6 @@
     import { errorHandler } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import {
         albumsPreset,
         artistsPreset,
@@ -76,7 +75,6 @@
                         data={{ id: id }}
                     />
 
-                    <MassRater bind:tabulator type="artist" />
                 </div>
 
                 <Tabulator
@@ -101,7 +99,6 @@
                         data={{ id: id }}
                     />
 
-                    <MassRater bind:tabulator type="album" />
                 </div>
 
                 <Tabulator
@@ -126,7 +123,6 @@
                         data={{ id: id }}
                     />
 
-                    <MassRater bind:tabulator type="song" />
                 </div>
 
                 <Tabulator

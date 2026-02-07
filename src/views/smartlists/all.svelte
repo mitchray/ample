@@ -2,7 +2,6 @@
     import { smartlistsPreset } from "~/components/lister/columns.js";
     import { API, User } from "~/stores/state.js";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
     import { _ } from "@rgglez/svelte-i18n";
@@ -40,7 +39,6 @@
     {:else}
         <div class="lister-tabulator">
             <div class="lister-tabulator__actions">
-                <MassRater bind:tabulator type="playlist" />
             </div>
 
             <Tabulator

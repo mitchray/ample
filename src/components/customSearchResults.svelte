@@ -2,7 +2,6 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import {
         albumsPreset,
         artistsPreset,
@@ -43,7 +42,6 @@
                         data={{ getSongs: () => tabulator.getData("active") }}
                     />
 
-                    <MassRater bind:tabulator type="song" />
                 </div>
 
                 <Tabulator
@@ -68,7 +66,6 @@
                         data={{ getAlbums: () => tabulator.getData("active") }}
                     />
 
-                    <MassRater bind:tabulator type="album" />
                 </div>
 
                 <Tabulator
@@ -95,7 +92,6 @@
                         }}
                     />
 
-                    <MassRater bind:tabulator type="artist" />
                 </div>
 
                 <Tabulator
@@ -122,7 +118,6 @@
                         }}
                     />
 
-                    <MassRater bind:tabulator type="playlist" />
                 </div>
 
                 <Tabulator

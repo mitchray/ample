@@ -8,7 +8,6 @@
     import ArtistList from "~/components/artist/artistList.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import MassRater from "~/components/lister/massRater.svelte";
     import { albumPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { getAlbumDisks } from "~/logic/album.js";
@@ -144,7 +143,6 @@
                                     />
                                 {/if}
 
-                                <MassRater bind:tabulator type="song" />
                             </div>
 
                             <Tabulator
