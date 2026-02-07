@@ -57,6 +57,23 @@ export function truncateDecimals(num) {
 }
 
 /**
+ * Map fetch type to Ampache API type (singular).
+ * @param {string} t - Type (e.g. songs, albums, artistGenre)
+ * @returns {string|null} - Singular API type (e.g. song, album, artist)
+ */
+export function toApiType(t) {
+    if (!t) return null;
+    const map = {
+        artistGenre: "artist",
+        albumGenre: "album",
+        songGenre: "song",
+        artistAlpha: "artist",
+        albumAlpha: "album",
+    };
+    return map[t] ?? (t.replace(/s$/, "") || t);
+}
+
+/**
  Get hash of image and compare it to the placeholder art
  Based on https://stackoverflow.com/a/16566198/4968507
  */

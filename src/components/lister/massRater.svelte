@@ -1,32 +1,22 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { API } from "~/stores/state.js";
-    import { errorHandler } from "~/logic/helper.js";
+    import { API, recentRating } from "~/stores/state.js";
+    import { errorHandler, toApiType } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { tabulator = $bindable(), type } = $props();
+    let { items: itemsProp = null, type } = $props();
 
-    let selectedCount = $state(0);
+    let items = $derived(Array.isArray(itemsProp) ? itemsProp : []);
 
-    $effect(() => {
-        if (tabulator) {
-            tabulator.on(
-                "rowSelectionChanged",
-                function (data, rows, selected, deselected) {
-                    selectedCount = data.length;
-                },
-            );
-        }
-    });
+    let apiType = $derived(toApiType(type));
 
     function handleApply(e) {
         let newRating = parseInt(e.detail.item.value);
-        let selected = tabulator.getSelectedData();
 
-        selected.forEach(async (item) => {
+        items.forEach(async (item) => {
             // rate on the backend
             let result = await $API.rate({
-                type: type,
+                type: apiType,
                 id: item.id,
                 rating: newRating,
             });
@@ -36,15 +26,22 @@
                 return;
             }
 
-            // update data in the table
+            // update data in the table (mutate selection copy)
             item.rating = newRating;
+
+            // notify Rating components
+            recentRating.set({
+                type: apiType,
+                id: item.id,
+                rating: newRating,
+            });
         });
     }
 </script>
 
-{#if selectedCount > 0}
+{#if items.length > 0}
     <sl-dropdown>
-        <sl-button slot="trigger" variant="primary" caret>
+        <sl-button slot="trigger" variant="primary" size="small" caret>
             <MaterialSymbol name="star" slot="prefix" />
             {$_("text.rate")}
         </sl-button>

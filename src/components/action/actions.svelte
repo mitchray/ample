@@ -16,7 +16,7 @@
         getSongsFromPlaylist,
         getSongsFromPlaylists,
     } from "~/logic/song.js";
-    import { errorHandler } from "~/logic/helper.js";
+    import { errorHandler, toApiType } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
@@ -54,19 +54,6 @@
     let items = $derived(Array.isArray(itemsProp) ? itemsProp : []);
 
     let firstItem = $derived(items[0] ?? null);
-
-    /** Map fetch type to Ampache API type (singular) */
-    function toApiType(t) {
-        if (!t) return null;
-        const map = {
-            artistGenre: "artist",
-            albumGenre: "album",
-            songGenre: "song",
-            artistAlpha: "artist",
-            albumAlpha: "album",
-        };
-        return map[t] ?? (t.replace(/s$/, "") || t);
-    }
 
     let apiType = $derived(toApiType(type));
 

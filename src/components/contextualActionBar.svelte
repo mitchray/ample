@@ -6,6 +6,7 @@
         getSelectedRows,
         clearAllSelections,
     } from "~/stores/selectedTabulatorRows.js";
+    import MassRater from "~/components/lister/massRater.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Actions from "~/components/action/actions.svelte";
     import { slide } from "svelte/transition";
@@ -19,7 +20,9 @@
 
     const entityType = $derived(firstItem?._tabulatorType || "songs");
     const selectedItems = $derived(
-        $selectedTabulatorRowsFlat.filter((r) => r._tabulatorType === entityType),
+        $selectedTabulatorRowsFlat.filter(
+            (r) => r._tabulatorType === entityType,
+        ),
     );
 
     const entityToFetchType = {
@@ -62,6 +65,8 @@
                     showShuffle={selectedItems.length >= 2}
                     showPlayFromHere={false}
                 />
+
+                <MassRater type={fetchType} items={selectedItems} />
 
                 <sl-button size="small" onclick={clearAllSelections}>
                     {$_("text.clearAll")}
