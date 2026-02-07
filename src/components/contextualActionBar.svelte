@@ -8,6 +8,7 @@
     } from "~/stores/selectedTabulatorRows.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Actions from "~/components/action/actions.svelte";
+    import { slide } from "svelte/transition";
 
     const visibleActions = $derived(
         $contextualActions.filter((a) => a.visible !== false),
@@ -24,7 +25,7 @@
 </script>
 
 {#if hasActions}
-    <div class="contextual-action-bar">
+    <div class="contextual-action-bar" transition:slide>
         <div class="contextual-action-bar__inner">
             {#if selectedCount > 0}
                 <span>{$_("text.selected")}:</span>
