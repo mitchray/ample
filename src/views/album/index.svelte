@@ -221,10 +221,6 @@
         text-wrap: balance;
     }
 
-    section:not(:first-of-type) {
-        margin-block-start: var(--spacing-xxxl);
-    }
-
     @container (min-width: 530px) {
         .details {
             grid-template-areas: "image info";

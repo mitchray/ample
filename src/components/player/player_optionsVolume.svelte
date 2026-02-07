@@ -171,6 +171,16 @@
 {/if}
 
 <style>
+    .overrides :global(label) {
+        margin-block-start: var(--spacing-md);
+        display: block;
+    }
+
+    .overrides label > input {
+        margin-block-start: var(--spacing-sm);
+        display: block;
+    }
+
     .current {
         max-width: fit-content;
         margin-block: var(--spacing-md);

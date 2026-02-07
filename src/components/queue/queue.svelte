@@ -133,8 +133,4 @@
         flex: 1;
         position: relative;
     }
-
-    .auto-queue {
-        /*padding-block-start: var(--spacing-sm);*/
-    }
 </style>

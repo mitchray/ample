@@ -85,16 +85,6 @@
 <PlayerOptions />
 
 <style>
-    .overrides :global(label) {
-        margin-block-start: var(--spacing-md);
-        display: block;
-    }
-
-    .overrides label > input {
-        margin-block-start: var(--spacing-sm);
-        display: block;
-    }
-
     .site-player__volume-slider {
         background-color: var(--color-outline-variant);
         display: flex;

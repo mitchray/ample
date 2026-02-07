@@ -297,8 +297,7 @@
         width: 100%;
     }
 
-    .header,
-    .footer {
+    .header {
         display: flex;
         justify-content: end;
         padding: var(--spacing-md);

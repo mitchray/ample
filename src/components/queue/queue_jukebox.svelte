@@ -299,11 +299,6 @@
         /*gap: var(--spacing-lg);*/
     }
 
-    sl-card [slot="header"] {
-        display: flex;
-        justify-content: space-between;
-    }
-
     sl-radio-group {
         margin-block-end: var(--spacing-md);
     }
