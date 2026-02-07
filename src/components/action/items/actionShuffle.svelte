@@ -1,12 +1,12 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { MediaPlayer } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { getSongs, _showShuffle, _displayMode } = getContext(contextKey);
+    const { getSongs, displayMode } = actionContext;
+    const showShuffle = $derived(actionContext.showShuffle);
 
     let loading = $state(false);
 
@@ -18,13 +18,13 @@
     }
 </script>
 
-{#if $_showShuffle}
+{#if showShuffle}
     <sl-button
         variant="primary-alt"
         onclick={handleAction}
         title={$_("text.shuffle")}
         {loading}
-        size={$_displayMode === "miniButtons" ? "small" : "medium"}
+        size={displayMode === "miniButtons" ? "small" : "medium"}
     >
         <MaterialSymbol name="shuffle" />
         <span class="label">{$_("text.shuffle")}</span>

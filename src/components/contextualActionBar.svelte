@@ -17,6 +17,30 @@
     const hasActions = $derived(visibleActions.length > 0 || selectedCount > 0);
     const firstItem = $derived($selectedTabulatorRowsFlat[0] || {});
 
+    const entityType = $derived(firstItem?._tabulatorType || "songs");
+    const selectedItems = $derived(
+        $selectedTabulatorRowsFlat.filter((r) => r._tabulatorType === entityType),
+    );
+
+    const entityToFetchType = {
+        songs: "songs",
+        albums: "albums",
+        artists: "artists",
+        playlists: "playlists",
+    };
+    const fetchType = $derived(entityToFetchType[entityType] ?? "songs");
+
+    const selectionData = $derived({
+        getSongs: () =>
+            getSelectedRows().filter((r) => r._tabulatorType === "songs"),
+        getArtists: () =>
+            getSelectedRows().filter((r) => r._tabulatorType === "artists"),
+        getAlbums: () =>
+            getSelectedRows().filter((r) => r._tabulatorType === "albums"),
+        getPlaylists: () =>
+            getSelectedRows().filter((r) => r._tabulatorType === "playlists"),
+    });
+
     function handleClick(action) {
         if (!action.disabled && typeof action.onClick === "function") {
             action.onClick();
@@ -31,15 +55,12 @@
                 <span>{$_("text.selected")}:</span>
 
                 <Actions
-                    type={firstItem?._tabulatorType || "songs"}
+                    type={fetchType}
+                    items={selectedItems}
                     displayMode="miniButtons"
-                    data={{
-                        getSongs: () => getSelectedRows(),
-                        getArtists: () => getSelectedRows(),
-                        getAlbums: () => getSelectedRows(),
-                        getPlaylists: () => getSelectedRows(),
-                    }}
-                    showShuffle={selectedCount >= 2}
+                    data={selectionData}
+                    showShuffle={selectedItems.length >= 2}
+                    showPlayFromHere={false}
                 />
 
                 <sl-button size="small" onclick={clearAllSelections}>

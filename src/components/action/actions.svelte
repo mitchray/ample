@@ -1,9 +1,7 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext, setContext } from "svelte";
-    import { v4 as uuidv4 } from "uuid";
+    import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
-    import { sampleSize } from "lodash-es";
     import { addAlert } from "~/logic/alert.js";
     import {
         getSomeSongsByGenre,
@@ -19,7 +17,6 @@
         getSongsFromPlaylists,
     } from "~/logic/song.js";
     import { errorHandler } from "~/logic/helper.js";
-    import { writable } from "svelte/store";
     import Actions from "~/components/action/actions.svelte";
     import ActionPlay from "./items/actionPlay.svelte";
     import ActionPlayNext from "./items/actionPlayNext.svelte";
@@ -43,39 +40,54 @@
     import { Settings } from "~/stores/settings.js";
 
     let {
-        item = null,
+        items: itemsProp = null,
         type,
         displayMode,
         showShuffle = false,
         showLinks = false,
         hideDefaultActions = false,
+        showPlayFromHere = true,
         hoist = false,
         data = {},
     } = $props();
 
-    const contextKey = uuidv4(); // unique key for each instance of actions
+    let items = $derived(Array.isArray(itemsProp) ? itemsProp : []);
+
+    let firstItem = $derived(items[0] ?? null);
+
+    /** Map fetch type to Ampache API type (singular) */
+    function toApiType(t) {
+        if (!t) return null;
+        const map = {
+            artistGenre: "artist",
+            albumGenre: "album",
+            songGenre: "song",
+            artistAlpha: "artist",
+            albumAlpha: "album",
+        };
+        return map[t] ?? (t.replace(/s$/, "") || t);
+    }
+
+    let apiType = $derived(toApiType(type));
 
     let playLimit = 5000;
     let actionsBind = $state();
     let moreButtonActivated = $state(false);
 
-    // underscore prefixed items are accessor aliases of exported params
-    let _item = writable(item);
-    let _type = writable(type);
-    let _displayMode = writable(displayMode);
-    let _showShuffle = writable(showShuffle);
-    let _data = writable(data);
+    // Merge playlist into data when type is playlist (for edit/delete)
+    let resolvedData = $derived(
+        type === "playlist" && firstItem
+            ? { ...data, playlist: firstItem }
+            : data,
+    );
 
-    $effect(() => {
-        _showShuffle.set(showShuffle);
-    });
-
-    setContext(contextKey, {
-        _item,
-        _type,
-        _displayMode,
-        _data,
-        _showShuffle,
+    const actionContext = $derived({
+        items,
+        apiType,
+        type,
+        data: resolvedData,
+        displayMode,
+        showShuffle,
         getSongs: () => doFetch(),
     });
 
@@ -83,7 +95,7 @@
 
     /**
      * Determine which method should be used to get songs
-     * @returns function
+     * @returns Promise<array>
      */
     async function determineFetchURL() {
         let response = null;
@@ -91,95 +103,107 @@
 
         switch (type) {
             case "artist":
-                final = await getSongsFromArtist(item?.id);
+                final = await getSongsFromArtist(firstItem?.id);
                 break;
             case "artists":
                 response = await getSongsFromArtists(data.getArtists());
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "artistAlpha":
                 response = await getSongsFromArtistsStartingWith(data.char);
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "artistGenre":
             case "genre":
                 response = await getSomeSongsFromArtistsByGenre(data.id);
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "album":
-                response = await $API.albumSongs({ filter: item?.id });
-                final = response.song;
+                response = await $API.albumSongs({ filter: firstItem?.id });
+                final = response?.song ?? [];
                 break;
             case "albums":
                 response = await getSongsFromAlbums(data.getAlbums());
-                final = response; // no .song here
+                final = Array.isArray(response)
+                    ? response
+                    : (response?.song ?? []);
                 break;
             case "albumGenre":
                 response = await getSomeSongsFromAlbumsByGenre(data.id);
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "albumAlpha":
                 response = await getSongsFromAlbumsStartingWith(data.char);
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "song":
-                final = await $API.song({ filter: item?.id });
+                final = await $API.song({ filter: firstItem?.id });
+                final = final ? [final] : [];
                 break;
             case "songGenre":
                 response = await getSomeSongsByGenre(data.id);
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "songs":
             case "playlist_songs":
-                final = data.getSongs();
+                final = data.getSongs?.() ?? data.songs ?? [];
+                final = Array.isArray(final) ? final : [];
                 break;
             case "playlist":
             case "smartlist":
-                let playlistInfo = await $API.playlist({ filter: item?.id });
+                let playlistInfo = await $API.playlist({
+                    filter: firstItem?.id,
+                });
                 let playlistLimit =
                     playlistInfo?.items > playLimit ? playLimit : 0;
 
                 if (playlistLimit > 0) {
                     addAlert({
                         title: $_("text.limitedItems", {
-                            values: { n: playlistLimit },
+                            values: { n: playLimit },
                         }),
                         style: "info",
                     });
                 }
 
                 response = await $API.playlistSongs({
-                    filter: item?.id,
+                    filter: firstItem?.id,
                     limit: playlistLimit,
                 });
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "playlists":
                 response = await getSongsFromPlaylists(data.getPlaylists());
-                final = response; // no .song here
+                final = Array.isArray(response)
+                    ? response
+                    : (response?.song ?? []);
                 break;
             case "year":
                 response = await getSongsByYear(data.from, data.to);
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "artistMix":
                 response = await getSongsFromPlaylist({
-                    id: item?.id,
+                    id: firstItem?.id,
                     type: "artist_mix",
                 });
-                final = response.song;
+                final = response?.song ?? [];
                 break;
             case "live_stream":
-                response = await $API.liveStream({ filter: item?.id });
-                final = response.live_stream;
+                response = await $API.liveStream({ filter: firstItem?.id });
+                final = response?.live_stream ? [response.live_stream] : [];
                 break;
             case "podcast":
-                response = await $API.podcastEpisodes({ filter: item?.id });
-                final = response.podcast_episode;
+                response = await $API.podcastEpisodes({
+                    filter: firstItem?.id,
+                });
+                final = response?.podcast_episode ?? [];
                 break;
             case "podcast_episode":
-                response = await $API.podcastEpisode({ filter: item?.id });
-                final = response.podcast_episode;
+                response = await $API.podcastEpisode({ filter: firstItem?.id });
+                final = response?.podcast_episode
+                    ? [response.podcast_episode]
+                    : [];
                 break;
             default:
                 break;
@@ -195,27 +219,22 @@
     async function doFetch() {
         let result = await determineFetchURL();
 
-        if (result.error) {
+        if (result?.error) {
             errorHandler("determining fetch URL", result.error);
             return [];
         }
 
-        // make sure we are working with an array
         result = Array.isArray(result) ? result : [result];
 
-        // filter out pending podcast episodes...
-        result = result.filter(
-            (item) => !item.state || item.state === "completed",
-        );
+        result = result.filter((it) => !it.state || it.state === "completed");
 
-        // filter out songs not by artist if that is set, but allow a single item through with the assumption its the only one we want to play
         if (
             result.length > 1 &&
             $Settings.PlaySongsByOtherArtists === "exclude" &&
             filterToArtistID
         ) {
-            result = result.filter((item) =>
-                item.artists.find((artist) => artist.id === filterToArtistID),
+            result = result.filter((it) =>
+                it.artists?.find((artist) => artist.id === filterToArtistID),
             );
         }
 
@@ -226,73 +245,73 @@
 <!-- Dynamic context menu -->
 {#if displayMode === "menu"}
     <sl-menu>
-        {#if showLinks && item}
+        {#if showLinks && firstItem}
             {#if type === "live_stream"}
-                <a href="#/radio-station/{item.id}">
+                <a href="#/radio-station/{firstItem.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="radio" slot="prefix" />
-                        {item.name}
+                        {firstItem.name}
                     </sl-menu-item>
                 </a>
             {:else if type === "podcast_episode"}
-                <a href="#/podcast-episode/{item.id}">
+                <a href="#/podcast-episode/{firstItem.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="podcast" slot="prefix" />
-                        {item.name}
+                        {firstItem.name}
                     </sl-menu-item>
                 </a>
             {:else if type === "song"}
-                <a href="#/song/{item.id}">
+                <a href="#/song/{firstItem.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="music_note" slot="prefix" />
-                        {item.name}
+                        {firstItem.name}
                     </sl-menu-item>
                 </a>
             {:else if type === "album"}
-                <a href="#/album/{item.id}">
+                <a href="#/album/{firstItem.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="album" slot="prefix" />
-                        {item.name}
+                        {firstItem.name}
                     </sl-menu-item>
                 </a>
             {:else if type === "playlist"}
-                <a href="#/playlist/{item.id}">
+                <a href="#/playlist/{firstItem.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="queue_music" slot="prefix" />
-                        {item.name}
+                        {firstItem.name}
                     </sl-menu-item>
                 </a>
             {:else if type === "artistMix"}
-                <a href="#/mix/artist/{item.id}">
+                <a href="#/mix/artist/{firstItem.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="queue_music" slot="prefix" />
-                        {item.name}
+                        {firstItem.name}
                     </sl-menu-item>
                 </a>
             {/if}
 
             <!-- PARENT ITEMS -->
 
-            {#if item.album?.id}
-                <a href="#/album/{item.album.id}">
+            {#if firstItem.album?.id}
+                <a href="#/album/{firstItem.album.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="album" slot="prefix" />
-                        {item.album.name}
+                        {firstItem.album.name}
                     </sl-menu-item>
                 </a>
             {/if}
 
-            {#if item.podcast?.id}
-                <a href="#/podcast/{item.podcast.id}">
+            {#if firstItem.podcast?.id}
+                <a href="#/podcast/{firstItem.podcast.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="swap_calls" slot="prefix" />
-                        {item.podcast.name}
+                        {firstItem.podcast.name}
                     </sl-menu-item>
                 </a>
             {/if}
 
-            {#if item.artists?.length > 0}
-                {#each item.artists as artist}
+            {#if firstItem.artists?.length > 0}
+                {#each firstItem.artists as artist}
                     <a href="#/artist/{artist.id}">
                         <sl-menu-item>
                             <MaterialSymbol name="person" slot="prefix" />
@@ -303,11 +322,11 @@
             {/if}
 
             <!-- add album artist if not already in artists -->
-            {#if item.albumArtist?.id && item.artists?.length > 0 && !item.artists.find((artist) => artist.id === item.albumArtist.id)}
-                <a href="#/artist/{item.albumArtist.id}">
+            {#if firstItem.albumArtist?.id && firstItem.artists?.length > 0 && !firstItem.artists.find((artist) => artist.id === firstItem.albumArtist.id)}
+                <a href="#/artist/{firstItem.albumArtist.id}">
                     <sl-menu-item>
                         <MaterialSymbol name="person" slot="prefix" />
-                        {item.albumArtist.name}
+                        {firstItem.albumArtist.name}
                     </sl-menu-item>
                 </a>
             {/if}
@@ -315,43 +334,43 @@
             <sl-divider></sl-divider>
         {/if}
 
-        {#if type === "playlist"}
-            <ActionEditPlaylist {contextKey} />
-            <ActionDeletePlaylist {contextKey} />
+        {#if apiType === "playlist" && items.length > 0}
+            <ActionEditPlaylist {actionContext} />
+            <ActionDeletePlaylist {actionContext} />
         {/if}
 
-        {#if type === "song" && item}
-            <ActionPlayFromHere {contextKey} />
+        {#if showPlayFromHere && apiType === "song" && items.length === 1}
+            <ActionPlayFromHere {actionContext} />
         {/if}
 
-        {#if type === "song" && item}
-            <ActionArtistMix {contextKey} />
+        {#if items.length === 1 && (apiType === "song" || apiType === "artist" || apiType === "album" || type === "playlist_songs")}
+            <ActionArtistMix {actionContext} />
         {/if}
 
-        {#if item && (type === "song" || type === "album" || type === "artist" || type === "playlist" || type === "podcast" || type === "podcast_episode" || type === "video")}
-            <ActionShareCreate {contextKey} />
+        {#if items.length === 1 && ["song", "album", "artist", "playlist", "podcast", "podcast_episode", "video"].includes(apiType)}
+            <ActionShareCreate {actionContext} />
         {/if}
 
         {#if type !== "share"}
-            <ActionAddToPlaylist {contextKey} />
-            <ActionShuffleNext {contextKey} />
-            <ActionShuffleLast {contextKey} />
+            <ActionAddToPlaylist {actionContext} />
+            <ActionShuffleNext {actionContext} />
+            <ActionShuffleLast {actionContext} />
         {/if}
 
-        {#if type === "artist" || type === "album" || type === "song"}
-            <ActionUpdateFromTags {contextKey} />
+        {#if items.length > 0 && ["artist", "album", "song"].includes(apiType)}
+            <ActionUpdateFromTags {actionContext} />
         {/if}
 
-        {#if type === "artist" || type === "album"}
-            <ActionUpdateArt {contextKey} />
+        {#if items.length > 0 && ["artist", "album"].includes(apiType)}
+            <ActionUpdateArt {actionContext} />
         {/if}
 
-        {#if type === "song"}
-            <ActionDownload {contextKey} />
+        {#if items.length > 0 && apiType === "song"}
+            <ActionDownload {actionContext} />
         {/if}
 
-        {#if type === "song" && item}
-            <ActionFindDuplicates {item} />
+        {#if apiType === "song" && firstItem && items.length === 1}
+            <ActionFindDuplicates item={firstItem} />
         {/if}
     </sl-menu>
 {/if}
@@ -360,15 +379,15 @@
 {#if displayMode === "miniButtons" || displayMode === "fullButtons"}
     <div class="c-actions {displayMode}" bind:this={actionsBind}>
         <sl-button-group>
-            {#if !hideDefaultActions}<ActionPlay {contextKey} />{/if}
-            {#if !hideDefaultActions}<ActionShuffle {contextKey} />{/if}
-            {#if !hideDefaultActions}<ActionPlayNext {contextKey} />{/if}
-            {#if !hideDefaultActions}<ActionPlayLast {contextKey} />{/if}
+            {#if !hideDefaultActions}<ActionPlay {actionContext} />{/if}
+            {#if !hideDefaultActions}<ActionShuffle {actionContext} />{/if}
+            {#if !hideDefaultActions}<ActionPlayNext {actionContext} />{/if}
+            {#if !hideDefaultActions}<ActionPlayLast {actionContext} />{/if}
 
             <!-- special actions for Shares -->
             {#if type === "share"}
-                <ActionShareEdit {contextKey} />
-                <ActionShareDelete {contextKey} />
+                <ActionShareEdit {actionContext} />
+                <ActionShareDelete {actionContext} />
             {/if}
 
             {#if type !== "share"}
@@ -403,11 +422,12 @@
         </sl-button>
         <Actions
             displayMode="menu"
-            {item}
+            {items}
             {type}
             {showShuffle}
             {showLinks}
             {hideDefaultActions}
+            {showPlayFromHere}
             {data}
         />
     </sl-dropdown>

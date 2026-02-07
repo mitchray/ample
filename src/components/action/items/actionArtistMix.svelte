@@ -1,27 +1,30 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { getSongsFromPlaylist } from "~/logic/song.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _type, _item } = getContext(contextKey);
+    const { items, apiType } = actionContext;
 
     let loading = $state(false);
     let show =
-        $_type === "artist" ||
-        $_type === "album" ||
-        $_type === "song" ||
-        $_type === "playlist_songs";
+        apiType === "artist" ||
+        apiType === "album" ||
+        apiType === "song" ||
+        (actionContext.type === "playlist_songs" && items.length > 0);
 
     async function handleAction() {
         loading = true;
 
         let artistID = await getArtistID();
+        if (artistID == null) {
+            loading = false;
+            return;
+        }
         let songs = await getSongsFromPlaylist({
             id: artistID,
             type: "artist_mix",
@@ -32,14 +35,17 @@
     }
 
     async function getArtistID() {
+        let firstItem = items[0];
+        if (!firstItem) return null;
+
         let tempID;
 
-        switch ($_type) {
+        switch (apiType) {
             case "artist":
-                tempID = $_item.id;
+                tempID = firstItem.id;
                 break;
             case "album":
-                let album = await $API.album({ filter: $_item.id });
+                let album = await $API.album({ filter: firstItem.id });
 
                 if (album.error) {
                     errorHandler("getting album", album.error);
@@ -49,8 +55,7 @@
                 tempID = album.artist.id;
                 break;
             case "song":
-            case "playlist_songs":
-                let song = await $API.song({ filter: $_item.id });
+                let song = await $API.song({ filter: firstItem.id });
 
                 if (song.error) {
                     errorHandler("getting song", song.error);

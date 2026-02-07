@@ -134,7 +134,7 @@
                     <div class="actions">
                         <Actions
                             {type}
-                            item={data}
+                            items={[data]}
                             showLinks={true}
                             displayMode="miniButtons"
                             showShuffle={data.songcount > 1}

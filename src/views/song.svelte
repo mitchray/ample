@@ -72,7 +72,7 @@
 
                 <Genres genres={song.genre} />
 
-                <Actions type="song" displayMode="fullButtons" item={song} />
+                <Actions type="song" displayMode="fullButtons" items={[song]} />
             </div>
 
             <sl-tab-group>

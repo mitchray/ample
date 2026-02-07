@@ -65,7 +65,7 @@
                 <Actions
                     type="artistMix"
                     displayMode="miniButtons"
-                    item={playlist}
+                    items={[playlist]}
                 />
             </div>
         </div>

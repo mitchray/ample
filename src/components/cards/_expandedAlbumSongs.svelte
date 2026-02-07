@@ -120,7 +120,7 @@
                                 <div class="bottom">
                                     <Actions
                                         type="song"
-                                        item={song}
+                                        items={[song]}
                                         showLinks={true}
                                         displayMode="miniButtons"
                                     />
@@ -135,11 +135,11 @@
                             <div class="lister-tabulator__actions">
                                 {#if disks.length > 1}
                                     <Actions
-                                        type="album"
-                                        id={album.id}
+                                        type="songs"
+                                        items={disk.songs}
                                         displayMode="fullButtons"
                                         showShuffle={disk.songs.length > 1}
-                                        data={{ songs: disk.songs }}
+                                        data={{ getSongs: () => disk.songs }}
                                     />
                                 {/if}
 

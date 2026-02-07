@@ -1,12 +1,11 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { MediaPlayer } from "~/stores/elements.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { getSongs, _displayMode } = getContext(contextKey);
+    const { getSongs, displayMode } = actionContext;
 
     let loading = $state(false);
 
@@ -21,7 +20,7 @@
 <sl-button
     {loading}
     onclick={handleAction}
-    size={$_displayMode === "miniButtons" ? "small" : "medium"}
+    size={displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.playLast")}
 >
     <MaterialSymbol name="add" slot="prefix" />

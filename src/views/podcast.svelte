@@ -69,7 +69,7 @@
             <Actions
                 type="podcast"
                 displayMode="fullButtons"
-                item={podcast}
+                items={[podcast]}
                 showShuffle={true}
             />
 

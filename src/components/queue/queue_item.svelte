@@ -178,10 +178,11 @@
         </sl-button>
 
         <Actions
-            item={media}
+            items={[media]}
             showLinks={true}
             type={media.object_type}
             displayMode="menu"
+            showPlayFromHere={false}
         />
     </sl-dropdown>
 </div>

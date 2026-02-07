@@ -52,7 +52,7 @@
 
                 <div class="actions">
                     <Actions
-                        item={album}
+                        items={[album]}
                         type="album"
                         displayMode="miniButtons"
                         showLinks={true}

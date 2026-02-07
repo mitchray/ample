@@ -52,7 +52,7 @@
 
             <div class="actions">
                 <Actions
-                    item={playlist}
+                    items={[playlist]}
                     type="playlist"
                     displayMode="miniButtons"
                     showShuffle={playlist.items > 1}

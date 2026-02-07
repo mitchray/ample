@@ -1,14 +1,14 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import DrawerDelete from "~/components/action/drawers/drawerShareDelete.svelte";
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _item, _displayMode } = getContext(contextKey);
+    const { items, displayMode } = actionContext;
+    let share = $state(items[0]);
 
     let drawerDelete = $state();
     let loaded = $state(false);
@@ -22,7 +22,7 @@
 
 <sl-button
     onclick={handleAction}
-    size={$_displayMode === "miniButtons" ? "small" : "medium"}
+    size={displayMode === "miniButtons" ? "small" : "medium"}
     title={$_("text.shareDelete")}
 >
     <MaterialSymbol name="delete" />
@@ -31,6 +31,6 @@
 
 {#if loaded}
     <Portal>
-        <DrawerDelete bind:this={drawerDelete} bind:share={$_item} />
+        <DrawerDelete bind:this={drawerDelete} bind:share={share} />
     </Portal>
 {/if}

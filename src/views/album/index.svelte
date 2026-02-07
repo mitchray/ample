@@ -133,7 +133,7 @@
                         <Actions
                             type="album"
                             displayMode="fullButtons"
-                            item={album}
+                            items={[album]}
                             showShuffle={album.songcount > 1}
                             data={Object.create({
                                 artist: album.artist,

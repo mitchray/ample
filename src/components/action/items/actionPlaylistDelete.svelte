@@ -1,14 +1,14 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _data } = getContext(contextKey);
+    const { items, data } = actionContext;
+    let playlist = $state(items[0] ?? data.playlist);
 
     let drawerDelete = $state();
     let loaded = $state(false);
@@ -20,7 +20,7 @@
     }
 </script>
 
-{#if $_data.playlist?.has_access}
+{#if playlist?.has_access}
     <sl-menu-item
         onclick={handleAction}
         title={$_("text.playlistDelete")}
@@ -35,7 +35,7 @@
     <Portal>
         <DrawerDelete
             bind:this={drawerDelete}
-            bind:playlist={$_data.playlist}
+            bind:playlist={playlist}
         />
     </Portal>
 {/if}

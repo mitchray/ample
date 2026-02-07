@@ -1,14 +1,13 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import Portal from "~/components/portal.svelte";
     import DrawerAddTo from "~/components/action/drawers/drawerPlaylistAddTo.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey, ...rest } = $props();
+    let { actionContext, ...rest } = $props();
 
-    const { getSongs } = getContext(contextKey);
+    const { getSongs } = actionContext;
 
     let loaded = $state(false);
     let drawerAddTo = $state();

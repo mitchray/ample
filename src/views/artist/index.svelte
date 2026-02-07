@@ -191,7 +191,7 @@
                             type="artist"
                             displayMode="fullButtons"
                             showShuffle={artist.songcount > 1}
-                            item={artist}
+                            items={[artist]}
                         />
                     </div>
                 </div>

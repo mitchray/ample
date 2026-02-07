@@ -45,7 +45,7 @@
 
         <div class="actions">
             <Actions
-                item={song}
+                items={[song]}
                 showLinks={true}
                 type="song"
                 displayMode="miniButtons"

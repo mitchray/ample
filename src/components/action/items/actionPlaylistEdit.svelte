@@ -1,14 +1,14 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import Portal from "~/components/portal.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { ticks } from "~/logic/ui.js";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _data } = getContext(contextKey);
+    const { items, data } = actionContext;
+    let playlist = $state(items[0] ?? data.playlist);
 
     let drawerEdit = $state();
     let loaded = $state(false);
@@ -20,7 +20,7 @@
     }
 </script>
 
-{#if $_data.playlist?.has_access}
+{#if playlist?.has_access}
     <sl-menu-item onclick={handleAction} title={$_("text.playlistEdit")}>
         <MaterialSymbol name="edit" slot="prefix" />
         {$_("text.playlistEdit")}
@@ -29,6 +29,6 @@
 
 {#if loaded}
     <Portal>
-        <DrawerEdit bind:this={drawerEdit} bind:playlist={$_data.playlist} />
+        <DrawerEdit bind:this={drawerEdit} bind:playlist={playlist} />
     </Portal>
 {/if}

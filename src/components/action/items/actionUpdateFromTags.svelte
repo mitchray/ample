@@ -1,42 +1,36 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { useQueryClient } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _type, _item } = getContext(contextKey);
+    const { items, apiType } = actionContext;
 
     let loading = $state(false);
 
     async function handleAction() {
         loading = true;
-
         let urlBefore = window.location.href;
 
-        $API.updateFromTags({ type: $_type, id: $_item.id }).then((result) => {
+        for (const item of items) {
+            let result = await $API.updateFromTags({ type: apiType, id: item.id });
             if (result.error) {
                 errorHandler("updating from tags", result.error);
             }
+        }
 
-            if (result.success) {
-                let urlAfter = window.location.href;
+        if (items.length > 0) {
+            try {
+                useQueryClient()?.invalidateQueries();
+            } catch (e) {}
+            addAlert({ title: $_("text.tagUpdateDone"), style: "success" });
+        }
 
-                if (urlBefore === urlAfter) {
-                    try {
-                        useQueryClient()?.invalidateQueries();
-                    } catch (e) {}
-                }
-
-                addAlert({ title: $_("text.tagUpdateDone"), style: "success" });
-            }
-
-            loading = false;
-        });
+        loading = false;
     }
 </script>
 

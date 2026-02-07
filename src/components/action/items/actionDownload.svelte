@@ -1,14 +1,13 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
     import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _item } = getContext(contextKey);
+    const { items } = actionContext;
     const downloadPreference = userPreference("download");
 
     let loading = $state(false);
@@ -27,30 +26,30 @@
     async function handleAction() {
         loading = true;
 
-        let song = await $API.song({ filter: $_item.id });
+        for (const item of items) {
+            let song = await $API.song({ filter: item.id });
 
-        if (song.error) {
-            errorHandler("getting song", song.error);
-            loading = false;
-            return;
+            if (song.error) {
+                errorHandler("getting song", song.error);
+                continue;
+            }
+
+            let file = await $API.download({
+                id: item.id,
+                type: "song",
+                format: "raw",
+            });
+
+            if (file.error) {
+                errorHandler("downloading", file.error);
+                continue;
+            }
+
+            downloadFile(
+                file,
+                `${song.artist.name} - ${song.track} - ${song.title}.${song.format}`,
+            );
         }
-
-        let file = await $API.download({
-            id: $_item.id,
-            type: "song",
-            format: "raw",
-        });
-
-        if (file.error) {
-            errorHandler("downloading", file.error);
-            loading = false;
-            return;
-        }
-
-        downloadFile(
-            file,
-            `${song.artist.name} - ${song.track} - ${song.title}.${song.format}`,
-        );
 
         loading = false;
     }

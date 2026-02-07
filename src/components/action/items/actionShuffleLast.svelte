@@ -1,13 +1,12 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { MediaPlayer } from "~/stores/elements.js";
     import { shuffleArray } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { getSongs, _showShuffle } = getContext(contextKey);
+    const { getSongs, showShuffle } = actionContext;
 
     let loading = $state(false);
 
@@ -20,7 +19,7 @@
     }
 </script>
 
-{#if $_showShuffle}
+{#if showShuffle}
     <sl-menu-item
         onclick={handleAction}
         title={$_("text.shuffleLast")}

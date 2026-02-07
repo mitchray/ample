@@ -611,7 +611,7 @@ export let songsPreset = [
                     props: {
                         type: "song",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                         data: Object.create({
                             album: data.album ? data.album : null,
@@ -681,7 +681,7 @@ export let albumPreset = [
                     props: {
                         type: "song",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                         data: Object.create({
                             album: data.album ? data.album : null,
@@ -734,7 +734,7 @@ export let albumsPreset = [
                     props: {
                         type: "album",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         showShuffle: true,
                         hoist: true,
                         data: Object.create({
@@ -803,7 +803,7 @@ export let artistsPreset = [
                     props: {
                         type: "artist",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                         showShuffle: true,
                         data: Object.create({}),
@@ -862,7 +862,7 @@ export let playlistsPreset = [
                     props: {
                         type: "playlist",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                         showShuffle: true,
                         data: Object.create({
@@ -906,7 +906,7 @@ export let smartlistsPreset = [
                     props: {
                         type: "playlist",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                         showShuffle: true,
                         data: Object.create({}),
@@ -986,7 +986,7 @@ export let liveStreamsPreset = [
                     props: {
                         type: "live_stream",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                     },
                 });
@@ -1021,7 +1021,7 @@ export let podcastsPreset = [
                     props: {
                         type: "podcast",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         showShuffle: true,
                         hoist: true,
                     },
@@ -1057,7 +1057,7 @@ export let podcastEpisodesPreset = [
                     props: {
                         type: "podcast_episode",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hoist: true,
                         hideDefaultActions: data.state !== "completed",
                     },
@@ -1097,7 +1097,7 @@ export let sharesPreset = [
                     props: {
                         type: "share",
                         displayMode: "miniButtons",
-                        item: data,
+                        items: [data],
                         hideDefaultActions: true,
                         hoist: true,
                     },

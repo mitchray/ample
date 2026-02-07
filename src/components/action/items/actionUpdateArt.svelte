@@ -1,49 +1,46 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { API } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
-    let { contextKey } = $props();
+    let { actionContext } = $props();
 
-    const { _type, _item } = getContext(contextKey);
+    const { items, apiType } = actionContext;
 
     let loading = $state(false);
     let label =
-        $_type === "artist"
+        apiType === "artist"
             ? $_("text.updateArtistImage")
             : $_("text.updateAlbumArt");
 
     async function handleAction() {
         loading = true;
 
-        $API.updateArt({ type: $_type, id: $_item.id }).then((result) => {
+        for (const item of items) {
+            let result = await $API.updateArt({ type: apiType, id: item.id });
             if (result.error) {
                 errorHandler("updating art", result.error);
             }
 
             if (result.success) {
                 let images = document.querySelectorAll(
-                    `img[data-id=art-${$_type}-${$_item.id}]`,
+                    `img[data-id=art-${apiType}-${item.id}]`,
                 );
                 images.forEach((image) => {
-                    // reload the original image url (including thumb param) to update the cache
                     fetch(image.src, { cache: "reload", mode: "no-cors" });
-
-                    // replace the visible image with the updated art
                     image.src = result.art;
                 });
             }
+        }
 
-            loading = false;
-        });
+        loading = false;
     }
 </script>
 
 <sl-menu-item {loading} onclick={handleAction} title={label}>
     <MaterialSymbol
-        name={$_type === "artist" ? "portrait" : "image"}
+        name={apiType === "artist" ? "portrait" : "image"}
         slot="prefix"
     />
     {label}

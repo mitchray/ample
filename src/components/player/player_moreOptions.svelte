@@ -4,8 +4,6 @@
      * and the player has unique menu items
      */
 
-    import { setContext } from "svelte";
-    import { v4 as uuidv4 } from "uuid";
     import { CurrentMedia } from "~/stores/state.js";
     import PlaybackSpeed from "~/components/player/player_playbackSpeed.svelte";
     import Lyrics from "~/components/action/items/actionLyrics.svelte";
@@ -14,11 +12,9 @@
     import FindDuplicates from "~/components/action/items/actionFindDuplicates.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
-    const contextKey = uuidv4(); // unique key passing context
-
-    setContext(contextKey, {
+    const actionContext = {
         getSongs: () => [$CurrentMedia],
-    });
+    };
 </script>
 
 <sl-dropdown>
@@ -28,7 +24,7 @@
 
     <sl-menu>
         <AddToPlaylist
-            {contextKey}
+            {actionContext}
             disabled={$CurrentMedia?.object_type !== "song"}
         />
 
@@ -38,7 +34,7 @@
 
         <Visualizer />
 
-        <Lyrics {contextKey} disabled={$CurrentMedia?.object_type !== "song"} />
+        <Lyrics disabled={$CurrentMedia?.object_type !== "song"} />
 
         <PlaybackSpeed />
     </sl-menu>

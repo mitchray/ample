@@ -1,6 +1,5 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { getContext } from "svelte";
     import { ticks } from "~/logic/ui.js";
     import Portal from "~/components/portal.svelte";
     import DrawerShareEdit from "~/components/action/drawers/drawerShareEdit.svelte";
@@ -8,9 +7,9 @@
     import { API } from "~/stores/state.js";
     import { userPreference } from "~/logic/preferences.js";
 
-    let { contextKey, ...rest } = $props();
+    let { actionContext, ...rest } = $props();
 
-    const { _item, _type } = getContext(contextKey);
+    const { items, apiType } = actionContext;
     const sharePreference = userPreference("share");
     let drawerShare = $state();
     let loaded = $state(false);
@@ -19,10 +18,12 @@
     async function handleAction() {
         loaded = false;
 
-        newShare = await $API.shareCreate({
-            filter: $_item.id,
-            type: $_type,
-        });
+        for (const item of items) {
+            newShare = await $API.shareCreate({
+                filter: item.id,
+                type: apiType,
+            });
+        }
 
         loaded = true;
         await ticks(2);
