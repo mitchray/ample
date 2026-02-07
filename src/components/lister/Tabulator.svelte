@@ -66,7 +66,7 @@
 
                 return icon;
             },
-            minHeight: 250,
+            //minHeight: 250,
             maxHeight:
                 $SiteContentBind?.clientHeight > 0
                     ? $SiteContentBind.clientHeight
