@@ -21,7 +21,7 @@
                 return {};
             }
 
-            tabulator?.setData(result.share);
+            tabulator?.replaceData(result.share);
 
             return result;
         },

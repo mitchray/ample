@@ -20,7 +20,7 @@
                 return [];
             }
 
-            tabulator?.setData(result.artist);
+            tabulator?.replaceData(result.artist);
 
             return result;
         },
@@ -49,7 +49,6 @@
                         getArtists: () => tabulator.getData("active"),
                     }}
                 />
-
             </div>
 
             <Tabulator

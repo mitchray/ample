@@ -20,7 +20,7 @@
             to: toYear,
         });
 
-        tabulator?.setData(response.album || []);
+        tabulator?.replaceData(response.album || []);
     }
 
     $effect(() => {
@@ -41,7 +41,6 @@
             showShuffle={true}
             data={{ from: fromYear, to: toYear }}
         />
-
     </div>
 
     <Tabulator

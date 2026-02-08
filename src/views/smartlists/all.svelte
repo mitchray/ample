@@ -18,7 +18,7 @@
                 return [];
             }
 
-            tabulator?.setData(result.playlist);
+            tabulator?.replaceData(result.playlist);
 
             return result;
         },
@@ -38,8 +38,7 @@
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-            </div>
+            <div class="lister-tabulator__actions"></div>
 
             <Tabulator
                 bind:tabulator

@@ -40,7 +40,7 @@
             // or only refetch if not in edit mode
 
             // refresh data on subsequent loads
-            tabulator?.setData(response.song);
+            tabulator?.replaceData(response.song);
 
             // TODO return correct object type when playlists eventually have mixed content
             return response.song;
@@ -110,7 +110,6 @@
                     showShuffle={items.length > 1}
                     data={{ getSongs: () => tabulator.getData("active") }}
                 />
-
 
                 {#if type === "playlist"}
                     <PlaylistRemoveFrom

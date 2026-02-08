@@ -21,7 +21,7 @@
                 return [];
             }
 
-            tabulator?.setData(result.genre);
+            tabulator?.replaceData(result.genre);
 
             return result;
         },

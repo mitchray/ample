@@ -20,7 +20,7 @@
                 return [];
             }
 
-            tabulator?.setData(result.album);
+            tabulator?.replaceData(result.album);
 
             return result;
         },
@@ -47,7 +47,6 @@
                     showShuffle={true}
                     data={{ getAlbums: () => tabulator.getData("active") }}
                 />
-
             </div>
 
             <Tabulator
