@@ -23,6 +23,8 @@
 
     function handleRating() {
         ratingErrored = false;
+        const ratedId = data.id;
+        const ratedType = finalType;
         let parsedRating = parseInt(this.dataset.rating);
         let originalRating = data.rating;
         let newRating = parsedRating === data.rating ? 0 : parsedRating; // clear rating if it matches existing
@@ -30,37 +32,41 @@
         // update the displayed rating immediately
         data = { ...data, rating: newRating };
 
-        $API.rate({ type: finalType, id: data.id, rating: newRating }).then(
+        $API.rate({ type: ratedType, id: ratedId, rating: newRating }).then(
             (result) => {
                 if (result.error) {
                     errorHandler("while rating", result.error);
                     ratingErrored = true;
 
-                    // revert the displayed rating
-                    data = { ...data, rating: originalRating };
+                    // revert the displayed rating only if still showing the same item
+                    if (data.id === ratedId) {
+                        data = { ...data, rating: originalRating };
+                    }
                 }
 
                 if (result.success) {
                     recentRating.set({
-                        type: finalType,
-                        id: data.id,
+                        type: ratedType,
+                        id: ratedId,
                         rating: newRating,
                     });
 
                     // now update any items in the queue with the new rating
                     let foundItems = $NowPlayingQueue.filter(
                         (item) =>
-                            item.id === data.id &&
-                            item.object_type === finalType,
+                            item.id === ratedId &&
+                            item.object_type === ratedType,
                     );
 
                     foundItems.forEach((item) => {
                         item.rating = newRating;
                     });
 
-                    // TODO is this still required
                     updateQueue();
-                    refreshAverageRating();
+
+                    if (data.id === ratedId) {
+                        refreshAverageRating(ratedId, ratedType);
+                    }
                 }
             },
         );
@@ -68,9 +74,11 @@
 
     function handleFlag() {
         flagErrored = false;
+        const ratedId = data.id;
+        const ratedType = finalType;
         let newFlag = data.flag ? 0 : 1;
 
-        $API.flag({ type: finalType, id: data.id, flag: newFlag }).then(
+        $API.flag({ type: ratedType, id: ratedId, flag: newFlag }).then(
             (result) => {
                 if (result.error) {
                     errorHandler("while flagging", result.error);
@@ -79,45 +87,50 @@
                 }
 
                 if (result.success) {
-                    data = { ...data, flag: newFlag };
-
                     recentFlag.set({
-                        type: finalType,
-                        id: data.id,
+                        type: ratedType,
+                        id: ratedId,
                         flag: newFlag,
                     });
 
                     // now update any items in the queue with the new fav
                     let foundItems = $NowPlayingQueue.filter(
                         (item) =>
-                            item.id === data.id &&
-                            item.object_type === finalType,
+                            item.id === ratedId &&
+                            item.object_type === ratedType,
                     );
 
                     foundItems.forEach((item) => {
-                        item.flag = data.flag;
+                        item.flag = newFlag;
                     });
 
                     updateQueue();
+
+                    if (data.id === ratedId) {
+                        data = { ...data, flag: newFlag };
+                    }
                 }
             },
         );
     }
 
-    function refreshAverageRating() {
+    function refreshAverageRating(id = null, typeOverride = null) {
+        const targetId = id ?? data.id;
+        const targetType = typeOverride ?? finalType;
+
         debugHelper("refetch item to get average rating");
 
         const apiMap = {
-            song: () => $API.song({ filter: data.id }),
-            album: () => $API.album({ filter: data.id }),
-            artist: () => $API.artist({ filter: data.id }),
-            playlist: () => $API.playlist({ filter: data.id }),
-            podcast: () => $API.podcast({ filter: data.id }),
+            song: () => $API.song({ filter: targetId }),
+            album: () => $API.album({ filter: targetId }),
+            artist: () => $API.artist({ filter: targetId }),
+            playlist: () => $API.playlist({ filter: targetId }),
+            podcast: () => $API.podcast({ filter: targetId }),
         };
 
-        if (apiMap[finalType]) {
-            apiMap[finalType]().then((r) => {
-                if (!r.error) {
+        if (apiMap[targetType]) {
+            apiMap[targetType]().then((r) => {
+                if (!r.error && data.id === targetId) {
                     data = { ...data, averagerating: r.averagerating };
                 }
             });

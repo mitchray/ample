@@ -941,7 +941,7 @@ class Player {
                 self.approachingEnd = false;
                 self.empty(self.players[key]);
 
-                // TODO what did this achieve?
+                // ensures that next() is only called when the currently active player finishes
                 if (self.players[key] !== self.currentPlayer) {
                     return;
                 }
