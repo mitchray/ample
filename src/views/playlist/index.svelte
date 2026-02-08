@@ -206,6 +206,7 @@
     }
 
     .art-container {
+        width: 100%;
         max-width: 240px;
         aspect-ratio: 1 / 1;
         overflow: hidden;
@@ -267,7 +268,7 @@
         }
 
         .art-container {
-            max-width: 180px;
+            width: 180px;
         }
 
         .type {
@@ -282,7 +283,7 @@
         }
 
         .art-container {
-            max-width: 240px;
+            width: 240px;
         }
     }
 </style>
