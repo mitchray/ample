@@ -39,8 +39,6 @@
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
-            <div class="lister-tabulator__actions"></div>
-
             <Tabulator
                 bind:tabulator
                 data={smartlists}
