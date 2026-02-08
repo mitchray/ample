@@ -41,12 +41,12 @@
     }));
 
     // alias of returned data
-    let songs = $derived(query.data || {});
+    let songs = $derived(query.data ?? []);
 </script>
 
 <div class="page-header">
     <h1 class="page-title">
-        {@html $PageTitle}
+        {$PageTitle}
     </h1>
 </div>
 
@@ -61,12 +61,11 @@
         <div class="lister-tabulator">
             <div class="lister-tabulator__actions">
                 <Actions
-                    type="songGenre"
+                    type="songs"
                     displayMode="fullButtons"
-                    showShuffle={true}
-                    data={{ songs: songs }}
+                    showShuffle={songs.length > 1}
+                    data={{ getSongs: () => tabulator?.getData("active") }}
                 />
-
             </div>
 
             <Tabulator

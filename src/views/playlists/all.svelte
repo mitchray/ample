@@ -1,23 +1,30 @@
 <script>
     import { playlistsPreset } from "~/components/lister/columns.js";
-    import { API, User } from "~/stores/state.js";
-    import Tabulator from "~/components/lister/Tabulator.svelte";
     import { createInfiniteQuery } from "@tanstack/svelte-query";
+    import { API, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let limit = 500;
     let total = $state(0);
 
     const query = createInfiniteQuery(() => ({
         queryKey: ["playlistsAll"],
         initialPageParam: 0,
         getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            let offsetTotal = lastPageParam + limit;
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            let offsetTotal = lastPageParam + limitUsed;
             return offsetTotal <= total ? offsetTotal : undefined;
         },
-        // pageParam is based on offset total
         queryFn: async ({ pageParam }) => {
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+
             let response = await $API.playlists({
                 hide_search: 1,
                 sort: "name,ASC",
@@ -41,26 +48,21 @@
     }));
 
     // alias of returned data
-    let playlists = $derived(query.data?.pages || []);
+    let playlists = $derived(query.data?.pages.flat() || []);
 
     $effect(() => {
-        if (playlists && query.hasNextPage) {
+        if (playlists && query.hasNextPage && !query.isFetchingNextPage) {
             query.fetchNextPage();
         }
     });
 </script>
 
 <div class="lister-tabulator">
-    <div class="lister-tabulator__actions">
-    </div>
-
     <Tabulator
         bind:tabulator
         data={[]}
         columns={playlistsPreset}
         type="playlists"
-        options={{
-            persistenceID: "playlists",
-        }}
+        options={{ id: "all-playlists", persistenceID: "all-playlists" }}
     ></Tabulator>
 </div>

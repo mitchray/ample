@@ -1,58 +1,80 @@
 <script>
-    import { _ } from "@rgglez/svelte-i18n";
-    import { createQuery } from "@tanstack/svelte-query";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
     import { API, User } from "~/stores/state";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
     import { songsPreset, track } from "~/components/lister/columns.js";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let { artistID } = $props();
-    let loading = $state(false);
-    let tabulator = $state(null);
 
-    const query = createQuery(() => ({
+    let tabulator = $state(null);
+    let total = $state(0);
+
+    const query = createInfiniteQuery(() => ({
         queryKey: ["allArtistSongs", artistID],
-        queryFn: async () => {
-            let result = await $API.artistSongs({ filter: artistID });
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            let offsetTotal = lastPageParam + limitUsed;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        // pageParam is based on offset total
+        queryFn: async ({ pageParam }) => {
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+
+            let result = await $API.artistSongs({
+                filter: artistID,
+                limit,
+                offset: pageParam,
+            });
 
             if (result.error) {
                 errorHandler("getting all songs for artist", result.error);
                 return [];
             }
 
-            return result;
+            total = result.total_count;
+
+            // refresh data on subsequent loads
+            tabulator?.addData(result.song);
+
+            return result.song;
         },
         enabled: $User.isLoggedIn,
     }));
 
     // alias of returned data
-    let songs = $derived(query.data?.song || {});
+    let songs = $derived(query.data?.pages.flat() || []);
+
+    $effect(() => {
+        if (songs && query.hasNextPage && !query.isFetchingNextPage) {
+            query.fetchNextPage();
+        }
+    });
 </script>
 
-{#if !loading && songs && songs.length > 0}
-    <div class="lister-tabulator">
-        <div class="lister-tabulator__actions">
-            <Actions
-                type="songs"
-                displayMode="fullButtons"
-                showShuffle={songs.length > 1}
-                data={{ getSongs: () => tabulator.getData("active") }}
-            />
-
-        </div>
-
-        <Tabulator
-            bind:tabulator
-            data={songs}
-            columns={[track, ...songsPreset]}
+<div class="lister-tabulator">
+    <div class="lister-tabulator__actions">
+        <Actions
             type="songs"
-            options={{ persistence: true, persistenceID: "SongsArtistAll" }}
-        ></Tabulator>
+            displayMode="fullButtons"
+            showShuffle={songs.length > 1}
+            data={{ getSongs: () => tabulator?.getData("active") }}
+        />
     </div>
-{:else}
-    <p>{$_("text.loading")}</p>
-{/if}
 
-<style>
-</style>
+    <Tabulator
+        bind:tabulator
+        data={[]}
+        columns={[track, ...songsPreset]}
+        type="songs"
+        options={{ persistence: true, persistenceID: "SongsArtistAll" }}
+    ></Tabulator>
+</div>

@@ -102,7 +102,7 @@ export async function getSongVersions(songTitle, artistName) {
     });
 
     if (response.error) {
-        return false;
+        return response.error;
     }
 
     debugHelper(response, "getSongVersions");

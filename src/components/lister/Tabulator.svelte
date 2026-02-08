@@ -23,6 +23,7 @@
     } = $props();
 
     let tableId;
+    let tableReady = $state(false);
 
     function centreOnTable() {
         tableElement?.scrollIntoView({
@@ -36,6 +37,14 @@
     $effect(() => {
         if ($clearSelectionTrigger) {
             tabulator?.deselectRow();
+        }
+    });
+
+    // sync data prop to table when it changes (e.g. after async load or cache hydration)
+    // only call setData after tableBuilt - renderer is null until then
+    $effect(() => {
+        if (tabulator && tableReady) {
+            tabulator.setData(data ?? []);
         }
     });
 
@@ -83,6 +92,10 @@
             ...options,
         });
 
+        tabulator.on("tableBuilt", () => {
+            tableReady = true;
+        });
+
         // centre table in viewport on scroll
         tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
 
@@ -122,7 +135,7 @@
     });
 </script>
 
-<div bind:this={tableElement} data-id={options.id || null}></div>
+<div bind:this={tableElement} data-id={options?.id || null}></div>
 
 <style>
     :global(.lister-tabulator) {

@@ -41,7 +41,7 @@
     }));
 
     // alias of returned data
-    let albums = $derived(query.data?.pages || []);
+    let albums = $derived(query.data?.pages.flat() || []);
 
     $effect(() => {
         if (albums && query.hasNextPage) {
@@ -51,9 +51,6 @@
 </script>
 
 <div class="lister-tabulator">
-    <div class="lister-tabulator__actions">
-    </div>
-
     <Tabulator
         bind:tabulator
         data={[]}

@@ -15,9 +15,6 @@
 
 {#if view === "table"}
     <div class="lister-tabulator">
-        <div class="lister-tabulator__actions">
-        </div>
-
         <Tabulator
             bind:tabulator
             data={items}

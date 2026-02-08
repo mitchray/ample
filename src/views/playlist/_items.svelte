@@ -11,59 +11,109 @@
         moveHandleDisabled,
         songsPreset,
     } from "~/components/lister/columns.js";
-    import { createQuery } from "@tanstack/svelte-query";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { _ } from "@rgglez/svelte-i18n";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let { type, playlist } = $props();
 
     let tabulator = $state(null);
+    let total = $state(0);
     let columns = $derived(
         type === "playlist"
             ? [moveHandle, moveHandleDisabled, ...songsPreset]
             : songsPreset,
     );
 
-    const query = createQuery(() => ({
-        queryKey: ["playlist_items", playlist.id],
-        queryFn: async () => {
-            let response = await getSongsFromPlaylist({
-                id: playlist.id,
-                type: type === "mix" ? "artist_mix" : "playlist",
+    const query = createInfiniteQuery(() => ({
+        queryKey: ["playlist_items", playlist.id + type],
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            if (type === "mix") return undefined;
+
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            let offsetTotal = lastPageParam + limitUsed;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        queryFn: async ({ pageParam }) => {
+            if (type === "mix") {
+                let response = await getSongsFromPlaylist({
+                    id: playlist.id,
+                    type: "artist_mix",
+                });
+
+                if (response.error) {
+                    errorHandler("getting items from playlist", response.error);
+                    return [];
+                }
+
+                return response.song || [];
+            }
+
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+
+            let result = await $API.playlistSongs({
+                filter: playlist.id,
+                limit,
+                offset: pageParam,
             });
 
-            if (response.error) {
-                errorHandler("getting items from playlist", response.error);
+            if (result.error) {
+                errorHandler("getting items from playlist", result.error);
                 return [];
             }
 
-            // TODO maybe don't refetch playlists on tab change in case it messes up sort order
-            // or only refetch if not in edit mode
+            total = result.total_count ?? 0;
 
-            // refresh data on subsequent loads
-            tabulator?.replaceData(response.song);
-
-            // TODO return correct object type when playlists eventually have mixed content
-            return response.song;
+            return result.song;
         },
         enabled: $User.isLoggedIn,
     }));
 
     // alias of returned data
-    let items = $derived(query.data || []);
+    let items = $derived(query.data?.pages.flat() || []);
+
+    const isDataFullyLoaded = $derived(
+        type === "mix"
+            ? !query.isFetching
+            : !query.isFetching && !query.hasNextPage,
+    );
+
+    $effect(() => {
+        if (
+            items.length > 0 &&
+            type !== "mix" &&
+            query.hasNextPage &&
+            !query.isFetchingNextPage
+        ) {
+            query.fetchNextPage();
+        }
+    });
+
+    function updateMoveHandleVisibility() {
+        if (!tabulator || type !== "playlist") return;
+
+        const isSorted = tabulator.getSorters?.()?.length > 0;
+        const showMoveHandle = isDataFullyLoaded && !isSorted;
+
+        if (showMoveHandle) {
+            tabulator.hideColumn("moveHandleDisabled");
+            tabulator.showColumn("moveHandle");
+        } else {
+            tabulator.hideColumn("moveHandle");
+            tabulator.showColumn("moveHandleDisabled");
+        }
+    }
 
     function setupEvents() {
         if (!tabulator || type !== "playlist") return;
 
-        // hide moveHandle if table has been sorted
-        tabulator.on("dataSorting", () => {
-            if (tabulator.getSorters().length > 0) {
-                tabulator.hideColumn("moveHandle");
-                tabulator.showColumn("moveHandleDisabled");
-            } else {
-                tabulator.hideColumn("moveHandleDisabled");
-                tabulator.showColumn("moveHandle");
-            }
-        });
+        tabulator.on("dataSorting", updateMoveHandleVisibility);
 
         tabulator.on("rowMoved", async () => {
             let allItems = tabulator.getData();
@@ -88,6 +138,10 @@
         }
     });
 
+    $effect(() => {
+        updateMoveHandleVisibility();
+    });
+
     onDestroy(() => {
         if (!tabulator || type !== "playlist") return;
 
@@ -96,40 +150,34 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#key playlist.id}
-        <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-                <Actions
-                    type="songs"
-                    displayMode="fullButtons"
-                    showShuffle={items.length > 1}
-                    data={{ getSongs: () => tabulator.getData("active") }}
-                />
-
-                {#if type === "playlist"}
-                    <PlaylistRemoveFrom
-                        bind:tabulator
-                        {items}
-                        playlistID={playlist.id}
-                    />
-                {/if}
-            </div>
-
-            <Tabulator
-                bind:tabulator
-                data={items}
-                {columns}
+{#key playlist.id}
+    <div class="lister-tabulator">
+        <div class="lister-tabulator__actions">
+            <Actions
                 type="songs"
-                options={{
-                    movableRows: true,
-                    persistenceID: "playlist",
-                }}
-            ></Tabulator>
+                displayMode="fullButtons"
+                showShuffle={items.length > 1}
+                data={{ getSongs: () => tabulator.getData("active") }}
+            />
+
+            {#if type === "playlist"}
+                <PlaylistRemoveFrom
+                    bind:tabulator
+                    {items}
+                    playlistID={playlist.id}
+                />
+            {/if}
         </div>
-    {/key}
-{/if}
+
+        <Tabulator
+            bind:tabulator
+            data={items}
+            {columns}
+            type="songs"
+            options={{
+                movableRows: true,
+                persistenceID: "playlist",
+            }}
+        ></Tabulator>
+    </div>
+{/key}

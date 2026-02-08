@@ -44,19 +44,16 @@
     }));
 
     // alias of returned data
-    let artists = $derived(query.data?.pages || []);
+    let artists = $derived(query.data?.pages.flat() || []);
 
     $effect(() => {
-        if (artists && query.hasNextPage) {
+        if (artists && query.hasNextPage && !query.isFetchingNextPage) {
             query.fetchNextPage();
         }
     });
 </script>
 
 <div class="lister-tabulator">
-    <div class="lister-tabulator__actions">
-    </div>
-
     <Tabulator
         bind:tabulator
         data={[]}

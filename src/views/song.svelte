@@ -15,6 +15,7 @@
     import { addAlert } from "~/logic/alert.js";
     import { push } from "svelte-spa-router";
     import { errorHandler } from "~/logic/helper.js";
+    import DOMPurify from "dompurify";
 
     let { params = {} } = $props();
 
@@ -63,7 +64,7 @@
     {:else}
         {#key query.data.id}
             <div class="info">
-                <h1 class="title">{song.title}</h1>
+                <h1 class="title">{$PageTitle}</h1>
 
                 <div class="meta">
                     <Rating type="song" data={song} />
@@ -76,8 +77,10 @@
             </div>
 
             <sl-tab-group>
-                <sl-tab slot="nav" panel="info">Info</sl-tab>
-                <sl-tab slot="nav" panel="lyrics">Lyrics</sl-tab>
+                <sl-tab slot="nav" panel="info">
+                    {$_("text.information")}
+                </sl-tab>
+                <sl-tab slot="nav" panel="lyrics">{$_("text.lyrics")}</sl-tab>
 
                 <sl-tab-panel name="info">
                     <div class="grid">
@@ -88,7 +91,7 @@
                             <span>
                                 <ArtistList data={song} />
                             </span>
-                        {:else if song.artist.name}
+                        {:else if song.artist?.name && song.artist?.id}
                             <span class="field">
                                 {$_("text.songArtist")}
                             </span>
@@ -213,8 +216,7 @@
                             <span>
                                 <a
                                     target="_blank"
-                                    href="https://musicbrainz.org/recording/{query
-                                        .data.mbid}"
+                                    href="https://musicbrainz.org/recording/{song.mbid}"
                                 >
                                     {song.mbid}
                                 </a>
@@ -237,7 +239,7 @@
 
                 <sl-tab-panel name="lyrics">
                     {#if song.lyrics}
-                        <span>{@html song.lyrics}</span>
+                        <span>{@html DOMPurify.sanitize(song.lyrics)}</span>
                     {:else}
                         <p>{$_("text.noItemsFound")}</p>
                     {/if}

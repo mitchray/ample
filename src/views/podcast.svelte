@@ -83,9 +83,6 @@
 
             {#if episodes.length > 0}
                 <div class="lister-tabulator">
-                    <div class="lister-tabulator__actions">
-                    </div>
-
                     <Tabulator
                         bind:tabulator
                         data={episodes}
