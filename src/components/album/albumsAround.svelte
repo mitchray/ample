@@ -41,15 +41,11 @@
             final.same = await groupAlbumsByReleaseType(final.same);
 
             final.previous = albums.filter((a) => a.year < album.year);
-            let closestPrevious = final.previous[final.previous.length - 1];
-            final.previous = final.previous.filter(
-                (a) => a.year === closestPrevious.year,
-            );
+            final.previous.sort((a, b) => b.year - a.year);
             final.previous = await groupAlbumsByReleaseType(final.previous);
 
             final.next = albums.filter((a) => a.year > album.year);
-            let closestNext = final.next[0];
-            final.next = final.next.filter((a) => a.year === closestNext.year);
+            final.next.sort((a, b) => a.year - b.year);
             final.next = await groupAlbumsByReleaseType(final.next);
 
             return final;
@@ -74,7 +70,7 @@
     >
         {#if albums.previous && [...albums.previous.values()].find((arr) => arr.length > 0)}
             <div class="previous">
-                <h3>{$_("text.previous")}</h3>
+                <h3>{$_("text.earlier")}</h3>
 
                 <div class="list">
                     {#each [...albums.previous] as [key, value], i}
@@ -102,7 +98,7 @@
 
         {#if albums.next && [...albums.next.values()].find((arr) => arr.length > 0)}
             <div class="next">
-                <h3>{$_("text.next")}</h3>
+                <h3>{$_("text.later")}</h3>
 
                 <div class="list">
                     {#each [...albums.next] as [key, value], i}
