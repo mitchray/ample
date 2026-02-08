@@ -33,9 +33,21 @@ export async function login({ auth }) {
     }));
 }
 
+/**
+ * Session valid if auth present and no error in response.
+ */
+function isSessionValid(result) {
+    return !result?.error && !!result?.auth;
+}
+
 export function logout() {
+    console.warn("[logout] called", new Error().stack);
+
     // destroy the session
-    get(API).goodbye({ auth: get(User).token });
+    const token = get(User).token;
+    if (token) {
+        get(API).goodbye({ auth: token });
+    }
 
     Settings.update((x) => ({
         ...x,
@@ -65,6 +77,9 @@ export async function pingWithTimeout(timeout = 5000) {
     ]);
 }
 
+const VALIDATE_RETRIES = 2;
+const VALIDATE_RETRY_DELAY_MS = 1000;
+
 export async function validateSession() {
     if (!get(Server).ampacheURL) {
         logout();
@@ -73,32 +88,48 @@ export async function validateSession() {
 
     let guestUserAPIKey = get(Server).guestUserAPIKey;
     let ampleLastSession = get(Settings).LastSession;
+    let finalToken = ampleLastSession?.token || guestUserAPIKey;
 
-    try {
-        API.set(
-            new AmpacheAPI({
-                url: get(Server).ampacheURL,
-                useBearerToken: get(useBearerToken),
-                debug: get(debugMode),
-            }),
-        );
-
-        let finalToken = ampleLastSession?.token || guestUserAPIKey;
-        get(API).setSessionKey(finalToken);
-
-        let result = await pingWithTimeout(10000);
-
-        if (result.auth) {
-            await login({
-                auth: finalToken, // use our original token
-            });
-        } else {
-            logout();
-        }
-    } catch (e) {
-        console.warn("Unable to validate session", e);
+    if (!finalToken) {
         logout();
+        return;
     }
+
+    API.set(
+        new AmpacheAPI({
+            url: get(Server).ampacheURL,
+            useBearerToken: get(useBearerToken),
+            debug: get(debugMode),
+        }),
+    );
+    get(API).setSessionKey(finalToken);
+
+    let lastError;
+    for (let attempt = 0; attempt <= VALIDATE_RETRIES; attempt++) {
+        try {
+            let result = await pingWithTimeout(10000);
+
+            if (isSessionValid(result)) {
+                await login({
+                    auth: finalToken,
+                });
+                return;
+            }
+
+            logout();
+            return;
+        } catch (e) {
+            lastError = e;
+            console.warn(`Unable to validate session (attempt ${attempt + 1}/${VALIDATE_RETRIES + 1})`, e);
+
+            if (attempt < VALIDATE_RETRIES) {
+                await new Promise((r) => setTimeout(r, VALIDATE_RETRY_DELAY_MS));
+            }
+        }
+    }
+
+    console.warn("All validation retries failed", lastError);
+    logout();
 }
 
 export async function attemptLogin({ passphrase = null, username = null }) {
@@ -138,11 +169,14 @@ export async function attemptLogin({ passphrase = null, username = null }) {
  * Extend an existing session by pinging the server with auth
  */
 export let extendSession = () => {
-    get(API)
-        .ping({ auth: get(User).token })
+    pingWithTimeout(8000)
         .then((result) => {
-            if (!result.auth) {
+            if (!isSessionValid(result)) {
+                console.warn("[extendSession] Session invalid, logging out", result);
                 logout();
             }
+        })
+        .catch((e) => {
+            console.warn("[extendSession] Ping failed, keeping session (network error)", e);
         });
 };
