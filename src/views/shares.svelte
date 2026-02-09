@@ -43,14 +43,12 @@
     {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <Tabulator
-                bind:tabulator
-                data={shares}
-                columns={sharesPreset}
-                type="shares"
-                options={{ id: "shares", persistenceID: "shares" }}
-            ></Tabulator>
-        </div>
+        <Tabulator
+            bind:tabulator
+            data={shares}
+            columns={sharesPreset}
+            type="shares"
+            options={{ id: "shares", persistenceID: "shares" }}
+        ></Tabulator>
     {/if}
 {/if}

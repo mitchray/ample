@@ -66,66 +66,60 @@
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         {#if type === "artist"}
-            <div class="lister-tabulator">
-                <Actions
-                    type="artistGenre"
-                    displayMode="fullButtons"
-                    showShuffle={true}
-                    data={{ id: id }}
-                />
+            <Actions
+                type="artistGenre"
+                displayMode="fullButtons"
+                showShuffle={true}
+                data={{ id: id }}
+            />
 
-                <Tabulator
-                    bind:tabulator
-                    data={items}
-                    columns={artistsPreset}
-                    type="artists"
-                    options={{
-                        persistenceID: "artists",
-                    }}
-                ></Tabulator>
-            </div>
+            <Tabulator
+                bind:tabulator
+                data={items}
+                columns={artistsPreset}
+                type="artists"
+                options={{
+                    persistenceID: "artists",
+                }}
+            ></Tabulator>
         {/if}
 
         {#if type === "album"}
-            <div class="lister-tabulator">
-                <Actions
-                    type="albumGenre"
-                    displayMode="fullButtons"
-                    showShuffle={true}
-                    data={{ id: id }}
-                />
+            <Actions
+                type="albumGenre"
+                displayMode="fullButtons"
+                showShuffle={true}
+                data={{ id: id }}
+            />
 
-                <Tabulator
-                    bind:tabulator
-                    data={items}
-                    columns={albumsPreset}
-                    type="albums"
-                    options={{
-                        persistenceID: "albums",
-                    }}
-                ></Tabulator>
-            </div>
+            <Tabulator
+                bind:tabulator
+                data={items}
+                columns={albumsPreset}
+                type="albums"
+                options={{
+                    persistenceID: "albums",
+                }}
+            ></Tabulator>
         {/if}
 
         {#if type === "song"}
-            <div class="lister-tabulator">
-                <Actions
-                    type="songGenre"
-                    displayMode="fullButtons"
-                    showShuffle={true}
-                    data={{ id: id }}
-                />
+            <Actions
+                type="songGenre"
+                displayMode="fullButtons"
+                showShuffle={true}
+                data={{ id: id }}
+            />
 
-                <Tabulator
-                    bind:tabulator
-                    data={items}
-                    columns={songsPreset}
-                    type="songs"
-                    options={{
-                        persistenceID: "songs",
-                    }}
-                ></Tabulator>
-            </div>
+            <Tabulator
+                bind:tabulator
+                data={items}
+                columns={songsPreset}
+                type="songs"
+                options={{
+                    persistenceID: "songs",
+                }}
+            ></Tabulator>
         {/if}
     {/if}
 {/if}

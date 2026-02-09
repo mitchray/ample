@@ -42,14 +42,12 @@
     {#if liveStreams.length < 1}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <Tabulator
-                bind:tabulator
-                data={liveStreams}
-                columns={liveStreamsPreset}
-                type="live_streams"
-                options={{ persistenceID: "livestreams" }}
-            ></Tabulator>
-        </div>
+        <Tabulator
+            bind:tabulator
+            data={liveStreams}
+            columns={liveStreamsPreset}
+            type="live_streams"
+            options={{ persistenceID: "livestreams" }}
+        ></Tabulator>
     {/if}
 {/if}

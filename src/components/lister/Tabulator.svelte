@@ -135,13 +135,15 @@
     });
 </script>
 
-<div bind:this={tableElement} data-id={options?.id || null}></div>
+<div class="lister-tabulator">
+    <div bind:this={tableElement} data-id={options?.id || null}></div>
+</div>
 
 <style>
-    :global(.lister-tabulator) {
-        display: flex;
-        flex-direction: column;
-        gap: var(--spacing-lg);
+    .lister-tabulator {
+        /*display: flex;*/
+        /*flex-direction: column;*/
+        /*gap: var(--spacing-lg);*/
     }
 
     :global(.tabulator-placeholder) {

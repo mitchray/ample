@@ -39,21 +39,19 @@
     {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <Actions
-                type="albums"
-                displayMode="fullButtons"
-                showShuffle={true}
-                data={{ getAlbums: () => tabulator.getData("active") }}
-            />
+        <Actions
+            type="albums"
+            displayMode="fullButtons"
+            showShuffle={true}
+            data={{ getAlbums: () => tabulator.getData("active") }}
+        />
 
-            <Tabulator
-                bind:tabulator
-                data={albums}
-                columns={albumsPreset}
-                type="albums"
-                options={{ persistenceID: "albums" }}
-            ></Tabulator>
-        </div>
+        <Tabulator
+            bind:tabulator
+            data={albums}
+            columns={albumsPreset}
+            type="albums"
+            options={{ persistenceID: "albums" }}
+        ></Tabulator>
     {/if}
 {/if}

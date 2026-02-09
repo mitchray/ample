@@ -50,14 +50,12 @@
     });
 </script>
 
-<div class="lister-tabulator">
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={albumsPreset}
-        type="albums"
-        options={{
-            persistenceID: "albums",
-        }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={albumsPreset}
+    type="albums"
+    options={{
+        persistenceID: "albums",
+    }}
+></Tabulator>

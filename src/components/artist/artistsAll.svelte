@@ -53,14 +53,12 @@
     });
 </script>
 
-<div class="lister-tabulator">
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={artistsPreset}
-        type="artists"
-        options={{
-            persistenceID: "artists",
-        }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={artistsPreset}
+    type="artists"
+    options={{
+        persistenceID: "artists",
+    }}
+></Tabulator>

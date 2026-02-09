@@ -47,21 +47,19 @@
     {#if songs.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <Actions
-                type="songs"
-                displayMode="fullButtons"
-                showShuffle={songs.length > 1}
-                data={{ getSongs: () => tabulator.getData("active") }}
-            />
+        <Actions
+            type="songs"
+            displayMode="fullButtons"
+            showShuffle={songs.length > 1}
+            data={{ getSongs: () => tabulator.getData("active") }}
+        />
 
-            <Tabulator
-                bind:tabulator
-                data={songs}
-                columns={[index, ...songsPreset]}
-                type="songs"
-                options={{ persistenceID: "songsArtistTop" }}
-            ></Tabulator>
-        </div>
+        <Tabulator
+            bind:tabulator
+            data={songs}
+            columns={[index, ...songsPreset]}
+            type="songs"
+            options={{ persistenceID: "songsArtistTop" }}
+        ></Tabulator>
     {/if}
 {/if}

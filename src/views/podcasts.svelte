@@ -42,14 +42,12 @@
     {#if podcasts.length < 1}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <Tabulator
-                bind:tabulator
-                data={podcasts}
-                columns={podcastsPreset}
-                type="podcasts"
-                options={{ persistenceID: "podcasts" }}
-            ></Tabulator>
-        </div>
+        <Tabulator
+            bind:tabulator
+            data={podcasts}
+            columns={podcastsPreset}
+            type="podcasts"
+            options={{ persistenceID: "podcasts" }}
+        ></Tabulator>
     {/if}
 {/if}

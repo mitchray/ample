@@ -55,12 +55,10 @@
     });
 </script>
 
-<div class="lister-tabulator">
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={smartlistsPreset}
-        type="smartlists"
-        options={{ id: "all-smartlists", persistenceID: "all-smartlists" }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={smartlistsPreset}
+    type="smartlists"
+    options={{ id: "all-smartlists", persistenceID: "all-smartlists" }}
+></Tabulator>

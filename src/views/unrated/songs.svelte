@@ -32,19 +32,17 @@
     let songs = $derived(query.data || []);
 </script>
 
-<div class="lister-tabulator">
-    <Actions
-        type="songs"
-        displayMode="fullButtons"
-        showShuffle={true}
-        data={{ getSongs: () => tabulator.getData("active") }}
-    />
+<Actions
+    type="songs"
+    displayMode="fullButtons"
+    showShuffle={true}
+    data={{ getSongs: () => tabulator.getData("active") }}
+/>
 
-    <Tabulator
-        bind:tabulator
-        data={songs}
-        columns={songsPreset}
-        type="songs"
-        options={{ persistenceID: "songs" }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={songs}
+    columns={songsPreset}
+    type="songs"
+    options={{ persistenceID: "songs" }}
+></Tabulator>

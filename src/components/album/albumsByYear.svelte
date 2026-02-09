@@ -33,21 +33,19 @@
 
 <YearPagination bind:fromYear bind:toYear {showYear} />
 
-<div class="lister-tabulator">
-    <Actions
-        type="year"
-        displayMode="fullButtons"
-        showShuffle={true}
-        data={{ from: fromYear, to: toYear }}
-    />
+<Actions
+    type="year"
+    displayMode="fullButtons"
+    showShuffle={true}
+    data={{ from: fromYear, to: toYear }}
+/>
 
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={albumsPreset}
-        type="albums"
-        options={{
-            persistenceID: "albums",
-        }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={albumsPreset}
+    type="albums"
+    options={{
+        persistenceID: "albums",
+    }}
+></Tabulator>

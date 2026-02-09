@@ -44,14 +44,12 @@
     {#if query.data?.total_count === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        <div class="lister-tabulator">
-            <Tabulator
-                bind:tabulator
-                data={genres}
-                columns={genresPreset}
-                type="genres"
-                options={{ layout: "fitDataFill", persistenceID: "genres" }}
-            ></Tabulator>
-        </div>
+        <Tabulator
+            bind:tabulator
+            data={genres}
+            columns={genresPreset}
+            type="genres"
+            options={{ layout: "fitDataFill", persistenceID: "genres" }}
+        ></Tabulator>
     {/if}
 {/if}

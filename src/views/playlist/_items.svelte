@@ -151,32 +151,26 @@
 </script>
 
 {#key playlist.id}
-    <div class="lister-tabulator">
-        <Actions
-            type="songs"
-            displayMode="fullButtons"
-            showShuffle={items.length > 1}
-            data={{ getSongs: () => tabulator.getData("active") }}
-        />
+    <Actions
+        type="songs"
+        displayMode="fullButtons"
+        showShuffle={items.length > 1}
+        data={{ getSongs: () => tabulator.getData("active") }}
+    />
 
-        <!-- todo move to contextual action bar -->
-        {#if type === "playlist"}
-            <PlaylistRemoveFrom
-                bind:tabulator
-                {items}
-                playlistID={playlist.id}
-            />
-        {/if}
+    <!-- todo move to contextual action bar -->
+    {#if type === "playlist"}
+        <PlaylistRemoveFrom bind:tabulator {items} playlistID={playlist.id} />
+    {/if}
 
-        <Tabulator
-            bind:tabulator
-            data={items}
-            {columns}
-            type="songs"
-            options={{
-                movableRows: true,
-                persistenceID: "playlist",
-            }}
-        ></Tabulator>
-    </div>
+    <Tabulator
+        bind:tabulator
+        data={items}
+        {columns}
+        type="songs"
+        options={{
+            movableRows: true,
+            persistenceID: "playlist",
+        }}
+    ></Tabulator>
 {/key}

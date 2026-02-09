@@ -60,19 +60,17 @@
     });
 </script>
 
-<div class="lister-tabulator">
-    <Actions
-        type="songs"
-        displayMode="fullButtons"
-        showShuffle={songs.length > 1}
-        data={{ getSongs: () => tabulator?.getData("active") }}
-    />
+<Actions
+    type="songs"
+    displayMode="fullButtons"
+    showShuffle={songs.length > 1}
+    data={{ getSongs: () => tabulator?.getData("active") }}
+/>
 
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={[track, ...songsPreset]}
-        type="songs"
-        options={{ persistence: true, persistenceID: "SongsArtistAll" }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={[track, ...songsPreset]}
+    type="songs"
+    options={{ persistence: true, persistenceID: "SongsArtistAll" }}
+></Tabulator>

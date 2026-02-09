@@ -51,21 +51,19 @@
     });
 </script>
 
-<div class="lister-tabulator">
-    <Actions
-        type="albums"
-        displayMode="fullButtons"
-        showShuffle={true}
-        data={{ getAlbums: () => tabulator.getData("active") }}
-    />
+<Actions
+    type="albums"
+    displayMode="fullButtons"
+    showShuffle={true}
+    data={{ getAlbums: () => tabulator.getData("active") }}
+/>
 
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={albumsPreset}
-        type="albums"
-        options={{
-            persistenceID: "albums",
-        }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={albumsPreset}
+    type="albums"
+    options={{
+        persistenceID: "albums",
+    }}
+></Tabulator>

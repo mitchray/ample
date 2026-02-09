@@ -130,45 +130,43 @@
                         {/each}
                     </ul>
                 {:else}
-                    <div class="lister-tabulator">
-                        {#key $Settings.ShowSongsByOtherArtists || 0}
-                            {#if disks.length > 1}
-                                <Actions
-                                    type="songs"
-                                    items={disk.songs}
-                                    displayMode="fullButtons"
-                                    showShuffle={disk.songs.length > 1}
-                                    data={{ getSongs: () => disk.songs }}
-                                />
-                            {/if}
-
-                            <Tabulator
-                                bind:tabulator
-                                data={$Settings.ShowSongsByOtherArtists ===
-                                    "hide" && filterToArtistID
-                                    ? disk.songsByArtist
-                                    : disk.songs}
-                                columns={albumPreset}
+                    {#key $Settings.ShowSongsByOtherArtists || 0}
+                        {#if disks.length > 1}
+                            <Actions
                                 type="songs"
-                                options={{
-                                    rowFormatter: function (row) {
-                                        if (
-                                            $Settings.ShowSongsByOtherArtists ===
-                                                "highlight" &&
-                                            filterToArtistID &&
-                                            row.getData().doesNotContainArtist
-                                        ) {
-                                            row.getElement().classList.add(
-                                                "not-by-artist",
-                                                "highlight",
-                                            );
-                                        }
-                                    },
-                                    persistenceID: "album",
-                                }}
-                            ></Tabulator>
-                        {/key}
-                    </div>
+                                items={disk.songs}
+                                displayMode="fullButtons"
+                                showShuffle={disk.songs.length > 1}
+                                data={{ getSongs: () => disk.songs }}
+                            />
+                        {/if}
+
+                        <Tabulator
+                            bind:tabulator
+                            data={$Settings.ShowSongsByOtherArtists ===
+                                "hide" && filterToArtistID
+                                ? disk.songsByArtist
+                                : disk.songs}
+                            columns={albumPreset}
+                            type="songs"
+                            options={{
+                                rowFormatter: function (row) {
+                                    if (
+                                        $Settings.ShowSongsByOtherArtists ===
+                                            "highlight" &&
+                                        filterToArtistID &&
+                                        row.getData().doesNotContainArtist
+                                    ) {
+                                        row.getElement().classList.add(
+                                            "not-by-artist",
+                                            "highlight",
+                                        );
+                                    }
+                                },
+                                persistenceID: "album",
+                            }}
+                        ></Tabulator>
+                    {/key}
                 {/if}
             </div>
         {/if}

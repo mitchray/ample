@@ -57,12 +57,10 @@
     });
 </script>
 
-<div class="lister-tabulator">
-    <Tabulator
-        bind:tabulator
-        data={[]}
-        columns={playlistsPreset}
-        type="playlists"
-        options={{ id: "all-playlists", persistenceID: "all-playlists" }}
-    ></Tabulator>
-</div>
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={playlistsPreset}
+    type="playlists"
+    options={{ id: "all-playlists", persistenceID: "all-playlists" }}
+></Tabulator>

@@ -14,15 +14,13 @@
 </script>
 
 {#if view === "table"}
-    <div class="lister-tabulator">
-        <Tabulator
-            bind:tabulator
-            data={items}
-            columns={albumsPreset}
-            type="albums"
-            options={{ persistenceID: "albums" }}
-        ></Tabulator>
-    </div>
+    <Tabulator
+        bind:tabulator
+        data={items}
+        columns={albumsPreset}
+        type="albums"
+        options={{ persistenceID: "albums" }}
+    ></Tabulator>
 {/if}
 
 {#if view === "card-small"}
