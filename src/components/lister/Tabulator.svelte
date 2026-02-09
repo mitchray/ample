@@ -88,7 +88,7 @@
                     size: true,
                 },
             },
-            placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.noItemsFound")}</span>`,
+            // placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.noItemsFound")}</span>`,
             ...options,
         });
 
