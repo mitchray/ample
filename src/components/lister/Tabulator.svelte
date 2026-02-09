@@ -144,12 +144,6 @@
         gap: var(--spacing-lg);
     }
 
-    :global(.lister-tabulator__actions) {
-        display: flex;
-        gap: var(--spacing-md);
-        flex-wrap: wrap;
-    }
-
     :global(.tabulator-placeholder) {
         width: 100% !important;
     }

@@ -67,15 +67,12 @@
     {:else}
         {#if type === "artist"}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="artistGenre"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{ id: id }}
-                    />
-
-                </div>
+                <Actions
+                    type="artistGenre"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{ id: id }}
+                />
 
                 <Tabulator
                     bind:tabulator
@@ -91,15 +88,12 @@
 
         {#if type === "album"}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="albumGenre"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{ id: id }}
-                    />
-
-                </div>
+                <Actions
+                    type="albumGenre"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{ id: id }}
+                />
 
                 <Tabulator
                     bind:tabulator
@@ -115,15 +109,12 @@
 
         {#if type === "song"}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="songGenre"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{ id: id }}
-                    />
-
-                </div>
+                <Actions
+                    type="songGenre"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{ id: id }}
+                />
 
                 <Tabulator
                     bind:tabulator

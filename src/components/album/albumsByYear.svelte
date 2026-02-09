@@ -34,14 +34,12 @@
 <YearPagination bind:fromYear bind:toYear {showYear} />
 
 <div class="lister-tabulator">
-    <div class="lister-tabulator__actions">
-        <Actions
-            type="year"
-            displayMode="fullButtons"
-            showShuffle={true}
-            data={{ from: fromYear, to: toYear }}
-        />
-    </div>
+    <Actions
+        type="year"
+        displayMode="fullButtons"
+        showShuffle={true}
+        data={{ from: fromYear, to: toYear }}
+    />
 
     <Tabulator
         bind:tabulator

@@ -13,17 +13,15 @@
 {/if}
 
 <div class="lister-tabulator">
-    <div class="lister-tabulator__actions">
-        {#if disks.length > 1}
-            <Actions
-                type="songs"
-                id={albumID}
-                displayMode="miniButtons"
-                showShuffle={tracks.length > 1}
-                data={{ getSongs: () => tabulator.getData("active") }}
-            />
-        {/if}
-    </div>
+    {#if disks.length > 1}
+        <Actions
+            type="songs"
+            id={albumID}
+            displayMode="miniButtons"
+            showShuffle={tracks.length > 1}
+            data={{ getSongs: () => tabulator.getData("active") }}
+        />
+    {/if}
 
     <Tabulator
         bind:tabulator

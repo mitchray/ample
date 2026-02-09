@@ -52,15 +52,12 @@
 </script>
 
 <div class="lister-tabulator">
-    <div class="lister-tabulator__actions">
-        <Actions
-            type="songs"
-            displayMode="fullButtons"
-            showShuffle={true}
-            data={{ getSongs: () => tabulator.getData("active") }}
-        />
-
-    </div>
+    <Actions
+        type="songs"
+        displayMode="fullButtons"
+        showShuffle={true}
+        data={{ getSongs: () => tabulator.getData("active") }}
+    />
 
     <Tabulator
         bind:tabulator

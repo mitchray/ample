@@ -132,18 +132,15 @@
                 {:else}
                     <div class="lister-tabulator">
                         {#key $Settings.ShowSongsByOtherArtists || 0}
-                            <div class="lister-tabulator__actions">
-                                {#if disks.length > 1}
-                                    <Actions
-                                        type="songs"
-                                        items={disk.songs}
-                                        displayMode="fullButtons"
-                                        showShuffle={disk.songs.length > 1}
-                                        data={{ getSongs: () => disk.songs }}
-                                    />
-                                {/if}
-
-                            </div>
+                            {#if disks.length > 1}
+                                <Actions
+                                    type="songs"
+                                    items={disk.songs}
+                                    displayMode="fullButtons"
+                                    showShuffle={disk.songs.length > 1}
+                                    data={{ getSongs: () => disk.songs }}
+                                />
+                            {/if}
 
                             <Tabulator
                                 bind:tabulator

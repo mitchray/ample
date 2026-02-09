@@ -40,14 +40,12 @@
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <div class="lister-tabulator">
-            <div class="lister-tabulator__actions">
-                <Actions
-                    type="albums"
-                    displayMode="fullButtons"
-                    showShuffle={true}
-                    data={{ getAlbums: () => tabulator.getData("active") }}
-                />
-            </div>
+            <Actions
+                type="albums"
+                displayMode="fullButtons"
+                showShuffle={true}
+                data={{ getAlbums: () => tabulator.getData("active") }}
+            />
 
             <Tabulator
                 bind:tabulator

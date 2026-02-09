@@ -152,22 +152,21 @@
 
 {#key playlist.id}
     <div class="lister-tabulator">
-        <div class="lister-tabulator__actions">
-            <Actions
-                type="songs"
-                displayMode="fullButtons"
-                showShuffle={items.length > 1}
-                data={{ getSongs: () => tabulator.getData("active") }}
-            />
+        <Actions
+            type="songs"
+            displayMode="fullButtons"
+            showShuffle={items.length > 1}
+            data={{ getSongs: () => tabulator.getData("active") }}
+        />
 
-            {#if type === "playlist"}
-                <PlaylistRemoveFrom
-                    bind:tabulator
-                    {items}
-                    playlistID={playlist.id}
-                />
-            {/if}
-        </div>
+        <!-- todo move to contextual action bar -->
+        {#if type === "playlist"}
+            <PlaylistRemoveFrom
+                bind:tabulator
+                {items}
+                playlistID={playlist.id}
+            />
+        {/if}
 
         <Tabulator
             bind:tabulator

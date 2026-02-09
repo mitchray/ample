@@ -34,15 +34,12 @@
     {#key loadedTime}
         {#if type === "song"}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="songs"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{ getSongs: () => tabulator.getData("active") }}
-                    />
-
-                </div>
+                <Actions
+                    type="songs"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{ getSongs: () => tabulator.getData("active") }}
+                />
 
                 <Tabulator
                     bind:tabulator
@@ -58,15 +55,12 @@
 
         {#if type === "album"}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="albums"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{ getAlbums: () => tabulator.getData("active") }}
-                    />
-
-                </div>
+                <Actions
+                    type="albums"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{ getAlbums: () => tabulator.getData("active") }}
+                />
 
                 <Tabulator
                     bind:tabulator
@@ -82,17 +76,14 @@
 
         {#if type.includes("artist")}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="artists"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{
-                            getArtists: () => tabulator.getData("active"),
-                        }}
-                    />
-
-                </div>
+                <Actions
+                    type="artists"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{
+                        getArtists: () => tabulator.getData("active"),
+                    }}
+                />
 
                 <Tabulator
                     bind:tabulator
@@ -108,17 +99,14 @@
 
         {#if type === "playlist"}
             <div class="lister-tabulator">
-                <div class="lister-tabulator__actions">
-                    <Actions
-                        type="playlists"
-                        displayMode="fullButtons"
-                        showShuffle={true}
-                        data={{
-                            getPlaylists: () => tabulator.getData("active"),
-                        }}
-                    />
-
-                </div>
+                <Actions
+                    type="playlists"
+                    displayMode="fullButtons"
+                    showShuffle={true}
+                    data={{
+                        getPlaylists: () => tabulator.getData("active"),
+                    }}
+                />
 
                 <Tabulator
                     bind:tabulator
