@@ -32,10 +32,10 @@
         });
     }
 
-    // when triggered, select rows
+    // when triggered, clear selection (only after table is built)
     $effect(() => {
-        if ($clearSelectionTrigger) {
-            tabulator?.deselectRow();
+        if ($clearSelectionTrigger && tabulator && tableReady) {
+            tabulator.deselectRow();
         }
     });
 
