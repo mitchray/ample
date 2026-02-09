@@ -221,7 +221,15 @@
                             panel={tab.id}
                             active={tab.id === section}
                         >
-                            {tab.label}
+                            <a
+                                class="tab-link"
+                                href="#/artist/{params.id}/{tab.id}"
+                                onclick={(e) => {
+                                    replace(`#/artist/${params.id}/${tab.id}`);
+                                }}
+                            >
+                                {tab.label}
+                            </a>
                         </sl-tab>
                     {/each}
 
@@ -245,6 +253,12 @@
         overflow: hidden;
         position: relative; /* needed to ensure third party links show on top */
         z-index: -1; /* needed to ensure third party links show on top */
+    }
+
+    .tab-link {
+        color: inherit;
+        text-decoration: none;
+        display: block;
     }
 
     .tab-content {
