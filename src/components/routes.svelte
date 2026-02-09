@@ -1,5 +1,5 @@
 <script>
-    import { SiteContentBind } from "~/stores/elements.js";
+    import { SiteContentBind, SiteContentInnerBind } from "~/stores/elements.js";
     import ContextualActionBar from "~/components/contextualActionBar.svelte";
     import Router from "svelte-spa-router";
     import { wrap } from "svelte-spa-router/wrap";
@@ -117,7 +117,7 @@
 <div bind:this={$SiteContentBind} class="site-content">
     <ContextualActionBar />
     {#key thisRoute}
-        <div class="site-content-inner" in:fade>
+        <div bind:this={$SiteContentInnerBind} class="site-content-inner" in:fade>
             <Router
                 restoreScrollState={true}
                 {routes}

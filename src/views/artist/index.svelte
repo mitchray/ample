@@ -9,16 +9,31 @@
     import Actions from "~/components/action/actions.svelte";
     import Genres from "~/components/genre/genres.svelte";
     import Art from "~/components/art.svelte";
-    import Releases from "~/views/artist/releases.svelte";
-    import All from "~/views/artist/all.svelte";
-    import Top from "~/views/artist/top.svelte";
-    import Similar from "~/views/artist/similar.svelte";
-    import Musicbrainz from "~/views/artist/musicbrainz.svelte";
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
     import Visibility from "~/components/visibility.svelte";
 
     let { params = {} } = $props();
+
+    let section = $derived(params.section || "releases");
+
+    const sectionComponents = {
+        releases: () => import("~/views/artist/releases.svelte"),
+        top: () => import("~/views/artist/top.svelte"),
+        all: () => import("~/views/artist/all.svelte"),
+        similar: () => import("~/views/artist/similar.svelte"),
+        musicbrainz: () => import("~/views/artist/musicbrainz.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.releases(),
+    );
+
+    $effect(() => {
+        if (!params.section && params.id) {
+            replace(`#/artist/${params.id}/releases`);
+        }
+    });
 
     const query = createQuery(() => ({
         queryKey: ["artist", params.id],
@@ -46,11 +61,6 @@
 
     $effect(() => {
         $PageTitle = artist?.name || $_("text.artist");
-    });
-
-    // default to releases tab
-    $effect(() => {
-        if (!params.section) replace(`#/artist/${params.id}/releases`);
     });
 
     const tabs = [
@@ -209,41 +219,20 @@
                         <sl-tab
                             slot="nav"
                             panel={tab.id}
-                            active={tab.id === params.section}
+                            active={tab.id === section}
                         >
                             {tab.label}
                         </sl-tab>
                     {/each}
 
-                    <sl-tab-panel name="releases">
-                        <Visibility>
-                            <Releases artistID={params.id} />
-                        </Visibility>
-                    </sl-tab-panel>
-
-                    <sl-tab-panel name="top">
-                        <Visibility>
-                            <Top artistID={params.id} />
-                        </Visibility>
-                    </sl-tab-panel>
-
-                    <sl-tab-panel name="all">
-                        <Visibility>
-                            <All artistID={params.id} />
-                        </Visibility>
-                    </sl-tab-panel>
-
-                    <sl-tab-panel name="similar">
-                        <Visibility>
-                            <Similar artistID={params.id} />
-                        </Visibility>
-                    </sl-tab-panel>
-
-                    <sl-tab-panel name="musicbrainz">
-                        <Visibility>
-                            <Musicbrainz {artist} />
-                        </Visibility>
-                    </sl-tab-panel>
+                    <div class="tab-content">
+                        {#await childComponent() then module}
+                            {@const Child = module.default}
+                            <Visibility>
+                                <Child artistID={params.id} {artist} />
+                            </Visibility>
+                        {/await}
+                    </div>
                 </sl-tab-group>
             </div>
         {/key}
@@ -258,7 +247,8 @@
         z-index: -1; /* needed to ensure third party links show on top */
     }
 
-    .tabs sl-tab-panel::part(base) {
+    .tab-content {
+        margin-block-start: var(--spacing-lg);
         min-height: calc(
             100vh - 180px
         ); /* reduce position shift between tabs */

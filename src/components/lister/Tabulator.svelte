@@ -1,5 +1,4 @@
 <script>
-    import { _ } from "@rgglez/svelte-i18n";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { onDestroy, onMount, tick } from "svelte";
     import { throttle } from "lodash-es";
@@ -75,11 +74,7 @@
 
                 return icon;
             },
-            //minHeight: 250,
-            maxHeight:
-                $SiteContentBind?.clientHeight > 0
-                    ? $SiteContentBind.clientHeight
-                    : "800",
+            maxHeight: $SiteContentBind?.clientHeight ?? 800,
             locale: true,
             langs: tabulatorStrings,
             persistence: {
@@ -97,7 +92,7 @@
         });
 
         // centre table in viewport on scroll
-        tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
+        // tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
 
         // resize rows when art column is resized
         tabulator.on("columnResized", (column) => {
@@ -124,7 +119,7 @@
     });
 
     onDestroy(() => {
-        tabulator?.off("scrollVertical");
+        // tabulator?.off("scrollVertical");
         tabulator?.off("columnResized");
         tabulator?.off("rowSelectionChanged");
         tabulator?.off("rowDeleted");
@@ -141,7 +136,7 @@
 
 <style>
     .lister-tabulator {
-        /*display: flex;*/
+        /*display: block;*/
         /*flex-direction: column;*/
         /*gap: var(--spacing-lg);*/
     }

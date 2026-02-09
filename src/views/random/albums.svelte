@@ -38,7 +38,7 @@
     type="albums"
     displayMode="fullButtons"
     showShuffle={true}
-    data={{ getAlbums: () => tabulator.getData("active") }}
+    data={{ getAlbums: () => tabulator?.getData("active") }}
 />
 
 <Tabulator

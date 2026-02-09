@@ -51,7 +51,7 @@
             type="songs"
             displayMode="fullButtons"
             showShuffle={songs.length > 1}
-            data={{ getSongs: () => tabulator.getData("active") }}
+            data={{ getSongs: () => tabulator?.getData("active") }}
         />
 
         <Tabulator

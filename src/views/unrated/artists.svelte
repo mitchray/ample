@@ -36,7 +36,7 @@
     displayMode="fullButtons"
     showShuffle={true}
     data={{
-        getArtists: () => tabulator.getData("active"),
+        getArtists: () => tabulator?.getData("active"),
     }}
 />
 

@@ -155,7 +155,7 @@
         type="songs"
         displayMode="fullButtons"
         showShuffle={items.length > 1}
-        data={{ getSongs: () => tabulator.getData("active") }}
+        data={{ getSongs: () => tabulator?.getData("active") }}
     />
 
     <!-- todo move to contextual action bar -->

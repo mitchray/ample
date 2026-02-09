@@ -37,7 +37,7 @@
                 type="songs"
                 displayMode="fullButtons"
                 showShuffle={true}
-                data={{ getSongs: () => tabulator.getData("active") }}
+                data={{ getSongs: () => tabulator?.getData("active") }}
             />
 
             <Tabulator
@@ -56,7 +56,7 @@
                 type="albums"
                 displayMode="fullButtons"
                 showShuffle={true}
-                data={{ getAlbums: () => tabulator.getData("active") }}
+                data={{ getAlbums: () => tabulator?.getData("active") }}
             />
 
             <Tabulator
@@ -76,7 +76,7 @@
                 displayMode="fullButtons"
                 showShuffle={true}
                 data={{
-                    getArtists: () => tabulator.getData("active"),
+                    getArtists: () => tabulator?.getData("active"),
                 }}
             />
 
@@ -97,7 +97,7 @@
                 displayMode="fullButtons"
                 showShuffle={true}
                 data={{
-                    getPlaylists: () => tabulator.getData("active"),
+                    getPlaylists: () => tabulator?.getData("active"),
                 }}
             />
 
