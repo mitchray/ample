@@ -426,6 +426,10 @@
         display: none;
     }
 
+    .c-actions.fullButtons {
+        margin-block-end: var(--spacing-lg);
+    }
+
     sl-button-group::part(base) {
         flex-wrap: wrap;
     }

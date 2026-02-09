@@ -1,4 +1,5 @@
 <script>
+    import { _ } from "@rgglez/svelte-i18n";
     import { TabulatorFull as Tabulator } from "tabulator-tables";
     import { onDestroy, onMount, tick } from "svelte";
     import { throttle } from "lodash-es";
@@ -83,7 +84,7 @@
                     size: true,
                 },
             },
-            // placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.noItemsFound")}</span>`,
+            placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.noItemsFound")}</span>`,
             ...options,
         });
 
@@ -92,7 +93,7 @@
         });
 
         // centre table in viewport on scroll
-        // tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
+        tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
 
         // resize rows when art column is resized
         tabulator.on("columnResized", (column) => {
