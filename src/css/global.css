@@ -721,6 +721,17 @@ body.sl-scroll-lock.sl-scroll-lock.sl-scroll-lock {
     overflow: clip;
 }
 
+/*
+Fix for Tabulator sl-dropdown positioning 'bug'
+Move the stacking context off Tabulator to the .site-content-inner
+*/
+#app .lister-tabulator .tabulator {
+    transform: none;
+}
+#app .site-content-inner {
+    contain: layout paint;
+}
+
 html {
     font-family: var(--font-body);
     font-size: 13px;

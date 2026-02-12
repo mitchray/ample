@@ -613,6 +613,7 @@ export let songsPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                         data: Object.create({
                             album: data.album ? data.album : null,
                             artists:
@@ -683,6 +684,7 @@ export let albumPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                         data: Object.create({
                             album: data.album ? data.album : null,
                             artists:
@@ -737,6 +739,7 @@ export let albumsPreset = [
                         items: [data],
                         showShuffle: true,
                         hoist: true,
+                        placement: "bottom-end",
                         data: Object.create({
                             album: data.album ? data.album : null,
                             artists:
@@ -805,6 +808,7 @@ export let artistsPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                         showShuffle: true,
                         data: Object.create({}),
                     },
@@ -864,6 +868,7 @@ export let playlistsPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                         showShuffle: true,
                         data: Object.create({
                             playlist: data,
@@ -908,6 +913,7 @@ export let smartlistsPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                         showShuffle: true,
                         data: Object.create({}),
                     },
@@ -950,6 +956,7 @@ export let genresPreset = [
                         data: { id: data.id },
                         showShuffle: true,
                         hoist: true,
+                        placement: "bottom-end",
                     },
                 });
             });
@@ -988,6 +995,7 @@ export let liveStreamsPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                     },
                 });
             });
@@ -1024,6 +1032,7 @@ export let podcastsPreset = [
                         items: [data],
                         showShuffle: true,
                         hoist: true,
+                        placement: "bottom-end",
                     },
                 });
             });
@@ -1059,6 +1068,7 @@ export let podcastEpisodesPreset = [
                         displayMode: "miniButtons",
                         items: [data],
                         hoist: true,
+                        placement: "bottom-end",
                         hideDefaultActions: data.state !== "completed",
                     },
                 });
@@ -1100,6 +1110,7 @@ export let sharesPreset = [
                         items: [data],
                         hideDefaultActions: true,
                         hoist: true,
+                        placement: "bottom-end",
                     },
                 });
             });
