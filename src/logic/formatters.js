@@ -25,7 +25,7 @@ export function formatFilesize(size) {
 }
 
 export function formatSongQuality(song) {
-    let bitrate = parseInt(song.bitrate) / 1000;
+    let bitrate = Math.floor(Number(song.bitrate) / 1000);
     let variable = song.mode === "vbr" ? "~" : " ";
 
     return song.format.toUpperCase() + variable + bitrate;
