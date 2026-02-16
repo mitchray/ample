@@ -7,7 +7,7 @@
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import Genres from "~/components/genre/genres.svelte";
+    import GenreList from "~/components/genreList.svelte";
     import Art from "~/components/art.svelte";
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
@@ -194,7 +194,7 @@
                         {/if}
                     </div>
 
-                    <Genres genres={artist.genre} />
+                    <GenreList items={artist.genre} limit={5} />
 
                     <div class="actions">
                         <Actions

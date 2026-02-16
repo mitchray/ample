@@ -8,7 +8,7 @@
     } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import Genres from "~/components/genre/genres.svelte";
+    import GenreList from "~/components/genreList.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import { createQuery } from "@tanstack/svelte-query";
@@ -59,10 +59,10 @@
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
 {:else if query.isSuccess}
-    {#if !query.data.id}
+    {#if !song.id}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
-        {#key query.data.id}
+        {#key song.id}
             <div class="info">
                 <h1 class="title">{$PageTitle}</h1>
 
@@ -71,7 +71,7 @@
                     <ThirdPartyServices data={song} type="song" />
                 </div>
 
-                <Genres genres={song.genre} />
+                <GenreList items={song.genre} limit={5} />
 
                 <Actions type="song" displayMode="fullButtons" items={[song]} />
             </div>

@@ -311,6 +311,7 @@ export let genres = {
                 props: {
                     items: cell.getData().genre,
                     limit: 1,
+                    isTabulator: true,
                 },
             });
         });

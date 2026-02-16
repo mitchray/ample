@@ -1,5 +1,7 @@
 <script>
-    let { items, limit = null } = $props();
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
+
+    let { items, limit = null, isTabulator = false } = $props();
 
     let genres = $state([]);
     let overflowGenres = $state([]);
@@ -14,18 +16,9 @@
 </script>
 
 {#if genres.length > 0}
-    <ul class="container" class:is-overflow={limit}>
+    <ul class="container" class:is-overflow={isTabulator}>
         {#each genres as genre}
-            <li class="genre-tag">
-                <sl-button
-                    href="#/genre/{genre.id}"
-                    size="small"
-                    title={genre.name}
-                    pill
-                >
-                    {genre.name}
-                </sl-button>
-            </li>
+            {@render tag(genre)}
         {/each}
 
         {#if overflowGenres.length}
@@ -51,6 +44,19 @@
     </ul>
 {/if}
 
+{#snippet tag(genre)}
+    <sl-button
+        href="#/genre/{genre.id}"
+        size="small"
+        title={genre.name}
+        pill
+        outline
+    >
+        <MaterialSymbol name="label" slot="prefix" />
+        {genre.name}
+    </sl-button>
+{/snippet}
+
 {#snippet createDropdown()}
     <sl-dropdown open hoist>
         <sl-button
@@ -65,11 +71,7 @@
         <sl-card>
             <ul class="overflow-menu">
                 {#each overflowGenres as genre}
-                    <li class="genre-tag">
-                        <sl-button href="#/genre/{genre.id}" size="small" pill>
-                            {genre.name}
-                        </sl-button>
-                    </li>
+                    {@render tag(genre)}
                 {/each}
             </ul>
         </sl-card>
@@ -88,15 +90,11 @@
         flex-wrap: wrap;
     }
 
-    .genre-tag {
-        overflow: hidden;
-    }
-
-    .genre-tag sl-button {
+    sl-button {
         max-width: 100%;
     }
 
-    .genre-tag sl-button::part(label) {
+    sl-button::part(label) {
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -106,13 +104,10 @@
         display: flex;
         flex-direction: column;
         gap: var(--spacing-md);
+        align-items: start;
     }
 
     .overflow-button::part(label) {
         padding: 0;
-    }
-
-    sl-button::part(base):not(:hover) {
-        background-color: transparent;
     }
 </style>
