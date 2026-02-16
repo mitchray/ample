@@ -11,8 +11,6 @@
     import { extendSession } from "~/logic/user.js";
     import { handleMigrations } from "~/logic/migrations.js";
 
-    // Use custom string as dnd-action ID
-    import { overrideItemIdKeyNameBeforeInitialisingDndZones } from "svelte-dnd-action";
     import Sidebar from "~/components/sidebar/sidebar.svelte";
     import Queue from "~/components/queue/queue.svelte";
     import Player from "~/components/player/player.svelte";
@@ -25,8 +23,6 @@
     import { hideLoadingOverlay } from "~/logic/ui.js";
 
     handleMigrations($ampleVersion);
-
-    overrideItemIdKeyNameBeforeInitialisingDndZones("_id");
 
     window.setInterval(
         function () {
