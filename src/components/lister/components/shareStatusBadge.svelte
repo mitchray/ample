@@ -6,7 +6,7 @@
         const expireDays = data.expire_days;
         const now = Date.now() / 1000;
         if (expireDays == null || expireDays <= 0) {
-            return { label: "No expiry", variant: "primary" };
+            return { label: "No expiry", variant: "neutral" };
         }
         const expiryTs = creationDate + expireDays * 86400;
         const daysLeft = (expiryTs - now) / 86400;

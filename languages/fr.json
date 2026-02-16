@@ -368,6 +368,8 @@
     "text.shareConfirmRemovalInfo": "Le partage pour {name} sera supprimé",
     "text.shareDeleteFailed": "Impossible de supprimer le partage",
     "text.shareDeleted": "Partage supprimé",
+    "text.sharesCleaningComplete": "Nettoyage terminé",
+    "text.cleanExpiredShares": "Nettoyer les expirés",
     "text.shareSaved": "Partager enregistré",
     "text.showChronologically": "Afficher chronologiquement",
     "text.showGroupedReleaseType": "Regrouper par type de version",

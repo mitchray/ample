@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "Freigabe für {name} wird gelöscht",
     "text.shareDeleteFailed": "Freigabe konnte nicht gelöscht werden",
     "text.shareDeleted": "Teilen gelöscht",
+    "text.sharesCleaningComplete": "Bereinigung abgeschlossen",
+    "text.cleanExpiredShares": "Abgelaufene entfernen",
     "text.shareSaved": "Teilen gespeichert",
     "text.showChronologically": "Chronologisch anzeigen",
     "text.showGroupedReleaseType": "Gruppiere nach Release-Typ",

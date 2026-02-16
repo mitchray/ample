@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "La condivisione per {name} verrà eliminata",
     "text.shareDeleteFailed": "Impossibile eliminare la condivisione",
     "text.shareDeleted": "Condividi cancellato",
+    "text.sharesCleaningComplete": "Pulizia completata",
+    "text.cleanExpiredShares": "Rimuovi scaduti",
     "text.shareSaved": "Condividi salvato",
     "text.showChronologically": "Mostra in ordine cronologico",
     "text.showGroupedReleaseType": "Raggruppa per tipo di rilascio",

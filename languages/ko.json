@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "{name} 에 대한 공유가 삭제됩니다.",
     "text.shareDeleteFailed": "공유 삭제에 실패했습니다",
     "text.shareDeleted": "공유 삭제됨",
+    "text.sharesCleaningComplete": "정리 완료",
+    "text.cleanExpiredShares": "만료된 항목 정리",
     "text.shareSaved": "공유 저장됨",
     "text.showChronologically": "연대순으로 표시",
     "text.showGroupedReleaseType": "릴리스 유형별로 그룹화",

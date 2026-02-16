@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "{name} megosztása törlésre kerül",
     "text.shareDeleteFailed": "Nem sikerült törölni a megosztást",
     "text.shareDeleted": "Megosztás törölve",
+    "text.sharesCleaningComplete": "Takarítás kész",
+    "text.cleanExpiredShares": "Lejártak törlése",
     "text.shareSaved": "Megosztás mentve",
     "text.showChronologically": "Mutasd időrendben",
     "text.showGroupedReleaseType": "Csoportosítás kiadás típusa szerint",

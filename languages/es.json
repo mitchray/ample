@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "Se eliminará la acción para {name}",
     "text.shareDeleteFailed": "No se pudo eliminar el recurso compartido",
     "text.shareDeleted": "Compartir eliminado",
+    "text.sharesCleaningComplete": "Limpieza completada",
+    "text.cleanExpiredShares": "Limpiar caducados",
     "text.shareSaved": "Compartir guardado",
     "text.showChronologically": "Mostrar cronológicamente",
     "text.showGroupedReleaseType": "Agrupar por tipo de lanzamiento",

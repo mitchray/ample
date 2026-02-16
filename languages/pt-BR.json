@@ -358,6 +358,8 @@
     "text.shareConfirmRemovalInfo": "O compartilhamento {name} será removido",
     "text.shareDeleteFailed": "Falha ao deletar o compartilhamento",
     "text.shareDeleted": "Compartilhamento deletado",
+    "text.sharesCleaningComplete": "Limpeza concluída",
+    "text.cleanExpiredShares": "Limpar expirados",
     "text.shareSaved": "Compartilhamento salvo",
     "text.showChronologically": "Mostrar cronologicamente",
     "text.showGroupedReleaseType": "Agrupar por tipo de lançamento",

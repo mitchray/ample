@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "Compartilhar para {name} será excluído",
     "text.shareDeleteFailed": "Falha ao excluir compartilhamento",
     "text.shareDeleted": "Compartilhar excluído",
+    "text.sharesCleaningComplete": "Limpeza concluída",
+    "text.cleanExpiredShares": "Limpar expirados",
     "text.shareSaved": "Compartilhar salvo",
     "text.showChronologically": "Mostrar cronologicamente",
     "text.showGroupedReleaseType": "Agrupar por tipo de versão",

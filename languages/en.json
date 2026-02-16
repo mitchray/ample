@@ -372,6 +372,8 @@
     "text.shareConfirmRemovalInfo": "Share for {name} will be deleted",
     "text.shareDeleteFailed": "Failed to delete share",
     "text.shareDeleted": "Share deleted",
+    "text.sharesCleaningComplete": "Cleaning complete",
+    "text.cleanExpiredShares": "Clean expired",
     "text.shareSaved": "Share saved",
     "text.showChronologically": "Show chronologically",
     "text.showGroupedReleaseType": "Group by release type",

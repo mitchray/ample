@@ -354,6 +354,8 @@
     "text.shareConfirmRemovalInfo": "Udostępnij dla {name} zostanie usunięty",
     "text.shareDeleteFailed": "Nie udało się usunąć udziału",
     "text.shareDeleted": "Udostępnij usunięto",
+    "text.sharesCleaningComplete": "Czyszczenie zakończone",
+    "text.cleanExpiredShares": "Wyczyść wygasłe",
     "text.shareSaved": "Udostępnij zapisane",
     "text.showChronologically": "Pokaż chronologicznie",
     "text.showGroupedReleaseType": "Grupuj według typu wydania",
