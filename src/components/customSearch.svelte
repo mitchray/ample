@@ -16,7 +16,7 @@
 
     let loaded = $state(false);
     let rows = $state([]);
-    let groupedFieldsToShow = {};
+    let groupedFieldsToShow = $state({});
     let rowCounter = $state(0);
     let containerBind = $state();
     let rawSearchRules = $state([]);
