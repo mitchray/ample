@@ -20,7 +20,6 @@
 
 {#if showShuffle}
     <sl-button
-        variant="primary-alt"
         onclick={handleAction}
         title={$_("text.shuffle")}
         {loading}

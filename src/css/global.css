@@ -531,13 +531,6 @@
     --color-btn-primary-border: var(--swatch-primary-600);
     --color-btn-primary-border-hover: var(--swatch-primary-500);
 
-    --color-btn-primary-alt-text: var(--swatch-primary-300);
-    --color-btn-primary-alt-text-hover: var(--swatch-primary-50);
-    --color-btn-primary-alt-bg: var(--swatch-primary-900);
-    --color-btn-primary-alt-bg-hover: var(--swatch-primary-700);
-    --color-btn-primary-alt-border: var(--swatch-primary-700);
-    --color-btn-primary-alt-border-hover: var(--swatch-primary-500);
-
     --color-btn-success-text: var(--swatch-green-300);
     --color-btn-success-text-hover: var(--swatch-green-50);
     --color-btn-success-bg: var(--swatch-green-800);
@@ -655,13 +648,6 @@
     --color-btn-primary-bg-hover: var(--swatch-primary-500);
     --color-btn-primary-border: var(--swatch-primary-500);
     --color-btn-primary-border-hover: var(--swatch-primary-500);
-
-    --color-btn-primary-alt-text: var(--swatch-primary-800);
-    --color-btn-primary-alt-text-hover: var(--swatch-primary-50);
-    --color-btn-primary-alt-bg: var(--swatch-primary-300);
-    --color-btn-primary-alt-bg-hover: var(--swatch-primary-500);
-    --color-btn-primary-alt-border: var(--swatch-primary-500);
-    --color-btn-primary-alt-border-hover: var(--swatch-primary-500);
 
     --color-btn-success-text: var(--swatch-green-800);
     --color-btn-success-text-hover: var(--swatch-green-50);
@@ -870,23 +856,6 @@ sl-button::part(base) {
     overflow: hidden;
 }
 
-@supports (mix-blend-mode: multiply) {
-    sl-button:not([variant="text"])::part(base)::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background-image: linear-gradient(
-            to bottom,
-            transparent 30%,
-            currentColor 100%
-        );
-        z-index: 1;
-        pointer-events: none;
-        mix-blend-mode: multiply;
-        opacity: 0.1;
-    }
-}
-
 sl-button::part(base):not(:disabled):hover {
     background-color: var(--color-btn-default-bg-hover);
     border-color: var(--color-btn-default-border-hover);
@@ -929,18 +898,6 @@ sl-button[variant="primary"]::part(base):not(:disabled):hover {
     background-color: var(--color-btn-primary-bg-hover);
     border-color: var(--color-btn-primary-border-hover);
     color: var(--color-btn-primary-text-hover);
-}
-
-sl-button[variant="primary-alt"]::part(base) {
-    background-color: var(--color-btn-primary-alt-bg);
-    border-color: var(--color-btn-primary-alt-border);
-    color: var(--color-btn-primary-alt-text);
-}
-
-sl-button[variant="primary-alt"]::part(base):not(:disabled):hover {
-    background-color: var(--color-btn-primary-alt-bg-hover);
-    border-color: var(--color-btn-primary-alt-border-hover);
-    color: var(--color-btn-primary-alt-text-hover);
 }
 
 sl-button[variant="success"]::part(base) {
