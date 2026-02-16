@@ -1,5 +1,6 @@
 import ArtistList from "~/components/artist/artistList.svelte";
 import Name from "~/components/lister/components/name.svelte";
+import ShareStatusBadge from "~/components/lister/components/shareStatusBadge.svelte";
 import Privacy from "~/components/privacy.svelte";
 import RelativeDate from "~/components/relativeDate.svelte";
 import GenreList from "~/components/genreList.svelte";
@@ -432,6 +433,23 @@ export let expireDays = {
     hozAlign: "right",
     headerHozAlign: "right",
     formatter: (cell) => cell.getValue() + " days" || "Forever",
+};
+
+/** @type Column */
+export let shareStatus = {
+    title: "Status",
+    hozAlign: "left",
+    headerHozAlign: "left",
+    minWidth: 90,
+    headerSort: false,
+    formatter: (cell, formatterParams, onRendered) => {
+        onRendered(function () {
+            mount(ShareStatusBadge, {
+                target: cell.getElement(),
+                props: { data: cell.getData() },
+            });
+        });
+    },
 };
 
 /** @type Column */
@@ -1131,6 +1149,7 @@ export let sharesPreset = [
             });
         },
     },
+    shareStatus,
     description,
     shareType,
     owner,
