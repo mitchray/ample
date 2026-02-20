@@ -24,6 +24,7 @@
 
     let tableId;
     let tableReady = $state(false);
+    let groupHeaderClickHandler = null;
 
     function centreOnTable() {
         tableElement?.scrollIntoView({
@@ -45,6 +46,14 @@
     $effect(() => {
         if (tabulator && tableReady) {
             tabulator.setData(data ?? []);
+        }
+    });
+
+    // sync groupBy option when it changes (e.g. user toggles grouping on/off)
+    $effect(() => {
+        if (tabulator && tableReady) {
+            const groupBy = options?.groupBy;
+            tabulator.setGroupBy(groupBy || false);
         }
     });
 
@@ -75,6 +84,10 @@
 
                 return icon;
             },
+            groupToggleElement: false,
+            groupHeader: function (value, count, data, group) {
+                return value;
+            },
             maxHeight: $SiteContentBind?.clientHeight ?? 800,
             locale: true,
             langs: tabulatorStrings,
@@ -91,6 +104,52 @@
         tabulator.on("tableBuilt", () => {
             tableReady = true;
         });
+
+        // When groupBy is active, clicking a group header selects/unselects all rows in that group
+        function getGroupRows(group) {
+            const rows = group.getRows();
+            const subGroups = group.getSubGroups();
+            if (subGroups.length === 0) return rows;
+            let all = [...rows];
+            for (const sg of subGroups) {
+                all = all.concat(getGroupRows(sg));
+            }
+            return all;
+        }
+
+        function findGroupForClick(groups, target) {
+            let found = null;
+            for (const g of groups) {
+                const el = g.getElement();
+                if (!el || (!el.contains(target) && el !== target)) continue;
+                found = g;
+                const sub = g.getSubGroups();
+                if (sub.length) {
+                    const deeper = findGroupForClick(sub, target);
+                    if (deeper) found = deeper;
+                }
+            }
+            return found;
+        }
+
+        groupHeaderClickHandler = (e) => {
+            const groups = tabulator?.getGroups?.();
+            if (!groups?.length) return;
+            const group = findGroupForClick(groups, e.target);
+            if (!group) return;
+            e.preventDefault();
+            e.stopPropagation();
+            const rows = getGroupRows(group);
+            if (rows.length === 0) return;
+            const allSelected = rows.every((r) => r.isSelected?.() === true);
+            if (allSelected) {
+                rows.forEach((r) => r.deselect?.());
+            } else {
+                rows.forEach((r) => r.select?.());
+            }
+        };
+
+        tableElement?.addEventListener("click", groupHeaderClickHandler);
 
         // centre table in viewport on scroll
         tabulator.on("scrollVertical", throttle(centreOnTable, 1 * 1000));
@@ -120,6 +179,9 @@
     });
 
     onDestroy(() => {
+        if (tableElement && groupHeaderClickHandler) {
+            tableElement.removeEventListener("click", groupHeaderClickHandler);
+        }
         // tabulator?.off("scrollVertical");
         tabulator?.off("columnResized");
         tabulator?.off("rowSelectionChanged");

@@ -96,6 +96,15 @@
         return { releases: grouped, appearances: split[1] };
     });
 
+    const flatReleasesForTable = $derived.by(() => {
+        if ($Settings.ArtistReleases.group !== "none") {
+            return releases.flatMap(([key, items]) =>
+                items.map((item) => ({ ...item, _groupKey: key })),
+            );
+        }
+        return releases.flatMap(([, items]) => items);
+    });
+
     $effect(() => {
         if (!$Settings.ArtistReleases) {
             $Settings.ArtistReleases.reset(); // svelte-persisted-store reset to initial value
@@ -178,18 +187,31 @@
         <p>Error: {query.error.message}</p>
     {:else if query.isSuccess}
         {#if releases.length > 0}
-            {#each releases as [group, items]}
+            {#if $Settings.ArtistReleases.view === "table"}
                 <div class="release-group">
-                    {#if releases.length > 0 && group !== "undefined"}
-                        <h3 class="group-title">{group}</h3>
-                    {/if}
-
                     <RenderReleases
-                        view={$Settings.ArtistReleases.view}
-                        {items}
+                        view="table"
+                        items={flatReleasesForTable}
+                        groupBy={$Settings.ArtistReleases.group &&
+                        $Settings.ArtistReleases.group !== "none"
+                            ? "_groupKey"
+                            : null}
                     />
                 </div>
-            {/each}
+            {:else}
+                {#each releases as [group, items]}
+                    <div class="release-group">
+                        {#if releases.length > 0 && group !== "undefined"}
+                            <h3 class="group-title">{group}</h3>
+                        {/if}
+
+                        <RenderReleases
+                            view={$Settings.ArtistReleases.view}
+                            {items}
+                        />
+                    </div>
+                {/each}
+            {/if}
         {/if}
 
         {#if appearances.length > 0}

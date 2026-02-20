@@ -6,7 +6,8 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { albumsPreset } from "~/components/lister/columns.js";
 
-    let { view, items, filterToArtistID = null } = $props();
+    let { view, items, filterToArtistID = null, groupBy = undefined } =
+        $props();
 
     setContext("filterToArtistID", filterToArtistID);
 </script>
@@ -16,7 +17,10 @@
         data={items}
         columns={albumsPreset}
         type="albums"
-        options={{ persistenceID: "albums" }}
+        options={{
+            persistenceID: "albums",
+            ...(groupBy ? { groupBy } : {}),
+        }}
     ></Tabulator>
 {/if}
 
