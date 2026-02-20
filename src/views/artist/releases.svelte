@@ -14,29 +14,46 @@
     let { artistID } = $props();
 
     const releaseTypesOrder = userPreference("album_release_type_sort") || "";
-    let appearances = [];
-    let releases = [];
-    let finalAppearances = $derived(cloneDeep(appearances));
 
-    async function processData() {
-        // sort entire array together
-        let sorted = sortBy(query.data, [$Settings.ArtistReleases.sort]);
+    const query = createQuery(() => ({
+        queryKey: ["artistAlbums", artistID],
+        queryFn: async () => {
+            let result = await $API.artistAlbums({ filter: artistID });
+
+            if (result.error) {
+                errorHandler("getting artist albums", result.error);
+                return [];
+            }
+
+            return result;
+        },
+        enabled: $User.isLoggedIn,
+    }));
+
+    // alias of returned data
+    let artistAlbums = $derived(query.data?.album || []);
+
+    const { releases, appearances } = $derived.by(() => {
+        let sorted = sortBy(artistAlbums, [$Settings.ArtistReleases.sort]);
 
         if ($Settings.ArtistReleases.sortReversed) {
             sorted.reverse();
         }
 
+        const split = partition(sorted, (item) => item.artist?.id === artistID);
+
         let groupMethod;
 
         switch ($Settings.ArtistReleases.group) {
             case "name":
-                groupMethod = (item) => item.name.charAt(0);
+                groupMethod = (item) => item.name.charAt(0).toUpperCase();
                 break;
             case "year":
                 groupMethod = (item) => item.year || "";
                 break;
             case "decade":
-                groupMethod = (item) => Math.floor(item.year / 10) * 10 || "";
+                groupMethod = (item) =>
+                    Math.floor(item.year / 10) * 10 + "s" || "";
                 break;
             case "release_type":
                 groupMethod = (item) => item.type || "";
@@ -48,7 +65,7 @@
         }
 
         // group into sections if requested
-        let grouped = groupBy(sorted, groupMethod);
+        let grouped = groupBy(split[0], groupMethod);
 
         // convert to array
         grouped = Object.entries(grouped).map(([key, value]) => {
@@ -76,40 +93,7 @@
             grouped.forEach((type) => (type[0] = formatReleaseType(type[0])));
         }
 
-        releases = grouped;
-    }
-
-    const query = createQuery(() => ({
-        queryKey: ["artistAlbums", artistID],
-        queryFn: async () => {
-            let result = await $API.artistAlbums({ filter: artistID });
-
-            if (result.error) {
-                errorHandler("getting artist albums", result.error);
-                return [];
-            }
-
-            return result;
-        },
-        enabled: $User.isLoggedIn,
-        select: (data) => {
-            let divide = partition(
-                data.album,
-                (item) => item.artist?.id === artistID,
-            );
-            let byArtist = divide[0];
-            appearances = divide[1];
-            return byArtist;
-        },
-    }));
-
-    // run processData whenever query.data or $Settings.ArtistReleases change
-    $effect.pre(() => {
-        (query.data, processData());
-    });
-
-    $effect.pre(() => {
-        ($Settings.ArtistReleases, processData());
+        return { releases: grouped, appearances: split[1] };
     });
 
     $effect(() => {
@@ -208,7 +192,7 @@
             {/each}
         {/if}
 
-        {#if finalAppearances.length > 0}
+        {#if appearances.length > 0}
             <div class="release-group appearances">
                 <h3 class="group-title appearances">
                     <span class="appearances-text">Appears On</span>
@@ -218,13 +202,13 @@
 
                 <RenderReleases
                     view={$Settings.ArtistReleases.view}
-                    items={finalAppearances}
+                    items={appearances}
                     filterToArtistID={artistID}
                 />
             </div>
         {/if}
 
-        {#if !releases && !finalAppearances}
+        {#if releases.length === 0 && appearances.length === 0}
             <p>{$_("text.noItemsFound")}</p>
         {/if}
     {/if}

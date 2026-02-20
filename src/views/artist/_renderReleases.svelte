@@ -8,14 +8,11 @@
 
     let { view, items, filterToArtistID = null } = $props();
 
-    let tabulator = $state(null);
-
     setContext("filterToArtistID", filterToArtistID);
 </script>
 
 {#if view === "table"}
     <Tabulator
-        bind:tabulator
         data={items}
         columns={albumsPreset}
         type="albums"
