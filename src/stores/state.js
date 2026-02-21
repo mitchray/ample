@@ -26,6 +26,8 @@ export let CurrentMediaGainInfo = writable({});
 export let JukeboxQueue = writable([]);
 export let NowPlayingQueue = writable([]);
 export let NowPlayingIndex = writable(0);
+/** Set of "id:object_type" keys for items currently in the audio cache */
+export let CachedItemKeys = writable(new Set());
 export let IsPlaying = writable(false);
 export let IsMuted = writable(false);
 export let TimeToggled = writable(false);

@@ -1,5 +1,6 @@
 import { compareVersions } from "compare-versions";
 import { clearCache } from "~/logic/helper.js";
+import { CachedItemKeys } from "~/stores/state.js";
 import { Settings } from "~/stores/settings.js";
 
 const migrations = [
@@ -266,6 +267,7 @@ export function handleMigrations(currentVersion) {
                 localStorage.setItem("ample-version", version);
 
                 clearCache();
+                CachedItemKeys.set(new Set());
             }
         });
     }

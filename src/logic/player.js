@@ -21,6 +21,7 @@ import {
 import { Settings } from "~/stores/settings";
 import {
     API,
+    CachedItemKeys,
     CurrentMedia,
     CurrentMediaGainInfo,
     IsPlaying,
@@ -32,6 +33,8 @@ import {
 } from "~/stores/state.js";
 import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 import { MediaPlayer } from "~/stores/elements.js";
+
+const PRELOAD_AHEAD_COUNT = 5;
 
 let wavesurferCommonOptions = {
     autoplay: true,
@@ -231,7 +234,14 @@ class Player {
 
             // special handling for live_stream which has to go through <audio> element
             if (item.object_type === "live_stream") {
-                this.currentPlayer.audioElement.src = this.currentMedia.url;
+                const url = this.currentMedia?.url;
+                if (url && typeof url === "string" && url.length > 0) {
+                    this.currentPlayer.audioElement.src = url;
+                } else {
+                    this.currentPlayer.audioElement.src = "";
+                    this.currentPlayer.audioElement.removeAttribute("src");
+                    this.currentPlayer.audioElement.load();
+                }
                 this.currentPlayer.wavesurfer.setMediaElement(
                     this.currentPlayer.audioElement,
                 );
@@ -324,13 +334,8 @@ class Player {
                         });
                     }
 
-                    // start preloading next item
-                    let nextItem = await this.findViableItem("next");
-
-                    if (nextItem?.id) {
-                        debugHelper("loading next song into cache");
-                        await this.cacheHandler(nextItem, "download");
-                    }
+                    // start preloading up to PRELOAD_AHEAD_COUNT items ahead (rolling)
+                    void this.preloadAhead(PRELOAD_AHEAD_COUNT);
 
                     this.#runChecks(item);
                 })
@@ -392,6 +397,8 @@ class Player {
                     const responseToCache = new Response(blob, { status: 200 });
                     await trimCache();
                     await cache.put(fakeURL, responseToCache);
+                    const cacheKey = `${item.id}:${item.object_type}`;
+                    CachedItemKeys.update((s) => new Set(s).add(cacheKey));
                 }
 
                 if (method === "stream") {
@@ -406,6 +413,8 @@ class Player {
         } else {
             // item was in cache
             blob = await response.blob();
+            const cacheKey = `${item.id}:${item.object_type}`;
+            CachedItemKeys.update((s) => new Set(s).add(cacheKey));
             debugHelper("song was in cache! method: " + method, item);
 
             // need to manually let server know we are playing this
@@ -421,6 +430,23 @@ class Player {
 
         if (method === "stream") {
             return blob;
+        }
+    }
+
+    /**
+     * Preload up to maxCount items ahead of current playback (rolling cache).
+     * Skips already-cached items and runs in background; call with void.
+     * @param {number} maxCount
+     */
+    async preloadAhead(maxCount) {
+        const items = this.findViableItemsAhead(maxCount);
+        const cached = get(CachedItemKeys);
+        const toLoad = items.filter(
+            (item) => !cached.has(`${item.id}:${item.object_type}`),
+        );
+        for (const item of toLoad) {
+            debugHelper("loading next song into cache", item);
+            await this.cacheHandler(item, "download");
         }
     }
 
@@ -561,6 +587,21 @@ class Player {
         }
 
         return closestItem;
+    }
+
+    /**
+     * Return up to count viable items ahead of current index (for preloading).
+     * @param {number} count
+     * @returns {Array}
+     */
+    findViableItemsAhead(count) {
+        const result = [];
+        for (let i = this.nowPlayingIndex + 1; i < this.nowPlayingQueue.length && result.length < count; i++) {
+            if (this.isEligibleToPlay(this.nowPlayingQueue[i])) {
+                result.push(this.nowPlayingQueue[i]);
+            }
+        }
+        return result;
     }
 
     isEligibleToPlay(item) {
@@ -990,6 +1031,7 @@ class Player {
                         currentTime === duration
                     ) {
                         debugHelper("falling through to next item");
+                        self.approachingEnd = true;
                         self.next();
                     }
                 },
@@ -1050,9 +1092,13 @@ class Player {
     #restartQueue() {
         NowPlayingIndex.set(0);
 
-        // unload any currently loaded items
-        this.playerA.audioElement.src = null;
-        this.playerB.audioElement.src = null;
+        // unload any currently loaded items (avoid src = null → browser requests ".../null")
+        for (const key of ["playerA", "playerB"]) {
+            const el = this[key].audioElement;
+            el.src = "";
+            el.removeAttribute("src");
+            el.load();
+        }
         CurrentMedia.set(null);
 
         if (this.repeatState === "enabled") {

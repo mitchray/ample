@@ -1,6 +1,7 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import {
+        CachedItemKeys,
         CurrentMedia,
         NowPlayingIndex,
         NowPlayingQueue,
@@ -163,6 +164,16 @@
         {#if media.object_type !== "live_stream"}
             <div class="mini-rating">
                 <MiniRating data={media} />
+
+                {#if $CachedItemKeys.has(`${media.id}:${media.object_type}`)}
+                    <span
+                        class="cache-icon"
+                        aria-hidden="true"
+                        title={$_("text.cached")}
+                    >
+                        <MaterialSymbol name="arrow_downward" />
+                    </span>
+                {/if}
             </div>
         {/if}
     </span>
@@ -189,8 +200,17 @@
 
 <style>
     .mini-rating {
-        /*line-height: 3px;*/
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
         margin-block-start: 3px;
+        font-size: 5px;
+        line-height: 0;
+    }
+
+    .cache-icon {
+        transform: scale(1.6);
+        opacity: 0.5;
     }
 
     .thumb {
@@ -199,7 +219,7 @@
         line-height: 0;
         height: 38px;
         width: 38px;
-        /*cursor: grab;*/
+        cursor: grab;
     }
 
     .queue-item {
