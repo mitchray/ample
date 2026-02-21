@@ -1,14 +1,9 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import {
-        API,
-        NowPlayingQueue,
-        recentRating,
-        recentFlag,
-    } from "~/stores/state.js";
+    import { API, recentRating, recentFlag } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { debugHelper, errorHandler } from "~/logic/helper.js";
-    import { updateQueue } from "~/logic/ui.js";
+    import { updateQueuesForRatedItem } from "~/logic/ui.js";
 
     let { type = $bindable(null), data = $bindable({}) } = $props();
 
@@ -51,18 +46,11 @@
                         rating: newRating,
                     });
 
-                    // now update any items in the queue with the new rating
-                    let foundItems = $NowPlayingQueue.filter(
-                        (item) =>
-                            item.id === ratedId &&
-                            item.object_type === ratedType,
-                    );
-
-                    foundItems.forEach((item) => {
-                        item.rating = newRating;
+                    updateQueuesForRatedItem({
+                        id: ratedId,
+                        objectType: ratedType,
+                        rating: newRating,
                     });
-
-                    updateQueue();
 
                     if (data.id === ratedId) {
                         refreshAverageRating(ratedId, ratedType);
@@ -93,18 +81,11 @@
                         flag: newFlag,
                     });
 
-                    // now update any items in the queue with the new fav
-                    let foundItems = $NowPlayingQueue.filter(
-                        (item) =>
-                            item.id === ratedId &&
-                            item.object_type === ratedType,
-                    );
-
-                    foundItems.forEach((item) => {
-                        item.flag = newFlag;
+                    updateQueuesForRatedItem({
+                        id: ratedId,
+                        objectType: ratedType,
+                        flag: newFlag,
                     });
-
-                    updateQueue();
 
                     if (data.id === ratedId) {
                         data = { ...data, flag: newFlag };

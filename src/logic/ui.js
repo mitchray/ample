@@ -39,6 +39,23 @@ export async function updateQueue() {
     await tick();
 }
 
+/**
+ * Update matching items in the now-playing queue with new rating and/or flag, then refresh the queue.
+ * Used by Rating and MassRater so queue stays in sync when rating/flagging from anywhere.
+ * @param {{ id: number, objectType: string, rating?: number, flag?: number }} params
+ */
+export function updateQueuesForRatedItem({ id, objectType, rating, flag }) {
+    const queue = get(NowPlayingQueue);
+    const found = queue.filter(
+        (item) => item.id === id && item.object_type === objectType,
+    );
+    found.forEach((item) => {
+        if (rating !== undefined) item.rating = rating;
+        if (flag !== undefined) item.flag = flag;
+    });
+    updateQueue();
+}
+
 export function hideLoadingOverlay() {
     const overlay = document.getElementById("loading-overlay");
 

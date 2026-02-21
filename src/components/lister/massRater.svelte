@@ -2,6 +2,7 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { API, recentRating } from "~/stores/state.js";
     import { errorHandler, toApiType } from "~/logic/helper.js";
+    import { updateQueuesForRatedItem } from "~/logic/ui.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { items: itemsProp = null, type } = $props();
@@ -33,6 +34,13 @@
             recentRating.set({
                 type: apiType,
                 id: item.id,
+                rating: newRating,
+            });
+
+            // keep queue in sync when same item is in now-playing queue
+            updateQueuesForRatedItem({
+                id: item.id,
+                objectType: apiType,
                 rating: newRating,
             });
         });
