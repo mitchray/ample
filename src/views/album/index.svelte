@@ -33,6 +33,8 @@
     // alias of returned data
     let album = $derived(query.data || {});
 
+    let albumTracksTabulator = $state(null);
+
     $effect(() => {
         $PageTitle = album?.name || $_("text.album");
     });
@@ -135,15 +137,20 @@
                             displayMode="fullButtons"
                             items={[album]}
                             showShuffle={album.songcount > 1}
-                            data={Object.create({
+                            data={{
                                 artist: album.artist,
-                            })}
+                                getSongs: () =>
+                                    albumTracksTabulator?.getData("active"),
+                            }}
                         />
                     </div>
                 </div>
             </div>
             <div class="songs">
-                <Disks albumID={album.id} />
+                <Disks
+                    albumID={album.id}
+                    bind:tabulatorRef={albumTracksTabulator}
+                />
             </div>
 
             <div class="albums-around-time">

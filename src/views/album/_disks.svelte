@@ -7,7 +7,7 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { albumPreset } from "~/components/lister/columns.js";
 
-    let { albumID } = $props();
+    let { albumID, tabulatorRef = $bindable(null) } = $props();
 
     const query = createQuery(() => ({
         queryKey: ["albumDisks", albumID],
@@ -44,6 +44,10 @@
             base.groupHeader = (value) => `Disc ${value}`;
         }
         return base;
+    });
+
+    $effect(() => {
+        tabulatorRef = tabulator;
     });
 </script>
 

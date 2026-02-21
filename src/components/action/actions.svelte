@@ -106,8 +106,18 @@
                 final = response?.song ?? [];
                 break;
             case "album":
-                response = await $API.albumSongs({ filter: firstItem?.id });
-                final = response?.song ?? [];
+                // the album view will grab songs from the tabulator
+                if (typeof data.getSongs === "function") {
+                    final = data.getSongs() ?? [];
+                    final = Array.isArray(final) ? final : [];
+                }
+                // if no songs are found, get them from the API
+                if (final.length === 0) {
+                    response = await $API.albumSongs({
+                        filter: firstItem?.id,
+                    });
+                    final = response?.song ?? [];
+                }
                 break;
             case "albums":
                 response = await getSongsFromAlbums(data.getAlbums());
