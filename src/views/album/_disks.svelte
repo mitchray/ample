@@ -4,7 +4,8 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
-    import Disk from "~/views/album/_disk.svelte";
+    import Tabulator from "~/components/lister/Tabulator.svelte";
+    import { albumPreset } from "~/components/lister/columns.js";
 
     let { albumID } = $props();
 
@@ -25,6 +26,25 @@
 
     // alias of returned data
     let disks = $derived(query.data || {});
+
+    // Single Tabulator: all tracks with _groupKey when multiple discs; no group when single disc
+    let tabulator = $state(null);
+    let allTracksWithGroup = $derived.by(() => {
+        if (!disks.length) return [];
+        if (disks.length === 1) return disks[0][1];
+        return disks.flatMap(([diskTitle, tracks]) =>
+            tracks.map((t) => ({ ...t, _groupKey: diskTitle })),
+        );
+    });
+    let hasMultipleDisks = $derived(disks.length > 1);
+    let tabulatorOptions = $derived.by(() => {
+        const base = { persistenceID: "album" };
+        if (hasMultipleDisks) {
+            base.groupBy = "_groupKey";
+            base.groupHeader = (value) => `Disc ${value}`;
+        }
+        return base;
+    });
 </script>
 
 {#if query.isLoading}
@@ -32,15 +52,19 @@
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
 {:else if query.isSuccess}
-    {#if disks.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else if disks.length > 0}
-        {#each disks as [disk, tracks]}
-            <section>
-                <Disk {disks} {disk} {tracks} {albumID} />
-            </section>
-        {/each}
-    {/if}
+    <section>
+        {#if disks.length === 0}
+            <p>{$_("text.noItemsFound")}</p>
+        {:else}
+            <Tabulator
+                bind:tabulator
+                data={allTracksWithGroup}
+                columns={albumPreset}
+                type="songs"
+                options={tabulatorOptions}
+            />
+        {/if}
+    </section>
 {/if}
 
 <style>
