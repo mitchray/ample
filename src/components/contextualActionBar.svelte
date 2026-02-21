@@ -97,10 +97,11 @@
 
 <style>
     .contextual-action-bar {
-        flex-shrink: 0;
-        position: sticky;
+        position: absolute;
         top: 0;
-        z-index: 2;
+        left: 0;
+        right: 0;
+        z-index: 10;
         align-content: center;
         padding-inline: var(--spacing-md);
         background: var(--color-surface-container);
