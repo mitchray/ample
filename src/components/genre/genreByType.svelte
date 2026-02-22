@@ -1,5 +1,5 @@
 <script>
-    import { createQuery } from "@tanstack/svelte-query";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { API, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
@@ -10,33 +10,52 @@
         songsPreset,
     } from "~/components/lister/columns.js";
     import { _ } from "@rgglez/svelte-i18n";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let { id, type } = $props();
 
     let tabulator = $state(null);
+    let total = $state(0);
 
-    const query = createQuery(() => ({
+    const query = createInfiniteQuery(() => ({
         queryKey: ["genre", id, type],
-        queryFn: async () => {
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            let offsetTotal = lastPageParam + limitUsed;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        // pageParam is based on offset total
+        queryFn: async ({ pageParam }) => {
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+
             let result = {};
 
             switch (type) {
                 case "artist":
                     result = await $API.genreArtists({
                         filter: id,
-                        limit: 100,
+                        limit,
+                        offset: pageParam,
                     });
                     break;
                 case "album":
                     result = await $API.genreAlbums({
                         filter: id,
-                        limit: 100,
+                        limit,
+                        offset: pageParam,
                     });
                     break;
                 case "song":
                     result = await $API.genreSongs({
                         filter: id,
-                        limit: 100,
+                        limit,
+                        offset: pageParam,
                     });
                     break;
                 default:
@@ -48,13 +67,23 @@
                 return [];
             }
 
+            total = result.total_count;
+
+            tabulator?.addData(result[type]);
+
             return result[type];
         },
         enabled: $User.isLoggedIn,
     }));
 
     // alias of returned data
-    let items = $derived(query.data || {});
+    let items = $derived(query.data?.pages.flat() || []);
+
+    $effect(() => {
+        if (items && query.hasNextPage && !query.isFetchingNextPage) {
+            query.fetchNextPage();
+        }
+    });
 </script>
 
 {#if query.isLoading}
@@ -75,7 +104,7 @@
 
             <Tabulator
                 bind:tabulator
-                data={items}
+                data={[]}
                 columns={artistsPreset}
                 type="artists"
                 options={{
@@ -94,7 +123,7 @@
 
             <Tabulator
                 bind:tabulator
-                data={items}
+                data={[]}
                 columns={albumsPreset}
                 type="albums"
                 options={{
@@ -113,7 +142,7 @@
 
             <Tabulator
                 bind:tabulator
-                data={items}
+                data={[]}
                 columns={songsPreset}
                 type="songs"
                 options={{
