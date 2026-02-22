@@ -10,6 +10,7 @@
     import RenderReleases from "~/views/artist/_renderReleases.svelte";
     import FeaturedOptions from "~/views/artist/_featuredOptions.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
 
     let { artistID } = $props();
 
@@ -194,11 +195,9 @@
         </div>
     {/if}
 
-    {#if query.isLoading}
-        <p>Loading...</p>
-    {:else if query.isError}
-        <p>Error: {query.error.message}</p>
-    {:else if query.isSuccess}
+    <QueryError {query} />
+
+    {#if query.isSuccess}
         {#if $Settings.ArtistReleases.view !== "table" && releases.length > 0}
             {#each releases as [group, items]}
                 <div class="release-group">
@@ -228,10 +227,6 @@
                     filterToArtistID={artistID}
                 />
             </div>
-        {/if}
-
-        {#if releases.length === 0 && appearances.length === 0}
-            <p>{$_("text.noItemsFound")}</p>
         {/if}
     {/if}
 </div>

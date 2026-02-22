@@ -11,6 +11,7 @@
     import Art from "~/components/art.svelte";
     import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import Visibility from "~/components/visibility.svelte";
 
     let { params = {} } = $props();
@@ -76,15 +77,10 @@
     }
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if !query.data.id}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        {#key query.data.id}
+<QueryError {query} />
+
+{#if query.isSuccess && query.data.id}
+    {#key query.data.id}
             <div class="header">
                 <h1 class="title">{artist.name}</h1>
                 <div class="profile">
@@ -244,7 +240,6 @@
                 </sl-tab-group>
             </div>
         {/key}
-    {/if}
 {/if}
 
 <style>

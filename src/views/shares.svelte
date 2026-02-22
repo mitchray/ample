@@ -7,6 +7,7 @@
     import { sharesPreset } from "~/components/lister/columns.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import QueryError from "~/components/QueryError.svelte";
     import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let title = $_("text.shares");
@@ -104,13 +105,7 @@
     {/if}
 </div>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && shares.length === 0}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <Tabulator
     bind:tabulator

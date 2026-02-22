@@ -6,6 +6,7 @@
     import AlbumCardMini from "~/components/cards/albumCardMini.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
 
     let { album } = $props();
 
@@ -59,11 +60,9 @@
     let albums = $derived(query.data || {});
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
+<QueryError {query} />
+
+{#if query.isSuccess}
     <div
         class="container"
         bind:this={containerBind}

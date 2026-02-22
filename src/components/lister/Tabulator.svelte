@@ -25,6 +25,17 @@
     let tableId;
     let tableReady = $state(false);
     let groupHeaderClickHandler = null;
+    let placeholderElement = null;
+    let placeholderVisible = $state(true);
+    let hidePlaceholderTimeout = null;
+
+    function hidePlaceholder() {
+        placeholderVisible = false;
+        if (hidePlaceholderTimeout != null) {
+            clearTimeout(hidePlaceholderTimeout);
+            hidePlaceholderTimeout = null;
+        }
+    }
 
     function centreOnTable() {
         tableElement?.scrollIntoView({
@@ -46,6 +57,10 @@
     $effect(() => {
         if (tabulator && tableReady) {
             tabulator.setData(data ?? []);
+        }
+        // Hide placeholder as soon as we have data
+        if ((data?.length ?? 0) > 0) {
+            hidePlaceholder();
         }
     });
 
@@ -88,6 +103,7 @@
             groupHeader: function (value, count, data, group) {
                 return value;
             },
+            minHeight: 70,
             maxHeight: $SiteContentBind?.clientHeight ?? 800,
             locale: true,
             langs: tabulatorStrings,
@@ -97,12 +113,15 @@
                     size: true,
                 },
             },
-            placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.noItemsFound")}</span>`,
+            // placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.loading")}</span>`,
+            placeholder: placeholderElement,
             ...options,
         });
 
         tabulator.on("tableBuilt", () => {
             tableReady = true;
+            // Hide placeholder after 2s if still visible (e.g. no data yet)
+            hidePlaceholderTimeout = setTimeout(hidePlaceholder, 2000);
         });
 
         // When groupBy is active, clicking a group header selects/unselects all rows in that group
@@ -179,6 +198,7 @@
     });
 
     onDestroy(() => {
+        hidePlaceholder(); // clear timeout and hide
         if (tableElement && groupHeaderClickHandler) {
             tableElement.removeEventListener("click", groupHeaderClickHandler);
         }
@@ -195,6 +215,13 @@
 
 <div class="lister-tabulator">
     <div bind:this={tableElement} data-id={options?.id || null}></div>
+    <div
+        bind:this={placeholderElement}
+        class="tabulator-placeholder"
+        class:hidden={!placeholderVisible}
+    >
+        {$_("text.loading")}
+    </div>
 </div>
 
 <style>
@@ -204,7 +231,19 @@
         /*gap: var(--spacing-lg);*/
     }
 
-    :global(.tabulator-placeholder) {
+    .tabulator-placeholder {
         width: 100% !important;
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        color: var(--color-on-surface-variant);
+        pointer-events: none;
+        transition: opacity 0.2s ease-in-out;
+    }
+
+    .hidden {
+        opacity: 0;
     }
 </style>

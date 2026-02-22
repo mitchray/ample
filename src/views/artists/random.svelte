@@ -5,6 +5,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { artistsPreset } from "~/components/lister/columns.js";
+    import QueryError from "~/components/QueryError.svelte";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
 
@@ -31,13 +32,7 @@
     let artists = $derived(Array.isArray(query.data?.artist) ? query.data.artist : []);
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && artists.length === 0}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <Actions
     type="artists"

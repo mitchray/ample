@@ -7,6 +7,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { PageTitle, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
 
     let { params = {} } = $props();
 
@@ -50,13 +51,7 @@
     </h1>
 </div>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && songs.length === 0}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <Actions
     type="songs"

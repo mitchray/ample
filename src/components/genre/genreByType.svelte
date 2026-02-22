@@ -10,6 +10,7 @@
         songsPreset,
     } from "~/components/lister/columns.js";
     import { _ } from "@rgglez/svelte-i18n";
+    import QueryError from "~/components/QueryError.svelte";
     import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let { id, type } = $props();
@@ -69,15 +70,10 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if items?.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        {#if type === "artist"}
+<QueryError {query} />
+
+{#if query.isSuccess && items?.length > 0}
+    {#if type === "artist"}
             <Actions
                 type="artistGenre"
                 displayMode="fullButtons"
@@ -133,5 +129,4 @@
                 }}
             ></Tabulator>
         {/if}
-    {/if}
 {/if}

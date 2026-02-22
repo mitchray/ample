@@ -4,6 +4,7 @@
     import { replace } from "svelte-spa-router";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import Visibility from "~/components/visibility.svelte";
 
@@ -59,42 +60,36 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if !query.data.id}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        {#key query.data.id}
-            <div class="page-header">
-                <h1 class="page-title">
-                    <MaterialSymbol name="label" />
-                    {genre.name}
-                </h1>
+<QueryError {query} />
+
+{#if query.isSuccess && query.data.id}
+    {#key query.data.id}
+        <div class="page-header">
+            <h1 class="page-title">
+                <MaterialSymbol name="label" />
+                {genre.name}
+            </h1>
+        </div>
+
+        <sl-tab-group onsl-tab-show={changeTab}>
+            {#each tabs as tab}
+                <sl-tab
+                    slot="nav"
+                    panel={tab.id}
+                    active={tab.id === section}
+                >
+                    {tab.label}
+                </sl-tab>
+            {/each}
+
+            <div class="tab-content">
+                {#await childComponent() then module}
+                    {@const Child = module.default}
+                    <Visibility>
+                        <Child id={genre.id} />
+                    </Visibility>
+                {/await}
             </div>
-
-            <sl-tab-group onsl-tab-show={changeTab}>
-                {#each tabs as tab}
-                    <sl-tab
-                        slot="nav"
-                        panel={tab.id}
-                        active={tab.id === section}
-                    >
-                        {tab.label}
-                    </sl-tab>
-                {/each}
-
-                <div class="tab-content">
-                    {#await childComponent() then module}
-                        {@const Child = module.default}
-                        <Visibility>
-                            <Child id={genre.id} />
-                        </Visibility>
-                    {/await}
-                </div>
-            </sl-tab-group>
-        {/key}
-    {/if}
+        </sl-tab-group>
+    {/key}
 {/if}

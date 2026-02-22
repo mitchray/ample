@@ -4,6 +4,7 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import { podcastsPreset } from "~/components/lister/columns.js";
 
     const query = createQuery(() => ({
@@ -34,13 +35,7 @@
     <h1 class="page-title">{title}</h1>
 </div>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && podcasts.length === 0}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <Tabulator
     bind:tabulator

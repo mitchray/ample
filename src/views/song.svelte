@@ -15,6 +15,7 @@
     import { addAlert } from "~/logic/alert.js";
     import { push } from "svelte-spa-router";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import DOMPurify from "dompurify";
 
     let { params = {} } = $props();
@@ -54,15 +55,10 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if !song.id}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        {#key song.id}
+<QueryError {query} />
+
+{#if query.isSuccess && song.id}
+    {#key song.id}
             <div class="info">
                 <h1 class="title">{$PageTitle}</h1>
 
@@ -246,7 +242,6 @@
                 </sl-tab-panel>
             </sl-tab-group>
         {/key}
-    {/if}
 {/if}
 
 <style>

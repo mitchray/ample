@@ -10,6 +10,7 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { albumPreset } from "~/components/lister/columns.js";
     import { createQuery } from "@tanstack/svelte-query";
+    import QueryError from "~/components/QueryError.svelte";
     import { getAlbumDisks } from "~/logic/album.js";
 
     let { contextKey } = $props();
@@ -65,11 +66,7 @@
     }));
 </script>
 
-{#if query.isLoading}
-    <sl-spinner style="font-size: 2rem;"></sl-spinner>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{/if}
+<QueryError {query} />
 
 {#each disksToRender as disk}
     {#if query.isSuccess && $Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}

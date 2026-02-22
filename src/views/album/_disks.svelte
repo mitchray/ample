@@ -4,6 +4,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { albumPreset } from "~/components/lister/columns.js";
 
@@ -51,24 +52,18 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if disks.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <section>
-            <Tabulator
-                bind:tabulator
-                data={allTracksWithGroup}
-                columns={albumPreset}
-                type="songs"
-                options={tabulatorOptions}
-            />
-        </section>
-    {/if}
+<QueryError {query} />
+
+{#if query.isSuccess && disks.length > 0}
+    <section>
+        <Tabulator
+            bind:tabulator
+            data={allTracksWithGroup}
+            columns={albumPreset}
+            type="songs"
+            options={tabulatorOptions}
+        />
+    </section>
 {/if}
 
 <style>

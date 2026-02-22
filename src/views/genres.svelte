@@ -4,6 +4,7 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import { genresPreset } from "~/components/lister/columns.js";
     import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
@@ -52,13 +53,7 @@
     <h1 class="page-title">{title}</h1>
 </div>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && genres.length === 0}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <Tabulator
     bind:tabulator

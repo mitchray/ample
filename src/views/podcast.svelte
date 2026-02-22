@@ -7,6 +7,7 @@
     import Actions from "~/components/action/actions.svelte";
     import Art from "~/components/art.svelte";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
     import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
@@ -73,43 +74,37 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if !query.data.id}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        {#key query.data.id}
-            <h1>{podcast.name}</h1>
-            <p>{@html podcast.description}</p>
-            <Rating type="podcast" data={podcast} />
-            <Art size="large" data={podcast} type="podcast" radius="8px" />
-            <Actions
-                type="podcast"
-                displayMode="fullButtons"
-                items={[podcast]}
-                showShuffle={true}
-            />
+<QueryError {query} />
 
-            <sl-button
-                role="button"
-                tabindex={0}
-                onclick={() => {
+{#if query.isSuccess && query.data.id}
+    {#key query.data.id}
+        <h1>{podcast.name}</h1>
+        <p>{@html podcast.description}</p>
+        <Rating type="podcast" data={podcast} />
+        <Art size="large" data={podcast} type="podcast" radius="8px" />
+        <Actions
+            type="podcast"
+            displayMode="fullButtons"
+            items={[podcast]}
+            showShuffle={true}
+        />
+
+        <sl-button
+            role="button"
+            tabindex={0}
+            onclick={() => {
+                $API.updatePodcast({ filter: podcast.id });
+            }}
+            onkeydown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
                     $API.updatePodcast({ filter: podcast.id });
-                }}
-                onkeydown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault();
-                        $API.updatePodcast({ filter: podcast.id });
-                    }
-                }}
-            >
-                Sync latest episodes
-            </sl-button>
-        {/key}
-    {/if}
+                }
+            }}
+        >
+            Sync latest episodes
+        </sl-button>
+    {/key}
 {/if}
 
 <Tabulator

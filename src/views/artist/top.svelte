@@ -4,7 +4,7 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
     import { index, songsPreset } from "~/components/lister/columns.js";
-
+    import QueryError from "~/components/QueryError.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
 
@@ -39,13 +39,7 @@
     let songs = $derived(Array.isArray(query.data?.song) ? query.data.song : []);
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && songs.length === 0}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <Actions
     type="songs"

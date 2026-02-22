@@ -4,6 +4,7 @@
     import ArtistCard from "~/components/cards/artistCard.svelte";
     import { createQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
+    import QueryError from "~/components/QueryError.svelte";
 
     let { artistID } = $props();
 
@@ -30,20 +31,14 @@
     let artists = $derived(query.data?.artist || {});
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if artists.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <div class="cardlist-grid artist-grid">
-            {#each artists as artist}
-                {#if artist.name}
-                    <ArtistCard data={artist} />
-                {/if}
-            {/each}
-        </div>
-    {/if}
+<QueryError {query} />
+
+{#if query.isSuccess && artists.length > 0}
+    <div class="cardlist-grid artist-grid">
+        {#each artists as artist}
+            {#if artist.name}
+                <ArtistCard data={artist} />
+            {/if}
+        {/each}
+    </div>
 {/if}

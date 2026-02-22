@@ -12,6 +12,7 @@
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import QueryError from "~/components/QueryError.svelte";
     import Items from "~/views/playlist/_items.svelte";
 
     let { params = {} } = $props();
@@ -65,13 +66,7 @@
     });
 </script>
 
-{#if query.isLoading}
-    <p>{$_("text.loading")}</p>
-{:else if query.isError}
-    <p>Error: {query.error.message}</p>
-{:else if query.isSuccess && !query.data.id}
-    <p>{$_("text.noItemsFound")}</p>
-{/if}
+<QueryError {query} />
 
 <div class="page-wrapper">
     {#if query.isSuccess && query.data.id}
