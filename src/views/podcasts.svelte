@@ -21,8 +21,8 @@
         enabled: $User.isLoggedIn,
     }));
 
-    // alias of returned data
-    let podcasts = $derived(query.data || {});
+    // alias of returned data – ensure array for Tabulator
+    let podcasts = $derived(Array.isArray(query.data) ? query.data : []);
 
     let title = $_("text.podcasts");
     $PageTitle = title;
@@ -38,16 +38,14 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if podcasts.length < 1}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Tabulator
-            bind:tabulator
-            data={podcasts}
-            columns={podcastsPreset}
-            type="podcasts"
-            options={{ persistenceID: "podcasts" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && podcasts.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Tabulator
+    bind:tabulator
+    data={podcasts}
+    columns={podcastsPreset}
+    type="podcasts"
+    options={{ persistenceID: "podcasts" }}
+></Tabulator>

@@ -47,6 +47,13 @@
         return arr;
     });
 
+    // When loading, render one placeholder disk so Tabulator stays in DOM
+    let disksToRender = $derived.by(() =>
+        query.isSuccess
+            ? disks
+            : [{ index: 1, songs: [], songsByArtist: [], doesNotContainArtist: false }],
+    );
+
     const query = createQuery(() => ({
         queryKey: ["albumDisks", album.id],
         queryFn: async () => {
@@ -62,116 +69,116 @@
     <sl-spinner style="font-size: 2rem;"></sl-spinner>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#each disks as disk}
-        {#if $Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
-            <!-- Hide this disk-->
-        {:else}
-            <div class="disk">
-                {#if disks.length > 1}
-                    <h4 class="disk-title">Disc {disk.index}</h4>
-                {/if}
-
-                {#if type === "slim"}
-                    <ul class="expanded-columns">
-                        {#each disk.songs as song}
-                            <li
-                                class:not-by-artist={song.doesNotContainArtist}
-                                class:hide={filterToArtistID &&
-                                    $Settings.ShowSongsByOtherArtists ===
-                                        "hide"}
-                                class:highlight={filterToArtistID &&
-                                    $Settings.ShowSongsByOtherArtists ===
-                                        "highlight"}
-                            >
-                                <div class="top">
-                                    <span class="secondary-info">
-                                        {song.track}.&nbsp;
-                                    </span>
-                                    <span class="name title truncate">
-                                        {#if $CurrentMedia?.id === song.id}
-                                            <span class="current-icon">
-                                                <MaterialSymbol
-                                                    name="play_circle"
-                                                />
-                                            </span>
-                                        {/if}
-
-                                        <a href="#/song/{song.id}">
-                                            {song.title}
-                                        </a>
-                                    </span>
-                                    <span class="secondary-info">
-                                        {formatTotalTime(song.time)}
-                                    </span>
-                                </div>
-
-                                <div class="middle">
-                                    <div
-                                        class="artists truncate secondary-info"
-                                    >
-                                        <ArtistList
-                                            data={song}
-                                            featuredOnly={true}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div class="bottom">
-                                    <Actions
-                                        type="song"
-                                        items={[song]}
-                                        showLinks={true}
-                                        displayMode="miniButtons"
-                                    />
-                                    <Rating data={song} type="song" />
-                                </div>
-                            </li>
-                        {/each}
-                    </ul>
-                {:else}
-                    {#key $Settings.ShowSongsByOtherArtists || 0}
-                        {#if disks.length > 1}
-                            <Actions
-                                type="songs"
-                                items={disk.songs}
-                                displayMode="fullButtons"
-                                showShuffle={disk.songs.length > 1}
-                                data={{ getSongs: () => disk.songs }}
-                            />
-                        {/if}
-
-                        <Tabulator
-                            bind:tabulator
-                            data={$Settings.ShowSongsByOtherArtists ===
-                                "hide" && filterToArtistID
-                                ? disk.songsByArtist
-                                : disk.songs}
-                            columns={albumPreset}
-                            type="songs"
-                            options={{
-                                rowFormatter: function (row) {
-                                    if (
-                                        $Settings.ShowSongsByOtherArtists ===
-                                            "highlight" &&
-                                        filterToArtistID &&
-                                        row.getData().doesNotContainArtist
-                                    ) {
-                                        row.getElement().classList.add(
-                                            "not-by-artist",
-                                            "highlight",
-                                        );
-                                    }
-                                },
-                                persistenceID: "album",
-                            }}
-                        ></Tabulator>
-                    {/key}
-                {/if}
-            </div>
-        {/if}
-    {/each}
 {/if}
+
+{#each disksToRender as disk}
+    {#if query.isSuccess && $Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
+        <!-- Hide this disk-->
+    {:else}
+        <div class="disk">
+            {#if disks.length > 1}
+                <h4 class="disk-title">Disc {disk.index}</h4>
+            {/if}
+
+            {#if type === "slim"}
+                <ul class="expanded-columns">
+                    {#each disk.songs as song}
+                        <li
+                            class:not-by-artist={song.doesNotContainArtist}
+                            class:hide={filterToArtistID &&
+                                $Settings.ShowSongsByOtherArtists ===
+                                    "hide"}
+                            class:highlight={filterToArtistID &&
+                                $Settings.ShowSongsByOtherArtists ===
+                                    "highlight"}
+                        >
+                            <div class="top">
+                                <span class="secondary-info">
+                                    {song.track}.&nbsp;
+                                </span>
+                                <span class="name title truncate">
+                                    {#if $CurrentMedia?.id === song.id}
+                                        <span class="current-icon">
+                                            <MaterialSymbol
+                                                name="play_circle"
+                                            />
+                                        </span>
+                                    {/if}
+
+                                    <a href="#/song/{song.id}">
+                                        {song.title}
+                                    </a>
+                                </span>
+                                <span class="secondary-info">
+                                    {formatTotalTime(song.time)}
+                                </span>
+                            </div>
+
+                            <div class="middle">
+                                <div
+                                    class="artists truncate secondary-info"
+                                >
+                                    <ArtistList
+                                        data={song}
+                                        featuredOnly={true}
+                                    />
+                                </div>
+                            </div>
+
+                            <div class="bottom">
+                                <Actions
+                                    type="song"
+                                    items={[song]}
+                                    showLinks={true}
+                                    displayMode="miniButtons"
+                                />
+                                <Rating data={song} type="song" />
+                            </div>
+                        </li>
+                    {/each}
+                </ul>
+            {:else}
+                {#key $Settings.ShowSongsByOtherArtists || 0}
+                    {#if disks.length > 1}
+                        <Actions
+                            type="songs"
+                            items={disk.songs}
+                            displayMode="fullButtons"
+                            showShuffle={disk.songs.length > 1}
+                            data={{ getSongs: () => disk.songs }}
+                        />
+                    {/if}
+
+                    <Tabulator
+                        bind:tabulator
+                        data={$Settings.ShowSongsByOtherArtists ===
+                            "hide" && filterToArtistID
+                            ? disk.songsByArtist
+                            : disk.songs}
+                        columns={albumPreset}
+                        type="songs"
+                        options={{
+                            rowFormatter: function (row) {
+                                if (
+                                    $Settings.ShowSongsByOtherArtists ===
+                                        "highlight" &&
+                                    filterToArtistID &&
+                                    row.getData().doesNotContainArtist
+                                ) {
+                                    row.getElement().classList.add(
+                                        "not-by-artist",
+                                        "highlight",
+                                    );
+                                }
+                            },
+                            persistenceID: "album",
+                        }}
+                    ></Tabulator>
+                {/key}
+            {/if}
+        </div>
+    {/if}
+{/each}
 
 <style>
     .disk {

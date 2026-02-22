@@ -24,8 +24,8 @@
         enabled: $User.isLoggedIn,
     }));
 
-    // alias of returned data
-    let disks = $derived(query.data || {});
+    // alias of returned data – ensure array for derived logic
+    let disks = $derived(Array.isArray(query.data) ? query.data : []);
 
     // Single Tabulator: all tracks with _groupKey when multiple discs; no group when single disc
     let tabulator = $state(null);
@@ -56,10 +56,10 @@
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
 {:else if query.isSuccess}
-    <section>
-        {#if disks.length === 0}
-            <p>{$_("text.noItemsFound")}</p>
-        {:else}
+    {#if disks.length === 0}
+        <p>{$_("text.noItemsFound")}</p>
+    {:else}
+        <section>
             <Tabulator
                 bind:tabulator
                 data={allTracksWithGroup}
@@ -67,8 +67,8 @@
                 type="songs"
                 options={tabulatorOptions}
             />
-        {/if}
-    </section>
+        </section>
+    {/if}
 {/if}
 
 <style>

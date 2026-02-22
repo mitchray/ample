@@ -35,7 +35,7 @@
                     total_count: totalFromResponse,
                 };
             },
-            enabled: $User.isLoggedIn,
+            enabled: $User.isLoggedIn && tabulator != null,
         }),
     );
 

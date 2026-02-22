@@ -35,31 +35,29 @@
 
     let tabulator = $state(null);
 
-    // alias of returned data
-    let songs = $derived(query.data?.song || {});
+    // alias of returned data – ensure array for Tabulator
+    let songs = $derived(Array.isArray(query.data?.song) ? query.data.song : []);
 </script>
 
 {#if query.isLoading}
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if songs.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Actions
-            type="songs"
-            displayMode="fullButtons"
-            showShuffle={songs.length > 1}
-            data={{ getSongs: () => tabulator?.getData("active") }}
-        />
-
-        <Tabulator
-            bind:tabulator
-            data={songs}
-            columns={[index, ...songsPreset]}
-            type="songs"
-            options={{ persistenceID: "songsArtistTop" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && songs.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Actions
+    type="songs"
+    displayMode="fullButtons"
+    showShuffle={songs.length > 1}
+    data={{ getSongs: () => tabulator?.getData("active") }}
+/>
+
+<Tabulator
+    bind:tabulator
+    data={songs}
+    columns={[index, ...songsPreset]}
+    type="songs"
+    options={{ persistenceID: "songsArtistTop" }}
+></Tabulator>

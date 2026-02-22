@@ -40,8 +40,8 @@
         enabled: $User.isLoggedIn,
     }));
 
-    // alias of returned data
-    let songs = $derived(query.data ?? []);
+    // alias of returned data – ensure array for Tabulator
+    let songs = $derived(Array.isArray(query.data) ? query.data : []);
 </script>
 
 <div class="page-header">
@@ -54,25 +54,23 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if songs.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Actions
-            type="songs"
-            displayMode="fullButtons"
-            showShuffle={songs.length > 1}
-            data={{ getSongs: () => tabulator?.getData("active") }}
-        />
-
-        <Tabulator
-            bind:tabulator
-            data={songs}
-            columns={songsPreset}
-            type="songs"
-            options={{
-                persistenceID: "songs",
-            }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && songs.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Actions
+    type="songs"
+    displayMode="fullButtons"
+    showShuffle={songs.length > 1}
+    data={{ getSongs: () => tabulator?.getData("active") }}
+/>
+
+<Tabulator
+    bind:tabulator
+    data={songs}
+    columns={songsPreset}
+    type="songs"
+    options={{
+        persistenceID: "songs",
+    }}
+></Tabulator>

@@ -24,38 +24,36 @@
 
             return result;
         },
-        enabled: $User.isLoggedIn,
+        enabled: $User.isLoggedIn && tabulator != null,
     }));
 
-    // alias of returned data
-    let artists = $derived(query.data?.artist || {});
+    // alias of returned data – ensure array for Tabulator
+    let artists = $derived(Array.isArray(query.data?.artist) ? query.data.artist : []);
 </script>
 
 {#if query.isLoading}
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if query.data?.total_count === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Actions
-            type="artists"
-            displayMode="fullButtons"
-            showShuffle={true}
-            data={{
-                getArtists: () => tabulator?.getData("active"),
-            }}
-        />
-
-        <Tabulator
-            bind:tabulator
-            data={artists}
-            columns={artistsPreset}
-            type="artists"
-            options={{
-                persistenceID: "artists",
-            }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && artists.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Actions
+    type="artists"
+    displayMode="fullButtons"
+    showShuffle={true}
+    data={{
+        getArtists: () => tabulator?.getData("active"),
+    }}
+/>
+
+<Tabulator
+    bind:tabulator
+    data={artists}
+    columns={artistsPreset}
+    type="artists"
+    options={{
+        persistenceID: "artists",
+    }}
+></Tabulator>

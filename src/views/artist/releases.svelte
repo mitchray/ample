@@ -181,37 +181,37 @@
 </sl-dropdown>
 
 <div class="releases">
+    {#if $Settings.ArtistReleases.view === "table"}
+        <div class="release-group">
+            <RenderReleases
+                view="table"
+                items={flatReleasesForTable}
+                groupBy={$Settings.ArtistReleases.group &&
+                $Settings.ArtistReleases.group !== "none"
+                    ? "_groupKey"
+                    : null}
+            />
+        </div>
+    {/if}
+
     {#if query.isLoading}
         <p>Loading...</p>
     {:else if query.isError}
         <p>Error: {query.error.message}</p>
     {:else if query.isSuccess}
-        {#if releases.length > 0}
-            {#if $Settings.ArtistReleases.view === "table"}
+        {#if $Settings.ArtistReleases.view !== "table" && releases.length > 0}
+            {#each releases as [group, items]}
                 <div class="release-group">
+                    {#if releases.length > 0 && group !== "undefined"}
+                        <h3 class="group-title">{group}</h3>
+                    {/if}
+
                     <RenderReleases
-                        view="table"
-                        items={flatReleasesForTable}
-                        groupBy={$Settings.ArtistReleases.group &&
-                        $Settings.ArtistReleases.group !== "none"
-                            ? "_groupKey"
-                            : null}
+                        view={$Settings.ArtistReleases.view}
+                        {items}
                     />
                 </div>
-            {:else}
-                {#each releases as [group, items]}
-                    <div class="release-group">
-                        {#if releases.length > 0 && group !== "undefined"}
-                            <h3 class="group-title">{group}</h3>
-                        {/if}
-
-                        <RenderReleases
-                            view={$Settings.ArtistReleases.view}
-                            {items}
-                        />
-                    </div>
-                {/each}
-            {/if}
+            {/each}
         {/if}
 
         {#if appearances.length > 0}

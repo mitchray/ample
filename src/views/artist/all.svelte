@@ -27,7 +27,7 @@
                 tabulator?.addData(result.song);
                 return { items: result.song, total_count: result.total_count };
             },
-            enabled: $User.isLoggedIn,
+            enabled: $User.isLoggedIn && tabulator != null,
         }),
     );
 

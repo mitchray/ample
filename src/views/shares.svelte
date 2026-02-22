@@ -67,7 +67,7 @@
                     total_count: result?.total_count ?? 0,
                 };
             },
-            enabled: $User.isLoggedIn,
+            enabled: $User.isLoggedIn && tabulator != null,
         }),
     );
 

@@ -21,8 +21,8 @@
         enabled: $User.isLoggedIn,
     }));
 
-    // alias of returned data
-    let liveStreams = $derived(query.data || {});
+    // alias of returned data – ensure array for Tabulator
+    let liveStreams = $derived(Array.isArray(query.data) ? query.data : []);
 
     let title = $_("text.radio");
     $PageTitle = title;
@@ -38,16 +38,14 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if liveStreams.length < 1}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Tabulator
-            bind:tabulator
-            data={liveStreams}
-            columns={liveStreamsPreset}
-            type="live_streams"
-            options={{ persistenceID: "livestreams" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && liveStreams.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Tabulator
+    bind:tabulator
+    data={liveStreams}
+    columns={liveStreamsPreset}
+    type="live_streams"
+    options={{ persistenceID: "livestreams" }}
+></Tabulator>

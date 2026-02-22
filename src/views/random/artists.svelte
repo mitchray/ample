@@ -27,7 +27,7 @@
 
             return response.artist;
         },
-        enabled: $User.isLoggedIn,
+        enabled: $User.isLoggedIn && tabulator != null,
     }));
 
     // alias of returned data

@@ -53,7 +53,7 @@
                     total_count: result?.total_count ?? 0,
                 };
             },
-            enabled: $User.isLoggedIn && !!params.id,
+            enabled: $User.isLoggedIn && !!params.id && tabulator != null,
         }),
     );
 
@@ -108,14 +108,14 @@
             >
                 Sync latest episodes
             </sl-button>
-
-            <Tabulator
-                bind:tabulator
-                data={[]}
-                columns={podcastEpisodesPreset}
-                type="podcast_episodes"
-                options={{ persistenceID: "podcast" }}
-            ></Tabulator>
         {/key}
     {/if}
 {/if}
+
+<Tabulator
+    bind:tabulator
+    data={episodes}
+    columns={podcastEpisodesPreset}
+    type="podcast_episodes"
+    options={{ persistenceID: "podcast" }}
+></Tabulator>

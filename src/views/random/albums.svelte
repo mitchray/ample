@@ -27,7 +27,7 @@
 
             return response.album;
         },
-        enabled: $User.isLoggedIn,
+        enabled: $User.isLoggedIn && tabulator != null,
     }));
 
     // alias of returned data

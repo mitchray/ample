@@ -55,6 +55,11 @@
     // alias of returned data
     let playlist = $derived(query.data || {});
 
+    // Placeholder so Items (and Tabulator) always mount; real playlist when loaded
+    let playlistForItems = $derived(
+        query.data?.id ? playlist : { id: params.id },
+    );
+
     $effect(() => {
         $PageTitle = playlist?.name || $_("text.playlist");
     });
@@ -64,126 +69,128 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if !query.data.id}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
+{:else if query.isSuccess && !query.data.id}
+    <p>{$_("text.noItemsFound")}</p>
+{/if}
+
+<div class="page-wrapper">
+    {#if query.isSuccess && query.data.id}
         {#key query.data.id}
-            <div class="page-wrapper">
-                <div class="details-container">
-                    <div class="details">
-                        <div class="cover-rating">
-                            <div class="art-container">
-                                <Art
-                                    size="large"
-                                    data={playlist}
-                                    {type}
-                                    radius="6px"
-                                />
-                            </div>
-
-                            {#if type !== "mix"}
-                                <div class="rating">
-                                    <Rating type="playlist" data={playlist} />
-                                </div>
-                            {/if}
+            <div class="details-container">
+                <div class="details">
+                    <div class="cover-rating">
+                        <div class="art-container">
+                            <Art
+                                size="large"
+                                data={playlist}
+                                {type}
+                                radius="6px"
+                            />
                         </div>
 
-                        <div class="info">
-                            <div class="name">
-                                <div class="type">
-                                    {#if type === "smartlist"}
-                                        <Badge text={$_("text.smartlist")} />
-                                    {:else if type === "mix"}
-                                        <Badge text={$_("text.mix")} />
-                                    {:else}
-                                        <Badge text={$_("text.playlist")} />
-                                    {/if}
-                                </div>
-
-                                <h1 class="title">
-                                    {playlist.name}
-                                </h1>
+                        {#if type !== "mix"}
+                            <div class="rating">
+                                <Rating type="playlist" data={playlist} />
                             </div>
-
-                            {#if type !== "mix"}
-                                <div class="meta-container">
-                                    <div class="meta-entry">
-                                        <span class="meta-field">
-                                            {$_("text.items")}
-                                        </span>
-                                        <span class="meta-value">
-                                            {playlist.items}
-                                        </span>
-                                    </div>
-
-                                    <div class="meta-entry">
-                                        <span class="meta-field">
-                                            {$_("text.owner")}
-                                        </span>
-                                        <span class="meta-value">
-                                            {playlist.owner}
-                                        </span>
-                                    </div>
-
-                                    <div class="meta-entry">
-                                        <span class="meta-field">
-                                            {$_("text.type")}
-                                        </span>
-                                        <span class="meta-value">
-                                            <Privacy type={playlist.type} />
-                                        </span>
-                                    </div>
-                                </div>
-                            {/if}
-
-                            {#if type === "playlist" && playlist.has_access}
-                                <div class="playlist-actions">
-                                    <sl-button
-                                        variant="primary"
-                                        onclick={() => drawerEdit.show()}
-                                        title={$_("text.edit")}
-                                    >
-                                        <MaterialSymbol
-                                            name="edit"
-                                            slot="prefix"
-                                        />
-                                        {$_("text.edit")}
-                                    </sl-button>
-
-                                    <sl-button
-                                        variant="neutral"
-                                        onclick={() => drawerDelete.show()}
-                                        title={$_("text.delete")}
-                                    >
-                                        <MaterialSymbol
-                                            name="delete"
-                                            slot="prefix"
-                                        />
-                                        {$_("text.delete")}
-                                    </sl-button>
-                                </div>
-                            {/if}
-                        </div>
+                        {/if}
                     </div>
-                </div>
 
-                <div class="songs-container">
-                    <div class="songs">
-                        <Items {type} {playlist} />
+                    <div class="info">
+                        <div class="name">
+                            <div class="type">
+                                {#if type === "smartlist"}
+                                    <Badge text={$_("text.smartlist")} />
+                                {:else if type === "mix"}
+                                    <Badge text={$_("text.mix")} />
+                                {:else}
+                                    <Badge text={$_("text.playlist")} />
+                                {/if}
+                            </div>
+
+                            <h1 class="title">
+                                {playlist.name}
+                            </h1>
+                        </div>
+
+                        {#if type !== "mix"}
+                            <div class="meta-container">
+                                <div class="meta-entry">
+                                    <span class="meta-field">
+                                        {$_("text.items")}
+                                    </span>
+                                    <span class="meta-value">
+                                        {playlist.items}
+                                    </span>
+                                </div>
+
+                                <div class="meta-entry">
+                                    <span class="meta-field">
+                                        {$_("text.owner")}
+                                    </span>
+                                    <span class="meta-value">
+                                        {playlist.owner}
+                                    </span>
+                                </div>
+
+                                <div class="meta-entry">
+                                    <span class="meta-field">
+                                        {$_("text.type")}
+                                    </span>
+                                    <span class="meta-value">
+                                        <Privacy type={playlist.type} />
+                                    </span>
+                                </div>
+                            </div>
+                        {/if}
+
+                        {#if type === "playlist" && playlist.has_access}
+                            <div class="playlist-actions">
+                                <sl-button
+                                    variant="primary"
+                                    onclick={() => drawerEdit.show()}
+                                    title={$_("text.edit")}
+                                >
+                                    <MaterialSymbol
+                                        name="edit"
+                                        slot="prefix"
+                                    />
+                                    {$_("text.edit")}
+                                </sl-button>
+
+                                <sl-button
+                                    variant="neutral"
+                                    onclick={() => drawerDelete.show()}
+                                    title={$_("text.delete")}
+                                >
+                                    <MaterialSymbol
+                                        name="delete"
+                                        slot="prefix"
+                                    />
+                                    {$_("text.delete")}
+                                </sl-button>
+                            </div>
+                        {/if}
                     </div>
                 </div>
             </div>
-
-            <Portal>
-                <DrawerEdit bind:this={drawerEdit} {playlist} />
-            </Portal>
-
-            <Portal>
-                <DrawerDelete bind:this={drawerDelete} {playlist} />
-            </Portal>
         {/key}
     {/if}
+
+    <div class="songs-container">
+        <div class="songs">
+            <Items {type} playlist={playlistForItems} />
+        </div>
+    </div>
+</div>
+
+{#if query.isSuccess && query.data.id}
+    <Portal>
+        <DrawerEdit bind:this={drawerEdit} {playlist} />
+    </Portal>
+
+    <Portal>
+        <DrawerDelete bind:this={drawerDelete} {playlist} />
+    </Portal>
 {/if}
 
 <style>

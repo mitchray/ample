@@ -28,7 +28,7 @@
                     total_count: response.total_count,
                 };
             },
-            enabled: $User.isLoggedIn,
+            enabled: $User.isLoggedIn && tabulator != null,
         }),
     );
 
