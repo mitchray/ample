@@ -35,7 +35,7 @@
             }
 
             let file = await $API.download({
-                id: item.id,
+                filter: item.id,
                 type: "song",
                 format: "raw",
             });

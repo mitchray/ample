@@ -363,7 +363,7 @@ class Player {
 
         // shared between stream() and download()
         let fetchParams = {
-            id: item.id,
+            filter: item.id,
             type: item.object_type,
         };
 

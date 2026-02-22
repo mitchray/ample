@@ -73,7 +73,7 @@
 <button
     onclick={() => {
         wavesurfer?.pause();
-        $API.stream({ id: 35209, type: "song", format: "raw" }).then((r) => {
+        $API.stream({ filter: 35209, type: "song", format: "raw" }).then((r) => {
             if (r.error) {
                 errorHandler("getting stream:", r.error);
             }

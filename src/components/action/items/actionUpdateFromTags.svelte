@@ -17,7 +17,7 @@
         let urlBefore = window.location.href;
 
         for (const item of items) {
-            let result = await $API.updateFromTags({ type: apiType, id: item.id });
+            let result = await $API.updateFromTags({ type: apiType, filter: item.id });
             if (result.error) {
                 errorHandler("updating from tags", result.error);
             }

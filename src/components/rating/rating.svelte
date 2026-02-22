@@ -66,7 +66,7 @@
         const ratedType = finalType;
         let newFlag = data.flag ? 0 : 1;
 
-        $API.flag({ type: ratedType, id: ratedId, flag: newFlag }).then(
+        $API.flag({ type: ratedType, filter: ratedId, flag: newFlag }).then(
             (result) => {
                 if (result.error) {
                     errorHandler("while flagging", result.error);

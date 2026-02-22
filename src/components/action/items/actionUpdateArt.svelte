@@ -18,7 +18,7 @@
         loading = true;
 
         for (const item of items) {
-            let result = await $API.updateArt({ type: apiType, id: item.id });
+            let result = await $API.updateArt({ type: apiType, filter: item.id });
             if (result.error) {
                 errorHandler("updating art", result.error);
             }
