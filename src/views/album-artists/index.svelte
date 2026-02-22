@@ -1,12 +1,21 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
-    import ArtistsAll from "~/components/artist/artistsAll.svelte";
     import { replace } from "svelte-spa-router";
-    import Random from "~/views/album-artists/random.svelte";
     import Visibility from "~/components/visibility.svelte";
 
     let { params = {} } = $props();
+
+    let section = $derived(params.section || "random");
+
+    const sectionComponents = {
+        random: () => import("~/views/album-artists/random.svelte"),
+        all: () => import("~/components/artist/artistsAll.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.random(),
+    );
 
     // default to random tab
     $effect(() => {
@@ -33,16 +42,18 @@
 
 <sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
-        <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
+        <sl-tab slot="nav" panel={tab.id} active={tab.id === section}>
             {tab.label}
         </sl-tab>
     {/each}
 
-    <sl-tab-panel name="random">
-        <Visibility><Random /></Visibility>
-    </sl-tab-panel>
-
-    <sl-tab-panel name="all">
-        <Visibility><ArtistsAll type="album_artist" /></Visibility>
-    </sl-tab-panel>
+    <div class="tab-content">
+        {#await childComponent() then module}
+            {@const Child = module.default}
+            {@const childProps = section === "all" ? { type: "album_artist" } : {}}
+            <Visibility>
+                <Child {...childProps} />
+            </Visibility>
+        {/await}
+    </div>
 </sl-tab-group>

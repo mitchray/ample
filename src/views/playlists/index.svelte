@@ -2,8 +2,6 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Portal from "~/components/portal.svelte";
     import { PageTitle } from "~/stores/state.js";
-    import Mine from "./mine.svelte";
-    import All from "./all.svelte";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import Visibility from "~/components/visibility.svelte";
     import { replace } from "svelte-spa-router";
@@ -11,7 +9,17 @@
 
     let { params = {} } = $props();
 
+    let section = $derived(params.section || "mine");
     let drawerEdit = $state();
+
+    const sectionComponents = {
+        mine: () => import("~/views/playlists/mine.svelte"),
+        all: () => import("~/views/playlists/all.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.mine(),
+    );
 
     let title = $_("text.playlists");
     $PageTitle = title;
@@ -47,22 +55,19 @@
 
 <sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
-        <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
+        <sl-tab slot="nav" panel={tab.id} active={tab.id === section}>
             {tab.label}
         </sl-tab>
     {/each}
 
-    <sl-tab-panel name="mine">
-        <Visibility>
-            <Mine />
-        </Visibility>
-    </sl-tab-panel>
-
-    <sl-tab-panel name="all">
-        <Visibility>
-            <All />
-        </Visibility>
-    </sl-tab-panel>
+    <div class="tab-content">
+        {#await childComponent() then module}
+            {@const Child = module.default}
+            <Visibility>
+                <Child />
+            </Visibility>
+        {/await}
+    </div>
 </sl-tab-group>
 
 <Portal>

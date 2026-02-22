@@ -2,12 +2,21 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { replace } from "svelte-spa-router";
     import { PageTitle } from "~/stores/state.js";
-    import ArtistsAll from "~/components/artist/artistsAll.svelte";
-    import Newest from "~/views/artists/newest.svelte";
-    import Random from "~/views/artists/random.svelte";
     import Visibility from "~/components/visibility.svelte";
 
     let { params = {} } = $props();
+
+    let section = $derived(params.section || "newest");
+
+    const sectionComponents = {
+        newest: () => import("~/views/artists/newest.svelte"),
+        random: () => import("~/views/artists/random.svelte"),
+        all: () => import("~/components/artist/artistsAll.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.newest(),
+    );
 
     // default to the newest tab
     $effect(() => {
@@ -35,20 +44,18 @@
 
 <sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
-        <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
+        <sl-tab slot="nav" panel={tab.id} active={tab.id === section}>
             {tab.label}
         </sl-tab>
     {/each}
 
-    <sl-tab-panel name="newest">
-        <Visibility><Newest /></Visibility>
-    </sl-tab-panel>
-
-    <sl-tab-panel name="random">
-        <Visibility><Random /></Visibility>
-    </sl-tab-panel>
-
-    <sl-tab-panel name="all">
-        <Visibility><ArtistsAll type="artist" /></Visibility>
-    </sl-tab-panel>
+    <div class="tab-content">
+        {#await childComponent() then module}
+            {@const Child = module.default}
+            <Visibility>
+                {@const childProps = section === "all" ? { type: "artist" } : {}}
+                <Child {...childProps} />
+            </Visibility>
+        {/await}
+    </div>
 </sl-tab-group>

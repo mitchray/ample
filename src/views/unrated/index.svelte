@@ -2,16 +2,24 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
-    import Artists from "~/views/unrated/artists.svelte";
-    import Albums from "~/views/unrated/albums.svelte";
-    import Songs from "~/views/unrated/songs.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import Visibility from "~/components/visibility.svelte";
     import StatsLinks from "~/components/statsLinks.svelte";
 
     let { params = {} } = $props();
 
+    let section = $derived(params.section || "artists");
     let loadedTime = $state();
+
+    const sectionComponents = {
+        artists: () => import("~/views/unrated/artists.svelte"),
+        albums: () => import("~/views/unrated/albums.svelte"),
+        songs: () => import("~/views/unrated/songs.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.artists(),
+    );
 
     // default to artists tab
     $effect(() => {
@@ -53,22 +61,19 @@
             <sl-tab
                 slot="nav"
                 panel={tab.id}
-                active={tab.id === params.section}
+                active={tab.id === section}
             >
                 {tab.label}
             </sl-tab>
         {/each}
 
-        <sl-tab-panel name="artists">
-            <Visibility><Artists /></Visibility>
-        </sl-tab-panel>
-
-        <sl-tab-panel name="albums">
-            <Visibility><Albums /></Visibility>
-        </sl-tab-panel>
-
-        <sl-tab-panel name="songs">
-            <Visibility><Songs /></Visibility>
-        </sl-tab-panel>
+        <div class="tab-content">
+            {#await childComponent() then module}
+                {@const Child = module.default}
+                <Visibility>
+                    <Child />
+                </Visibility>
+            {/await}
+        </div>
     </sl-tab-group>
 {/key}

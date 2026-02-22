@@ -261,13 +261,6 @@
         display: block;
     }
 
-    .tab-content {
-        margin-block-start: var(--spacing-lg);
-        min-height: calc(
-            100vh - 180px
-        ); /* reduce position shift between tabs */
-    }
-
     .header {
         position: relative;
         display: grid;

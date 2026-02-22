@@ -2,13 +2,24 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
-    import GenreByType from "~/components/genre/genreByType.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { createQuery } from "@tanstack/svelte-query";
     import Visibility from "~/components/visibility.svelte";
 
     let { params = {} } = $props();
+
+    let section = $derived(params.section || "artists");
+
+    const sectionComponents = {
+        artists: () => import("~/views/genre/artists.svelte"),
+        albums: () => import("~/views/genre/albums.svelte"),
+        songs: () => import("~/views/genre/songs.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.artists(),
+    );
 
     // default to artists tab
     $effect(() => {
@@ -69,29 +80,20 @@
                     <sl-tab
                         slot="nav"
                         panel={tab.id}
-                        active={tab.id === params.section}
+                        active={tab.id === section}
                     >
                         {tab.label}
                     </sl-tab>
                 {/each}
 
-                <sl-tab-panel name="artists">
-                    <Visibility>
-                        <GenreByType id={genre.id} type="artist" />
-                    </Visibility>
-                </sl-tab-panel>
-
-                <sl-tab-panel name="albums">
-                    <Visibility>
-                        <GenreByType id={genre.id} type="album" />
-                    </Visibility>
-                </sl-tab-panel>
-
-                <sl-tab-panel name="songs">
-                    <Visibility>
-                        <GenreByType id={genre.id} type="song" />
-                    </Visibility>
-                </sl-tab-panel>
+                <div class="tab-content">
+                    {#await childComponent() then module}
+                        {@const Child = module.default}
+                        <Visibility>
+                            <Child id={genre.id} />
+                        </Visibility>
+                    {/await}
+                </div>
             </sl-tab-group>
         {/key}
     {/if}

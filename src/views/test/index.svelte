@@ -2,20 +2,28 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { replace } from "svelte-spa-router";
     import { API, PageTitle } from "~/stores/state.js";
-    import General from "~/views/test/general.svelte";
-    import Image from "~/views/test/image.svelte";
-    import Buttons from "~/views/test/buttons.svelte";
-    import Menus from "~/views/test/menus.svelte";
-    import Actions from "~/views/test/actions.svelte";
-    import Theme from "~/views/test/theme.svelte";
-    import Wavesurfer from "~/views/test/wavesurfer.svelte";
     import { errorHandler } from "~/logic/helper.js";
 
     let { params = {} } = $props();
 
-    let data = {};
+    let section = $derived(params.section || "general");
+    let data = $state({});
 
-    // default to releases tab
+    const sectionComponents = {
+        general: () => import("~/views/test/general.svelte"),
+        image: () => import("~/views/test/image.svelte"),
+        buttons: () => import("~/views/test/buttons.svelte"),
+        menus: () => import("~/views/test/menus.svelte"),
+        actions: () => import("~/views/test/actions.svelte"),
+        theme: () => import("~/views/test/theme.svelte"),
+        //wavesurfer: () => import("~/views/test/wavesurfer.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.general(),
+    );
+
+    // default to general tab
     $effect(() => {
         if (!params.section) replace(`#/test/general`);
     });
@@ -27,7 +35,7 @@
         { id: "menus", label: "Menus" },
         { id: "actions", label: "Actions" },
         { id: "theme", label: "Theme" },
-        { id: "wavesurfer", label: "Wavesurfer" },
+        //{ id: "wavesurfer", label: "Wavesurfer" },
     ];
 
     let title = $_("text.test");
@@ -40,7 +48,7 @@
     $effect(async () => {
         data.playlist = await $API.playlist({ filter: 26 });
 
-        if (data.playlist.error) {
+        if (data.playlist?.error) {
             errorHandler("getting playlist", data.playlist.error);
         }
     });
@@ -52,36 +60,15 @@
 
 <sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
-        <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
+        <sl-tab slot="nav" panel={tab.id} active={tab.id === section}>
             {tab.label}
         </sl-tab>
     {/each}
 
-    <sl-tab-panel name="general">
-        <General />
-    </sl-tab-panel>
-
-    <sl-tab-panel name="image">
-        <Image />
-    </sl-tab-panel>
-
-    <sl-tab-panel name="buttons">
-        <Buttons />
-    </sl-tab-panel>
-
-    <sl-tab-panel name="menus">
-        <Menus />
-    </sl-tab-panel>
-
-    <sl-tab-panel name="actions">
-        <Actions />
-    </sl-tab-panel>
-
-    <sl-tab-panel name="theme">
-        <Theme />
-    </sl-tab-panel>
-
-    <sl-tab-panel name="wavesurfer">
-        <!--        <Wavesurfer />-->
-    </sl-tab-panel>
+    <div class="tab-content">
+        {#await childComponent() then module}
+            {@const Child = module.default}
+            <Child />
+        {/await}
+    </div>
 </sl-tab-group>

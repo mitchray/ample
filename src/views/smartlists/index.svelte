@@ -3,10 +3,19 @@
     import { PageTitle } from "~/stores/state.js";
     import { replace } from "svelte-spa-router";
     import Visibility from "~/components/visibility.svelte";
-    import Mine from "./mine.svelte";
-    import All from "./all.svelte";
 
     let { params = {} } = $props();
+
+    let section = $derived(params.section || "mine");
+
+    const sectionComponents = {
+        mine: () => import("~/views/smartlists/mine.svelte"),
+        all: () => import("~/views/smartlists/all.svelte"),
+    };
+
+    let childComponent = $derived(
+        () => sectionComponents[section]?.() ?? sectionComponents.mine(),
+    );
 
     let title = $_("text.smartlists");
     $PageTitle = title;
@@ -32,20 +41,17 @@
 
 <sl-tab-group onsl-tab-show={changeTab}>
     {#each tabs as tab}
-        <sl-tab slot="nav" panel={tab.id} active={tab.id === params.section}>
+        <sl-tab slot="nav" panel={tab.id} active={tab.id === section}>
             {tab.label}
         </sl-tab>
     {/each}
 
-    <sl-tab-panel name="mine">
-        <Visibility>
-            <Mine />
-        </Visibility>
-    </sl-tab-panel>
-
-    <sl-tab-panel name="all">
-        <Visibility>
-            <All />
-        </Visibility>
-    </sl-tab-panel>
+    <div class="tab-content">
+        {#await childComponent() then module}
+            {@const Child = module.default}
+            <Visibility>
+                <Child />
+            </Visibility>
+        {/await}
+    </div>
 </sl-tab-group>
