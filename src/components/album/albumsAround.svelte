@@ -14,10 +14,12 @@
     const query = createQuery(() => ({
         queryKey: ["albumsAround", album.id],
         queryFn: async () => {
+            if (!album?.artist?.id) return [];
+
             let final = {};
 
-            // 'Various' has no id so abort
-            if (parseInt(album.artist.id) === 0) return [];
+            // 'Various' so abort, used to be 0 but now 1
+            if (parseInt(album.artist.id) < 2) return [];
 
             let result = await $API.artistAlbums({
                 filter: album.artist.id,
