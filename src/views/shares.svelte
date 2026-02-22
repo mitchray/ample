@@ -108,16 +108,14 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if shares.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Tabulator
-            bind:tabulator
-            data={[]}
-            columns={sharesPreset}
-            type="shares"
-            options={{ id: "shares", persistenceID: "shares" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && shares.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={sharesPreset}
+    type="shares"
+    options={{ id: "shares", persistenceID: "shares" }}
+></Tabulator>

@@ -56,16 +56,14 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if genres.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Tabulator
-            bind:tabulator
-            data={[]}
-            columns={genresPreset}
-            type="genres"
-            options={{ layout: "fitDataFill", persistenceID: "genres" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && genres.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={genresPreset}
+    type="genres"
+    options={{ layout: "fitDataFill", persistenceID: "genres" }}
+></Tabulator>

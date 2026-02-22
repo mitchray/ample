@@ -43,25 +43,23 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if artists.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Actions
-            type="artists"
-            displayMode="fullButtons"
-            showShuffle={true}
-            data={{
-                getArtists: () => tabulator?.getData("active"),
-            }}
-        />
-
-        <Tabulator
-            bind:tabulator
-            data={[]}
-            columns={artistsPreset}
-            type="artists"
-            options={{ persistenceID: "artists" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && artists.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Actions
+    type="artists"
+    displayMode="fullButtons"
+    showShuffle={true}
+    data={{
+        getArtists: () => tabulator?.getData("active"),
+    }}
+/>
+
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={artistsPreset}
+    type="artists"
+    options={{ persistenceID: "artists" }}
+></Tabulator>

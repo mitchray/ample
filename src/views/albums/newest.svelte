@@ -43,23 +43,21 @@
     <p>{$_("text.loading")}</p>
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
-{:else if query.isSuccess}
-    {#if albums.length === 0}
-        <p>{$_("text.noItemsFound")}</p>
-    {:else}
-        <Actions
-            type="albums"
-            displayMode="fullButtons"
-            showShuffle={true}
-            data={{ getAlbums: () => tabulator?.getData("active") }}
-        />
-
-        <Tabulator
-            bind:tabulator
-            data={[]}
-            columns={albumsPreset}
-            type="albums"
-            options={{ persistenceID: "albums" }}
-        ></Tabulator>
-    {/if}
+{:else if query.isSuccess && albums.length === 0}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
+
+<Actions
+    type="albums"
+    displayMode="fullButtons"
+    showShuffle={true}
+    data={{ getAlbums: () => tabulator?.getData("active") }}
+/>
+
+<Tabulator
+    bind:tabulator
+    data={[]}
+    columns={albumsPreset}
+    type="albums"
+    options={{ persistenceID: "albums" }}
+></Tabulator>
