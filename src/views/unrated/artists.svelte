@@ -6,47 +6,30 @@
     import { User } from "~/stores/state.js";
     import Actions from "~/components/action/actions.svelte";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["unratedArtists", Date.now()],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            let offsetTotal = lastPageParam + limitUsed;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["unratedArtists", Date.now()],
+            fetchPage: async (offset, limit) => {
+                const result = await unratedArtists({ limit, offset });
+                if (result.error) {
+                    errorHandler("getting unrated artists", result.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(result.artist);
+                return {
+                    items: result.artist,
+                    total_count: result.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            let result = await unratedArtists({
-                limit,
-                offset: pageParam,
-            });
-
-            if (result.error) {
-                errorHandler("getting unrated artists", result.error);
-                return [];
-            }
-
-            total = result.total_count;
-
-            tabulator?.addData(result.artist);
-
-            return result.artist;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    let artists = $derived(query.data?.pages.flat() || []);
+    let artists = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
         if (artists && query.hasNextPage && !query.isFetchingNextPage) {

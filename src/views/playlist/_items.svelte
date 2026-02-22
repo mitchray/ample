@@ -13,70 +13,59 @@
     } from "~/components/lister/columns.js";
     import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { _ } from "@rgglez/svelte-i18n";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let { type, playlist } = $props();
 
     let tabulator = $state(null);
-    let total = $state(0);
     let columns = $derived(
         type === "playlist"
             ? [moveHandle, moveHandleDisabled, ...songsPreset]
             : songsPreset,
     );
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["playlist_items", playlist.id + type],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            if (type === "mix") return undefined;
-
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            let offsetTotal = lastPageParam + limitUsed;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        queryFn: async ({ pageParam }) => {
-            if (type === "mix") {
-                let response = await getSongsFromPlaylist({
-                    id: playlist.id,
-                    type: "artist_mix",
-                });
-
-                if (response.error) {
-                    errorHandler("getting items from playlist", response.error);
-                    return [];
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["playlist_items", playlist.id + type],
+            noMorePages: type === "mix",
+            fetchPage: async (offset, limit) => {
+                if (type === "mix") {
+                    const response = await getSongsFromPlaylist({
+                        id: playlist.id,
+                        type: "artist_mix",
+                    });
+                    if (response.error) {
+                        errorHandler(
+                            "getting items from playlist",
+                            response.error,
+                        );
+                        return { items: [], total_count: 0 };
+                    }
+                    const items = response.song || [];
+                    return { items, total_count: items.length };
                 }
+                const result = await $API.playlistSongs({
+                    filter: playlist.id,
+                    limit,
+                    offset,
+                });
+                if (result.error) {
+                    errorHandler(
+                        "getting items from playlist",
+                        result.error,
+                    );
+                    return { items: [], total_count: 0 };
+                }
+                return {
+                    items: result.song,
+                    total_count: result.total_count ?? 0,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-                return response.song || [];
-            }
-
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-
-            let result = await $API.playlistSongs({
-                filter: playlist.id,
-                limit,
-                offset: pageParam,
-            });
-
-            if (result.error) {
-                errorHandler("getting items from playlist", result.error);
-                return [];
-            }
-
-            total = result.total_count ?? 0;
-
-            return result.song;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let items = $derived(query.data?.pages.flat() || []);
+    let items = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     const isDataFullyLoaded = $derived(
         type === "mix"

@@ -10,74 +10,57 @@
         songsPreset,
     } from "~/components/lister/columns.js";
     import { _ } from "@rgglez/svelte-i18n";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let { id, type } = $props();
 
     let tabulator = $state(null);
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["genre", id, type],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            let offsetTotal = lastPageParam + limitUsed;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        // pageParam is based on offset total
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["genre", id, type],
+            fetchPage: async (offset, limit) => {
+                let result = {};
+                switch (type) {
+                    case "artist":
+                        result = await $API.genreArtists({
+                            filter: id,
+                            limit,
+                            offset,
+                        });
+                        break;
+                    case "album":
+                        result = await $API.genreAlbums({
+                            filter: id,
+                            limit,
+                            offset,
+                        });
+                        break;
+                    case "song":
+                        result = await $API.genreSongs({
+                            filter: id,
+                            limit,
+                            offset,
+                        });
+                        break;
+                    default:
+                        break;
+                }
+                if (result.error) {
+                    errorHandler("getting genre type " + type, result.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(result[type]);
+                return {
+                    items: result[type],
+                    total_count: result.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            let result = {};
-
-            switch (type) {
-                case "artist":
-                    result = await $API.genreArtists({
-                        filter: id,
-                        limit,
-                        offset: pageParam,
-                    });
-                    break;
-                case "album":
-                    result = await $API.genreAlbums({
-                        filter: id,
-                        limit,
-                        offset: pageParam,
-                    });
-                    break;
-                case "song":
-                    result = await $API.genreSongs({
-                        filter: id,
-                        limit,
-                        offset: pageParam,
-                    });
-                    break;
-                default:
-                    break;
-            }
-
-            if (result.error) {
-                errorHandler("getting genre type " + type, result.error);
-                return [];
-            }
-
-            total = result.total_count;
-
-            tabulator?.addData(result[type]);
-
-            return result[type];
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let items = $derived(query.data?.pages.flat() || []);
+    let items = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
         if (items && query.hasNextPage && !query.isFetchingNextPage) {

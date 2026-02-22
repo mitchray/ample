@@ -5,48 +5,39 @@
     import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let limit = 500;
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["favoriteAlbums"],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            let offsetTotal = lastPageParam + limit;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        // pageParam is based on offset total
-        queryFn: async ({ pageParam }) => {
-            let response = await $API.stats({
-                type: "album",
-                filter: "flagged",
-                sort: "user_flag_rating,DESC",
-                limit: limit,
-                offset: pageParam,
-            });
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["favoriteAlbums"],
+            fetchPage: async (offset, limit) => {
+                const response = await $API.stats({
+                    type: "album",
+                    filter: "flagged",
+                    sort: "user_flag_rating,DESC",
+                    limit,
+                    offset,
+                });
+                if (response.error) {
+                    errorHandler("getting favorite albums", response.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(response.album);
+                return {
+                    items: response.album,
+                    total_count: response.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            if (response.error) {
-                errorHandler("getting favorite albums", response.error);
-                return [];
-            }
-
-            total = response.total_count;
-
-            // refresh data on subsequent loads
-            tabulator?.addData(response.album);
-
-            return response.album;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let albums = $derived(query.data?.pages.flat() || []);
+    let albums = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
-        if (albums && query.hasNextPage) {
+        if (albums && query.hasNextPage && !query.isFetchingNextPage) {
             query.fetchNextPage();
         }
     });

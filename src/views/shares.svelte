@@ -7,16 +7,12 @@
     import { sharesPreset } from "~/components/lister/columns.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let title = $_("text.shares");
     $PageTitle = title;
 
     let tabulator = $state(null);
-    let total = $state(0);
     let cleaning = $state(false);
 
     function isExpired(share) {
@@ -54,46 +50,28 @@
         cleaning = false;
     }
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["shares"],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            const nextOffset = lastPageParam + limitUsed;
-            if (total > 0) {
-                return nextOffset <= total ? nextOffset : undefined;
-            }
-            return lastPage.length >= limitUsed ? nextOffset : undefined;
-        },
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["shares"],
+            fetchPage: async (offset, limit) => {
+                const result = await $API.shares({ limit, offset });
+                if (result?.error) {
+                    errorHandler("getting shares", result.error);
+                    return { items: [], total_count: 0 };
+                }
+                const list = result?.share ?? [];
+                const arr = Array.isArray(list) ? list : [];
+                tabulator?.addData(arr);
+                return {
+                    items: arr,
+                    total_count: result?.total_count ?? 0,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            let result = await $API.shares({
-                limit,
-                offset: pageParam,
-            });
-
-            if (result?.error) {
-                errorHandler("getting shares", result.error);
-                return [];
-            }
-
-            if (result?.total_count != null) {
-                total = result.total_count;
-            }
-
-            const list = result?.share ?? [];
-            const arr = Array.isArray(list) ? list : [];
-            tabulator?.addData(arr);
-
-            return arr;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    let shares = $derived(query.data?.pages.flat() || []);
+    let shares = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
         if (shares && query.hasNextPage && !query.isFetchingNextPage) {

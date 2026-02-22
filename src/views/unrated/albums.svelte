@@ -6,47 +6,30 @@
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import { albumsPreset } from "~/components/lister/columns.js";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["unratedAlbums", Date.now()],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            let offsetTotal = lastPageParam + limitUsed;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["unratedAlbums", Date.now()],
+            fetchPage: async (offset, limit) => {
+                const result = await unratedAlbums({ limit, offset });
+                if (result.error) {
+                    errorHandler("getting unrated albums", result.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(result.album);
+                return {
+                    items: result.album,
+                    total_count: result.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            let result = await unratedAlbums({
-                limit,
-                offset: pageParam,
-            });
-
-            if (result.error) {
-                errorHandler("getting unrated albums", result.error);
-                return [];
-            }
-
-            total = result.total_count;
-
-            tabulator?.addData(result.album);
-
-            return result.album;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    let albums = $derived(query.data?.pages.flat() || []);
+    let albums = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
         if (albums && query.hasNextPage && !query.isFetchingNextPage) {

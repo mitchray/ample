@@ -8,15 +8,11 @@
     import Art from "~/components/art.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { podcastEpisodesPreset } from "~/components/lister/columns.js";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let { params = {} } = $props();
 
     let tabulator = $state(null);
-    let total = $state(0);
 
     const query = createQuery(() => ({
         queryKey: ["podcast", params.id],
@@ -36,48 +32,35 @@
         enabled: $User.isLoggedIn,
     }));
 
-    const episodesQuery = createInfiniteQuery(() => ({
-        queryKey: ["podcastEpisodes", params.id],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            const nextOffset = lastPageParam + limitUsed;
-            if (total > 0) {
-                return nextOffset <= total ? nextOffset : undefined;
-            }
-            return lastPage.length >= limitUsed ? nextOffset : undefined;
-        },
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-
-            let result = await $API.podcastEpisodes({
-                filter: params.id,
-                limit,
-                offset: pageParam,
-            });
-
-            if (result?.error) {
-                errorHandler("getting podcast episodes", result.error);
-                return [];
-            }
-
-            const list = result?.podcast_episode ?? result ?? [];
-            const arr = Array.isArray(list) ? list : [];
-            if (result?.total_count != null) {
-                total = result.total_count;
-            }
-
-            tabulator?.addData(arr);
-
-            return arr;
-        },
-        enabled: $User.isLoggedIn && !!params.id,
-    }));
+    const episodesQuery = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["podcastEpisodes", params.id],
+            fetchPage: async (offset, limit) => {
+                const result = await $API.podcastEpisodes({
+                    filter: params.id,
+                    limit,
+                    offset,
+                });
+                if (result?.error) {
+                    errorHandler("getting podcast episodes", result.error);
+                    return { items: [], total_count: 0 };
+                }
+                const list = result?.podcast_episode ?? result ?? [];
+                const arr = Array.isArray(list) ? list : [];
+                tabulator?.addData(arr);
+                return {
+                    items: arr,
+                    total_count: result?.total_count ?? 0,
+                };
+            },
+            enabled: $User.isLoggedIn && !!params.id,
+        }),
+    );
 
     let podcast = $derived(query.data || {});
-    let episodes = $derived(episodesQuery.data?.pages.flat() || []);
+    let episodes = $derived(
+        episodesQuery.data?.pages.flatMap((p) => p.items) ?? [],
+    );
 
     $effect(() => {
         $PageTitle = podcast?.name || $_("text.podcast");

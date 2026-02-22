@@ -4,51 +4,35 @@
     import { API, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import Tabulator from "~/components/lister/Tabulator.svelte";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["playlistsAll"],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            let offsetTotal = lastPageParam + limitUsed;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["playlistsAll"],
+            fetchPage: async (offset, limit) => {
+                const response = await $API.playlists({
+                    hide_search: 1,
+                    sort: "name,ASC",
+                    limit,
+                    offset,
+                });
+                if (response.error) {
+                    errorHandler("getting all playlists", response.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(response.playlist);
+                return {
+                    items: response.playlist,
+                    total_count: response.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            let response = await $API.playlists({
-                hide_search: 1,
-                sort: "name,ASC",
-                limit: limit,
-                offset: pageParam,
-            });
-
-            if (response.error) {
-                errorHandler("getting all playlists", response.error);
-                return [];
-            }
-
-            total = response.total_count;
-
-            // refresh data on subsequent loads
-            tabulator?.addData(response.playlist);
-
-            return response.playlist;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let playlists = $derived(query.data?.pages.flat() || []);
+    let playlists = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
         if (playlists && query.hasNextPage && !query.isFetchingNextPage) {

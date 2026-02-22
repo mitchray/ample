@@ -5,53 +5,33 @@
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
     import { songsPreset, track } from "~/components/lister/columns.js";
-    import {
-        INITIAL_PAGE_SIZE,
-        BACKGROUND_PAGE_SIZE,
-    } from "~/logic/batching.js";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let { artistID } = $props();
 
     let tabulator = $state(null);
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["allArtistSongs", artistID],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            const limitUsed =
-                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
-            let offsetTotal = lastPageParam + limitUsed;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        // pageParam is based on offset total
-        queryFn: async ({ pageParam }) => {
-            const limit =
-                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["allArtistSongs", artistID],
+            fetchPage: async (offset, limit) => {
+                const result = await $API.artistSongs({
+                    filter: artistID,
+                    limit,
+                    offset,
+                });
+                if (result.error) {
+                    errorHandler("getting all songs for artist", result.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(result.song);
+                return { items: result.song, total_count: result.total_count };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            let result = await $API.artistSongs({
-                filter: artistID,
-                limit,
-                offset: pageParam,
-            });
-
-            if (result.error) {
-                errorHandler("getting all songs for artist", result.error);
-                return [];
-            }
-
-            total = result.total_count;
-
-            // refresh data on subsequent loads
-            tabulator?.addData(result.song);
-
-            return result.song;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let songs = $derived(query.data?.pages.flat() || []);
+    let songs = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
         if (songs && query.hasNextPage && !query.isFetchingNextPage) {

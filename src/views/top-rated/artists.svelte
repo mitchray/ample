@@ -5,48 +5,39 @@
     import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let limit = 500;
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["topRatedArtists"],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            let offsetTotal = lastPageParam + limit;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        // pageParam is based on offset total
-        queryFn: async ({ pageParam }) => {
-            let response = await $API.stats({
-                type: "artist",
-                filter: "highest",
-                sort: "user_rating,DESC",
-                limit: limit,
-                offset: pageParam,
-            });
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["topRatedArtists"],
+            fetchPage: async (offset, limit) => {
+                const response = await $API.stats({
+                    type: "artist",
+                    filter: "highest",
+                    sort: "user_rating,DESC",
+                    limit,
+                    offset,
+                });
+                if (response.error) {
+                    errorHandler("getting top rated artists", response.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(response.artist);
+                return {
+                    items: response.artist,
+                    total_count: response.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            if (response.error) {
-                errorHandler("getting top rated artists", response.error);
-                return [];
-            }
-
-            total = response.total_count;
-
-            // refresh data on subsequent loads
-            tabulator?.addData(response.artist);
-
-            return response.artist;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let artists = $derived(query.data?.pages.flat() || []);
+    let artists = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
-        if (artists && query.hasNextPage) {
+        if (artists && query.hasNextPage && !query.isFetchingNextPage) {
             query.fetchNextPage();
         }
     });

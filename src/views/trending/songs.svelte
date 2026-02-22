@@ -5,48 +5,39 @@
     import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { errorHandler } from "~/logic/helper.js";
     import Actions from "~/components/action/actions.svelte";
+    import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
     let tabulator = $state(null);
-    let limit = 500;
-    let total = $state(0);
 
-    const query = createInfiniteQuery(() => ({
-        queryKey: ["trendingAlbums"],
-        initialPageParam: 0,
-        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
-            let offsetTotal = lastPageParam + limit;
-            return offsetTotal <= total ? offsetTotal : undefined;
-        },
-        // pageParam is based on offset total
-        queryFn: async ({ pageParam }) => {
-            let response = await $API.stats({
-                type: "song",
-                filter: "frequent",
-                sort: "user_flag_rating,DESC",
-                limit: limit,
-                offset: pageParam,
-            });
+    const query = createInfiniteQuery(() =>
+        createOffsetInfiniteQueryOptions({
+            queryKey: ["trendingSongs"],
+            fetchPage: async (offset, limit) => {
+                const response = await $API.stats({
+                    type: "song",
+                    filter: "frequent",
+                    sort: "user_flag_rating,DESC",
+                    limit,
+                    offset,
+                });
+                if (response.error) {
+                    errorHandler("getting trending songs", response.error);
+                    return { items: [], total_count: 0 };
+                }
+                tabulator?.addData(response.song);
+                return {
+                    items: response.song,
+                    total_count: response.total_count,
+                };
+            },
+            enabled: $User.isLoggedIn,
+        }),
+    );
 
-            if (response.error) {
-                errorHandler("getting trending songs", response.error);
-                return [];
-            }
-
-            total = response.total_count;
-
-            // refresh data on subsequent loads
-            tabulator?.addData(response.song);
-
-            return response.song;
-        },
-        enabled: $User.isLoggedIn,
-    }));
-
-    // alias of returned data
-    let songs = $derived(query.data?.pages.flat() || []);
+    let songs = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
     $effect(() => {
-        if (songs && query.hasNextPage) {
+        if (songs && query.hasNextPage && !query.isFetchingNextPage) {
             query.fetchNextPage();
         }
     });
