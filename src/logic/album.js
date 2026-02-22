@@ -79,12 +79,13 @@ export function getAlbumsByYear({ page = 0, limit = 50, from, to }) {
  * Get albums that have no rating
  * @returns {Promise<*>}
  */
-export function unratedAlbums({ page = 0, limit = 50 }) {
+export function unratedAlbums({ page = 0, limit = 50, offset: offsetParam } = {}) {
+    const offset = offsetParam != null ? offsetParam : page * limit;
     return get(API).advancedSearch({
         type: "album",
         operator: "and",
         random: 1,
-        offset: page * limit,
+        offset,
         limit: limit,
         rules: [["myrating", 2, 0]],
     });
@@ -94,11 +95,12 @@ export function unratedAlbums({ page = 0, limit = 50 }) {
  * Get newly added albums
  * @returns {Promise<*>}
  */
-export function newestAlbums({ page = 0, limit = 50 }) {
+export function newestAlbums({ page = 0, limit = 50, offset: offsetParam } = {}) {
+    const offset = offsetParam != null ? offsetParam : page * limit;
     return get(API).stats({
         type: "album",
         filter: "newest",
-        offset: page * limit,
+        offset,
         limit: limit,
     });
 }

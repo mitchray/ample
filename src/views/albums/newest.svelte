@@ -3,32 +3,57 @@
     import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
-    import { createQuery } from "@tanstack/svelte-query";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import { albumsPreset } from "~/components/lister/columns.js";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let tabulator = $state(null);
+    let total = $state(0);
 
-    const query = createQuery(() => ({
+    const query = createInfiniteQuery(() => ({
         queryKey: ["newestAlbums"],
-        queryFn: async () => {
-            let result = await newestAlbums({ limit: 50 });
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            let offsetTotal = lastPageParam + limitUsed;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        queryFn: async ({ pageParam }) => {
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+
+            let result = await newestAlbums({
+                limit,
+                offset: pageParam,
+            });
 
             if (result.error) {
                 errorHandler("getting newest albums", result.error);
                 return [];
             }
 
-            tabulator?.replaceData(result.album);
+            total = result.total_count;
 
-            return result;
+            tabulator?.addData(result.album);
+
+            return result.album;
         },
         enabled: $User.isLoggedIn,
     }));
 
-    // alias of returned data
-    let albums = $derived(query.data?.album || {});
+    let albums = $derived(query.data?.pages.flat() || []);
+
+    $effect(() => {
+        if (albums && query.hasNextPage && !query.isFetchingNextPage) {
+            query.fetchNextPage();
+        }
+    });
 </script>
 
 {#if query.isLoading}
@@ -36,7 +61,7 @@
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
 {:else if query.isSuccess}
-    {#if query.data?.total_count === 0}
+    {#if albums.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <Actions
@@ -48,7 +73,7 @@
 
         <Tabulator
             bind:tabulator
-            data={albums}
+            data={[]}
             columns={albumsPreset}
             type="albums"
             options={{ persistenceID: "albums" }}

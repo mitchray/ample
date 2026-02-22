@@ -1,35 +1,58 @@
 <script>
-    import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
     import Actions from "~/components/action/actions.svelte";
     import { unratedAlbums } from "~/logic/album.js";
-    import { createQuery } from "@tanstack/svelte-query";
+    import { createInfiniteQuery } from "@tanstack/svelte-query";
     import { User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import { albumsPreset } from "~/components/lister/columns.js";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let tabulator = $state(null);
+    let total = $state(0);
 
-    const query = createQuery(() => ({
+    const query = createInfiniteQuery(() => ({
         queryKey: ["unratedAlbums", Date.now()],
-        queryFn: async () => {
-            let result = await unratedAlbums({ limit: 100 });
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            let offsetTotal = lastPageParam + limitUsed;
+            return offsetTotal <= total ? offsetTotal : undefined;
+        },
+        queryFn: async ({ pageParam }) => {
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+
+            let result = await unratedAlbums({
+                limit,
+                offset: pageParam,
+            });
 
             if (result.error) {
                 errorHandler("getting unrated albums", result.error);
                 return [];
             }
 
-            // refresh data on subsequent loads
-            tabulator?.replaceData(result.album);
+            total = result.total_count;
+
+            tabulator?.addData(result.album);
 
             return result.album;
         },
         enabled: $User.isLoggedIn,
     }));
 
-    // alias of returned data
-    let albums = $derived(query.data || []);
+    let albums = $derived(query.data?.pages.flat() || []);
+
+    $effect(() => {
+        if (albums && query.hasNextPage && !query.isFetchingNextPage) {
+            query.fetchNextPage();
+        }
+    });
 </script>
 
 <Actions
@@ -41,7 +64,7 @@
 
 <Tabulator
     bind:tabulator
-    data={albums}
+    data={[]}
     columns={albumsPreset}
     type="albums"
     options={{ persistenceID: "albums" }}

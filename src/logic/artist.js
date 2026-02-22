@@ -37,12 +37,13 @@ export async function getArtist(id) {
  * Get artists that have no rating
  * @returns {Promise<*>}
  */
-export function unratedArtists({ page = 0, limit = 50 }) {
+export function unratedArtists({ page = 0, limit = 50, offset: offsetParam } = {}) {
+    const offset = offsetParam != null ? offsetParam : page * limit;
     return get(API).advancedSearch({
         type: "artist",
         operator: "and",
         random: 1,
-        offset: page * limit,
+        offset,
         limit: limit,
         rules: [["myrating", 2, 0]],
     });
@@ -52,11 +53,12 @@ export function unratedArtists({ page = 0, limit = 50 }) {
  * Get newest artists
  * @returns {Promise<*>}
  */
-export function newestArtists({ page = 0, limit = 50 }) {
+export function newestArtists({ page = 0, limit = 50, offset: offsetParam } = {}) {
+    const offset = offsetParam != null ? offsetParam : page * limit;
     return get(API).stats({
         type: "artist",
         filter: "newest",
-        offset: page * limit,
+        offset,
         limit: limit,
     });
 }

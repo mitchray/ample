@@ -1,5 +1,5 @@
 <script>
-    import { createQuery, useQueryClient } from "@tanstack/svelte-query";
+    import { createInfiniteQuery, useQueryClient } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { _ } from "@rgglez/svelte-i18n";
     import Tabulator from "~/components/lister/Tabulator.svelte";
@@ -7,11 +7,16 @@
     import { sharesPreset } from "~/components/lister/columns.js";
     import { addAlert } from "~/logic/alert.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import {
+        INITIAL_PAGE_SIZE,
+        BACKGROUND_PAGE_SIZE,
+    } from "~/logic/batching.js";
 
     let title = $_("text.shares");
     $PageTitle = title;
 
     let tabulator = $state(null);
+    let total = $state(0);
     let cleaning = $state(false);
 
     function isExpired(share) {
@@ -27,7 +32,7 @@
     }
 
     async function cleanExpired() {
-        const list = query.data?.share || [];
+        const list = shares;
         const expired = getExpiredShares(list);
         cleaning = true;
         for (const share of expired) {
@@ -49,24 +54,52 @@
         cleaning = false;
     }
 
-    const query = createQuery(() => ({
+    const query = createInfiniteQuery(() => ({
         queryKey: ["shares"],
-        queryFn: async () => {
-            let result = await $API.shares();
+        initialPageParam: 0,
+        getNextPageParam(lastPage, allPages, lastPageParam, allPageParams) {
+            const limitUsed =
+                lastPageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
+            const nextOffset = lastPageParam + limitUsed;
+            if (total > 0) {
+                return nextOffset <= total ? nextOffset : undefined;
+            }
+            return lastPage.length >= limitUsed ? nextOffset : undefined;
+        },
+        queryFn: async ({ pageParam }) => {
+            const limit =
+                pageParam === 0 ? INITIAL_PAGE_SIZE : BACKGROUND_PAGE_SIZE;
 
-            if (result.error) {
+            let result = await $API.shares({
+                limit,
+                offset: pageParam,
+            });
+
+            if (result?.error) {
                 errorHandler("getting shares", result.error);
-                return {};
+                return [];
             }
 
-            tabulator?.replaceData(result.share);
+            if (result?.total_count != null) {
+                total = result.total_count;
+            }
 
-            return result;
+            const list = result?.share ?? [];
+            const arr = Array.isArray(list) ? list : [];
+            tabulator?.addData(arr);
+
+            return arr;
         },
         enabled: $User.isLoggedIn,
     }));
-    // alias of returned data
-    let shares = $derived(query.data?.share || []);
+
+    let shares = $derived(query.data?.pages.flat() || []);
+
+    $effect(() => {
+        if (shares && query.hasNextPage && !query.isFetchingNextPage) {
+            query.fetchNextPage();
+        }
+    });
 </script>
 
 <div class="page-header">
@@ -98,12 +131,12 @@
 {:else if query.isError}
     <p>Error: {query.error.message}</p>
 {:else if query.isSuccess}
-    {#if query.data?.total_count === 0}
+    {#if shares.length === 0}
         <p>{$_("text.noItemsFound")}</p>
     {:else}
         <Tabulator
             bind:tabulator
-            data={shares}
+            data={[]}
             columns={sharesPreset}
             type="shares"
             options={{ id: "shares", persistenceID: "shares" }}
