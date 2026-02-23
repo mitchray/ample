@@ -116,6 +116,7 @@ class Player {
 
         // other
         this.approachingEnd = false;
+        this._skipCrossfadeForCurrentTrack = false;
 
         // initial AbortController
         this.abortController = new AbortController();
@@ -184,7 +185,7 @@ class Player {
     /**
      * Begin playing
      */
-    async start(forcePlay = false) {
+    async start({ forcePlay = false, skipCrossfade = false } = {}) {
         // Abort the previous loading request
         this.abortController.abort();
 
@@ -208,6 +209,9 @@ class Player {
             this.#restartQueue();
             return;
         }
+
+        this._skipCrossfadeForCurrentTrack =
+            this.nowPlayingIndex === 0 || skipCrossfade;
 
         await this.#switchPlayers();
 
@@ -273,6 +277,7 @@ class Player {
                     // attach Envelope plugin if crossfade enabled & enough time
                     if (
                         this.crossfadeEnabled &&
+                        !this._skipCrossfadeForCurrentTrack &&
                         this.crossfadeDuration * 2 < this.currentPlayer.duration
                     ) {
                         // attach Envelope plugin to Wavesurfers
@@ -744,7 +749,7 @@ class Player {
 
         NowPlayingIndex.set(index);
 
-        this.start(true);
+        this.start({ forcePlay: true, skipCrossfade: true });
     }
 
     getDuration() {
@@ -1009,12 +1014,16 @@ class Player {
                         self.currentPlayer.duration ||
                         self.currentPlayer.wavesurfer.getDuration();
 
-                    let thresholdDuration = self.crossfadeEnabled
-                        ? self.crossfadeDuration
-                        : 0.25;
+                    let thresholdDuration =
+                        self.crossfadeEnabled &&
+                        !self._skipCrossfadeForCurrentTrack
+                            ? self.crossfadeDuration
+                            : 0.25;
 
                     if (
-                        (self.crossfadeEnabled || self.gaplessEnabled) &&
+                        ((self.crossfadeEnabled &&
+                            !self._skipCrossfadeForCurrentTrack) ||
+                            self.gaplessEnabled) &&
                         duration > 0 &&
                         currentTime > duration - thresholdDuration &&
                         currentTime < duration - 0.1
