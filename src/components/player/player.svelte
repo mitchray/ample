@@ -1,6 +1,6 @@
 <script>
     import { onDestroy, onMount } from "svelte";
-    import WavesurferConnector from "~/logic/player.js";
+    import Player from "~/logic/player";
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
     import { ShowVisualizer } from "~/stores/state.js";
@@ -27,12 +27,11 @@
     let currentHeight = $state();
 
     onMount(() => {
-        $MediaPlayer = new WavesurferConnector();
+        $MediaPlayer = new Player();
     });
 
     onDestroy(() => {
-        $MediaPlayer?.wavesurfer?.unAll();
-        $MediaPlayer?.wavesurfer?.destroy();
+        $MediaPlayer?.destroy();
     });
 </script>
 

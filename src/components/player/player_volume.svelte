@@ -27,10 +27,6 @@
         volumeWidth = volumeWidth < 0 ? 0 : volumeWidth;
 
         $Settings.PlayerVolume = volumeWidth;
-        Object.keys($MediaPlayer.players).forEach((key) => {
-            $MediaPlayer.players[key].filters.masterVolume.gain.value =
-                $MediaPlayer.globalVolume;
-        });
     }
 
     function handleVolumeMouseDown() {

@@ -8,6 +8,8 @@
     } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
 
+    let compressor = $derived($MediaPlayer?.getMasterCompressor?.() ?? null);
+
     function handleVolumeNormalize(e) {
         let setting = e.target.checked;
         $Settings.VolumeNormalizationEnabled = setting;
@@ -21,23 +23,23 @@
     }
 
     function handleCompressorThreshold() {
-        $MediaPlayer.filterCompressor.threshold.value = this.value;
+        if (compressor) compressor.threshold.value = this.value;
     }
 
     function handleCompressorRatio() {
-        $MediaPlayer.filterCompressor.ratio.value = this.value;
+        if (compressor) compressor.ratio.value = this.value;
     }
 
     function handleCompressorKnee() {
-        $MediaPlayer.filterCompressor.knee.value = this.value;
+        if (compressor) compressor.knee.value = this.value;
     }
 
     function handleCompressorAttack() {
-        $MediaPlayer.filterCompressor.attack.value = this.value;
+        if (compressor) compressor.attack.value = this.value;
     }
 
     function handleCompressorRelease() {
-        $MediaPlayer.filterCompressor.release.value = this.value;
+        if (compressor) compressor.release.value = this.value;
     }
 </script>
 
@@ -97,58 +99,59 @@
     {$_("text.volumeNightModeInfo")}
 </div>
 
-{#if $debugMode && $MediaPlayer?.filterCompressor}
+{#if $debugMode && $MediaPlayer}
+    {#if compressor}
     <sl-divider></sl-divider>
 
     <div class="overrides">
         <label>
             Threshold <span id="compressor_threshold_value">
-                {$MediaPlayer.filterCompressor.threshold.value}
+                {compressor.threshold.value}
             </span>
             <input
                 type="range"
                 min="-100"
                 max="0"
-                value={$MediaPlayer.filterCompressor.threshold.value}
+                value={compressor.threshold.value}
                 on:input={handleCompressorThreshold}
             />
         </label>
 
         <label>
             Ratio <span id="compressor_ratio_value">
-                {$MediaPlayer.filterCompressor.ratio.value}
+                {compressor.ratio.value}
             </span>
             <input
                 type="range"
                 min="1"
                 max="20"
-                value={$MediaPlayer.filterCompressor.ratio.value}
+                value={compressor.ratio.value}
                 on:input={handleCompressorRatio}
             />
         </label>
 
         <label>
             Knee <span id="compressor_knee_value">
-                {$MediaPlayer.filterCompressor.knee.value}
+                {compressor.knee.value}
             </span>
             <input
                 type="range"
                 min="0"
                 max="40"
-                value={$MediaPlayer.filterCompressor.knee.value}
+                value={compressor.knee.value}
                 on:input={handleCompressorKnee}
             />
         </label>
 
         <label>
             Attack <span id="compressor_attack_value">
-                {$MediaPlayer.filterCompressor.attack.value}
+                {compressor.attack.value}
             </span>
             <input
                 type="range"
                 min="0"
                 max="1"
-                value={$MediaPlayer.filterCompressor.attack.value}
+                value={compressor.attack.value}
                 step="0.001"
                 on:input={handleCompressorAttack}
             />
@@ -156,18 +159,19 @@
 
         <label>
             Release <span id="compressor_release_value">
-                {$MediaPlayer.filterCompressor.release.value}
+                {compressor.release.value}
             </span>
             <input
                 type="range"
                 min="0"
                 max="1"
-                value={$MediaPlayer.filterCompressor.release.value}
+                value={compressor.release.value}
                 step="0.001"
                 on:input={handleCompressorRelease}
             />
         </label>
     </div>
+    {/if}
 {/if}
 
 <style>
