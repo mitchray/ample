@@ -57,14 +57,24 @@ export function calculateGain(currentMedia, targetVolume = TARGET_VOLUME_DEFAULT
 }
 
 /**
- * Apply gain and filter values to all players.
+ * Set the master volume gain node on all players.
+ * @param {Object} players - Map of playerId -> { filters }
+ * @param {number} globalVolume - Master volume (0-1, logarithmic)
+ */
+export function setMasterVolume(players, globalVolume) {
+    Object.keys(players).forEach((key) => {
+        players[key].filters.masterVolume.gain.value = globalVolume;
+    });
+}
+
+/**
+ * Apply tag gain and compressor filter values to all players.
  * @param {Object} players - Map of playerId -> { filters }
  * @param {string} currentPlayerId - Which player is current (for tag gain)
  * @param {object} options
  * @param {number} options.tagGainValue - Gain value for current player's tagGain
  * @param {boolean} options.volumeNormalizationEnabled
  * @param {boolean} options.dynamicsCompressorEnabled
- * @param {number} options.globalVolume - Master volume (0-1)
  * @param {object} [options.audioContext] - Optional audio context to resume (e.g. current player's)
  */
 export function updateFilters(players, currentPlayerId, options) {
@@ -72,7 +82,6 @@ export function updateFilters(players, currentPlayerId, options) {
         tagGainValue,
         volumeNormalizationEnabled,
         dynamicsCompressorEnabled,
-        globalVolume,
         audioContext,
     } = options;
 
@@ -87,7 +96,6 @@ export function updateFilters(players, currentPlayerId, options) {
         player.filters.compressor.threshold.value = dynamicsCompressorEnabled
             ? -30
             : 0;
-        player.filters.masterVolume.gain.value = globalVolume;
     });
 
     debugHelper(currentPlayer?.filters, "Active filters");

@@ -79,8 +79,7 @@ class Player {
         Settings.subscribe((s) => {
             // PlayerVolume
             this.globalVolume = this.#logVolume(s.PlayerVolume); // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
-            this._core?.setVolume(this.globalVolume);
-            this.updateFilters();
+            gain.setMasterVolume(this.players, this.globalVolume);
 
             // RepeatState
             this.repeatState = s.RepeatState;
@@ -591,9 +590,12 @@ class Player {
             tagGainValue: this.volumeNormalizationEnabled ? tagGainValue : 1,
             volumeNormalizationEnabled: this.volumeNormalizationEnabled,
             dynamicsCompressorEnabled: this.dynamicsCompressorEnabled,
-            globalVolume: this.globalVolume,
             audioContext: this.currentPlayer.audioContext,
         });
+    }
+
+    setMasterVolume(vol) {
+        gain.setMasterVolume(this.players, vol);
     }
 
     setPlaybackRate(val) {

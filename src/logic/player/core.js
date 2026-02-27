@@ -191,7 +191,7 @@ export function createCore(containerA, containerB, getCrossfadeState, setWaveCol
 
     function init(globalVolume) {
         Object.keys(players).forEach((key) => {
-            players[key].wavesurfer.setVolume(globalVolume);
+            players[key].filters.masterVolume.gain.value = globalVolume;
         });
         setupFilters();
         initWavesurferEvents();
@@ -267,11 +267,6 @@ export function createCore(containerA, containerB, getCrossfadeState, setWaveCol
         setMuted(bool) {
             Object.keys(players).forEach((k) =>
                 players[k].wavesurfer.setMuted(bool),
-            );
-        },
-        setVolume(vol) {
-            Object.keys(players).forEach((k) =>
-                players[k].wavesurfer.setVolume(vol),
             );
         },
     };
