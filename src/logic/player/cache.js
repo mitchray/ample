@@ -63,7 +63,7 @@ export async function getBlob(item, method) {
         debugHelper("song was in cache! method: " + method, item);
 
         if (method === "stream") {
-            await get(API).player({
+            get(API).player({
                 filter: item.id,
                 type: item.object_type,
                 state: "play",

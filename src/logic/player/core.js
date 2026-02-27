@@ -138,6 +138,7 @@ export function createCore(containerA, containerB, getCrossfadeState, setWaveCol
                 setWaveColors();
             });
             p.wavesurfer.on("audioprocess", (currentTime) => {
+                if (p !== currentPlayer) return;
                 if (_approachingEnd) return;
                 const state = getCrossfadeState();
                 const duration =
@@ -233,9 +234,11 @@ export function createCore(containerA, containerB, getCrossfadeState, setWaveCol
             currentPlayer.wavesurfer.setMediaElement(currentPlayer.audioElement);
         },
         play() {
-            return currentPlayer.wavesurfer.play().then(() => {
-                currentPlayer.duration = currentPlayer.wavesurfer.getDuration();
-            });
+            return currentPlayer.audioContext.resume().then(() =>
+                currentPlayer.wavesurfer.play().then(() => {
+                    currentPlayer.duration = currentPlayer.wavesurfer.getDuration();
+                }),
+            );
         },
         pause() {
             Object.keys(players).forEach((k) => players[k].wavesurfer.pause());
