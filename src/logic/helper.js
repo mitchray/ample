@@ -191,46 +191,7 @@ export function formatForGenius(input) {
 }
 
 export function prepareForQueue(arr) {
-    const propertiesToKeep = [
-        //common
-        "id",
-        "name",
-        "title",
-        "art",
-        "object_type",
-        "rating",
-        "averagerating",
-        "flag",
-        "url",
-
-        //song
-        "album",
-        "artist",
-        "artists",
-        "year",
-        "r128_track_gain",
-        "replaygain_track_gain",
-        "r128_album_gain",
-        "replaygain_album_gain",
-        "time",
-
-        //podcast
-        "podcast",
-
-        //radio
-        "site_url",
-    ];
-
-    arr = arr.reduce((acc, obj) => {
-        const newObj = {};
-        propertiesToKeep.forEach((prop) => {
-            if (obj.hasOwnProperty(prop)) {
-                newObj[prop] = obj[prop];
-            }
-        });
-        acc.push(newObj);
-        return acc;
-    }, []);
+    arr = arr.map((obj) => ({ ...obj }));
 
     // assign object_type and _id
     for (let i = 0; i < arr.length; i++) {
