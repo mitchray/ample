@@ -210,6 +210,8 @@ export function prepareForQueue(arr) {
         "year",
         "r128_track_gain",
         "replaygain_track_gain",
+        "r128_album_gain",
+        "replaygain_album_gain",
         "time",
 
         //podcast

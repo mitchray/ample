@@ -12,7 +12,7 @@ export let Settings = persisted("ample-settings", {
     PlayerVolume: 50,
     PlayerIsMini: false,
     RepeatState: "disabled",
-    VolumeNormalizationEnabled: true,
+    GainMode: "track", // "off" | "track" | "album" | "smart"
     DynamicsCompressorEnabled: false,
     Language: "en",
     SkipBelow: {

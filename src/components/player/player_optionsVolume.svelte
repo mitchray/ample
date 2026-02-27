@@ -10,9 +10,8 @@
 
     let compressor = $derived($MediaPlayer?.getMasterCompressor?.() ?? null);
 
-    function handleVolumeNormalize(e) {
-        let setting = e.target.checked;
-        $Settings.VolumeNormalizationEnabled = setting;
+    function handleGainMode(e) {
+        $Settings.GainMode = e.target.value;
         $MediaPlayer.updateFilters();
     }
 
@@ -43,12 +42,16 @@
     }
 </script>
 
-<sl-checkbox
-    checked={$Settings.VolumeNormalizationEnabled}
-    on:sl-change={handleVolumeNormalize}
+<sl-select
+    value={$Settings.GainMode ?? "track"}
+    on:sl-change={handleGainMode}
+    label={$_("text.volumeNormalize")}
 >
-    {$_("text.volumeNormalize")}
-</sl-checkbox>
+    <sl-option value="off">{$_("text.gainModeOff")}</sl-option>
+    <sl-option value="track">{$_("text.gainModeTrack")}</sl-option>
+    <sl-option value="album">{$_("text.gainModeAlbum")}</sl-option>
+    <sl-option value="smart">{$_("text.gainModeSmart")}</sl-option>
+</sl-select>
 
 <div class="secondary-info help-text">
     {$_("text.volumeNormalizeInfo")}

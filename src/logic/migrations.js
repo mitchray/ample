@@ -252,6 +252,17 @@ const migrations = [
             }));
         },
     },
+    {
+        version: "4.0.0",
+        migrate: async () => {
+            Settings.update((obj) => {
+                const gainMode =
+                    obj.VolumeNormalizationEnabled === false ? "off" : "track";
+                const { VolumeNormalizationEnabled, ...rest } = obj;
+                return { ...rest, GainMode: gainMode };
+            });
+        },
+    },
 ];
 
 export function handleMigrations(currentVersion) {

@@ -5,12 +5,106 @@ import { debugHelper } from "~/logic/helper.js";
 const TARGET_VOLUME_DEFAULT = -14;
 
 /**
- * Calculate gain (R128 & ReplayGain) and update CurrentMediaGainInfo store.
+ * Calculate track gain (R128 & ReplayGain) and update CurrentMediaGainInfo store.
  * @param {object|null} currentMedia - Current track item
  * @param {number} [targetVolume] - Target volume in dB (default -14)
  * @returns {number} finalGainAmount
  */
 export function calculateGain(currentMedia, targetVolume = TARGET_VOLUME_DEFAULT) {
+    return _calculateGainFromTags(
+        currentMedia,
+        targetVolume,
+        currentMedia?.r128_track_gain,
+        currentMedia?.replaygain_track_gain,
+        "Track",
+    );
+}
+
+/**
+ * Calculate album gain (R128 & ReplayGain) and update CurrentMediaGainInfo store.
+ * Falls back to track gain if no album gain tags are present.
+ * @param {object|null} currentMedia - Current track item
+ * @param {number} [targetVolume] - Target volume in dB (default -14)
+ * @returns {number} finalGainAmount
+ */
+export function calculateAlbumGain(currentMedia, targetVolume = TARGET_VOLUME_DEFAULT) {
+    const r128AlbumRaw = currentMedia?.r128_album_gain;
+    const rgAlbumRaw = currentMedia?.replaygain_album_gain;
+    const hasAlbumTags =
+        (r128AlbumRaw !== undefined && r128AlbumRaw !== null) ||
+        (rgAlbumRaw !== undefined && rgAlbumRaw !== null);
+
+    if (!hasAlbumTags) {
+        return _calculateGainFromTags(
+            currentMedia,
+            targetVolume,
+            currentMedia?.r128_track_gain,
+            currentMedia?.replaygain_track_gain,
+            "Track",
+        );
+    }
+
+    return _calculateGainFromTags(
+        currentMedia,
+        targetVolume,
+        r128AlbumRaw,
+        rgAlbumRaw,
+        "Album",
+    );
+}
+
+/**
+ * Resolve gain based on the active GainMode setting.
+ * "off"   → gain factor 1, no normalization
+ * "track" → track gain tags
+ * "album" → album gain tags (falls back to track if absent)
+ * "smart" → album gain when all upcoming items share the same album, else track gain
+ * @param {object|null} currentMedia
+ * @param {string} gainMode - "off" | "track" | "album" | "smart"
+ * @param {object[]} upcomingItems - Next eligible items from the queue
+ * @param {number} [targetVolume]
+ * @returns {number} finalGainAmount
+ */
+export function resolveGainMode(
+    currentMedia,
+    gainMode,
+    upcomingItems,
+    targetVolume = TARGET_VOLUME_DEFAULT,
+) {
+    if (gainMode === "off") {
+        CurrentMediaGainInfo.set({ gainType: "None", gainFactor: 1, masteredVolume: 0 });
+        return 1;
+    }
+
+    if (gainMode === "album") {
+        return calculateAlbumGain(currentMedia, targetVolume);
+    }
+
+    if (gainMode === "smart") {
+        const albumId = currentMedia?.album?.id;
+        const useAlbum =
+            albumId != null &&
+            upcomingItems.length > 0 &&
+            upcomingItems.every((t) => t.album?.id === albumId);
+        return useAlbum
+            ? calculateAlbumGain(currentMedia, targetVolume)
+            : calculateGain(currentMedia, targetVolume);
+    }
+
+    // "track" (default)
+    return calculateGain(currentMedia, targetVolume);
+}
+
+/**
+ * Internal helper: compute gain from a pair of raw tag values and update the store.
+ * @param {object|null} currentMedia
+ * @param {number} targetVolume
+ * @param {number|string|null|undefined} r128Raw - raw r128 tag value
+ * @param {number|string|null|undefined} rgRaw - raw replaygain tag value
+ * @param {"Track"|"Album"} scope - label suffix for gainType display
+ * @returns {number}
+ */
+function _calculateGainFromTags(currentMedia, targetVolume, r128Raw, rgRaw, scope) {
     let finalGainAmount = 1;
 
     CurrentMediaGainInfo.set({
@@ -21,33 +115,29 @@ export function calculateGain(currentMedia, targetVolume = TARGET_VOLUME_DEFAULT
 
     if (!currentMedia) return finalGainAmount;
 
-    const r128 = currentMedia.r128_track_gain;
-    const rg = currentMedia.replaygain_track_gain;
-    const r128_track_gain =
-        r128 !== undefined && r128 !== null ? r128.toString() : null;
-    const replaygain_track_gain =
-        rg !== undefined && rg !== null ? rg.toString() : null;
+    const r128Tag = r128Raw !== undefined && r128Raw !== null ? r128Raw.toString() : null;
+    const rgTag = rgRaw !== undefined && rgRaw !== null ? rgRaw.toString() : null;
 
-    if (r128_track_gain !== null) {
+    if (r128Tag !== null) {
         const referenceLevel = -23; // LUFS
         // EBU R128 stores gain in 256ths of dB (e.g. -230 = -0.9 dB)
-        const gainDb = Number(r128_track_gain) / 256;
+        const gainDb = Number(r128Tag) / 256;
         const masteredVolume = referenceLevel - gainDb;
         const difference = targetVolume - masteredVolume;
         finalGainAmount = Math.pow(10, difference / 20);
         CurrentMediaGainInfo.set({
-            gainType: "EBU R128",
+            gainType: `EBU R128 ${scope}`,
             gainFactor: truncateDecimals(finalGainAmount),
             masteredVolume: truncateDecimals(masteredVolume),
         });
-    } else if (replaygain_track_gain !== null) {
+    } else if (rgTag !== null) {
         const referenceLevel = -18; // ReplayGain 2.0
-        const parsedGainLevel = parseFloat(replaygain_track_gain);
+        const parsedGainLevel = parseFloat(rgTag);
         const trackLoudness = referenceLevel - parsedGainLevel;
         const difference = targetVolume - trackLoudness;
         finalGainAmount = Math.pow(10, difference / 20);
         CurrentMediaGainInfo.set({
-            gainType: "ReplayGain",
+            gainType: `ReplayGain ${scope}`,
             gainFactor: truncateDecimals(finalGainAmount),
             masteredVolume: truncateDecimals(trackLoudness),
         });

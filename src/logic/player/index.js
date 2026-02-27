@@ -1,11 +1,7 @@
 import { tick } from "svelte";
 import { get } from "svelte/store";
 import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
-import {
-    debugHelper,
-    prepareForQueue,
-    shuffleArray,
-} from "~/logic/helper";
+import { debugHelper, prepareForQueue, shuffleArray } from "~/logic/helper";
 import { Settings } from "~/stores/settings";
 import {
     CurrentMedia,
@@ -24,10 +20,7 @@ import { createCore } from "./core.js";
 import { installCrossfade } from "./crossfade.js";
 import { installVisualizer } from "./visualizer.js";
 import { installMediaKeys } from "./mediaKeys.js";
-import {
-    installTrackChecks,
-    notifyRatingMissing,
-} from "./trackChecks.js";
+import { installTrackChecks, notifyRatingMissing } from "./trackChecks.js";
 
 const PRELOAD_AHEAD_COUNT = 5;
 
@@ -65,6 +58,7 @@ class Player {
 
         // volume
         this.targetVolume = parseInt(-14);
+        this.gainMode = "track";
         this.masteredVolume = null;
         this.gainFactor = null;
         this.gainType = null;
@@ -84,8 +78,8 @@ class Player {
             // RepeatState
             this.repeatState = s.RepeatState;
 
-            // VolumeNormalizationEnabled
-            this.volumeNormalizationEnabled = s.VolumeNormalizationEnabled;
+            // GainMode
+            this.gainMode = s.GainMode ?? "track";
 
             // DynamicsCompressorEnabled
             this.dynamicsCompressorEnabled = s.DynamicsCompressorEnabled;
@@ -190,9 +184,14 @@ class Player {
 
         // Pre-apply gain before any audio loads so the gain node is already at
         // the correct value when audio first flows through it
-        const tagGainValue = gain.calculateGain(item, this.targetVolume);
-        this.currentPlayer.filters.tagGain.gain.value =
-            this.volumeNormalizationEnabled ? tagGainValue : 1;
+
+        const tagGainValue = gain.resolveGainMode(
+            item,
+            this.gainMode,
+            queue.findViableItemsAhead(5),
+            this.targetVolume,
+        );
+        this.currentPlayer.filters.tagGain.gain.value = tagGainValue;
 
         try {
             // Load new item into media session
@@ -592,13 +591,16 @@ class Player {
     }
 
     updateFilters() {
-        const tagGainValue = gain.calculateGain(
+        const currentGainMode = get(Settings).GainMode ?? "track";
+        const tagGainValue = gain.resolveGainMode(
             this.currentMedia,
+            currentGainMode,
+            queue.findViableItemsAhead(5),
             this.targetVolume,
         );
         gain.updateFilters(this.players, this.currentPlayerID, {
-            tagGainValue: this.volumeNormalizationEnabled ? tagGainValue : 1,
-            volumeNormalizationEnabled: this.volumeNormalizationEnabled,
+            tagGainValue,
+            volumeNormalizationEnabled: currentGainMode !== "off",
             dynamicsCompressorEnabled: this.dynamicsCompressorEnabled,
             audioContext: this.currentPlayer.audioContext,
         });
@@ -649,7 +651,9 @@ class Player {
     #init() {
         this._core.setOnRequestNext(() => this.next());
         this._core.init(this.globalVolume);
-        this._emitter.on("play", () => this.setPlaybackRate(get(PlaybackSpeed)));
+        this._emitter.on("play", () =>
+            this.setPlaybackRate(get(PlaybackSpeed)),
+        );
         this._emitter.on("approachingEnd", () => {
             this.approachingEnd = true;
         });
