@@ -11,6 +11,11 @@ export function installCrossfade(player) {
         const { wavesurfer, duration, skipCrossfade } = payload;
         if (!wavesurfer) return;
 
+        wavesurfer.envelopePlugin?.setPoints([]);
+        wavesurfer.envelopePlugin?.destroy();
+        wavesurfer.envelopePlugin = null;
+        wavesurfer.setVolume(1.0);
+
         const settings = get(Settings);
         const crossfadeEnabled = settings.Crossfade?.mode === "crossfade";
         const crossfadeDuration = settings.Crossfade?.duration ?? 6;
@@ -22,9 +27,6 @@ export function installCrossfade(player) {
         ) {
             return;
         }
-
-        wavesurfer.envelopePlugin?.setPoints([]);
-        wavesurfer.envelopePlugin?.destroy();
 
         const envelope = wavesurfer.registerPlugin(
             EnvelopePlugin.create({

@@ -96,6 +96,17 @@ class Player {
 
             // Gapless
             this.gaplessEnabled = s.Crossfade.mode === "gapless";
+
+            // When switching away from crossfade, immediately clean up any active
+            // EnvelopePlugin and restore audio element volume to avoid silent playback
+            if (!this.crossfadeEnabled && this.players) {
+                Object.values(this.players).forEach((p) => {
+                    p.wavesurfer.envelopePlugin?.setPoints([]);
+                    p.wavesurfer.envelopePlugin?.destroy();
+                    p.wavesurfer.envelopePlugin = null;
+                    p.wavesurfer.setVolume(1.0);
+                });
+            }
         });
 
         NowPlayingQueue.subscribe((value) => {
