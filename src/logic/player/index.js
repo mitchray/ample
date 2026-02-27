@@ -188,6 +188,12 @@ class Player {
 
         await this.#switchPlayers();
 
+        // Pre-apply gain before any audio loads so the gain node is already at
+        // the correct value when audio first flows through it
+        const tagGainValue = gain.calculateGain(item, this.targetVolume);
+        this.currentPlayer.filters.tagGain.gain.value =
+            this.volumeNormalizationEnabled ? tagGainValue : 1;
+
         try {
             // Load new item into media session
             if ("mediaSession" in navigator) {
@@ -218,13 +224,6 @@ class Player {
                 this._core.loadBlob(blob);
             }
 
-            // set gain of this item
-            const tagGainValue = gain.calculateGain(
-                this.currentMedia,
-                this.targetVolume,
-            );
-            this.currentPlayer.filters.tagGain.gain.value =
-                this.volumeNormalizationEnabled ? tagGainValue : 1;
             this.updateFilters();
 
             this._emitter.emit("trackLoaded", {
