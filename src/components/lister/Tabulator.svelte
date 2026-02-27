@@ -28,6 +28,7 @@
     let placeholderElement = null;
     let placeholderVisible = $state(true);
     let hidePlaceholderTimeout = null;
+    let bufferHeight = 30;
 
     function hidePlaceholder() {
         placeholderVisible = false;
@@ -39,7 +40,7 @@
 
     function centreOnTable() {
         tableElement?.scrollIntoView({
-            block: "start",
+            block: "center",
             inline: "nearest",
             behavior: "smooth",
         });
@@ -104,7 +105,7 @@
                 return value;
             },
             minHeight: 70,
-            maxHeight: $SiteContentBind?.clientHeight ?? 800,
+            maxHeight: $SiteContentBind?.clientHeight - bufferHeight ?? 800, //
             locale: true,
             langs: tabulatorStrings,
             persistence: {
