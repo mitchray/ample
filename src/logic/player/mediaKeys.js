@@ -9,7 +9,7 @@ export function installMediaKeys(player) {
     navigator.mediaSession.setActionHandler("play", () => player.playPause());
     navigator.mediaSession.setActionHandler("pause", () => player.playPause());
     navigator.mediaSession.setActionHandler("stop", () => player.stop());
-    navigator.mediaSession.setActionHandler("nexttrack", () => player.next());
+    navigator.mediaSession.setActionHandler("nexttrack", () => player.next(true));
     navigator.mediaSession.setActionHandler("previoustrack", () =>
         player.previous(),
     );
