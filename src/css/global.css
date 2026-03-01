@@ -21,8 +21,6 @@
    -------------------------- */
 
 :root {
-    color-scheme: light dark;
-
     /* Spacing */
     --spacing-sm: 4px;
     --spacing-md: 8px;

@@ -13,10 +13,10 @@
 
     $effect(() => {
         if (!$Settings.Theme.mode) {
-            if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-                $Settings.Theme.mode = "dark";
-            } else {
+            if (window.matchMedia("(prefers-color-scheme: light)").matches) {
                 $Settings.Theme.mode = "light";
+            } else {
+                $Settings.Theme.mode = "dark";
             }
         }
 
