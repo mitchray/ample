@@ -277,10 +277,8 @@
         position: relative;
     }
 
-    @media (prefers-color-scheme: dark) {
-        .art-container {
-            filter: url(#blur-and-scale);
-        }
+    :global(.sl-theme-dark) .art-container {
+        filter: url(#blur-and-scale);
     }
 
     .profile {

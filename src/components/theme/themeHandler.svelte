@@ -2,25 +2,36 @@
     import { Settings } from "~/stores/settings.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { capitalize } from "lodash-es";
-    import { derived } from "svelte/store";
 
-    let themeMode = $derived(capitalize($Settings.Theme.mode) || null);
+    let systemPrefersDark = $state(
+        window.matchMedia("(prefers-color-scheme: dark)").matches,
+    );
+
+    $effect(() => {
+        const mq = window.matchMedia("(prefers-color-scheme: dark)");
+        const handler = (e) => {
+            systemPrefersDark = e.matches;
+        };
+        mq.addEventListener("change", handler);
+        return () => mq.removeEventListener("change", handler);
+    });
+
+    let effectiveMode = $derived(
+        $Settings.Theme.mode === "system"
+            ? systemPrefersDark
+                ? "dark"
+                : "light"
+            : $Settings.Theme.mode,
+    );
+
+    let themeMode = $derived(capitalize(effectiveMode) || null);
 
     function handleChange() {
-        // update waveform colors when theme is toggled
         $MediaPlayer?.setWaveColors();
     }
 
     $effect(() => {
-        if (!$Settings.Theme.mode) {
-            if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-                $Settings.Theme.mode = "light";
-            } else {
-                $Settings.Theme.mode = "dark";
-            }
-        }
-
-        if ($Settings.Theme.mode === "dark") {
+        if (effectiveMode === "dark") {
             document.documentElement.style.colorScheme = "dark";
             document.documentElement.classList.add("sl-theme-dark");
         } else {

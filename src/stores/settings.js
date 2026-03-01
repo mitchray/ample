@@ -40,7 +40,7 @@ export let Settings = persisted("ample-settings", {
         sortReversed: false,
     },
     Theme: {
-        mode: null,
+        mode: "system",
         Dark: {
             hueBackground: 60,
             hue1: 60,
