@@ -144,14 +144,18 @@
         border-radius: inherit;
     }
 
-    :global(.sl-theme-dark) .container:after {
-        border-color: hsla(0, 0%, 15%, 1);
-        mix-blend-mode: lighten;
+    @media (prefers-color-scheme: dark) {
+        .container:after {
+            border-color: hsla(0, 0%, 15%, 1);
+            mix-blend-mode: lighten;
+        }
     }
 
-    :global(.sl-theme-light) .container:after {
-        border-color: hsla(0, 0%, 90%, 1);
-        mix-blend-mode: darken;
+    @media (prefers-color-scheme: light) {
+        .container:after {
+            border-color: hsla(0, 0%, 90%, 1);
+            mix-blend-mode: darken;
+        }
     }
 
     .container > img {
@@ -195,12 +199,16 @@
         pointer-events: none;
     }
 
-    :global(.sl-theme-dark) .c-art :global(.mix-icon) {
-        mix-blend-mode: plus-lighter;
+    @media (prefers-color-scheme: dark) {
+        .c-art :global(.mix-icon) {
+            mix-blend-mode: plus-lighter;
+        }
     }
 
-    :global(.sl-theme-light) .c-art :global(.mix-icon) {
-        /*mix-blend-mode: screen;*/
+    @media (prefers-color-scheme: light) {
+        .c-art :global(.mix-icon) {
+            /*mix-blend-mode: screen;*/
+        }
     }
 
     .mix-effect:before {
@@ -215,31 +223,35 @@
         z-index: 1;
     }
 
-    :global(.sl-theme-dark) .mix-effect {
-        background-color: var(--color-primary-container);
+    @media (prefers-color-scheme: dark) {
+        .mix-effect {
+            background-color: var(--color-primary-container);
+        }
+
+        .mix-effect:before {
+            background-color: var(--color-secondary-container);
+            mix-blend-mode: plus-lighter;
+        }
+
+        .mix-effect img {
+            filter: grayscale(100%) contrast(110%);
+            mix-blend-mode: multiply;
+        }
     }
 
-    :global(.sl-theme-dark) .mix-effect:before {
-        background-color: var(--color-secondary-container);
-        mix-blend-mode: plus-lighter;
-    }
+    @media (prefers-color-scheme: light) {
+        .mix-effect {
+            background-color: var(--color-primary-container);
+        }
 
-    :global(.sl-theme-dark) .mix-effect img {
-        filter: grayscale(100%) contrast(110%);
-        mix-blend-mode: multiply;
-    }
+        .mix-effect:before {
+            background-color: var(--color-on-secondary-container);
+            mix-blend-mode: screen;
+        }
 
-    :global(.sl-theme-light) .mix-effect {
-        background-color: var(--color-primary-container);
-    }
-
-    :global(.sl-theme-light) .mix-effect:before {
-        background-color: var(--color-on-secondary-container);
-        mix-blend-mode: screen;
-    }
-
-    :global(.sl-theme-light) .mix-effect img {
-        filter: grayscale(100%) contrast(70%);
-        mix-blend-mode: multiply;
+        .mix-effect img {
+            filter: grayscale(100%) contrast(70%);
+            mix-blend-mode: multiply;
+        }
     }
 </style>

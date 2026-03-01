@@ -150,14 +150,18 @@
         height: 40px;
     }
 
-    :global(.sl-theme-dark) .image-text::before {
-        opacity: 0.5;
-        background-color: var(--color-background);
+    @media (prefers-color-scheme: dark) {
+        .image-text::before {
+            opacity: 0.5;
+            background-color: var(--color-background);
+        }
     }
 
-    :global(.sl-theme-light) .image-text::before {
-        opacity: 0.7;
-        background-color: var(--color-tertiary-container);
+    @media (prefers-color-scheme: light) {
+        .image-text::before {
+            opacity: 0.7;
+            background-color: var(--color-tertiary-container);
+        }
     }
 
     .details {

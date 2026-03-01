@@ -21,16 +21,16 @@
         }
 
         if ($Settings.Theme.mode === "dark") {
+            document.documentElement.style.colorScheme = "dark";
             document.documentElement.classList.add("sl-theme-dark");
-            document.documentElement.classList.remove("sl-theme-light");
         } else {
+            document.documentElement.style.colorScheme = "light";
             document.documentElement.classList.remove("sl-theme-dark");
-            document.documentElement.classList.add("sl-theme-light");
         }
     });
 
     $effect(() => {
-        $Settings.Theme, handleChange();
+        ($Settings.Theme, handleChange());
     });
 </script>
 

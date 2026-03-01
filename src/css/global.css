@@ -21,6 +21,8 @@
    -------------------------- */
 
 :root {
+    color-scheme: light dark;
+
     /* Spacing */
     --spacing-sm: 4px;
     --spacing-md: 8px;
@@ -448,224 +450,132 @@
         oklch(var(--color-shadow-val) / 0.08) 0px 10px 10px -5px;
 }
 
-.sl-theme-dark {
-    --color-primary: var(--swatch-primary-400);
-    --color-on-primary: var(--swatch-primary-900);
-    --color-primary-container: var(--swatch-primary-800);
-    --color-on-primary-container: var(--swatch-primary-200);
-    --color-secondary: var(--swatch-secondary-400);
-    --color-on-secondary: var(--swatch-secondary-900);
-    --color-secondary-container: var(--swatch-secondary-800);
-    --color-secondary-container-variant: var(--swatch-secondary-900);
-    --color-on-secondary-container: var(--swatch-secondary-200);
-    --color-on-secondary-container-variant: var(--swatch-secondary-400);
-    --color-tertiary: var(--swatch-tertiary-400);
-    --color-on-tertiary: var(--swatch-tertiary-900);
-    --color-tertiary-container: var(--swatch-tertiary-800);
-    --color-tertiary-container-variant: var(--swatch-tertiary-900);
-    --color-on-tertiary-container: var(--swatch-tertiary-200);
-    --color-on-tertiary-container-variant: var(--swatch-tertiary-400);
-    --color-background: var(--swatch-background-950);
-    --color-on-background: var(--swatch-background-200);
-    --color-surface: oklch(
-        18.7% var(--chroma-override, var(--chroma-900))
-            var(--user-hue-background)
+:root {
+    --color-primary: light-dark(var(--swatch-primary-700), var(--swatch-primary-400));
+    --color-on-primary: light-dark(var(--swatch-primary-50), var(--swatch-primary-900));
+    --color-primary-container: light-dark(var(--swatch-primary-200), var(--swatch-primary-800));
+    --color-on-primary-container: light-dark(var(--swatch-primary-900), var(--swatch-primary-200));
+    --color-secondary: light-dark(var(--swatch-secondary-700), var(--swatch-secondary-400));
+    --color-on-secondary: light-dark(var(--swatch-secondary-50), var(--swatch-secondary-900));
+    --color-secondary-container: light-dark(var(--swatch-secondary-200), var(--swatch-secondary-800));
+    --color-secondary-container-variant: light-dark(var(--swatch-secondary-200), var(--swatch-secondary-900));
+    --color-on-secondary-container: light-dark(var(--swatch-secondary-900), var(--swatch-secondary-200));
+    --color-on-secondary-container-variant: light-dark(var(--swatch-secondary-800), var(--swatch-secondary-400));
+    --color-tertiary: light-dark(var(--swatch-tertiary-700), var(--swatch-tertiary-400));
+    --color-on-tertiary: light-dark(var(--swatch-tertiary-50), var(--swatch-tertiary-900));
+    --color-tertiary-container: light-dark(var(--swatch-tertiary-200), var(--swatch-tertiary-800));
+    --color-tertiary-container-variant: light-dark(var(--swatch-tertiary-200), var(--swatch-tertiary-900));
+    --color-on-tertiary-container: light-dark(var(--swatch-tertiary-900), var(--swatch-tertiary-200));
+    --color-on-tertiary-container-variant: light-dark(var(--swatch-tertiary-800), var(--swatch-tertiary-400));
+    --color-background: light-dark(
+        oklch(98.4% var(--chroma-override, 0.013) var(--user-hue-background)),
+        var(--swatch-background-950)
     );
-    --color-on-surface: var(--swatch-background-200);
-    --color-surface-variant: oklch(
-        39.8% var(--chroma-override, 0.017) var(--user-hue-background)
+    --color-on-background: light-dark(
+        oklch(22.7% var(--chroma-override, 0.01) var(--user-hue-background)),
+        var(--swatch-background-200)
     );
-    --color-on-surface-variant: var(--swatch-background-400);
-    --color-outline: oklch(
-        65.7% var(--chroma-override, 0.05) var(--user-hue-background)
+    --color-surface: light-dark(
+        oklch(98.4% var(--chroma-override, 0.013) var(--user-hue-background)),
+        oklch(18.7% var(--chroma-override, var(--chroma-900)) var(--user-hue-background))
     );
-    --color-outline-variant: oklch(
-        39.8% var(--chroma-override, 0.05) var(--user-hue-background)
+    --color-on-surface: light-dark(
+        oklch(22.7% var(--chroma-override, 0.01) var(--user-hue-background)),
+        var(--swatch-background-200)
     );
-    --color-shadow: oklch(0% 0 var(--user-hue-background));
-    --color-scrim: oklch(0% 0 var(--user-hue-background));
-    --color-inverse-surface: var(--swatch-background-200);
-    --color-inverse-on-surface: var(--swatch-background-900);
-    --color-inverse-primary: var(--swatch-primary-700);
-    --color-surface-container-lowest: oklch(
-        16.418% var(--chroma-override, var(--chroma-950))
-            var(--user-hue-background)
+    --color-surface-variant: light-dark(
+        oklch(91.6% var(--chroma-override, 0.018) var(--user-hue-background)),
+        oklch(39.8% var(--chroma-override, 0.017) var(--user-hue-background))
     );
-    --color-surface-container-low: oklch(
-        23.7% var(--chroma-override, var(--chroma-950))
-            var(--user-hue-background)
+    --color-on-surface-variant: light-dark(
+        oklch(39.8% var(--chroma-override, 0.017) var(--user-hue-background)),
+        var(--swatch-background-400)
     );
-    --color-surface-container: oklch(
-        25.5% var(--chroma-override, var(--chroma-950))
-            var(--user-hue-background)
+    --color-outline: light-dark(
+        oklch(56.7% var(--chroma-override, 0.016) var(--user-hue-background)),
+        oklch(65.7% var(--chroma-override, 0.05) var(--user-hue-background))
     );
-    --color-surface-container-high: oklch(
-        28.6% var(--chroma-override, var(--chroma-950))
-            var(--user-hue-background)
-    );
-
-    --color-waveform: var(--user-color-waveform);
-    --color-shadow-val: var(--lightness-950) var(--chroma-950)
-        var(--hue-primary);
-    --color-rating: var(--swatch-yellow-500);
-    --color-favorite: var(--swatch-red-600);
-
-    --color-btn-default-text: var(--swatch-primary-400);
-    --color-btn-default-text-hover: var(--swatch-primary-100);
-    --color-btn-default-bg: transparent;
-    --color-btn-default-bg-hover: var(--swatch-primary-800);
-    --color-btn-default-border: var(--swatch-primary-700);
-    --color-btn-default-border-hover: var(--swatch-primary-600);
-
-    --color-btn-neutral-text: var(--swatch-neutral-400);
-    --color-btn-neutral-text-hover: var(--swatch-neutral-100);
-    --color-btn-neutral-bg: var(--color-surface);
-    --color-btn-neutral-bg-hover: var(--swatch-neutral-800);
-    --color-btn-neutral-border: var(--swatch-neutral-700);
-    --color-btn-neutral-border-hover: var(--swatch-neutral-600);
-
-    --color-btn-primary-text: var(--swatch-primary-300);
-    --color-btn-primary-text-hover: var(--swatch-primary-50);
-    --color-btn-primary-bg: var(--swatch-primary-800);
-    --color-btn-primary-bg-hover: var(--swatch-primary-700);
-    --color-btn-primary-border: var(--swatch-primary-600);
-    --color-btn-primary-border-hover: var(--swatch-primary-500);
-
-    --color-btn-success-text: var(--swatch-green-300);
-    --color-btn-success-text-hover: var(--swatch-green-50);
-    --color-btn-success-bg: var(--swatch-green-800);
-    --color-btn-success-bg-hover: var(--swatch-green-700);
-    --color-btn-success-border: var(--swatch-green-600);
-    --color-btn-success-border-hover: var(--swatch-green-500);
-
-    --color-btn-warning-text: var(--swatch-yellow-300);
-    --color-btn-warning-text-hover: var(--swatch-yellow-50);
-    --color-btn-warning-bg: var(--swatch-yellow-800);
-    --color-btn-warning-bg-hover: var(--swatch-yellow-700);
-    --color-btn-warning-border: var(--swatch-yellow-600);
-    --color-btn-warning-border-hover: var(--swatch-yellow-500);
-
-    --color-btn-danger-text: var(--swatch-red-300);
-    --color-btn-danger-text-hover: var(--swatch-red-50);
-    --color-btn-danger-bg: var(--swatch-red-800);
-    --color-btn-danger-bg-hover: var(--swatch-red-700);
-    --color-btn-danger-border: var(--swatch-red-600);
-    --color-btn-danger-border-hover: var(--swatch-red-500);
-}
-
-.sl-theme-light {
-    --color-primary: var(--swatch-primary-700);
-    --color-on-primary: var(--swatch-primary-50);
-    --color-primary-container: var(--swatch-primary-200);
-    --color-on-primary-container: var(--swatch-primary-900);
-    --color-secondary: var(--swatch-secondary-700);
-    --color-on-secondary: var(--swatch-secondary-50);
-    --color-secondary-container: var(--swatch-secondary-200);
-    --color-secondary-container-variant: var(--swatch-secondary-200);
-    --color-on-secondary-container: var(--swatch-secondary-900);
-    --color-on-secondary-container-variant: var(--swatch-secondary-800);
-    --color-tertiary: var(--swatch-tertiary-700);
-    --color-on-tertiary: var(--swatch-tertiary-50);
-    --color-tertiary-container: var(--swatch-tertiary-200);
-    --color-tertiary-container-variant: var(--swatch-tertiary-200);
-    --color-on-tertiary-container: var(--swatch-tertiary-900);
-    --color-on-tertiary-container-variant: var(--swatch-tertiary-800);
-    --color-background: oklch(
-        98.4% var(--chroma-override, 0.013) var(--user-hue-background)
-    );
-    --color-on-background: oklch(
-        22.7% var(--chroma-override, 0.01) var(--user-hue-background)
-    );
-    --color-surface: oklch(
-        98.4% var(--chrome-override, 0.013) var(--user-hue-background)
-    );
-    --color-on-surface: oklch(
-        22.7% var(--chroma-override, 0.01) var(--user-hue-background)
-    );
-    --color-surface-variant: oklch(
-        91.6% var(--chroma-override, 0.018) var(--user-hue-background)
-    );
-    --color-on-surface-variant: oklch(
-        39.8% var(--chroma-override, 0.017) var(--user-hue-background)
-    );
-    --color-outline: oklch(
-        56.7% var(--chroma-override, 0.016) var(--user-hue-background)
-    );
-    --color-outline-variant: oklch(
-        82.9% var(--chroma-override, 0.018) var(--user-hue-background)
+    --color-outline-variant: light-dark(
+        oklch(82.9% var(--chroma-override, 0.018) var(--user-hue-background)),
+        oklch(39.8% var(--chroma-override, 0.05) var(--user-hue-background))
     );
     --color-shadow: oklch(0% 0 var(--user-hue-background));
     --color-scrim: oklch(0% 0 var(--user-hue-background));
-    --color-inverse-surface: oklch(
-        31.1% var(--chroma-override, 0.011) var(--user-hue-background)
+    --color-inverse-surface: light-dark(
+        oklch(31.1% var(--chroma-override, 0.011) var(--user-hue-background)),
+        var(--swatch-background-200)
     );
-    --color-inverse-on-surface: oklch(
-        95.9% var(--chroma-override, 0.012) var(--user-hue-background)
+    --color-inverse-on-surface: light-dark(
+        oklch(95.9% var(--chroma-override, 0.012) var(--user-hue-background)),
+        var(--swatch-background-900)
     );
-    --color-inverse-primary: oklch(
-        83.5% var(--chroma-override, 0.095) var(--hue-primary)
+    --color-inverse-primary: light-dark(
+        oklch(83.5% var(--chroma-override, 0.095) var(--hue-primary)),
+        var(--swatch-primary-700)
     );
-    --color-surface-container-lowest: oklch(
-        100% var(--chroma-override, var(--chroma-100))
-            var(--user-hue-background)
+    --color-surface-container-lowest: light-dark(
+        oklch(100% var(--chroma-override, var(--chroma-100)) var(--user-hue-background)),
+        oklch(16.418% var(--chroma-override, var(--chroma-950)) var(--user-hue-background))
     );
-    --color-surface-container-low: oklch(
-        96.7% var(--chroma-override, var(--chroma-100))
-            var(--user-hue-background)
+    --color-surface-container-low: light-dark(
+        oklch(96.7% var(--chroma-override, var(--chroma-100)) var(--user-hue-background)),
+        oklch(23.7% var(--chroma-override, var(--chroma-950)) var(--user-hue-background))
     );
-    --color-surface-container: oklch(
-        95.4% var(--chroma-override, var(--chroma-100))
-            var(--user-hue-background)
+    --color-surface-container: light-dark(
+        oklch(95.4% var(--chroma-override, var(--chroma-100)) var(--user-hue-background)),
+        oklch(25.5% var(--chroma-override, var(--chroma-950)) var(--user-hue-background))
     );
-    --color-surface-container-high: oklch(
-        93.3% var(--chroma-override, var(--chroma-100))
-            var(--user-hue-background)
+    --color-surface-container-high: light-dark(
+        oklch(93.3% var(--chroma-override, var(--chroma-100)) var(--user-hue-background)),
+        oklch(28.6% var(--chroma-override, var(--chroma-950)) var(--user-hue-background))
     );
 
     --color-waveform: var(--user-color-waveform);
-    --color-shadow-val: var(--lightness-600) var(--chroma-200)
-        var(--hue-primary);
-    --color-rating: var(--swatch-yellow-600);
+    --color-shadow-val: light-dark(
+        var(--lightness-600) var(--chroma-200) var(--hue-primary),
+        var(--lightness-950) var(--chroma-950) var(--hue-primary)
+    );
+    --color-rating: light-dark(var(--swatch-yellow-600), var(--swatch-yellow-500));
     --color-favorite: var(--swatch-red-600);
 
-    --color-btn-default-text: var(--swatch-primary-700);
-    --color-btn-default-text-hover: var(--swatch-primary-900);
+    --color-btn-default-text: light-dark(var(--swatch-primary-700), var(--swatch-primary-400));
+    --color-btn-default-text-hover: light-dark(var(--swatch-primary-900), var(--swatch-primary-100));
     --color-btn-default-bg: transparent;
-    --color-btn-default-bg-hover: var(--swatch-primary-200);
-    --color-btn-default-border: var(--swatch-primary-500);
-    --color-btn-default-border-hover: var(--swatch-primary-600);
+    --color-btn-default-bg-hover: light-dark(var(--swatch-primary-200), var(--swatch-primary-800));
+    --color-btn-default-border: light-dark(var(--swatch-primary-500), var(--swatch-primary-700));
+    --color-btn-default-border-hover: light-dark(var(--swatch-primary-600), var(--swatch-primary-600));
 
-    --color-btn-neutral-text: var(--swatch-neutral-700);
-    --color-btn-neutral-text-hover: var(--swatch-neutral-900);
+    --color-btn-neutral-text: light-dark(var(--swatch-neutral-700), var(--swatch-neutral-400));
+    --color-btn-neutral-text-hover: light-dark(var(--swatch-neutral-900), var(--swatch-neutral-100));
     --color-btn-neutral-bg: var(--color-surface);
-    --color-btn-neutral-bg-hover: var(--swatch-neutral-200);
-    --color-btn-neutral-border: var(--swatch-neutral-500);
-    --color-btn-neutral-border-hover: var(--swatch-neutral-600);
+    --color-btn-neutral-bg-hover: light-dark(var(--swatch-neutral-200), var(--swatch-neutral-800));
+    --color-btn-neutral-border: light-dark(var(--swatch-neutral-500), var(--swatch-neutral-700));
+    --color-btn-neutral-border-hover: light-dark(var(--swatch-neutral-600), var(--swatch-neutral-600));
 
-    --color-btn-primary-text: var(--swatch-primary-800);
+    --color-btn-primary-text: light-dark(var(--swatch-primary-800), var(--swatch-primary-300));
     --color-btn-primary-text-hover: var(--swatch-primary-50);
-    --color-btn-primary-bg: var(--swatch-primary-200);
-    --color-btn-primary-bg-hover: var(--swatch-primary-500);
-    --color-btn-primary-border: var(--swatch-primary-500);
-    --color-btn-primary-border-hover: var(--swatch-primary-500);
+    --color-btn-primary-bg: light-dark(var(--swatch-primary-200), var(--swatch-primary-800));
+    --color-btn-primary-bg-hover: light-dark(var(--swatch-primary-500), var(--swatch-primary-700));
+    --color-btn-primary-border: light-dark(var(--swatch-primary-500), var(--swatch-primary-600));
+    --color-btn-primary-border-hover: light-dark(var(--swatch-primary-500), var(--swatch-primary-500));
 
-    --color-btn-success-text: var(--swatch-green-800);
+    --color-btn-success-text: light-dark(var(--swatch-green-800), var(--swatch-green-300));
     --color-btn-success-text-hover: var(--swatch-green-50);
-    --color-btn-success-bg: var(--swatch-green-200);
-    --color-btn-success-bg-hover: var(--swatch-green-500);
-    --color-btn-success-border: var(--swatch-green-500);
+    --color-btn-success-bg: light-dark(var(--swatch-green-200), var(--swatch-green-800));
+    --color-btn-success-bg-hover: light-dark(var(--swatch-green-500), var(--swatch-green-700));
+    --color-btn-success-border: light-dark(var(--swatch-green-500), var(--swatch-green-600));
     --color-btn-success-border-hover: var(--swatch-green-500);
 
-    --color-btn-warning-text: var(--swatch-yellow-800);
+    --color-btn-warning-text: light-dark(var(--swatch-yellow-800), var(--swatch-yellow-300));
     --color-btn-warning-text-hover: var(--swatch-yellow-50);
-    --color-btn-warning-bg: var(--swatch-yellow-200);
-    --color-btn-warning-bg-hover: var(--swatch-yellow-500);
-    --color-btn-warning-border: var(--swatch-yellow-500);
+    --color-btn-warning-bg: light-dark(var(--swatch-yellow-200), var(--swatch-yellow-800));
+    --color-btn-warning-bg-hover: light-dark(var(--swatch-yellow-500), var(--swatch-yellow-700));
+    --color-btn-warning-border: light-dark(var(--swatch-yellow-500), var(--swatch-yellow-600));
     --color-btn-warning-border-hover: var(--swatch-yellow-500);
 
-    --color-btn-danger-text: var(--swatch-red-800);
+    --color-btn-danger-text: light-dark(var(--swatch-red-800), var(--swatch-red-300));
     --color-btn-danger-text-hover: var(--swatch-red-50);
-    --color-btn-danger-bg: var(--swatch-red-200);
+    --color-btn-danger-bg: light-dark(var(--swatch-red-200), var(--swatch-red-800));
     --color-btn-danger-bg-hover: var(--swatch-red-600);
     --color-btn-danger-border: var(--swatch-red-500);
     --color-btn-danger-border-hover: var(--swatch-red-600);
