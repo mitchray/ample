@@ -53,13 +53,18 @@
 
 <style>
     .volume-slider {
-        --thumb-size: 0.1em;
+        --thumb-size: 0.01em;
         --track-color-active: var(--color-primary);
         --track-color-inactive: var(--color-outline-variant);
         --tooltip-offset: 25px;
+        --track-height: 8px;
         width: 100%;
         min-width: 50px;
         margin: 0 10px;
         justify-self: center;
+    }
+
+    sl-range::part(input) {
+        cursor: pointer;
     }
 </style>
