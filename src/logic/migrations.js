@@ -257,7 +257,7 @@ const migrations = [
         migrate: async () => {
             Settings.update((obj) => {
                 const gainMode =
-                    obj.VolumeNormalizationEnabled === false ? "off" : "track";
+                    obj.VolumeNormalizationEnabled === false ? "off" : "smart";
                 const { VolumeNormalizationEnabled, ...rest } = obj;
                 return { ...rest, GainMode: gainMode };
             });
