@@ -21,7 +21,7 @@ export async function searchArtists({ page = 0, limit = 50, query }) {
 
 /**
  * Get artist by ID
- * @param {number} id
+ * @param {string} id
  * @returns {Promise<*>}
  */
 export async function getArtist(id) {

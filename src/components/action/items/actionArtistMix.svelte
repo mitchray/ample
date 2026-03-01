@@ -25,10 +25,12 @@
             loading = false;
             return;
         }
-        let songs = await getSongsFromPlaylist({
+        let response = await getSongsFromPlaylist({
             id: artistID,
             type: "artist_mix",
         });
+
+        let songs = response.song || [];
 
         $MediaPlayer.playNow(songs);
         loading = false;

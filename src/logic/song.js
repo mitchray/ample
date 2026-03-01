@@ -201,7 +201,11 @@ export async function getSongsByYear(from, to) {
  * Get songs that have no rating
  * @returns {Promise<*>}
  */
-export function unratedSongs({ page = 0, limit = 50, offset: offsetParam } = {}) {
+export function unratedSongs({
+    page = 0,
+    limit = 50,
+    offset: offsetParam,
+} = {}) {
     const offset = offsetParam != null ? offsetParam : page * limit;
     return get(API).advancedSearch({
         type: "song",
