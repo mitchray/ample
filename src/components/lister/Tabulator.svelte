@@ -110,9 +110,6 @@
             langs: tabulatorStrings,
             persistence: {
                 columns: ["order"],
-                page: {
-                    size: true,
-                },
             },
             // placeholder: `<span style="color: var(--color-on-surface-variant);">${$_("text.loading")}</span>`,
             placeholder: placeholderElement,
