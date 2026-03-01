@@ -5,61 +5,46 @@
     import { API, User } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import { onDestroy } from "svelte";
-    import { getSongsFromPlaylist } from "~/logic/song.js";
     import {
         moveHandle,
         moveHandleDisabled,
         songsPreset,
     } from "~/components/lister/columns.js";
     import { createInfiniteQuery } from "@tanstack/svelte-query";
-    import { _ } from "@rgglez/svelte-i18n";
     import { createOffsetInfiniteQueryOptions } from "~/logic/batching.js";
 
-    let { type, playlist } = $props();
+    let { playlist } = $props();
 
     let tabulator = $state(null);
-    let columns = $derived(
-        type === "playlist"
-            ? [moveHandle, moveHandleDisabled, ...songsPreset]
-            : songsPreset,
-    );
+    let destroyed = false;
+    let columns = [moveHandle, moveHandleDisabled, ...songsPreset];
 
     const query = createInfiniteQuery(() =>
         createOffsetInfiniteQueryOptions({
-            queryKey: ["playlist_items", playlist.id + type],
-            noMorePages: type === "mix",
+            queryKey: ["playlist_items", playlist.id],
             fetchPage: async (offset, limit) => {
-                if (type === "mix") {
-                    const response = await getSongsFromPlaylist({
-                        id: playlist.id,
-                        type: "artist_mix",
+                try {
+                    const result = await $API.playlistSongs({
+                        filter: playlist.id,
+                        limit,
+                        offset,
                     });
-                    if (response.error) {
+                    if (destroyed) return { items: [], total_count: 0 };
+                    if (result.error) {
                         errorHandler(
                             "getting items from playlist",
-                            response.error,
+                            result.error,
                         );
                         return { items: [], total_count: 0 };
                     }
-                    const items = response.song || [];
-                    return { items, total_count: items.length };
+                    return {
+                        items: result.song,
+                        total_count: result.total_count ?? 0,
+                    };
+                } catch (e) {
+                    if (destroyed) return { items: [], total_count: 0 };
+                    throw e;
                 }
-                const result = await $API.playlistSongs({
-                    filter: playlist.id,
-                    limit,
-                    offset,
-                });
-                if (result.error) {
-                    errorHandler(
-                        "getting items from playlist",
-                        result.error,
-                    );
-                    return { items: [], total_count: 0 };
-                }
-                return {
-                    items: result.song,
-                    total_count: result.total_count ?? 0,
-                };
             },
             enabled: $User.isLoggedIn,
         }),
@@ -67,16 +52,11 @@
 
     let items = $derived(query.data?.pages.flatMap((p) => p.items) ?? []);
 
-    const isDataFullyLoaded = $derived(
-        type === "mix"
-            ? !query.isFetching
-            : !query.isFetching && !query.hasNextPage,
-    );
+    const isDataFullyLoaded = $derived(!query.isFetching && !query.hasNextPage);
 
     $effect(() => {
         if (
             items.length > 0 &&
-            type !== "mix" &&
             query.hasNextPage &&
             !query.isFetchingNextPage
         ) {
@@ -85,7 +65,7 @@
     });
 
     function updateMoveHandleVisibility() {
-        if (!tabulator || type !== "playlist") return;
+        if (!tabulator) return;
 
         const isSorted = tabulator.getSorters?.()?.length > 0;
         const showMoveHandle = isDataFullyLoaded && !isSorted;
@@ -100,7 +80,7 @@
     }
 
     function setupEvents() {
-        if (!tabulator || type !== "playlist") return;
+        if (!tabulator) return;
 
         tabulator.on("dataSorting", updateMoveHandleVisibility);
 
@@ -122,17 +102,15 @@
     }
 
     $effect(() => {
-        if (tabulator && type === "playlist") {
+        if (tabulator) {
             setupEvents();
         }
     });
 
-    $effect(() => {
-        updateMoveHandleVisibility();
-    });
-
     onDestroy(() => {
-        if (!tabulator || type !== "playlist") return;
+        destroyed = true;
+
+        if (!tabulator) return;
 
         tabulator?.off("dataSorting");
         tabulator?.off("rowMoved");
@@ -148,9 +126,7 @@
     />
 
     <!-- todo move to contextual action bar -->
-    {#if type === "playlist"}
-        <PlaylistRemoveFrom bind:tabulator {items} playlistID={playlist.id} />
-    {/if}
+    <PlaylistRemoveFrom bind:tabulator {items} playlistID={playlist.id} />
 
     <Tabulator
         bind:tabulator

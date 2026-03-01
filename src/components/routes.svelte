@@ -40,13 +40,13 @@
             asyncComponent: () => import("~/views/playlists/index.svelte"),
         }),
         "/smartlist/:id": wrap({
-            asyncComponent: () => import("~/views/playlist/index.svelte"),
+            asyncComponent: () => import("~/views/smartlist/index.svelte"),
         }),
         "/smartlists/:section?": wrap({
             asyncComponent: () => import("~/views/smartlists/index.svelte"),
         }),
         "/mix/:mixType/:id": wrap({
-            asyncComponent: () => import("~/views/playlist/index.svelte"),
+            asyncComponent: () => import("~/views/mix/index.svelte"),
         }),
         "/genre/:id/:section?": wrap({
             asyncComponent: () => import("~/views/genre/index.svelte"),
