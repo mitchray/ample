@@ -36,6 +36,7 @@
                     filter: playlist.id,
                     id: element.id,
                     type: "song",
+                    check: ignoreDuplicates ? "1" : "0",
                 });
             });
         });
