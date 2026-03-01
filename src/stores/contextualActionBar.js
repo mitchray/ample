@@ -11,6 +11,7 @@ import { writable } from "svelte/store";
  * @property {boolean} [loading=false] - Whether the button shows a loading state
  * @property {'default'|'primary'} [variant='default'] - Button style variant
  * @property {boolean} [visible=true] - Whether this action is currently visible
+ * @property {import('svelte').Snippet} [component] - Optional: render this snippet instead of a plain sl-button
  */
 
 /** @type {import('svelte/store').Writable<ContextualAction[]>} */

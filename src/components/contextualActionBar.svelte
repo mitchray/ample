@@ -71,25 +71,25 @@
                 <sl-button size="small" onclick={clearAllSelections}>
                     {$_("text.clearAll")}
                 </sl-button>
-
-                <sl-divider vertical></sl-divider>
             {/if}
             {#each visibleActions as action (action.id)}
-                <sl-button
-                    class="contextual-action-bar__btn"
-                    variant={action.variant === "primary"
-                        ? "primary"
-                        : "default"}
-                    size="small"
-                    disabled={action.disabled === true}
-                    loading={action.loading === true}
-                    onclick={() => handleClick(action)}
-                >
-                    {#if action.icon}
-                        <MaterialSymbol name={action.icon} slot="prefix" />
-                    {/if}
-                    {action.label}
-                </sl-button>
+                {#if action.component}
+                    {@render action.component()}
+                {:else}
+                    <sl-button
+                        class="contextual-action-bar__btn"
+                        variant={action.variant ?? "default"}
+                        size="small"
+                        disabled={action.disabled === true}
+                        loading={action.loading === true}
+                        onclick={() => handleClick(action)}
+                    >
+                        {#if action.icon}
+                            <MaterialSymbol name={action.icon} slot="prefix" />
+                        {/if}
+                        {action.label}
+                    </sl-button>
+                {/if}
             {/each}
         </div>
     </div>

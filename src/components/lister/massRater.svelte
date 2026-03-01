@@ -49,7 +49,7 @@
 
 {#if items.length > 0}
     <sl-dropdown>
-        <sl-button slot="trigger" variant="primary" size="small" caret>
+        <sl-button slot="trigger" size="small" caret>
             <MaterialSymbol name="star" slot="prefix" />
             {$_("text.rate")}
         </sl-button>

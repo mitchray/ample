@@ -125,8 +125,7 @@
         data={{ getSongs: () => tabulator?.getData("active") }}
     />
 
-    <!-- todo move to contextual action bar -->
-    <PlaylistRemoveFrom bind:tabulator {items} playlistID={playlist.id} />
+    <PlaylistRemoveFrom bind:tabulator playlistID={playlist.id} />
 
     <Tabulator
         bind:tabulator

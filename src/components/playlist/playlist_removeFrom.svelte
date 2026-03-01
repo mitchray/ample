@@ -3,58 +3,70 @@
     import { API } from "~/stores/state.js";
     import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { onDestroy } from "svelte";
+    import {
+        setContextualActions,
+        clearContextualActions,
+    } from "~/stores/contextualActionBar.js";
+    import {
+        selectedTabulatorRowsFlat,
+        clearAllSelections,
+    } from "~/stores/selectedTabulatorRows.js";
 
     let { tabulator = $bindable(), playlistID, songs = $bindable() } = $props();
 
-    let selectedCount = $state(0);
     let confirm = $state(null);
 
     $effect(() => {
-        if (tabulator) {
-            tabulator.on(
-                "rowSelectionChanged",
-                function (data, rows, selected, deselected) {
-                    selectedCount = data.length;
+        if ($selectedTabulatorRowsFlat.length > 0) {
+            setContextualActions([
+                {
+                    id: "playlist-remove-from",
+                    component: removeAction,
                 },
-            );
+            ]);
+        } else {
+            clearContextualActions();
         }
     });
 
-    function handleApply(e) {
-        // close confirmation and reset selectedCount
+    onDestroy(() => {
+        clearContextualActions();
+    });
+
+    async function handleApply(e) {
         confirm.hide();
-        selectedCount = 0;
 
-        let selected = tabulator.getSelectedRows();
+        const tabulatorRows = tabulator.getSelectedRows();
 
-        selected.forEach(async (row) => {
-            let itemData = row.getData();
+        await Promise.all(
+            tabulatorRows.map(async (row) => {
+                let itemData = row.getData();
 
-            // remove on the backend
-            let result = await $API.playlistRemoveSong({
-                filter: playlistID,
-                track: itemData.playlisttrack,
-            });
+                let result = await $API.playlistRemoveSong({
+                    filter: playlistID,
+                    track: itemData.playlisttrack,
+                });
 
-            if (result.error) {
-                errorHandler("while remove from playlist", result.error);
-            }
+                if (result.error) {
+                    errorHandler("while remove from playlist", result.error);
+                }
 
-            if (!result.error) {
-                //remove from tabulator
-                row.delete();
-            }
-        });
+                if (!result.error) {
+                    row.delete();
+                }
+            }),
+        );
 
-        //send data back to tabulator
+        clearAllSelections();
         songs = tabulator.getData();
     }
 </script>
 
-{#if selectedCount > 0}
-    <sl-dropdown bind:this={confirm}>
-        <sl-button slot="trigger">
-            <MaterialSymbol name="cancel" slot="prefix" />
+{#snippet removeAction()}
+    <sl-dropdown bind:this={confirm} placement="bottom-start">
+        <sl-button slot="trigger" size="small" variant="danger">
+            <MaterialSymbol name="delete" slot="prefix" />
             {$_("text.remove")}
         </sl-button>
         <sl-card>
@@ -63,18 +75,18 @@
             </div>
 
             <div class="options">
-                <sl-button onclick={confirm.hide()} variant="text">
+                <sl-button onclick={() => confirm.hide()} variant="text">
                     {$_("text.cancel")}
                 </sl-button>
 
                 <sl-button onclick={handleApply} variant="danger">
-                    <MaterialSymbol name="cancel" slot="prefix" />
+                    <MaterialSymbol name="delete" slot="prefix" />
                     {$_("text.remove")}
                 </sl-button>
             </div>
         </sl-card>
     </sl-dropdown>
-{/if}
+{/snippet}
 
 <style>
     .options {
