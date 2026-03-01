@@ -188,7 +188,6 @@ class Player {
         const tagGainValue = gain.resolveGainMode(
             item,
             this.gainMode,
-            queue.findViableItemsAhead(5),
             this.targetVolume,
         );
         this.currentPlayer.filters.tagGain.gain.value = tagGainValue;
@@ -595,7 +594,6 @@ class Player {
         const tagGainValue = gain.resolveGainMode(
             this.currentMedia,
             currentGainMode,
-            queue.findViableItemsAhead(5),
             this.targetVolume,
         );
         gain.updateFilters(this.players, this.currentPlayerID, {

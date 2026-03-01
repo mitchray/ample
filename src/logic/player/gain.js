@@ -1,6 +1,6 @@
 import { CurrentMediaGainInfo } from "~/stores/state.js";
-import { truncateDecimals } from "~/logic/helper.js";
-import { debugHelper } from "~/logic/helper.js";
+import { truncateDecimals, debugHelper } from "~/logic/helper.js";
+import { findViableItem } from "~/logic/player/queue.js";
 
 const TARGET_VOLUME_DEFAULT = -14;
 
@@ -58,17 +58,16 @@ export function calculateAlbumGain(currentMedia, targetVolume = TARGET_VOLUME_DE
  * "off"   → gain factor 1, no normalization
  * "track" → track gain tags
  * "album" → album gain tags (falls back to track if absent)
- * "smart" → album gain when all upcoming items share the same album, else track gain
+ * "smart" → album gain when the previous or next viable queue item shares the
+ *            same album as the current track, otherwise track gain
  * @param {object|null} currentMedia
  * @param {string} gainMode - "off" | "track" | "album" | "smart"
- * @param {object[]} upcomingItems - Next eligible items from the queue
  * @param {number} [targetVolume]
  * @returns {number} finalGainAmount
  */
 export function resolveGainMode(
     currentMedia,
     gainMode,
-    upcomingItems,
     targetVolume = TARGET_VOLUME_DEFAULT,
 ) {
     if (gainMode === "off") {
@@ -82,10 +81,11 @@ export function resolveGainMode(
 
     if (gainMode === "smart") {
         const albumId = currentMedia?.album?.id;
+        const prevItem = findViableItem("previous");
+        const nextItem = findViableItem("next");
         const useAlbum =
             albumId != null &&
-            upcomingItems.length > 0 &&
-            upcomingItems.every((t) => t.album?.id === albumId);
+            (prevItem?.album?.id === albumId || nextItem?.album?.id === albumId);
         return useAlbum
             ? calculateAlbumGain(currentMedia, targetVolume)
             : calculateGain(currentMedia, targetVolume);
