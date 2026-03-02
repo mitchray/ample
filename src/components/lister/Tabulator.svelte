@@ -200,7 +200,7 @@
         if (tableElement && groupHeaderClickHandler) {
             tableElement.removeEventListener("click", groupHeaderClickHandler);
         }
-        // tabulator?.off("scrollVertical");
+        tabulator?.off("scrollVertical");
         tabulator?.off("columnResized");
         tabulator?.off("rowSelectionChanged");
         tabulator?.off("rowDeleted");
