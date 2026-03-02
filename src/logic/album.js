@@ -196,7 +196,7 @@ export async function groupAlbumsByReleaseType(albums) {
         "album_release_type_sort",
     );
 
-    let preferenceReleaseTypes = get(preferenceAlbumReleaseTypeSort).split(",");
+    let preferenceReleaseTypes = (get(preferenceAlbumReleaseTypeSort) ?? "").split(",");
 
     if (get(preferenceAlbumReleaseType) === "1") {
         // Create base types in specified order from server setting

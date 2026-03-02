@@ -14,7 +14,7 @@
 
     let { artistID } = $props();
 
-    const releaseTypesOrder = userPreference("album_release_type_sort") || "";
+    const releaseTypesOrder = userPreference("album_release_type_sort");
 
     const query = createQuery(() => ({
         queryKey: ["artistAlbums", artistID],
@@ -80,7 +80,7 @@
 
         // reorder the groups to match the order set in preference
         if ($Settings.ArtistReleases.group === "release_type") {
-            let arr = $releaseTypesOrder.split(",");
+            let arr = ($releaseTypesOrder ?? "").split(",");
 
             grouped.sort(function (a, b) {
                 // ensures the order matches preference, with new items appended
