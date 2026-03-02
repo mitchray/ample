@@ -53,114 +53,113 @@
 
 {#if query.isSuccess && query.data.id}
     {#key query.data.id}
-            <div class="details">
-                <div class="cover-rating">
-                    <div class="art-container">
-                        <Art
-                            size="large"
-                            data={album}
-                            type="album"
-                            radius="6px"
-                        />
+        <div class="details">
+            <div class="cover-rating">
+                <div class="art-container">
+                    <Art size="large" data={album} type="album" radius="6px" />
+                </div>
+
+                <div class="below-image">
+                    <div class="rating">
+                        <Rating type="album" data={album} />
                     </div>
 
-                    <div class="below-image">
-                        <div class="rating">
-                            <Rating type="album" data={album} />
-                        </div>
+                    <div class="third-party-links">
+                        <ThirdPartyServices data={album} type="album" />
+                    </div>
+                </div>
+            </div>
 
-                        <div class="third-party-links">
-                            <ThirdPartyServices data={album} type="album" />
-                        </div>
+            <div class="info">
+                <div class="name">
+                    {#if album.type}
+                        <Badge text={formatReleaseType(album.type)} />
+                    {/if}
+                    <h1 class="title">{album.name}</h1>
+                    <div class="artist">
+                        <a href="#/artist/{album.artist.id}">
+                            {album.artist.name}
+                        </a>
                     </div>
                 </div>
 
-                <div class="info">
-                    <div class="name">
-                        {#if album.type}
-                            <Badge text={formatReleaseType(album.type)} />
-                        {/if}
-                        <h1 class="title">{album.name}</h1>
-                        <div class="artist">
-                            <a href="#/artist/{album.artist.id}">
-                                {album.artist.name}
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="meta-container">
-                        <div class="meta-entry">
-                            <span class="meta-field">{$_("text.year")}</span>
-                            <span class="meta-value">
+                <div class="meta-container">
+                    <div class="meta-entry">
+                        <span class="meta-field">{$_("text.year")}</span>
+                        <span class="meta-value">
+                            {#if album.year}
                                 <a
                                     href="#/albums/year/{album.year}"
                                     title={album.year}
                                 >
                                     {album.year}
                                 </a>
-                            </span>
-                        </div>
-
-                        {#if album.diskcount > 1}
-                            <div class="meta-entry">
-                                <span class="meta-field">
-                                    {$_("text.disks", {
-                                        values: { count: album.diskcount },
-                                    })}
-                                </span>
-                                <span class="meta-value">
-                                    {album.diskcount}
-                                </span>
-                            </div>
-                        {/if}
-
-                        <div class="meta-entry">
-                            <span class="meta-field">
-                                {$_("text.songs")}
-                            </span>
-                            <span class="meta-value">
-                                {album.songcount}
-                            </span>
-                        </div>
-
-                        <div class="meta-entry">
-                            <span class="meta-field">
-                                {$_("text.length")}
-                            </span>
-                            <span class="meta-value">
-                                {formatTotalTime(album.time)}
-                            </span>
-                        </div>
+                            {:else}
+                                -
+                            {/if}
+                        </span>
                     </div>
 
-                    <GenreList items={album.genre} limit={5} />
+                    {#if album.diskcount > 1}
+                        <div class="meta-entry">
+                            <span class="meta-field">
+                                {$_("text.disks", {
+                                    values: { count: album.diskcount },
+                                })}
+                            </span>
+                            <span class="meta-value">
+                                {album.diskcount}
+                            </span>
+                        </div>
+                    {/if}
 
-                    <div class="actions">
-                        <Actions
-                            type="album"
-                            displayMode="fullButtons"
-                            items={[album]}
-                            showShuffle={album.songcount > 1}
-                            data={{
-                                artist: album.artist,
-                                getSongs: () =>
-                                    albumTracksTabulator?.getData("active"),
-                            }}
-                        />
+                    <div class="meta-entry">
+                        <span class="meta-field">
+                            {$_("text.songs")}
+                        </span>
+                        <span class="meta-value">
+                            {album.songcount}
+                        </span>
+                    </div>
+
+                    <div class="meta-entry">
+                        <span class="meta-field">
+                            {$_("text.length")}
+                        </span>
+                        <span class="meta-value">
+                            {formatTotalTime(album.time)}
+                        </span>
                     </div>
                 </div>
-            </div>
-            <div class="songs">
-                <Disks
-                    albumID={album.id}
-                    bind:tabulatorRef={albumTracksTabulator}
-                />
-            </div>
 
-            <div class="albums-around-time">
-                <AlbumsAround {album} />
+                <GenreList items={album.genre} limit={5} />
+
+                <div class="actions">
+                    <Actions
+                        type="album"
+                        displayMode="fullButtons"
+                        items={[album]}
+                        showShuffle={album.songcount > 1}
+                        data={{
+                            artist: album.artist,
+                            getSongs: () =>
+                                albumTracksTabulator?.getData("active"),
+                        }}
+                    />
+                </div>
             </div>
-        {/key}
+        </div>
+        <div class="songs">
+            <Disks
+                albumID={album.id}
+                bind:tabulatorRef={albumTracksTabulator}
+            />
+        </div>
+
+        <div class="albums-around-time">
+            <AlbumsAround {album} />
+        </div>
+    {/key}
 {/if}
 
 <style>
