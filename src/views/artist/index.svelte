@@ -4,13 +4,13 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
+    import { addAlert } from "~/logic/alert.js";
+    import { errorHandler } from "~/logic/helper.js";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import Actions from "~/components/action/actions.svelte";
     import GenreList from "~/components/genreList.svelte";
     import Art from "~/components/art.svelte";
-    import { addAlert } from "~/logic/alert.js";
-    import { errorHandler } from "~/logic/helper.js";
     import QueryError from "~/components/QueryError.svelte";
     import Visibility from "~/components/visibility.svelte";
 
@@ -43,13 +43,12 @@
 
             if (result.error) {
                 addAlert({
-                    title: $_("text.IDChanged"),
+                    title: $_("text.noItemsFound"),
                     style: "info",
                 });
                 await push(`/artists/`);
 
                 errorHandler("getting artist", result.error);
-                return [];
             }
 
             return result;

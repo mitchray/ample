@@ -1,5 +1,7 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
+    import { push } from "svelte-spa-router";
+    import { addAlert } from "~/logic/alert.js";
     import { API, PageTitle, User } from "~/stores/state";
     import { errorHandler } from "~/logic/helper.js";
     import { createQuery } from "@tanstack/svelte-query";
@@ -15,6 +17,12 @@
             const response = await $API.playlist({ filter: params.id });
 
             if (response.error) {
+                addAlert({
+                    title: $_("text.noItemsFound"),
+                    style: "info",
+                });
+                await push(`/smartlists/`);
+
                 errorHandler("getting smartlist core", response.error);
                 return [];
             }

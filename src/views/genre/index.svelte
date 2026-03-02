@@ -1,11 +1,12 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { replace } from "svelte-spa-router";
-    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import { replace, push } from "svelte-spa-router";
+    import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
-    import QueryError from "~/components/QueryError.svelte";
     import { createQuery } from "@tanstack/svelte-query";
+    import MaterialSymbol from "~/components/materialSymbol.svelte";
+    import QueryError from "~/components/QueryError.svelte";
     import Visibility from "~/components/visibility.svelte";
 
     let { params = {} } = $props();
@@ -43,8 +44,13 @@
             let result = await $API.genre({ filter: params.id });
 
             if (result.error) {
+                addAlert({
+                    title: $_("text.noItemsFound"),
+                    style: "info",
+                });
+                await push(`/genres/`);
+
                 errorHandler("getting genre", result.error);
-                return [];
             }
 
             return result;
@@ -73,11 +79,7 @@
 
         <sl-tab-group onsl-tab-show={changeTab}>
             {#each tabs as tab}
-                <sl-tab
-                    slot="nav"
-                    panel={tab.id}
-                    active={tab.id === section}
-                >
+                <sl-tab slot="nav" panel={tab.id} active={tab.id === section}>
                     {tab.label}
                 </sl-tab>
             {/each}

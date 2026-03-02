@@ -1,8 +1,11 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
+    import { push } from "svelte-spa-router";
     import { formatReleaseType, formatTotalTime } from "~/logic/formatters.js";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
+    import { addAlert } from "~/logic/alert.js";
+    import { errorHandler } from "~/logic/helper.js";
     import Disks from "~/views/album/_disks.svelte";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
@@ -10,7 +13,7 @@
     import AlbumsAround from "~/components/album/albumsAround.svelte";
     import Art from "~/components/art.svelte";
     import Badge from "~/components/badge.svelte";
-    import { errorHandler } from "~/logic/helper.js";
+
     import QueryError from "~/components/QueryError.svelte";
     import GenreList from "~/components/genreList.svelte";
 
@@ -22,8 +25,13 @@
             let result = await $API.album({ filter: params.id });
 
             if (result.error) {
+                addAlert({
+                    title: $_("text.noItemsFound"),
+                    style: "info",
+                });
+                await push(`/albums/`);
+
                 errorHandler("getting album", result.error);
-                return [];
             }
 
             return result;

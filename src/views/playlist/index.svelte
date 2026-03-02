@@ -1,12 +1,14 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
+    import { createQuery } from "@tanstack/svelte-query";
+    import { push } from "svelte-spa-router";
+    import { addAlert } from "~/logic/alert.js";
+    import { errorHandler } from "~/logic/helper.js";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
     import Portal from "~/components/portal.svelte";
-    import { errorHandler } from "~/logic/helper.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { createQuery } from "@tanstack/svelte-query";
     import QueryError from "~/components/QueryError.svelte";
     import ItemListShell from "~/components/ItemListShell.svelte";
     import Items from "~/views/playlist/_items.svelte";
@@ -22,8 +24,13 @@
             const response = await $API.playlist({ filter: params.id });
 
             if (response.error) {
+                addAlert({
+                    title: $_("text.noItemsFound"),
+                    style: "info",
+                });
+                await push(`/playlists/`);
+
                 errorHandler("getting playlist core", response.error);
-                return [];
             }
 
             return response;
