@@ -95,7 +95,7 @@ export let Settings = persisted("ample-settings", {
         hideShortSongs: true,
         hideRadioEdits: false,
     },
-});
+}, { syncTabs: false }); // syncTabs is false to avoid syncing the tabs when the settings are loaded. Temporary fix for the tabulator issue.
 
 export async function loadSettings() {
     let systemsPrefsResponse = await get(API).systemPreferences();
