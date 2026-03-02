@@ -247,6 +247,7 @@ export let releaseType = {
     title: "Type",
     formatter: (cell, formatterParams, onRendered) => {
         onRendered(function () {
+            if (!cell.getValue()) return;
             return mount(Badge, {
                 target: cell.getElement(),
                 props: {
