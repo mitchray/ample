@@ -34,16 +34,14 @@
     let observer;
 
     $effect.root(() => {
-        const user = get(User);
-        if (user.isLoggedIn && !refreshLoop) {
-            console.log("[User] logged in, starting interval");
+        if ($User?.isLoggedIn && !refreshLoop) {
             init();
 
             // recent_songs has its own interval to check for fresh songs
             if (autoRefreshInterval) {
                 clearInterval(refreshLoop);
                 refreshLoop = window.setInterval(function () {
-                    if ($User.isLoggedIn) {
+                    if ($User?.isLoggedIn) {
                         getLatestUpdate();
                     }
                 }, 1000 * autoRefreshInterval);
