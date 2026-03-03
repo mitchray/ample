@@ -1,5 +1,5 @@
 <script>
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { capitalize } from "lodash-es";
 
@@ -17,11 +17,11 @@
     });
 
     let effectiveMode = $derived(
-        $Settings.Theme.mode === "system"
+        Settings.current.Theme.mode === "system"
             ? systemPrefersDark
                 ? "dark"
                 : "light"
-            : $Settings.Theme.mode,
+            : Settings.current.Theme.mode,
     );
 
     let themeMode = $derived(capitalize(effectiveMode) || null);
@@ -41,20 +41,20 @@
     });
 
     $effect(() => {
-        ($Settings.Theme, handleChange());
+        (Settings.current.Theme, handleChange());
     });
 </script>
 
 {@html `<style>
 :root {
-    --user-hue-background: ${$Settings.Theme[themeMode]?.hueBackground};
-    --user-hue-accent-1: ${$Settings.Theme[themeMode]?.hue1};
-    --user-hue-accent-2: ${$Settings.Theme[themeMode]?.hue2};
-    --user-color-waveform: ${$Settings.Theme[themeMode]?.colorWave};
+    --user-hue-background: ${Settings.current.Theme[themeMode]?.hueBackground};
+    --user-hue-accent-1: ${Settings.current.Theme[themeMode]?.hue1};
+    --user-hue-accent-2: ${Settings.current.Theme[themeMode]?.hue2};
+    --user-color-waveform: ${Settings.current.Theme[themeMode]?.colorWave};
 }
 </style>`}
 
-{#if $Settings.Theme[themeMode]?.isGray}
+{#if Settings.current.Theme[themeMode]?.isGray}
     {@html `<style>
 :root {
     --chroma-override: 0.008;

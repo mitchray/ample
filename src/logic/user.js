@@ -9,7 +9,7 @@ import {
     useBearerToken,
     User,
 } from "~/stores/state.js";
-import { Settings } from "~/stores/settings.js";
+import { Settings } from "~/stores/settings.svelte.js";
 
 export async function login({ auth }) {
     get(API).setSessionKey(auth);
@@ -23,14 +23,14 @@ export async function login({ auth }) {
         isLoggedIn: true,
     });
 
-    Settings.update((x) => ({
-        ...x,
+    Settings.current = {
+        ...Settings.current,
         LastSession: {
             token: auth,
             time: Date.now(),
             rememberMe: false,
         },
-    }));
+    };
 }
 
 /**
@@ -49,10 +49,10 @@ export function logout() {
         get(API).goodbye({ auth: token });
     }
 
-    Settings.update((x) => ({
-        ...x,
+    Settings.current = {
+        ...Settings.current,
         LastSession: null,
-    }));
+    };
 
     User.set({ ...get(User), isLoggedIn: false });
 
@@ -87,7 +87,7 @@ export async function validateSession() {
     }
 
     let guestUserAPIKey = get(Server).guestUserAPIKey;
-    let ampleLastSession = get(Settings).LastSession;
+    let ampleLastSession = Settings.current.LastSession;
     let finalToken = ampleLastSession?.token || guestUserAPIKey;
 
     if (!finalToken) {

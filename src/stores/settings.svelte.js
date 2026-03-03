@@ -1,11 +1,23 @@
-import { get, writable } from "svelte/store";
-import { persisted } from "svelte-persisted-store";
+import { get } from "svelte/store";
+import { merge } from "lodash-es";
 import { API, SystemPreferences, UserPreferences } from "~/stores/state.js";
 import { locale } from "@rgglez/svelte-i18n";
 import { setTabulatorLang } from "~/logic/i18n.js";
 
-// our global svelte-persisted-store
-export let Settings = persisted("ample-settings", {
+const STORAGE_KEY = "ample-settings";
+
+function getStoredSettings() {
+    if (typeof localStorage === "undefined") return null;
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw == null) return null;
+    try {
+        return JSON.parse(raw);
+    } catch {
+        return null;
+    }
+}
+
+const initialSettings = {
     SidebarIsExpanded: true,
     QueueIsOpen: true,
     QueueIsPinned: true,
@@ -24,6 +36,7 @@ export let Settings = persisted("ample-settings", {
     PlaySongsByOtherArtists: "include",
     LastSession: {},
     LastLoginMethod: null,
+    SidebarStatuses: {},
     Crossfade: {
         mode: "gapless",
         duration: 6,
@@ -95,7 +108,25 @@ export let Settings = persisted("ample-settings", {
         hideShortSongs: true,
         hideRadioEdits: false,
     },
-}, { syncTabs: false }); // syncTabs is false to avoid syncing the tabs when the settings are loaded. Temporary fix for the tabulator issue.
+};
+
+let current = $state(merge({}, initialSettings, getStoredSettings() || {}));
+
+export function persistSettingsToStorage() {
+    if (typeof localStorage === "undefined") return;
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+}
+
+export const INITIAL_ARTIST_RELEASES = { ...initialSettings.ArtistReleases };
+
+export const Settings = {
+    get current() {
+        return current;
+    },
+    set current(value) {
+        current = value;
+    },
+};
 
 export async function loadSettings() {
     let systemsPrefsResponse = await get(API).systemPreferences();
@@ -104,7 +135,7 @@ export async function loadSettings() {
     let userPrefsResponse = await get(API).userPreferences();
     UserPreferences.set(userPrefsResponse.preference);
 
-    let lang = get(Settings).Language;
+    let lang = Settings.current.Language;
     if (lang) {
         locale.set(lang);
         setTabulatorLang(lang);

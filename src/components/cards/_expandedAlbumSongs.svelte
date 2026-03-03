@@ -1,6 +1,6 @@
 <script>
     import { getContext } from "svelte";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { CurrentMedia, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
     import Rating from "~/components/rating/rating.svelte";
@@ -69,7 +69,7 @@
 <QueryError {query} />
 
 {#each disksToRender as disk}
-    {#if query.isSuccess && $Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
+    {#if query.isSuccess && Settings.current.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
         <!-- Hide this disk-->
     {:else}
         <div class="disk">
@@ -83,10 +83,10 @@
                         <li
                             class:not-by-artist={song.doesNotContainArtist}
                             class:hide={filterToArtistID &&
-                                $Settings.ShowSongsByOtherArtists ===
+                                Settings.current.ShowSongsByOtherArtists ===
                                     "hide"}
                             class:highlight={filterToArtistID &&
-                                $Settings.ShowSongsByOtherArtists ===
+                                Settings.current.ShowSongsByOtherArtists ===
                                     "highlight"}
                         >
                             <div class="top">
@@ -135,7 +135,7 @@
                     {/each}
                 </ul>
             {:else}
-                {#key $Settings.ShowSongsByOtherArtists || 0}
+                {#key Settings.current.ShowSongsByOtherArtists || 0}
                     {#if disks.length > 1}
                         <Actions
                             type="songs"
@@ -148,7 +148,7 @@
 
                     <Tabulator
                         bind:tabulator
-                        data={$Settings.ShowSongsByOtherArtists ===
+                        data={Settings.current.ShowSongsByOtherArtists ===
                             "hide" && filterToArtistID
                             ? disk.songsByArtist
                             : disk.songs}
@@ -157,7 +157,7 @@
                         options={{
                             rowFormatter: function (row) {
                                 if (
-                                    $Settings.ShowSongsByOtherArtists ===
+                                    Settings.current.ShowSongsByOtherArtists ===
                                         "highlight" &&
                                     filterToArtistID &&
                                     row.getData().doesNotContainArtist

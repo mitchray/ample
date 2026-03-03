@@ -7,7 +7,11 @@
         ShowSearch,
         User,
     } from "~/stores/state.js";
-    import { loadSettings } from "~/stores/settings";
+    import {
+        loadSettings,
+        persistSettingsToStorage,
+        Settings,
+    } from "~/stores/settings.svelte.js";
     import { extendSession } from "~/logic/user.js";
     import { handleMigrations } from "~/logic/migrations.js";
 
@@ -23,6 +27,11 @@
     import { hideLoadingOverlay } from "~/logic/ui.js";
 
     handleMigrations($ampleVersion);
+
+    $effect(() => {
+        Settings.current;
+        persistSettingsToStorage();
+    });
 
     window.setInterval(
         function () {

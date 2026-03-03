@@ -1,5 +1,5 @@
 <script>
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import SidebarTop from "~/components/sidebar/sidebar_top.svelte";
     import SidebarContent from "~/components/sidebar/sidebar_content.svelte";
     import SidebarBottom from "~/components/sidebar/sidebar_bottom.svelte";
@@ -7,7 +7,7 @@
 
 <div
     class="site-sidebar"
-    class:is-mini={!$Settings.SidebarIsExpanded}
+    class:is-mini={!Settings.current.SidebarIsExpanded}
     data-testid="sidebar"
 >
     <div class="start">

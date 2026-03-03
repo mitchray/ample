@@ -1,9 +1,17 @@
 <script>
     import { onDestroy, onMount } from "svelte";
+    import { get } from "svelte/store";
     import Player from "~/logic/player";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { MediaPlayer, SitePlayerBind } from "~/stores/elements.js";
-    import { ShowVisualizer } from "~/stores/state.js";
+    import {
+        CurrentMedia,
+        IsPlaying,
+        NowPlayingIndex,
+        NowPlayingQueue,
+        PlaybackSpeed,
+        ShowVisualizer,
+    } from "~/stores/state.js";
     import QueueToggle from "~/components/player/player_queueToggle.svelte";
     import MiniToggle from "~/components/player/player_miniToggle.svelte";
     import NowPlaying from "~/components/player/player_nowPlaying.svelte";
@@ -33,15 +41,40 @@
     onDestroy(() => {
         $MediaPlayer?.destroy();
     });
+
+    $effect(() => {
+        if (!$MediaPlayer) return;
+        Settings.current;
+        $MediaPlayer.syncSettings(Settings.current);
+    });
+
+    $effect(() => {
+        $MediaPlayer?.setNowPlayingQueue(get(NowPlayingQueue));
+    });
+    $effect(() => {
+        $MediaPlayer?.setNowPlayingIndex(get(NowPlayingIndex));
+    });
+    $effect(() => {
+        $MediaPlayer?.setPlaybackRate(get(PlaybackSpeed));
+    });
+    $effect(() => {
+        $MediaPlayer?.setIsPlaying(get(IsPlaying));
+    });
+    $effect(() => {
+        $MediaPlayer?.setCurrentMedia(get(CurrentMedia));
+    });
+    $effect(() => {
+        $MediaPlayer?.getVisualizerPlugin()?.setShow(get(ShowVisualizer));
+    });
 </script>
 
 <div
     bind:clientHeight={currentHeight}
     bind:this={$SitePlayerBind}
     class="site-player"
-    class:is-expanded={!$Settings.PlayerIsMini}
+    class:is-expanded={!Settings.current.PlayerIsMini}
     class:visualizer-open={$ShowVisualizer}
-    class:queue-open={$Settings.QueueIsOpen}
+    class:queue-open={Settings.current.QueueIsOpen}
     style:height="auto"
 >
     <QueueToggle />

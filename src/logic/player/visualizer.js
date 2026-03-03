@@ -16,7 +16,6 @@ export function installVisualizer(player) {
     let visualizer = null;
     let audioContextProxy = null;
     let renderLoopActive = false;
-    let unsubShow = null;
 
     function connectAudio(mediaElement) {
         if (!audioContextProxy || !mediaElement) return;
@@ -77,14 +76,13 @@ export function installVisualizer(player) {
         if (mediaElement) connectAudio(mediaElement);
     });
 
-    unsubShow = ShowVisualizer.subscribe((show) => {
-        if (show) init();
-        else destroy();
-    });
-
     if (get(ShowVisualizer)) init();
 
     return {
+        setShow(show) {
+            if (show) init();
+            else destroy();
+        },
         loadPreset(presetData, blendTime) {
             visualizer?.loadPreset(presetData, blendTime);
         },

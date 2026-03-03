@@ -1,5 +1,6 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
+    import { get } from "svelte/store";
     import Lyrics from "~/logic/lyrics";
     import Portal from "~/components/portal.svelte";
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
@@ -65,6 +66,10 @@
             follow = true;
         }
     }
+
+    $effect(() => {
+        lyrics?.onCurrentMediaChange(get(CurrentMedia));
+    });
 
     $effect(() => {
         if (lyrics && $CurrentMedia) {

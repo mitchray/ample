@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import { NowPlayingQueue, NowPlayingIndex } from "~/stores/state.js";
-import { Settings } from "~/stores/settings.js";
+import { Settings } from "~/stores/settings.svelte.js";
 import { updateQueue } from "~/logic/ui.js";
 
 /**
@@ -16,7 +16,7 @@ export function getCurrentItem() {
  * @param {object} item
  * @param {object} [settings]
  */
-export function isEligibleToPlay(item, settings = get(Settings)) {
+export function isEligibleToPlay(item, settings = Settings.current) {
     if (!item) return false;
     return (
         !settings.SkipBelow.enabled ||
@@ -34,7 +34,7 @@ export function isEligibleToPlay(item, settings = get(Settings)) {
 export function findViableItem(direction) {
     const queue = get(NowPlayingQueue);
     const index = get(NowPlayingIndex);
-    const settings = get(Settings);
+    const settings = Settings.current;
     let i = direction === "previous" ? index - 1 : index + 1;
     while (direction === "previous" ? i >= 0 : i < queue.length) {
         if (isEligibleToPlay(queue[i], settings)) return queue[i];
@@ -49,7 +49,7 @@ export function findViableItem(direction) {
 export function findViableItemsAhead(count) {
     const queue = get(NowPlayingQueue);
     const index = get(NowPlayingIndex);
-    const settings = get(Settings);
+    const settings = Settings.current;
     const result = [];
     for (
         let i = index + 1;
@@ -63,7 +63,7 @@ export function findViableItemsAhead(count) {
 
 export function hasEligibleItems() {
     const queue = get(NowPlayingQueue);
-    const settings = get(Settings);
+    const settings = Settings.current;
     return queue.some((item) => isEligibleToPlay(item, settings));
 }
 

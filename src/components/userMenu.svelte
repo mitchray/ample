@@ -2,7 +2,7 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { logout } from "~/logic/user";
     import { ampleVersion, APIVersion, User } from "~/stores/state.js";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import ThemeToggle from "~/components/theme/themeToggle.svelte";
     import LanguageSelector from "~/components/languageSelector.svelte";
     import MaterialSymbol from "~/components//materialSymbol.svelte";
@@ -23,7 +23,7 @@
                 slot="prefix"
             ></sl-avatar>
 
-            {#if $Settings.SidebarIsExpanded}
+            {#if Settings.current.SidebarIsExpanded}
                 {$User.username}
             {/if}
         {:else}

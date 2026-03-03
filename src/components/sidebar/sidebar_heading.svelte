@@ -1,5 +1,5 @@
 <script>
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     let { icon = null, label } = $props();
@@ -7,7 +7,7 @@
 
 <sl-tooltip
     content={label}
-    disabled={$Settings.SidebarIsExpanded}
+    disabled={Settings.current.SidebarIsExpanded}
     hoist
     placement="right"
 >

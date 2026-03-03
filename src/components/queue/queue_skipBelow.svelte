@@ -1,42 +1,42 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { tick } from "svelte";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     async function handleSkipBelow(e) {
         await tick();
         let newValue = e.target.checked;
-        $Settings.SkipBelow.enabled = newValue;
+        Settings.current.SkipBelow.enabled = newValue;
     }
 
     async function handleSkipBelowRating(e) {
         await tick();
         let newValue = e.target.value;
-        $Settings.SkipBelow.rating = newValue;
+        Settings.current.SkipBelow.rating = newValue;
     }
 
     async function handleAllowZero(e) {
         await tick();
         let newValue = e.target.checked;
-        $Settings.SkipBelow.allowZero = newValue;
+        Settings.current.SkipBelow.allowZero = newValue;
     }
 </script>
 
 <sl-dropdown hoist placement="bottom">
     <sl-button
         class="rating-filter"
-        class:is-enabled={$Settings.SkipBelow.enabled}
+        class:is-enabled={Settings.current.SkipBelow.enabled}
         size="small"
         slot="trigger"
         title={$_("text.skipBelow")}
     >
-        <MaterialSymbol fill={$Settings.SkipBelow.enabled} name="star" />
+        <MaterialSymbol fill={Settings.current.SkipBelow.enabled} name="star" />
     </sl-button>
 
     <sl-card>
         <sl-switch
-            checked={$Settings.SkipBelow.enabled}
+            checked={Settings.current.SkipBelow.enabled}
             onsl-change={handleSkipBelow}
         >
             {$_("text.skipBelow")}:
@@ -44,7 +44,7 @@
 
         <sl-select
             onsl-change={handleSkipBelowRating}
-            value={$Settings.SkipBelow.rating}
+            value={Settings.current.SkipBelow.rating}
         >
             <sl-option value="5">
                 {$_("text.ratingCount", { values: { count: 5 } })}
@@ -61,7 +61,7 @@
         </sl-select>
 
         <sl-switch
-            checked={$Settings.SkipBelow.allowZero}
+            checked={Settings.current.SkipBelow.allowZero}
             onsl-change={handleAllowZero}
         >
             {$_("text.allowUnrated")}

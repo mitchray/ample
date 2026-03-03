@@ -1,14 +1,14 @@
 <script>
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { _ } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { ShowSearch } from "~/stores/state.js";
     import { fly } from "svelte/transition";
     import Notifications from "~/components/notification/notifications.svelte";
 
     function handleSidebarToggle() {
-        let inverted = !$Settings.SidebarIsExpanded;
-        $Settings.SidebarIsExpanded = inverted;
+        let inverted = !Settings.current.SidebarIsExpanded;
+        Settings.current.SidebarIsExpanded = inverted;
     }
 
     function handleOpenSearch() {
@@ -26,7 +26,7 @@
     content={$_("text.search")}
     hoist
     placement="right"
-    disabled={$Settings.SidebarIsExpanded}
+    disabled={Settings.current.SidebarIsExpanded}
 >
     <sl-button
         id="search-button"

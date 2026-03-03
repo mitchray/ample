@@ -1,14 +1,14 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { showQueueItemAtIndex } from "~/logic/ui.js";
     import { NowPlayingIndex } from "~/stores/state.js";
     import { tick } from "svelte";
 
     async function handleQueueToggle() {
-        let inverted = !$Settings.QueueIsOpen;
-        $Settings.QueueIsOpen = inverted;
+        let inverted = !Settings.current.QueueIsOpen;
+        Settings.current.QueueIsOpen = inverted;
 
         if (inverted === true) {
             await tick();
@@ -18,7 +18,7 @@
 </script>
 
 <sl-tooltip
-    content={$Settings.QueueIsOpen
+    content={Settings.current.QueueIsOpen
         ? $_("text.queueHide")
         : $_("text.queueShow")}
     placement="left"

@@ -1,6 +1,6 @@
 <script>
     import { clickOutsideDetector } from "~/actions/clickOutsideDetector.js";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { QueuePanelBind } from "~/stores/elements.js";
     import Jukebox from "~/components/queue/queue_jukebox.svelte";
     import UserQueue from "~/components/queue/queue_user.svelte";
@@ -10,7 +10,7 @@
     function handleClickOutside() {
         if (siteQueueBind?.classList.contains("is-drawer")) {
             let status = false;
-            $Settings.QueueIsOpen = status;
+            Settings.current.QueueIsOpen = status;
         }
     }
 </script>
@@ -18,8 +18,8 @@
 <div
     bind:this={siteQueueBind}
     class="site-queue"
-    class:is-drawer={!$Settings.QueueIsPinned}
-    class:is-open={$Settings.QueueIsOpen}
+    class:is-drawer={!Settings.current.QueueIsPinned}
+    class:is-open={Settings.current.QueueIsOpen}
     onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#queue-button",

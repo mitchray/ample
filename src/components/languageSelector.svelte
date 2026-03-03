@@ -1,13 +1,13 @@
 <script>
     import { _, getLocaleFromNavigator, locale } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { setTabulatorLang } from "~/logic/i18n.js";
 
     async function handleLocaleChange(e) {
         e.preventDefault();
         let newLanguage = e.target.value;
         locale.set(newLanguage);
-        $Settings.Language = newLanguage;
+        Settings.current.Language = newLanguage;
 
         // update Tabulator instances
         setTabulatorLang(newLanguage);

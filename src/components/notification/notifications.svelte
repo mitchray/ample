@@ -1,7 +1,7 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { Notifications } from "~/stores/message.js";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import Portal from "~/components/portal.svelte";
     import NotificationList from "~/components/notification/_notificationList.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -75,20 +75,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.AlternateVersions
+                        checked={Settings.current.Notifications.AlternateVersions
                             .isEnabled}
                         onsl-change={(e) => {
-                            $Settings.Notifications.AlternateVersions.isEnabled =
+                            Settings.current.Notifications.AlternateVersions.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.AlternateVersions
+                        checked={Settings.current.Notifications.AlternateVersions
                             .isSilent}
                         onsl-change={(e) => {
-                            $Settings.Notifications.AlternateVersions.isSilent =
+                            Settings.current.Notifications.AlternateVersions.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -109,20 +109,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.GainTagsMissing
+                        checked={Settings.current.Notifications.GainTagsMissing
                             .isEnabled}
                         onsl-change={(e) => {
-                            $Settings.Notifications.GainTagsMissing.isEnabled =
+                            Settings.current.Notifications.GainTagsMissing.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.GainTagsMissing
+                        checked={Settings.current.Notifications.GainTagsMissing
                             .isSilent}
                         onsl-change={(e) => {
-                            $Settings.Notifications.GainTagsMissing.isSilent =
+                            Settings.current.Notifications.GainTagsMissing.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -143,19 +143,19 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.RatingMissing
+                        checked={Settings.current.Notifications.RatingMissing
                             .isEnabled}
                         onsl-change={(e) => {
-                            $Settings.Notifications.RatingMissing.isEnabled =
+                            Settings.current.Notifications.RatingMissing.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.RatingMissing.isSilent}
+                        checked={Settings.current.Notifications.RatingMissing.isSilent}
                         onsl-change={(e) => {
-                            $Settings.Notifications.RatingMissing.isSilent =
+                            Settings.current.Notifications.RatingMissing.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -176,19 +176,19 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.LyricsMissing
+                        checked={Settings.current.Notifications.LyricsMissing
                             .isEnabled}
                         onsl-change={(e) => {
-                            $Settings.Notifications.LyricsMissing.isEnabled =
+                            Settings.current.Notifications.LyricsMissing.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.LyricsMissing.isSilent}
+                        checked={Settings.current.Notifications.LyricsMissing.isSilent}
                         onsl-change={(e) => {
-                            $Settings.Notifications.LyricsMissing.isSilent =
+                            Settings.current.Notifications.LyricsMissing.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -209,20 +209,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.LyricsNotTimestamped
+                        checked={Settings.current.Notifications.LyricsNotTimestamped
                             .isEnabled}
                         onsl-change={(e) => {
-                            $Settings.Notifications.LyricsNotTimestamped.isEnabled =
+                            Settings.current.Notifications.LyricsNotTimestamped.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={$Settings.Notifications.LyricsNotTimestamped
+                        checked={Settings.current.Notifications.LyricsNotTimestamped
                             .isSilent}
                         onsl-change={(e) => {
-                            $Settings.Notifications.LyricsNotTimestamped.isSilent =
+                            Settings.current.Notifications.LyricsNotTimestamped.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>

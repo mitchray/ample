@@ -3,7 +3,8 @@
 
     let { multiple = false, contextKey } = $props();
 
-    let { playlists, selectedPlaylists } = getContext(contextKey); // prefix store $ when accessing
+    let { playlists, selectedPlaylists, onPlaylistSelect } =
+        getContext(contextKey); // prefix store $ when accessing
 
     function handleRadio(e) {
         let index = $playlists.findIndex((p) => p && p.id === e.target.value);
@@ -19,6 +20,7 @@
         playlists.set(tempArray);
 
         refreshSelected();
+        onPlaylistSelect?.(e.target.value);
     }
 
     function handleCheckbox(e) {

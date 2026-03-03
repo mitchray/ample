@@ -1,6 +1,6 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { IsMuted, NowPlayingQueue } from "~/stores/state.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -19,7 +19,7 @@
 
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-            $Settings.PlayerVolume = val;
+            Settings.current.PlayerVolume = val;
         }, 300);
     }
 
@@ -45,7 +45,7 @@
     min="0"
     max="100"
     step="1"
-    value={$Settings.PlayerVolume}
+    value={Settings.current.PlayerVolume}
     onsl-input={handleVolumeInput}
 ></sl-range>
 

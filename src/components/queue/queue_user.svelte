@@ -6,7 +6,7 @@
         CurrentMedia,
     } from "~/stores/state.js";
     import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import QueueList from "~/components/queue/queue_list.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import SkipBelowButton from "~/components/queue/queue_skipBelow.svelte";
@@ -31,8 +31,8 @@
     }
 
     function togglePinned() {
-        let inverted = !$Settings.QueueIsPinned;
-        $Settings.QueueIsPinned = inverted;
+        let inverted = !Settings.current.QueueIsPinned;
+        Settings.current.QueueIsPinned = inverted;
     }
 
     function expandPanel() {
@@ -100,7 +100,7 @@
                         togglePinned();
                     }}
                 >
-                    {#if $Settings.QueueIsPinned}
+                    {#if Settings.current.QueueIsPinned}
                         {$_("text.queueUnpin")}
                     {:else}
                         {$_("text.queuePin")}

@@ -3,7 +3,7 @@
     import { createQuery } from "@tanstack/svelte-query";
     import { cloneDeep, groupBy, partition, sortBy } from "lodash-es";
     import { API, User } from "~/stores/state";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings, INITIAL_ARTIST_RELEASES } from "~/stores/settings.svelte.js";
     import { formatReleaseType } from "~/logic/formatters.js";
     import { userPreference } from "~/logic/preferences.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -35,9 +35,11 @@
     let artistAlbums = $derived(query.data?.album || []);
 
     const { releases, appearances } = $derived.by(() => {
-        let sorted = sortBy(artistAlbums, [$Settings.ArtistReleases.sort]);
+        let sorted = sortBy(artistAlbums, [
+            Settings.current.ArtistReleases.sort,
+        ]);
 
-        if ($Settings.ArtistReleases.sortReversed) {
+        if (Settings.current.ArtistReleases.sortReversed) {
             sorted.reverse();
         }
 
@@ -45,7 +47,7 @@
 
         let groupMethod;
 
-        switch ($Settings.ArtistReleases.group) {
+        switch (Settings.current.ArtistReleases.group) {
             case "name":
                 groupMethod = (item) => item.name.charAt(0).toUpperCase();
                 break;
@@ -74,12 +76,12 @@
         });
 
         // also reverse the groups if needed
-        if ($Settings.ArtistReleases.sortReversed) {
+        if (Settings.current.ArtistReleases.sortReversed) {
             grouped.reverse();
         }
 
         // reorder the groups to match the order set in preference
-        if ($Settings.ArtistReleases.group === "release_type") {
+        if (Settings.current.ArtistReleases.group === "release_type") {
             let arr = ($releaseTypesOrder ?? "").split(",");
 
             grouped.sort(function (a, b) {
@@ -98,7 +100,7 @@
     });
 
     const flatReleasesForTable = $derived.by(() => {
-        if ($Settings.ArtistReleases.group !== "none") {
+        if (Settings.current.ArtistReleases.group !== "none") {
             return releases.flatMap(([key, items]) =>
                 items.map((item) => ({ ...item, _groupKey: key })),
             );
@@ -107,8 +109,8 @@
     });
 
     $effect(() => {
-        if (!$Settings.ArtistReleases) {
-            $Settings.ArtistReleases.reset(); // svelte-persisted-store reset to initial value
+        if (!Settings.current.ArtistReleases) {
+            Settings.current.ArtistReleases = { ...INITIAL_ARTIST_RELEASES };
         }
     });
 </script>
@@ -121,8 +123,8 @@
             <sl-select
                 label="Display"
                 onsl-change={(e) =>
-                    ($Settings.ArtistReleases.view = e.target.value)}
-                value={$Settings.ArtistReleases.view}
+                    (Settings.current.ArtistReleases.view = e.target.value)}
+                value={Settings.current.ArtistReleases.view}
             >
                 <MaterialSymbol name="visibility" slot="prefix" />
                 <sl-option value="table">Table</sl-option>
@@ -137,9 +139,9 @@
                     clearable
                     label="Sort"
                     onsl-change={(e) =>
-                        ($Settings.ArtistReleases.sort = e.target.value)}
+                        (Settings.current.ArtistReleases.sort = e.target.value)}
                     placeholder="None"
-                    value={$Settings.ArtistReleases.sort}
+                    value={Settings.current.ArtistReleases.sort}
                 >
                     <MaterialSymbol name="sort" slot="prefix" />
                     <sl-option value="name">Name</sl-option>
@@ -151,10 +153,10 @@
                 <sl-tooltip content="Direction">
                     <sl-button
                         onclick={() =>
-                            ($Settings.ArtistReleases.sortReversed =
-                                !$Settings.ArtistReleases.sortReversed)}
+                            (Settings.current.ArtistReleases.sortReversed =
+                                !Settings.current.ArtistReleases.sortReversed)}
                     >
-                        {#if $Settings.ArtistReleases.sortReversed}
+                        {#if Settings.current.ArtistReleases.sortReversed}
                             <MaterialSymbol name="arrow_downward" />
                         {:else}
                             <MaterialSymbol name="arrow_upward" />
@@ -167,9 +169,9 @@
                 clearable
                 label="Grouping"
                 onsl-change={(e) =>
-                    ($Settings.ArtistReleases.group = e.target.value)}
+                    (Settings.current.ArtistReleases.group = e.target.value)}
                 placeholder="None"
-                value={$Settings.ArtistReleases.group}
+                value={Settings.current.ArtistReleases.group}
             >
                 <MaterialSymbol name="category" slot="prefix" />
                 <sl-option value="name">Name</sl-option>
@@ -182,13 +184,13 @@
 </sl-dropdown>
 
 <div class="releases">
-    {#if $Settings.ArtistReleases.view === "table"}
+    {#if Settings.current.ArtistReleases.view === "table"}
         <div class="release-group">
             <RenderReleases
                 view="table"
                 items={flatReleasesForTable}
-                groupBy={$Settings.ArtistReleases.group &&
-                $Settings.ArtistReleases.group !== "none"
+                groupBy={Settings.current.ArtistReleases.group &&
+                Settings.current.ArtistReleases.group !== "none"
                     ? "_groupKey"
                     : null}
             />
@@ -198,7 +200,7 @@
     <QueryError {query} />
 
     {#if query.isSuccess}
-        {#if $Settings.ArtistReleases.view !== "table" && releases.length > 0}
+        {#if Settings.current.ArtistReleases.view !== "table" && releases.length > 0}
             {#each releases as [group, items]}
                 <div class="release-group">
                     {#if releases.length > 0 && group !== "undefined"}
@@ -206,7 +208,7 @@
                     {/if}
 
                     <RenderReleases
-                        view={$Settings.ArtistReleases.view}
+                        view={Settings.current.ArtistReleases.view}
                         {items}
                     />
                 </div>
@@ -222,7 +224,7 @@
                 </h3>
 
                 <RenderReleases
-                    view={$Settings.ArtistReleases.view}
+                    view={Settings.current.ArtistReleases.view}
                     items={appearances}
                     filterToArtistID={artistID}
                 />

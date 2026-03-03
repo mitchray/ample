@@ -1,5 +1,5 @@
 import { get, writable } from "svelte/store";
-import { API, CurrentMedia } from "~/stores/state.js";
+import { API } from "~/stores/state.js";
 import { lyricsAreTimestamped } from "~/logic/helper";
 import {
     addLyricsMissingNotification,
@@ -17,16 +17,19 @@ class Lyrics {
         this.API = get(API);
         this.previousID = null;
 
-        CurrentMedia.subscribe(async (value) => {
-            let id = value?.id + value?.object_type;
-
-            if (id !== this.previousID) {
-                this.previousID = id;
-                await this.setLyrics(value);
-            }
-        });
-
         this._store = writable(this);
+    }
+
+    /**
+     * Called from component $effect when CurrentMedia changes.
+     */
+    async onCurrentMediaChange(value) {
+        let id = value?.id + value?.object_type;
+
+        if (id !== this.previousID) {
+            this.previousID = id;
+            await this.setLyrics(value);
+        }
     }
 
     subscribe(subscriber) {

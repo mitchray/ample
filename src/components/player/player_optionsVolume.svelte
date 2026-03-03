@@ -1,5 +1,5 @@
 <script>
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { _ } from "@rgglez/svelte-i18n";
     import {
         CurrentMedia,
@@ -11,13 +11,13 @@
     let compressor = $derived($MediaPlayer?.getMasterCompressor?.() ?? null);
 
     function handleGainMode(e) {
-        $Settings.GainMode = e.target.value;
+        Settings.current.GainMode = e.target.value;
         $MediaPlayer.updateFilters();
     }
 
     function handleDynamicsCompressor(e) {
         let setting = e.target.checked;
-        $Settings.DynamicsCompressorEnabled = setting;
+        Settings.current.DynamicsCompressorEnabled = setting;
         $MediaPlayer.updateFilters();
     }
 
@@ -43,7 +43,7 @@
 </script>
 
 <sl-select
-    value={$Settings.GainMode ?? "track"}
+    value={Settings.current.GainMode ?? "track"}
     on:sl-change={handleGainMode}
     label={$_("text.volumeNormalize")}
 >
@@ -92,7 +92,7 @@
 <sl-divider></sl-divider>
 
 <sl-checkbox
-    checked={$Settings.DynamicsCompressorEnabled}
+    checked={Settings.current.DynamicsCompressorEnabled}
     on:sl-change={handleDynamicsCompressor}
 >
     {$_("text.volumeNightMode")}

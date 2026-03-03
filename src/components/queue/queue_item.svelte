@@ -7,7 +7,7 @@
         NowPlayingQueue,
         JukeboxQueue,
     } from "~/stores/state";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { MediaPlayer } from "~/stores/elements.js";
     import { updateQueue } from "~/logic/ui.js";
     import Actions from "~/components/action/actions.svelte";
@@ -80,9 +80,9 @@
 
     $effect(() => {
         (media, retest());
-        ($Settings.SkipBelow.enabled, retest());
-        ($Settings.SkipBelow.rating, retest());
-        ($Settings.SkipBelow.allowZero, retest());
+        (Settings.current.SkipBelow.enabled, retest());
+        (Settings.current.SkipBelow.rating, retest());
+        (Settings.current.SkipBelow.allowZero, retest());
     });
 </script>
 

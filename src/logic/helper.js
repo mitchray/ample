@@ -2,7 +2,7 @@ import { _ } from "@rgglez/svelte-i18n";
 import { get } from "svelte/store";
 import { addAlert } from "~/logic/alert";
 import { debugMode, Server } from "~/stores/state.js";
-import { Settings } from "~/stores/settings";
+import { Settings } from "~/stores/settings.svelte.js";
 import { v4 as uuidv4 } from "uuid";
 import JsSHA from "jssha/dist/sha1";
 import { Tabulator } from "tabulator-tables";
@@ -147,9 +147,9 @@ export function filterBelow(arr) {
     let originalCount = arr.length;
 
     // if length is 1 let's assume we want to play that item regardless of rating
-    if (arr.length > 1 && get(Settings).SkipBelow.enabled) {
+    if (arr.length > 1 && Settings.current.SkipBelow.enabled) {
         arr = arr.filter(
-            (item) => item.rating >= get(Settings).SkipBelow.rating,
+            (item) => item.rating >= Settings.current.SkipBelow.rating,
         );
     }
 
@@ -160,7 +160,7 @@ export function filterBelow(arr) {
             title: get(_)("text.skippedItemsBelow", {
                 values: {
                     itemCount: filteredCount,
-                    starCount: get(Settings).SkipBelow.rating,
+                    starCount: Settings.current.SkipBelow.rating,
                 },
             }),
             style: "info",

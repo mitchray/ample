@@ -1,14 +1,14 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
 
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 </script>
 
 <sl-select
-    value={$Settings.Theme.mode}
+    value={Settings.current.Theme.mode}
     onsl-change={(e) => {
-        $Settings.Theme.mode = e.target.value;
+        Settings.current.Theme.mode = e.target.value;
     }}
 >
     <sl-option value="light">

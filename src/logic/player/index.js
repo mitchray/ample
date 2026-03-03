@@ -2,7 +2,7 @@ import { tick } from "svelte";
 import { get } from "svelte/store";
 import { showQueueItemAtIndex, updateQueue } from "~/logic/ui.js";
 import { debugHelper, prepareForQueue, shuffleArray } from "~/logic/helper";
-import { Settings } from "~/stores/settings";
+import { Settings } from "~/stores/settings.svelte.js";
 import {
     CurrentMedia,
     IsPlaying,
@@ -70,58 +70,13 @@ class Player {
         // initial AbortController
         this.abortController = new AbortController();
 
-        Settings.subscribe((s) => {
-            // PlayerVolume
-            this.globalVolume = this.#logVolume(s.PlayerVolume); // volume here takes the linear 0-100 value and converts into a logarithmic float from 0.0 to 1.0
-            gain.setMasterVolume(this.players, this.globalVolume);
-
-            // RepeatState
-            this.repeatState = s.RepeatState;
-
-            // GainMode
-            this.gainMode = s.GainMode ?? "track";
-
-            // DynamicsCompressorEnabled
-            this.dynamicsCompressorEnabled = s.DynamicsCompressorEnabled;
-
-            // Crossfade
-            this.crossfadeDuration = s.Crossfade.duration;
-            this.crossfadeEnabled = s.Crossfade.mode === "crossfade";
-
-            // Gapless
-            this.gaplessEnabled = s.Crossfade.mode === "gapless";
-
-            // When switching away from crossfade, immediately clean up any active
-            // EnvelopePlugin and restore audio element volume to avoid silent playback
-            if (!this.crossfadeEnabled && this.players) {
-                Object.values(this.players).forEach((p) => {
-                    p.wavesurfer.envelopePlugin?.setPoints([]);
-                    p.wavesurfer.envelopePlugin?.destroy();
-                    p.wavesurfer.envelopePlugin = null;
-                    p.wavesurfer.setVolume(1.0);
-                });
-            }
-        });
-
-        NowPlayingQueue.subscribe((value) => {
-            this.nowPlayingQueue = value;
-        });
-
-        NowPlayingIndex.subscribe((value) => {
-            this.nowPlayingIndex = value;
-        });
-
-        PlaybackSpeed.subscribe((value) => {
-            this.setPlaybackRate(value);
-        });
-
-        IsPlaying.subscribe((value) => {
-            this.isPlaying = value;
-        });
-
-        CurrentMedia.subscribe((value) => {
-            this.currentMedia = value;
-        });
+        // Initial state from stores (component $effect will keep in sync)
+        this.syncSettings(Settings.current);
+        this.nowPlayingQueue = get(NowPlayingQueue);
+        this.nowPlayingIndex = get(NowPlayingIndex);
+        this.setPlaybackRate(get(PlaybackSpeed));
+        this.isPlaying = get(IsPlaying);
+        this.currentMedia = get(CurrentMedia);
 
         installCrossfade(this);
         this._visualizerPlugin = installVisualizer(this);
@@ -145,6 +100,49 @@ class Player {
      */
     off(event, fn) {
         this._emitter.off(event, fn);
+    }
+
+    /**
+     * Sync settings from Settings.current (called from component $effect).
+     */
+    syncSettings(s) {
+        if (!s) return;
+        this.globalVolume = this.#logVolume(s.PlayerVolume);
+        gain.setMasterVolume(this.players, this.globalVolume);
+        this.repeatState = s.RepeatState;
+        this.gainMode = s.GainMode ?? "track";
+        this.dynamicsCompressorEnabled = s.DynamicsCompressorEnabled;
+        this.crossfadeDuration = s.Crossfade?.duration ?? 6;
+        this.crossfadeEnabled = s.Crossfade?.mode === "crossfade";
+        this.gaplessEnabled = s.Crossfade?.mode === "gapless";
+        if (!this.crossfadeEnabled && this.players) {
+            Object.values(this.players).forEach((p) => {
+                p.wavesurfer.envelopePlugin?.setPoints([]);
+                p.wavesurfer.envelopePlugin?.destroy();
+                p.wavesurfer.envelopePlugin = null;
+                p.wavesurfer.setVolume(1.0);
+            });
+        }
+    }
+
+    setNowPlayingQueue(value) {
+        this.nowPlayingQueue = value;
+    }
+
+    setNowPlayingIndex(value) {
+        this.nowPlayingIndex = value;
+    }
+
+    setIsPlaying(value) {
+        this.isPlaying = value;
+    }
+
+    setCurrentMedia(value) {
+        this.currentMedia = value;
+    }
+
+    getVisualizerPlugin() {
+        return this._visualizerPlugin;
     }
 
     /**
@@ -590,7 +588,7 @@ class Player {
     }
 
     updateFilters() {
-        const currentGainMode = get(Settings).GainMode ?? "track";
+        const currentGainMode = Settings.current.GainMode ?? "track";
         const tagGainValue = gain.resolveGainMode(
             this.currentMedia,
             currentGainMode,

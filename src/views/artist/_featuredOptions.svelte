@@ -1,15 +1,15 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
 
     function handleShowSongs(e) {
         let val = e.target.value;
-        $Settings.ShowSongsByOtherArtists = val;
+        Settings.current.ShowSongsByOtherArtists = val;
     }
 
     function handlePlaySongs(e) {
         let val = e.target.value;
-        $Settings.PlaySongsByOtherArtists = val;
+        Settings.current.PlaySongsByOtherArtists = val;
     }
 </script>
 
@@ -25,7 +25,7 @@
             onsl-change={(e) => {
                 handleShowSongs(e);
             }}
-            value={$Settings.ShowSongsByOtherArtists}
+            value={Settings.current.ShowSongsByOtherArtists}
         >
             <sl-radio-button value="show">Show</sl-radio-button>
             <sl-radio-button value="highlight">
@@ -42,7 +42,7 @@
             onsl-change={(e) => {
                 handlePlaySongs(e);
             }}
-            value={$Settings.PlaySongsByOtherArtists}
+            value={Settings.current.PlaySongsByOtherArtists}
         >
             <sl-radio-button value="include">Include</sl-radio-button>
             <sl-radio-button value="exclude">Skip</sl-radio-button>
@@ -50,10 +50,10 @@
     </sl-card>
 </sl-dropdown>
 
-{#if $Settings.ShowSongsByOtherArtists === "hide"}
+{#if Settings.current.ShowSongsByOtherArtists === "hide"}
     <sl-badge variant="neutral">Hiding songs by other artists</sl-badge>
 {/if}
 
-{#if $Settings.PlaySongsByOtherArtists === "exclude"}
+{#if Settings.current.PlaySongsByOtherArtists === "exclude"}
     <sl-badge variant="neutral">Skipping songs by other artists</sl-badge>
 {/if}

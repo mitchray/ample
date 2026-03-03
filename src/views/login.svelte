@@ -10,7 +10,7 @@
         Server,
         useBearerToken,
     } from "~/stores/state.js";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import { attemptLogin } from "~/logic/user";
     import UserMenu from "~/components/userMenu.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -57,7 +57,7 @@
                     username: username,
                 });
             }
-            $Settings.LastLoginMethod = currentTab;
+            Settings.current.LastLoginMethod = currentTab;
         } catch (e) {
             fatalError = true;
         } finally {
@@ -96,7 +96,7 @@
     }
 
     onMount(async () => {
-        lastUsedTab = $Settings.LastLoginMethod;
+        lastUsedTab = Settings.current.LastLoginMethod;
         currentTab = lastUsedTab || "username";
         await tick();
         hideLoadingOverlay();

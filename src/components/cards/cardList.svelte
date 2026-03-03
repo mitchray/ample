@@ -1,6 +1,7 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { v4 as uuidv4 } from "uuid";
+    import { get } from "svelte/store";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { errorHandler } from "~/logic/helper.js";
     import { User } from "~/stores/state.js";
@@ -32,7 +33,8 @@
     let containerScrollX = $state();
     let observer;
 
-    const unsubscribe = User.subscribe((user) => {
+    $effect.root(() => {
+        const user = get(User);
         if (user.isLoggedIn && !refreshLoop) {
             console.log("[User] logged in, starting interval");
             init();
@@ -47,6 +49,10 @@
                 }, 1000 * autoRefreshInterval);
             }
         }
+        return () => {
+            clearInterval(refreshLoop);
+            refreshLoop = undefined;
+        };
     });
 
     async function init() {
@@ -75,7 +81,6 @@
     onDestroy(() => {
         observer?.disconnect();
         clearInterval(refreshLoop);
-        unsubscribe();
     });
 
     async function getLatestUpdate() {

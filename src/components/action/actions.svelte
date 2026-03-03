@@ -37,7 +37,7 @@
     import ActionShareEdit from "./items/actionShareEdit.svelte";
     import ActionShareDelete from "./items/actionShareDelete.svelte";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
 
     let {
         items: itemsProp = null,
@@ -227,7 +227,7 @@
 
         if (
             result.length > 1 &&
-            $Settings.PlaySongsByOtherArtists === "exclude" &&
+            Settings.current.PlaySongsByOtherArtists === "exclude" &&
             filterToArtistID
         ) {
             result = result.filter((it) =>

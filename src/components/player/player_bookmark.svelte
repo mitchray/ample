@@ -1,5 +1,6 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
+    import { get } from "svelte/store";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { API, CurrentMedia } from "~/stores/state.js";
     import { MediaPlayer } from "~/stores/elements.js";
@@ -8,7 +9,7 @@
 
     let bookmarks = $state([]);
     let clickTimeout;
-    let previousID = null;
+    let previousID = $state(null);
 
     function addBookmark() {
         if (!$CurrentMedia) return;
@@ -75,9 +76,9 @@
         });
     }
 
-    CurrentMedia.subscribe((value) => {
-        let id = value?.id + value?.object_type || null;
-
+    $effect(() => {
+        const value = get(CurrentMedia);
+        const id = value?.id + value?.object_type || null;
         if (id !== previousID) {
             getBookmarks(value);
             previousID = id;

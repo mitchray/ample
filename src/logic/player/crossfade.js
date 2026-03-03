@@ -1,6 +1,6 @@
 import { get } from "svelte/store";
 import EnvelopePlugin from "wavesurfer.js/dist/plugins/envelope.js";
-import { Settings } from "~/stores/settings.js";
+import { Settings } from "~/stores/settings.svelte.js";
 
 /**
  * Crossfade plugin: attaches WaveSurfer Envelope on trackReady when crossfade is enabled.
@@ -16,7 +16,7 @@ export function installCrossfade(player) {
         wavesurfer.envelopePlugin = null;
         wavesurfer.setVolume(1.0);
 
-        const settings = get(Settings);
+        const settings = Settings.current;
         const crossfadeEnabled = settings.Crossfade?.mode === "crossfade";
         const crossfadeDuration = settings.Crossfade?.duration ?? 6;
 

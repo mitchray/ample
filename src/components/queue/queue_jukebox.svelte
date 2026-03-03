@@ -1,6 +1,6 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { Settings } from "~/stores/settings.js";
+    import { Settings } from "~/stores/settings.svelte.js";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import PlaylistSelector from "~/components/playlist/playlist_selector.svelte";
     import {
@@ -28,8 +28,12 @@
     let contextKey = "smartlists";
     let smartlistsLoaded = $state(false);
 
+    function onPlaylistSelect(id) {
+        if (id) Settings.current.QueueRefill.smartlist = id;
+    }
+
     // Provide the playlists store to selector
-    setContext(contextKey, { playlists, selectedPlaylists });
+    setContext(contextKey, { playlists, selectedPlaylists, onPlaylistSelect });
 
     async function startFetching() {
         isFetching = true;
@@ -45,14 +49,14 @@
                 let apiCall;
 
                 if (
-                    $Settings.QueueRefill.mode === "smartlist" &&
+                    Settings.current.QueueRefill.mode === "smartlist" &&
                     activePlaylist
                 ) {
                     apiCall = $API.playlistSongs({
                         filter: activePlaylist,
                         limit: 100,
                     });
-                } else if ($Settings.QueueRefill.mode === "mix") {
+                } else if (Settings.current.QueueRefill.mode === "mix") {
                     let lastItem =
                         $NowPlayingQueue[$NowPlayingQueue.length - 1];
                     let artistID = lastItem.artist?.id;
@@ -102,11 +106,12 @@
     }
 
     function toggleEnabled() {
-        $Settings.QueueRefill.enabled = !$Settings.QueueRefill.enabled;
+        Settings.current.QueueRefill.enabled =
+            !Settings.current.QueueRefill.enabled;
     }
 
     function handleMode(e) {
-        $Settings.QueueRefill.mode = e.target.value;
+        Settings.current.QueueRefill.mode = e.target.value;
     }
 
     async function handleRefresh() {
@@ -142,37 +147,33 @@
     }
 
     let shouldAddToQueue = $derived(
-        $Settings.QueueRefill.enabled && // jukebox is enabled
+        Settings.current.QueueRefill.enabled && // jukebox is enabled
             $JukeboxQueue.length > 0 && // there are jukebox items to play
             $CurrentMedia && // just to trigger reactivity
             !$MediaPlayer?.findViableItem("next"), // need another eligible item
     );
 
     let shouldRefillJukebox = $derived(
-        $Settings.QueueRefill.enabled && // jukebox is enabled
+        Settings.current.QueueRefill.enabled && // jukebox is enabled
             $NowPlayingQueue.length > 0 && // items are in queue
             $NowPlayingIndex > $NowPlayingQueue.length - 5 && // approaching end of queue
             $JukeboxQueue.length < 10, // not many items in jukebox
     );
 
     $effect(() => {
-        // when selected playlist changes, save to store
-        if ($selectedPlaylists[0]?.id) {
-            $Settings.QueueRefill.smartlist = $selectedPlaylists[0].id;
-        }
-    });
-
-    $effect(() => {
-        if (!$Settings.QueueRefill.enabled || $Settings.QueueRefill.mode) {
+        if (
+            !Settings.current.QueueRefill.enabled ||
+            Settings.current.QueueRefill.mode
+        ) {
             clearQueue();
         }
     });
 
     $effect(() => {
         // test the saved smartlist does exist
-        if ($User.isLoggedIn && $Settings.QueueRefill.smartlist) {
+        if ($User.isLoggedIn && Settings.current.QueueRefill.smartlist) {
             $API.playlist({
-                filter: $Settings.QueueRefill.smartlist,
+                filter: Settings.current.QueueRefill.smartlist,
             }).then((result) => {
                 if (result.error) {
                     errorHandler(
@@ -200,7 +201,7 @@
         }
     });
 
-    $effect.pre(() => {
+    $effect(() => {
         if ($User.isLoggedIn) {
             init();
         }
@@ -222,14 +223,14 @@
         playlists.set(list);
 
         let initialIndex = list.findIndex(
-            (p) => p.id === $Settings.QueueRefill.smartlist,
+            (p) => p.id === Settings.current.QueueRefill.smartlist,
         );
 
         if (initialIndex !== -1) {
             selectedPlaylists.set([list[initialIndex]]);
         } else if (list.length > 0) {
             selectedPlaylists.set([list[0]]);
-            $Settings.QueueRefill.smartlist = list[0].id;
+            Settings.current.QueueRefill.smartlist = list[0].id;
         }
 
         smartlistsLoaded = true;
@@ -253,7 +254,7 @@
     </div>
 
     <sl-switch
-        checked={$Settings.QueueRefill.enabled}
+        checked={Settings.current.QueueRefill.enabled}
         onsl-change={toggleEnabled}
     ></sl-switch>
 
@@ -271,7 +272,7 @@
                 <sl-radio-group
                     name="mode"
                     onsl-change={handleMode}
-                    value={$Settings.QueueRefill.mode}
+                    value={Settings.current.QueueRefill.mode}
                 >
                     <sl-radio-button
                         value="smartlist"
@@ -286,7 +287,7 @@
                     </sl-radio-button>
                 </sl-radio-group>
 
-                {#if $Settings.QueueRefill.mode === "smartlist"}
+                {#if Settings.current.QueueRefill.mode === "smartlist"}
                     <div class="secondary-info">
                         {$_("text.queueRefillSmartlist")}
                     </div>
