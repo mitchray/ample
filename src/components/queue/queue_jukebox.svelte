@@ -26,6 +26,7 @@
     let timeout = $state();
     let playlistResponse;
     let contextKey = "smartlists";
+    let smartlistsLoaded = $state(false);
 
     // Provide the playlists store to selector
     setContext(contextKey, { playlists, selectedPlaylists });
@@ -217,15 +218,21 @@
             return;
         }
 
-        playlists.set(playlistResponse.playlist);
+        const list = playlistResponse.playlist ?? [];
+        playlists.set(list);
 
-        let initialIndex = $playlists.findIndex(
+        let initialIndex = list.findIndex(
             (p) => p.id === $Settings.QueueRefill.smartlist,
         );
 
         if (initialIndex !== -1) {
-            selectedPlaylists.set([$playlists[initialIndex]]);
+            selectedPlaylists.set([list[initialIndex]]);
+        } else if (list.length > 0) {
+            selectedPlaylists.set([list[0]]);
+            $Settings.QueueRefill.smartlist = list[0].id;
         }
+
+        smartlistsLoaded = true;
     }
 </script>
 
@@ -266,7 +273,10 @@
                     onsl-change={handleMode}
                     value={$Settings.QueueRefill.mode}
                 >
-                    <sl-radio-button value="smartlist">
+                    <sl-radio-button
+                        value="smartlist"
+                        disabled={smartlistsLoaded && $playlists.length === 0}
+                    >
                         <MaterialSymbol name="electric_bolt" slot="prefix" />
                         {$_("text.smartlist")}
                     </sl-radio-button>
@@ -283,7 +293,11 @@
 
                     <sl-divider></sl-divider>
 
-                    <PlaylistSelector {contextKey} />
+                    {#if smartlistsLoaded && $playlists.length === 0}
+                        <p>{$_("text.noItemsFound")}</p>
+                    {:else}
+                        <PlaylistSelector {contextKey} />
+                    {/if}
                 {:else}
                     <div class="secondary-info">
                         {$_("text.queueRefillMix")}
