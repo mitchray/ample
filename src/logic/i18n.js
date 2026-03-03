@@ -1,6 +1,58 @@
 import { getLocaleFromNavigator, init, register } from "@rgglez/svelte-i18n";
 import { TabulatorFull as Tabulator } from "tabulator-tables";
 
+const SUPPORTED_LOCALES = [
+    "en",
+    "en-AU",
+    "de",
+    "ko",
+    "it",
+    "hu",
+    "pl",
+    "fr",
+    "pt",
+    "pt-BR",
+    "es",
+];
+
+/**
+ * Map navigator locale to a supported app locale.
+ * @param {string} navigatorLocale - e.g. "en-US", "pt-BR", "de"
+ * @returns {string} Supported locale code
+ */
+function mapNavigatorToSupported(navigatorLocale) {
+    if (!navigatorLocale || typeof navigatorLocale !== "string") return "en";
+    const lower = navigatorLocale.toLowerCase();
+    const parts = lower.split("-");
+    const lang = parts[0];
+    const region = parts[1];
+
+    if (SUPPORTED_LOCALES.includes(navigatorLocale)) return navigatorLocale;
+    const exact = SUPPORTED_LOCALES.find((l) => l.toLowerCase() === lower);
+    if (exact) return exact;
+
+    if (lang === "en") {
+        if (region === "au") return "en-AU";
+        return "en";
+    }
+    if (lang === "pt" && region === "br") return "pt-BR";
+
+    const byLang = SUPPORTED_LOCALES.find((l) => l.split("-")[0].toLowerCase() === lang);
+    return byLang || "en";
+}
+
+/**
+ * Resolve "auto" or falsy to navigator locale (mapped to supported); otherwise return the given locale.
+ * @param {string} [lang] - "auto", a supported locale code, or empty
+ * @returns {string} Supported locale code for locale.set() / Tabulator
+ */
+export function resolveLocale(lang) {
+    if (lang === "auto" || !lang) {
+        return mapNavigatorToSupported(getLocaleFromNavigator());
+    }
+    return lang;
+}
+
 export function setupI18n() {
     register("en", () => import("../../languages/en.json"));
     register("en-AU", () => import("../../languages/en-AU.json"));
@@ -21,11 +73,12 @@ export function setupI18n() {
 }
 
 export function setTabulatorLang(lang) {
+    const effective = lang === "auto" ? resolveLocale("auto") : lang;
     let tabulators = Tabulator.findTable(".tabulator");
 
     if (tabulators) {
         tabulators.forEach((table) => {
-            table.setLocale(lang.toLowerCase());
+            table.setLocale(effective.toLowerCase());
         });
     }
 }

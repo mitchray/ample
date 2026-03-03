@@ -1,21 +1,24 @@
 <script>
-    import { _, getLocaleFromNavigator, locale } from "@rgglez/svelte-i18n";
+    import { _, locale } from "@rgglez/svelte-i18n";
     import { Settings } from "~/stores/settings.svelte.js";
-    import { setTabulatorLang } from "~/logic/i18n.js";
+    import { resolveLocale, setTabulatorLang } from "~/logic/i18n.js";
 
-    async function handleLocaleChange(e) {
+    let selectedLang = $state(Settings.Language);
+
+    function handleLocaleChange(e) {
         e.preventDefault();
         let newLanguage = e.target.value;
-        locale.set(newLanguage);
         Settings.Language = newLanguage;
+        selectedLang = newLanguage;
 
-        // update Tabulator instances
+        const effective = newLanguage === "auto" ? resolveLocale("auto") : newLanguage;
+        locale.set(effective);
         setTabulatorLang(newLanguage);
     }
 </script>
 
-<sl-select onsl-change={handleLocaleChange} value={$locale}>
-    <sl-option value={getLocaleFromNavigator()}>
+<sl-select onsl-change={handleLocaleChange} value={selectedLang}>
+    <sl-option value="auto">
         ({$_("text.autodetect")})
     </sl-option>
     <sl-option value="en">English (US)</sl-option>

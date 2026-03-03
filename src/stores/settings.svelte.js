@@ -2,7 +2,7 @@ import { get } from "svelte/store";
 import { merge } from "lodash-es";
 import { API, SystemPreferences, UserPreferences } from "~/stores/state.js";
 import { locale } from "@rgglez/svelte-i18n";
-import { setTabulatorLang } from "~/logic/i18n.js";
+import { resolveLocale, setTabulatorLang } from "~/logic/i18n.js";
 
 const STORAGE_KEY = "ample-settings";
 
@@ -26,7 +26,7 @@ const initialSettings = {
     RepeatState: "disabled",
     GainMode: "smart", // "off" | "track" | "album" | "smart"
     DynamicsCompressorEnabled: false,
-    Language: "en",
+    Language: "auto",
     SkipBelow: {
         enabled: true,
         rating: "2",
@@ -149,9 +149,7 @@ export async function loadSettings() {
     let userPrefsResponse = await get(API).userPreferences();
     UserPreferences.set(userPrefsResponse.preference);
 
-    let lang = Settings.Language;
-    if (lang) {
-        locale.set(lang);
-        setTabulatorLang(lang);
-    }
+    let effectiveLang = resolveLocale(Settings.Language);
+    locale.set(effectiveLang);
+    setTabulatorLang(Settings.Language);
 }
