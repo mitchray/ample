@@ -117,6 +117,11 @@ export function persistSettingsToStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(__source));
 }
 
+export function resetSettingsToDefaults() {
+    __source = merge({}, initialSettings);
+    persistSettingsToStorage();
+}
+
 export const INITIAL_ARTIST_RELEASES = { ...initialSettings.ArtistReleases };
 
 export const Settings = new Proxy(

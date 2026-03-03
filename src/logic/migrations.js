@@ -1,12 +1,17 @@
 import { compareVersions } from "compare-versions";
 import { clearCache } from "~/logic/helper.js";
 import { CachedItemKeys } from "~/stores/state.js";
-import { Settings } from "~/stores/settings.svelte.js";
+import {
+    resetSettingsToDefaults,
+} from "~/stores/settings.svelte.js";
 
 const migrations = [
     {
         version: "4.0.0",
-        migrate: async () => {},
+        migrate: async () => {
+            localStorage.removeItem("ample-settings");
+            resetSettingsToDefaults();
+        },
     },
 ];
 
