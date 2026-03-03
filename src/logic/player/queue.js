@@ -16,7 +16,7 @@ export function getCurrentItem() {
  * @param {object} item
  * @param {object} [settings]
  */
-export function isEligibleToPlay(item, settings = Settings.current) {
+export function isEligibleToPlay(item, settings = Settings) {
     if (!item) return false;
     return (
         !settings.SkipBelow.enabled ||
@@ -34,10 +34,9 @@ export function isEligibleToPlay(item, settings = Settings.current) {
 export function findViableItem(direction) {
     const queue = get(NowPlayingQueue);
     const index = get(NowPlayingIndex);
-    const settings = Settings.current;
     let i = direction === "previous" ? index - 1 : index + 1;
     while (direction === "previous" ? i >= 0 : i < queue.length) {
-        if (isEligibleToPlay(queue[i], settings)) return queue[i];
+        if (isEligibleToPlay(queue[i], Settings)) return queue[i];
         direction === "previous" ? i-- : i++;
     }
     return null;
@@ -49,13 +48,9 @@ export function findViableItem(direction) {
 export function findViableItemsAhead(count) {
     const queue = get(NowPlayingQueue);
     const index = get(NowPlayingIndex);
-    const settings = Settings.current;
+    const settings = Settings;
     const result = [];
-    for (
-        let i = index + 1;
-        i < queue.length && result.length < count;
-        i++
-    ) {
+    for (let i = index + 1; i < queue.length && result.length < count; i++) {
         if (isEligibleToPlay(queue[i], settings)) result.push(queue[i]);
     }
     return result;
@@ -63,7 +58,7 @@ export function findViableItemsAhead(count) {
 
 export function hasEligibleItems() {
     const queue = get(NowPlayingQueue);
-    const settings = Settings.current;
+    const settings = Settings;
     return queue.some((item) => isEligibleToPlay(item, settings));
 }
 

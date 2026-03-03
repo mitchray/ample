@@ -10,7 +10,7 @@
     function handleClickOutside() {
         if (siteQueueBind?.classList.contains("is-drawer")) {
             let status = false;
-            Settings.current.QueueIsOpen = status;
+            Settings.QueueIsOpen = status;
         }
     }
 </script>
@@ -18,8 +18,8 @@
 <div
     bind:this={siteQueueBind}
     class="site-queue"
-    class:is-drawer={!Settings.current.QueueIsPinned}
-    class:is-open={Settings.current.QueueIsOpen}
+    class:is-drawer={!Settings.QueueIsPinned}
+    class:is-open={Settings.QueueIsOpen}
     onclickedOutside={handleClickOutside}
     use:clickOutsideDetector={{
         toggle: "#queue-button",

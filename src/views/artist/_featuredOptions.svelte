@@ -4,12 +4,12 @@
 
     function handleShowSongs(e) {
         let val = e.target.value;
-        Settings.current.ShowSongsByOtherArtists = val;
+        Settings.ShowSongsByOtherArtists = val;
     }
 
     function handlePlaySongs(e) {
         let val = e.target.value;
-        Settings.current.PlaySongsByOtherArtists = val;
+        Settings.PlaySongsByOtherArtists = val;
     }
 </script>
 
@@ -25,7 +25,7 @@
             onsl-change={(e) => {
                 handleShowSongs(e);
             }}
-            value={Settings.current.ShowSongsByOtherArtists}
+            value={Settings.ShowSongsByOtherArtists}
         >
             <sl-radio-button value="show">Show</sl-radio-button>
             <sl-radio-button value="highlight">
@@ -42,7 +42,7 @@
             onsl-change={(e) => {
                 handlePlaySongs(e);
             }}
-            value={Settings.current.PlaySongsByOtherArtists}
+            value={Settings.PlaySongsByOtherArtists}
         >
             <sl-radio-button value="include">Include</sl-radio-button>
             <sl-radio-button value="exclude">Skip</sl-radio-button>
@@ -50,10 +50,10 @@
     </sl-card>
 </sl-dropdown>
 
-{#if Settings.current.ShowSongsByOtherArtists === "hide"}
+{#if Settings.ShowSongsByOtherArtists === "hide"}
     <sl-badge variant="neutral">Hiding songs by other artists</sl-badge>
 {/if}
 
-{#if Settings.current.PlaySongsByOtherArtists === "exclude"}
+{#if Settings.PlaySongsByOtherArtists === "exclude"}
     <sl-badge variant="neutral">Skipping songs by other artists</sl-badge>
 {/if}

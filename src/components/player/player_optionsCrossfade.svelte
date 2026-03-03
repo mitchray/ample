@@ -4,11 +4,11 @@
     import MaterialSymbol from "~/components/materialSymbol.svelte";
 
     function handleDuration(e) {
-        Settings.current.Crossfade.duration = e.target.value;
+        Settings.Crossfade.duration = e.target.value;
     }
 
     function handleMode(e) {
-        Settings.current.Crossfade.mode = e.target.value;
+        Settings.Crossfade.mode = e.target.value;
     }
 </script>
 
@@ -16,7 +16,7 @@
     <sl-radio-group
         label={$_("text.mode")}
         name="mode"
-        value={Settings.current.Crossfade?.mode}
+        value={Settings.Crossfade?.mode}
         onsl-change={(e) => handleMode(e)}
     >
         <sl-radio-button value="disabled">
@@ -28,7 +28,7 @@
         </sl-radio-button>
     </sl-radio-group>
 
-    {#if Settings.current.Crossfade?.mode === "crossfade"}
+    {#if Settings.Crossfade?.mode === "crossfade"}
         <div class="duration-container">
             <sl-range
                 label={$_("text.crossfadeDuration")}
@@ -36,13 +36,13 @@
                 max="30"
                 step="1"
                 onsl-change={(e) => handleDuration(e)}
-                value={Settings.current.Crossfade?.duration}
+                value={Settings.Crossfade?.duration}
             ></sl-range>
-            {Settings.current.Crossfade?.duration}
+            {Settings.Crossfade?.duration}
         </div>
     {/if}
 
-    {#if Settings.current.Crossfade?.mode === "gapless"}
+    {#if Settings.Crossfade?.mode === "gapless"}
         <sl-alert open variant="primary">
             <MaterialSymbol name="asterisk" size="1.5em" slot="icon" />
             Gapless is simulated by slightly overlapping items due to technical limitations.

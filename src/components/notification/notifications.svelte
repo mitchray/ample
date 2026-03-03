@@ -75,20 +75,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.AlternateVersions
+                        checked={Settings.Notifications.AlternateVersions
                             .isEnabled}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.AlternateVersions.isEnabled =
+                            Settings.Notifications.AlternateVersions.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.AlternateVersions
+                        checked={Settings.Notifications.AlternateVersions
                             .isSilent}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.AlternateVersions.isSilent =
+                            Settings.Notifications.AlternateVersions.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -109,20 +109,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.GainTagsMissing
+                        checked={Settings.Notifications.GainTagsMissing
                             .isEnabled}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.GainTagsMissing.isEnabled =
+                            Settings.Notifications.GainTagsMissing.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.GainTagsMissing
+                        checked={Settings.Notifications.GainTagsMissing
                             .isSilent}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.GainTagsMissing.isSilent =
+                            Settings.Notifications.GainTagsMissing.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -143,19 +143,19 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.RatingMissing
+                        checked={Settings.Notifications.RatingMissing
                             .isEnabled}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.RatingMissing.isEnabled =
+                            Settings.Notifications.RatingMissing.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.RatingMissing.isSilent}
+                        checked={Settings.Notifications.RatingMissing.isSilent}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.RatingMissing.isSilent =
+                            Settings.Notifications.RatingMissing.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -176,19 +176,19 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.LyricsMissing
+                        checked={Settings.Notifications.LyricsMissing
                             .isEnabled}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.LyricsMissing.isEnabled =
+                            Settings.Notifications.LyricsMissing.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.LyricsMissing.isSilent}
+                        checked={Settings.Notifications.LyricsMissing.isSilent}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.LyricsMissing.isSilent =
+                            Settings.Notifications.LyricsMissing.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>
@@ -209,20 +209,20 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.LyricsNotTimestamped
+                        checked={Settings.Notifications.LyricsNotTimestamped
                             .isEnabled}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.LyricsNotTimestamped.isEnabled =
+                            Settings.Notifications.LyricsNotTimestamped.isEnabled =
                                 e.target.checked;
                         }}
                     ></sl-switch>
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.current.Notifications.LyricsNotTimestamped
+                        checked={Settings.Notifications.LyricsNotTimestamped
                             .isSilent}
                         onsl-change={(e) => {
-                            Settings.current.Notifications.LyricsNotTimestamped.isSilent =
+                            Settings.Notifications.LyricsNotTimestamped.isSilent =
                                 e.target.checked;
                         }}
                     ></sl-switch>

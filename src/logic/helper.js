@@ -147,9 +147,9 @@ export function filterBelow(arr) {
     let originalCount = arr.length;
 
     // if length is 1 let's assume we want to play that item regardless of rating
-    if (arr.length > 1 && Settings.current.SkipBelow.enabled) {
+    if (arr.length > 1 && Settings.SkipBelow.enabled) {
         arr = arr.filter(
-            (item) => item.rating >= Settings.current.SkipBelow.rating,
+            (item) => item.rating >= Settings.SkipBelow.rating,
         );
     }
 
@@ -160,7 +160,7 @@ export function filterBelow(arr) {
             title: get(_)("text.skippedItemsBelow", {
                 values: {
                     itemCount: filteredCount,
-                    starCount: Settings.current.SkipBelow.rating,
+                    starCount: Settings.SkipBelow.rating,
                 },
             }),
             style: "info",

@@ -7,36 +7,36 @@
     async function handleSkipBelow(e) {
         await tick();
         let newValue = e.target.checked;
-        Settings.current.SkipBelow.enabled = newValue;
+        Settings.SkipBelow.enabled = newValue;
     }
 
     async function handleSkipBelowRating(e) {
         await tick();
         let newValue = e.target.value;
-        Settings.current.SkipBelow.rating = newValue;
+        Settings.SkipBelow.rating = newValue;
     }
 
     async function handleAllowZero(e) {
         await tick();
         let newValue = e.target.checked;
-        Settings.current.SkipBelow.allowZero = newValue;
+        Settings.SkipBelow.allowZero = newValue;
     }
 </script>
 
 <sl-dropdown hoist placement="bottom">
     <sl-button
         class="rating-filter"
-        class:is-enabled={Settings.current.SkipBelow.enabled}
+        class:is-enabled={Settings.SkipBelow.enabled}
         size="small"
         slot="trigger"
         title={$_("text.skipBelow")}
     >
-        <MaterialSymbol fill={Settings.current.SkipBelow.enabled} name="star" />
+        <MaterialSymbol fill={Settings.SkipBelow.enabled} name="star" />
     </sl-button>
 
     <sl-card>
         <sl-switch
-            checked={Settings.current.SkipBelow.enabled}
+            checked={Settings.SkipBelow.enabled}
             onsl-change={handleSkipBelow}
         >
             {$_("text.skipBelow")}:
@@ -44,7 +44,7 @@
 
         <sl-select
             onsl-change={handleSkipBelowRating}
-            value={Settings.current.SkipBelow.rating}
+            value={Settings.SkipBelow.rating}
         >
             <sl-option value="5">
                 {$_("text.ratingCount", { values: { count: 5 } })}
@@ -61,7 +61,7 @@
         </sl-select>
 
         <sl-switch
-            checked={Settings.current.SkipBelow.allowZero}
+            checked={Settings.SkipBelow.allowZero}
             onsl-change={handleAllowZero}
         >
             {$_("text.allowUnrated")}

@@ -57,7 +57,7 @@
                     username: username,
                 });
             }
-            Settings.current.LastLoginMethod = currentTab;
+            Settings.LastLoginMethod = currentTab;
         } catch (e) {
             fatalError = true;
         } finally {
@@ -96,7 +96,7 @@
     }
 
     onMount(async () => {
-        lastUsedTab = Settings.current.LastLoginMethod;
+        lastUsedTab = Settings.LastLoginMethod;
         currentTab = lastUsedTab || "username";
         await tick();
         hideLoadingOverlay();

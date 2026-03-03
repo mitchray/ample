@@ -71,7 +71,7 @@ class Player {
         this.abortController = new AbortController();
 
         // Initial state from stores (component $effect will keep in sync)
-        this.syncSettings(Settings.current);
+        this.syncSettings(Settings);
         this.nowPlayingQueue = get(NowPlayingQueue);
         this.nowPlayingIndex = get(NowPlayingIndex);
         this.setPlaybackRate(get(PlaybackSpeed));
@@ -103,7 +103,7 @@ class Player {
     }
 
     /**
-     * Sync settings from Settings.current (called from component $effect).
+     * Sync settings from Settings (called from component $effect).
      */
     syncSettings(s) {
         if (!s) return;
@@ -588,7 +588,7 @@ class Player {
     }
 
     updateFilters() {
-        const currentGainMode = Settings.current.GainMode ?? "track";
+        const currentGainMode = Settings.GainMode ?? "track";
         const tagGainValue = gain.resolveGainMode(
             this.currentMedia,
             currentGainMode,

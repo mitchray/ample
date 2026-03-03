@@ -17,11 +17,11 @@
     });
 
     let effectiveMode = $derived(
-        Settings.current.Theme.mode === "system"
+        Settings.Theme.mode === "system"
             ? systemPrefersDark
                 ? "dark"
                 : "light"
-            : Settings.current.Theme.mode,
+            : Settings.Theme.mode,
     );
 
     let themeMode = $derived(capitalize(effectiveMode) || null);
@@ -41,20 +41,20 @@
     });
 
     $effect(() => {
-        (Settings.current.Theme, handleChange());
+        (Settings.Theme, handleChange());
     });
 </script>
 
 {@html `<style>
 :root {
-    --user-hue-background: ${Settings.current.Theme[themeMode]?.hueBackground};
-    --user-hue-accent-1: ${Settings.current.Theme[themeMode]?.hue1};
-    --user-hue-accent-2: ${Settings.current.Theme[themeMode]?.hue2};
-    --user-color-waveform: ${Settings.current.Theme[themeMode]?.colorWave};
+    --user-hue-background: ${Settings.Theme[themeMode]?.hueBackground};
+    --user-hue-accent-1: ${Settings.Theme[themeMode]?.hue1};
+    --user-hue-accent-2: ${Settings.Theme[themeMode]?.hue2};
+    --user-color-waveform: ${Settings.Theme[themeMode]?.colorWave};
 }
 </style>`}
 
-{#if Settings.current.Theme[themeMode]?.isGray}
+{#if Settings.Theme[themeMode]?.isGray}
     {@html `<style>
 :root {
     --chroma-override: 0.008;

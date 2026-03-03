@@ -44,8 +44,8 @@
 
     $effect(() => {
         if (!$MediaPlayer) return;
-        Settings.current;
-        $MediaPlayer.syncSettings(Settings.current);
+        Settings;
+        $MediaPlayer.syncSettings(Settings);
     });
 
     $effect(() => {
@@ -72,9 +72,9 @@
     bind:clientHeight={currentHeight}
     bind:this={$SitePlayerBind}
     class="site-player"
-    class:is-expanded={!Settings.current.PlayerIsMini}
+    class:is-expanded={!Settings.PlayerIsMini}
     class:visualizer-open={$ShowVisualizer}
-    class:queue-open={Settings.current.QueueIsOpen}
+    class:queue-open={Settings.QueueIsOpen}
     style:height="auto"
 >
     <QueueToggle />

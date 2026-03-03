@@ -11,13 +11,13 @@
     let compressor = $derived($MediaPlayer?.getMasterCompressor?.() ?? null);
 
     function handleGainMode(e) {
-        Settings.current.GainMode = e.target.value;
+        Settings.GainMode = e.target.value;
         $MediaPlayer.updateFilters();
     }
 
     function handleDynamicsCompressor(e) {
         let setting = e.target.checked;
-        Settings.current.DynamicsCompressorEnabled = setting;
+        Settings.DynamicsCompressorEnabled = setting;
         $MediaPlayer.updateFilters();
     }
 
@@ -43,7 +43,7 @@
 </script>
 
 <sl-select
-    value={Settings.current.GainMode ?? "track"}
+    value={Settings.GainMode ?? "track"}
     on:sl-change={handleGainMode}
     label={$_("text.volumeNormalize")}
 >
@@ -92,7 +92,7 @@
 <sl-divider></sl-divider>
 
 <sl-checkbox
-    checked={Settings.current.DynamicsCompressorEnabled}
+    checked={Settings.DynamicsCompressorEnabled}
     on:sl-change={handleDynamicsCompressor}
 >
     {$_("text.volumeNightMode")}

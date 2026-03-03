@@ -31,8 +31,8 @@
     }
 
     function togglePinned() {
-        let inverted = !Settings.current.QueueIsPinned;
-        Settings.current.QueueIsPinned = inverted;
+        let inverted = !Settings.QueueIsPinned;
+        Settings.QueueIsPinned = inverted;
     }
 
     function expandPanel() {
@@ -100,7 +100,7 @@
                         togglePinned();
                     }}
                 >
-                    {#if Settings.current.QueueIsPinned}
+                    {#if Settings.QueueIsPinned}
                         {$_("text.queueUnpin")}
                     {:else}
                         {$_("text.queuePin")}

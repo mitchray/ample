@@ -23,8 +23,8 @@ export async function login({ auth }) {
         isLoggedIn: true,
     });
 
-    Settings.current = {
-        ...Settings.current,
+    Settings.__source = {
+        ...Settings.__source,
         LastSession: {
             token: auth,
             time: Date.now(),
@@ -49,8 +49,8 @@ export function logout() {
         get(API).goodbye({ auth: token });
     }
 
-    Settings.current = {
-        ...Settings.current,
+    Settings.__source = {
+        ...Settings.__source,
         LastSession: null,
     };
 
@@ -87,7 +87,7 @@ export async function validateSession() {
     }
 
     let guestUserAPIKey = get(Server).guestUserAPIKey;
-    let ampleLastSession = Settings.current.LastSession;
+    let ampleLastSession = Settings.LastSession;
     let finalToken = ampleLastSession?.token || guestUserAPIKey;
 
     if (!finalToken) {

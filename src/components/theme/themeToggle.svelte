@@ -6,9 +6,9 @@
 </script>
 
 <sl-select
-    value={Settings.current.Theme.mode}
+    value={Settings.Theme.mode}
     onsl-change={(e) => {
-        Settings.current.Theme.mode = e.target.value;
+        Settings.Theme.mode = e.target.value;
     }}
 >
     <sl-option value="light">

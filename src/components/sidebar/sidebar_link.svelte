@@ -8,7 +8,7 @@
 
 <sl-tooltip
     content={label}
-    disabled={Settings.current.SidebarIsExpanded}
+    disabled={Settings.SidebarIsExpanded}
     hoist
     placement="right"
 >

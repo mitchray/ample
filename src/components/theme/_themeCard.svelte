@@ -14,8 +14,8 @@
     class="container c-theme-card sl-theme-{mode}"
     data-uid={contextKey}
     onclick={() => {
-        Settings.current.Theme.mode = mode;
-        Settings.current.Theme[capitalize(mode)] = {
+        Settings.Theme.mode = mode;
+        Settings.Theme[capitalize(mode)] = {
             colorWave: colors.colorWave,
             hue1: colors.hue1,
             hue2: colors.hue2,

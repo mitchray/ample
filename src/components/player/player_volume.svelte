@@ -19,7 +19,7 @@
 
         clearTimeout(debounceTimer);
         debounceTimer = setTimeout(() => {
-            Settings.current.PlayerVolume = val;
+            Settings.PlayerVolume = val;
         }, 300);
     }
 
@@ -45,7 +45,7 @@
     min="0"
     max="100"
     step="1"
-    value={Settings.current.PlayerVolume}
+    value={Settings.PlayerVolume}
     onsl-input={handleVolumeInput}
 ></sl-range>
 

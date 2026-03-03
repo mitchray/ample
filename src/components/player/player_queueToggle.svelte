@@ -7,8 +7,8 @@
     import { tick } from "svelte";
 
     async function handleQueueToggle() {
-        let inverted = !Settings.current.QueueIsOpen;
-        Settings.current.QueueIsOpen = inverted;
+        let inverted = !Settings.QueueIsOpen;
+        Settings.QueueIsOpen = inverted;
 
         if (inverted === true) {
             await tick();
@@ -18,7 +18,7 @@
 </script>
 
 <sl-tooltip
-    content={Settings.current.QueueIsOpen
+    content={Settings.QueueIsOpen
         ? $_("text.queueHide")
         : $_("text.queueShow")}
     placement="left"

@@ -110,23 +110,32 @@ const initialSettings = {
     },
 };
 
-let current = $state(merge({}, initialSettings, getStoredSettings() || {}));
+let __source = $state(merge({}, initialSettings, getStoredSettings() || {}));
 
 export function persistSettingsToStorage() {
     if (typeof localStorage === "undefined") return;
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(__source));
 }
 
 export const INITIAL_ARTIST_RELEASES = { ...initialSettings.ArtistReleases };
 
-export const Settings = {
-    get current() {
-        return current;
+export const Settings = new Proxy(
+    {},
+    {
+        get(_, key) {
+            if (key === "__source") return __source;
+            return __source[key];
+        },
+        set(_, key, value) {
+            if (key === "__source") {
+                __source = value;
+                return true;
+            }
+            __source[key] = value;
+            return true;
+        },
     },
-    set current(value) {
-        current = value;
-    },
-};
+);
 
 export async function loadSettings() {
     let systemsPrefsResponse = await get(API).systemPreferences();
@@ -135,7 +144,7 @@ export async function loadSettings() {
     let userPrefsResponse = await get(API).userPreferences();
     UserPreferences.set(userPrefsResponse.preference);
 
-    let lang = Settings.current.Language;
+    let lang = Settings.Language;
     if (lang) {
         locale.set(lang);
         setTabulatorLang(lang);

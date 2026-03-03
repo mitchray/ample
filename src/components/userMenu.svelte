@@ -23,7 +23,7 @@
                 slot="prefix"
             ></sl-avatar>
 
-            {#if Settings.current.SidebarIsExpanded}
+            {#if Settings.SidebarIsExpanded}
                 {$User.username}
             {/if}
         {:else}

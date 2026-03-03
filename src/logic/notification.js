@@ -27,7 +27,7 @@ export function removeNotification(id) {
 }
 
 export function addGainTagsMissingNotification(data) {
-    if (!Settings.current.Notifications.GainTagsMissing.isEnabled || !data) {
+    if (!Settings.Notifications.GainTagsMissing.isEnabled || !data) {
         return;
     }
 
@@ -36,14 +36,14 @@ export function addGainTagsMissingNotification(data) {
         type: "gainTagsMissing",
         style: "warning",
         data: data,
-        isSilent: Settings.current.Notifications.GainTagsMissing.isSilent,
+        isSilent: Settings.Notifications.GainTagsMissing.isSilent,
     };
 
     addNotification(settings);
 }
 
 export function addRatingMissingNotification(data) {
-    if (!Settings.current.Notifications.RatingMissing.isEnabled || !data) {
+    if (!Settings.Notifications.RatingMissing.isEnabled || !data) {
         return;
     }
 
@@ -52,7 +52,7 @@ export function addRatingMissingNotification(data) {
         type: "ratingMissing",
         style: "warning",
         data: data,
-        isSilent: Settings.current.Notifications.RatingMissing.isSilent,
+        isSilent: Settings.Notifications.RatingMissing.isSilent,
     };
 
     get(API)
@@ -65,7 +65,7 @@ export function addRatingMissingNotification(data) {
 }
 
 export function addAlternateVersionsNotification(data) {
-    if (!Settings.current.Notifications.AlternateVersions.isEnabled || !data) {
+    if (!Settings.Notifications.AlternateVersions.isEnabled || !data) {
         return;
     }
 
@@ -76,14 +76,14 @@ export function addAlternateVersionsNotification(data) {
         type: "alternateVersions",
         style: "info",
         data: data,
-        isSilent: Settings.current.Notifications.AlternateVersions.isSilent,
+        isSilent: Settings.Notifications.AlternateVersions.isSilent,
     };
 
     addNotification(settings);
 }
 
 export function addLyricsMissingNotification(data) {
-    if (!Settings.current.Notifications.LyricsMissing.isEnabled || !data) {
+    if (!Settings.Notifications.LyricsMissing.isEnabled || !data) {
         return;
     }
 
@@ -92,14 +92,14 @@ export function addLyricsMissingNotification(data) {
         type: "lyricsMissing",
         style: "warning",
         data: data,
-        isSilent: Settings.current.Notifications.LyricsMissing.isSilent,
+        isSilent: Settings.Notifications.LyricsMissing.isSilent,
     };
 
     addNotification(settings);
 }
 
 export function addLyricsNotTimestampedNotification(data) {
-    if (!Settings.current.Notifications.LyricsNotTimestamped.isEnabled || !data) {
+    if (!Settings.Notifications.LyricsNotTimestamped.isEnabled || !data) {
         return;
     }
 
@@ -108,7 +108,7 @@ export function addLyricsNotTimestampedNotification(data) {
         type: "lyricsMissingTimestamps",
         style: "warning",
         data: data,
-        isSilent: Settings.current.Notifications.LyricsNotTimestamped.isSilent,
+        isSilent: Settings.Notifications.LyricsNotTimestamped.isSilent,
     };
 
     addNotification(settings);

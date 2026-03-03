@@ -7,7 +7,7 @@
 
 <div
     class="site-sidebar"
-    class:is-mini={!Settings.current.SidebarIsExpanded}
+    class:is-mini={!Settings.SidebarIsExpanded}
     data-testid="sidebar"
 >
     <div class="start">

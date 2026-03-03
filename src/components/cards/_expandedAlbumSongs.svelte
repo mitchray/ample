@@ -69,7 +69,7 @@
 <QueryError {query} />
 
 {#each disksToRender as disk}
-    {#if query.isSuccess && Settings.current.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
+    {#if query.isSuccess && Settings.ShowSongsByOtherArtists === "hide" && filterToArtistID && disk.doesNotContainArtist}
         <!-- Hide this disk-->
     {:else}
         <div class="disk">
@@ -83,10 +83,10 @@
                         <li
                             class:not-by-artist={song.doesNotContainArtist}
                             class:hide={filterToArtistID &&
-                                Settings.current.ShowSongsByOtherArtists ===
+                                Settings.ShowSongsByOtherArtists ===
                                     "hide"}
                             class:highlight={filterToArtistID &&
-                                Settings.current.ShowSongsByOtherArtists ===
+                                Settings.ShowSongsByOtherArtists ===
                                     "highlight"}
                         >
                             <div class="top">
@@ -135,7 +135,7 @@
                     {/each}
                 </ul>
             {:else}
-                {#key Settings.current.ShowSongsByOtherArtists || 0}
+                {#key Settings.ShowSongsByOtherArtists || 0}
                     {#if disks.length > 1}
                         <Actions
                             type="songs"
@@ -148,7 +148,7 @@
 
                     <Tabulator
                         bind:tabulator
-                        data={Settings.current.ShowSongsByOtherArtists ===
+                        data={Settings.ShowSongsByOtherArtists ===
                             "hide" && filterToArtistID
                             ? disk.songsByArtist
                             : disk.songs}
@@ -157,7 +157,7 @@
                         options={{
                             rowFormatter: function (row) {
                                 if (
-                                    Settings.current.ShowSongsByOtherArtists ===
+                                    Settings.ShowSongsByOtherArtists ===
                                         "highlight" &&
                                     filterToArtistID &&
                                     row.getData().doesNotContainArtist

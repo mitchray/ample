@@ -29,7 +29,7 @@
     let smartlistsLoaded = $state(false);
 
     function onPlaylistSelect(id) {
-        if (id) Settings.current.QueueRefill.smartlist = id;
+        if (id) Settings.QueueRefill.smartlist = id;
     }
 
     // Provide the playlists store to selector
@@ -49,14 +49,14 @@
                 let apiCall;
 
                 if (
-                    Settings.current.QueueRefill.mode === "smartlist" &&
+                    Settings.QueueRefill.mode === "smartlist" &&
                     activePlaylist
                 ) {
                     apiCall = $API.playlistSongs({
                         filter: activePlaylist,
                         limit: 100,
                     });
-                } else if (Settings.current.QueueRefill.mode === "mix") {
+                } else if (Settings.QueueRefill.mode === "mix") {
                     let lastItem =
                         $NowPlayingQueue[$NowPlayingQueue.length - 1];
                     let artistID = lastItem.artist?.id;
@@ -106,12 +106,12 @@
     }
 
     function toggleEnabled() {
-        Settings.current.QueueRefill.enabled =
-            !Settings.current.QueueRefill.enabled;
+        Settings.QueueRefill.enabled =
+            !Settings.QueueRefill.enabled;
     }
 
     function handleMode(e) {
-        Settings.current.QueueRefill.mode = e.target.value;
+        Settings.QueueRefill.mode = e.target.value;
     }
 
     async function handleRefresh() {
@@ -147,14 +147,14 @@
     }
 
     let shouldAddToQueue = $derived(
-        Settings.current.QueueRefill.enabled && // jukebox is enabled
+        Settings.QueueRefill.enabled && // jukebox is enabled
             $JukeboxQueue.length > 0 && // there are jukebox items to play
             $CurrentMedia && // just to trigger reactivity
             !$MediaPlayer?.findViableItem("next"), // need another eligible item
     );
 
     let shouldRefillJukebox = $derived(
-        Settings.current.QueueRefill.enabled && // jukebox is enabled
+        Settings.QueueRefill.enabled && // jukebox is enabled
             $NowPlayingQueue.length > 0 && // items are in queue
             $NowPlayingIndex > $NowPlayingQueue.length - 5 && // approaching end of queue
             $JukeboxQueue.length < 10, // not many items in jukebox
@@ -162,8 +162,8 @@
 
     $effect(() => {
         if (
-            !Settings.current.QueueRefill.enabled ||
-            Settings.current.QueueRefill.mode
+            !Settings.QueueRefill.enabled ||
+            Settings.QueueRefill.mode
         ) {
             clearQueue();
         }
@@ -171,9 +171,9 @@
 
     $effect(() => {
         // test the saved smartlist does exist
-        if ($User.isLoggedIn && Settings.current.QueueRefill.smartlist) {
+        if ($User.isLoggedIn && Settings.QueueRefill.smartlist) {
             $API.playlist({
-                filter: Settings.current.QueueRefill.smartlist,
+                filter: Settings.QueueRefill.smartlist,
             }).then((result) => {
                 if (result.error) {
                     errorHandler(
@@ -223,14 +223,14 @@
         playlists.set(list);
 
         let initialIndex = list.findIndex(
-            (p) => p.id === Settings.current.QueueRefill.smartlist,
+            (p) => p.id === Settings.QueueRefill.smartlist,
         );
 
         if (initialIndex !== -1) {
             selectedPlaylists.set([list[initialIndex]]);
         } else if (list.length > 0) {
             selectedPlaylists.set([list[0]]);
-            Settings.current.QueueRefill.smartlist = list[0].id;
+            Settings.QueueRefill.smartlist = list[0].id;
         }
 
         smartlistsLoaded = true;
@@ -254,7 +254,7 @@
     </div>
 
     <sl-switch
-        checked={Settings.current.QueueRefill.enabled}
+        checked={Settings.QueueRefill.enabled}
         onsl-change={toggleEnabled}
     ></sl-switch>
 
@@ -272,7 +272,7 @@
                 <sl-radio-group
                     name="mode"
                     onsl-change={handleMode}
-                    value={Settings.current.QueueRefill.mode}
+                    value={Settings.QueueRefill.mode}
                 >
                     <sl-radio-button
                         value="smartlist"
@@ -287,7 +287,7 @@
                     </sl-radio-button>
                 </sl-radio-group>
 
-                {#if Settings.current.QueueRefill.mode === "smartlist"}
+                {#if Settings.QueueRefill.mode === "smartlist"}
                     <div class="secondary-info">
                         {$_("text.queueRefillSmartlist")}
                     </div>

@@ -7,7 +7,7 @@
         e.preventDefault();
         let newLanguage = e.target.value;
         locale.set(newLanguage);
-        Settings.current.Language = newLanguage;
+        Settings.Language = newLanguage;
 
         // update Tabulator instances
         setTabulatorLang(newLanguage);

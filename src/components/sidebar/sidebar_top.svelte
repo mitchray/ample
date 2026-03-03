@@ -7,8 +7,8 @@
     import Notifications from "~/components/notification/notifications.svelte";
 
     function handleSidebarToggle() {
-        let inverted = !Settings.current.SidebarIsExpanded;
-        Settings.current.SidebarIsExpanded = inverted;
+        let inverted = !Settings.SidebarIsExpanded;
+        Settings.SidebarIsExpanded = inverted;
     }
 
     function handleOpenSearch() {
@@ -26,7 +26,7 @@
     content={$_("text.search")}
     hoist
     placement="right"
-    disabled={Settings.current.SidebarIsExpanded}
+    disabled={Settings.SidebarIsExpanded}
 >
     <sl-button
         id="search-button"

@@ -16,7 +16,7 @@ export function installCrossfade(player) {
         wavesurfer.envelopePlugin = null;
         wavesurfer.setVolume(1.0);
 
-        const settings = Settings.current;
+        const settings = Settings;
         const crossfadeEnabled = settings.Crossfade?.mode === "crossfade";
         const crossfadeDuration = settings.Crossfade?.duration ?? 6;
 

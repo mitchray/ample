@@ -80,9 +80,9 @@
 
     $effect(() => {
         (media, retest());
-        (Settings.current.SkipBelow.enabled, retest());
-        (Settings.current.SkipBelow.rating, retest());
-        (Settings.current.SkipBelow.allowZero, retest());
+        (Settings.SkipBelow.enabled, retest());
+        (Settings.SkipBelow.rating, retest());
+        (Settings.SkipBelow.allowZero, retest());
     });
 </script>
 

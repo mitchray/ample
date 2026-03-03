@@ -227,7 +227,7 @@
 
         if (
             result.length > 1 &&
-            Settings.current.PlaySongsByOtherArtists === "exclude" &&
+            Settings.PlaySongsByOtherArtists === "exclude" &&
             filterToArtistID
         ) {
             result = result.filter((it) =>

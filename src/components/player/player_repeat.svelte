@@ -6,14 +6,14 @@
 </script>
 
 <sl-button
-    class:active={Settings.current.RepeatState !== "disabled"}
+    class:active={Settings.RepeatState !== "disabled"}
     onclick={() => $MediaPlayer.repeat()}
-    title={Settings.current.RepeatState === "repeat_one"
+    title={Settings.RepeatState === "repeat_one"
         ? $_("text.repeatOne")
         : $_("text.repeat")}
     variant="text"
 >
-    {#if Settings.current.RepeatState === "repeat_one"}
+    {#if Settings.RepeatState === "repeat_one"}
         <MaterialSymbol name="repeat_one_on" />
     {:else}
         <MaterialSymbol name="repeat" />

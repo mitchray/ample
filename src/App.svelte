@@ -29,7 +29,7 @@
     handleMigrations($ampleVersion);
 
     $effect(() => {
-        Settings.current;
+        Settings;
         persistSettingsToStorage();
     });
 

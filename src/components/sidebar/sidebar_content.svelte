@@ -16,8 +16,8 @@
         if (event.target === event.currentTarget) {
             let id = event.target.dataset.id;
             savedStatuses[id] = true;
-            Settings.current = {
-                ...Settings.current,
+            Settings.__source = {
+                ...Settings.__source,
                 SidebarStatuses: savedStatuses,
             };
         }
@@ -28,15 +28,15 @@
         if (event.target === event.currentTarget) {
             let id = event.target.dataset.id;
             savedStatuses[id] = false;
-            Settings.current = {
-                ...Settings.current,
+            Settings.__source = {
+                ...Settings.__source,
                 SidebarStatuses: savedStatuses,
             };
         }
     }
 
     onMount(async () => {
-        savedStatuses = Settings.current.SidebarStatuses || {};
+        savedStatuses = Settings.SidebarStatuses || {};
     });
 </script>
 

@@ -36,10 +36,10 @@
 
     const { releases, appearances } = $derived.by(() => {
         let sorted = sortBy(artistAlbums, [
-            Settings.current.ArtistReleases.sort,
+            Settings.ArtistReleases.sort,
         ]);
 
-        if (Settings.current.ArtistReleases.sortReversed) {
+        if (Settings.ArtistReleases.sortReversed) {
             sorted.reverse();
         }
 
@@ -47,7 +47,7 @@
 
         let groupMethod;
 
-        switch (Settings.current.ArtistReleases.group) {
+        switch (Settings.ArtistReleases.group) {
             case "name":
                 groupMethod = (item) => item.name.charAt(0).toUpperCase();
                 break;
@@ -76,12 +76,12 @@
         });
 
         // also reverse the groups if needed
-        if (Settings.current.ArtistReleases.sortReversed) {
+        if (Settings.ArtistReleases.sortReversed) {
             grouped.reverse();
         }
 
         // reorder the groups to match the order set in preference
-        if (Settings.current.ArtistReleases.group === "release_type") {
+        if (Settings.ArtistReleases.group === "release_type") {
             let arr = ($releaseTypesOrder ?? "").split(",");
 
             grouped.sort(function (a, b) {
@@ -100,7 +100,7 @@
     });
 
     const flatReleasesForTable = $derived.by(() => {
-        if (Settings.current.ArtistReleases.group !== "none") {
+        if (Settings.ArtistReleases.group !== "none") {
             return releases.flatMap(([key, items]) =>
                 items.map((item) => ({ ...item, _groupKey: key })),
             );
@@ -109,8 +109,8 @@
     });
 
     $effect(() => {
-        if (!Settings.current.ArtistReleases) {
-            Settings.current.ArtistReleases = { ...INITIAL_ARTIST_RELEASES };
+        if (!Settings.ArtistReleases) {
+            Settings.ArtistReleases = { ...INITIAL_ARTIST_RELEASES };
         }
     });
 </script>
@@ -123,8 +123,8 @@
             <sl-select
                 label="Display"
                 onsl-change={(e) =>
-                    (Settings.current.ArtistReleases.view = e.target.value)}
-                value={Settings.current.ArtistReleases.view}
+                    (Settings.ArtistReleases.view = e.target.value)}
+                value={Settings.ArtistReleases.view}
             >
                 <MaterialSymbol name="visibility" slot="prefix" />
                 <sl-option value="table">Table</sl-option>
@@ -139,9 +139,9 @@
                     clearable
                     label="Sort"
                     onsl-change={(e) =>
-                        (Settings.current.ArtistReleases.sort = e.target.value)}
+                        (Settings.ArtistReleases.sort = e.target.value)}
                     placeholder="None"
-                    value={Settings.current.ArtistReleases.sort}
+                    value={Settings.ArtistReleases.sort}
                 >
                     <MaterialSymbol name="sort" slot="prefix" />
                     <sl-option value="name">Name</sl-option>
@@ -153,10 +153,10 @@
                 <sl-tooltip content="Direction">
                     <sl-button
                         onclick={() =>
-                            (Settings.current.ArtistReleases.sortReversed =
-                                !Settings.current.ArtistReleases.sortReversed)}
+                            (Settings.ArtistReleases.sortReversed =
+                                !Settings.ArtistReleases.sortReversed)}
                     >
-                        {#if Settings.current.ArtistReleases.sortReversed}
+                        {#if Settings.ArtistReleases.sortReversed}
                             <MaterialSymbol name="arrow_downward" />
                         {:else}
                             <MaterialSymbol name="arrow_upward" />
@@ -169,9 +169,9 @@
                 clearable
                 label="Grouping"
                 onsl-change={(e) =>
-                    (Settings.current.ArtistReleases.group = e.target.value)}
+                    (Settings.ArtistReleases.group = e.target.value)}
                 placeholder="None"
-                value={Settings.current.ArtistReleases.group}
+                value={Settings.ArtistReleases.group}
             >
                 <MaterialSymbol name="category" slot="prefix" />
                 <sl-option value="name">Name</sl-option>
@@ -184,13 +184,13 @@
 </sl-dropdown>
 
 <div class="releases">
-    {#if Settings.current.ArtistReleases.view === "table"}
+    {#if Settings.ArtistReleases.view === "table"}
         <div class="release-group">
             <RenderReleases
                 view="table"
                 items={flatReleasesForTable}
-                groupBy={Settings.current.ArtistReleases.group &&
-                Settings.current.ArtistReleases.group !== "none"
+                groupBy={Settings.ArtistReleases.group &&
+                Settings.ArtistReleases.group !== "none"
                     ? "_groupKey"
                     : null}
             />
@@ -200,7 +200,7 @@
     <QueryError {query} />
 
     {#if query.isSuccess}
-        {#if Settings.current.ArtistReleases.view !== "table" && releases.length > 0}
+        {#if Settings.ArtistReleases.view !== "table" && releases.length > 0}
             {#each releases as [group, items]}
                 <div class="release-group">
                     {#if releases.length > 0 && group !== "undefined"}
@@ -208,7 +208,7 @@
                     {/if}
 
                     <RenderReleases
-                        view={Settings.current.ArtistReleases.view}
+                        view={Settings.ArtistReleases.view}
                         {items}
                     />
                 </div>
@@ -224,7 +224,7 @@
                 </h3>
 
                 <RenderReleases
-                    view={Settings.current.ArtistReleases.view}
+                    view={Settings.ArtistReleases.view}
                     items={appearances}
                     filterToArtistID={artistID}
                 />
