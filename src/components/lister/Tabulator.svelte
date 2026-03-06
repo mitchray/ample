@@ -80,7 +80,7 @@
             columnDefaults: ColumnDefaults,
             data: data, //link data to table
             reactiveData: true, //enable data reactivity
-            layout: "fitColumns",
+            layout: "fitDataStretch",
             columns: columns, //define table columns
             movableColumns: true,
             headerSortElement: function (column, dir) {
