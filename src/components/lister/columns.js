@@ -73,7 +73,6 @@ export let checkbox = {
     resizable: false,
     headerHozAlign: "center",
     hozAlign: "center",
-    width: 30,
     minWidth: 30,
 };
 
@@ -85,7 +84,6 @@ export let moveHandle = {
     formatter: "handle",
     headerSort: false,
     resizable: false,
-    width: 30,
     minWidth: 30,
 };
 
@@ -95,7 +93,6 @@ export let moveHandleDisabled = {
     title: "",
     headerSort: false,
     resizable: false,
-    width: 30,
     minWidth: 30,
 };
 
@@ -105,7 +102,6 @@ export let index = {
     title: "№",
     hozAlign: "right",
     headerHozAlign: "right",
-    width: 50,
     minWidth: 50,
     sorter: "number",
     headerSortTristate: false,
@@ -118,7 +114,6 @@ export let track = {
     sorter: "number",
     hozAlign: "right",
     headerHozAlign: "right",
-    width: 50,
     minWidth: 50,
 };
 
