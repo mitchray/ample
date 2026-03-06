@@ -28,7 +28,7 @@
     let placeholderElement = null;
     let placeholderVisible = $state(true);
     let hidePlaceholderTimeout = null;
-    let bufferHeight = 30;
+    let bufferHeight = 0;
 
     function hidePlaceholder() {
         placeholderVisible = false;
