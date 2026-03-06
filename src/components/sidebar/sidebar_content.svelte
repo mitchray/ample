@@ -108,13 +108,13 @@
 
     <div class="items">
         <SidebarLink
-            activePath="/playlists"
+            activePath="/playlists?(\/(.*?))?"
             href="#/playlists"
             icon="queue_music"
             label={$_("text.playlists")}
         />
         <SidebarLink
-            activePath="/smartlists"
+            activePath="/smartlists?(\/(.*?))?"
             href="#/smartlists"
             icon="electric_bolt"
             label={$_("text.smartlists")}
