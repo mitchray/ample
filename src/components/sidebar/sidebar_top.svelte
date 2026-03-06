@@ -32,9 +32,10 @@
         id="search-button"
         onclick={handleOpenSearch}
         transition:fly
+        variant="text"
         disabled={$ShowSearch}
     >
-        <MaterialSymbol name="search" slot="prefix" />
+        <MaterialSymbol name="search" />
     </sl-button>
 </sl-tooltip>
 

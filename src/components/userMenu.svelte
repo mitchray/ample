@@ -95,8 +95,8 @@
     }
 
     :global(.site-sidebar.is-mini) .user-details {
-        transform: translateX(-2px);
-        display: inline-flex;
+        transform: translateX(-9px);
+        /* display: inline-flex; */
     }
 
     .meta {

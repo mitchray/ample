@@ -14,19 +14,20 @@
 </script>
 
 <sl-dropdown hoist placement="top-end">
-    <div slot="trigger">
-        <sl-button class="main-button" variant="text">
+    <sl-tooltip
+        slot="trigger"
+        content={$_("text.notifications")}
+        hoist
+        placement="right"
+        disabled={Settings.SidebarIsExpanded}
+    >
+        <sl-button variant="text">
             <MaterialSymbol
                 name="notifications"
-                slot="prefix"
                 fill={$Notifications.length > 0 ? 1 : 0}
             />
-
-            <span class="counter">
-                {$Notifications.length}
-            </span>
         </sl-button>
-    </div>
+    </sl-tooltip>
 
     <sl-card>
         <div class="header" slot="header">
@@ -143,8 +144,7 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.Notifications.RatingMissing
-                            .isEnabled}
+                        checked={Settings.Notifications.RatingMissing.isEnabled}
                         onsl-change={(e) => {
                             Settings.Notifications.RatingMissing.isEnabled =
                                 e.target.checked;
@@ -176,8 +176,7 @@
                 </div>
                 <div class="checkbox">
                     <sl-switch
-                        checked={Settings.Notifications.LyricsMissing
-                            .isEnabled}
+                        checked={Settings.Notifications.LyricsMissing.isEnabled}
                         onsl-change={(e) => {
                             Settings.Notifications.LyricsMissing.isEnabled =
                                 e.target.checked;
@@ -266,14 +265,6 @@
 
     .clear-notifications {
         margin-inline-end: auto;
-    }
-
-    .main-button::part(label) {
-        padding-inline-start: var(--spacing-sm);
-    }
-
-    .counter {
-        display: flex;
     }
 
     .header {
