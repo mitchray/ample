@@ -33,10 +33,14 @@
     let containerScrollX = $state();
     let observer;
 
-    $effect.root(() => {
-        if ($User?.isLoggedIn && !refreshLoop) {
-            init();
-
+    $effect(() => {
+        if (!$User?.isLoggedIn) {
+            clearInterval(refreshLoop);
+            refreshLoop = undefined;
+            return;
+        }
+        if (!refreshLoop) {
+            untrack(() => init());
             // recent_songs has its own interval to check for fresh songs
             if (autoRefreshInterval) {
                 clearInterval(refreshLoop);
@@ -45,11 +49,12 @@
                         getLatestUpdate();
                     }
                 }, 1000 * autoRefreshInterval);
+            } else {
+                refreshLoop = true; // guard so we don't re-run init() when effect re-runs
             }
         }
         return () => {
             clearInterval(refreshLoop);
-            refreshLoop = undefined;
         };
     });
 
