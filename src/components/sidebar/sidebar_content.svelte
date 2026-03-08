@@ -223,6 +223,10 @@
         padding-inline: 0;
     }
 
+    :global(.site-sidebar.is-mini) sl-details::part(summary-icon) {
+        display: none;
+    }
+
     .container {
         overflow-x: hidden;
         overflow-y: auto;
