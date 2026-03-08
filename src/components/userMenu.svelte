@@ -10,28 +10,23 @@
     let dropdown;
 </script>
 
-<sl-dropdown placement="top-start" hoist bind:this={dropdown}>
+<sl-dropdown
+    placement={Settings.SidebarIsExpanded ? "top" : "left"}
+    hoist
+    bind:this={dropdown}
+>
     <sl-button
-        class="user-details"
-        slot="trigger"
+        class="user-button"
         variant="text"
         title={$User.username}
+        slot="trigger"
     >
-        {#if $User.isLoggedIn}
-            <sl-avatar
-                image={$User.has_art ? $User.art : null}
-                slot="prefix"
-            ></sl-avatar>
-
-            {#if Settings.SidebarIsExpanded}
-                {$User.username}
-            {/if}
-        {:else}
-            <sl-avatar image={null} slot="prefix"></sl-avatar>
-        {/if}
+        <sl-avatar
+            image={$User?.isLoggedIn && $User?.has_art ? $User?.art : null}
+        ></sl-avatar>
     </sl-button>
 
-    <sl-card style="max-width: 250px">
+    <sl-card style="width: 250px">
         {#if $User.isLoggedIn}
             <sl-button
                 variant="warning"
@@ -75,28 +70,16 @@
         gap: var(--spacing-md);
     }
 
-    .user-details {
-        margin: var(--spacing-sm);
-        margin-block-end: 0;
-        display: block;
-    }
-
-    .user-details::part(base) {
-        justify-content: start;
-        align-items: baseline;
+    .user-button::part(label) {
         padding: 0;
     }
 
-    .user-details::part(label) {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding-inline-end: var(--spacing-sm);
+    :global(.site-sidebar) sl-avatar {
+        --size: 30px;
     }
 
-    :global(.site-sidebar.is-mini) .user-details {
-        transform: translateX(-9px);
-        /* display: inline-flex; */
+    sl-avatar::part(base) {
+        position: initial;
     }
 
     .meta {

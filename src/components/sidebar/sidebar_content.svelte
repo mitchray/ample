@@ -40,145 +40,155 @@
     });
 </script>
 
-<div class="items">
-    <SidebarLink activePath="/" href="#/" icon="home" label={$_("text.home")} />
-    <SidebarLink
-        activePath="/advanced-search"
-        href="#/advanced-search"
-        icon="category_search"
-        label={$_("text.advancedSearch")}
-    />
+<div class="container">
+    <div class="items">
+        <SidebarLink
+            activePath="/"
+            href="#/"
+            icon="home"
+            label={$_("text.home")}
+        />
+        <SidebarLink
+            activePath="/advanced-search"
+            href="#/advanced-search"
+            icon="category_search"
+            label={$_("text.advancedSearch")}
+        />
+    </div>
+
+    <sl-divider></sl-divider>
+
+    <sl-details
+        data-id="library"
+        onsl-hide={handleClose}
+        onsl-show={handleOpen}
+        open={savedStatuses["library"]}
+    >
+        <div class="title-wrapper" slot="summary">
+            <SidebarHeading icon="library_music" label={$_("text.library")} />
+        </div>
+        <MaterialSymbol name="expand_more" slot="expand-icon" />
+        <MaterialSymbol name="expand_less" slot="collapse-icon" />
+
+        <div class="items">
+            <SidebarLink
+                activePath="/artists?(\/(.*?))?"
+                href="#/artists"
+                icon="person_outline"
+                label={$_("text.artists")}
+            />
+            <SidebarLink
+                activePath="/album-artists(\/(.*?))?"
+                href="#/album-artists"
+                icon="artist"
+                label={$_("text.albumArtists")}
+            />
+            <SidebarLink
+                activePath="/albums?(\/(.*?))?"
+                href="#/albums"
+                icon="album"
+                label={$_("text.albums")}
+            />
+            <SidebarLink
+                activePath="/genres"
+                href="#/genres"
+                icon="label"
+                label={$_("text.genres")}
+            />
+        </div>
+    </sl-details>
+
+    <sl-divider></sl-divider>
+
+    <sl-details
+        data-id="playlists"
+        onsl-hide={handleClose}
+        onsl-show={handleOpen}
+        open={savedStatuses["playlists"]}
+    >
+        <div class="title-wrapper" slot="summary">
+            <SidebarHeading icon="library_books" label={$_("text.playlists")} />
+        </div>
+        <MaterialSymbol name="expand_more" slot="expand-icon" />
+        <MaterialSymbol name="expand_less" slot="collapse-icon" />
+
+        <div class="items">
+            <SidebarLink
+                activePath="/playlists?(\/(.*?))?"
+                href="#/playlists"
+                icon="queue_music"
+                label={$_("text.playlists")}
+            />
+            <SidebarLink
+                activePath="/smartlists?(\/(.*?))?"
+                href="#/smartlists"
+                icon="electric_bolt"
+                label={$_("text.smartlists")}
+            />
+        </div>
+    </sl-details>
+
+    {#if featuresReady}
+        <sl-divider></sl-divider>
+
+        <sl-details
+            data-id="dashboards"
+            open={savedStatuses["dashboards"]}
+            onsl-show={handleOpen}
+            onsl-hide={handleClose}
+        >
+            <div class="title-wrapper" slot="summary">
+                <SidebarHeading
+                    icon="dashboard"
+                    label={$_("text.dashboards")}
+                />
+            </div>
+            <MaterialSymbol name="expand_more" slot="expand-icon" />
+            <MaterialSymbol name="expand_less" slot="collapse-icon" />
+
+            <div class="items">
+                <SidebarLink
+                    href="#/podcasts"
+                    activePath="/podcasts"
+                    label={$_("text.podcasts")}
+                    icon="podcasts"
+                />
+                <SidebarLink
+                    href="#/radio"
+                    activePath="/radio"
+                    label={$_("text.radio")}
+                    icon="radio"
+                />
+            </div>
+        </sl-details>
+    {/if}
+
+    {#if $sharePreference}
+        <sl-divider></sl-divider>
+
+        <sl-details
+            data-id="system"
+            open={savedStatuses["system"]}
+            onsl-show={handleOpen}
+            onsl-hide={handleClose}
+        >
+            <div class="title-wrapper" slot="summary">
+                <SidebarHeading icon="settings" label={$_("text.system")} />
+            </div>
+            <MaterialSymbol name="expand_more" slot="expand-icon" />
+            <MaterialSymbol name="expand_less" slot="collapse-icon" />
+
+            <div class="items">
+                <SidebarLink
+                    href="#/shares"
+                    activePath="/shares"
+                    label={$_("text.shares")}
+                    icon="share"
+                />
+            </div>
+        </sl-details>
+    {/if}
 </div>
-
-<sl-divider></sl-divider>
-
-<sl-details
-    data-id="library"
-    onsl-hide={handleClose}
-    onsl-show={handleOpen}
-    open={savedStatuses["library"]}
->
-    <div class="title-wrapper" slot="summary">
-        <SidebarHeading icon="library_music" label={$_("text.library")} />
-    </div>
-    <MaterialSymbol name="expand_more" slot="expand-icon" />
-    <MaterialSymbol name="expand_less" slot="collapse-icon" />
-
-    <div class="items">
-        <SidebarLink
-            activePath="/artists?(\/(.*?))?"
-            href="#/artists"
-            icon="person_outline"
-            label={$_("text.artists")}
-        />
-        <SidebarLink
-            activePath="/album-artists(\/(.*?))?"
-            href="#/album-artists"
-            icon="artist"
-            label={$_("text.albumArtists")}
-        />
-        <SidebarLink
-            activePath="/albums?(\/(.*?))?"
-            href="#/albums"
-            icon="album"
-            label={$_("text.albums")}
-        />
-        <SidebarLink
-            activePath="/genres"
-            href="#/genres"
-            icon="label"
-            label={$_("text.genres")}
-        />
-    </div>
-</sl-details>
-
-<sl-divider></sl-divider>
-
-<sl-details
-    data-id="playlists"
-    onsl-hide={handleClose}
-    onsl-show={handleOpen}
-    open={savedStatuses["playlists"]}
->
-    <div class="title-wrapper" slot="summary">
-        <SidebarHeading icon="library_books" label={$_("text.playlists")} />
-    </div>
-    <MaterialSymbol name="expand_more" slot="expand-icon" />
-    <MaterialSymbol name="expand_less" slot="collapse-icon" />
-
-    <div class="items">
-        <SidebarLink
-            activePath="/playlists?(\/(.*?))?"
-            href="#/playlists"
-            icon="queue_music"
-            label={$_("text.playlists")}
-        />
-        <SidebarLink
-            activePath="/smartlists?(\/(.*?))?"
-            href="#/smartlists"
-            icon="electric_bolt"
-            label={$_("text.smartlists")}
-        />
-    </div>
-</sl-details>
-
-{#if featuresReady}
-    <sl-divider></sl-divider>
-
-    <sl-details
-        data-id="dashboards"
-        open={savedStatuses["dashboards"]}
-        onsl-show={handleOpen}
-        onsl-hide={handleClose}
-    >
-        <div class="title-wrapper" slot="summary">
-            <SidebarHeading icon="dashboard" label={$_("text.dashboards")} />
-        </div>
-        <MaterialSymbol name="expand_more" slot="expand-icon" />
-        <MaterialSymbol name="expand_less" slot="collapse-icon" />
-
-        <div class="items">
-            <SidebarLink
-                href="#/podcasts"
-                activePath="/podcasts"
-                label={$_("text.podcasts")}
-                icon="podcasts"
-            />
-            <SidebarLink
-                href="#/radio"
-                activePath="/radio"
-                label={$_("text.radio")}
-                icon="radio"
-            />
-        </div>
-    </sl-details>
-{/if}
-
-{#if $sharePreference}
-    <sl-divider></sl-divider>
-
-    <sl-details
-        data-id="system"
-        open={savedStatuses["system"]}
-        onsl-show={handleOpen}
-        onsl-hide={handleClose}
-    >
-        <div class="title-wrapper" slot="summary">
-            <SidebarHeading icon="settings" label={$_("text.system")} />
-        </div>
-        <MaterialSymbol name="expand_more" slot="expand-icon" />
-        <MaterialSymbol name="expand_less" slot="collapse-icon" />
-
-        <div class="items">
-            <SidebarLink
-                href="#/shares"
-                activePath="/shares"
-                label={$_("text.shares")}
-                icon="share"
-            />
-        </div>
-    </sl-details>
-{/if}
 
 <style>
     sl-details::part(base) {
@@ -211,6 +221,19 @@
     sl-details::part(content) {
         padding-block: 0;
         padding-inline: 0;
+    }
+
+    .container {
+        overflow-x: hidden;
+        overflow-y: auto;
+        position: absolute;
+        inset: 0;
+        padding-block-start: 50px;
+        padding-inline: var(--sidebar-padding-inline);
+    }
+
+    :global(.site-sidebar.is-mini) .container {
+        padding-block-start: 115px;
     }
 
     .title-wrapper {
