@@ -36,7 +36,6 @@ const initialSettings = {
     PlaySongsByOtherArtists: "include",
     LastSession: {},
     LastLoginMethod: null,
-    SidebarStatuses: {},
     Crossfade: {
         mode: "gapless",
         duration: 6,
