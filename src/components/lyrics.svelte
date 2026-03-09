@@ -1,20 +1,23 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { get } from "svelte/store";
-    import Lyrics from "~/logic/lyrics";
+    import { parseLyrics, getCurrentLineIndex } from "~/logic/lyrics.js";
     import Portal from "~/components/portal.svelte";
     import { MediaPlayer, SiteContentBind } from "~/stores/elements.js";
-    import { CurrentMedia, ShowLyrics } from "~/stores/state.js";
+    import { API, CurrentMedia, ShowLyrics } from "~/stores/state.js";
     import { throttle } from "lodash-es";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
     import { tick, untrack } from "svelte";
 
-    let lyrics = new Lyrics(); // custom store
+    let lyricsFinal = $state([]);
+    let currentLineIndex = $state(null);
+    let isTimestamped = $state(false);
+    let hasLyrics = $state(false);
+    let previousMediaId = $state("");
     let follow = $state(true);
-    let loading = $state(true);
     let drawer = $state();
     let container = $state();
-    let currentLine = $state();
+    let currentLineEl = $state();
 
     function handleClose(event) {
         // ignore bubbled sl-hide events from other components
@@ -43,16 +46,20 @@
     }
 
     function scrollToLine() {
-        currentLine?.scrollIntoView({
+        currentLineEl?.scrollIntoView({
             block: "center",
             behavior: "smooth",
         });
     }
 
     async function changeLine() {
-        $lyrics.move($MediaPlayer.getCurrentTime());
+        currentLineIndex = getCurrentLineIndex(
+            lyricsFinal,
+            isTimestamped,
+            $MediaPlayer.getCurrentTime(),
+        );
         await tick();
-        currentLine = container?.querySelector(".current");
+        currentLineEl = container?.querySelector(".current");
 
         if (follow) {
             scrollToLine();
@@ -68,18 +75,53 @@
     }
 
     $effect(() => {
-        lyrics?.onCurrentMediaChange(get(CurrentMedia));
+        const item = $CurrentMedia;
+        const id = (item?.id ?? "") + (item?.object_type ?? "");
+
+        if (id !== previousMediaId) {
+            previousMediaId = id;
+            lyricsFinal = [];
+            currentLineIndex = null;
+            hasLyrics = false;
+
+            if (item?.object_type === "song") {
+                $API.getLyrics({ filter: item.id, plugins: 1 })
+                    .then((response) => {
+                        const raw = response?.error
+                            ? null
+                            : (response?.plugin?.database?.text ?? null);
+                        const current = get(CurrentMedia);
+                        if (
+                            current?.id !== item?.id ||
+                            current?.object_type !== item?.object_type
+                        ) {
+                            return;
+                        }
+                        if (!raw?.length) {
+                            return;
+                        }
+                        const { lines, isTimestamped: ts } = parseLyrics(raw);
+                        lyricsFinal = lines;
+                        isTimestamped = ts;
+                        hasLyrics = true;
+                    })
+                    .catch(() => {
+                        const current = get(CurrentMedia);
+                        if (
+                            current?.id !== item?.id ||
+                            current?.object_type !== item?.object_type
+                        ) {
+                            return;
+                        }
+                    });
+            }
+        }
     });
 
     $effect(() => {
-        if (lyrics && $CurrentMedia) {
+        if ($CurrentMedia) {
             untrack(() => {
-                loading = true;
-
-                // reset any previous instance
                 resetEvents();
-
-                loading = false;
             });
         }
     });
@@ -104,7 +146,7 @@
             <div slot="header-actions">
                 <sl-button
                     class="follow"
-                    hidden={!$lyrics.isTimestamped || follow}
+                    hidden={!isTimestamped || follow}
                     onclick={() => (follow = true)}
                 >
                     <MaterialSymbol name="footprint" slot="prefix" />
@@ -115,17 +157,17 @@
             <div
                 class="lyrics-container"
                 class:disable-scroll={follow}
-                class:hasTimestamps={$lyrics.isTimestamped}
+                class:hasTimestamps={isTimestamped}
                 ontouchstart={handleScroll}
                 onwheel={handleScroll}
                 bind:this={container}
             >
                 {#if $CurrentMedia?.object_type === "song"}
-                    {#if $lyrics.hasLyrics() && !loading}
-                        {#each $lyrics.lyricsFinal as line, i}
+                    {#if hasLyrics}
+                        {#each lyricsFinal as line, i}
                             <div
                                 class="line"
-                                class:current={$lyrics.currentLine === i}
+                                class:current={currentLineIndex === i}
                                 onclick={() => {
                                     handleClick(line.startSeconds);
                                 }}

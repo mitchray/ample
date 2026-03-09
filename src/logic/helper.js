@@ -118,13 +118,6 @@ export async function placeholderArtCheck(url) {
     }
 }
 
-/**
- Test if lyrics are timestamped
- */
-export function lyricsAreTimestamped(lyrics) {
-    return new RegExp(/\[\d\d:/gi).test(lyrics);
-}
-
 export function setIndexes(items) {
     for (let i = 0; i < items.length; i++) {
         items[i].initialOrder = i;
