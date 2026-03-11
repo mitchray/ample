@@ -18,7 +18,6 @@ import * as cache from "./cache.js";
 import * as gain from "./gain.js";
 import { createCore } from "./core.js";
 import { installCrossfade } from "./crossfade.js";
-import { installVisualizer } from "./visualizer.js";
 import { installMediaKeys } from "./mediaKeys.js";
 import { installTrackChecks, notifyRatingMissing } from "./trackChecks.js";
 
@@ -79,7 +78,6 @@ class Player {
         this.currentMedia = get(CurrentMedia);
 
         installCrossfade(this);
-        this._visualizerPlugin = installVisualizer(this);
         installTrackChecks(this);
         this.#init();
     }
@@ -142,6 +140,17 @@ class Player {
     }
 
     getVisualizerPlugin() {
+        return this._visualizerPlugin;
+    }
+
+    /**
+     * Ensure the visualizer plugin is loaded (lazy). Resolves when the plugin is ready.
+     * @returns {Promise<{ setShow: (show: boolean) => void, loadPreset: (presetData: object, blendTime: number) => void } | undefined>}
+     */
+    async ensureVisualizerPlugin() {
+        if (this._visualizerPlugin) return this._visualizerPlugin;
+        const { installVisualizer } = await import("./visualizer.js");
+        this._visualizerPlugin = installVisualizer(this);
         return this._visualizerPlugin;
     }
 

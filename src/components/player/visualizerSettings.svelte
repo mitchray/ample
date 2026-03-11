@@ -4,15 +4,15 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { keys } from "lodash-es";
     import { MediaPlayer } from "~/stores/elements.js";
-    import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 
     let menuIsVisible = false;
     let bindSelector = $state();
-    let presets = getCuratedVisualizerPresets();
-    let presetsArray = Object.entries(presets);
-    let presetKeys = keys(presets);
+    let presets = $state({});
+    let presetsArray = $derived(Object.entries(presets));
+    let presetKeys = $derived(keys(presets));
     let currentPresetIndex = 0;
     let isRandomizeEnabled = false;
+    let presetsLoading = false;
     let isCycleEnabled = $state(false);
     let cycleInterval = $state(10);
     let transitionDuration = $state(3);
@@ -29,10 +29,11 @@
     }
 
     function handlePresetChange(e) {
+        if (presetKeys.length === 0) return;
         currentPresetIndex = e.target.value;
         $MediaPlayer?.loadVisualizerPreset(
             presets[presetKeys[currentPresetIndex]],
-            transitionDuration,
+            Number(transitionDuration) || 3,
         );
         updateSelect();
     }
@@ -46,32 +47,45 @@
     }
 
     function handlePreviousPreset() {
+        if (presetsArray.length === 0) return;
         currentPresetIndex = isRandomizeEnabled
             ? getRandomPresetIndex()
             : (currentPresetIndex - 1 + presetsArray.length) %
               presetsArray.length;
         $MediaPlayer?.loadVisualizerPreset(
             presets[presetKeys[currentPresetIndex]],
-            transitionDuration,
+            Number(transitionDuration) || 3,
         );
-        bindSelector.value = currentPresetIndex;
+        if (bindSelector) bindSelector.value = currentPresetIndex;
         updateSelect();
     }
 
     function handleNextPreset() {
+        if (presetsArray.length === 0) return;
         currentPresetIndex = isRandomizeEnabled
             ? getRandomPresetIndex()
             : (currentPresetIndex + 1) % presetsArray.length;
         $MediaPlayer?.loadVisualizerPreset(
             presets[presetKeys[currentPresetIndex]],
-            transitionDuration,
+            Number(transitionDuration) || 3,
         );
         updateSelect();
     }
 
     function updateSelect() {
-        bindSelector.value = currentPresetIndex.toString();
+        if (bindSelector) bindSelector.value = currentPresetIndex.toString();
     }
+
+    $effect(() => {
+        if ($ShowVisualizer && presetKeys.length === 0 && !presetsLoading) {
+            presetsLoading = true;
+            import("~/logic/visualizer.js").then(
+                ({ getCuratedVisualizerPresets }) => {
+                    presets = getCuratedVisualizerPresets();
+                },
+            );
+        }
+    });
 
     function handleRandomizeChange(e) {
         isRandomizeEnabled = e.target.checked;
@@ -86,11 +100,11 @@
     }
 
     function handleCycleIntervalChange(e) {
-        cycleInterval = e.target.value;
+        cycleInterval = Number(e.target.value) || 10;
     }
 
     function handleTransitionDurationChange(e) {
-        transitionDuration = e.target.value;
+        transitionDuration = Number(e.target.value) || 3;
     }
 
     // Watch for changes in the cycle checkbox and interval

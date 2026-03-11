@@ -1,6 +1,4 @@
-import { get } from "svelte/store";
 import butterchurn from "butterchurn";
-import { ShowVisualizer } from "~/stores/state.js";
 import { getCuratedVisualizerPresets } from "~/logic/visualizer.js";
 import { errorHandler } from "~/logic/helper.js";
 
@@ -16,34 +14,51 @@ export function installVisualizer(player) {
     let visualizer = null;
     let audioContextProxy = null;
     let renderLoopActive = false;
+    let renderFrameScheduled = false;
+    let connectedNode = null;
+    let showing = false;
 
-    function connectAudio(mediaElement) {
-        if (!audioContextProxy || !mediaElement) return;
-        const proxyMediaNode =
-            audioContextProxy.createMediaElementSource(mediaElement);
-        visualizer?.connectAudio(proxyMediaNode);
+    /** Connect the visualizer to an audio node (e.g. player's mediaNode). Use the player's graph; do not create a second MediaElementSource. */
+    function connectAudio(audioNode) {
+        if (!audioNode || !visualizer) return;
+        if (connectedNode) {
+            try {
+                visualizer.disconnectAudio(connectedNode);
+            } catch (_) {}
+        }
+        connectedNode = audioNode;
+        visualizer.connectAudio(audioNode);
     }
 
     function startRenderer() {
         if (!renderLoopActive) return;
+        if (renderFrameScheduled) return;
+        renderFrameScheduled = true;
         requestAnimationFrame(() => {
+            renderFrameScheduled = false;
             if (!renderLoopActive) return;
-            if (player.isPlaying && visualizer) {
-                visualizer.render();
-            }
+            if (visualizer) visualizer.render();
             startRenderer();
         });
     }
 
     function init() {
         if (visualizer) return;
+        if (!showing) return;
+        const canvas = document.querySelector("#visualizer");
+        if (!canvas) {
+            requestAnimationFrame(init);
+            return;
+        }
         const presets = getCuratedVisualizerPresets();
         const preset = presets[DEFAULT_VISUALIZER_PRESET];
         try {
-            audioContextProxy = new AudioContext();
+            const current = player.currentPlayer;
+            if (!current?.audioContext) return;
+            audioContextProxy = current.audioContext;
             visualizer = butterchurn.createVisualizer(
                 audioContextProxy,
-                document.querySelector("#visualizer"),
+                canvas,
                 {
                     width: 1600,
                     height: 900,
@@ -54,32 +69,45 @@ export function installVisualizer(player) {
             visualizer?.loadPreset(preset, 5);
             renderLoopActive = true;
             startRenderer();
-            const mediaEl = player.currentPlayer?.wavesurfer?.getMediaElement?.();
-            if (mediaEl) connectAudio(mediaEl);
+            if (current.mediaNode) connectAudio(current.mediaNode);
         } catch (e) {
             errorHandler("initializing visualizer", e);
         }
     }
 
-    function destroy() {
+    function teardown() {
         renderLoopActive = false;
-        if (visualizer) {
+        renderFrameScheduled = false;
+        if (visualizer && connectedNode) {
             try {
-                visualizer.disconnectAudio?.();
+                visualizer.disconnectAudio(connectedNode);
             } catch (_) {}
-            visualizer = null;
         }
+        connectedNode = null;
+        visualizer = null;
     }
 
-    player.on("trackLoaded", (payload) => {
-        const mediaElement = payload.wavesurfer?.getMediaElement?.();
-        if (mediaElement) connectAudio(mediaElement);
+    function destroy() {
+        teardown();
+    }
+
+    player.on("trackLoaded", () => {
+        const current = player.currentPlayer;
+        if (!current?.mediaNode) return;
+        if (current.audioContext !== audioContextProxy) return;
+        connectAudio(current.mediaNode);
     });
 
-    if (get(ShowVisualizer)) init();
+    player.on("playerSwitch", () => {
+        if (!visualizer) return;
+        teardown();
+        audioContextProxy = null;
+        init();
+    });
 
     return {
         setShow(show) {
+            showing = !!show;
             if (show) init();
             else destroy();
         },

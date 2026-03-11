@@ -12,6 +12,11 @@
     async function handleToggle() {
         let inverted = !$ShowVisualizer;
         ShowVisualizer.set(inverted);
+        if (inverted) {
+            $MediaPlayer?.ensureVisualizerPlugin().then((plugin) =>
+                plugin?.setShow(true),
+            );
+        }
         await tick();
         $MediaPlayer?.setWaveColors();
     }

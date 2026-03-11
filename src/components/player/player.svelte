@@ -64,7 +64,11 @@
         $MediaPlayer?.setCurrentMedia(get(CurrentMedia));
     });
     $effect(() => {
-        $MediaPlayer?.getVisualizerPlugin()?.setShow(get(ShowVisualizer));
+        const show = get(ShowVisualizer);
+        const mediaPlayer = $MediaPlayer;
+        if (!show && mediaPlayer) {
+            mediaPlayer.getVisualizerPlugin()?.setShow(false);
+        }
     });
 </script>
 
@@ -149,14 +153,16 @@
     </div>
 
     <VisualizerSettings />
-    <div class="canvas-container" onclick={() => $MediaPlayer.playPause()}>
-        <canvas
-            id="visualizer"
-            class="viz-canvas"
-            height="900"
-            width="1600"
-        ></canvas>
-    </div>
+    {#if $ShowVisualizer}
+        <div class="canvas-container" onclick={() => $MediaPlayer?.playPause()}>
+            <canvas
+                id="visualizer"
+                class="viz-canvas"
+                height="900"
+                width="1600"
+            ></canvas>
+        </div>
+    {/if}
     <div class="behind"></div>
 </div>
 
