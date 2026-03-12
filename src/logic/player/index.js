@@ -10,50 +10,50 @@ import {
     NowPlayingIndex,
     NowPlayingQueue,
     PlaybackSpeed,
-    ShowVisualizer,
 } from "~/stores/state.js";
 import { MediaPlayer } from "~/stores/elements.js";
 import * as queue from "./queue.js";
 import * as cache from "./cache.js";
 import * as gain from "./gain.js";
-import { createCore } from "./core.js";
 import { installCrossfade } from "./crossfade.js";
 import { installMediaKeys } from "./mediaKeys.js";
 import { installTrackChecks, notifyRatingMissing } from "./trackChecks.js";
+import WaveSurfer from "wavesurfer.js";
 
 const PRELOAD_AHEAD_COUNT = 5;
+const SILENCE_URL =
+    typeof import.meta !== "undefined" && import.meta.env?.BASE_URL
+        ? `${import.meta.env.BASE_URL}audio/silence.mp3`
+        : "./audio/silence.mp3";
+
+const wavesurferCommonOptions = {
+    autoplay: true,
+    backend: "MediaElement",
+    barAlign: "bottom",
+    barGap: 1,
+    barWidth: 2,
+    cursorWidth: 0,
+    fillParent: true,
+    height: "auto",
+    hideScrollbar: true,
+    normalize: true,
+};
 
 /**
- * Coordinator: composes core + queue + cache + gain + plugins, exposes full player API.
+ * Coordinator: dual wavesurfer, filter chain, queue, cache, gain, plugins, full player API.
  */
 class Player {
+    #currentPlayerID = "playerB";
+    #currentPlayer;
+    #onRequestNext = () => { };
+    #approachingEndFired = false;
+
     constructor() {
-        this._core = createCore(
-            "#waveformA",
-            "#waveformB",
-            () => ({
-                crossfadeEnabled: this.crossfadeEnabled,
-                gaplessEnabled: this.gaplessEnabled,
-                crossfadeDuration: this.crossfadeDuration,
-                skipCrossfade: this._skipCrossfadeForCurrentTrack,
-                approachingEnd: this.approachingEnd,
-            }),
-            () => this.setWaveColors(),
-        );
-        this.players = this._core.players;
-        this.playerA = this._core.players.playerA;
-        this.playerB = this._core.players.playerB;
-        this._emitter = this._core.emitter;
-        Object.defineProperty(this, "currentPlayer", {
-            get() {
-                return this._core.currentPlayer;
-            },
-        });
-        Object.defineProperty(this, "currentPlayerID", {
-            get() {
-                return this._core.currentPlayerID;
-            },
-        });
+        this._emitter = createEventEmitter();
+        this.playerA = createWavesurferInstance("#waveformA");
+        this.playerB = createWavesurferInstance("#waveformB");
+        this.players = { playerA: this.playerA, playerB: this.playerB };
+        this.#currentPlayer = this.playerB;
 
         // volume
         this.targetVolume = parseInt(-14);
@@ -85,6 +85,14 @@ class Player {
     /*
      PUBLIC METHODS
      */
+
+    get currentPlayer() {
+        return this.#currentPlayer;
+    }
+
+    get currentPlayerID() {
+        return this.#currentPlayerID;
+    }
 
     /**
      * Subscribe to player events (trackLoaded, trackReady, play, pause, timeUpdate, approachingEnd, finish, playerSwitch, start, stop).
@@ -223,10 +231,10 @@ class Player {
             // special handling for live_stream which has to go through <audio> element
             if (item.object_type === "live_stream") {
                 const url = this.currentMedia?.url;
-                this._core.loadUrl(url);
+                this.#loadUrl(url);
             } else {
                 let blob = await cache.getBlob(item, "stream");
-                this._core.loadBlob(blob);
+                this.#loadBlob(blob);
             }
 
             this.updateFilters();
@@ -237,8 +245,7 @@ class Player {
                 wavesurfer: this.currentPlayer.wavesurfer,
             });
 
-            this._core
-                .play()
+            this.#play()
                 .then(async () => {
                     this._emitter.emit("trackReady", {
                         item,
@@ -276,8 +283,8 @@ class Player {
         this._emitter.emit("stop");
         IsPlaying.set(false);
         this.approachingEnd = false;
-        this._core.setApproachingEnd(false);
-        this._core.stop();
+        this.#approachingEndFired = false;
+        this.#stopPlayback();
     }
 
     /**
@@ -295,7 +302,7 @@ class Player {
     }
 
     empty(player) {
-        this._core.empty(player);
+        this.#empty(player);
     }
 
     /**
@@ -312,7 +319,7 @@ class Player {
 
         // apply to all players
         if (this.currentPlayer.wavesurfer.isPlaying()) {
-            this._core.pause();
+            this.#pause();
             IsPlaying.set(false);
         } else {
             Object.keys(this.players).forEach((key) => {
@@ -532,27 +539,33 @@ class Player {
     }
 
     getDuration() {
-        return this._core.getDuration();
+        const d =
+            this.#currentPlayer.duration ??
+            this.#currentPlayer.wavesurfer?.getDuration();
+        return Number.isFinite(d) ? d : 0;
     }
 
     getCurrentTime() {
-        return this._core.getCurrentTime();
+        const t = this.#currentPlayer.wavesurfer.getCurrentTime();
+        return Number.isFinite(t) ? t : 0;
     }
 
     goForward(seconds) {
-        this._core.skip(seconds);
+        this.#currentPlayer.wavesurfer?.skip(seconds);
     }
 
     goBackward(seconds) {
-        this._core.skip(-seconds);
+        this.#currentPlayer.wavesurfer?.skip(-seconds);
     }
 
     seekTo(percentage) {
-        this._core.seekTo(percentage);
+        this.#currentPlayer.wavesurfer.seekTo(percentage);
     }
 
     setMuted(bool) {
-        this._core.setMuted(bool);
+        Object.keys(this.players).forEach((k) =>
+            this.players[k].wavesurfer.setMuted(bool),
+        );
     }
 
     /**
@@ -616,7 +629,9 @@ class Player {
     }
 
     setPlaybackRate(val) {
-        this._core.setPlaybackRate(val);
+        Object.keys(this.players).forEach((k) =>
+            this.players[k].wavesurfer.setPlaybackRate(val),
+        );
     }
 
     loadVisualizerPreset(presetData, blendTime) {
@@ -645,17 +660,171 @@ class Player {
      #PRIVATE METHODS
      */
 
+    #getCrossfadeState() {
+        return {
+            crossfadeEnabled: this.crossfadeEnabled,
+            gaplessEnabled: this.gaplessEnabled,
+            crossfadeDuration: this.crossfadeDuration,
+            skipCrossfade: this._skipCrossfadeForCurrentTrack,
+            approachingEnd: this.approachingEnd,
+        };
+    }
+
+    #setupFilters() {
+        Object.keys(this.players).forEach((key) => {
+            const player = this.players[key];
+            Object.values(player.filters)
+                .reduce((prev, curr) => {
+                    prev.connect(curr);
+                    return curr;
+                }, player.mediaNode)
+                .connect(player.audioContext.destination);
+        });
+    }
+
+    #initWavesurferEvents() {
+        Object.keys(this.players).forEach((key) => {
+            const p = this.players[key];
+            p.wavesurfer.on("error", (e) => {
+                debugHelper(e, "Wavesurfer play error");
+                IsPlaying.set(false);
+                this.#onRequestNext();
+            });
+            p.wavesurfer.on("play", () => {
+                debugHelper("Wavesurfer playing");
+                IsPlaying.set(true);
+                this._emitter.emit("play");
+            });
+            p.wavesurfer.on("pause", () => {
+                debugHelper("Wavesurfer paused");
+                this._emitter.emit("pause");
+            });
+            p.wavesurfer.on("finish", () => {
+                debugHelper(key, "Wavesurfer finished");
+                this._emitter.emit("finish", { playerKey: key });
+                this.#approachingEndFired = false;
+                this.#empty(p);
+                if (p === this.#currentPlayer) this.#onRequestNext();
+            });
+            p.wavesurfer.on("ready", () => {
+                debugHelper("Wavesurfer ready");
+                this.setWaveColors();
+            });
+            p.wavesurfer.on("audioprocess", (currentTime) => {
+                if (p !== this.#currentPlayer) return;
+                if (this.#approachingEndFired) return;
+                const state = this.#getCrossfadeState();
+                const duration =
+                    this.#currentPlayer.duration ??
+                    this.#currentPlayer.wavesurfer.getDuration();
+                const thresholdDuration =
+                    state.crossfadeEnabled && !state.skipCrossfade
+                        ? state.crossfadeDuration
+                        : 0.25;
+
+                if (
+                    (state.crossfadeEnabled && !state.skipCrossfade) ||
+                    state.gaplessEnabled
+                ) {
+                    if (
+                        duration > 0 &&
+                        currentTime > duration - thresholdDuration &&
+                        currentTime < duration - 0.1
+                    ) {
+                        debugHelper("approaching end of song");
+                        this.#approachingEndFired = true;
+                        this._emitter.emit("approachingEnd", {
+                            currentTime,
+                            duration,
+                        });
+                        this.#onRequestNext();
+                    }
+                }
+                if (
+                    duration > 0 &&
+                    currentTime > 0 &&
+                    currentTime === duration
+                ) {
+                    debugHelper("falling through to next item");
+                    this.#approachingEndFired = true;
+                    this._emitter.emit("approachingEnd", {
+                        currentTime,
+                        duration,
+                    });
+                    this.#onRequestNext();
+                }
+                this._emitter.emit("timeUpdate", { currentTime, duration });
+            });
+        });
+    }
+
+    #empty(player) {
+        player.wavesurfer.pause();
+        player.wavesurfer
+            .load(SILENCE_URL, [[0]], 0.001)
+            .then(() => player.wavesurfer.stop());
+    }
+
+    #switchPlayersInternal() {
+        this.#currentPlayerID =
+            this.#currentPlayerID === "playerA" ? "playerB" : "playerA";
+        this.#currentPlayer = this.players[this.#currentPlayerID];
+        this._emitter.emit("playerSwitch", {
+            currentPlayerId: this.#currentPlayerID,
+        });
+        debugHelper("PLAYERS SWITCHED");
+    }
+
     async #switchPlayers() {
-        this._core.switchPlayers();
+        this.#switchPlayersInternal();
         MediaPlayer.set(this);
+    }
+
+    #loadBlob(blob) {
+        this.#currentPlayer.wavesurfer.loadBlob(blob);
+    }
+
+    #loadUrl(url) {
+        if (url && typeof url === "string" && url.length > 0) {
+            this.#currentPlayer.audioElement.src = url;
+        } else {
+            this.#currentPlayer.audioElement.src = "";
+            this.#currentPlayer.audioElement.removeAttribute("src");
+            this.#currentPlayer.audioElement.load();
+        }
+        this.#currentPlayer.wavesurfer.setMediaElement(
+            this.#currentPlayer.audioElement,
+        );
+    }
+
+    #play() {
+        return this.#currentPlayer.audioContext.resume().then(() =>
+            this.#currentPlayer.wavesurfer.play().then(() => {
+                this.#currentPlayer.duration =
+                    this.#currentPlayer.wavesurfer.getDuration();
+            }),
+        );
+    }
+
+    #pause() {
+        Object.keys(this.players).forEach((k) =>
+            this.players[k].wavesurfer.pause(),
+        );
+    }
+
+    #stopPlayback() {
+        this.#empty(this.playerA);
+        this.#empty(this.playerB);
     }
 
     /**
      * More setup which doesn't belong in constructor
      */
     #init() {
-        this._core.setOnRequestNext(() => this.next());
-        this._core.init(this.globalVolume);
+        this.#onRequestNext = () => this.next();
+        gain.setMasterVolume(this.players, this.globalVolume);
+        this.#setupFilters();
+        this.#initWavesurferEvents();
         this._emitter.on("play", () =>
             this.setPlaybackRate(get(PlaybackSpeed)),
         );
@@ -700,6 +869,63 @@ class Player {
     async #setJukeboxQueueItems(arr) {
         JukeboxQueue.set(arr);
     }
+}
+
+/**
+ * Minimal event emitter for player lifecycle events.
+ */
+function createEventEmitter() {
+    const listeners = {};
+    return {
+        on(event, fn) {
+            (listeners[event] = listeners[event] || []).push(fn);
+        },
+        off(event, fn) {
+            const L = listeners[event];
+            if (L) listeners[event] = L.filter((f) => f !== fn);
+        },
+        emit(event, payload) {
+            (listeners[event] || []).slice().forEach((fn) => fn(payload));
+        },
+    };
+}
+
+function createWavesurferInstance(containerSelector) {
+    const audioElement = new Audio();
+    audioElement.crossOrigin = "anonymous";
+    audioElement.preload = "auto";
+
+    const audioContext = new AudioContext();
+    const compressor = audioContext.createDynamicsCompressor();
+    compressor.threshold.value = 0;
+    compressor.knee.value = 10.0;
+    compressor.ratio.value = 2.0;
+    compressor.attack.value = 0.1;
+    compressor.release.value = 0.3;
+
+    const filters = {
+        tagGain: audioContext.createGain(),
+        compressor,
+        masterVolume: audioContext.createGain(),
+    };
+
+    const wavesurfer = new WaveSurfer({
+        ...wavesurferCommonOptions,
+        container: containerSelector,
+        media: audioElement,
+    });
+
+    const mediaNode = audioContext.createMediaElementSource(
+        wavesurfer.getMediaElement(),
+    );
+
+    return {
+        audioElement,
+        filters,
+        wavesurfer,
+        mediaNode,
+        audioContext,
+    };
 }
 
 export default Player;
