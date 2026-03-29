@@ -85,16 +85,7 @@
 
     <div class="container">
         <div class="player__waveform">
-            <div
-                id="waveformA"
-                class="waveform"
-                class:active={$MediaPlayer?.currentPlayerID === "playerA"}
-            ></div>
-            <div
-                id="waveformB"
-                class="waveform"
-                class:active={$MediaPlayer?.currentPlayerID === "playerB"}
-            ></div>
+            <div id="waveform" class="waveform"></div>
         </div>
 
         <div class="player__seekbar">
@@ -341,32 +332,6 @@
         height: 100%;
         position: absolute;
         bottom: 0;
-        opacity: 0;
-        transition: opacity ease 0.3s;
-    }
-
-    .waveform.active {
-        opacity: 1;
-        transition-delay: 2s;
-    }
-
-    /* hide envelopes */
-    .waveform :global(::part(envelope)) {
-        opacity: 0;
-    }
-
-    .waveform :global(::part(envelope)),
-    .waveform :global(::part(polyline)),
-    .waveform :global(::part(envelope-circle)) {
-        pointer-events: none !important;
-    }
-
-    #waveformA {
-        /*background-color: hsla(0, 100%, 50%, 0.5);*/
-    }
-
-    #waveformB {
-        /*background-color: hsla(240, 100%, 50%, 0.5);*/
     }
 
     .player__now-playing {

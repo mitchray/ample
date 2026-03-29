@@ -36,10 +36,6 @@ const initialSettings = {
     PlaySongsByOtherArtists: "include",
     LastSession: {},
     LastLoginMethod: null,
-    Crossfade: {
-        mode: "gapless",
-        duration: 6,
-    },
     QueueRefill: {
         enabled: true,
         mode: "mix",

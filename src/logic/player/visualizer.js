@@ -98,13 +98,6 @@ export function installVisualizer(player) {
         connectAudio(current.mediaNode);
     });
 
-    player.on("playerSwitch", () => {
-        if (!visualizer) return;
-        teardown();
-        audioContextProxy = null;
-        init();
-    });
-
     return {
         setShow(show) {
             showing = !!show;

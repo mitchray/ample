@@ -29,12 +29,9 @@
     const throttledAction = throttle(changeLine, 0.25 * 1000);
 
     function resetEvents() {
-        const wsA = $MediaPlayer.getWavesurferForPlayer("playerA");
-        const wsB = $MediaPlayer.getWavesurferForPlayer("playerB");
-        const wsCurrent = $MediaPlayer.getCurrentWavesurfer();
-        wsA?.un("timeupdate", throttledAction);
-        wsB?.un("timeupdate", throttledAction);
-        wsCurrent?.on("timeupdate", throttledAction);
+        const ws = $MediaPlayer.getCurrentWavesurfer();
+        ws?.un("timeupdate", throttledAction);
+        ws?.on("timeupdate", throttledAction);
 
         if (container) container.scrollTop = 0;
 

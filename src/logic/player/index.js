@@ -15,11 +15,11 @@ import { MediaPlayer } from "~/stores/elements.js";
 import * as queue from "./queue.js";
 import * as cache from "./cache.js";
 import * as gain from "./gain.js";
-import { installCrossfade } from "./crossfade.js";
 import { installMediaKeys } from "./mediaKeys.js";
 import { installTrackChecks, notifyRatingMissing } from "./trackChecks.js";
 import WaveSurfer from "wavesurfer.js";
 
+const MAIN_PLAYER_ID = "main";
 const PRELOAD_AHEAD_COUNT = 5;
 const SILENCE_URL =
     typeof import.meta !== "undefined" && import.meta.env?.BASE_URL
@@ -40,20 +40,16 @@ const wavesurferCommonOptions = {
 };
 
 /**
- * Coordinator: dual wavesurfer, filter chain, queue, cache, gain, plugins, full player API.
+ * Coordinator: single wavesurfer, filter chain, queue, cache, gain, plugins, full player API.
  */
 class Player {
-    #currentPlayerID = "playerB";
     #currentPlayer;
     #onRequestNext = () => { };
-    #approachingEndFired = false;
 
     constructor() {
         this._emitter = createEventEmitter();
-        this.playerA = createWavesurferInstance("#waveformA");
-        this.playerB = createWavesurferInstance("#waveformB");
-        this.players = { playerA: this.playerA, playerB: this.playerB };
-        this.#currentPlayer = this.playerB;
+        this.#currentPlayer = createWavesurferInstance("#waveform");
+        this.players = { [MAIN_PLAYER_ID]: this.#currentPlayer };
 
         // volume
         this.targetVolume = parseInt(-14);
@@ -61,10 +57,6 @@ class Player {
         this.masteredVolume = null;
         this.gainFactor = null;
         this.gainType = null;
-
-        // other
-        this.approachingEnd = false;
-        this._skipCrossfadeForCurrentTrack = false;
 
         // initial AbortController
         this.abortController = new AbortController();
@@ -77,7 +69,6 @@ class Player {
         this.isPlaying = get(IsPlaying);
         this.currentMedia = get(CurrentMedia);
 
-        installCrossfade(this);
         installTrackChecks(this);
         this.#init();
     }
@@ -90,12 +81,8 @@ class Player {
         return this.#currentPlayer;
     }
 
-    get currentPlayerID() {
-        return this.#currentPlayerID;
-    }
-
     /**
-     * Subscribe to player events (trackLoaded, trackReady, play, pause, timeUpdate, approachingEnd, finish, playerSwitch, start, stop).
+     * Subscribe to player events (trackLoaded, trackReady, play, pause, timeUpdate, finish, start, stop).
      */
     on(event, fn) {
         this._emitter.on(event, fn);
@@ -118,17 +105,6 @@ class Player {
         this.repeatState = s.RepeatState;
         this.gainMode = s.GainMode ?? "track";
         this.dynamicsCompressorEnabled = s.DynamicsCompressorEnabled;
-        this.crossfadeDuration = s.Crossfade?.duration ?? 6;
-        this.crossfadeEnabled = s.Crossfade?.mode === "crossfade";
-        this.gaplessEnabled = s.Crossfade?.mode === "gapless";
-        if (!this.crossfadeEnabled && this.players) {
-            Object.values(this.players).forEach((p) => {
-                p.wavesurfer.envelopePlugin?.setPoints([]);
-                p.wavesurfer.envelopePlugin?.destroy();
-                p.wavesurfer.envelopePlugin = null;
-                p.wavesurfer.setVolume(1.0);
-            });
-        }
     }
 
     setNowPlayingQueue(value) {
@@ -165,13 +141,12 @@ class Player {
     /**
      * Begin playing
      */
-    async start({ forcePlay = false, skipCrossfade = false } = {}) {
+    async start({ forcePlay = false } = {}) {
         // Abort the previous loading request
         this.abortController.abort();
 
         // Create a new AbortController for the current request
         this.abortController = new AbortController();
-        const abortSignal = this.abortController.signal;
 
         let self = this;
 
@@ -192,10 +167,7 @@ class Player {
             return;
         }
 
-        this._skipCrossfadeForCurrentTrack =
-            this.nowPlayingIndex === 0 || skipCrossfade;
-
-        await this.#switchPlayers();
+        MediaPlayer.set(this);
 
         // Pre-apply gain before any audio loads so the gain node is already at
         // the correct value when audio first flows through it
@@ -241,7 +213,7 @@ class Player {
 
             this._emitter.emit("trackLoaded", {
                 item,
-                playerId: this.currentPlayerID,
+                playerId: MAIN_PLAYER_ID,
                 wavesurfer: this.currentPlayer.wavesurfer,
             });
 
@@ -250,17 +222,12 @@ class Player {
                     this._emitter.emit("trackReady", {
                         item,
                         duration: this.currentPlayer.duration,
-                        playerId: this.currentPlayerID,
+                        playerId: MAIN_PLAYER_ID,
                         wavesurfer: this.currentPlayer.wavesurfer,
-                        skipCrossfade: this._skipCrossfadeForCurrentTrack,
                     });
-
-                    // Crossfade plugin attaches envelope via trackReady; no inline envelope here
 
                     // start preloading up to PRELOAD_AHEAD_COUNT items ahead (rolling)
                     void cache.preloadAhead(PRELOAD_AHEAD_COUNT);
-
-                    // TrackChecks plugin runs on trackLoaded
                 })
                 .catch((e) => {
                     // probably a race condition between quick succession load/play, ignore
@@ -282,13 +249,11 @@ class Player {
     stop() {
         this._emitter.emit("stop");
         IsPlaying.set(false);
-        this.approachingEnd = false;
-        this.#approachingEndFired = false;
         this.#stopPlayback();
     }
 
     /**
-     * Teardown: stop playback and destroy both WaveSurfer instances. Call from component onDestroy.
+     * Teardown: stop playback and destroy the WaveSurfer instance. Call from component onDestroy.
      */
     destroy() {
         this.stop();
@@ -322,11 +287,7 @@ class Player {
             this.#pause();
             IsPlaying.set(false);
         } else {
-            Object.keys(this.players).forEach((key) => {
-                if (this.players[key].wavesurfer.getCurrentTime() > 0) {
-                    this.players[key].wavesurfer.play();
-                }
-            });
+            this.currentPlayer.wavesurfer.play();
             IsPlaying.set(true);
         }
     }
@@ -535,7 +496,7 @@ class Player {
 
         NowPlayingIndex.set(index);
 
-        this.start({ forcePlay: true, skipCrossfade: true });
+        this.start({ forcePlay: true });
     }
 
     getDuration() {
@@ -616,7 +577,7 @@ class Player {
             currentGainMode,
             this.targetVolume,
         );
-        gain.updateFilters(this.players, this.currentPlayerID, {
+        gain.updateFilters(this.players, MAIN_PLAYER_ID, {
             tagGainValue,
             volumeNormalizationEnabled: currentGainMode !== "off",
             dynamicsCompressorEnabled: this.dynamicsCompressorEnabled,
@@ -638,9 +599,9 @@ class Player {
         this._visualizerPlugin?.loadPreset(presetData, blendTime);
     }
 
-    /** Stable API for UI: avoid reaching into internal playerA/playerB/filters */
+    /** Stable API for UI */
     getCurrentPlayerId() {
-        return this.currentPlayerID;
+        return MAIN_PLAYER_ID;
     }
 
     getCurrentWavesurfer() {
@@ -651,24 +612,14 @@ class Player {
         return this.currentPlayer?.filters?.compressor ?? null;
     }
 
-    /** For lyrics: attach timeupdate to a specific player by id */
-    getWavesurferForPlayer(playerId) {
-        return this.players[playerId]?.wavesurfer ?? null;
+    /** @deprecated Use getCurrentWavesurfer(); single player only */
+    getWavesurferForPlayer(_playerId) {
+        return this.getCurrentWavesurfer();
     }
 
     /*
      #PRIVATE METHODS
      */
-
-    #getCrossfadeState() {
-        return {
-            crossfadeEnabled: this.crossfadeEnabled,
-            gaplessEnabled: this.gaplessEnabled,
-            crossfadeDuration: this.crossfadeDuration,
-            skipCrossfade: this._skipCrossfadeForCurrentTrack,
-            approachingEnd: this.approachingEnd,
-        };
-    }
 
     #setupFilters() {
         Object.keys(this.players).forEach((key) => {
@@ -702,8 +653,6 @@ class Player {
             p.wavesurfer.on("finish", () => {
                 debugHelper(key, "Wavesurfer finished");
                 this._emitter.emit("finish", { playerKey: key });
-                this.#approachingEndFired = false;
-                this.#empty(p);
                 if (p === this.#currentPlayer) this.#onRequestNext();
             });
             p.wavesurfer.on("ready", () => {
@@ -712,47 +661,9 @@ class Player {
             });
             p.wavesurfer.on("audioprocess", (currentTime) => {
                 if (p !== this.#currentPlayer) return;
-                if (this.#approachingEndFired) return;
-                const state = this.#getCrossfadeState();
                 const duration =
                     this.#currentPlayer.duration ??
                     this.#currentPlayer.wavesurfer.getDuration();
-                const thresholdDuration =
-                    state.crossfadeEnabled && !state.skipCrossfade
-                        ? state.crossfadeDuration
-                        : 0.25;
-
-                if (
-                    (state.crossfadeEnabled && !state.skipCrossfade) ||
-                    state.gaplessEnabled
-                ) {
-                    if (
-                        duration > 0 &&
-                        currentTime > duration - thresholdDuration &&
-                        currentTime < duration - 0.1
-                    ) {
-                        debugHelper("approaching end of song");
-                        this.#approachingEndFired = true;
-                        this._emitter.emit("approachingEnd", {
-                            currentTime,
-                            duration,
-                        });
-                        this.#onRequestNext();
-                    }
-                }
-                if (
-                    duration > 0 &&
-                    currentTime > 0 &&
-                    currentTime === duration
-                ) {
-                    debugHelper("falling through to next item");
-                    this.#approachingEndFired = true;
-                    this._emitter.emit("approachingEnd", {
-                        currentTime,
-                        duration,
-                    });
-                    this.#onRequestNext();
-                }
                 this._emitter.emit("timeUpdate", { currentTime, duration });
             });
         });
@@ -763,21 +674,6 @@ class Player {
         player.wavesurfer
             .load(SILENCE_URL, [[0]], 0.001)
             .then(() => player.wavesurfer.stop());
-    }
-
-    #switchPlayersInternal() {
-        this.#currentPlayerID =
-            this.#currentPlayerID === "playerA" ? "playerB" : "playerA";
-        this.#currentPlayer = this.players[this.#currentPlayerID];
-        this._emitter.emit("playerSwitch", {
-            currentPlayerId: this.#currentPlayerID,
-        });
-        debugHelper("PLAYERS SWITCHED");
-    }
-
-    async #switchPlayers() {
-        this.#switchPlayersInternal();
-        MediaPlayer.set(this);
     }
 
     #loadBlob(blob) {
@@ -813,8 +709,7 @@ class Player {
     }
 
     #stopPlayback() {
-        this.#empty(this.playerA);
-        this.#empty(this.playerB);
+        this.#empty(this.#currentPlayer);
     }
 
     /**
@@ -828,12 +723,6 @@ class Player {
         this._emitter.on("play", () =>
             this.setPlaybackRate(get(PlaybackSpeed)),
         );
-        this._emitter.on("approachingEnd", () => {
-            this.approachingEnd = true;
-        });
-        this._emitter.on("finish", () => {
-            this.approachingEnd = false;
-        });
         installMediaKeys(this);
     }
 
@@ -848,12 +737,10 @@ class Player {
         NowPlayingIndex.set(0);
 
         // unload any currently loaded items (avoid src = null → browser requests ".../null")
-        for (const key of ["playerA", "playerB"]) {
-            const el = this[key].audioElement;
-            el.src = "";
-            el.removeAttribute("src");
-            el.load();
-        }
+        const el = this.#currentPlayer.audioElement;
+        el.src = "";
+        el.removeAttribute("src");
+        el.load();
         CurrentMedia.set(null);
 
         if (this.repeatState === "enabled") {
