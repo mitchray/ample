@@ -2,8 +2,6 @@
     import { _ } from "@rgglez/svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state";
     import { createQuery } from "@tanstack/svelte-query";
-    import { push } from "svelte-spa-router";
-    import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
     import DrawerEdit from "~/components/action/drawers/drawerPlaylistEdit.svelte";
     import DrawerDelete from "~/components/action/drawers/drawerPlaylistDelete.svelte";
@@ -24,12 +22,6 @@
             const response = await $API.playlist({ filter: params.id });
 
             if (response.error) {
-                addAlert({
-                    title: $_("text.noItemsFound"),
-                    style: "info",
-                });
-                await push(`/playlists/`);
-
                 errorHandler("getting playlist core", response.error);
             }
 
@@ -79,6 +71,8 @@
             <Items playlist={playlistForItems} />
         </ItemListShell>
     {/key}
+{:else if query.isSuccess && !query.data?.id}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
 
 {#if query.isSuccess && query.data.id}

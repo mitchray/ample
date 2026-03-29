@@ -1,8 +1,7 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
     import { API, PageTitle, User } from "~/stores/state.js";
-    import { replace, push } from "svelte-spa-router";
-    import { addAlert } from "~/logic/alert.js";
+    import { replace } from "svelte-spa-router";
     import { errorHandler } from "~/logic/helper.js";
     import { createQuery } from "@tanstack/svelte-query";
     import MaterialSymbol from "~/components/materialSymbol.svelte";
@@ -44,12 +43,6 @@
             let result = await $API.genre({ filter: params.id });
 
             if (result.error) {
-                addAlert({
-                    title: $_("text.noItemsFound"),
-                    style: "info",
-                });
-                await push(`/genres/`);
-
                 errorHandler("getting genre", result.error);
             }
 
@@ -94,4 +87,6 @@
             </div>
         </sl-tab-group>
     {/key}
+{:else if query.isSuccess && !query.data?.id}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}

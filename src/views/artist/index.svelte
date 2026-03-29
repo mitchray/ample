@@ -1,10 +1,9 @@
 <script>
     import { _ } from "@rgglez/svelte-i18n";
-    import { push, replace } from "svelte-spa-router";
+    import { replace } from "svelte-spa-router";
     import { createQuery } from "@tanstack/svelte-query";
     import { API, PageTitle, User } from "~/stores/state.js";
     import { formatTotalTime } from "~/logic/formatters.js";
-    import { addAlert } from "~/logic/alert.js";
     import { errorHandler } from "~/logic/helper.js";
     import Rating from "~/components/rating/rating.svelte";
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
@@ -42,12 +41,6 @@
             let result = await $API.artist({ filter: params.id });
 
             if (result.error) {
-                addAlert({
-                    title: $_("text.noItemsFound"),
-                    style: "info",
-                });
-                await push(`/artists/`);
-
                 errorHandler("getting artist", result.error);
             }
 
@@ -239,6 +232,8 @@
                 </sl-tab-group>
             </div>
         {/key}
+{:else if query.isSuccess && !query.data?.id}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
 
 <style>

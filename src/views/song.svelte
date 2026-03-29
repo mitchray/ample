@@ -12,18 +12,11 @@
     import ThirdPartyServices from "~/components/thirdPartyServices.svelte";
     import ArtistList from "~/components/artist/artistList.svelte";
     import { createQuery } from "@tanstack/svelte-query";
-    import { addAlert } from "~/logic/alert.js";
-    import { push } from "svelte-spa-router";
     import { errorHandler } from "~/logic/helper.js";
     import QueryError from "~/components/QueryError.svelte";
     import DOMPurify from "dompurify";
 
     let { params = {} } = $props();
-
-    let parentItem = $state();
-
-    // alias of returned data
-    let song = $derived(query.data || {});
 
     const query = createQuery(() => ({
         queryKey: ["song", params.id],
@@ -31,24 +24,17 @@
             let result = await $API.song({ filter: params.id });
 
             if (result.error) {
-                if (parentItem?.id) {
-                    addAlert({
-                        title: $_("text.IDChanged"),
-                        style: "info",
-                    });
-                    await push(`/album/${parentItem.id}`);
-                }
-
                 errorHandler("getting song", result.error);
                 return [];
             }
-
-            parentItem = result.album || null;
 
             return result;
         },
         enabled: $User.isLoggedIn,
     }));
+
+    // alias of returned data
+    let song = $derived(query.data || {});
 
     $effect(() => {
         $PageTitle = song?.name || $_("text.song");
@@ -242,6 +228,8 @@
                 </sl-tab-panel>
             </sl-tab-group>
         {/key}
+{:else if query.isSuccess && !song.id}
+    <p>{$_("text.noItemsFound")}</p>
 {/if}
 
 <style>
