@@ -1,7 +1,7 @@
 ## _Ample_: A web browser client for [Ampache](https://ampache.org/) v6+
 
 > [!WARNING]
-> Main branch frozen while v4 rewrite is underway
+> I have stopped working on Ample, there is just no point when [Feishin](https://github.com/jeffvli/feishin) kicks so much ass 🚀
 
 Note: This is a personal project, shared as-is in case it’s useful to others. I’m not actively supporting feature requests or troubleshooting issues, but I’ll consider minor pull requests.
 
